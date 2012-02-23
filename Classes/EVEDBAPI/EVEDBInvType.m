@@ -304,28 +304,28 @@
 		return icon;
 }
 
-- (NSArray*) attributeCategories {
+- (NSMutableArray*) attributeCategories {
 	if (!attributeCategories) {
 		[self loadAttributes];
 	}
 	return attributeCategories;
 }
 
-- (NSDictionary*) attributesDictionary {
+- (NSMutableDictionary*) attributesDictionary {
 	if (!attributesDictionary) {
 		[self loadAttributes];
 	}
 	return attributesDictionary;
 }
 
-- (NSDictionary*) effectsDictionary {
+- (NSMutableDictionary*) effectsDictionary {
 	if (!effectsDictionary) {
 		[self loadEffects];
 	}
 	return effectsDictionary;
 }
 
-- (NSArray*) certificateRecommendations {
+- (NSMutableArray*) certificateRecommendations {
 	if (!certificateRecommendations) {
 		[self loadCertificateRecommendations];
 	}
@@ -379,7 +379,7 @@
 	[super dealloc];
 }
 
-- (NSArray*) requiredSkills {
+- (NSMutableArray*) requiredSkills {
 	if (!requiredSkills) {
 		requiredSkills = [[NSMutableArray alloc] init];
 		NSArray* requirementIDs = [NSArray arrayWithObjects:@"182", @"183", @"184", @"1285", @"1289", @"1290", nil];

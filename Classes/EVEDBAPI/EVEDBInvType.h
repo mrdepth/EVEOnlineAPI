@@ -42,8 +42,8 @@
 	EVEDBEveIcon *icon;
 	NSString *imageName;
 	NSMutableArray *attributeCategories;
-	NSDictionary *attributesDictionary;
-	NSDictionary *effectsDictionary;
+	NSMutableDictionary *attributesDictionary;
+	NSMutableDictionary *effectsDictionary;
 	NSMutableArray *certificateRecommendations;
 	NSMutableArray *requiredSkills;
 }
@@ -67,11 +67,11 @@
 @property (nonatomic) NSInteger iconID;
 @property (nonatomic, retain) EVEDBEveIcon *icon;
 @property (nonatomic, retain) NSString *imageName;
-@property (nonatomic, retain) NSArray *attributeCategories;
-@property (nonatomic, retain) NSDictionary *attributesDictionary;
-@property (nonatomic, retain) NSDictionary *effectsDictionary;
-@property (nonatomic, retain) NSArray *certificateRecommendations;
-@property (nonatomic, retain) NSArray *requiredSkills;
+@property (nonatomic, retain) NSMutableArray *attributeCategories;
+@property (nonatomic, retain) NSMutableDictionary *attributesDictionary;
+@property (nonatomic, retain) NSMutableDictionary *effectsDictionary;
+@property (nonatomic, retain) NSMutableArray *certificateRecommendations;
+@property (nonatomic, retain) NSMutableArray *requiredSkills;
 
 + (id) invTypeWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr;
 + (id) invTypeWithDictionary: (NSDictionary*) dictionary;
