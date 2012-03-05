@@ -16,7 +16,7 @@
 	NSString *title;
 	NSInteger toCorpOrAllianceID;
 	NSArray *toCharacterIDs;
-	NSArray *toListIDs;
+	NSArray *toListID;
 	BOOL read;
 }
 @property (nonatomic) NSInteger messageID;
@@ -25,7 +25,7 @@
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic) NSInteger toCorpOrAllianceID;
 @property (nonatomic, retain) NSArray *toCharacterIDs;
-@property (nonatomic, retain) NSArray *toListIDs;
+@property (nonatomic, retain) NSArray *toListID;
 @property (nonatomic) BOOL read;
 
 + (id) mailMessagesItemWithXMLAttributes:(NSDictionary *)attributeDict;
