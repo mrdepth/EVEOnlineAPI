@@ -389,9 +389,10 @@
 			if (attributeTypeID) {
 				EVEDBDgmTypeAttribute* attributeLevel = [self.attributesDictionary valueForKey:[skillLevelIDs objectAtIndex:i]];
 				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(NSInteger) attributeTypeID.value error:nil];
-				if (skill)
+				if (skill) {
 					skill.requiredLevel = attributeLevel.value;
-				[requiredSkills addObject:skill];
+					[requiredSkills addObject:skill];
+				}
 			}
 		}
 	}
