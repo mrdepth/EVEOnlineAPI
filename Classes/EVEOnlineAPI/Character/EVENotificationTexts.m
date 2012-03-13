@@ -98,7 +98,8 @@
 			NSRange separator = [component rangeOfString:@":"];
 			if (separator.location != NSNotFound) {
 				NSString* key = [component substringToIndex:separator.location];
-				NSMutableString* value = [NSMutableString stringWithString:[component substringFromIndex:separator.location + 1]];
+				NSString* s = [component substringFromIndex:separator.location + 1];
+				NSMutableString* value = [NSMutableString stringWithString:s ? s : @""];
 				[value replaceOccurrencesOfString:@" " withString:@"" options:0 range:NSMakeRange(0, 1)];
 				[value replaceOccurrencesOfString:@"\"" withString:@"" options:0 range:NSMakeRange(0, 1)];
 				[value replaceOccurrencesOfString:@"\"" withString:@"" options:0 range:NSMakeRange(value.length - 1, 1)];
