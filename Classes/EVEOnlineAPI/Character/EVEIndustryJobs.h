@@ -10,23 +10,23 @@
 #import "EVERequest.h"
 
 @interface EVEIndustryJobsItem : NSObject {
-	NSInteger jobID, assemblyLineID, containerID, installedItemLocationID, installedItemQuantity,
+	NSInteger jobID, assemblyLineID, installedItemQuantity,
 		installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
-		outputLocationID, installerID, runs, licensedProductionRuns, installedInSolarSystemID,
+		runs, licensedProductionRuns, installedInSolarSystemID,
 		containerLocationID, installedItemTypeID, outputTypeID, containerTypeID, installedItemCopy, completed,
 		completedSuccessfully, installedItemFlag, outputFlag, activityID, completedStatus;
-	long long installedItemID;
+	long long installedItemID, containerID, installedItemLocationID, outputLocationID, installerID;
 	
 	float materialMultiplier,charMaterialMultiplier, timeMultiplier,charTimeMultiplier;
 	
 	NSDate *installTime, *beginProductionTime, *endProductionTime, *pauseProductionTime;
 }
-@property (nonatomic) NSInteger jobID, assemblyLineID, containerID, installedItemLocationID, installedItemQuantity,
+@property (nonatomic) NSInteger jobID, assemblyLineID, installedItemQuantity,
 								installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
-								outputLocationID, installerID, runs, licensedProductionRuns, installedInSolarSystemID,
+								runs, licensedProductionRuns, installedInSolarSystemID,
 								containerLocationID, installedItemTypeID, outputTypeID, containerTypeID, installedItemCopy, completed,
 								completedSuccessfully, installedItemFlag, outputFlag, activityID, completedStatus;
-@property (nonatomic) long long installedItemID;
+@property (nonatomic) long long installedItemID, containerID, installedItemLocationID, outputLocationID, installerID;
 
 @property (nonatomic) float materialMultiplier,charMaterialMultiplier, timeMultiplier,charTimeMultiplier;
 @property (nonatomic, retain) NSDate *installTime, *beginProductionTime, *endProductionTime, *pauseProductionTime;
