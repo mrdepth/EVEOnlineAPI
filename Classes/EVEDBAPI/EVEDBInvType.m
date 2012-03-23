@@ -379,6 +379,14 @@
 	[super dealloc];
 }
 
+- (BOOL) isEqual:(id)object {
+	return [object isKindOfClass:[self class]] && typeID == [object typeID];
+}
+
+- (NSUInteger) hash {
+	return typeID;
+}
+
 - (NSMutableArray*) requiredSkills {
 	if (!requiredSkills) {
 		requiredSkills = [[NSMutableArray alloc] init];
