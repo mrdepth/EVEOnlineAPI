@@ -54,6 +54,7 @@
 		37D0E45014CDB965006A57BA /* EVEDBCrtCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0E44F14CDB965006A57BA /* EVEDBCrtCategory.m */; };
 		37D0E45314CDBAF7006A57BA /* EVEDBCrtClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0E45214CDBAF5006A57BA /* EVEDBCrtClass.m */; };
 		37D0E45614CDBC52006A57BA /* EVEDBCrtCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D0E45514CDBC51006A57BA /* EVEDBCrtCertificate.m */; };
+		37DF48EA151CC80000BC87A5 /* EVEC0rporationFaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 37DF48E9151CC80000BC87A5 /* EVEC0rporationFaction.m */; };
 		716CA80412200C4800C9D6D3 /* EVEMetricsHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 716CA7FB12200C4800C9D6D3 /* EVEMetricsHistory.m */; };
 		716CA80512200C4800C9D6D3 /* EVEMetricsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 716CA7FD12200C4800C9D6D3 /* EVEMetricsItem.m */; };
 		716CA80612200C4800C9D6D3 /* EVEMetricsItemPrice.m in Sources */ = {isa = PBXBuildFile; fileRef = 716CA7FF12200C4800C9D6D3 /* EVEMetricsItemPrice.m */; };
@@ -241,6 +242,9 @@
 		37D0E45214CDBAF5006A57BA /* EVEDBCrtClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCrtClass.m; sourceTree = "<group>"; };
 		37D0E45414CDBC4F006A57BA /* EVEDBCrtCertificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCrtCertificate.h; sourceTree = "<group>"; };
 		37D0E45514CDBC51006A57BA /* EVEDBCrtCertificate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCrtCertificate.m; sourceTree = "<group>"; };
+		37DF48E7151CC7E300BC87A5 /* EVEC0rporationAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEC0rporationAPI.h; sourceTree = "<group>"; };
+		37DF48E8151CC80000BC87A5 /* EVEC0rporationFaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEC0rporationFaction.h; sourceTree = "<group>"; };
+		37DF48E9151CC80000BC87A5 /* EVEC0rporationFaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEC0rporationFaction.m; sourceTree = "<group>"; };
 		716CA7FA12200C4800C9D6D3 /* EVEMetricsHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEMetricsHistory.h; sourceTree = "<group>"; };
 		716CA7FB12200C4800C9D6D3 /* EVEMetricsHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEMetricsHistory.m; sourceTree = "<group>"; };
 		716CA7FC12200C4800C9D6D3 /* EVEMetricsItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEMetricsItem.h; sourceTree = "<group>"; };
@@ -459,6 +463,7 @@
 				7199F58C1224118E004B1032 /* EVEDBAPI */,
 				717B172912F4A931009DDE48 /* RSS */,
 				71997880137F0A230061BA4E /* BattleClinicAPI */,
+				37DF48E6151CC7D600BC87A5 /* EVEC0rporationAPI */,
 				1D3623240D0F684500981E51 /* EVEOnlineAPIAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */,
 			);
@@ -657,6 +662,16 @@
 				379324B2142224CA00DD0EF7 /* RSSParserAtom.m */,
 			);
 			path = Parsers;
+			sourceTree = "<group>";
+		};
+		37DF48E6151CC7D600BC87A5 /* EVEC0rporationAPI */ = {
+			isa = PBXGroup;
+			children = (
+				37DF48E7151CC7E300BC87A5 /* EVEC0rporationAPI.h */,
+				37DF48E8151CC80000BC87A5 /* EVEC0rporationFaction.h */,
+				37DF48E9151CC80000BC87A5 /* EVEC0rporationFaction.m */,
+			);
+			path = EVEC0rporationAPI;
 			sourceTree = "<group>";
 		};
 		716CA7F912200C4800C9D6D3 /* EVEMetricsAPI(Deprecated) */ = {
@@ -1174,6 +1189,7 @@
 				37410508151A1F3F00BCED1B /* EVEDBRamAssemblyLineType.m in Sources */,
 				3741050C151A218F00BCED1B /* EVEDBRamInstallationTypeContent.m in Sources */,
 				3741050F151A243600BCED1B /* EVEDBInvType+Installation.m in Sources */,
+				37DF48EA151CC80000BC87A5 /* EVEC0rporationFaction.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

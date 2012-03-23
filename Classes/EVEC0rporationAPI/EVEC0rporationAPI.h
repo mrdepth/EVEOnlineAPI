@@ -9,6 +9,6 @@
 #ifndef EVEOnlineAPI_EVEC0rporationAPI_h
 #define EVEOnlineAPI_EVEC0rporationAPI_h
 
-
+#import "EVEC0rporationFaction.h"
 
 #endif
