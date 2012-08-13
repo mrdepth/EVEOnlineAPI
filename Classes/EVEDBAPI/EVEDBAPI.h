@@ -8,12 +8,14 @@
  */
 
 #import "EVEDBDatabase.h"
+#import "EVEDBInvBlueprintType.h"
 #import "EVEDBInvCategory.h"
 #import "EVEDBInvGroup.h"
 #import "EVEDBInvType.h"
 #import "EVEDBInvType+Skill.h"
 #import "EVEDBInvType+ControlTower.h"
 #import "EVEDBInvType+Installation.h"
+#import "EVEDBInvTypeMaterial.h"
 #import "EVEDBInvControlTowerResourcePurpose.h"
 #import "EVEDBInvControlTowerResource.h"
 #import "EVEDBInvMarketGroup.h"
@@ -31,6 +33,7 @@
 #import "EVEDBRamActivity.h"
 #import "EVEDBRamAssemblyLineType.h"
 #import "EVEDBRamInstallationTypeContent.h"
+#import "EVEDBRamTypeRequirement.h"
 #import "EVEDBMapDenormalize.h"
 #import "EVEDBCrtCategory.h"
 #import "EVEDBCrtClass.h"

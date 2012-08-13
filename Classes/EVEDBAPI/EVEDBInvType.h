@@ -20,6 +20,7 @@
 @class EVEDBInvGroup;
 @class EVEDBInvMarketGroup;
 @class EVEDBEveIcon;
+@class EVEDBInvBlueprintType;
 @interface EVEDBInvType : NSObject {
 	NSInteger typeID;
 	NSInteger groupID;
@@ -46,6 +47,8 @@
 	NSMutableDictionary *effectsDictionary;
 	NSMutableArray *certificateRecommendations;
 	NSMutableArray *requiredSkills;
+	EVEDBInvBlueprintType* blueprintType;
+	EVEDBInvType* blueprint;
 }
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger groupID;
@@ -72,6 +75,8 @@
 @property (nonatomic, retain) NSMutableDictionary *effectsDictionary;
 @property (nonatomic, retain) NSMutableArray *certificateRecommendations;
 @property (nonatomic, retain) NSMutableArray *requiredSkills;
+@property (nonatomic, retain) EVEDBInvBlueprintType* blueprintType;
+@property (nonatomic, retain) EVEDBInvType* blueprint;
 
 + (id) invTypeWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr;
 + (id) invTypeWithDictionary: (NSDictionary*) dictionary;

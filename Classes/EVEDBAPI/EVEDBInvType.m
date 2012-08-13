@@ -18,6 +18,8 @@
 #import "EVEDBEveIcon.h"
 #import "EVEDBCrtRecommendation.h"
 #import "EVEDBInvType+Skill.h"
+#import "EVEDBInvTypeMaterial.h"
+#import "EVEDBInvBlueprintType.h"
 
 
 @implementation EVEDBInvTypeAttributeCategory
@@ -189,6 +191,8 @@
 @synthesize effectsDictionary;
 @synthesize certificateRecommendations;
 @synthesize requiredSkills;
+@synthesize blueprintType;
+@synthesize blueprint;
 
 + (id) invTypeWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr {
 	return [[[self alloc] initWithTypeID:aTypeID error:errorPtr] autorelease];
@@ -376,6 +380,7 @@
 	[effectsDictionary release];
 	[certificateRecommendations release];
 	[requiredSkills release];
+	[blueprint release];
 	[super dealloc];
 }
 
@@ -407,13 +412,52 @@
 	return requiredSkills;
 }
 
+- (EVEDBInvBlueprintType*) blueprintType {
+	if (!blueprintType) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (database) {
+			[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invBlueprintTypes WHERE blueprintTypeID=%d;", typeID]
+							 resultBlock:^(NSDictionary *record, BOOL *needsMore) {
+								 blueprintType = [[EVEDBInvBlueprintType alloc] initWithDictionary:record];
+								 blueprintType.blueprintType = self;
+								 *needsMore = NO;
+							 }];
+		}
+		if (!blueprintType)
+			blueprintType = (EVEDBInvBlueprintType*) [[NSNull null] retain];
+	}
+	if ((NSNull*) blueprintType == [NSNull null])
+		return NULL;
+	else
+		return blueprintType;
+}
+
+- (EVEDBInvType*) blueprint {
+	if (!blueprint) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (database) {
+			[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT a.* FROM invTypes as a, invBlueprintTypes as b WHERE a.typeID=b.blueprintTypeID and b.productTypeID=%d;", typeID]
+							 resultBlock:^(NSDictionary *record, BOOL *needsMore) {
+								 blueprint = [[EVEDBInvType invTypeWithDictionary:record] retain];
+								 *needsMore = NO;
+							 }];
+		}
+		if (!blueprint)
+			blueprint = (EVEDBInvType*) [[NSNull null] retain];
+	}
+	if ((NSNull*) blueprint == [NSNull null])
+		return NULL;
+	else
+		return blueprint;
+}
+
 - (NSString*) description {
 	if (!description) {
 		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 		if (!database) {
 			return nil;
 		}
-		[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT description from invTypes WHERE typeID=%d;", typeID]
+		[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT description FROM invTypes WHERE typeID=%d;", typeID]
 						 resultBlock:^(NSDictionary *record, BOOL *needsMore) {
 							 self.description = [record valueForKey:@"description"];
 						 }];

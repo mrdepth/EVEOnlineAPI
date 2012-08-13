@@ -24,6 +24,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[window makeKeyAndVisible];
 	
+	EVEDBInvType* type = [EVEDBInvType invTypeWithTypeID:999 error:nil];
+	EVEDBInvBlueprintType* blueprintType = type.blueprintType;
+	
 	NSError* error = nil;
 	EVECharacters *list = [EVECharacters charactersWithKeyID:KEY_ID vCode:V_CODE error:&error];
 	return YES;

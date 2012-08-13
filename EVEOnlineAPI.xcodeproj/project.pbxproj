@@ -26,6 +26,10 @@
 		12D30C3E11B6A08100D772CF /* EVECharContactList.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D30C3D11B6A08100D772CF /* EVECharContactList.m */; };
 		12D30C4911B6A40C00D772CF /* EVEContactNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D30C4811B6A40C00D772CF /* EVEContactNotifications.m */; };
 		12D4D91F11B56A7900DA98DA /* EVEAssetList.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D4D91E11B56A7900DA98DA /* EVEAssetList.m */; };
+		12D81ACB15D8D977006AA4B2 /* EVEDBInvBlueprintType.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81ACA15D8D977006AA4B2 /* EVEDBInvBlueprintType.m */; };
+		12D81ACF15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81ACE15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m */; };
+		12D81AD115D8E2F8006AA4B2 /* evedb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 12D81AD015D8E2F8006AA4B2 /* evedb.sqlite */; };
+		12D81B4115D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81B4015D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m */; };
 		12DF9C0F11B7CD9100350938 /* EVECharFacWarStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */; };
 		12E1A0FF11B80A6500F004D7 /* EVEKillLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */; };
 		1D3623260D0F684500981E51 /* EVEOnlineAPIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */; };
@@ -189,6 +193,13 @@
 		12D30C4E11B6A8F200D772CF /* EVEOnlineAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEOnlineAPI.h; sourceTree = "<group>"; };
 		12D4D91D11B56A7900DA98DA /* EVEAssetList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEAssetList.h; sourceTree = "<group>"; };
 		12D4D91E11B56A7900DA98DA /* EVEAssetList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEAssetList.m; sourceTree = "<group>"; };
+		12D81AC915D8D977006AA4B2 /* EVEDBInvBlueprintType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBInvBlueprintType.h; sourceTree = "<group>"; };
+		12D81ACA15D8D977006AA4B2 /* EVEDBInvBlueprintType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBInvBlueprintType.m; sourceTree = "<group>"; };
+		12D81ACD15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBInvTypeMaterial.h; sourceTree = "<group>"; };
+		12D81ACE15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBInvTypeMaterial.m; sourceTree = "<group>"; };
+		12D81AD015D8E2F8006AA4B2 /* evedb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = evedb.sqlite; path = ../evedb.sqlite; sourceTree = "<group>"; };
+		12D81B3F15D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBRamTypeRequirement.h; sourceTree = "<group>"; };
+		12D81B4015D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBRamTypeRequirement.m; sourceTree = "<group>"; };
 		12DF9C0D11B7CD9100350938 /* EVECharFacWarStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECharFacWarStats.h; sourceTree = "<group>"; };
 		12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECharFacWarStats.m; sourceTree = "<group>"; };
 		12E1A0FD11B80A6500F004D7 /* EVEKillLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillLog.h; sourceTree = "<group>"; };
@@ -612,6 +623,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				12D81AD015D8E2F8006AA4B2 /* evedb.sqlite */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* EVEOnlineAPI-Info.plist */,
 			);
@@ -892,6 +904,8 @@
 				7183B4F8122547FD005CB8EE /* Utility */,
 				7199F590122411D9004B1032 /* EVEDBDatabase.h */,
 				7199F591122411D9004B1032 /* EVEDBDatabase.m */,
+				12D81AC915D8D977006AA4B2 /* EVEDBInvBlueprintType.h */,
+				12D81ACA15D8D977006AA4B2 /* EVEDBInvBlueprintType.m */,
 				7199F5FA122419E1004B1032 /* EVEDBInvCategory.h */,
 				7199F5FB122419E1004B1032 /* EVEDBInvCategory.m */,
 				7199F5F7122419D2004B1032 /* EVEDBInvGroup.h */,
@@ -904,6 +918,8 @@
 				71A652DA131DA32A0082FFAC /* EVEDBInvType+ControlTower.m */,
 				3741050D151A243400BCED1B /* EVEDBInvType+Installation.h */,
 				3741050E151A243500BCED1B /* EVEDBInvType+Installation.m */,
+				12D81ACD15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.h */,
+				12D81ACE15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m */,
 				7199F6BB12242B83004B1032 /* EVEDBInvMarketGroup.h */,
 				7199F6BC12242B83004B1032 /* EVEDBInvMarketGroup.m */,
 				71A6530D131DA7FA0082FFAC /* EVEDBInvControlTowerResourcePurpose.h */,
@@ -940,6 +956,8 @@
 				37410507151A1F3F00BCED1B /* EVEDBRamAssemblyLineType.m */,
 				3741050A151A218E00BCED1B /* EVEDBRamInstallationTypeContent.h */,
 				3741050B151A218E00BCED1B /* EVEDBRamInstallationTypeContent.m */,
+				12D81B3F15D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.h */,
+				12D81B4015D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m */,
 				37D0E44E14CDB964006A57BA /* EVEDBCrtCategory.h */,
 				37D0E44F14CDB965006A57BA /* EVEDBCrtCategory.m */,
 				37D0E45114CDBAF4006A57BA /* EVEDBCrtClass.h */,
@@ -1046,6 +1064,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
+				12D81AD115D8E2F8006AA4B2 /* evedb.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1190,6 +1209,9 @@
 				3741050C151A218F00BCED1B /* EVEDBRamInstallationTypeContent.m in Sources */,
 				3741050F151A243600BCED1B /* EVEDBInvType+Installation.m in Sources */,
 				37DF48EA151CC80000BC87A5 /* EVEC0rporationFaction.m in Sources */,
+				12D81ACB15D8D977006AA4B2 /* EVEDBInvBlueprintType.m in Sources */,
+				12D81ACF15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m in Sources */,
+				12D81B4115D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
