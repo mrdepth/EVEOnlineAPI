@@ -158,6 +158,8 @@
 									 [ramTypeRequirements setValue:array forKey:activityID];
 									 activity = [EVEDBRamActivity ramActivityWithActivityID:[activityID integerValue] error:nil];
 								 }
+								 else
+									 activity = [[array objectAtIndex:0] activity];
 								 EVEDBRamTypeRequirement* typeRequirement = [EVEDBRamTypeRequirement ramTypeRequirementWithDictionary:record];
 								 typeRequirement.activity = activity;
 								 typeRequirement.type = self.blueprintType;
@@ -234,11 +236,11 @@
 			[requirements addObject:requirement];
 	}
 	
-	EVEDBRamActivity* activity;
+/*	EVEDBRamActivity* activity;
 	if (requirements.count > 0)
 		activity = [[requirements objectAtIndex:0] activity];
 	else
-		activity = [EVEDBRamActivity ramActivityWithActivityID:activityID error:nil];
+		activity = [EVEDBRamActivity ramActivityWithActivityID:activityID error:nil];*/
 	
 	if (activityID == 1) {//Manufacturing
 		[requirements addObjectsFromArray:self.typeMaterials];

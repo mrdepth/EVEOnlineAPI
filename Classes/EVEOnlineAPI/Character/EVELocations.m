@@ -83,7 +83,7 @@
 }
 
 - (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Locations.xml.aspx?keyID=%d&vCode=%@&characterID=%d",
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Locations.xml.aspx?keyID=%d&vCode=%@&characterID=%d&ids=%@",
 														EVEOnlineAPIHost,
 														(corporate ? @"corp" : @"char"),
 														keyID,
