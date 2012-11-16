@@ -55,7 +55,8 @@
 #define EVEKillNetLogFilterFBPilotName @"FBPilotName" // Shows kills ONLY related to that finalblow pilot
 #define EVEKillNetLogFilterNoTowers @"NoTowers" // Removes towers, tower mods, territory modules, customs offices and infrastructure modules
 #define EVEKillNetLogFilterOrderBy @"OrderBy" // Apparently default was ordering by DESC, which ****** up time and killid usage, that now works! ;) (you can use orderBy:desc and orderBy:asc)
-
+#define EVEKillNetLogFilterSystem @"system" // Show kills done in a system
+#define EVEKillNetLogFilterRegion @"region" // Show kills done in a region
 typedef enum {
 	EVEKillNetLogMaskURL = 1, //Show the URL to EVE-KILL.
 	EVEKillNetLogMaskTimestamp = 2, // Show the Timestamp.
@@ -82,8 +83,11 @@ typedef enum {
 	
 	EVEKillNetLogMaskAll = 3145727,
 	EVEKillNetLogMaskShort =	EVEKillNetLogMaskTimestamp |
+								EVEKillNetLogMaskInternalKillID |
 								EVEKillNetLogMaskVictimName |
-								EVEKillNetLogMaskVictimShipName |
+								EVEKillNetLogMaskVictimCorpName |
+								EVEKillNetLogMaskVictimAllianceName |
+								EVEKillNetLogMaskVictimShipsExternalID |
 								EVEKillNetLogMaskCountOfInvolvedPilots |
 								EVEKillNetLogMaskSolarSystem |
 								EVEKillNetLogMaskSolarSystemSecurity |

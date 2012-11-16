@@ -164,8 +164,12 @@
 
 - (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr {
 	NSMutableString* args = [NSMutableString string];
-	for (NSString* key in [filter allKeys])
-		[args appendFormat:@"%@:%@/", key, [[filter valueForKey:key] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+	for (NSString* key in [filter allKeys]) {
+		NSString* value = [filter valueForKey:key];
+		if ([value isKindOfClass:[NSString class]])
+			value = [value stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+		[args appendFormat:@"%@:%@/", key, value];
+	}
 	[args appendFormat:@"mask:%d", mask];
 	NSURL* url = [NSURL URLWithString:[EVEKillNetLogAPIHost stringByAppendingPathComponent:args]];
 	
@@ -225,7 +229,7 @@
 
 		NSMutableArray* involvedParties = [NSMutableArray array];
 		for (NSDictionary* inv in [dic notNullValueForKey:@"involvedParties"])
-			[involved addObject:[[[EVEKillNetLogInvolved alloc] initWithDictinary:inv] autorelease]];
+			[involvedParties addObject:[[[EVEKillNetLogInvolved alloc] initWithDictinary:inv] autorelease]];
 		entry.involvedParties = involvedParties;
 
 		NSMutableArray* destroyedItems = [NSMutableArray array];
