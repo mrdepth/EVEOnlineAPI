@@ -34,7 +34,7 @@
 @property (nonatomic) NSInteger issuerID;
 @property (nonatomic, copy) NSString *roleLocationType;
 @property (nonatomic, retain) NSArray *oldRoles;
-@property (nonatomic, retain) NSArray *newRoles;
+@property (nonatomic, retain) NSArray *theNewRoles;
 
 + (id) memberSecurityLogRoleHistoryItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
