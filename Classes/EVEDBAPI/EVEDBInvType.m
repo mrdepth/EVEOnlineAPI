@@ -470,6 +470,10 @@
 @implementation EVEDBInvTypeRequiredSkill
 @synthesize requiredLevel;
 
+- (BOOL) isEqual:(id)object {
+	return [object isKindOfClass:[self class]] && typeID == [object typeID] && requiredLevel == [object requiredLevel];
+}
+
 - (float) requiredSP {
 	if (requiredSP == 0.0 && requiredLevel > 0)
 		requiredSP = [self skillpointsAtLevel:requiredLevel];
