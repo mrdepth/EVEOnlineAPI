@@ -50,8 +50,10 @@
 @property (nonatomic, retain) NSString *securityClass;
 
 + (id) mapSolarSystemWithSolarSystemID: (NSInteger)aSolarSystemID error:(NSError **)errorPtr;
++ (id) mapSolarSystemWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr;
 + (id) mapSolarSystemWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithSolarSystemID: (NSInteger)aSolarSystemID error:(NSError **)errorPtr;
+- (id) initWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr;
 - (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

@@ -39,7 +39,7 @@
 @synthesize issuerID;
 @synthesize roleLocationType;
 @synthesize oldRoles;
-@synthesize newRoles;
+@synthesize theNewRoles;
 
 
 + (id) memberSecurityLogRoleHistoryItemWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -60,7 +60,7 @@
 	[changeTime release];
 	[roleLocationType release];
 	[oldRoles release];
-	[newRoles release];
+	[theNewRoles release];
 	[super dealloc];
 }
 
@@ -117,9 +117,9 @@
 		return oldRoles;
 	}
 	else if ([rowset isEqualToString:@"newRoles"]) {
-		NSMutableArray *newRoles = [[[NSMutableArray alloc] init] autorelease];
-		[[self currentRow] setNewRoles:newRoles];
-		return newRoles;
+		NSMutableArray *theNewRoles = [[[NSMutableArray alloc] init] autorelease];
+		[[self currentRow] setTheNewRoles:theNewRoles];
+		return theNewRoles;
 	}
 	else
 		return nil;

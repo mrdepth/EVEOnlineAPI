@@ -23,7 +23,7 @@
 @synthesize typeID;
 @synthesize quantity;
 @synthesize oldConfiguration;
-@synthesize newConfiguration;
+@synthesize theNewConfiguration;
 
 + (id) containerLogItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[[EVEContainerLogItem alloc] initWithXMLAttributes:attributeDict] autorelease];
@@ -43,7 +43,7 @@
 		self.typeID = (EVEInventoryFlag) [[attributeDict valueForKey:@"typeID"] integerValue];
 		self.quantity = [[attributeDict valueForKey:@"quantity"] integerValue];
 		self.oldConfiguration = [attributeDict valueForKey:@"oldConfiguration"];
-		self.newConfiguration = [attributeDict valueForKey:@"newConfiguration"];
+		self.theNewConfiguration = [attributeDict valueForKey:@"newConfiguration"];
 	}
 	return self;
 }
@@ -54,7 +54,7 @@
 	[action release];
 	[passwordType release];
 	[oldConfiguration release];
-	[newConfiguration release];
+	[theNewConfiguration release];
 	[super dealloc];
 }
 

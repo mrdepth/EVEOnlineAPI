@@ -67,6 +67,11 @@
 	return [[[EVEDBMapSolarSystem alloc] initWithSolarSystemID:aSolarSystemID error:errorPtr] autorelease];
 }
 
++ (id) mapSolarSystemWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr {
+	return [[[EVEDBMapSolarSystem alloc] initWithSolarSystemName:aSolarSystemName error:errorPtr] autorelease];
+	
+}
+
 + (id) mapSolarSystemWithDictionary: (NSDictionary*) dictionary {
 	return [[[EVEDBMapSolarSystem alloc] initWithDictionary:dictionary] autorelease];
 }
@@ -79,6 +84,26 @@
 			return nil;
 		}
 		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemID=%d;", aSolarSystemID]
+											   target:self
+											   action:@selector(didReceiveRecord:)];
+		if (error) {
+			if (errorPtr)
+				*errorPtr = error;
+			[self release];
+			return nil;
+		}
+	}
+	return self;
+}
+
+- (id) initWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr {
+	if (self = [super init]) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (!database) {
+			[self release];
+			return nil;
+		}
+		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemName=\"%@\";", aSolarSystemName]
 											   target:self
 											   action:@selector(didReceiveRecord:)];
 		if (error) {

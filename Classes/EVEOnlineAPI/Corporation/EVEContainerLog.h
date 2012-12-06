@@ -22,7 +22,7 @@
 	NSInteger typeID;
 	NSInteger quantity;
 	NSString *oldConfiguration;
-	NSString *newConfiguration;
+	NSString *theNewConfiguration;
 }
 @property (nonatomic, retain) NSDate *logTime;
 @property (nonatomic) long long itemID;
@@ -36,7 +36,7 @@
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger quantity;
 @property (nonatomic, copy) NSString *oldConfiguration;
-@property (nonatomic, copy) NSString *newConfiguration;
+@property (nonatomic, copy) NSString *theNewConfiguration;
 
 + (id) containerLogItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;

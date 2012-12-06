@@ -32,6 +32,7 @@
 		12D81B4115D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81B4015D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m */; };
 		12DF9C0F11B7CD9100350938 /* EVECharFacWarStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */; };
 		12E1A0FF11B80A6500F004D7 /* EVEKillLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */; };
+		12FDCC5A16390FEC0000709F /* EVEKillNetLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12FDCC5916390FEC0000709F /* EVEKillNetLog.m */; };
 		1D3623260D0F684500981E51 /* EVEOnlineAPIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -204,6 +205,9 @@
 		12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECharFacWarStats.m; sourceTree = "<group>"; };
 		12E1A0FD11B80A6500F004D7 /* EVEKillLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillLog.h; sourceTree = "<group>"; };
 		12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEKillLog.m; sourceTree = "<group>"; };
+		12FDCC5716390FEC0000709F /* EVEKillNetAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillNetAPI.h; sourceTree = "<group>"; };
+		12FDCC5816390FEC0000709F /* EVEKillNetLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillNetLog.h; sourceTree = "<group>"; };
+		12FDCC5916390FEC0000709F /* EVEKillNetLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEKillNetLog.m; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* EVEOnlineAPIAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEOnlineAPIAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEOnlineAPIAppDelegate.m; sourceTree = "<group>"; };
@@ -475,6 +479,7 @@
 				717B172912F4A931009DDE48 /* RSS */,
 				71997880137F0A230061BA4E /* BattleClinicAPI */,
 				37DF48E6151CC7D600BC87A5 /* EVEC0rporationAPI */,
+				12FDCC5616390FEC0000709F /* EVEKillNetAPI */,
 				1D3623240D0F684500981E51 /* EVEOnlineAPIAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */,
 			);
@@ -589,6 +594,16 @@
 				37AF875814E991BC0047360D /* EVELocations.m */,
 			);
 			path = Character;
+			sourceTree = "<group>";
+		};
+		12FDCC5616390FEC0000709F /* EVEKillNetAPI */ = {
+			isa = PBXGroup;
+			children = (
+				12FDCC5716390FEC0000709F /* EVEKillNetAPI.h */,
+				12FDCC5816390FEC0000709F /* EVEKillNetLog.h */,
+				12FDCC5916390FEC0000709F /* EVEKillNetLog.m */,
+			);
+			path = EVEKillNetAPI;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -1212,6 +1227,7 @@
 				12D81ACB15D8D977006AA4B2 /* EVEDBInvBlueprintType.m in Sources */,
 				12D81ACF15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m in Sources */,
 				12D81B4115D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m in Sources */,
+				12FDCC5A16390FEC0000709F /* EVEKillNetLog.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

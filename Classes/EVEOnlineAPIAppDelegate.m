@@ -13,6 +13,7 @@
 #import "EVECentralAPI.h"
 #import "RSS.h"
 #import "BattleClinicAPI.h"
+#import "EVEKillNetAPI.h"
 
 @implementation EVEOnlineAPIAppDelegate
 
@@ -23,6 +24,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[window makeKeyAndVisible];
+	
+	EVEKillNetLog* log = [EVEKillNetLog logWithFilter:@{EVEKillNetLogFilterInvolvedPilot : @"Ellistara"} mask:EVEKillNetLogMaskAll error:nil];
 	
 	EVEDBInvType* type = [EVEDBInvType invTypeWithTypeID:999 error:nil];
 	EVEDBInvBlueprintType* blueprintType = type.blueprintType;
