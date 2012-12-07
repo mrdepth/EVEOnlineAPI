@@ -53,7 +53,7 @@
 }
 
 - (void) dealloc {
-	[self.typeName release];
+	[_typeName release];
 	[super dealloc];
 }
 
@@ -81,10 +81,10 @@
 }
 
 - (void) dealloc {
-	[self.characterName release];
-	[self.corporationName release];
-	[self.allianceName release];
-	[self.factionName release];
+	[_characterName release];
+	[_corporationName release];
+	[_allianceName release];
+	[_factionName release];
 	[super dealloc];
 }
 
@@ -93,27 +93,27 @@
 @implementation EVEKillNetLogEntry
 
 - (void) dealloc {
-	[self.url release];
-	[self.timestamp release];
-	[self.victimName release];
-	[self.victimCorpName release];
-	[self.victimAllianceName release];
-	[self.victimShipName release];
-	[self.victimShipClass release];
-	[self.FBPilotName release];
-	[self.FBCorpName release];
-	[self.FBAllianceName release];
-	[self.solarSystemName release];
-	[self.regionName release];
-	[self.involved release];
-	[self.destroyedItems release];
-	[self.droppedItems release];
-	[self.corpName release];
-	[self.allianceName release];
-	[self.factionName release];
-	[self.shipDestroyed release];
-	[self.systemName release];
-	[self.involvedParties release];
+	[_url release];
+	[_timestamp release];
+	[_victimName release];
+	[_victimCorpName release];
+	[_victimAllianceName release];
+	[_victimShipName release];
+	[_victimShipClass release];
+	[_fbPilotName release];
+	[_fbCorpName release];
+	[_fbAllianceName release];
+	[_solarSystemName release];
+	[_regionName release];
+	[_involved release];
+	[_destroyedItems release];
+	[_droppedItems release];
+	[_corpName release];
+	[_allianceName release];
+	[_factionName release];
+	[_shipDestroyed release];
+	[_systemName release];
+	[_involvedParties release];
 	[super dealloc];
 }
 
@@ -204,9 +204,9 @@
 		entry.victimShipName = [dic notNullValueForKey:@"victimShipName"];
 		entry.victimShipClass = [dic notNullValueForKey:@"victimShipClass"];
 		entry.victimShipID = [[dic notNullValueForKey:@"victimShipID"] integerValue];
-		entry.FBPilotName = [dic notNullValueForKey:@"FBPilotName"];
-		entry.FBCorpName = [dic notNullValueForKey:@"FBCorpName"];
-		entry.FBAllianceName = [dic notNullValueForKey:@"FBAllianceName"];
+		entry.fbPilotName = [dic notNullValueForKey:@"FBPilotName"];
+		entry.fbCorpName = [dic notNullValueForKey:@"FBCorpName"];
+		entry.fbAllianceName = [dic notNullValueForKey:@"FBAllianceName"];
 		entry.involvedPartyCount = [[dic notNullValueForKey:@"involvedPartyCount"] integerValue];
 		entry.solarSystemName = [dic notNullValueForKey:@"solarSystemName"];
 		entry.solarSystemSecurity = [[dic notNullValueForKey:@"solarSystemSecurity"] floatValue];

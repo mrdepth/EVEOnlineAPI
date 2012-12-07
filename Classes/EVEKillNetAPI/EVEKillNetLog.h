@@ -135,9 +135,9 @@ typedef enum {
 @property (nonatomic, copy) NSString* victimShipName;
 @property (nonatomic, copy) NSString* victimShipClass;
 @property (nonatomic, assign) NSInteger victimShipID;
-@property (nonatomic, copy) NSString* FBPilotName;
-@property (nonatomic, copy) NSString* FBCorpName;
-@property (nonatomic, copy) NSString* FBAllianceName;
+@property (nonatomic, copy) NSString* fbPilotName;
+@property (nonatomic, copy) NSString* fbCorpName;
+@property (nonatomic, copy) NSString* fbAllianceName;
 @property (nonatomic, assign) NSInteger involvedPartyCount;
 @property (nonatomic, copy) NSString* solarSystemName;
 @property (nonatomic, assign) float solarSystemSecurity;
