@@ -60,6 +60,7 @@
 #import "EVEFacWarStats.h"
 #import "EVEFacWarTopStats.h"
 #import "EVECharacterID.h"
+#import "EVECharacterInfo.h"
 #import "EVECharacterName.h"
 #import "EVERefTypes.h"
 #import "EVESkillTree.h"
