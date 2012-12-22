@@ -73,7 +73,10 @@
 		if (!iconFile)
 			iconImageName = (NSString*) [[NSNull null] retain];
 		else {
-			iconImageName = [[NSString stringWithFormat:@"Icons/icon%@.png", iconFile] retain];
+			if ([iconFile hasPrefix:@"res:/"])
+				iconImageName = [[NSString stringWithFormat:@"Icons/%@", [iconFile lastPathComponent]] retain];
+			else
+				iconImageName = [[NSString stringWithFormat:@"Icons/icon%@.png", iconFile] retain];
 		}
 	}
 	if ((NSNull*) iconImageName == [NSNull null])

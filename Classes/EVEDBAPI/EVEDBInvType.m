@@ -337,8 +337,12 @@
 }
 
 - (NSString*) typeLargeImageName {
-	if (!imageName/*self.icon.iconImageName*/)
-		return self.icon.iconImageName;
+	if (!imageName) {
+		if (self.icon.iconImageName && [[NSBundle mainBundle] pathForResource:self.icon.iconImageName ofType:nil])
+			return self.icon.iconImageName;
+		else
+			return @"Icons/icon74_14.png";
+	}
 	else {
 		//NSString *imageName = [NSString stringWithFormat:@"Types/%d.png", typeID];
 		NSString *fileName = [NSString stringWithFormat:@"Types/%@.png", imageName];
@@ -350,9 +354,12 @@
 }
 
 - (NSString*) typeSmallImageName {
-	if (!imageName/*self.icon.iconImageName*/)
-//	if (self.icon.iconImageName)
-		return self.icon.iconImageName ? self.icon.iconImageName : @"Icons/icon74_14.png";
+	if (!imageName) {
+		if (self.icon.iconImageName && [[NSBundle mainBundle] pathForResource:self.icon.iconImageName ofType:nil])
+			return self.icon.iconImageName;
+		else
+			return @"Icons/icon74_14.png";
+	}
 	else {
 		//NSString *imageName = [NSString stringWithFormat:@"Types/%d.png", typeID];
 		NSString *fileName = [NSString stringWithFormat:@"Types/%@.png", imageName];
