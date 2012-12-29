@@ -49,12 +49,24 @@
 }
 
 - (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterName.xml.aspx?ids=%@", EVEOnlineAPIHost,
+/*	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterName.xml.aspx?ids=%@", EVEOnlineAPIHost,
 														[[ids componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr]) {
 	}
+	return self;*/
+	
+	NSString* body = [NSString stringWithFormat:@"ids=%@", [ids componentsJoinedByString:@","]];
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterName.xml.aspx",
+														EVEOnlineAPIHost]]
+						 bodyData:[body dataUsingEncoding:NSUTF8StringEncoding]
+					  contentType:nil
+					   cacheStyle:EVERequestCacheStyleLong
+							error:errorPtr]) {
+		
+	}
 	return self;
+
 }
 
 - (id) initWithIDs:(NSArray*) ids target:(id)target action:(SEL)action object:(id)aObject {
