@@ -106,7 +106,7 @@
 				[properties setValue:value forKey:key];
 			}
 		}
-		[row setProperties:properties];
+		[(EVENotificationTextsItem*) row setProperties:properties];
 	}
 }
 
