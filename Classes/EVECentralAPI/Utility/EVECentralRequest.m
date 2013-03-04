@@ -70,4 +70,29 @@ didStartElement:(NSString *)elementName
 	[s release];
 }
 
+- (NSString*) validText {
+	NSInteger n = [self.text lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+	const char* s = [self.text UTF8String];
+	
+	int start;
+	int end;
+	
+	for (start = 0; start < n; start++) {
+		if (s[start] != '\n' && s[start] != ' ' && s[start] != '\t')
+			break;
+	}
+	
+	for (end = n - 1; end >= 0; end--) {
+		if (s[end] != '\n' && s[end] != ' ' && s[end] != '\t')
+			break;
+	}
+	
+	NSString* validText = nil;
+	if (start <= end)
+		validText = [self.text substringWithRange:NSMakeRange(start, end - start + 1)];
+	else
+		validText = self.text;
+	return validText;
+}
+
 @end

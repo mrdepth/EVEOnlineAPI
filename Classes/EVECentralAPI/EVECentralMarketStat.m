@@ -153,17 +153,17 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	
 	if ([elementName isEqualToString:@"volume"])
-		currentStat.volume = [self.text floatValue];
+		currentStat.volume = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"avg"])
-		currentStat.avg = [self.text floatValue];
+		currentStat.avg = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"max"])
-		currentStat.max = [self.text floatValue];
+		currentStat.max = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"min"])
-		currentStat.min = [self.text floatValue];
+		currentStat.min = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"stddev"])
-		currentStat.stddev = [self.text floatValue];
+		currentStat.stddev = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"median"])
-		currentStat.median = [self.text floatValue];
+		currentStat.median = [self.validText floatValue];
 		
 }
 

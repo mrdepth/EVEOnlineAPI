@@ -18,4 +18,5 @@
 
 @interface EVECentralRequest (Protected)
 @property (nonatomic, readonly) NSString *text;
+@property (nonatomic, readonly) NSString *validText;
 @end

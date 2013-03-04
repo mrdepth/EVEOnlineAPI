@@ -205,37 +205,37 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	
 	if ([elementName isEqualToString:@"item"])
-		self.typeID = [self.text integerValue];
+		self.typeID = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"itemname"])
-		self.typeName = self.text;
+		self.typeName = self.validText;
 	else if ([elementName isEqualToString:@"region"]) {
 		if (currentOrder)
-			currentOrder.regionID = [self.text integerValue];
+			currentOrder.regionID = [self.validText integerValue];
 		else
-			[regions addObject:self.text];
+			[regions addObject:self.validText];
 	}
 	else if ([elementName isEqualToString:@"hours"])
-		self.hours = [self.text integerValue];
+		self.hours = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"minqty"])
-		self.minQ = [self.text integerValue];
+		self.minQ = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"station"])
-		currentOrder.stationID = [self.text integerValue];
+		currentOrder.stationID = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"station_name"])
-		currentOrder.stationName = self.text;
+		currentOrder.stationName = self.validText;
 	else if ([elementName isEqualToString:@"security"])
-		currentOrder.security = [self.text floatValue];
+		currentOrder.security = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"range"])
-		currentOrder.range = [self.text integerValue];
+		currentOrder.range = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"price"])
-		currentOrder.price = [self.text floatValue];
+		currentOrder.price = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"vol_remain"])
-		currentOrder.volRemain = [self.text integerValue];
+		currentOrder.volRemain = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"min_volume"])
-		currentOrder.minVolume = [self.text integerValue];
+		currentOrder.minVolume = [self.validText integerValue];
 	else if ([elementName isEqualToString:@"expires"])
-		currentOrder.expires = [expiresDateFormatter dateFromString:self.text];
+		currentOrder.expires = [expiresDateFormatter dateFromString:self.validText];
 	else if ([elementName isEqualToString:@"reported_time"])
-		currentOrder.reportedTime = [reportedTimeDateFormatter dateFromString:self.text];
+		currentOrder.reportedTime = [reportedTimeDateFormatter dateFromString:self.validText];
 	
 }
 
