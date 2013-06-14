@@ -10,11 +10,9 @@
 
 
 @implementation EVEErrorListItem
-@synthesize errorCode;
-@synthesize errorText;
 
 + (id) errorListItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEErrorListItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEErrorListItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -25,57 +23,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[errorText release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEErrorList
-@synthesize errors;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) errorListWithError:(NSError **)errorPtr {
-	return [[[EVEErrorList alloc] initWithError:errorPtr] autorelease];
++ (id) errorListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEErrorList alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) errorListWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEErrorList alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ErrorList.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ErrorList.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[errors release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"errors"]) {
-		errors = [[NSMutableArray alloc] init];
-		return errors;
+		self.errors = [[NSMutableArray alloc] init];
+		return self.errors;
 	}
 	else
 		return nil;

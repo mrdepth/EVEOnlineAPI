@@ -10,14 +10,9 @@
 
 
 @implementation EVESovereigntyItem
-@synthesize solarSystemID;
-@synthesize allianceID;
-@synthesize factionID;
-@synthesize solarSystemName;
-@synthesize corporationID;
 
 + (id) sovereigntyItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVESovereigntyItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVESovereigntyItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -31,62 +26,41 @@
 	return self;
 }
 
-- (void) dealloc {
-	[solarSystemName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVESovereignty
-@synthesize solarSystems;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) sovereigntyWithError:(NSError **)errorPtr {
-	return [[[EVESovereignty alloc] initWithError:errorPtr] autorelease];
++ (id) sovereigntyWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVESovereignty alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) sovereigntyWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVESovereignty alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Sovereignty.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Sovereignty.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[solarSystems release];
-	[super dealloc];
-}
-
-- (void) cacheData {
+- (NSError*) parseData:(NSData *)data {
+	NSError* error = [super parseData:data];
 	self.cachedUntil = [self.currentTime dateByAddingTimeInterval:3600 * 24];
-	[super cacheData];
+	self.cacheExpireDate = [self localTimeWithServerTime:self.cachedUntil];
+	return error;
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"solarSystems"]) {
-		solarSystems = [[NSMutableArray alloc] init];
-		return solarSystems;
+		self.solarSystems = [[NSMutableArray alloc] init];
+		return self.solarSystems;
 	}
 	else
 		return nil;

@@ -10,51 +10,22 @@
 
 
 @implementation EVECharFacWarStats
-@synthesize factionID;
-@synthesize factionName;
-@synthesize enlisted;
-@synthesize currentRank;
-@synthesize highestRank;
-@synthesize killsYesterday;
-@synthesize killsLastWeek;
-@synthesize killsTotal;
-@synthesize victoryPointsYesterday;
-@synthesize victoryPointsLastWeek;
-@synthesize victoryPointsTotal;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) charFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVECharFacWarStats alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) charFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECharFacWarStats alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) charFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECharFacWarStats alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/FacWarStats.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/FacWarStats.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[factionName release];
-	[enlisted release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
@@ -69,7 +40,7 @@
 	else if ([elementName isEqualToString:@"factionName"])
 		self.factionName = self.text;
 	else if ([elementName isEqualToString:@"enlisted"]) {
-		self.enlisted = [[NSDateFormatter eveDateFormatter] dateFromString:text];
+		self.enlisted = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
 	}
 	else if ([elementName isEqualToString:@"currentRank"])
 		self.currentRank = [self.text integerValue];

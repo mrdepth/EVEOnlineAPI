@@ -6,22 +6,13 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBDgmAttributeType;
-@interface EVEDBDgmTypeAttribute : NSObject {
-	NSInteger typeID;
-	NSInteger attributeID;
-	EVEDBDgmAttributeType *attribute;
-	float value;
-	
-}
+@interface EVEDBDgmTypeAttribute : EVEDBObject
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger attributeID;
-@property (nonatomic, retain) EVEDBDgmAttributeType *attribute;
+@property (nonatomic, strong) EVEDBDgmAttributeType *attribute;
 @property (nonatomic) float value;
-
-+ (id) dgmTypeAttributeWithDictionary: (NSDictionary*) dictionary;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

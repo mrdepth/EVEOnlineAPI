@@ -10,14 +10,4 @@
 
 
 @implementation RSSEnclosure
-@synthesize url;
-@synthesize length;
-@synthesize type;
-
-- (void) dealloc {
-	[url release];
-	[type release];
-	[super dealloc];
-}
-
 @end

@@ -9,12 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEKillsItem : NSObject {
-	NSInteger solarSystemID;
-	NSInteger shipKills;
-	NSInteger factionKills;
-	NSInteger podKills;
-}
+@interface EVEKillsItem : NSObject
 @property (nonatomic) NSInteger solarSystemID;
 @property (nonatomic) NSInteger shipKills;
 @property (nonatomic) NSInteger factionKills;
@@ -26,13 +21,9 @@
 @end
 
 
-@interface EVEKills : EVERequest {
-	NSMutableArray *solarSystems;
-}
-@property (nonatomic, retain) NSArray *solarSystems;
+@interface EVEKills : EVERequest
+@property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) killsWithError:(NSError **)errorPtr;
-+ (id) killsWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) killsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

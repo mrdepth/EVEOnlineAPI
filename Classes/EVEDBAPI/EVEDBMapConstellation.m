@@ -7,91 +7,46 @@
 //
 
 #import "EVEDBMapConstellation.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBMapRegion.h"
 
-@interface EVEDBMapConstellation(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBMapConstellation(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.regionID = [[dictionary valueForKey:@"regionID"] integerValue];
-	self.constellationID = [[dictionary valueForKey:@"constellationID"] integerValue];
-	self.constellationName = [dictionary valueForKey:@"constellationName"];
-	self.factionID = [[dictionary valueForKey:@"factionID"] integerValue];
-	self.radius = [[dictionary valueForKey:@"radius"] floatValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 @implementation EVEDBMapConstellation
-@synthesize regionID;
-@synthesize region;
-@synthesize constellationID;
-@synthesize constellationName;
-@synthesize factionID;
-@synthesize radius;
 
-+ (id) mapConstellationWithConstellationID: (NSInteger)aConstellationID error:(NSError **)errorPtr {
-	return [[[EVEDBMapConstellation alloc] initWithConstellationID:aConstellationID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"regionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"regionID"},
+		  @"constellationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"constellationID"},
+		  @"constellationName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"constellationName"},
+		  @"factionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"factionID"},
+		  @"radius" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"radius"}
+		  };
+	return map;
 }
 
-+ (id) mapConstellationWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBMapConstellation alloc] initWithDictionary:dictionary] autorelease];
++ (id) mapConstellationWithConstellationID: (NSInteger)constellationID error:(NSError **)errorPtr {
+	return [[EVEDBMapConstellation alloc] initWithConstellationID:constellationID error:errorPtr];
 }
 
-- (id) initWithConstellationID: (NSInteger)aConstellationID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapConstellations WHERE constellationID=%d;", aConstellationID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+- (id) initWithConstellationID: (NSInteger)constellationID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapConstellations WHERE constellationID=%d;", constellationID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (EVEDBMapRegion*) region {
-	if (regionID == 0)
+	if (self.regionID == 0)
 		return NULL;
-	if (!region) {
-		region = [[EVEDBMapRegion mapRegionWithRegionID:regionID error:nil] retain];
-		if (!region)
-			region = (EVEDBMapRegion*) [[NSNull null] retain];
+	if (!_region) {
+		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
+		if (!_region)
+			_region = (EVEDBMapRegion*) [NSNull null];
 	}
-	if ((NSNull*) region == [NSNull null])
+	if ((NSNull*) _region == [NSNull null])
 		return NULL;
 	else
-		return region;
-}
-
-- (void) dealloc {
-	[region release];
-	[constellationName release];
-	[super dealloc];
+		return _region;
 }
 
 @end

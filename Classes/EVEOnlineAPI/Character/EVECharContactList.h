@@ -9,12 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECharContactListItem : NSObject {
-	NSInteger contactID;
-	NSString *contactName;
-	BOOL inWatchlist;
-	float standing;
-}
+@interface EVECharContactListItem : NSObject
 @property (nonatomic) NSInteger contactID;
 @property (nonatomic, copy) NSString *contactName;
 @property (nonatomic) BOOL inWatchlist;
@@ -25,14 +20,10 @@
 
 @end
 
-@interface EVECharContactList : EVERequest {
-	NSMutableArray *contactList;
-}
-@property (nonatomic, retain) NSArray *contactList;
+@interface EVECharContactList : EVERequest
+@property (nonatomic, strong) NSArray *contactList;
 
-+ (id) charContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-+ (id) charContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
++ (id) charContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

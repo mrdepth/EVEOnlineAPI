@@ -18,37 +18,24 @@ typedef enum {
 
 #define EVEC0rporationErrorCodeParsingErrorText @"Result parsing error"
 
-@interface EVEC0rporationFactionItem : NSObject {
-	NSInteger typeID;
-	float avg;
-	float median;
-	float lo;
-	float hi;
-	float latest;
-	NSDate* lastupdate;
-}
+@interface EVEC0rporationFactionItem : NSObject
 @property (nonatomic, assign) NSInteger typeID;
 @property (nonatomic, assign) float avg;
 @property (nonatomic, assign) float median;
 @property (nonatomic, assign) float lo;
 @property (nonatomic, assign) float hi;
 @property (nonatomic, assign) float latest;
-@property (nonatomic, retain) NSDate* lastupdate;
+@property (nonatomic, strong) NSDate* lastupdate;
 
 + (id) factionItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
 
 @end
 
-@interface EVEC0rporationFaction : EVECachedURLRequest<NSXMLParserDelegate> {
-	NSMutableString *text;
-	NSMutableDictionary* types;
-}
-@property (nonatomic, retain) NSDictionary* types;
+@interface EVEC0rporationFaction : EVECachedURLRequest<NSXMLParserDelegate>
+@property (nonatomic, strong) NSDictionary* types;
 
-+ (id) factionWithError:(NSError **)errorPtr;
-+ (id) factionWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) factionWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

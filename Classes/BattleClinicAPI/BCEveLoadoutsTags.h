@@ -9,14 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "BCRequest.h"
 
-@interface BCEveLoadoutsTags : BCRequest {
-	NSMutableArray *tags;
-}
-@property (nonatomic, retain) NSArray *tags;
+@interface BCEveLoadoutsTags : BCRequest
+@property (nonatomic, strong) NSArray *tags;
 
-+ (id) eveLoadoutsTagsWithAPIKey:(NSString*) apiKey target:(id)target action:(SEL)action object:(id)object;
-+ (id) eveLoadoutsTagsWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr;
-- (id) initWithAPIKey:(NSString*) apiKey target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr;
++ (id) eveLoadoutsTagsWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

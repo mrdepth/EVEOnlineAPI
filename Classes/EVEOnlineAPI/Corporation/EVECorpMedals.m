@@ -10,14 +10,9 @@
 
 
 @implementation EVECorpMedalsItem
-@synthesize medalID;
-@synthesize title;
-@synthesize description;
-@synthesize creatorID;
-@synthesize created;
 
 + (id) corpMedalsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECorpMedalsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECorpMedalsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -31,59 +26,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[title release];
-	[description release];
-	[created release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECorpMedals
-@synthesize medals;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) corpMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVECorpMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) corpMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECorpMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) corpMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECorpMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[medals release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"medals"]) {
-		medals = [[NSMutableArray alloc] init];
-		return medals;
+		self.medals = [[NSMutableArray alloc] init];
+		return self.medals;
 	}
 	else
 		return nil;
@@ -92,7 +62,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"medals"]) {
 		EVECorpMedalsItem *corpMedalsItem = [EVECorpMedalsItem corpMedalsItemWithXMLAttributes:attributeDict];
-		[medals addObject:corpMedalsItem];
+		[(NSMutableArray*) self.medals addObject:corpMedalsItem];
 		return corpMedalsItem;
 	}
 	return nil;

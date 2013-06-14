@@ -10,17 +10,9 @@
 
 
 @implementation EVEMailMessagesItem
-@synthesize messageID;
-@synthesize senderID;
-@synthesize sentDate;
-@synthesize title;
-@synthesize toCorpOrAllianceID;
-@synthesize toCharacterIDs;
-@synthesize toListID;
-@synthesize read;
 
 + (id) mailMessagesItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEMailMessagesItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEMailMessagesItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -41,60 +33,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[sentDate release];
-	[title release];
-	[toCharacterIDs release];
-	[toListID release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEMailMessages
-@synthesize mailMessages;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) mailMessagesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEMailMessages alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) mailMessagesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEMailMessages alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) mailMessagesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEMailMessages alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailMessages.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailMessages.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleLong
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[mailMessages release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"messages"]) {
-		mailMessages = [[NSMutableArray alloc] init];
-		return mailMessages;
+		self.mailMessages = [[NSMutableArray alloc] init];
+		return self.mailMessages;
 	}
 	else
 		return nil;
@@ -103,8 +69,8 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"messages"]) {
 		EVEMailMessagesItem *mailMessagesItem = [EVEMailMessagesItem mailMessagesItemWithXMLAttributes:attributeDict];
-		[mailMessages addObject:mailMessagesItem];
-		return mailMessages;
+		[(NSMutableArray*) self.mailMessages addObject:mailMessagesItem];
+		return mailMessagesItem;
 	}
 	return nil;
 }

@@ -6,23 +6,14 @@
 //
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBInvType;
-@interface EVEDBInvTypeMaterial : NSObject {
-	NSInteger typeID;
-	EVEDBInvType* type;
-	NSInteger materialTypeID;
-	EVEDBInvType* materialType;
-	NSInteger quantity;
-}
+@interface EVEDBInvTypeMaterial : EVEDBObject
 @property (nonatomic) NSInteger typeID;
-@property (nonatomic, retain) EVEDBInvType* type;
+@property (nonatomic, strong) EVEDBInvType* type;
 @property (nonatomic) NSInteger materialTypeID;
-@property (nonatomic, retain) EVEDBInvType* materialType;
+@property (nonatomic, strong) EVEDBInvType* materialType;
 @property (nonatomic) NSInteger quantity;
-
-+ (id) invTypeMaterialWithDictionary: (NSDictionary*) dictionary;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

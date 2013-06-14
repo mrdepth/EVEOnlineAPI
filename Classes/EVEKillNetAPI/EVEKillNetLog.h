@@ -124,8 +124,8 @@ typedef enum {
 @end
 
 @interface EVEKillNetLogEntry : NSObject
-@property (nonatomic, retain) NSURL* url;
-@property (nonatomic, retain) NSDate* timestamp;
+@property (nonatomic, strong) NSURL* url;
+@property (nonatomic, strong) NSDate* timestamp;
 @property (nonatomic, assign) NSInteger internalID;
 @property (nonatomic, assign) NSInteger externalID;
 @property (nonatomic, copy) NSString* victimName;
@@ -143,9 +143,9 @@ typedef enum {
 @property (nonatomic, assign) float solarSystemSecurity;
 @property (nonatomic, copy) NSString* regionName;
 @property (nonatomic, assign) long long isk;
-@property (nonatomic, retain) NSArray* involved;
-@property (nonatomic, retain) NSArray* destroyedItems;
-@property (nonatomic, retain) NSArray* droppedItems;
+@property (nonatomic, strong) NSArray* involved;
+@property (nonatomic, strong) NSArray* destroyedItems;
+@property (nonatomic, strong) NSArray* droppedItems;
 @property (nonatomic, assign) NSInteger eveKillID;
 @property (nonatomic, assign) NSInteger eveKillExternalID;
 @property (nonatomic, copy) NSString* corpName;
@@ -155,15 +155,13 @@ typedef enum {
 @property (nonatomic, copy) NSString* systemName;
 @property (nonatomic, assign) float systemSecurity;
 @property (nonatomic, assign) float damageTaken;
-@property (nonatomic, retain) NSArray* involvedParties;
+@property (nonatomic, strong) NSArray* involvedParties;
 @end;
 
-@interface EVEKillNetLog : EVECachedURLRequest {
-	NSMutableArray* killLog;
-}
-@property (nonatomic, retain) NSArray* killLog;
+@interface EVEKillNetLog : EVECachedURLRequest
+@property (nonatomic, strong) NSArray* killLog;
 
-+ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr;
-- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr;
++ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

@@ -9,11 +9,9 @@
 #import "EVEMailingLists.h"
 
 @implementation EVEMailingListsItem
-@synthesize listID;
-@synthesize displayName;
 
 + (id) mailingListsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEMailingListsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEMailingListsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -24,68 +22,43 @@
 	return self;
 }
 
-- (void) dealloc {
-	[displayName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEMailingLists
-@synthesize mailingLists;
-@synthesize mailingListsMap;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) mailingListsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEMailingLists alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) mailingListsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEMailingLists alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) mailingListsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEMailingLists alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailingLists.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailingLists.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[mailingLists release];
-	[mailingListsMap release];
-	[super dealloc];
 }
 
 - (NSDictionary*) mailingListsMap {
-	if (!mailingListsMap) {
-		mailingListsMap = [[NSMutableDictionary alloc] initWithCapacity:mailingLists.count];
-		for (EVEMailingListsItem* item in mailingLists)
-			[mailingListsMap setValue:item forKey:[NSString stringWithFormat:@"%d", item.listID]];
+	if (!_mailingListsMap) {
+		_mailingListsMap = [[NSMutableDictionary alloc] initWithCapacity:self.mailingLists.count];
+		for (EVEMailingListsItem* item in self.mailingLists)
+			[_mailingListsMap setValue:item forKey:[NSString stringWithFormat:@"%d", item.listID]];
 	}
-	return mailingListsMap;
+	return _mailingListsMap;
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"mailingLists"]) {
-		mailingLists = [[NSMutableArray alloc] init];
-		return mailingLists;
+		self.mailingLists = [[NSMutableArray alloc] init];
+		return self.mailingLists;
 	}
 	else
 		return nil;
@@ -94,7 +67,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"mailingLists"]) {
 		EVEMailingListsItem *mailingListsItem = [EVEMailingListsItem mailingListsItemWithXMLAttributes:attributeDict];
-		[mailingLists addObject:mailingListsItem];
+		[(NSMutableArray*) self.mailingLists addObject:mailingListsItem];
 		return mailingListsItem;
 	}
 	return nil;

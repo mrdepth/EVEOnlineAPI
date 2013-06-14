@@ -44,17 +44,17 @@
 
 + (id) characterPortraitImageWithCharacterID: (NSInteger) characterID size: (EVEImageSize) size error:(NSError **)errorPtr {
 	NSData *data = [NSData dataWithContentsOfURL:[self characterPortraitURLWithCharacterID:characterID size:size error:errorPtr]];
-	return [[[EVEImage alloc] initWithData:data] autorelease];
+	return [[EVEImage alloc] initWithData:data];
 }
 
 + (id) corporationLogoImageWithCorporationID: (NSInteger) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr {
 	NSData *data = [NSData dataWithContentsOfURL:[self corporationLogoURLWithCorporationID:corporationID size:size error:errorPtr]];
-	return [[[EVEImage alloc] initWithData:data] autorelease];
+	return [[EVEImage alloc] initWithData:data];
 }
 
 + (id) allianceLogoImageWithAllianceID: (NSInteger) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr {
 	NSData *data = [NSData dataWithContentsOfURL:[self allianceLogoURLWithAllianceID:allianceID size:size error:errorPtr]];
-	return [[[EVEImage alloc] initWithData:data] autorelease];
+	return [[EVEImage alloc] initWithData:data];
 }
 
 @end

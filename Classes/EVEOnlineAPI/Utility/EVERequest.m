@@ -7,7 +7,17 @@
 //
 
 #import "EVERequest.h"
-#import "EVERequestsCache.h"
+
+@interface EVERequest()
+@property (nonatomic, strong) NSError* error;
+@property (nonatomic, assign) NSInteger errorCode;
+@property (nonatomic, strong, readwrite) NSMutableString* text;
+
+@property (nonatomic, strong) NSMutableArray *rowsets;
+@property (nonatomic, strong) NSMutableArray *rowsetObjects;
+@property (nonatomic, strong) NSMutableArray *rows;
+
+@end
 
 @implementation NSDateFormatter(EVERequest)
 
@@ -20,62 +30,66 @@
 		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
 		[threadDictionary setValue:dateFormatter forKey:@"eveDateFormatter"];
 		[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-		[dateFormatter autorelease];
 	}
 	return dateFormatter;
 }
 
 @end
 
-@implementation EVERequest(Protected)
+@implementation EVERequest
 
-- (NSString*) text {
-	return text;
++ (EVEApiKeyType) requiredApiKeyType {
+	return EVEApiKeyTypeFull;
+}
+
+- (NSDate*) currentServerTime {
+	return [NSDate dateWithTimeIntervalSinceNow:-[self.cacheDate timeIntervalSinceDate:self.currentTime]];
+}
+
+- (NSDate*) serverTimeWithLocalTime:(NSDate*) localTime {
+	if (!localTime)
+		return nil;
+	return [NSDate dateWithTimeInterval:[self.currentTime timeIntervalSinceDate:self.cacheDate] sinceDate:localTime];
+}
+
+- (NSDate*) localTimeWithServerTime:(NSDate*) serverTime {
+	return [NSDate dateWithTimeInterval:[self.cacheDate timeIntervalSinceDate:self.currentTime] sinceDate:serverTime];
 }
 
 - (NSError*) parseData: (NSData*) aData {
-//	NSString *s = [[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding];
-//	NSLog(@"%@", s);
-//	[s release];*
-	
-	
 	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:aData];
 	[parser setDelegate:self];
-	error = nil;
 	
-	rowsets = [[NSMutableArray alloc] init];
-	rowsetObjects = [[NSMutableArray alloc] init];
-	rows = [[NSMutableArray alloc] init];
-	text = [[NSMutableString alloc] init];
-	if (![parser parse]) {
+	self.rowsets = [[NSMutableArray alloc] init];
+	self.rowsetObjects = [[NSMutableArray alloc] init];
+	self.rows = [[NSMutableArray alloc] init];
+	self.text = [[NSMutableString alloc] init];
+	
+	NSError* error = nil;
+	if (![parser parse])
 		error = [parser parserError];
-	}
-	[rowsets release];
-	[rowsetObjects release];
-	[rows release];
-	[text release];
-	[parser release];
+	self.rowsets = nil;
+	self.rowsetObjects = nil;
+	self.rows = nil;
+	self.text = nil;
+	
+	if (self.error)
+		error = self.error;
+	
+	self.cacheExpireDate = [self localTimeWithServerTime:self.cachedUntil];
 	return error;
 }
 
-- (void) cacheData {
-	EVERequestsCache *cache = [EVERequestsCache sharedRequestsCache];
-	NSTimeInterval timeInterval = [self.currentTime timeIntervalSinceNow];
-	NSTimeInterval dateInterval = [self.cachedUntil timeIntervalSince1970];
-	NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateInterval - timeInterval];
-	[cache cacheData:data withURL:requestUrl cachedUntil:date];
-}
-
 - (NSString*) currentRowset {
-	if (rowsets.count > 0)
-		return [rowsets lastObject];
+	if (self.rowsets.count > 0)
+		return [self.rowsets lastObject];
 	else
 		return nil;
 }
 
 - (id) currentRow {
-	if (rows.count > 0)
-		return [rows lastObject];
+	if (self.rows.count > 0)
+		return [self.rows lastObject];
 	else
 		return nil;
 }
@@ -94,41 +108,6 @@
 - (void) didEndRow: (id) row rowset: (NSString*) rowset {
 }
 
-@end
-
-
-
-@implementation EVERequest
-@synthesize currentTime;
-@synthesize cachedUntil;
-@synthesize apiVersion;
-
-+ (EVEApiKeyType) requiredApiKeyType {
-	return EVEApiKeyTypeFull;
-}
-
-- (void) dealloc {
-	[currentTime release];
-	[cachedUntil release];
-	[apiVersion release];
-	[super dealloc];
-}
-
-- (NSDate*) currentServerTime {
-	return [NSDate dateWithTimeIntervalSinceNow:-[self.cacheDate timeIntervalSinceDate:self.currentTime]];
-}
-
-- (NSDate*) serverTimeWithLocalTime:(NSDate*) localTime {
-	if (!localTime)
-		return nil;
-	return [NSDate dateWithTimeInterval:[self.currentTime timeIntervalSinceDate:self.cacheDate] sinceDate:localTime];
-}
-
-- (NSDate*) localTimeWithServerTime:(NSDate*) serverTime {
-	return [NSDate dateWithTimeInterval:[self.cacheDate timeIntervalSinceDate:self.currentTime] sinceDate:serverTime];
-}
-
-
 #pragma mark NSXMLParserDelegate
 
 - (void) parser:(NSXMLParser *)parser
@@ -136,29 +115,29 @@ didStartElement:(NSString *)elementName
    namespaceURI:(NSString *)namespaceURI
   qualifiedName:(NSString *)qualifiedName
 	 attributes:(NSDictionary *)attributeDict {
-	[text setString:@""];
+	[(NSMutableString*) self.text setString:@""];
 	if ([elementName isEqualToString:@"eveapi"]) {
 		self.apiVersion = [attributeDict valueForKey:@"version"];
 	}
 	else if ([elementName isEqualToString:@"error"]) {
-		errorCode = [[attributeDict valueForKey:@"code"] integerValue];
+		self.errorCode = [[attributeDict valueForKey:@"code"] integerValue];
 	}
 	else if ([elementName isEqualToString:@"rowset"]) {
 		NSString *rowset = [attributeDict valueForKey:@"name"];
-		[rowsets addObject:rowset];
+		[self.rowsets addObject:rowset];
 		id rowsetObject = [self didStartRowset:rowset];
 		if (!rowsetObject)
 			rowsetObject = [NSNull null];
-		[rowsetObjects addObject:rowsetObject];
+		[self.rowsetObjects addObject:rowsetObject];
 	}
 	else if ([elementName isEqualToString:@"row"]) {
-		id rowsetObject = [rowsetObjects lastObject];
+		id rowsetObject = [self.rowsetObjects lastObject];
 		id row = [self didStartRowWithAttributes:attributeDict
-										  rowset:[rowsets lastObject]
+										  rowset:[self.rowsets lastObject]
 									rowsetObject:((NSNull*) rowsetObject == [NSNull null] ? nil : rowsetObject)];
 		if (!row)
 			row = [NSNull null];
-		[rows addObject:row];
+		[self.rows addObject:row];
 	}
 }
 
@@ -167,37 +146,36 @@ didStartElement:(NSString *)elementName
    namespaceURI:(NSString *)namespaceURI
   qualifiedName:(NSString *)qName {
 	if ([elementName isEqualToString:@"currentTime"]) {
-		self.currentTime = [[NSDateFormatter eveDateFormatter] dateFromString:text];
+		self.currentTime = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
 	}
 	else if ([elementName isEqualToString:@"cachedUntil"])
-		self.cachedUntil = [[NSDateFormatter eveDateFormatter] dateFromString:text];
+		self.cachedUntil = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
 	else if ([elementName isEqualToString:@"error"]) {
-		error = [NSError errorWithDomain:EVEOnlineErrorDomain code:errorCode userInfo:[NSDictionary dictionaryWithObject:[[text copy] autorelease] forKey:NSLocalizedDescriptionKey]];
+		self.error = [NSError errorWithDomain:EVEOnlineErrorDomain code:self.errorCode userInfo:[NSDictionary dictionaryWithObject:[self.text copy] forKey:NSLocalizedDescriptionKey]];
 	}
 	else if ([elementName isEqualToString:@"rowset"]) {
-		id rowsetObject = [rowsetObjects lastObject];
-		[self didEndRowset:[rowsets lastObject]
+		id rowsetObject = [self.rowsetObjects lastObject];
+		[self didEndRowset:[self.rowsets lastObject]
 			  rowsetObject:((NSNull*) rowsetObject == [NSNull null] ? nil : rowsetObject)];
 		
-		[rowsets removeLastObject];
-		[rowsetObjects removeLastObject];
+		[self.rowsets removeLastObject];
+		[self.rowsetObjects removeLastObject];
 	}
 	else if ([elementName isEqualToString:@"row"]) {
-		id row = [rows lastObject];
+		id row = [self.rows lastObject];
 		[self didEndRow: ((NSNull*) row == [NSNull null] ? nil : row)
-				 rowset: [rowsets lastObject]];
-		[rows removeLastObject];
+				 rowset: [self.rowsets lastObject]];
+		[self.rows removeLastObject];
 	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-	[text appendString:string];
+	[(NSMutableString*) self.text appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock {
 	NSString *s = [[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding];
-	[text setString:s];
-	[s release];
+	[(NSMutableString*) self.text setString:s];
 }
 
 @end

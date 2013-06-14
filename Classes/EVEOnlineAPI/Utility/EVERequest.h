@@ -10,30 +10,17 @@
 #import "EVEGlobals.h"
 #import "EVECachedURLRequest.h"
 
-@interface EVERequest : EVECachedURLRequest<NSXMLParserDelegate> {
-	NSMutableString *text;
-	
-	NSMutableArray *rowsets;
-	NSMutableArray *rowsetObjects;
-	NSMutableArray *rows;
-	
-	NSDate *currentTime;
-	NSDate *cachedUntil;
-	NSString *apiVersion;
-}
+@interface EVERequest : EVECachedURLRequest<NSXMLParserDelegate>
 
-@property (nonatomic, retain) NSDate *currentTime;
-@property (nonatomic, retain) NSDate *cachedUntil;
+@property (nonatomic, strong) NSDate *currentTime;
+@property (nonatomic, strong) NSDate *cachedUntil;
 @property (nonatomic, copy) NSString *apiVersion;
+@property (nonatomic, readonly, strong) NSString *text;
 
 + (EVEApiKeyType) requiredApiKeyType;
 - (NSDate*) currentServerTime;
 - (NSDate*) serverTimeWithLocalTime:(NSDate*) localTime;
 - (NSDate*) localTimeWithServerTime:(NSDate*) serverTime;
-@end
-
-@interface EVERequest(Protected)
-@property (nonatomic, readonly) NSString *text;
 
 - (NSString*) currentRowset;
 - (id) currentRow;

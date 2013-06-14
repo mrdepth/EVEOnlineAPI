@@ -10,17 +10,9 @@
 
 
 @implementation EVEContractsItem
-@synthesize contractID;
-@synthesize issuerID, issuerCorpID, assigneeID, acceptorID, startStationID, endStationID, forCorp, numDays;
-@synthesize title;
-@synthesize type;
-@synthesize status;
-@synthesize availability;
-@synthesize dateIssued, dateExpired, dateAccepted, dateCompleted;
-@synthesize price, reward, collateral, buyout, volume;
 
 + (id) contractsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEContractsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEContractsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -92,15 +84,6 @@
 	return self;
 }
 
-- (void) dealloc {
-	[title release];
-	[dateIssued release];
-	[dateExpired release];
-	[dateAccepted release];
-	[dateCompleted release];
-	[super dealloc];
-}
-
 - (NSString*) localizedTypeString {
 	switch (self.type) {
 		case EVEContractTypeItemExchange:
@@ -169,49 +152,32 @@
 
 
 @implementation EVEContracts
-@synthesize contractList;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
 
-+ (id) contractsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr {
-	return [[[EVEContracts alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr] autorelease];
++ (id) contractsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEContracts alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) contractsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEContracts alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate target:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Contracts.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Contracts.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[contractList release];
-	[super dealloc];
-}
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"contractList"]) {
-		contractList = [[NSMutableArray alloc] init];
-		return contractList;
+		self.contractList = [[NSMutableArray alloc] init];
+		return self.contractList;
 	}
 	else
 		return nil;
@@ -220,7 +186,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"contractList"]) {
 		EVEContractsItem *contractsItem = [EVEContractsItem contractsItemWithXMLAttributes:attributeDict];
-		[contractList addObject:contractsItem];
+		[(NSMutableArray*) self.contractList addObject:contractsItem];
 		return contractsItem;
 	}
 	return nil;

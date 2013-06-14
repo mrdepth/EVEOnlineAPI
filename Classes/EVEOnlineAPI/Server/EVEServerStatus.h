@@ -9,15 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEServerStatus : EVERequest {
-	BOOL serverOpen;
-	NSInteger onlinePlayers;
-}
+@interface EVEServerStatus : EVERequest
 @property (nonatomic) BOOL serverOpen;
 @property (nonatomic) NSInteger onlinePlayers;
 
-+ (id) serverStatusWithError:(NSError **)errorPtr;
-+ (id) serverStatusWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) serverStatusWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

@@ -9,14 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarStatsTotals : NSObject {
-	NSInteger killsYesterday;
-	NSInteger killsLastWeek;
-	NSInteger killsTotal;
-	NSInteger victoryPointsYesterday;
-	NSInteger victoryPointsLastWeek;
-	NSInteger victoryPointsTotal;
-}
+@interface EVEFacWarStatsTotals : NSObject
 @property (nonatomic) NSInteger killsYesterday;
 @property (nonatomic) NSInteger killsLastWeek;
 @property (nonatomic) NSInteger killsTotal;
@@ -26,18 +19,7 @@
 @end
 
 
-@interface EVEFacWarStatsFactionsItem : NSObject {
-	NSInteger factionID;
-	NSString *factionName;
-	NSInteger pilots;
-	NSInteger systemsControlled;
-	NSInteger killsYesterday;
-	NSInteger killsLastWeek;
-	NSInteger killsTotal;
-	NSInteger victoryPointsYesterday;
-	NSInteger victoryPointsLastWeek;
-	NSInteger victoryPointsTotal;
-}
+@interface EVEFacWarStatsFactionsItem : NSObject
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic) NSInteger pilots;
@@ -55,12 +37,7 @@
 @end
 
 
-@interface EVEFacWarStatsFactionWarsItem : NSObject {
-	NSInteger factionID;
-	NSString *factionName;
-	NSInteger againstID;
-	NSString *againstName;
-}
+@interface EVEFacWarStatsFactionWarsItem : NSObject
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic) NSInteger againstID;
@@ -72,17 +49,11 @@
 @end
 
 
-@interface EVEFacWarStats : EVERequest {
-	EVEFacWarStatsTotals *totals;
-	NSMutableArray *factions;
-	NSMutableArray *factionWars;
-}
-@property (nonatomic, retain) EVEFacWarStatsTotals *totals;
-@property (nonatomic, retain) NSArray *factions;
-@property (nonatomic, retain) NSArray *factionWars;
+@interface EVEFacWarStats : EVERequest
+@property (nonatomic, strong) EVEFacWarStatsTotals *totals;
+@property (nonatomic, strong) NSArray *factions;
+@property (nonatomic, strong) NSArray *factionWars;
 
-+ (id) facWarStatsWithError:(NSError **)errorPtr;
-+ (id) facWarStatsWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) facWarStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

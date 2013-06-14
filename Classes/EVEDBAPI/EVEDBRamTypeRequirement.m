@@ -7,101 +7,66 @@
 //
 
 #import "EVEDBRamTypeRequirement.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBRamActivity.h"
 #import "EVEDBInvType.h"
 
-@interface EVEDBRamTypeRequirement(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBRamTypeRequirement(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.typeID = [[dictionary valueForKey:@"typeID"] integerValue];
-	self.activityID = [[dictionary valueForKey:@"activityID"] integerValue];
-	self.requiredTypeID = [[dictionary valueForKey:@"requiredTypeID"] integerValue];
-	self.quantity = [[dictionary valueForKey:@"quantity"] integerValue];
-	self.damagePerJob = [[dictionary valueForKey:@"damagePerJob"] floatValue];
-	self.recycle = [[dictionary valueForKey:@"recycle"] integerValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 @implementation EVEDBRamTypeRequirement
-@synthesize typeID;
-@synthesize type;
-@synthesize activityID;
-@synthesize activity;
-@synthesize requiredTypeID;
-@synthesize requiredType;
-@synthesize quantity;
-@synthesize damagePerJob;
-@synthesize recycle;
 
-+ (id) ramTypeRequirementWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBRamTypeRequirement alloc] initWithDictionary:dictionary] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"typeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"typeID"},
+		  @"activityID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"activityID"},
+		  @"requiredTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"requiredTypeID"},
+		  @"quantity" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"quantity"},
+		  @"damagePerJob" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"damagePerJob"},
+		  @"recycle" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"recycle"},
+		  };
+	return map;
 }
 
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[type release];
-	[activity release];
-	[requiredType release];
-	[super dealloc];
-}
 
 - (EVEDBInvType*) type {
-	if (typeID == 0)
+	if (self.typeID == 0)
 		return NULL;
-	if (!type) {
-		type = [[EVEDBInvType invTypeWithTypeID:typeID error:nil] retain];
-		if (!type)
-			type = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_type) {
+		_type = [EVEDBInvType invTypeWithTypeID:self.typeID error:nil];
+		if (!_type)
+			_type = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) type == [NSNull null])
+	if ((NSNull*) _type == [NSNull null])
 		return NULL;
 	else
-		return type;
+		return _type;
 }
 
 - (EVEDBRamActivity*) activity {
-	if (activityID == 0)
+	if (self.activityID == 0)
 		return NULL;
-	if (!activity) {
-		activity = [[EVEDBRamActivity ramActivityWithActivityID:activityID error:nil] retain];
-		if (!activity)
-			activity = (EVEDBRamActivity*) [[NSNull null] retain];
+	if (!_activity) {
+		_activity = [EVEDBRamActivity ramActivityWithActivityID:self.activityID error:nil];
+		if (!_activity)
+			_activity = (EVEDBRamActivity*) [NSNull null];
 	}
-	if ((NSNull*) activity == [NSNull null])
+	if ((NSNull*) _activity == [NSNull null])
 		return NULL;
 	else
-		return activity;
+		return _activity;
 }
 
 - (EVEDBInvType*) requiredType {
-	if (requiredTypeID == 0)
+	if (self.requiredTypeID == 0)
 		return NULL;
-	if (!requiredType) {
-		requiredType = [[EVEDBInvType invTypeWithTypeID:requiredTypeID error:nil] retain];
-		if (!requiredType)
-			requiredType = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_requiredType) {
+		_requiredType = [EVEDBInvType invTypeWithTypeID:self.requiredTypeID error:nil];
+		if (!_requiredType)
+			_requiredType = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) requiredType == [NSNull null])
+	if ((NSNull*) _requiredType == [NSNull null])
 		return NULL;
 	else
-		return requiredType;
+		return _requiredType;
 }
 
 @end

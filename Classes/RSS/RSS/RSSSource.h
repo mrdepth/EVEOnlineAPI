@@ -9,11 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface RSSSource : NSObject {
-	NSString *title;
-	NSURL *url;
-}
+@interface RSSSource : NSObject
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic, retain) NSURL *url;
+@property (nonatomic, strong) NSURL *url;
 
 @end

@@ -9,19 +9,9 @@
 #import "EVEKillLog.h"
 
 @implementation EVEKillLogVictim
-@synthesize allianceID;
-@synthesize allianceName;
-@synthesize characterID;
-@synthesize characterName;
-@synthesize corporationID;
-@synthesize corporationName;
-@synthesize damageTaken;
-@synthesize factionID;
-@synthesize factionName;
-@synthesize shipTypeID;
 
 + (id) killLogVictimWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEKillLogVictim alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEKillLogVictim alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -40,33 +30,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[allianceName release];
-	[characterName release];
-	[corporationName release];
-	[factionName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEKillLogAttacker
-@synthesize characterID;
-@synthesize characterName;
-@synthesize corporationID;
-@synthesize corporationName;
-@synthesize allianceID;
-@synthesize allianceName;
-@synthesize securityStatus;
-@synthesize damageDone;
-@synthesize finalBlow;
-@synthesize weaponTypeID;
-@synthesize shipTypeID;
-
 
 + (id) killLogAttackerWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEKillLogAttacker alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEKillLogAttacker alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -86,24 +56,12 @@
 	return self;
 }
 
-- (void) dealloc {
-	[characterName release];
-	[corporationName release];
-	[allianceName release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVEKillLogItem
-@synthesize flag;
-@synthesize qtyDropped;
-@synthesize qtyDestroyed;
-@synthesize typeID;
-@synthesize items;
 
 + (id) killLogItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEKillLogItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEKillLogItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -116,24 +74,12 @@
 	return self;
 }
 
-- (void) dealloc {
-	[items release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVEKillLogKill
-@synthesize killID;
-@synthesize solarSystemID;
-@synthesize killTime;
-@synthesize moonID;
-@synthesize victim;
-@synthesize attackers;
-@synthesize items;
 
 + (id) killLogKillWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEKillLogKill alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEKillLogKill alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -146,62 +92,35 @@
 	return self;
 }
 
-- (void) dealloc {
-	[killTime release];
-	[victim release];
-	[attackers release];
-	[items release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEKillLog
-@synthesize kills;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr {
-	return [[[EVEKillLog alloc] initWithKeyID:keyID vCode:vCode characterID:characterID beforeKillID:beforeKillID corporate:corporate error:errorPtr] autorelease];
++ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEKillLog alloc] initWithKeyID:keyID vCode:vCode characterID:characterID beforeKillID:beforeKillID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEKillLog alloc] initWithKeyID:keyID vCode:vCode characterID:characterID beforeKillID:beforeKillID corporate:corporate target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/KillLog.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, vCode, characterID,
 														(beforeKillID > 0 ? [NSString stringWithFormat:@"&beforeKillID=%d", beforeKillID] : @"")]]
 					   cacheStyle:EVERequestCacheStyleLong
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/KillLog.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, vCode, characterID,
-														(beforeKillID > 0 ? [NSString stringWithFormat:@"&beforeKillID=%d", beforeKillID] : @"")]]
-					   cacheStyle:EVERequestCacheStyleLong
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[kills release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"kills"]) {
-		kills = [[NSMutableArray alloc] init];
-		return kills;
+		self.kills = [[NSMutableArray alloc] init];
+		return self.kills;
 	}
 	else if ([rowset isEqualToString:@"attackers"]) {
 		NSMutableArray *attackers = [NSMutableArray array];
@@ -220,7 +139,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"kills"]) {
 		EVEKillLogKill *kill = [EVEKillLogKill killLogKillWithXMLAttributes:attributeDict];
-		[kills addObject:kill];
+		[(NSMutableArray*) self.kills addObject:kill];
 		return kill;
 	}
 	else if ([rowset isEqualToString:@"attackers"]) {

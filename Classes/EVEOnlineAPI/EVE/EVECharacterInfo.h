@@ -11,7 +11,7 @@
 @interface EVECharacterInfoEmploymentHistoryItem : NSObject
 @property (nonatomic, assign) NSInteger recordID;
 @property (nonatomic, assign) NSInteger corporationID;
-@property (nonatomic, retain) NSDate *startDate;
+@property (nonatomic, strong) NSDate *startDate;
 
 + (id) characterInfoEmploymentHistoryItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -31,16 +31,14 @@
 @property (nonatomic, copy) NSString* shipTypeName;
 @property (nonatomic, assign) NSInteger corporationID;
 @property (nonatomic, copy) NSString* corporation;
-@property (nonatomic, retain) NSDate* corporationDate;
+@property (nonatomic, strong) NSDate* corporationDate;
 @property (nonatomic, assign) NSInteger allianceID;
 @property (nonatomic, copy) NSString* alliance;
-@property (nonatomic, retain) NSDate* allianceDate;
+@property (nonatomic, strong) NSDate* allianceDate;
 @property (nonatomic, copy) NSString* lastKnownLocation;
 @property (nonatomic, assign) float securityStatus;
-@property (nonatomic, retain) NSArray* employmentHistory;
+@property (nonatomic, strong) NSArray* employmentHistory;
 
-+ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-+ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
++ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

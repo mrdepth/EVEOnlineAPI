@@ -9,23 +9,9 @@
 #import "EVECharWalletJournal.h"
 
 @implementation EVECharWalletJournalItem
-@synthesize date;
-@synthesize refID;
-@synthesize refTypeID;
-@synthesize ownerName1;
-@synthesize ownerID1;
-@synthesize ownerName2;
-@synthesize ownerID2;
-@synthesize argName1;
-@synthesize argID1;
-@synthesize amount;
-@synthesize balance;
-@synthesize reason;
-@synthesize taxReceiverID;
-@synthesize taxAmount;
 
 + (id) charWalletJournalItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharWalletJournalItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharWalletJournalItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -48,65 +34,36 @@
 	return self;
 }
 
-- (void) dealloc {
-	[date release];
-	[ownerName1 release];
-	[ownerName2 release];
-	[argName1 release];
-	[reason release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECharWalletJournal
-@synthesize charWalletJournal;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) charWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr {
-	return [[[EVECharWalletJournal alloc] initWithKeyID:keyID vCode:vCode characterID:characterID fromID:fromID rowCount:rowCount error:errorPtr] autorelease];
++ (id) charWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECharWalletJournal alloc] initWithKeyID:keyID vCode:vCode characterID:characterID fromID:fromID rowCount:rowCount error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) charWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECharWalletJournal alloc] initWithKeyID:keyID vCode:vCode characterID:characterID fromID:fromID rowCount:rowCount target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/WalletJournal.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@%@", EVEOnlineAPIHost, keyID, vCode, characterID,
 														(fromID > 0 ? [NSString stringWithFormat:@"&fromID=%qi", fromID] : @""),
 														(rowCount > 0 ? [NSString stringWithFormat:@"&rowCount=%d", rowCount] : @"")]]
 					   cacheStyle:EVERequestCacheStyleLong
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/WalletJournal.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@%@", EVEOnlineAPIHost, keyID, vCode, characterID,
-														(fromID > 0 ? [NSString stringWithFormat:@"&fromID=%qi", fromID] : @""),
-														(rowCount > 0 ? [NSString stringWithFormat:@"&rowCount=%d", rowCount] : @"")]]
-					   cacheStyle:EVERequestCacheStyleLong
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[charWalletJournal release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"transactions"]) {
-		charWalletJournal = [[NSMutableArray alloc] init];
-		return charWalletJournal;
+		self.charWalletJournal = [[NSMutableArray alloc] init];
+		return self.charWalletJournal;
 	}
 	else
 		return nil;
@@ -115,7 +72,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"transactions"]) {
 		EVECharWalletJournalItem *charWalletJournalItem = [EVECharWalletJournalItem charWalletJournalItemWithXMLAttributes:attributeDict];
-		[charWalletJournal addObject:charWalletJournalItem];
+		[(NSMutableArray*) self.charWalletJournal addObject:charWalletJournalItem];
 		return charWalletJournalItem;
 	}
 	return nil;

@@ -6,26 +6,18 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 
-@interface EVEDBRamActivity : NSObject {
-	NSInteger activityID;
-	NSString *activityName;
-	NSString *iconNo;
-	NSString *description;
-	BOOL published;
-}
+@interface EVEDBRamActivity : EVEDBObject
 @property (nonatomic) NSInteger activityID;
-@property (nonatomic, retain) NSString *activityName;
-@property (nonatomic, retain) NSString *iconNo;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) NSString *activityName;
+@property (nonatomic, strong) NSString *iconNo;
+@property (nonatomic, strong) NSString *description;
 @property (nonatomic) BOOL published;
-@property(nonatomic, retain, readonly) NSString *iconImageName;
+@property(nonatomic, strong, readonly) NSString *iconImageName;
 
 + (id) ramActivityWithActivityID: (NSInteger)aActivityID error:(NSError **)errorPtr;
-+ (id) ramActivityWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithActivityID: (NSInteger)aActivityID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

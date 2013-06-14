@@ -10,16 +10,9 @@
 
 
 @implementation EVEAllianceListItem
-@synthesize name;
-@synthesize shortName;
-@synthesize allianceID;
-@synthesize executorCorpID;
-@synthesize memberCount;
-@synthesize startDate;
-@synthesize memberCorporations;
 
 + (id) allianceListItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEAllianceListItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEAllianceListItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -34,24 +27,14 @@
 	return self;
 }
 
-- (void) dealloc {
-	[name release];
-	[shortName release];
-	[memberCorporations release];
-	[startDate release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEAllianceListMemberCorporationsItem
-@synthesize corporationID;
-@synthesize startDate;
 
 
 + (id) allianceListMemberCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEAllianceListMemberCorporationsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEAllianceListMemberCorporationsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -62,76 +45,53 @@
 	return self;
 }
 
-- (void) dealloc {
-	[startDate release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEAllianceList
-@synthesize alliances;
-@synthesize alliancesMap;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) allianceListWithError:(NSError **)errorPtr {
-	return [[[EVEAllianceList alloc] initWithError:errorPtr] autorelease];
++ (id) allianceListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEAllianceList alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) allianceListWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEAllianceList alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/AllianceList.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/AllianceList.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[alliances release];
-	[alliancesMap release];
-	[super dealloc];
-}
-
-- (void) cacheData {
-	self.cachedUntil = [self.currentTime dateByAddingTimeInterval:3600 * 24];
-	[super cacheData];
+- (NSError*) parseData:(NSData *)data {
+	NSError* error = [super parseData:data];
+	self.cachedUntil = [self.currentTime dateByAddingTimeInterval:3600];
+	self.cacheExpireDate = [self localTimeWithServerTime:self.cachedUntil];
+	return error;
 }
 
 - (NSDictionary*) alliancesMap {
-	if (!alliancesMap) {
-		alliancesMap = [[NSMutableDictionary alloc] initWithCapacity:alliances.count];
-		for (EVEAllianceListItem* item in alliances)
-			[alliancesMap setValue:item forKey:[NSString stringWithFormat:@"%d", item.allianceID]];
+	if (!self.alliancesMap) {
+		self.alliancesMap = [[NSMutableDictionary alloc] initWithCapacity:self.alliances.count];
+		for (EVEAllianceListItem* item in self.alliances)
+			[self.alliancesMap setValue:item forKey:[NSString stringWithFormat:@"%d", item.allianceID]];
 	}
-	return alliancesMap;
+	return _alliancesMap;
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"alliances"]) {
-		alliances = [[NSMutableArray alloc] init];
-		return alliances;
+		self.alliances = [[NSMutableArray alloc] init];
+		return self.alliances;
 	}
 	else if ([rowset isEqualToString:@"memberCorporations"]) {
-		NSMutableArray *memberCorporations = [[[NSMutableArray alloc] init] autorelease];
+		NSMutableArray *memberCorporations = [[NSMutableArray alloc] init];
 		[self.currentRow setMemberCorporations:memberCorporations];
 		return memberCorporations;
 	}

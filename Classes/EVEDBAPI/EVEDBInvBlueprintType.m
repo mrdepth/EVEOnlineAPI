@@ -14,187 +14,126 @@
 #import "EVEDBRamActivity.h"
 #import "EVEDBInvTypeMaterial.h"
 
-@interface EVEDBInvBlueprintType(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBInvBlueprintType(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.blueprintTypeID = [[dictionary valueForKey:@"blueprintTypeID"] integerValue];
-	self.parentBlueprintTypeID = [[dictionary valueForKey:@"parentBlueprintTypeID"] integerValue];
-	self.productTypeID = [[dictionary valueForKey:@"productTypeID"] integerValue];
-	self.productionTime = [[dictionary valueForKey:@"productionTime"] integerValue];
-	self.techLevel = [[dictionary valueForKey:@"techLevel"] integerValue];
-	self.researchProductivityTime = [[dictionary valueForKey:@"researchProductivityTime"] integerValue];
-	self.researchMaterialTime = [[dictionary valueForKey:@"researchMaterialTime"] integerValue];
-	self.researchCopyTime = [[dictionary valueForKey:@"researchCopyTime"] integerValue];
-	self.researchTechTime = [[dictionary valueForKey:@"researchTechTime"] integerValue];
-	self.productivityModifier = [[dictionary valueForKey:@"productivityModifier"] integerValue];
-	self.materialModifier = [[dictionary valueForKey:@"materialModifier"] integerValue];
-	self.wasteFactor = [[dictionary valueForKey:@"wasteFactor"] integerValue];
-	self.maxProductionLimit = [[dictionary valueForKey:@"maxProductionLimit"] integerValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
-
-
 @implementation EVEDBInvBlueprintType
-@synthesize blueprintTypeID;
-@synthesize blueprintType;
-@synthesize parentBlueprintTypeID;
-@synthesize parentBlueprintType;
-@synthesize productTypeID;
-@synthesize productType;
-@synthesize productionTime;
-@synthesize techLevel;
-@synthesize researchProductivityTime;
-@synthesize researchMaterialTime;
-@synthesize researchCopyTime;
-@synthesize researchTechTime;
-@synthesize productivityModifier;
-@synthesize materialModifier;
-@synthesize wasteFactor;
-@synthesize maxProductionLimit;
-@synthesize ramTypeRequirements;
-@synthesize typeMaterials;
 
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"blueprintTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"blueprintTypeID"},
+		  @"parentBlueprintTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"parentBlueprintTypeID"},
+		  @"productTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"productTypeID"},
+		  @"productionTime" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"productionTime"},
+		  @"techLevel" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"techLevel"},
+		  @"researchProductivityTime" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"researchProductivityTime"},
+		  @"researchMaterialTime" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"researchMaterialTime"},
+		  @"researchCopyTime" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"researchCopyTime"},
+		  @"researchTechTime" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"researchTechTime"},
+		  @"productivityModifier" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"productivityModifier"},
+		  @"materialModifier" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"materialModifier"},
+		  @"wasteFactor" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"wasteFactor"},
+		  @"maxProductionLimit" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"maxProductionLimit"}
+		  };
+	return map;
+}
 
 + (id) invBlueprintTypeWithBlueprintTypeID: (NSInteger)aBlueprintTypeID error:(NSError **)errorPtr {
-	return [[[EVEDBInvBlueprintType alloc] initWithBlueprintTypeID:aBlueprintTypeID error:errorPtr] autorelease];
-}
-
-+ (id) invBlueprintTypeWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBInvBlueprintType alloc] initWithDictionary:dictionary] autorelease];
+	return [[EVEDBInvBlueprintType alloc] initWithBlueprintTypeID:aBlueprintTypeID error:errorPtr];
 }
 
 - (id) initWithBlueprintTypeID: (NSInteger)aBlueprintTypeID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invBlueprintTypes WHERE blueprintTypeID=%d;", aBlueprintTypeID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invBlueprintTypes WHERE blueprintTypeID=%d;", aBlueprintTypeID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (EVEDBInvType*) blueprintType {
-	if (blueprintTypeID == 0)
+	if (_blueprintTypeID == 0)
 		return NULL;
-	if (!blueprintType) {
-		blueprintType = [[EVEDBInvType invTypeWithTypeID:blueprintTypeID error:nil] retain];
-		if (!blueprintType)
-			blueprintType = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_blueprintType) {
+		_blueprintType = [EVEDBInvType invTypeWithTypeID:_blueprintTypeID error:nil];
+		if (!_blueprintType)
+			_blueprintType = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) blueprintType == [NSNull null])
+	if ((NSNull*) _blueprintType == [NSNull null])
 		return NULL;
 	else
-		return blueprintType;
+		return _blueprintType;
 }
 
 - (EVEDBInvBlueprintType*) parentBlueprintType {
-	if (parentBlueprintTypeID == 0)
+	if (_parentBlueprintTypeID == 0)
 		return NULL;
-	if (!parentBlueprintType) {
-		parentBlueprintType = [[EVEDBInvBlueprintType invBlueprintTypeWithBlueprintTypeID:parentBlueprintTypeID error:nil] retain];
-		if (!parentBlueprintType)
-			parentBlueprintType = (EVEDBInvBlueprintType*) [[NSNull null] retain];
+	if (!_parentBlueprintType) {
+		_parentBlueprintType = [EVEDBInvBlueprintType invBlueprintTypeWithBlueprintTypeID:_parentBlueprintTypeID error:nil];
+		if (!_parentBlueprintType)
+			_parentBlueprintType = (EVEDBInvBlueprintType*) [NSNull null];
 	}
-	if ((NSNull*) parentBlueprintType == [NSNull null])
+	if ((NSNull*) _parentBlueprintType == [NSNull null])
 		return NULL;
 	else
-		return parentBlueprintType;
+		return _parentBlueprintType;
 }
 
 - (EVEDBInvType*) productType {
-	if (productTypeID == 0)
+	if (_productTypeID == 0)
 		return NULL;
-	if (!productType) {
-		productType = [[EVEDBInvType invTypeWithTypeID:productTypeID error:nil] retain];
-		if (!productType)
-			productType = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_productType) {
+		_productType = [EVEDBInvType invTypeWithTypeID:_productTypeID error:nil];
+		if (!_productType)
+			_productType = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) productType == [NSNull null])
+	if ((NSNull*) _productType == [NSNull null])
 		return NULL;
 	else
-		return productType;
+		return _productType;
 }
 
 - (NSDictionary*) ramTypeRequirements {
-	if (!ramTypeRequirements) {
-		ramTypeRequirements = [[NSMutableDictionary alloc] init];
+	if (!_ramTypeRequirements) {
+		_ramTypeRequirements = [[NSMutableDictionary alloc] init];
 		
 		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 		if (database) {
-			[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM ramTypeRequirements where typeID=%d;", blueprintTypeID]
-							 resultBlock:^(NSDictionary *record, BOOL *needsMore) {
-								 NSString* activityID = [record valueForKey:@"activityID"];
-								 NSMutableArray* array = [ramTypeRequirements valueForKey:activityID];
-								 EVEDBRamActivity* activity;
-								 if (!array) {
-									 array = [NSMutableArray array];
-									 [ramTypeRequirements setValue:array forKey:activityID];
-									 activity = [EVEDBRamActivity ramActivityWithActivityID:[activityID integerValue] error:nil];
-								 }
-								 else
-									 activity = [[array objectAtIndex:0] activity];
-								 EVEDBRamTypeRequirement* typeRequirement = [EVEDBRamTypeRequirement ramTypeRequirementWithDictionary:record];
-								 typeRequirement.activity = activity;
-								 typeRequirement.type = self.blueprintType;
-								 [array addObject:typeRequirement];
-							 }];
+			[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM ramTypeRequirements where typeID=%d;", self.blueprintTypeID]
+						 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+							 EVEDBRamTypeRequirement* typeRequirement = [[EVEDBRamTypeRequirement alloc] initWithStatement:stmt];
+							 NSValue* key = @(typeRequirement.activityID);
+							 NSMutableArray* array = [_ramTypeRequirements objectForKey:key];
+							 EVEDBRamActivity* activity;
+							 if (!array) {
+								 array = [NSMutableArray array];
+								 [_ramTypeRequirements setObject:array forKey:key];
+								 activity = [EVEDBRamActivity ramActivityWithActivityID:typeRequirement.activityID error:nil];
+							 }
+							 else
+								 activity = [[array objectAtIndex:0] activity];
+							 
+							 typeRequirement.activity = activity;
+							 typeRequirement.type = self.blueprintType;
+							 [array addObject:typeRequirement];
+						 }];
 		}
 	}
-	return ramTypeRequirements;
+	return _ramTypeRequirements;
 }
 
 - (NSArray*) typeMaterials {
-	if (!typeMaterials) {
-		typeMaterials = [[NSMutableArray alloc] init];
+	if (!_typeMaterials) {
+		_typeMaterials = [[NSMutableArray alloc] init];
 		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 		if (database) {
-			[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invTypeMaterials where typeID=%d order by quantity desc;", productTypeID]
-							 resultBlock:^(NSDictionary *record, BOOL *needsMore) {
-								 EVEDBInvTypeMaterial* typeMaterial = [EVEDBInvTypeMaterial invTypeMaterialWithDictionary:record];
+			[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invTypeMaterials where typeID=%d order by quantity desc;", self.productTypeID]
+						 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+								 EVEDBInvTypeMaterial* typeMaterial = [[EVEDBInvTypeMaterial alloc] initWithStatement:stmt];
 								 if (typeMaterial) {
 									 typeMaterial.type = self.productType;
-									 [typeMaterials addObject:typeMaterial];
+									 [(NSMutableArray*) _typeMaterials addObject:typeMaterial];
 								 }
-							 }];
+						 }];
 		}
 	}
-	return typeMaterials;
-}
-
-- (void) dealloc {
-	[blueprintType release];
-	[parentBlueprintType release];
-	[productType release];
-	[ramTypeRequirements release];
-	[typeMaterials release];
-	[super dealloc];
+	return _typeMaterials;
 }
 
 - (NSArray*) activities {
@@ -236,22 +175,8 @@
 			[requirements addObject:requirement];
 	}
 	
-/*	EVEDBRamActivity* activity;
-	if (requirements.count > 0)
-		activity = [[requirements objectAtIndex:0] activity];
-	else
-		activity = [EVEDBRamActivity ramActivityWithActivityID:activityID error:nil];*/
-	
 	if (activityID == 1) {//Manufacturing
 		[requirements addObjectsFromArray:self.typeMaterials];
-/*		for (EVEDBInvTypeMaterial* material in self.typeMaterials) {
-			EVEDBRamTypeRequirement* requirement = [[EVEDBRamTypeRequirement alloc] init];
-			requirement.requiredTypeID = material.materialTypeID;
-			requirement.quantity = material.quantity * (1.0 + self.wasteFactor / 100.0);
-			requirement.activityID = activityID;
-			requirement.activity = activity;
-			[requirements addObject:requirement];
-		}*/
 	}
 	return requirements;
 }

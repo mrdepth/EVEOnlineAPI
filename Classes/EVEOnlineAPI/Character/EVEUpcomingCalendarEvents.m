@@ -10,18 +10,9 @@
 
 
 @implementation EVEUpcomingCalendarEventsItem
-@synthesize eventID;
-@synthesize ownerID;
-@synthesize ownerName;
-@synthesize eventDate;
-@synthesize eventTitle;
-@synthesize duration;
-@synthesize importance;
-@synthesize response;
-@synthesize eventText;
 
 + (id) upcomingCalendarEventsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEUpcomingCalendarEventsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEUpcomingCalendarEventsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -39,61 +30,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[ownerName release];
-	[eventDate release];
-	[eventTitle release];
-	[response release];
-	[eventText release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEUpcomingCalendarEvents
-@synthesize upcomingCalendarEvents;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) upcomingCalendarEventsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEUpcomingCalendarEvents alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) upcomingCalendarEventsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEUpcomingCalendarEvents alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) upcomingCalendarEventsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEUpcomingCalendarEvents alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/UpcomingCalendarEvents.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/UpcomingCalendarEvents.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[upcomingCalendarEvents release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"upcomingEvents"]) {
-		upcomingCalendarEvents = [[NSMutableArray alloc] init];
-		return upcomingCalendarEvents;
+		self.upcomingCalendarEvents = [[NSMutableArray alloc] init];
+		return self.upcomingCalendarEvents;
 	}
 	else
 		return nil;
@@ -102,7 +66,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"upcomingEvents"]) {
 		EVEUpcomingCalendarEventsItem *upcomingCalendarEventsItem = [EVEUpcomingCalendarEventsItem upcomingCalendarEventsItemWithXMLAttributes:attributeDict];
-		[upcomingCalendarEvents addObject:upcomingCalendarEventsItem];
+		[(NSMutableArray*) self.upcomingCalendarEvents addObject:upcomingCalendarEventsItem];
 		return upcomingCalendarEventsItem;
 	}
 	return nil;

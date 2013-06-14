@@ -11,30 +11,25 @@
 #import "RSSParser20.h"
 #import "RSSParserAtom.h"
 
+@interface RSSParser()
+@property (nonatomic, strong) id parser;
+
+@end
+
 
 @implementation RSSParser
-@synthesize feed;
-@synthesize error;
-
-- (void) dealloc {
-	[feed release];
-	[error release];
-	[super dealloc];
-}
 
 - (BOOL) parseXMLData:(NSData*) data {
 	NSXMLParser *xmlParser = [[NSXMLParser alloc] initWithData:data];
 	xmlParser.delegate = self;
 	[xmlParser setShouldProcessNamespaces:YES];
-	[feed release];
-	feed = [[RSSFeed alloc] init];
+	self.feed = [[RSSFeed alloc] init];
+	NSError* error = nil;
 	if ([xmlParser parse]) {
 	}
 	else {
-		[error release];
-		error = [[xmlParser parserError] retain];
+		error = [xmlParser parserError];
 	}
-	[xmlParser release];
 	return error == nil;
 }
 
@@ -47,19 +42,19 @@
 
 - (void)parser:(NSXMLParser *)xmlParser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
 	if ([elementName compare:@"RDF" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-		parser = [[RSSParser10 alloc] init];
-		[parser setFeed:self.feed];
-		xmlParser.delegate = parser;
+		self.parser = [[RSSParser10 alloc] init];
+		[self.parser setFeed:self.feed];
+		xmlParser.delegate = self.parser;
 	}
 	else if ([elementName compare:@"rss" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-		parser = [[RSSParser20 alloc] init];
-		[parser setFeed:self.feed];
-		xmlParser.delegate = parser;
+		self.parser = [[RSSParser20 alloc] init];
+		[self.parser setFeed:self.feed];
+		xmlParser.delegate = self.parser;
 	}
 	else if ([elementName compare:@"feed" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-		parser = [[RSSParserAtom alloc] init];
-		[parser setFeed:self.feed];
-		xmlParser.delegate = parser;
+		self.parser = [[RSSParserAtom alloc] init];
+		[self.parser setFeed:self.feed];
+		xmlParser.delegate = self.parser;
 	}
 }
 

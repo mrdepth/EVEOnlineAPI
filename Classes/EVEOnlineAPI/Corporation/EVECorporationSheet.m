@@ -11,11 +11,8 @@
 
 @implementation EVECorporationSheetDivisionItem
 
-@synthesize accountKey;
-@synthesize description;
-
 + (id) corporationSheetDivisionItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECorporationSheetDivisionItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECorporationSheetDivisionItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -26,101 +23,42 @@
 	return self;
 }
 
-- (void) dealloc {
-	[description release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVECorporationSheetLogo
-@synthesize graphicID;
-@synthesize shape1;
-@synthesize shape2;
-@synthesize shape3;
-@synthesize color1;
-@synthesize color2;
-@synthesize color3;
-
 @end
 
 
 @implementation EVECorporationSheet
-@synthesize corporationID;
-@synthesize corporationName;
-@synthesize ticker;
-@synthesize ceoID;
-@synthesize ceoName;
-@synthesize stationID;
-@synthesize stationName;
-@synthesize description;
-@synthesize url;
-@synthesize allianceID;
-@synthesize allianceName;
-@synthesize taxRate;
-@synthesize memberCount;
-@synthesize memberLimit;
-@synthesize shares;
-@synthesize divisions;
-@synthesize walletDivisions;
-@synthesize logo;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr {
-	return [[[EVECorporationSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporationID:corporationID error:errorPtr] autorelease];
++ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECorporationSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporationID:corporationID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECorporationSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporationID:corporationID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) aCorporationID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) aCorporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/CorporationSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, keyID, vCode, characterID,
 														(aCorporationID > 0 ? [NSString stringWithFormat:@"&corporationID=%d", aCorporationID] : @"")]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) aCorporationID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/CorporationSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, keyID, vCode, characterID,
-														(aCorporationID > 0 ? [NSString stringWithFormat:@"&corporationID=%d", aCorporationID] : @"")]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-	return self;
-}
-
-- (void) dealloc {
-	[corporationName release];
-	[ticker release];
-	[ceoName release];
-	[stationName release];
-	[description release];
-	[url release];
-	[allianceName release];
-	[divisions release];
-	[walletDivisions release];
-	[logo release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"divisions"]) {
-		divisions = [[NSMutableArray alloc] init];
-		return divisions;
+		self.divisions = [[NSMutableArray alloc] init];
+		return self.divisions;
 	}
 	else if ([rowset isEqualToString:@"walletDivisions"]) {
-		walletDivisions = [[NSMutableArray alloc] init];
-		return walletDivisions;
+		self.walletDivisions = [[NSMutableArray alloc] init];
+		return self.walletDivisions;
 	}
 	else
 		return nil;
@@ -142,7 +80,7 @@ didStartElement:(NSString *)elementName
 	 attributes:(NSDictionary *)attributeDict {
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"logo"])
-		self.logo = [[[EVECorporationSheetLogo alloc] init] autorelease];
+		self.logo = [[EVECorporationSheetLogo alloc] init];
 }
 
 - (void) parser:(NSXMLParser *)parser

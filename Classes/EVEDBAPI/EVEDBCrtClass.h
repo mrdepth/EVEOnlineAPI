@@ -6,20 +6,14 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
-@interface EVEDBCrtClass : NSObject {
-	NSInteger classID;
-	NSString *description;
-	NSString *className;
-}
+@interface EVEDBCrtClass : EVEDBObject
 @property (nonatomic) NSInteger classID;
-@property (nonatomic, retain) NSString *description;
-@property (nonatomic, retain) NSString *className;
+@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSString *className;
 
 + (id) crtClassWithClassID: (NSInteger)aClassID error:(NSError **)errorPtr;
-+ (id) crtClassWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithClassID: (NSInteger)aClassID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

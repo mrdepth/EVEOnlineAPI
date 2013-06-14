@@ -9,14 +9,9 @@
 #import "EVECharMedals.h"
 
 @implementation EVECharCurrentCorporationMedal
-@synthesize medalID;
-@synthesize reason;
-@synthesize status;
-@synthesize issuerID;
-@synthesize issued;
 
 + (id) charCurrentCorporationMedalWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharCurrentCorporationMedal alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharCurrentCorporationMedal alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -30,28 +25,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[reason release];
-	[status release];
-	[issued release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECharOtherCorporationsMedal
-@synthesize medalID;
-@synthesize reason;
-@synthesize status;
-@synthesize issuerID;
-@synthesize issued;
-@synthesize corporationID;
-@synthesize title;
-@synthesize description;
 
 + (id) charOtherCorporationsMedalWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharOtherCorporationsMedal alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharOtherCorporationsMedal alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -68,67 +48,38 @@
 	return self;
 }
 
-- (void) dealloc {
-	[reason release];
-	[status release];
-	[issued release];
-	[title release];
-	[description release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECharMedals
-@synthesize currentCorporation;
-@synthesize otherCorporations;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVECharMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECharMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECharMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[currentCorporation release];
-	[otherCorporations release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"currentCorporation"]) {
-		currentCorporation = [[NSMutableArray alloc] init];
-		return currentCorporation;
+		self.currentCorporation = [[NSMutableArray alloc] init];
+		return self.currentCorporation;
 	}
 	else if ([rowset isEqualToString:@"otherCorporations"]) {
-		otherCorporations = [[NSMutableArray alloc] init];
-		return otherCorporations;
+		self.otherCorporations = [[NSMutableArray alloc] init];
+		return self.otherCorporations;
 	}
 	else
 		return nil;
@@ -137,12 +88,12 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"currentCorporation"]) {
 		EVECharCurrentCorporationMedal *charCurrentCorporationMedal = [EVECharCurrentCorporationMedal charCurrentCorporationMedalWithXMLAttributes:attributeDict];
-		[currentCorporation addObject:charCurrentCorporationMedal];
+		[(NSMutableArray*) self.currentCorporation addObject:charCurrentCorporationMedal];
 		return charCurrentCorporationMedal;
 	}
 	else if ([rowset isEqualToString:@"otherCorporations"]) {
 		EVECharOtherCorporationsMedal *charOtherCorporationsMedal = [EVECharOtherCorporationsMedal charOtherCorporationsMedalWithXMLAttributes:attributeDict];
-		[otherCorporations addObject:charOtherCorporationsMedal];
+		[(NSMutableArray*) self.otherCorporations addObject:charOtherCorporationsMedal];
 		return charOtherCorporationsMedal;
 	}
 	return nil;

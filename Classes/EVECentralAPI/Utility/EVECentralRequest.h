@@ -10,13 +10,9 @@
 #import "EVECachedURLRequest.h"
 #import "EVECentralGlobals.h"
 
-@interface EVECentralRequest : EVECachedURLRequest<NSXMLParserDelegate> {
-	NSMutableString *text;
-}
+@interface EVECentralRequest : EVECachedURLRequest<NSXMLParserDelegate>
 
-@end
-
-@interface EVECentralRequest (Protected)
-@property (nonatomic, readonly) NSString *text;
+@property (nonatomic, readonly, strong) NSString *text;
 @property (nonatomic, readonly) NSString *validText;
+
 @end

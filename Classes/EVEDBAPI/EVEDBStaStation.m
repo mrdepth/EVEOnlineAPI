@@ -7,145 +7,87 @@
 //
 
 #import "EVEDBStaStation.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBMapRegion.h"
 #import "EVEDBMapConstellation.h"
 #import "EVEDBMapSolarSystem.h"
 
-@interface EVEDBStaStation(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBStaStation(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.stationID = [[dictionary valueForKey:@"stationID"] integerValue];
-	self.security = [[dictionary valueForKey:@"security"] integerValue];
-	self.dockingCostPerVolume = [[dictionary valueForKey:@"dockingCostPerVolume"] floatValue];
-	self.maxShipVolumeDockable = [[dictionary valueForKey:@"maxShipVolumeDockable"] floatValue];
-	self.officeRentalCost = [[dictionary valueForKey:@"officeRentalCost"] integerValue];
-	self.operationID = [[dictionary valueForKey:@"operationID"] integerValue];
-	self.stationTypeID = [[dictionary valueForKey:@"stationTypeID"] integerValue];
-	self.corporationID = [[dictionary valueForKey:@"corporationID"] integerValue];
-	self.solarSystemID = [[dictionary valueForKey:@"solarSystemID"] integerValue];
-	self.constellationID = [[dictionary valueForKey:@"constellationID"] integerValue];
-	self.regionID = [[dictionary valueForKey:@"regionID"] integerValue];
-	self.stationName = [dictionary valueForKey:@"stationName"];
-	self.reprocessingEfficiency = [[dictionary valueForKey:@"reprocessingEfficiency"] floatValue];
-	self.reprocessingStationsTake = [[dictionary valueForKey:@"reprocessingStationsTake"] floatValue];
-	self.reprocessingHangarFlag = [[dictionary valueForKey:@"reprocessingHangarFlag"] integerValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 @implementation EVEDBStaStation
-@synthesize stationID;
-@synthesize security;
-@synthesize dockingCostPerVolume;
-@synthesize maxShipVolumeDockable;
-@synthesize officeRentalCost;
-@synthesize operationID;
-@synthesize stationTypeID;
-@synthesize corporationID;
-@synthesize solarSystemID;
-@synthesize solarSystem;
-@synthesize constellationID;
-@synthesize constellation;
-@synthesize regionID;
-@synthesize region;
-@synthesize stationName;
-@synthesize reprocessingEfficiency;
-@synthesize reprocessingStationsTake;
-@synthesize reprocessingHangarFlag;
 
-+ (id) staStationWithStationID: (NSInteger)aStationID error:(NSError **)errorPtr {
-	return [[[EVEDBStaStation alloc] initWithStationID:aStationID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"stationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"stationID"},
+		  @"security" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"security"},
+		  @"dockingCostPerVolume" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"dockingCostPerVolume"},
+		  @"maxShipVolumeDockable" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"maxShipVolumeDockable"},
+		  @"officeRentalCost" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"officeRentalCost"},
+		  @"operationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"operationID"},
+		  @"stationTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"stationTypeID"},
+		  @"corporationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"corporationID"},
+		  @"solarSystemID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"solarSystemID"},
+		  @"constellationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"constellationID"},
+		  @"regionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"regionID"},
+		  @"stationName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"stationName"},
+		  @"reprocessingEfficiency" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"reprocessingEfficiency"},
+		  @"reprocessingStationsTake" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"reprocessingStationsTake"},
+		  @"reprocessingHangarFlag" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"reprocessingHangarFlag"}
+		  };
+	return map;
 }
 
-+ (id) staStationWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBStaStation alloc] initWithDictionary:dictionary] autorelease];
++ (id) staStationWithStationID: (NSInteger)stationID error:(NSError **)errorPtr {
+	return [[EVEDBStaStation alloc] initWithStationID:stationID error:errorPtr];
 }
 
-- (id) initWithStationID: (NSInteger)aStationID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from staStations WHERE stationID=%d;", aStationID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+- (id) initWithStationID: (NSInteger)stationID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from staStations WHERE stationID=%d;", stationID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (EVEDBMapRegion*) region {
-	if (regionID == 0)
+	if (self.regionID == 0)
 		return NULL;
-	if (!region) {
-		region = [[EVEDBMapRegion mapRegionWithRegionID:regionID error:nil] retain];
-		if (!region)
-			region = (EVEDBMapRegion*) [[NSNull null] retain];
+	if (!_region) {
+		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
+		if (!_region)
+			_region = (EVEDBMapRegion*) [NSNull null];
 	}
-	if ((NSNull*) region == [NSNull null])
+	if ((NSNull*) _region == [NSNull null])
 		return NULL;
 	else
-		return region;
+		return _region;
 }
 
 - (EVEDBMapConstellation*) constellation {
-	if (constellationID == 0)
+	if (self.constellationID == 0)
 		return NULL;
-	if (!constellation) {
-		constellation = [[EVEDBMapConstellation mapConstellationWithConstellationID:constellationID error:nil] retain];
-		if (!constellation)
-			constellation = (EVEDBMapConstellation*) [[NSNull null] retain];
+	if (!_constellation) {
+		_constellation = [EVEDBMapConstellation mapConstellationWithConstellationID:self.constellationID error:nil];
+		if (!_constellation)
+			_constellation = (EVEDBMapConstellation*) [NSNull null];
 	}
-	if ((NSNull*) constellation == [NSNull null])
+	if ((NSNull*) _constellation == [NSNull null])
 		return NULL;
 	else
-		return constellation;
+		return _constellation;
 }
 
 - (EVEDBMapSolarSystem*) solarSystem {
-	if (solarSystemID == 0)
+	if (self.solarSystemID == 0)
 		return NULL;
-	if (!solarSystem) {
-		solarSystem = [[EVEDBMapSolarSystem mapSolarSystemWithSolarSystemID:solarSystemID error:nil] retain];
-		if (!solarSystem)
-			solarSystem = (EVEDBMapSolarSystem*) [[NSNull null] retain];
+	if (!_solarSystem) {
+		_solarSystem = [EVEDBMapSolarSystem mapSolarSystemWithSolarSystemID:self.solarSystemID error:nil];
+		if (!_solarSystem)
+			_solarSystem = (EVEDBMapSolarSystem*) [NSNull null];
 	}
-	if ((NSNull*) solarSystem == [NSNull null])
+	if ((NSNull*) _solarSystem == [NSNull null])
 		return NULL;
 	else
-		return solarSystem;
+		return _solarSystem;
 }
 
-- (void) dealloc {
-	[solarSystem release];
-	[constellation release];
-	[region release];
-	[stationName release];
-	[super dealloc];
-}
 
 @end

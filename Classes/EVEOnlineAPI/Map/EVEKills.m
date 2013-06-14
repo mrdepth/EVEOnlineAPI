@@ -10,13 +10,9 @@
 
 
 @implementation EVEKillsItem
-@synthesize solarSystemID;
-@synthesize shipKills;
-@synthesize factionKills;
-@synthesize podKills;
 
 + (id) killsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEKillsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEKillsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -29,56 +25,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEKills
-@synthesize solarSystems;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) killsWithError:(NSError **)errorPtr {
-	return [[[EVEKills alloc] initWithError:errorPtr] autorelease];
++ (id) killsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEKills alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) killsWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEKills alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Kills.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Kills.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[solarSystems release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"solarSystems"]) {
-		solarSystems = [[NSMutableArray alloc] init];
-		return solarSystems;
+		self.solarSystems = [[NSMutableArray alloc] init];
+		return self.solarSystems;
 	}
 	else
 		return nil;

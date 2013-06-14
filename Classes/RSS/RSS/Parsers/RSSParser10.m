@@ -9,114 +9,106 @@
 #import "RSSParser10.h"
 #import "NSMutableString+RSSParser10.h"
 
+@interface RSSParser10()
+@property (nonatomic, strong) NSMutableString *text;
+@property (nonatomic, strong) NSMutableArray *stack;
+@property (nonatomic, strong) NSMutableArray *dateFormatters;
+
+@end
+
 @implementation RSSParser10
-@synthesize feed;
 
 - (id) init {
 	if (self = [super init]) {
-		stack = [[NSMutableArray alloc] init];
-		text = [[NSMutableString alloc] init];
-		dateFormatters = [[NSMutableArray alloc] init];
+		self.stack = [[NSMutableArray alloc] init];
+		self.text = [[NSMutableString alloc] init];
+		self.dateFormatters = [[NSMutableArray alloc] init];
 
 		NSDateFormatter *dateFormatter;
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmZZZ"];
-		[dateFormatters addObject:dateFormatter];
-		[dateFormatter release];
+		[self.dateFormatters addObject:dateFormatter];
 
 		dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmssZZZ"];
-		[dateFormatters addObject:dateFormatter];
-		[dateFormatter release];
+		[self.dateFormatters addObject:dateFormatter];
 
 		dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmss.SZZZ"];
-		[dateFormatters addObject:dateFormatter];
-		[dateFormatter release];
+		[self.dateFormatters addObject:dateFormatter];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd"];
-		[dateFormatters addObject:dateFormatter];
-		[dateFormatter release];
+		[self.dateFormatters addObject:dateFormatter];
 	}
 	return self;
-}
-
-- (void) dealloc {
-	[text release];
-	[feed release];
-	[stack release];
-	[dateFormatters release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qualifiedName attributes:(NSDictionary *)attributeDict {
-	[text setString:@""];
+	[self.text setString:@""];
 	
 	if ([elementName compare:@"channel" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-		[stack addObject:feed];
+		[self.stack addObject:self.feed];
 	}
 	else if ([elementName compare:@"image" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		RSSImage *image = [[RSSImage alloc] init];
-		feed.image = image;
-		[stack addObject:image];
-		[image release];
+		self.feed.image = image;
+		[self.stack addObject:image];
 	}
 	else if ([elementName compare:@"item" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		RSSItem *item = [[RSSItem alloc] init];
-		[feed.items addObject:item];
-		[stack addObject:item];
-		[item release];
+		[self.feed.items addObject:item];
+		[self.stack addObject:item];
 	}
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-	id object = [stack lastObject];
-	[text removeSpaces];
+	id object = [self.stack lastObject];
+	[self.text removeSpaces];
 	if ([elementName compare:@"title" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setTitle:)])
-			[object setTitle:text];
+			[object setTitle:self.text];
 	}
 	else if ([elementName compare:@"link" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setLink:)])
-			[object setLink:[NSURL URLWithString:text]];
+			[object setLink:[NSURL URLWithString:self.text]];
 	}
 	else if ([elementName compare:@"description" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setDescription:)])
-			[object setDescription:text];
+			[object setDescription:self.text];
 	}
 	else if ([elementName compare:@"url" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setUrl:)])
-			[object setUrl:[NSURL URLWithString:text]];
+			[object setUrl:[NSURL URLWithString:self.text]];
 	}
 	else if ([elementName compare:@"image" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-		[stack removeLastObject];
+		[self.stack removeLastObject];
 	}
 	else if ([elementName compare:@"creator" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setAuthor:)])
-			[object setAuthor:text];
+			[object setAuthor:self.text];
 	}
 	else if ([elementName compare:@"identifier" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setGuid:)])
-			[object setGuid:text];
+			[object setGuid:self.text];
 	}
 	else if ([elementName compare:@"subject" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setCategory:)])
-			[object setCategory:text];
+			[object setCategory:self.text];
 	}
 	else if ([elementName compare:@"rights" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setCopyright:)])
-			[object setCopyright:text];
+			[object setCopyright:self.text];
 	}
 	else if ([elementName compare:@"date" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setUpdated:)]) {
-			[text replaceOccurrencesOfString:@":" withString:@"" options:0 range:NSMakeRange(0, text.length)];
+			[self.text replaceOccurrencesOfString:@":" withString:@"" options:0 range:NSMakeRange(0, self.text.length)];
 			NSDate *date = nil;
-			for (NSDateFormatter *dateFormatter in dateFormatters) {
-				date = [dateFormatter dateFromString:text];
+			for (NSDateFormatter *dateFormatter in self.dateFormatters) {
+				date = [dateFormatter dateFromString:self.text];
 				if (date)
 					break;
 			}
@@ -124,18 +116,17 @@
 		}
 	}
 	else if ([elementName compare:@"item" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
-		[stack removeLastObject];
+		[self.stack removeLastObject];
 	}
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-	[text appendString:string];
+	[self.text appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock {
 	NSString *string = [[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding];
-	[text appendString:string];
-	[string release];
+	[self.text appendString:string];
 }
 
 @end

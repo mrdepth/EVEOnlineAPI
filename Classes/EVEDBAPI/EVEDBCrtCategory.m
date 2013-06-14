@@ -7,71 +7,29 @@
 //
 
 #import "EVEDBCrtCategory.h"
-#import "EVEDBDatabase.h"
-
-@interface EVEDBCrtCategory(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBCrtCategory(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.categoryID = [[dictionary valueForKey:@"categoryID"] integerValue];
-	self.description = [dictionary valueForKey:@"description"];
-	self.categoryName = [dictionary valueForKey:@"categoryName"];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 @implementation EVEDBCrtCategory
-@synthesize categoryID;
-@synthesize description;
-@synthesize categoryName;
 
-+ (id) crtCategoryWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr {
-	return [[[EVEDBCrtCategory alloc] initWithCategoryID:aCategoryID error:errorPtr] autorelease];
+
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"categoryID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"categoryID"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"},
+		  @"categoryName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"categoryName"}
+		  };
+	return map;
 }
 
-+ (id) crtCategoryWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBCrtCategory alloc] initWithDictionary:dictionary] autorelease];
++ (id) crtCategoryWithCategoryID: (NSInteger)categoryID error:(NSError **)errorPtr {
+	return [[EVEDBCrtCategory alloc] initWithCategoryID:categoryID error:errorPtr];
 }
 
-- (id) initWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCategories WHERE categoryID=%d;", aCategoryID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
+- (id) initWithCategoryID: (NSInteger)categoryID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCategories WHERE categoryID=%d;", categoryID]
+								   error:errorPtr]) {
 	}
 	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[description release];
-	[categoryName release];
-	[super dealloc];
 }
 
 @end

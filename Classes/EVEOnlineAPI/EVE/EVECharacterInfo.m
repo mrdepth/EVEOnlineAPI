@@ -11,7 +11,7 @@
 @implementation EVECharacterInfoEmploymentHistoryItem
 
 + (id) characterInfoEmploymentHistoryItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharacterInfoEmploymentHistoryItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharacterInfoEmploymentHistoryItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -21,11 +21,6 @@
 		self.startDate = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"startDate"]];
 	}
 	return self;
-}
-
-- (void) dealloc {
-	[_startDate release];
-	[super dealloc];
 }
 
 @end
@@ -38,15 +33,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVECharacterInfo alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECharacterInfo alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECharacterInfo alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	NSURL* url;
 	if (keyID && vCode)
 		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterInfo.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, aCharacterID]];
@@ -55,39 +46,10 @@
 
 	if (self = [super initWithURL:url
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID target:(id)target action:(SEL)action object:(id)aObject {
-	NSURL* url;
-	if (keyID && vCode)
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterInfo.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, aCharacterID]];
-	else
-		url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterInfo.xml.aspx?characterID=%d", EVEOnlineAPIHost, aCharacterID]];
-
-	if (self = [super initWithURL:url
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[_characterName release];
-	[_race release];
-	[_bloodline release];
-	[_shipName release];
-	[_shipTypeName release];
-	[_corporation release];
-	[_corporationDate release];
-	[_alliance release];
-	[_allianceDate release];
-	[_lastKnownLocation release];
-	[_employmentHistory release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate

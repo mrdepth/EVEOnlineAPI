@@ -6,36 +6,17 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBMapRegion;
 @class EVEDBMapConstellation;
-@interface EVEDBMapSolarSystem : NSObject {
-	NSInteger regionID;
-	EVEDBMapRegion *region;
-	NSInteger constellationID;
-	EVEDBMapConstellation *constellation;
-	NSInteger solarSystemID;
-	NSString *solarSystemName;
-	float luminosity;
-	BOOL border;
-	BOOL fringe;
-	BOOL corridor;
-	BOOL hub;
-	BOOL international;
-	BOOL regional;
-	BOOL isConstellation;
-	float security;
-	NSInteger factionID;
-	float radius;
-	NSString *securityClass;
-}
+@interface EVEDBMapSolarSystem : EVEDBObject
 @property (nonatomic) NSInteger regionID;
-@property (nonatomic, retain) EVEDBMapRegion *region;
+@property (nonatomic, strong) EVEDBMapRegion *region;
 @property (nonatomic) NSInteger constellationID;
-@property (nonatomic, retain) EVEDBMapConstellation *constellation;
+@property (nonatomic, strong) EVEDBMapConstellation *constellation;
 @property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic, retain) NSString *solarSystemName;
+@property (nonatomic, strong) NSString *solarSystemName;
 @property (nonatomic) float luminosity;
 @property (nonatomic) BOOL border;
 @property (nonatomic) BOOL fringe;
@@ -47,13 +28,11 @@
 @property (nonatomic) float security;
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic) float radius;
-@property (nonatomic, retain) NSString *securityClass;
+@property (nonatomic, strong) NSString *securityClass;
 
 + (id) mapSolarSystemWithSolarSystemID: (NSInteger)aSolarSystemID error:(NSError **)errorPtr;
 + (id) mapSolarSystemWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr;
-+ (id) mapSolarSystemWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithSolarSystemID: (NSInteger)aSolarSystemID error:(NSError **)errorPtr;
 - (id) initWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

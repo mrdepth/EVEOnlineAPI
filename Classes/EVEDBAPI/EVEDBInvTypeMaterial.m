@@ -10,70 +10,44 @@
 #import "EVEDBDatabase.h"
 #import "EVEDBInvType.h"
 
-@interface EVEDBInvTypeMaterial(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-@end
-
-@implementation EVEDBInvTypeMaterial(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.typeID = [[dictionary valueForKey:@"typeID"] integerValue];
-	self.materialTypeID = [[dictionary valueForKey:@"materialTypeID"] integerValue];
-	self.quantity = [[dictionary valueForKey:@"quantity"] integerValue];
-}
-
-@end
-
 @implementation EVEDBInvTypeMaterial
-@synthesize typeID;
-@synthesize type;
-@synthesize materialTypeID;
-@synthesize materialType;
-@synthesize quantity;
 
-+ (id) invTypeMaterialWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBInvTypeMaterial alloc] initWithDictionary:dictionary] autorelease];
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[type release];
-	[materialType release];
-	[super dealloc];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"typeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"typeID"},
+		  @"materialTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"materialTypeID"},
+		  @"quantity" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"quantity"}
+		  };
+	return map;
 }
 
 - (EVEDBInvType*) type {
-	if (typeID == 0)
+	if (self.typeID == 0)
 		return NULL;
-	if (!type) {
-		type = [[EVEDBInvType invTypeWithTypeID:typeID error:nil] retain];
-		if (!type)
-			type = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_type) {
+		_type = [EVEDBInvType invTypeWithTypeID:self.typeID error:nil];
+		if (!_type)
+			_type = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) type == [NSNull null])
+	if ((NSNull*) _type == [NSNull null])
 		return NULL;
 	else
-		return type;
+		return _type;
 }
 
 - (EVEDBInvType*) materialType {
-	if (materialTypeID == 0)
+	if (self.materialTypeID == 0)
 		return NULL;
-	if (!materialType) {
-		materialType = [[EVEDBInvType invTypeWithTypeID:materialTypeID error:nil] retain];
-		if (!materialType)
-			materialType = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_materialType) {
+		_materialType = [EVEDBInvType invTypeWithTypeID:self.materialTypeID error:nil];
+		if (!_materialType)
+			_materialType = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) materialType == [NSNull null])
+	if ((NSNull*) _materialType == [NSNull null])
 		return NULL;
 	else
-		return materialType;
+		return _materialType;
 }
 
 @end

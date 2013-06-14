@@ -9,14 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "RSSFeed.h"
 
-@interface RSSParser : NSObject<NSXMLParserDelegate> {
-	RSSFeed *feed;
-	NSError *error;
-@private
-	id parser;
-}
-@property (nonatomic, retain) RSSFeed *feed;
-@property (nonatomic, retain) NSError *error;
+@interface RSSParser : NSObject<NSXMLParserDelegate>
+@property (nonatomic, strong) RSSFeed *feed;
+@property (nonatomic, strong) NSError *error;
 
 - (BOOL) parseXMLData:(NSData*) data;
 - (BOOL) parseXMLString:(NSString*) string;

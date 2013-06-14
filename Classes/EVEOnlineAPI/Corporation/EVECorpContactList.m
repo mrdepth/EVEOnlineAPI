@@ -11,12 +11,8 @@
 
 @implementation EVECorpContactListItem
 
-@synthesize contactID;
-@synthesize contactName;
-@synthesize standing;
-
 + (id) corpContactListItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECorpContactListItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECorpContactListItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -28,63 +24,39 @@
 	return self;
 }
 
-- (void) dealloc {
-	[contactName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECorpContactList
-@synthesize corporateContactList;
-@synthesize allianceContactList;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) corpContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVECorpContactList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) corpContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECorpContactList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) corpContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECorpContactList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/ContactList.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/ContactList.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleLong
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[corporateContactList release];
-	[allianceContactList release];
-	[super dealloc];
-}
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"corporateContactList"]) {
-		corporateContactList = [[NSMutableArray alloc] init];
-		return corporateContactList;
+		self.corporateContactList = [[NSMutableArray alloc] init];
+		return self.corporateContactList;
 	}
 	else if ([rowset isEqualToString:@"allianceContactList"]) {
-		allianceContactList = [[NSMutableArray alloc] init];
-		return allianceContactList;
+		self.allianceContactList = [[NSMutableArray alloc] init];
+		return self.allianceContactList;
 	}
 	else
 		return nil;

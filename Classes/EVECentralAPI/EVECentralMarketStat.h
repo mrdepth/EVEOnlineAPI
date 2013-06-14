@@ -9,14 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVECentralRequest.h"
 
-@interface EVECentralMarketStatTypeStat : NSObject {
-	float volume;
-	float avg;
-	float max;
-	float min;
-	float stddev;
-	float median;
-}
+@interface EVECentralMarketStatTypeStat : NSObject
 @property (nonatomic) float volume;
 @property (nonatomic) float avg;
 @property (nonatomic) float max;
@@ -29,35 +22,20 @@
 @end
 
 
-@interface EVECentralMarketStatType: NSObject {
-	NSInteger typeID;
-	EVECentralMarketStatTypeStat *all;
-	EVECentralMarketStatTypeStat *buy;
-	EVECentralMarketStatTypeStat *sell;
-}
+@interface EVECentralMarketStatType: NSObject
 @property (nonatomic) NSInteger typeID;
-@property (nonatomic, retain) EVECentralMarketStatTypeStat *all;
-@property (nonatomic, retain) EVECentralMarketStatTypeStat *buy;
-@property (nonatomic, retain) EVECentralMarketStatTypeStat *sell;
+@property (nonatomic, strong) EVECentralMarketStatTypeStat *all;
+@property (nonatomic, strong) EVECentralMarketStatTypeStat *buy;
+@property (nonatomic, strong) EVECentralMarketStatTypeStat *sell;
 
 + (id) marketStatTypeStatWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end
 
-@interface EVECentralMarketStat : EVECentralRequest {
-	NSMutableArray *types;
-	EVECentralMarketStatType *currentType;
-	EVECentralMarketStatTypeStat *currentStat;
-}
-@property (nonatomic, retain) NSArray *types;
+@interface EVECentralMarketStat : EVECentralRequest
+@property (nonatomic, strong) NSArray *types;
 
-+ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr;
-+ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr;
-- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ target:(id)target action:(SEL)action object:(id)object;
-@end
-
-@interface EVECentralMarketStat(Private)
-- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ;
++ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

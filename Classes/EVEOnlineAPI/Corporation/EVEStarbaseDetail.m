@@ -10,31 +10,16 @@
 
 
 @implementation EVEStarbaseDetailGeneralSettings
-@synthesize usageFlags;
-@synthesize deployFlags;
-@synthesize allowCorporationMembers;
-@synthesize allowAllianceMembers;
-
 @end
 
 @implementation EVEStarbaseDetailCombatSettings
-@synthesize useStandingsFromOwnerID;
-@synthesize onStandingDropStading;
-@synthesize onStatusDropEnabled;
-@synthesize onStatusDropStanding;
-@synthesize onAggressionEnabled;
-@synthesize onCorporationWarEnabled;
-
 @end
 
 
 @implementation EVEStarbaseDetailFuelItem
 
-@synthesize typeID;
-@synthesize quantity;
-
 + (id) starbaseDetailFuelItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEStarbaseDetailFuelItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEStarbaseDetailFuelItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -48,58 +33,31 @@
 
 
 @implementation EVEStarbaseDetail
-@synthesize state;
-@synthesize stateTimestamp;
-@synthesize onlineTimestamp;
-@synthesize generalSettings;
-@synthesize combatSettings;
-@synthesize fuel;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr {
-	return [[[EVEStarbaseDetail alloc] initWithKeyID:keyID vCode:vCode characterID:characterID itemID:itemID error:errorPtr] autorelease];
++ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEStarbaseDetail alloc] initWithKeyID:keyID vCode:vCode characterID:characterID itemID:itemID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEStarbaseDetail alloc] initWithKeyID:keyID vCode:vCode characterID:characterID itemID:itemID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/StarbaseDetail.xml.aspx?keyID=%d&vCode=%@&characterID=%d&itemID=%qi&version=2", EVEOnlineAPIHost, keyID, vCode, characterID, itemID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/StarbaseDetail.xml.aspx?keyID=%d&vCode=%@&characterID=%d&itemID=%qi&version=2", EVEOnlineAPIHost, keyID, vCode, characterID, itemID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-	return self;
-}
-
-- (void) dealloc {
-	[stateTimestamp release];
-	[onlineTimestamp release];
-	[generalSettings release];
-	[combatSettings release];
-	[fuel release];
-	[super dealloc];
-}
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"fuel"]) {
-		fuel = [[NSMutableArray alloc] init];
-		return fuel;
+		self.fuel = [[NSMutableArray alloc] init];
+		return self.fuel;
 	}
 	else
 		return nil;
@@ -121,9 +79,9 @@ didStartElement:(NSString *)elementName
 	 attributes:(NSDictionary *)attributeDict {
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"generalSettings"])
-		self.generalSettings = [[[EVEStarbaseDetailGeneralSettings alloc] init] autorelease];
+		self.generalSettings = [[EVEStarbaseDetailGeneralSettings alloc] init];
 	else if ([elementName isEqualToString:@"combatSettings"])
-		self.combatSettings = [[[EVEStarbaseDetailCombatSettings alloc] init] autorelease];
+		self.combatSettings = [[EVEStarbaseDetailCombatSettings alloc] init];
 	else if ([elementName isEqualToString:@"useStandingsFrom"])
 		self.combatSettings.useStandingsFromOwnerID = [[attributeDict valueForKey:@"ownerID"] integerValue];
 	else if ([elementName isEqualToString:@"onStandingDrop"])

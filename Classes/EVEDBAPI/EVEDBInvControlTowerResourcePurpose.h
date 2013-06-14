@@ -6,19 +6,14 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 
-@interface EVEDBInvControlTowerResourcePurpose : NSObject {
-	NSInteger purposeID;
-	NSString *purposeText;
-}
+@interface EVEDBInvControlTowerResourcePurpose : EVEDBObject
 @property (nonatomic) NSInteger purposeID;
-@property (nonatomic, retain) NSString *purposeText;
+@property (nonatomic, strong) NSString *purposeText;
 
 + (id) invControlTowerResourcePurposeWithPurposeID: (NSInteger)aPurposeID error:(NSError **)errorPtr;
-+ (id) invControlTowerResourcePurposeWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithPurposeID: (NSInteger)aPurposeID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

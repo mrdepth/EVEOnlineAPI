@@ -10,14 +10,9 @@
 
 
 @implementation EVEFacWarSystemsItem
-@synthesize solarSystemID;
-@synthesize solarSystemName;
-@synthesize occupyingFactionID;
-@synthesize occupyingFactionName;
-@synthesize contested;
 
 + (id) facWarSystemsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEFacWarSystemsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEFacWarSystemsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -31,58 +26,35 @@
 	return self;
 }
 
-- (void) dealloc {
-	[solarSystemName release];
-	[occupyingFactionName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEFacWarSystems
-@synthesize solarSystems;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarSystemsWithError:(NSError **)errorPtr {
-	return [[[EVEFacWarSystems alloc] initWithError:errorPtr] autorelease];
++ (id) facWarSystemsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEFacWarSystems alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) facWarSystemsWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEFacWarSystems alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/FacWarSystems.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/FacWarSystems.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[solarSystems release];
-	[super dealloc];
-}
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"solarSystems"]) {
-		solarSystems = [[NSMutableArray alloc] init];
-		return solarSystems;
+		self.solarSystems = [[NSMutableArray alloc] init];
+		return self.solarSystems;
 	}
 	else
 		return nil;

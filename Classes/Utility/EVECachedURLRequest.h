@@ -14,39 +14,16 @@ typedef enum {
 	EVERequestCacheStyleLong
 } EVERequestCacheStyle;
 
-@interface EVECachedURLRequest : NSObject {
-	BOOL isCached;
-	id delegate;
-	SEL selector;
-	IMP method;
-	id targetObject;
-	NSURL *requestUrl;
-	NSURLConnection *connection;
-	NSData *data;
-	NSInteger errorCode;
-	NSError *error;
-	NSDate *cacheDate;
-	EVERequestCacheStyle cacheStyle;
-	NSString *hash;
-	BOOL isFinishedLoading;
-	NSThread *scheduleThread;
-}
+@interface EVECachedURLRequest : NSObject
 
-@property (readonly) BOOL isCached;
-@property (readonly) NSDate *cacheDate;
+@property (assign, nonatomic, readonly, getter = isCashed) BOOL cached;
+@property (strong, nonatomic) NSDate* cacheDate;
+@property (strong, nonatomic) NSDate* cacheExpireDate;
 
-- (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr;
-- (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr;
-@end
-
-@interface EVECachedURLRequest(Protected)
-@property (nonatomic, retain) NSURL *requestUrl;
+- (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithRequest:(NSURLRequest*) request cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 - (NSError*) parseData: (NSData*) data;
-- (void) didCompleteWithError: (NSError*) error;
-- (void) cacheData;
-- (void) backgroundProcessResults;
 
 @end

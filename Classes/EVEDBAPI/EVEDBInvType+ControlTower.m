@@ -13,12 +13,6 @@
 
 @implementation EVEDBInvType(ControlTower)
 
-- (void) didReceiveResource: (NSDictionary*) dictionary {
-	NSMutableArray *resources = objc_getAssociatedObject(self, @"resources");
-	EVEDBInvControlTowerResource *resource = [EVEDBInvControlTowerResource invControlTowerResourceWithDictionary:dictionary];
-	[resources addObject:resource];
-}
-
 - (NSArray*) resources {
 	NSMutableArray *resources = objc_getAssociatedObject(self, @"resources");
 	if (!resources) {
@@ -27,10 +21,11 @@
 			return nil;
 		resources = [NSMutableArray array];
 		objc_setAssociatedObject(self, @"resources", resources, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-		
-		[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invControlTowerResources WHERE controlTowerTypeID=%d;", typeID]
-							  target:self
-							  action:@selector(didReceiveResource:)];
+		[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invControlTowerResources WHERE controlTowerTypeID=%d;", self.typeID]
+					 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+						 EVEDBInvControlTowerResource *resource = [[EVEDBInvControlTowerResource alloc] initWithStatement:stmt];
+						 [resources addObject:resource];
+					 }];
 	}
 	return resources;
 }

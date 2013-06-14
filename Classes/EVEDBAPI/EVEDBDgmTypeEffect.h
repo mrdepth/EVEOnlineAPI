@@ -6,24 +6,14 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBInvType;
 @class EVEDBDgmEffect;
-@interface EVEDBDgmTypeEffect : NSObject {
-	NSInteger typeID;
-//	EVEDBInvType *type;
-	NSInteger effectID;
-	EVEDBDgmEffect *effect;
-	BOOL isDefault;
-}
+@interface EVEDBDgmTypeEffect : EVEDBObject
 @property(nonatomic) NSInteger typeID;
-//@property(nonatomic, assign) EVEDBInvType *type;
 @property(nonatomic) NSInteger effectID;
-@property(nonatomic, retain) EVEDBDgmEffect *effect;
+@property(nonatomic, strong) EVEDBDgmEffect *effect;
 @property(nonatomic) BOOL isDefault;
-
-+ (id) dgmTypeEffectWithDictionary: (NSDictionary*) dictionary;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

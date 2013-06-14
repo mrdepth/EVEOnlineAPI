@@ -7,219 +7,141 @@
 //
 
 #import "EVEDBCrtCertificate.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBCrtCategory.h"
 #import "EVEDBCrtClass.h"
 #import "EVEDBEveIcon.h"
 #import "EVEDBCrtRelationship.h"
 #import "EVEDBCrtRecommendation.h"
 
-@interface EVEDBCrtCertificate(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-- (void) didReceivePrerequisite: (NSDictionary*) record;
-- (void) didReceiveDerivation: (NSDictionary*) record;
-- (void) didReceiveRecommendation: (NSDictionary*) record;
-- (void) loadPrerequisites;
-- (void) loadDerivations;
-- (void) loadRecommendations;
-@end
-
-@implementation EVEDBCrtCertificate(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.certificateID = [[dictionary valueForKey:@"certificateID"] integerValue];
-	self.categoryID = [[dictionary valueForKey:@"categoryID"] integerValue];
-	self.classID = [[dictionary valueForKey:@"classID"] integerValue];
-	self.grade = [[dictionary valueForKey:@"grade"] integerValue];
-	self.corpID = [[dictionary valueForKey:@"corpID"] integerValue];
-	self.iconID = [[dictionary valueForKey:@"iconID"] integerValue];
-	self.description = [dictionary valueForKey:@"description"];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-- (void) didReceivePrerequisite: (NSDictionary*) record {
-	EVEDBCrtRelationship* relationship = [EVEDBCrtRelationship crtRelationshipWithDictionary:record];
-	relationship.child = self;
-	[prerequisites addObject:relationship];
-}
-
-- (void) didReceiveDerivation: (NSDictionary*) record {
-	EVEDBCrtRelationship* relationship = [EVEDBCrtRelationship crtRelationshipWithDictionary:record];
-	relationship.parent = self;
-	[derivations addObject:relationship];
-}
-
-- (void) didReceiveRecommendation: (NSDictionary*) record {
-	EVEDBCrtRecommendation* recommendation = [EVEDBCrtRecommendation crtRecommendationWithDictionary:record];
-	recommendation.certificate = self;
-	[recommendations addObject:recommendation];
-}
-
-- (void) loadPrerequisites {
-	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-	if (!database)
-		return;
-	prerequisites = [[NSMutableArray alloc] init];
-	
-	[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRelationships WHERE childID=%d;", certificateID]
-						  target:self
-						  action:@selector(didReceivePrerequisite:)];
-}
-
-- (void) loadDerivations {
-	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-	if (!database)
-		return;
-	derivations = [[NSMutableArray alloc] init];
-	
-	[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRelationships WHERE parentID=%d;", certificateID]
-						  target:self
-						  action:@selector(didReceiveDerivation:)];
-}
-
-- (void) loadRecommendations {
-	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-	if (!database)
-		return;
-	recommendations = [[NSMutableArray alloc] init];
-	
-	[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRecommendations WHERE certificateID=%d;", certificateID]
-						  target:self
-						  action:@selector(didReceiveRecommendation:)];
-}
+@interface EVEDBCrtCertificate()
+@property (nonatomic, readwrite, strong) NSArray* prerequisites;
+@property (nonatomic, readwrite, strong) NSArray* derivations;
+@property (nonatomic, readwrite, strong) NSArray* recommendations;
 
 @end
 
 @implementation EVEDBCrtCertificate
-@synthesize certificateID;
-@synthesize categoryID;
-@synthesize category;
-@synthesize classID;
-@synthesize certificateClass;
-@synthesize grade;
-@synthesize corpID;
-@synthesize iconID;
-@synthesize icon;
-@synthesize description;
-@synthesize prerequisites;
-@synthesize derivations;
-@synthesize recommendations;
 
-+ (id) crtCertificateWithCertificateID: (NSInteger)aCertificateID error:(NSError **)errorPtr {
-	return [[[EVEDBCrtCertificate alloc] initWithCertificateID:aCertificateID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"certificateID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"certificateID"},
+		  @"categoryID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"categoryID"},
+		  @"classID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"classID"},
+		  @"grade" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"grade"},
+		  @"corpID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"corpID"},
+		  @"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"}
+		  };
+	return map;
 }
 
-+ (id) crtCertificateWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBCrtCertificate alloc] initWithDictionary:dictionary] autorelease];
++ (id) crtCertificateWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
+	return [[EVEDBCrtCertificate alloc] initWithCertificateID:certificateID error:errorPtr];
 }
 
-- (id) initWithCertificateID: (NSInteger)aCertificateID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCertificates WHERE certificateID=%d;", aCertificateID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
+- (id) initWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCertificates WHERE certificateID=%d;", certificateID]
+								   error:errorPtr]) {
 	}
 	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[description release];
-	[category release];
-	[certificateClass release];
-	[icon release];
-	[prerequisites release];
-	[derivations release];
-	[recommendations release];
-	[super dealloc];
 }
 
 - (EVEDBCrtCategory*) category {
-	if (categoryID == 0)
+	if (self.categoryID == 0)
 		return NULL;
-	if (!category) {
-		category = [[EVEDBCrtCategory crtCategoryWithCategoryID:categoryID error:nil] retain];
-		if (!category)
-			category = (EVEDBCrtCategory*) [[NSNull null] retain];
+	if (!_category) {
+		_category = [EVEDBCrtCategory crtCategoryWithCategoryID:self.categoryID error:nil];
+		if (!_category)
+			_category = (EVEDBCrtCategory*) [NSNull null];
 	}
-	if ((NSNull*) category == [NSNull null])
+	if ((NSNull*) _category == [NSNull null])
 		return NULL;
 	else
-		return category;
+		return _category;
 }
 
 - (EVEDBCrtClass*) certificateClass {
-	if (classID == 0)
+	if (self.classID == 0)
 		return NULL;
-	if (!certificateClass) {
-		certificateClass = [[EVEDBCrtClass crtClassWithClassID:classID error:nil] retain];
-		if (!certificateClass)
-			certificateClass = (EVEDBCrtClass*) [[NSNull null] retain];
+	if (!_certificateClass) {
+		_certificateClass = [EVEDBCrtClass crtClassWithClassID:self.classID error:nil];
+		if (!_certificateClass)
+			_certificateClass = (EVEDBCrtClass*) [NSNull null];
 	}
-	if ((NSNull*) certificateClass == [NSNull null])
+	if ((NSNull*) _certificateClass == [NSNull null])
 		return NULL;
 	else
-		return certificateClass;
+		return _certificateClass;
 }
 
 - (EVEDBEveIcon*) icon {
-	if (iconID == 0)
+	if (self.iconID == 0)
 		return NULL;
-	if (!icon) {
-		icon = [[EVEDBEveIcon eveIconWithIconID:iconID error:nil] retain];
-		if (!icon)
-			icon = (EVEDBEveIcon*) [[NSNull null] retain];
+	if (!_icon) {
+		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
+		if (!_icon)
+			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
-	if ((NSNull*) icon == [NSNull null])
+	if ((NSNull*) _icon == [NSNull null])
 		return NULL;
 	else
-		return icon;
+		return _icon;
 }
 
 - (NSArray*) prerequisites {
-	if (!prerequisites) {
-		[self loadPrerequisites];
+	if (!_prerequisites) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (!database)
+			return nil;
+		_prerequisites = [[NSMutableArray alloc] init];
+		
+		[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRelationships WHERE childID=%d;", self.certificateID]
+					 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+						 EVEDBCrtRelationship* relationship = [[EVEDBCrtRelationship alloc] initWithStatement:stmt];
+						 //relationship.child = self;
+						 [(NSMutableArray*) _prerequisites addObject:relationship];
+					 }];
 	}
-	return prerequisites;
+	return _prerequisites;
 }
 
 - (NSArray*) derivations {
-	if (!derivations) {
-		[self loadDerivations];
+	if (!_derivations) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (!database)
+			return nil;
+		_derivations = [[NSMutableArray alloc] init];
+		
+		[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRelationships WHERE parentID=%d;", self.certificateID]
+					 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+						 EVEDBCrtRelationship* relationship = [[EVEDBCrtRelationship alloc] initWithStatement:stmt];
+						 //relationship.parent = self;
+						 [(NSMutableArray*) _derivations addObject:relationship];
+					 }];
 	}
-	return derivations;
+	return _derivations;
 }
 
 - (NSArray*) recommendations {
-	if (!recommendations) {
-		[self loadRecommendations];
+	if (!_recommendations) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (!database)
+			return nil;
+		_recommendations = [[NSMutableArray alloc] init];
+		
+		[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRecommendations WHERE certificateID=%d;", self.certificateID]
+					 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+						 EVEDBCrtRecommendation* recommendation = [[EVEDBCrtRecommendation alloc] initWithStatement:stmt];
+						 //recommendation.certificate = self;
+						 [(NSMutableArray*) _recommendations addObject:recommendation];
+					 }];
 	}
-	return recommendations;
+	return _recommendations;
 }
 
 - (NSString*) gradeText {
-	switch (grade) {
+	switch (self.grade) {
 		case 1:
 			return @"Basic";
 		case 2:
@@ -237,7 +159,7 @@
 	if (self.icon)
 		return self.icon.iconImageName;
 	else
-		return [NSString stringWithFormat:@"Icons/icon79_0%d.png", 1 + grade];
+		return [NSString stringWithFormat:@"Icons/icon79_0%d.png", 1 + self.grade];
 }
 
 @end

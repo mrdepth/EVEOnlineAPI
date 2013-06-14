@@ -9,39 +9,20 @@
 #import "EVECharacterSheet.h"
 
 @implementation EVECharacterSheetAttributes
-@synthesize intelligence;
-@synthesize memory;
-@synthesize charisma;
-@synthesize perception;
-@synthesize willpower;
-
 @end
 
 
 #pragma mark --
 
 @implementation EVECharacterSheetAttributeEnhancer
-@synthesize attribute;
-@synthesize augmentatorName;
-@synthesize augmentatorValue;
-
-- (void) dealloc {
-	[augmentatorName release];
-	[super dealloc];
-}
-
 @end
 
 #pragma mark --
 
 @implementation EVECharacterSheetSkill
-@synthesize typeID;
-@synthesize skillpoints;
-@synthesize level;
-@synthesize unpublished;
 
 + (id) characterSheetSkillWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharacterSheetSkill alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharacterSheetSkill alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -63,11 +44,9 @@
 #pragma mark --
 
 @implementation EVECharacterSheetRole
-@synthesize roleID;
-@synthesize roleName;
 
 + (id) characterSheetRoleWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharacterSheetRole alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharacterSheetRole alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -78,21 +57,14 @@
 	return self;
 }
 
-- (void) dealloc {
-	[roleName release];
-	[super dealloc];
-}
-
 @end
 
 #pragma mark --
 
 @implementation EVECharacterSheetCorporationTitle
-@synthesize titleID;
-@synthesize titleName;
 
 + (id) characterSheetCorporationTitleWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharacterSheetCorporationTitle alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharacterSheetCorporationTitle alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -103,101 +75,36 @@
 	return self;
 }
 
-- (void) dealloc {
-	[titleName release];
-	[super dealloc];
-}
-
 @end
 
 #pragma mark --
 
 @implementation EVECharacterSheet
 
-@synthesize characterID;
-@synthesize name;
-@synthesize race;
-@synthesize DoB;
-@synthesize bloodLine;
-@synthesize ancestry;
-@synthesize gender;
-@synthesize corporationName;
-@synthesize corporationID;
-@synthesize allianceName;
-@synthesize allianceID;
-@synthesize cloneName;
-@synthesize cloneSkillPoints;
-@synthesize balance;
-@synthesize attributeEnhancers;
-@synthesize attributes;
-@synthesize skills;
-@synthesize certificates;
-@synthesize corporationRoles;
-@synthesize corporationRolesAtHQ;
-@synthesize corporationRolesAtBase;
-@synthesize corporationRolesAtOther;
-@synthesize corporationTitles;
-
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVECharacterSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECharacterSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVECharacterSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CharacterSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, aCharacterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CharacterSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, aCharacterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[name release];
-	[race release];
-	[DoB release];
-	[bloodLine release];
-	[ancestry release];
-	[gender release];
-	[corporationName release];
-	[allianceName release];
-	[cloneName release];
-	[attributeEnhancers release];
-	[attributes release];
-	[skills release];
-	[certificates release];
-	[corporationRoles release];
-	[corporationRolesAtHQ release];
-	[corporationRolesAtBase release];
-	[corporationRolesAtOther release];
-	[corporationTitles release];
-	[skillsMap release];
-	
-	[super dealloc];
 }
 
 - (NSDictionary*) skillsMap {
-	if (!skillsMap) {
-		skillsMap = [[NSMutableDictionary alloc] initWithCapacity:skills.count];
-		for (EVECharacterSheetSkill* skill in skills)
-			[skillsMap setValue:skill forKey:[NSString stringWithFormat:@"%d", skill.typeID]];
+	if (!_skillsMap) {
+		_skillsMap = [[NSMutableDictionary alloc] initWithCapacity:self.skills.count];
+		for (EVECharacterSheetSkill* skill in self.skills)
+			[(NSMutableDictionary*)self.skillsMap setValue:skill forKey:[NSString stringWithFormat:@"%d", skill.typeID]];
 	}
-	return skillsMap;
+	return _skillsMap;
 }
 
 #pragma mark NSXMLParserDelegate
@@ -245,7 +152,7 @@ didStartElement:(NSString *)elementName
 	 attributes:(NSDictionary *)attributeDict {
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"attributes"]) {
-		self.attributes = [[[EVECharacterSheetAttributes alloc] init] autorelease];
+		self.attributes = [[EVECharacterSheetAttributes alloc] init];
 	}
 	else if ([elementName isEqualToString:@"attributeEnhancers"])
 		self.attributeEnhancers = [NSMutableArray array];
@@ -253,31 +160,26 @@ didStartElement:(NSString *)elementName
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
 		attributeEnhancer.attribute = EVECharacterAttributeWillpower;
 		[self.attributeEnhancers addObject:attributeEnhancer];
-		[attributeEnhancer release];
 	}
 	else if ([elementName isEqualToString:@"charismaBonus"]) {
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
 		attributeEnhancer.attribute = EVECharacterAttributeCharisma;
 		[self.attributeEnhancers addObject:attributeEnhancer];
-		[attributeEnhancer release];
 	}
 	else if ([elementName isEqualToString:@"perceptionBonus"]) {
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
 		attributeEnhancer.attribute = EVECharacterAttributePerception;
 		[self.attributeEnhancers addObject:attributeEnhancer];
-		[attributeEnhancer release];
 	}
 	else if ([elementName isEqualToString:@"memoryBonus"]) {
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
 		attributeEnhancer.attribute = EVECharacterAttributeMemory;
 		[self.attributeEnhancers addObject:attributeEnhancer];
-		[attributeEnhancer release];
 	}
 	else if ([elementName isEqualToString:@"intelligenceBonus"]) {
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
 		attributeEnhancer.attribute = EVECharacterAttributeIntelligence;
 		[self.attributeEnhancers addObject:attributeEnhancer];
-		[attributeEnhancer release];		
 	}
 }
 

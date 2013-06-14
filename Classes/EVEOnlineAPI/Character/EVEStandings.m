@@ -9,12 +9,9 @@
 #import "EVEStandings.h"
 
 @implementation EVEStandingsItem
-@synthesize fromID;
-@synthesize fromName;
-@synthesize standing;
 
 + (id) standingsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEStandingsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEStandingsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -26,81 +23,47 @@
 	return self;
 }
 
-- (void) dealloc {
-	[fromName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEStandingsNPCStandings
-@synthesize agents;
-@synthesize NPCCorporations;
-@synthesize factions;
-
-- (void) dealloc {
-	[agents release];
-	[NPCCorporations release];
-	[factions release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVEStandings
-@synthesize standings;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr {
-	return [[[EVEStandings alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr] autorelease];
++ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEStandings alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEStandings alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Standings.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") , keyID, vCode, characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Standings.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") , keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[standings release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
-	if (!standings)
-		self.standings = [[[EVEStandingsNPCStandings alloc] init] autorelease];
+	if (!self.standings)
+		self.standings = [[EVEStandingsNPCStandings alloc] init];
 	if ([rowset isEqualToString:@"agents"]) {
-		standings.agents = [[[NSMutableArray alloc] init] autorelease];
-		return standings.agents;
+		self.standings.agents = [[NSMutableArray alloc] init];
+		return self.standings.agents;
 	}
 	else if ([rowset isEqualToString:@"NPCCorporations"]) {
-		standings.NPCCorporations = [[[NSMutableArray alloc] init] autorelease];
-		return standings.NPCCorporations;
+		self.standings.NPCCorporations = [[NSMutableArray alloc] init];
+		return self.standings.NPCCorporations;
 	}
 	else if ([rowset isEqualToString:@"factions"]) {
-		standings.factions = [[[NSMutableArray alloc] init] autorelease];
-		return standings.factions;
+		self.standings.factions = [[NSMutableArray alloc] init];
+		return self.standings.factions;
 	}
 	else
 		return nil;
@@ -111,4 +74,5 @@
 	[object addObject:standingsItem];
 	return standingsItem;
 }
+
 @end

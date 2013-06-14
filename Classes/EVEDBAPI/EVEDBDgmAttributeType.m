@@ -7,140 +7,83 @@
 //
 
 #import "EVEDBDgmAttributeType.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBDgmAttributeCategory.h"
 #import "EVEDBEveIcon.h"
 #import "EVEDBEveUnit.h"
 
-@interface EVEDBDgmAttributeType(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBDgmAttributeType(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.attributeID = [[dictionary valueForKey:@"attributeID"] integerValue];
-	self.attributeName = [dictionary valueForKey:@"attributeName"];
-	self.description = [dictionary valueForKey:@"description"];
-	self.iconID = [[dictionary valueForKey:@"iconID"] integerValue];
-	self.defaultValue = [[dictionary valueForKey:@"defaultValue"] floatValue];
-	self.published = [[dictionary valueForKey:@"published"] integerValue];
-	self.displayName = [dictionary valueForKey:@"displayName"];
-	self.unitID = [[dictionary valueForKey:@"unitID"] integerValue];
-	self.stackable = [[dictionary valueForKey:@"stackable"] integerValue];
-	self.highIsGood = [[dictionary valueForKey:@"highIsGood"] integerValue];
-	self.categoryID = [[dictionary valueForKey:@"categoryID"] integerValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 @implementation EVEDBDgmAttributeType
-@synthesize attributeID;
-@synthesize attributeName;
-@synthesize description;
-@synthesize iconID;
-@synthesize icon;
-@synthesize defaultValue;
-@synthesize published;
-@synthesize displayName;
-@synthesize unitID;
-@synthesize unit;
-@synthesize stackable;
-@synthesize highIsGood;
-@synthesize categoryID;
-@synthesize category;
+
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"attributeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"attributeID"},
+		  @"attributeName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"attributeName"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"},
+		  @"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
+		  @"defaultValue" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"defaultValue"},
+		  @"published" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"published"},
+		  @"displayName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"displayName"},
+		  @"unitID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"unitID"},
+		  @"stackable" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"stackable"},
+		  @"highIsGood" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"highIsGood"},
+		  @"categoryID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"categoryID"}
+		  };
+	return map;
+}
 
 + (id) dgmAttributeTypeWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr {
-	return [[[EVEDBDgmAttributeType alloc] initWithAttributeTypeID:aAttributeTypeID error:errorPtr] autorelease];
+	return [[EVEDBDgmAttributeType alloc] initWithAttributeTypeID:aAttributeTypeID error:errorPtr];
 }
 
-+ (id) dgmAttributeTypeWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBDgmAttributeType alloc] initWithDictionary:dictionary] autorelease];
-}
-
-- (id) initWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmAttributeTypes WHERE attributeID=%d;", aAttributeTypeID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+- (id) initWithAttributeTypeID: (NSInteger)attributeTypeID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmAttributeTypes WHERE attributeID=%d;", attributeTypeID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (EVEDBDgmAttributeCategory*) category {
-	if (categoryID == 0)
+	if (self.categoryID == 0)
 		return NULL;
-	if (!category) {
-		category = [[EVEDBDgmAttributeCategory dgmAttributeCategoryWithAttributeCategoryID:categoryID error:nil] retain];
-		if (!category)
-			category = (EVEDBDgmAttributeCategory*) [[NSNull null] retain];
+	if (!_category) {
+		_category = [EVEDBDgmAttributeCategory dgmAttributeCategoryWithAttributeCategoryID:self.categoryID error:nil];
+		if (!_category)
+			_category = (EVEDBDgmAttributeCategory*) [NSNull null];
 	}
-	if ((NSNull*) category == [NSNull null])
+	if ((NSNull*) _category == [NSNull null])
 		return NULL;
 	else
-		return category;
+		return _category;
 }
 
 - (EVEDBEveIcon*) icon {
-	if (iconID == 0)
+	if (self.iconID == 0)
 		return NULL;
-	if (!icon) {
-		icon = [[EVEDBEveIcon eveIconWithIconID:iconID error:nil] retain];
-		if (!icon)
-			icon = (EVEDBEveIcon*) [[NSNull null] retain];
+	if (!_icon) {
+		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
+		if (!_icon)
+			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
-	if ((NSNull*) icon == [NSNull null])
+	if ((NSNull*) _icon == [NSNull null])
 		return NULL;
 	else
-		return icon;
+		return _icon;
 }
 
 
 - (EVEDBEveUnit*) unit {
-	if (unitID == 0)
+	if (self.unitID == 0)
 		return NULL;
-	if (!unit) {
-		unit = [[EVEDBEveUnit eveUnitWithUnitID:unitID error:nil] retain];
-		if (!unit)
-			unit = (EVEDBEveUnit*) [[NSNull null] retain];
+	if (!_unit) {
+		_unit = [EVEDBEveUnit eveUnitWithUnitID:self.unitID error:nil];
+		if (!_unit)
+			_unit = (EVEDBEveUnit*) [NSNull null];
 	}
-	if ((NSNull*) unit == [NSNull null])
+	if ((NSNull*) _unit == [NSNull null])
 		return NULL;
 	else
-		return unit;
-}
-
-- (void) dealloc {
-	[attributeName release];
-	[description release];
-	[icon release];
-	[displayName release];
-	[unit release];
-	[category release];
-	[super dealloc];
+		return _unit;
 }
 
 @end

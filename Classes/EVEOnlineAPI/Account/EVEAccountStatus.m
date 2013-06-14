@@ -10,45 +10,23 @@
 
 
 @implementation EVEAccountStatus
-@synthesize paidUntil;
-@synthesize createDate;
-@synthesize logonCount;
-@synthesize logonMinutes;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr {
-	return [[[EVEAccountStatus alloc] initWithKeyID:keyID vCode:vCode error:errorPtr] autorelease];
++ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEAccountStatus alloc] initWithKeyID:keyID vCode:vCode error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEAccountStatus alloc] initWithKeyID:keyID vCode:vCode target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/account/AccountStatus.xml.aspx?keyID=%d&vCode=%@", EVEOnlineAPIHost, keyID, vCode]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
+		
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/account/AccountStatus.xml.aspx?keyID=%d&vCode=%@", EVEOnlineAPIHost, keyID, vCode]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-
-- (void) dealloc {
-	[paidUntil release];
-	[createDate release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate

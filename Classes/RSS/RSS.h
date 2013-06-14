@@ -13,14 +13,10 @@
 #define RSS_CACHE_TIME (60*60)
 
 
-@interface RSS : EVECachedURLRequest<NSXMLParserDelegate> {
-	RSSFeed *feed;
-}
-@property (nonatomic, retain) RSSFeed *feed;
+@interface RSS : EVECachedURLRequest<NSXMLParserDelegate>
+@property (nonatomic, strong) RSSFeed *feed;
 
-+ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr;
-+ (id) rssWithContentsOfURL: (NSURL*) url target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr;
-- (id) initWithContentsOfURL: (NSURL*) url target:(id)target action:(SEL)action object:(id)object;
++ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

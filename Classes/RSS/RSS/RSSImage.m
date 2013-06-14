@@ -10,15 +10,5 @@
 
 
 @implementation RSSImage
-@synthesize title;
-@synthesize link;
-@synthesize url;
-
-- (void) dealloc {
-	[title release];
-	[link release];
-	[url release];
-	[super dealloc];
-}
 
 @end

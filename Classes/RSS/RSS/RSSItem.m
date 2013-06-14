@@ -10,27 +10,6 @@
 
 
 @implementation RSSItem
-@synthesize title;
-@synthesize link;
-@synthesize description;
-@synthesize author;
-@synthesize category;
-@synthesize guid;
-@synthesize updated;
-@synthesize source;
-@synthesize enclosure;
 
-- (void) dealloc {
-	[title release];
-	[link release];
-	[description release];
-	[author release];
-	[category release];
-	[guid release];
-	[updated release];
-	[source release];
-	[enclosure release];
-	[super dealloc];
-}
 
 @end

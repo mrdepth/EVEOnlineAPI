@@ -41,45 +41,33 @@
 
 
 @implementation EVEDBInvGroup
-@synthesize groupID;
-@synthesize categoryID;
-@synthesize category;
-@synthesize groupName;
-@synthesize description;
-@synthesize iconID;
-@synthesize icon;
-@synthesize useBasePrice;
-@synthesize allowManufacture;
-@synthesize allowRecycler;
-@synthesize anchored;
-@synthesize anchorable;
-@synthesize fittableNonSingleton;
-@synthesize published;
 
-+ (id) invGroupWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr {
-	return [[[EVEDBInvGroup alloc] initWithGroupID:aGroupID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"groupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"groupID"},
+		  @"categoryID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"categoryID"},
+		  @"groupName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"groupName"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"},
+		  @"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
+		  @"useBasePrice" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"useBasePrice"},
+		  @"allowManufacture" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"allowManufacture"},
+		  @"allowRecycler" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"allowRecycler"},
+		  @"anchored" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"anchored"},
+		  @"anchorable" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"anchorable"},
+		  @"fittableNonSingleton" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"fittableNonSingleton"},
+		  @"published" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"published"}
+		  };
+	return map;
 }
 
-+ (id) invGroupWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBInvGroup alloc] initWithDictionary:dictionary] autorelease];
++ (id) invGroupWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr {
+	return [[EVEDBInvGroup alloc] initWithGroupID:aGroupID error:errorPtr];
 }
 
 - (id) initWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invGroups WHERE groupID=%d;", aGroupID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invGroups WHERE groupID=%d;", aGroupID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
@@ -92,38 +80,31 @@
 }
 
 - (EVEDBInvCategory*) category {
-	if (categoryID == 0)
+	if (self.categoryID == 0)
 		return NULL;
-	if (!category) {
-		category = [[EVEDBInvCategory invCategoryWithCategoryID:categoryID error:nil] retain];
-		if (!category)
-			category = (EVEDBInvCategory*) [[NSNull null] retain];
+	if (!_category) {
+		_category = [EVEDBInvCategory invCategoryWithCategoryID:self.categoryID error:nil];
+		if (!_category)
+			_category = (EVEDBInvCategory*) [NSNull null];
 	}
-	if ((NSNull*) category == [NSNull null])
+	if ((NSNull*) _category == [NSNull null])
 		return NULL;
 	else
-		return category;
+		return _category;
 }
 
 - (EVEDBEveIcon*) icon {
-	if (iconID == 0)
+	if (self.iconID == 0)
 		return NULL;
-	if (!icon) {
-		icon = [[EVEDBEveIcon eveIconWithIconID:iconID error:nil] retain];
-		if (!icon)
-			icon = (EVEDBEveIcon*) [[NSNull null] retain];
+	if (!_icon) {
+		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
+		if (!_icon)
+			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
-	if ((NSNull*) icon == [NSNull null])
+	if ((NSNull*) _icon == [NSNull null])
 		return NULL;
 	else
-		return icon;
+		return _icon;
 }
 
-- (void) dealloc {
-	[category release];
-	[groupName release];
-	[description release];
-	[icon release];
-	[super dealloc];
-}
 @end
