@@ -28,6 +28,8 @@
 		12D30C3E11B6A08100D772CF /* EVECharContactList.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D30C3D11B6A08100D772CF /* EVECharContactList.m */; };
 		12D30C4911B6A40C00D772CF /* EVEContactNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D30C4811B6A40C00D772CF /* EVEContactNotifications.m */; };
 		12D4D91F11B56A7900DA98DA /* EVEAssetList.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D4D91E11B56A7900DA98DA /* EVEAssetList.m */; };
+		12D5F8BD17706AA50061D57C /* NAPIUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BC17706AA50061D57C /* NAPIUpload.m */; };
+		12D5F8C017706D010061D57C /* NAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BF17706D010061D57C /* NAPISearch.m */; };
 		12D6EDD4176F0DA600F45382 /* NSDictionary+EVEDBAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D6EDD3176F0DA600F45382 /* NSDictionary+EVEDBAPI.m */; };
 		12D6EDDD176F193100F45382 /* EVEDBInvMetaGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D6EDDC176F193000F45382 /* EVEDBInvMetaGroup.m */; };
 		12D81ACB15D8D977006AA4B2 /* EVEDBInvBlueprintType.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81ACA15D8D977006AA4B2 /* EVEDBInvBlueprintType.m */; };
@@ -191,6 +193,11 @@
 		12D30C4E11B6A8F200D772CF /* EVEOnlineAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEOnlineAPI.h; sourceTree = "<group>"; };
 		12D4D91D11B56A7900DA98DA /* EVEAssetList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEAssetList.h; sourceTree = "<group>"; };
 		12D4D91E11B56A7900DA98DA /* EVEAssetList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEAssetList.m; sourceTree = "<group>"; };
+		12D5F8BA17706A710061D57C /* NeocomAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NeocomAPI.h; sourceTree = "<group>"; };
+		12D5F8BB17706AA50061D57C /* NAPIUpload.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPIUpload.h; sourceTree = "<group>"; };
+		12D5F8BC17706AA50061D57C /* NAPIUpload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAPIUpload.m; sourceTree = "<group>"; };
+		12D5F8BE17706D000061D57C /* NAPISearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPISearch.h; sourceTree = "<group>"; };
+		12D5F8BF17706D010061D57C /* NAPISearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAPISearch.m; sourceTree = "<group>"; };
 		12D6EDD2176F0DA500F45382 /* NSDictionary+EVEDBAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+EVEDBAPI.h"; sourceTree = "<group>"; };
 		12D6EDD3176F0DA600F45382 /* NSDictionary+EVEDBAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+EVEDBAPI.m"; sourceTree = "<group>"; };
 		12D6EDDB176F193000F45382 /* EVEDBInvMetaGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBInvMetaGroup.h; sourceTree = "<group>"; };
@@ -575,6 +582,11 @@
 		12F7A69017687D2000F39962 /* NeocomAPI */ = {
 			isa = PBXGroup;
 			children = (
+				12D5F8BA17706A710061D57C /* NeocomAPI.h */,
+				12D5F8BB17706AA50061D57C /* NAPIUpload.h */,
+				12D5F8BC17706AA50061D57C /* NAPIUpload.m */,
+				12D5F8BE17706D000061D57C /* NAPISearch.h */,
+				12D5F8BF17706D010061D57C /* NAPISearch.m */,
 			);
 			path = NeocomAPI;
 			sourceTree = "<group>";
@@ -1163,6 +1175,8 @@
 				12D6EDD4176F0DA600F45382 /* NSDictionary+EVEDBAPI.m in Sources */,
 				12D6EDDD176F193100F45382 /* EVEDBInvMetaGroup.m in Sources */,
 				12774E171770347100E98F8C /* ASURLConnection.m in Sources */,
+				12D5F8BD17706AA50061D57C /* NAPIUpload.m in Sources */,
+				12D5F8C017706D010061D57C /* NAPISearch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
