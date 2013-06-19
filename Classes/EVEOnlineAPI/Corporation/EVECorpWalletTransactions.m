@@ -49,7 +49,7 @@
 }
 
 - (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/WalletTransactions.xml.aspx?keyID=%d&vCode=%@&characterID=%d&accountKey=%d%@", EVEOnlineAPIHost, keyID, vCode, characterID, accountKey, 
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/WalletTransactions.xml.aspx?keyID=%d&vCode=%@&characterID=%d&accountKey=%d%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, accountKey, 
 														(beforeTransID > 0 ? [NSString stringWithFormat:@"&beforeTransID=%d", beforeTransID] : @"")]]
 					   cacheStyle:EVERequestCacheStyleLong
 							error:errorPtr

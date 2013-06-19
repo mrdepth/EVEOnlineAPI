@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1248696B17717B0B0025C647 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
 		1264136E11B94B48001417FE /* EVEMailMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264136D11B94B48001417FE /* EVEMailMessages.m */; };
@@ -149,6 +150,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1248696917717B0B0025C647 /* NAPILookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPILookup.h; sourceTree = "<group>"; };
+		1248696A17717B0B0025C647 /* NAPILookup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAPILookup.m; sourceTree = "<group>"; };
 		124D20CC11B7EF7A00D84307 /* EVEIndustryJobs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEIndustryJobs.h; sourceTree = "<group>"; };
 		124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEIndustryJobs.m; sourceTree = "<group>"; };
 		1264134E11B949B2001417FE /* EVEMailingLists.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEMailingLists.h; sourceTree = "<group>"; };
@@ -587,6 +590,8 @@
 				12D5F8BC17706AA50061D57C /* NAPIUpload.m */,
 				12D5F8BE17706D000061D57C /* NAPISearch.h */,
 				12D5F8BF17706D010061D57C /* NAPISearch.m */,
+				1248696917717B0B0025C647 /* NAPILookup.h */,
+				1248696A17717B0B0025C647 /* NAPILookup.m */,
 			);
 			path = NeocomAPI;
 			sourceTree = "<group>";
@@ -1177,6 +1182,7 @@
 				12774E171770347100E98F8C /* ASURLConnection.m in Sources */,
 				12D5F8BD17706AA50061D57C /* NAPIUpload.m in Sources */,
 				12D5F8C017706D010061D57C /* NAPISearch.m in Sources */,
+				1248696B17717B0B0025C647 /* NAPILookup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

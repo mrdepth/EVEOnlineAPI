@@ -38,7 +38,7 @@
 }
 
 - (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void (^)(CGFloat))progressHandler{
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CalendarEventAttendees.xml.aspx?keyID=%d&vCode=%@&characterID=%d&eventID=%d", EVEOnlineAPIHost, keyID, vCode, characterID, eventID]]
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CalendarEventAttendees.xml.aspx?keyID=%d&vCode=%@&characterID=%d&eventID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, eventID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
 				  progressHandler:progressHandler]) {

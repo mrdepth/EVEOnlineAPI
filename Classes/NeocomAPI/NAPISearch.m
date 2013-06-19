@@ -15,14 +15,18 @@
 
 @implementation NAPISearch
 
-+ (id) searchWithCriteria:(NSDictionary*) criteria error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[NAPISearch alloc] initWithCriteria:criteria error:errorPtr progressHandler:progressHandler];
++ (id) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[NAPISearch alloc] initWithCriteria:criteria order:order error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithCriteria:(NSDictionary*) criteria error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	NSMutableArray* arguments = [[NSMutableArray alloc] init];
 	for (NSString* key in [criteria allKeys])
 		[arguments addObject:[NSString stringWithFormat:@"%@=%@", key, [criteria valueForKey:key]]];
+	
+	if (order)
+		[arguments addObject:[NSString stringWithFormat:@"order=%@", order]];
+	
 	NSString* argumentsString = [arguments componentsJoinedByString:@"&"];
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/search?%@", NeocomAPIHost, argumentsString]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
@@ -58,6 +62,7 @@
 		}
 		
 		self.loadouts = loadouts;
+		return nil;
 	}
 	else
 		return error;

@@ -42,7 +42,7 @@
 }
 
 - (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID contractID:(long long) contractID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/ContractItems.xml.aspx?keyID=%d&vCode=%@&characterID=%d&contractID=%qi", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, vCode, characterID, contractID]]
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/ContractItems.xml.aspx?keyID=%d&vCode=%@&characterID=%d&contractID=%qi", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, contractID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
 				  progressHandler:progressHandler]) {
