@@ -75,6 +75,8 @@
 				[cache storeCachedResponse:cachedResponse forRequest:request];
 			}
 		}
+		if (errorPtr)
+			*errorPtr = error;
 	}
 	return self;
 }
