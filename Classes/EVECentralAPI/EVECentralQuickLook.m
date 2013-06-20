@@ -156,9 +156,11 @@
 - (void)parserDidStartDocument:(NSXMLParser *)parser {
 	expiresDateFormatter = [[NSDateFormatter alloc] init];
 	[expiresDateFormatter setDateFormat:@"yyyy-MM-dd"];
+	[expiresDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 	reportedTimeDateFormatter = [[NSDateFormatter alloc] init];
 	[reportedTimeDateFormatter setDateFormat:@"MM-dd HH:mm:ss"];
 	[reportedTimeDateFormatter setDefaultDate:[NSDate date]];
+	[reportedTimeDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {

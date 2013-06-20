@@ -18,6 +18,7 @@
 	if (!dateFormatter) {
 		dateFormatter = [[NSDateFormatter alloc] init];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 		[threadDictionary setValue:dateFormatter forKey:@"eveDateFormatter"];
 		[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
 		[dateFormatter autorelease];

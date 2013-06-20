@@ -21,21 +21,25 @@
 		NSDateFormatter *dateFormatter;
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmZZZ"];
 		[dateFormatters addObject:dateFormatter];
 		[dateFormatter release];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmssZZZ"];
 		[dateFormatters addObject:dateFormatter];
 		[dateFormatter release];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmss.SZZZ"];
 		[dateFormatters addObject:dateFormatter];
 		[dateFormatter release];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd"];
 		[dateFormatters addObject:dateFormatter];
 		[dateFormatter release];

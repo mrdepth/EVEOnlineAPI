@@ -189,6 +189,7 @@
 - (void) didParseObject:(NSArray*) object {
 	NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
 	[formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+	[formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
 	self.killLog = [NSMutableArray array];
 	
 	for (NSDictionary* dic in object) {
