@@ -16,7 +16,7 @@
 }
 
 - (id) initWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	NSDictionary* jsonObject = @{@"userID" : userID, @"loadouts" : cannonicalNames};
+	NSDictionary* jsonObject = @{@"userID" : userID, @"loadouts" : [cannonicalNames sortedArrayUsingSelector:@selector(compare:)]};
 	NSData* data = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:errorPtr];
 
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/upload", NeocomAPIHost]]
