@@ -138,11 +138,11 @@
 
 - (NSArray*) activities {
 	NSMutableArray* activities = [NSMutableArray array];
-	for (NSString* key in [self.ramTypeRequirements allKeys]) {
-		NSArray* requirements = [self.ramTypeRequirements valueForKey:key];
+	for (NSNumber* key in [self.ramTypeRequirements allKeys]) {
+		NSArray* requirements = self.ramTypeRequirements[key];
 		EVEDBRamActivity* activity = nil;
 		if (requirements.count > 0)
-			activity = [[requirements objectAtIndex:0] activity];
+			activity = [requirements[0] activity];
 		else
 			activity = [EVEDBRamActivity ramActivityWithActivityID:[key integerValue] error:nil];
 		[activities addObject:activity];
@@ -154,7 +154,7 @@
 
 - (NSArray*) requiredSkillsForActivity:(NSInteger) activityID {
 	NSMutableArray* skills = [NSMutableArray array];
-	NSArray* requirements = [self.ramTypeRequirements valueForKey:[NSString stringWithFormat:@"%d", activityID]];
+	NSArray* requirements = self.ramTypeRequirements[@(activityID)];
 	for (EVEDBRamTypeRequirement* requirement in requirements) {
 		if (requirement.requiredType.group.categoryID == 16) { //Skill
 			EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:requirement.requiredTypeID error:nil];
@@ -170,7 +170,7 @@
 - (NSArray*) requiredMaterialsForActivity:(NSInteger) activityID {
 	NSMutableArray* requirements = [NSMutableArray array];
 
-	for (EVEDBRamTypeRequirement* requirement in [self.ramTypeRequirements valueForKey:[NSString stringWithFormat:@"%d", activityID]]) {
+	for (EVEDBRamTypeRequirement* requirement in self.ramTypeRequirements[@(activityID)]) {
 		if (requirement.requiredType.group.categoryID != 16) //Skill
 			[requirements addObject:requirement];
 	}

@@ -99,6 +99,9 @@
 
 - (id) initWithInvType:(EVEDBInvType*) type {
 	if (self = [super init]) {
+		if (!type)
+			return nil;
+		
 		self.typeID = type.typeID;
 		self.groupID = type.groupID;
 		self.typeName = type.typeName;
@@ -117,9 +120,9 @@
 		self.iconID = type.iconID;
 		self.imageName = type.imageName;
 		
-		self.group = type->_group;
-		self.marketGroup = type->_marketGroup;
-		self.icon = type->_icon;
+		_group = type->_group;
+		_marketGroup = type->_marketGroup;
+		_icon = type->_icon;
 		
 		self.attributeCategories = type->_attributeCategories;
 		self.effectsDictionary = type->_effectsDictionary;
