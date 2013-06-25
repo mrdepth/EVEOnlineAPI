@@ -10,12 +10,9 @@
 
 
 @implementation EVECertificateTreeItem
-@synthesize categoryID;
-@synthesize categoryName;
-@synthesize classes;
 
 + (id) certificateTreeItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECertificateTreeItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECertificateTreeItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -26,23 +23,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[categoryName release];
-	[classes release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECertificateTreeClassesItem
 
-@synthesize classID;
-@synthesize className;
-@synthesize certificates;
-
 + (id) certificateTreeClassesItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECertificateTreeClassesItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECertificateTreeClassesItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -53,25 +40,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[className release];
-	[certificates release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECertificateTreeCertificatesItem
-@synthesize certificateID;
-@synthesize grade;
-@synthesize corporationID;
-@synthesize description;
-@synthesize requiredSkills;
-@synthesize requiredCertificates;
 
 + (id) certificateTreeCertificatesItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECertificateTreeCertificatesItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECertificateTreeCertificatesItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -84,22 +59,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[description release];
-	[requiredSkills release];
-	[requiredCertificates release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECertificateTreeRequiredSkillsItem
-@synthesize typeID;
-@synthesize skillLevel;
 
 + (id) certificateTreeRequiredSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECertificateTreeRequiredSkillsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECertificateTreeRequiredSkillsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -110,19 +76,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECertificateTreeRequiredCertificatesItem
-@synthesize certificateID;
-@synthesize grade;
 
 + (id) certificateTreeRequiredCertificatesItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECertificateTreeRequiredCertificatesItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECertificateTreeRequiredCertificatesItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -133,74 +93,52 @@
 	return self;
 }
 
-- (void) dealloc {
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECertificateTree
-@synthesize categories;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) certificateTreeWithError:(NSError **)errorPtr {
-	return [[[EVECertificateTree alloc] initWithError:errorPtr] autorelease];
++ (id) certificateTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECertificateTree alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) certificateTreeWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVECertificateTree alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CertificateTree.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CertificateTree.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[categories release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"categories"]) {
-		categories = [[NSMutableArray alloc] init];
-		return categories;
+		self.categories = [[NSMutableArray alloc] init];
+		return self.categories;
 	}
 	else if ([rowset isEqualToString:@"classes"]) {
-		NSMutableArray *classes = [[[NSMutableArray alloc] init] autorelease];
+		NSMutableArray *classes = [[NSMutableArray alloc] init];
 		[self.currentRow setClasses:classes];
 		return classes;
 	}
 	else if ([rowset isEqualToString:@"certificates"]) {
-		NSMutableArray *certificates = [[[NSMutableArray alloc] init] autorelease];
+		NSMutableArray *certificates = [[NSMutableArray alloc] init];
 		[self.currentRow setCertificates:certificates];
 		return certificates;
 	}
 	else if ([rowset isEqualToString:@"requiredSkills"]) {
-		NSMutableArray *requiredSkills = [[[NSMutableArray alloc] init] autorelease];
+		NSMutableArray *requiredSkills = [[NSMutableArray alloc] init];
 		[self.currentRow setRequiredSkills:requiredSkills];
 		return requiredSkills;
 	}
 	else if ([rowset isEqualToString:@"requiredCertificates"]) {
-		NSMutableArray *requiredCertificates = [[[NSMutableArray alloc] init] autorelease];
+		NSMutableArray *requiredCertificates = [[NSMutableArray alloc] init];
 		[self.currentRow setRequiredCertificates:requiredCertificates];
 		return requiredCertificates;
 	}

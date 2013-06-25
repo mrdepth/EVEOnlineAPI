@@ -9,23 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECorpWalletTransactionsItem : NSObject {
-	NSDate *transactionDateTime;
-	NSInteger transactionID;
-	NSInteger quantity;
-	NSString *typeName;
-	NSInteger typeID;
-	float price;
-	NSInteger clientID;
-	NSString *clientName;
-	NSInteger characterID;
-	NSString *characterName;
-	NSInteger stationID;
-	NSString *stationName;
-	NSString *transactionType;
-	NSString *transactionFor;
-}
-@property (nonatomic, retain) NSDate *transactionDateTime;
+@interface EVECorpWalletTransactionsItem : NSObject
+@property (nonatomic, strong) NSDate *transactionDateTime;
 @property (nonatomic) NSInteger transactionID;
 @property (nonatomic) NSInteger quantity;
 @property (nonatomic, copy) NSString *typeName;
@@ -45,14 +30,10 @@
 
 @end
 
-@interface EVECorpWalletTransactions : EVERequest {
-	NSMutableArray *transactions;
-}
-@property (nonatomic, retain) NSArray *transactions;
+@interface EVECorpWalletTransactions : EVERequest
+@property (nonatomic, strong) NSArray *transactions;
 
-+ (id) corpWalletTransactionsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr;
-+ (id) corpWalletTransactionsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey target:(id)target action:(SEL)action object:(id)object;
++ (id) corpWalletTransactionsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

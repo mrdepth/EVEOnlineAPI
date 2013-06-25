@@ -9,14 +9,9 @@
 #import "EVEContactNotifications.h"
 
 @implementation EVEContactNotificationsItem
-@synthesize notificationID;
-@synthesize senderID;
-@synthesize senderName;
-@synthesize sentDate;
-@synthesize messageData;
 
 + (id) contactNotificationsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEContactNotificationsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEContactNotificationsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -32,58 +27,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[senderName release];
-	[sentDate release];
-	[messageData release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVEContactNotifications
-@synthesize contactNotifications;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) contactNotificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEContactNotifications alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) contactNotificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEContactNotifications alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) contactNotificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEContactNotifications alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/ContactNotifications.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/ContactNotifications.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/ContactNotifications.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleLong
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[contactNotifications release];
-	[super dealloc];
-}
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"contactNotifications"]) {
-		contactNotifications = [[NSMutableArray alloc] init];
-		return contactNotifications;
+		self.contactNotifications = [[NSMutableArray alloc] init];
+		return self.contactNotifications;
 	}
 	else
 		return nil;
@@ -92,7 +63,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"contactNotifications"]) {
 		EVEContactNotificationsItem *contactNotificationsItem = [EVEContactNotificationsItem contactNotificationsItemWithXMLAttributes:attributeDict];
-		[contactNotifications addObject:contactNotificationsItem];
+		[(NSMutableArray*) self.contactNotifications addObject:contactNotificationsItem];
 		return contactNotificationsItem;
 	}
 	return nil;

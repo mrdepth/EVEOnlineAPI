@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEMailBodiesItem : NSObject {
-	NSInteger messageID;
-	NSString *text;
-}
+@interface EVEMailBodiesItem : NSObject
 @property (nonatomic) NSInteger messageID;
 @property (nonatomic, copy) NSString *text;
 
@@ -21,14 +18,10 @@
 
 @end
 
-@interface EVEMailBodies : EVERequest {
-	NSMutableArray *messages;
-}
-@property (nonatomic, retain) NSArray *messages;
+@interface EVEMailBodies : EVERequest
+@property (nonatomic, strong) NSArray *messages;
 
-+ (id) mailBodiesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr;
-+ (id) mailBodiesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids target:(id)target action:(SEL)action object:(id)object;
++ (id) mailBodiesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

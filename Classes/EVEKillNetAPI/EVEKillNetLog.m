@@ -8,8 +8,6 @@
 
 #import "EVEKillNetLog.h"
 #import "EVERequest.h"
-#import "EVERequestsCache.h"
-#import "SBJSON.h"
 #import "EVEKillNetAPI.h"
 
 @interface NSDictionary(NotNull)
@@ -52,11 +50,6 @@
 	return self;
 }
 
-- (void) dealloc {
-	[_typeName release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVEKillNetLogInvolved
@@ -80,42 +73,10 @@
 	return self;
 }
 
-- (void) dealloc {
-	[_characterName release];
-	[_corporationName release];
-	[_allianceName release];
-	[_factionName release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVEKillNetLogEntry
 
-- (void) dealloc {
-	[_url release];
-	[_timestamp release];
-	[_victimName release];
-	[_victimCorpName release];
-	[_victimAllianceName release];
-	[_victimShipName release];
-	[_victimShipClass release];
-	[_fbPilotName release];
-	[_fbCorpName release];
-	[_fbAllianceName release];
-	[_solarSystemName release];
-	[_regionName release];
-	[_involved release];
-	[_destroyedItems release];
-	[_droppedItems release];
-	[_corpName release];
-	[_allianceName release];
-	[_factionName release];
-	[_shipDestroyed release];
-	[_systemName release];
-	[_involvedParties release];
-	[super dealloc];
-}
 
 @end
 
@@ -125,44 +86,13 @@
 
 @end
 
-@implementation EVEKillNetLog(Protected)
-
-- (NSError*) parseData: (NSData*) aData {
-	NSString *s = [[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding];
-	//	NSLog(@"%@", s);
-	
-	SBJSON *parser = [[SBJSON alloc] init];
-	id object = [parser objectWithString:s];
-	if ([object isKindOfClass:[NSArray class]]) {
-		error = nil;
-		[self didParseObject:object];
-	}
-	else
-		error = [NSError errorWithDomain:EVEKillNetAPIErrorDomain code:EVEKillNetAPIErrorCodeParsingError userInfo:[NSDictionary dictionaryWithObject:EVEKillNetAPIErrorCodeParsingErrorText forKey:NSLocalizedDescriptionKey]];
-	[parser release];
-	[s release];
-	return error;
-}
-
-- (void) cacheData {
-	EVERequestsCache *cache = [EVERequestsCache sharedRequestsCache];
-	NSDate *date = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 0.5];
-	if (hash)
-		[cache cacheData:data withHash:hash cachedUntil:date];
-	else
-		[cache cacheData:data withURL:requestUrl cachedUntil:date];
-}
-
-@end
-
 @implementation EVEKillNetLog
-@synthesize killLog;
 
-+ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr {
-	return [[[EVEKillNetLog alloc] initWithFilter:filter mask:mask error:errorPtr] autorelease];
++ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEKillNetLog alloc] initWithFilter:filter mask:mask error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr {
+- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	NSMutableString* args = [NSMutableString string];
 	for (NSString* key in [filter allKeys]) {
 		NSString* value = [filter valueForKey:key];
@@ -173,15 +103,22 @@
 	[args appendFormat:@"mask:%d", mask];
 	NSURL* url = [NSURL URLWithString:[EVEKillNetLogAPIHost stringByAppendingPathComponent:args]];
 	
-	if (self = [super initWithURL:url cacheStyle:EVERequestCacheStyleModifiedShort error:errorPtr]) {
+	if (self = [super initWithURL:url cacheStyle:EVERequestCacheStyleModifiedShort error:errorPtr progressHandler:progressHandler]) {
 		
 	}
 	return self;
 }
 
-- (void) dealloc {
-	[killLog release];
-	[super dealloc];
+- (NSError*) parseData: (NSData*) aData {
+	NSError* error = nil;
+	id object = [NSJSONSerialization JSONObjectWithData:aData options:0 error:&error];
+	if ([object isKindOfClass:[NSArray class]]) {
+		error = nil;
+		[self didParseObject:object];
+	}
+	else
+		error = [NSError errorWithDomain:EVEKillNetAPIErrorDomain code:EVEKillNetAPIErrorCodeParsingError userInfo:[NSDictionary dictionaryWithObject:EVEKillNetAPIErrorCodeParsingErrorText forKey:NSLocalizedDescriptionKey]];
+	return error;
 }
 
 #pragma mark - Private
@@ -225,29 +162,26 @@
 		
 		NSMutableArray* involved = [NSMutableArray array];
 		for (NSDictionary* inv in [dic notNullValueForKey:@"involved"])
-			[involved addObject:[[[EVEKillNetLogInvolved alloc] initWithDictinary:inv] autorelease]];
+			[involved addObject:[[EVEKillNetLogInvolved alloc] initWithDictinary:inv]];
 		entry.involved = involved;
 
 		NSMutableArray* involvedParties = [NSMutableArray array];
 		for (NSDictionary* inv in [dic notNullValueForKey:@"involvedParties"])
-			[involvedParties addObject:[[[EVEKillNetLogInvolved alloc] initWithDictinary:inv] autorelease]];
+			[involvedParties addObject:[[EVEKillNetLogInvolved alloc] initWithDictinary:inv]];
 		entry.involvedParties = involvedParties;
 
 		NSMutableArray* destroyedItems = [NSMutableArray array];
 		for (NSDictionary* item in [dic notNullValueForKeyPath:@"items.destroyed"])
-			[destroyedItems addObject:[[[EVEKillNetLogItem alloc] initWithDictinary:item] autorelease]];
+			[destroyedItems addObject:[[EVEKillNetLogItem alloc] initWithDictinary:item]];
 		entry.destroyedItems = destroyedItems;
 
 		NSMutableArray* droppedItems = [NSMutableArray array];
 		for (NSDictionary* item in [dic notNullValueForKeyPath:@"items.dropped"])
-			[droppedItems addObject:[[[EVEKillNetLogItem alloc] initWithDictinary:item] autorelease]];
+			[droppedItems addObject:[[EVEKillNetLogItem alloc] initWithDictinary:item]];
 		entry.droppedItems = droppedItems;
-		[killLog addObject:entry];
-		[entry release];
+		[(NSMutableArray*) self.killLog addObject:entry];
 
 	}
-	
-	[formatter release];
 }
 
 @end

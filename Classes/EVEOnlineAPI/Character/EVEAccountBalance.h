@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAccountBalanceItem : NSObject {
-	NSInteger accountID;
-	NSInteger accountKey;
-	float balance;
-}
+@interface EVEAccountBalanceItem : NSObject
 @property (nonatomic) NSInteger accountID;
 @property (nonatomic) NSInteger accountKey;
 @property (nonatomic) float balance;
@@ -24,14 +20,10 @@
 @end
 
 
-@interface EVEAccountBalance : EVERequest {
-	NSMutableArray *accounts;
-}
-@property (nonatomic, retain) NSArray *accounts;
+@interface EVEAccountBalance : EVERequest
+@property (nonatomic, strong) NSArray *accounts;
 
-+ (id) accountBalanceWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-+ (id) accountBalanceWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
++ (id) accountBalanceWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

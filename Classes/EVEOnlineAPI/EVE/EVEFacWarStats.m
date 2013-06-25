@@ -9,29 +9,13 @@
 #import "EVEFacWarStats.h"
 
 @implementation EVEFacWarStatsTotals
-@synthesize killsYesterday;
-@synthesize killsLastWeek;
-@synthesize killsTotal;
-@synthesize victoryPointsYesterday;
-@synthesize victoryPointsLastWeek;
-@synthesize victoryPointsTotal;
 @end
 
 
 @implementation EVEFacWarStatsFactionsItem
-@synthesize factionID;
-@synthesize factionName;
-@synthesize pilots;
-@synthesize systemsControlled;
-@synthesize killsYesterday;
-@synthesize killsLastWeek;
-@synthesize killsTotal;
-@synthesize victoryPointsYesterday;
-@synthesize victoryPointsLastWeek;
-@synthesize victoryPointsTotal;
 
 + (id) facWarStatsFactionsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEFacWarStatsFactionsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEFacWarStatsFactionsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -50,22 +34,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[factionName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEFacWarStatsFactionWarsItem
-@synthesize factionID;
-@synthesize factionName;
-@synthesize againstID;
-@synthesize againstName;
 
 + (id) facWarStatsFactionWarsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEFacWarStatsFactionWarsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEFacWarStatsFactionWarsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -78,66 +53,38 @@
 	return self;
 }
 
-- (void) dealloc {
-	[factionName release];
-	[againstName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEFacWarStats
-@synthesize totals;
-@synthesize factions;
-@synthesize factionWars;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarStatsWithError:(NSError **)errorPtr {
-	return [[[EVEFacWarStats alloc] initWithError:errorPtr] autorelease];
++ (id) facWarStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEFacWarStats alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) facWarStatsWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEFacWarStats alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/FacWarStats.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/FacWarStats.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[totals release];
-	[factions release];
-	[factionWars release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"factions"]) {
-		factions = [[NSMutableArray alloc] init];
-		return factions;
+		self.factions = [[NSMutableArray alloc] init];
+		return self.factions;
 	}
 	else if ([rowset isEqualToString:@"factionWars"]) {
-		factionWars = [[NSMutableArray alloc] init];
-		return factionWars;
+		self.factionWars = [[NSMutableArray alloc] init];
+		return self.factionWars;
 	}
 	else
 		return nil;
@@ -164,7 +111,7 @@ didStartElement:(NSString *)elementName
 	 attributes:(NSDictionary *)attributeDict {
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"totals"])
-		self.totals = [[[EVEFacWarStatsTotals alloc] init] autorelease];
+		self.totals = [[EVEFacWarStatsTotals alloc] init];
 }
 
 - (void) parser:(NSXMLParser *)parser

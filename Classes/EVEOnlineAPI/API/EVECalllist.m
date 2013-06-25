@@ -10,12 +10,9 @@
 
 
 @implementation EVECalllistCallGroupsItem
-@synthesize groupID;
-@synthesize name;
-@synthesize description;
 
 + (id) callGroupsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECalllistCallGroupsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECalllistCallGroupsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -27,24 +24,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[name release];
-	[description release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECalllistCallsItem
-@synthesize accessMask;
-@synthesize type;
-@synthesize name;
-@synthesize groupID;
-@synthesize description;
 
 + (id) callsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECalllistCallsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECalllistCallsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -58,65 +44,39 @@
 	return self;
 }
 
-- (void) dealloc {
-	[name release];
-	[description release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVECalllist
-@synthesize callGroups;
-@synthesize calls;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
 
-+ (id) calllistWithError:(NSError **)errorPtr {
-	return [[[EVECalllist alloc] initWithError:errorPtr] autorelease];
++ (id) calllistWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECalllist alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) calllistWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVECalllist alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/calllist.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/calllist.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[callGroups release];
-	[calls release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"callGroups"]) {
-		callGroups = [[NSMutableArray alloc] init];
-		return callGroups;
+		self.callGroups = [[NSMutableArray alloc] init];
+		return self.callGroups;
 	}
 	else if ([rowset isEqualToString:@"calls"]) {
-		calls = [[NSMutableArray alloc] init];
-		return calls;
+		self.calls = [[NSMutableArray alloc] init];
+		return self.calls;
 	}
 	return nil;
 }
@@ -124,12 +84,12 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"callGroups"]) {
 		EVECalllistCallGroupsItem *callGroup = [EVECalllistCallGroupsItem callGroupsItemWithXMLAttributes:attributeDict];
-		[callGroups addObject:callGroup];
+		[(NSMutableArray*) self.callGroups addObject:callGroup];
 		return callGroup;
 	}
 	else if ([rowset isEqualToString:@"calls"]) {
 		EVECalllistCallsItem *call = [EVECalllistCallsItem callsItemWithXMLAttributes:attributeDict];
-		[calls addObject:call];
+		[(NSMutableArray*) self.calls addObject:call];
 		return call;
 	}
 	else

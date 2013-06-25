@@ -9,16 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "BCRequest.h"
 
-@interface BCEveLoadout : BCRequest {
-	NSInteger loadoutID;
-	NSInteger typeID;
-	NSInteger thumbsUp;
-	NSInteger thumbsDown;
-	NSInteger topic;
-	NSString *title;
-	NSString *description;
-	NSString *fitting;
-}
+@interface BCEveLoadout : BCRequest
 @property (nonatomic, assign) NSInteger loadoutID;
 @property (nonatomic, assign) NSInteger typeID;
 @property (nonatomic, assign) NSInteger thumbsUp;
@@ -28,9 +19,7 @@
 @property (nonatomic, copy) NSString *description;
 @property (nonatomic, copy) NSString *fitting;
 
-+ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID target:(id)target action:(SEL)action object:(id)object;
-+ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr;
-- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr;
++ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

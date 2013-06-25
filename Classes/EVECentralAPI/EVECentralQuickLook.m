@@ -11,22 +11,8 @@
 
 
 @implementation EVECentralQuickLookOrder
-@synthesize orderID;
-@synthesize regionID;
-@synthesize region;
-@synthesize stationID;
-@synthesize station;
-@synthesize stationName;
-@synthesize security;
-@synthesize range;
-@synthesize price;
-@synthesize volRemain;
-@synthesize minVolume;
-@synthesize expires;
-@synthesize reportedTime;
-
 + (id) quickLookOrderWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVECentralQuickLookOrder alloc] initWithDictionary:dictionary] autorelease];
+	return [[EVECentralQuickLookOrder alloc] initWithDictionary:dictionary];
 }
 
 - (id) initWithDictionary: (NSDictionary*) dictionary {
@@ -36,48 +22,152 @@
 	return self;
 }
 
-- (void) dealloc {
-	[region release];
-	[stationName release];
-	[station release];
-	[expires release];
-	[reportedTime release];
-	[super dealloc];
-}
-
 - (EVEDBMapRegion*) region {
-	if (regionID == 0)
+	if (self.regionID == 0)
 		return NULL;
-	if (!region) {
-		region = [[EVEDBMapRegion mapRegionWithRegionID:regionID error:nil] retain];
-		if (!region)
-			region = (EVEDBMapRegion*) [[NSNull null] retain];
+	if (!_region) {
+		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
+		if (!_region)
+			_region = (EVEDBMapRegion*) [NSNull null];
 	}
-	if ((NSNull*) region == [NSNull null])
+	if ((NSNull*) _region == [NSNull null])
 		return NULL;
 	else
-		return region;
+		return _region;
 }
 
 - (EVEDBStaStation*) station {
-	if (stationID == 0)
+	if (self.stationID == 0)
 		return NULL;
-	if (!station) {
-		station = [[EVEDBStaStation staStationWithStationID:stationID error:nil] retain];
-		if (!station)
-			station = (EVEDBStaStation*) [[NSNull null] retain];
+	if (!_station) {
+		_station = [EVEDBStaStation staStationWithStationID:self.stationID error:nil];
+		if (!_station)
+			_station = (EVEDBStaStation*) [NSNull null];
 	}
-	if ((NSNull*) station == [NSNull null])
+	if ((NSNull*) _station == [NSNull null])
 		return NULL;
 	else
-		return station;
+		return _station;
 }
 
 @end
 
 
+@interface EVECentralQuickLook()
+@property (nonatomic, strong) NSMutableArray *currentOrders;
+@property (nonatomic, strong) EVECentralQuickLookOrder *currentOrder;
+@property (nonatomic, strong) NSDateFormatter *expiresDateFormatter;
+@property (nonatomic, strong) NSDateFormatter *reportedTimeDateFormatter;
 
-@implementation EVECentralQuickLook(Private)
+- (NSString*) argumentsStringWithTypeID: (NSInteger) typeIDs regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ;
+
+@end
+
+
+@implementation EVECentralQuickLook
+
++ (id) quickLookWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECentralQuickLook alloc] initWithTypeID:typeID regionIDs:regionIDs systemID:systemID hours:hours minQ:minQ error:errorPtr progressHandler:progressHandler];
+}
+
+- (id) initWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/quicklook?%@",
+														EVECentralAPIHost,
+														[self argumentsStringWithTypeID:aTypeID regionIDs:regionIDs systemID:systemID hours:aHours minQ:aMinQ]]]
+					   cacheStyle:EVERequestCacheStyleModifiedShort
+							error:errorPtr
+				  progressHandler:progressHandler]) {
+	}
+	return self;
+}
+
+#pragma mark NSXMLParserDelegate
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser {
+	self.expiresDateFormatter = [[NSDateFormatter alloc] init];
+	[self.expiresDateFormatter setDateFormat:@"yyyy-MM-dd"];
+	[self.expiresDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+	self.reportedTimeDateFormatter = [[NSDateFormatter alloc] init];
+	[self.reportedTimeDateFormatter setDateFormat:@"MM-dd HH:mm:ss"];
+	[self.reportedTimeDateFormatter setDefaultDate:[NSDate date]];
+	[self.reportedTimeDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser {
+	self.expiresDateFormatter = nil;
+	self.reportedTimeDateFormatter = nil;
+}
+
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
+	self.expiresDateFormatter = nil;
+	self.reportedTimeDateFormatter = nil;
+}
+
+- (void) parser:(NSXMLParser *)parser
+didStartElement:(NSString *)elementName
+   namespaceURI:(NSString *)namespaceURI
+  qualifiedName:(NSString *)qualifiedName
+	 attributes:(NSDictionary *)attributeDict {
+	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
+	
+	if ([elementName isEqualToString:@"sell_orders"]) {
+		self.currentOrders = [NSMutableArray array];
+		self.sellOrders = self.currentOrders;
+	}
+	else if ([elementName isEqualToString:@"buy_orders"]) {
+		self.currentOrders = [NSMutableArray array];
+		self.buyOrders = self.currentOrders;
+	}
+	else if ([elementName isEqualToString:@"order"]) {
+		self.currentOrder = [EVECentralQuickLookOrder quickLookOrderWithDictionary:attributeDict];
+		[(NSMutableArray*) self.currentOrders addObject:self.currentOrder];
+	}
+	else if ([elementName isEqualToString:@"regions"])
+		self.regions = [NSMutableArray array];
+}
+
+- (void) parser:(NSXMLParser *)parser
+  didEndElement:(NSString *)elementName
+   namespaceURI:(NSString *)namespaceURI
+  qualifiedName:(NSString *)qName {
+	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
+	
+	if ([elementName isEqualToString:@"item"])
+		self.typeID = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"itemname"])
+		self.typeName = self.validText;
+	else if ([elementName isEqualToString:@"region"]) {
+		if (self.currentOrder)
+			self.currentOrder.regionID = [self.validText integerValue];
+		else
+			[(NSMutableArray*) self.regions addObject:self.validText];
+	}
+	else if ([elementName isEqualToString:@"hours"])
+		self.hours = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"minqty"])
+		self.minQ = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"station"])
+		self.currentOrder.stationID = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"station_name"])
+		self.currentOrder.stationName = self.validText;
+	else if ([elementName isEqualToString:@"security"])
+		self.currentOrder.security = [self.validText floatValue];
+	else if ([elementName isEqualToString:@"range"])
+		self.currentOrder.range = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"price"])
+		self.currentOrder.price = [self.validText floatValue];
+	else if ([elementName isEqualToString:@"vol_remain"])
+		self.currentOrder.volRemain = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"min_volume"])
+		self.currentOrder.minVolume = [self.validText integerValue];
+	else if ([elementName isEqualToString:@"expires"])
+		self.currentOrder.expires = [self.expiresDateFormatter dateFromString:self.validText];
+	else if ([elementName isEqualToString:@"reported_time"])
+		self.currentOrder.reportedTime = [self.reportedTimeDateFormatter dateFromString:self.validText];
+	
+}
+
+#pragma mark - Private
 
 - (NSString*) argumentsStringWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ {
 	NSMutableArray *regionIDsArgs = [NSMutableArray array];
@@ -95,150 +185,11 @@
 	
 	if (aMinQ)
 		[argumentsString appendFormat:@"&setminQ=%d", aMinQ];
-
+	
 	if (systemID)
 		[argumentsString appendFormat:@"&usesystem=%d", systemID];
-
+	
 	return argumentsString;
-}
-
-@end
-
-
-@implementation EVECentralQuickLook
-@synthesize typeID;
-@synthesize typeName;
-@synthesize regions;
-@synthesize hours;
-@synthesize minQ;
-@synthesize sellOrders;
-@synthesize buyOrders;
-
-+ (id) quickLookWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr {
-	return [[[EVECentralQuickLook alloc] initWithTypeID:typeID regionIDs:regionIDs systemID:systemID hours:hours minQ:minQ error:errorPtr] autorelease];
-}
-
-+ (id) quickLookWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ target:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVECentralQuickLook alloc] initWithTypeID:typeID regionIDs:regionIDs systemID:systemID hours:hours minQ:minQ target:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/quicklook?%@",
-														EVECentralAPIHost,
-														[self argumentsStringWithTypeID:aTypeID regionIDs:regionIDs systemID:systemID hours:aHours minQ:aMinQ]]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
-	}
-	return self;
-}
-
-- (id) initWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/quicklook?%@",
-														EVECentralAPIHost,
-														[self argumentsStringWithTypeID:aTypeID regionIDs:regionIDs systemID:systemID hours:aHours minQ:aMinQ]]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[typeName release];
-	[regions release];
-	[sellOrders release];
-	[buyOrders release];
-	[super dealloc];
-}
-
-#pragma mark NSXMLParserDelegate
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser {
-	expiresDateFormatter = [[NSDateFormatter alloc] init];
-	[expiresDateFormatter setDateFormat:@"yyyy-MM-dd"];
-	[expiresDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
-	reportedTimeDateFormatter = [[NSDateFormatter alloc] init];
-	[reportedTimeDateFormatter setDateFormat:@"MM-dd HH:mm:ss"];
-	[reportedTimeDateFormatter setDefaultDate:[NSDate date]];
-	[reportedTimeDateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
-}
-
-- (void)parserDidEndDocument:(NSXMLParser *)parser {
-	[expiresDateFormatter release];
-	expiresDateFormatter = nil;
-	[reportedTimeDateFormatter release];
-	reportedTimeDateFormatter = nil;
-}
-
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-	[expiresDateFormatter release];
-	expiresDateFormatter = nil;
-	[reportedTimeDateFormatter release];
-	reportedTimeDateFormatter = nil;
-}
-
-- (void) parser:(NSXMLParser *)parser
-didStartElement:(NSString *)elementName
-   namespaceURI:(NSString *)namespaceURI
-  qualifiedName:(NSString *)qualifiedName
-	 attributes:(NSDictionary *)attributeDict {
-	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
-	
-	if ([elementName isEqualToString:@"sell_orders"]) {
-		currentOrders = [NSMutableArray array];
-		self.sellOrders = currentOrders;
-	}
-	else if ([elementName isEqualToString:@"buy_orders"]) {
-		currentOrders = [NSMutableArray array];
-		self.buyOrders = currentOrders;
-	}
-	else if ([elementName isEqualToString:@"order"]) {
-		currentOrder = [EVECentralQuickLookOrder quickLookOrderWithDictionary:attributeDict];
-		[currentOrders addObject:currentOrder];
-	}
-	else if ([elementName isEqualToString:@"regions"])
-		self.regions = [NSMutableArray array];
-}
-
-- (void) parser:(NSXMLParser *)parser
-  didEndElement:(NSString *)elementName
-   namespaceURI:(NSString *)namespaceURI
-  qualifiedName:(NSString *)qName {
-	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-	
-	if ([elementName isEqualToString:@"item"])
-		self.typeID = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"itemname"])
-		self.typeName = self.validText;
-	else if ([elementName isEqualToString:@"region"]) {
-		if (currentOrder)
-			currentOrder.regionID = [self.validText integerValue];
-		else
-			[regions addObject:self.validText];
-	}
-	else if ([elementName isEqualToString:@"hours"])
-		self.hours = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"minqty"])
-		self.minQ = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"station"])
-		currentOrder.stationID = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"station_name"])
-		currentOrder.stationName = self.validText;
-	else if ([elementName isEqualToString:@"security"])
-		currentOrder.security = [self.validText floatValue];
-	else if ([elementName isEqualToString:@"range"])
-		currentOrder.range = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"price"])
-		currentOrder.price = [self.validText floatValue];
-	else if ([elementName isEqualToString:@"vol_remain"])
-		currentOrder.volRemain = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"min_volume"])
-		currentOrder.minVolume = [self.validText integerValue];
-	else if ([elementName isEqualToString:@"expires"])
-		currentOrder.expires = [expiresDateFormatter dateFromString:self.validText];
-	else if ([elementName isEqualToString:@"reported_time"])
-		currentOrder.reportedTime = [reportedTimeDateFormatter dateFromString:self.validText];
-	
 }
 
 @end

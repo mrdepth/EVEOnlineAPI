@@ -8,32 +8,26 @@
 
 #import "EVECentralRequest.h"
 
+@interface EVECentralRequest()
+@property (nonatomic, readwrite, strong) NSString *text;
+@end
+
 @implementation EVECentralRequest(Protected)
 
-- (NSString*) text {
-	return text;
-}
-
 - (NSError*) parseData: (NSData*) aData {
-	//NSString *s = [[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding];
-	//NSLog(@"%@", s);
-	//[s release];
-	
-	
 	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:aData];
 	[parser setDelegate:self];
-	error = nil;
+	NSError* error = nil;
 	
-	text = [NSMutableString string];
+	self.text = [NSMutableString string];
 	if (![parser parse]) {
 		error = [parser parserError];
 	}
 	if (error.code == 4) {
 		NSString *s = [[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding];
 		error = [NSError errorWithDomain:EVECentralErrorDomain code:0 userInfo:[NSDictionary dictionaryWithObject:s forKey:NSLocalizedDescriptionKey]];
-		[s release];
 	}
-	[parser release];
+	self.text = nil;
 	return error;
 }
 
@@ -49,7 +43,7 @@ didStartElement:(NSString *)elementName
    namespaceURI:(NSString *)namespaceURI
   qualifiedName:(NSString *)qualifiedName
 	 attributes:(NSDictionary *)attributeDict {
-	[text setString:@""];
+	[(NSMutableString*) self.text setString:@""];
 }
 
 - (void) parser:(NSXMLParser *)parser
@@ -59,15 +53,12 @@ didStartElement:(NSString *)elementName
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-	//text = [text stringByAppendingString:string];
-	[text appendString:string];
+	[(NSMutableString*) self.text appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock {
-	//text = [[[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding] autorelease];
 	NSString *s = [[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding];
-	[text setString:s];
-	[s release];
+	[(NSMutableString*) self.text setString:s];
 }
 
 - (NSString*) validText {

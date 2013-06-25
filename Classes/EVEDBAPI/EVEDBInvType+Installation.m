@@ -13,13 +13,6 @@
 
 @implementation EVEDBInvType (Installation)
 
-- (void) didReceiveInstallation: (NSDictionary*) dictionary {
-	NSMutableArray *installations = objc_getAssociatedObject(self, @"installations");
-	EVEDBRamInstallationTypeContent *installation = [EVEDBRamInstallationTypeContent ramInstallationTypeContentWithDictionary:dictionary];
-	installation.installationType = self;
-	[installations addObject:installation];
-}
-
 - (NSArray*) installations {
 	NSMutableArray *installations = objc_getAssociatedObject(self, @"installations");
 	if (!installations) {
@@ -29,9 +22,12 @@
 		installations = [NSMutableArray array];
 		objc_setAssociatedObject(self, @"installations", installations, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 		
-		[database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * FROM ramInstallationTypeContents WHERE installationTypeID=%d;", typeID]
-							  target:self
-							  action:@selector(didReceiveInstallation:)];
+		[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM ramInstallationTypeContents WHERE installationTypeID=%d;", self.typeID]
+					 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+						 EVEDBRamInstallationTypeContent *installation = [[EVEDBRamInstallationTypeContent alloc] initWithStatement:stmt];
+						 //installation.installationType = self;
+						 [installations addObject:installation];
+					 }];
 	}
 	return installations;
 }

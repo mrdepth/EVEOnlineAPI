@@ -6,45 +6,28 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBEveIcon;
 @class EVEDBEveUnit;
 @class EVEDBDgmAttributeCategory;
-@interface EVEDBDgmAttributeType : NSObject {
-	NSInteger attributeID;
-	NSString *attributeName;
-	NSString *description;
-	NSInteger iconID;
-	EVEDBEveIcon *icon;
-	float defaultValue;
-	BOOL published;
-	NSString *displayName;
-	NSInteger unitID;
-	EVEDBEveUnit *unit;
-	BOOL stackable;
-	BOOL highIsGood;
-	NSInteger categoryID;
-	EVEDBDgmAttributeCategory *category;
-}
+@interface EVEDBDgmAttributeType : EVEDBObject
 @property (nonatomic) NSInteger attributeID;
-@property (nonatomic, retain) NSString *attributeName;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) NSString *attributeName;
+@property (nonatomic, strong) NSString *description;
 @property (nonatomic) NSInteger iconID;
-@property (nonatomic, retain) EVEDBEveIcon *icon;
+@property (nonatomic, strong) EVEDBEveIcon *icon;
 @property (nonatomic) float defaultValue;
 @property (nonatomic) BOOL published;
-@property (nonatomic, retain) NSString *displayName;
+@property (nonatomic, strong) NSString *displayName;
 @property (nonatomic) NSInteger unitID;
-@property (nonatomic, retain) EVEDBEveUnit *unit;
+@property (nonatomic, strong) EVEDBEveUnit *unit;
 @property (nonatomic) BOOL stackable;
 @property (nonatomic) BOOL highIsGood;
 @property (nonatomic) NSInteger categoryID;
-@property (nonatomic, retain) EVEDBDgmAttributeCategory *category;
+@property (nonatomic, strong) EVEDBDgmAttributeCategory *category;
 
 + (id) dgmAttributeTypeWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr;
-+ (id) dgmAttributeTypeWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

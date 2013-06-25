@@ -7,156 +7,84 @@
 //
 
 #import "EVEDBMapSolarSystem.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBMapRegion.h"
 #import "EVEDBMapConstellation.h"
 
-@interface EVEDBMapSolarSystem(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBMapSolarSystem(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.regionID = [[dictionary valueForKey:@"regionID"] integerValue];
-	self.constellationID = [[dictionary valueForKey:@"constellationID"] integerValue];
-	self.solarSystemID = [[dictionary valueForKey:@"solarSystemID"] integerValue];
-	self.solarSystemName = [dictionary valueForKey:@"solarSystemName"];
-	self.luminosity = [[dictionary valueForKey:@"luminosity"] floatValue];
-	self.border = [[dictionary valueForKey:@"border"] integerValue];
-	self.fringe = [[dictionary valueForKey:@"fringe"] integerValue];
-	self.corridor = [[dictionary valueForKey:@"corridor"] integerValue];
-	self.hub = [[dictionary valueForKey:@"hub"] integerValue];
-	self.international = [[dictionary valueForKey:@"international"] integerValue];
-	self.regional = [[dictionary valueForKey:@"regional"] integerValue];
-	self.isConstellation = [[dictionary valueForKey:@"constellation"] integerValue];
-	self.security = [[dictionary valueForKey:@"security"] floatValue];
-	self.factionID = [[dictionary valueForKey:@"factionID"] integerValue];
-	self.radius = [[dictionary valueForKey:@"radius"] floatValue];
-	self.securityClass = [dictionary valueForKey:@"securityClass"];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
-
 @implementation EVEDBMapSolarSystem
-@synthesize regionID;
-@synthesize region;
-@synthesize constellationID;
-@synthesize constellation;
-@synthesize solarSystemID;
-@synthesize solarSystemName;
-@synthesize luminosity;
-@synthesize border;
-@synthesize fringe;
-@synthesize corridor;
-@synthesize hub;
-@synthesize international;
-@synthesize regional;
-@synthesize isConstellation;
-@synthesize security;
-@synthesize factionID;
-@synthesize radius;
-@synthesize securityClass;
 
-+ (id) mapSolarSystemWithSolarSystemID: (NSInteger)aSolarSystemID error:(NSError **)errorPtr {
-	return [[[EVEDBMapSolarSystem alloc] initWithSolarSystemID:aSolarSystemID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"regionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"regionID"},
+		  @"constellationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"constellationID"},
+		  @"solarSystemID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"solarSystemID"},
+		  @"solarSystemName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"solarSystemName"},
+		  @"luminosity" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"luminosity"},
+		  @"constellationID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"constellationID"},
+		  @"border" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"border"},
+		  @"fringe" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"fringe"},
+		  @"corridor" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"corridor"},
+		  @"hub" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"hub"},
+		  @"international" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"international"},
+		  @"regional" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"regional"},
+		  @"isConstellation" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"isConstellation"},
+		  @"security" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"security"},
+		  @"factionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"factionID"},
+		  @"radius" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"radius"},
+		  @"securityClass" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"securityClass"}
+		  };
+	return map;
 }
 
-+ (id) mapSolarSystemWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr {
-	return [[[EVEDBMapSolarSystem alloc] initWithSolarSystemName:aSolarSystemName error:errorPtr] autorelease];
++ (id) mapSolarSystemWithSolarSystemID: (NSInteger)solarSystemID error:(NSError **)errorPtr {
+	return [[EVEDBMapSolarSystem alloc] initWithSolarSystemID:solarSystemID error:errorPtr];
+}
+
++ (id) mapSolarSystemWithSolarSystemName: (NSString*)solarSystemName error:(NSError **)errorPtr {
+	return [[EVEDBMapSolarSystem alloc] initWithSolarSystemName:solarSystemName error:errorPtr];
 	
 }
 
-+ (id) mapSolarSystemWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBMapSolarSystem alloc] initWithDictionary:dictionary] autorelease];
-}
-
-- (id) initWithSolarSystemID: (NSInteger)aSolarSystemID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemID=%d;", aSolarSystemID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
+- (id) initWithSolarSystemID: (NSInteger)solarSystemID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemID=%d;", solarSystemID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
-- (id) initWithSolarSystemName: (NSString*)aSolarSystemName error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemName=\"%@\";", aSolarSystemName]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+- (id) initWithSolarSystemName: (NSString*)solarSystemName error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemName=\"%@\";", solarSystemName]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (EVEDBMapRegion*) region {
-	if (regionID == 0)
+	if (self.regionID == 0)
 		return NULL;
-	if (!region) {
-		region = [[EVEDBMapRegion mapRegionWithRegionID:regionID error:nil] retain];
-		if (!region)
-			region = (EVEDBMapRegion*) [[NSNull null] retain];
+	if (!_region) {
+		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
+		if (!_region)
+			_region = (EVEDBMapRegion*) [NSNull null];
 	}
-	if ((NSNull*) region == [NSNull null])
+	if ((NSNull*) _region == [NSNull null])
 		return NULL;
 	else
-		return region;
+		return _region;
 }
 
 - (EVEDBMapConstellation*) constellation {
-	if (constellationID == 0)
+	if (self.constellationID == 0)
 		return NULL;
-	if (!constellation) {
-		constellation = [[EVEDBMapConstellation mapConstellationWithConstellationID:constellationID error:nil] retain];
-		if (!constellation)
-			constellation = (EVEDBMapConstellation*) [[NSNull null] retain];
+	if (!_constellation) {
+		_constellation = [EVEDBMapConstellation mapConstellationWithConstellationID:self.constellationID error:nil];
+		if (!_constellation)
+			_constellation = (EVEDBMapConstellation*) [NSNull null];
 	}
-	if ((NSNull*) constellation == [NSNull null])
+	if ((NSNull*) _constellation == [NSNull null])
 		return NULL;
 	else
-		return constellation;
-}
-
-- (void) dealloc {
-	[region release];
-	[constellation release];
-	[solarSystemName release];
-	[securityClass release];
-	[super dealloc];
+		return _constellation;
 }
 
 @end

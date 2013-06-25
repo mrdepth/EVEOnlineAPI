@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECorporationSheetDivisionItem : NSObject {
-	NSInteger accountKey;
-	NSString *description;
-}
+@interface EVECorporationSheetDivisionItem : NSObject
 @property (nonatomic) NSInteger accountKey;
 @property (nonatomic, copy) NSString *description;
 
@@ -21,15 +18,7 @@
 
 @end
 
-@interface EVECorporationSheetLogo : NSObject {
-	NSInteger graphicID;
-	NSInteger shape1;
-	NSInteger shape2;
-	NSInteger shape3;
-	NSInteger color1;
-	NSInteger color2;
-	NSInteger color3;
-}
+@interface EVECorporationSheetLogo : NSObject
 @property (nonatomic) NSInteger graphicID;
 @property (nonatomic) NSInteger shape1;
 @property (nonatomic) NSInteger shape2;
@@ -41,26 +30,7 @@
 @end
 
 
-@interface EVECorporationSheet : EVERequest {
-	NSInteger corporationID;
-	NSString *corporationName;
-	NSString *ticker;
-	NSInteger ceoID;
-	NSString *ceoName;
-	NSInteger stationID;
-	NSString *stationName;
-	NSString *description;
-	NSString *url;
-	NSInteger allianceID;
-	NSString *allianceName;
-	float taxRate;
-	NSInteger memberCount;
-	NSInteger memberLimit;
-	NSInteger shares;
-	NSMutableArray *divisions;
-	NSMutableArray *walletDivisions;
-	EVECorporationSheetLogo *logo;
-}
+@interface EVECorporationSheet : EVERequest
 @property (nonatomic) NSInteger corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 @property (nonatomic, copy) NSString *ticker;
@@ -76,13 +46,11 @@
 @property (nonatomic) NSInteger memberCount;
 @property (nonatomic) NSInteger memberLimit;
 @property (nonatomic) NSInteger shares;
-@property (nonatomic, retain) NSArray *divisions;
-@property (nonatomic, retain) NSArray *walletDivisions;
-@property (nonatomic, retain) EVECorporationSheetLogo *logo;
+@property (nonatomic, strong) NSArray *divisions;
+@property (nonatomic, strong) NSArray *walletDivisions;
+@property (nonatomic, strong) EVECorporationSheetLogo *logo;
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr;
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID target:(id)target action:(SEL)action object:(id)object;
++ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

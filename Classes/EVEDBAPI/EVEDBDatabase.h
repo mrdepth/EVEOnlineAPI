@@ -10,26 +10,19 @@
 #import "EVEDBGlobals.h"
 #import <sqlite3.h>
 
+typedef enum {
+	EVEDBTypeInt,
+	EVEDBTypeLongLong,
+	EVEDBTypeFloat,
+	EVEDBTypeText
+} EVEDBType;
+
 @protocol EVEDBDatabaseRequestDelegate
 - (void) didReceiveRecord: (NSDictionary*) record;
 @end
 
-typedef void (^EVEDBDatabaseResultBlock)(NSDictionary *record, BOOL *needsMore);
-
-typedef struct {
-	id delegate;
-	SEL selector;
-	IMP method;
-	int numRecords;
-	EVEDBDatabaseResultBlock resultBlock;
-} RequestArgument;
-
-@interface EVEDBDatabase : NSObject {
-	sqlite3 *pDB;
-}
+@interface EVEDBDatabase : NSObject
 
 + (id) sharedDatabase;
-- (NSError*) execWithSQLRequest: (NSString*)sqlRequest target:(id) target action:(SEL) action;
-- (NSError*) execWithSQLRequest: (NSString*)sqlRequest resultBlock:(EVEDBDatabaseResultBlock) block;
-- (NSError*) execWithSQLRequest: (NSString*)sqlRequest argument:(RequestArgument*) argument;
+- (NSError*) execSQLRequest: (NSString*)sqlRequest resultBlock:(void (^)(sqlite3_stmt* stmt, BOOL *needsMore)) resultBlock;
 @end

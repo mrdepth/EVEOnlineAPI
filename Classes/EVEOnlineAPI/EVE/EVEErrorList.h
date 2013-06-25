@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEErrorListItem : NSObject {
-	NSInteger errorCode;
-	NSString *errorText;
-}
+@interface EVEErrorListItem : NSObject
 @property (nonatomic) NSInteger errorCode;
 @property (nonatomic, copy) NSString *errorText;
 
@@ -22,13 +19,9 @@
 @end
 
 
-@interface EVEErrorList : EVERequest {
-	NSMutableArray *errors;
-}
-@property (nonatomic, retain) NSArray *errors;
+@interface EVEErrorList : EVERequest
+@property (nonatomic, strong) NSArray *errors;
 
-+ (id) errorListWithError:(NSError **)errorPtr;
-+ (id) errorListWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) errorListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

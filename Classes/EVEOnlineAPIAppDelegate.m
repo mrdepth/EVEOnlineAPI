@@ -8,7 +8,6 @@
 
 #import "EVEOnlineAPIAppDelegate.h"
 #import "EVEOnlineAPI.h"
-#import "EVEMetricsAPI.h"
 #import "EVEDBAPI.h"
 #import "EVECentralAPI.h"
 #import "RSS.h"
@@ -24,21 +23,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	[window makeKeyAndVisible];
-	
-	EVEKillNetLog* log = [EVEKillNetLog logWithFilter:@{EVEKillNetLogFilterInvolvedPilot : @"Ellistara"} mask:EVEKillNetLogMaskAll error:nil];
-	
-	EVEDBInvType* type = [EVEDBInvType invTypeWithTypeID:999 error:nil];
-	EVEDBInvBlueprintType* blueprintType = type.blueprintType;
-	
-	NSError* error = nil;
-	EVECharacters *list = [EVECharacters charactersWithKeyID:KEY_ID vCode:V_CODE error:&error];
 	return YES;
-}
-
-
-- (void)dealloc {
-    [window release];
-    [super dealloc];
 }
 
 

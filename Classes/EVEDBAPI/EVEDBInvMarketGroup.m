@@ -7,112 +7,60 @@
 //
 
 #import "EVEDBInvMarketGroup.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBEveIcon.h"
 
-@interface EVEDBInvMarketGroup(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBInvMarketGroup(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.marketGroupID = [[dictionary valueForKey:@"marketGroupID"] integerValue];
-	self.parentGroupID = [[dictionary valueForKey:@"parentGroupID"] integerValue];
-	self.marketGroupName = [dictionary valueForKey:@"marketGroupName"];
-	self.description = [dictionary valueForKey:@"description"];
-	self.iconID = [[dictionary valueForKey:@"iconID"] integerValue];
-	self.hasTypes = [[dictionary valueForKey:@"hasTypes"] integerValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
-
 @implementation EVEDBInvMarketGroup
-@synthesize marketGroupID;
-@synthesize parentGroupID;
-@synthesize parentGroup;
-@synthesize marketGroupName;
-@synthesize description;
-@synthesize iconID;
-@synthesize icon;
-@synthesize hasTypes;
 
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"marketGroupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"marketGroupID"},
+		  @"parentGroupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"parentGroupID"},
+		  @"marketGroupName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"marketGroupName"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"},
+		  @"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
+		  @"hasTypes" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"hasTypes"}
+		  };
+	return map;
+}
 
 + (id) invMarketGroupWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr {
-	return [[[EVEDBInvMarketGroup alloc] initWithMarketGroupID:aMarketGroupID error:errorPtr] autorelease];
-}
-
-+ (id) invMarketGroupWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBInvMarketGroup alloc] initWithDictionary:dictionary] autorelease];
+	return [[EVEDBInvMarketGroup alloc] initWithMarketGroupID:aMarketGroupID error:errorPtr];
 }
 
 - (id) initWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invMarketGroups WHERE marketGroupID=%d;", aMarketGroupID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invMarketGroups WHERE marketGroupID=%d;", aMarketGroupID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (EVEDBInvMarketGroup*) parentGroup {
-	if (parentGroupID == 0)
+	if (self.parentGroupID == 0)
 		return NULL;
-	if (!parentGroup) {
-		parentGroup = [[EVEDBInvMarketGroup invMarketGroupWithMarketGroupID:parentGroupID error:nil] retain];
-		if (!parentGroup)
-			parentGroup = (EVEDBInvMarketGroup*) [[NSNull null] retain];
+	if (!_parentGroup) {
+		_parentGroup = [EVEDBInvMarketGroup invMarketGroupWithMarketGroupID:self.parentGroupID error:nil];
+		if (!_parentGroup)
+			_parentGroup = (EVEDBInvMarketGroup*) [NSNull null];
 	}
-	if ((NSNull*) parentGroup == [NSNull null])
+	if ((NSNull*) _parentGroup == [NSNull null])
 		return NULL;
 	else
-		return parentGroup;
+		return _parentGroup;
 }
 
 - (EVEDBEveIcon*) icon {
-	if (iconID == 0)
+	if (self.iconID == 0)
 		return NULL;
-	if (!icon) {
-		icon = [[EVEDBEveIcon eveIconWithIconID:iconID error:nil] retain];
-		if (!icon)
-			icon = (EVEDBEveIcon*) [[NSNull null] retain];
+	if (!_icon) {
+		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
+		if (!_icon)
+			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
-	if ((NSNull*) icon == [NSNull null])
+	if ((NSNull*) _icon == [NSNull null])
 		return NULL;
 	else
-		return icon;
-}
-
-
-- (void) dealloc {
-	[parentGroup release];
-	[marketGroupName release];
-	[description release];
-	[icon release];
-	[super dealloc];
+		return _icon;
 }
 
 @end

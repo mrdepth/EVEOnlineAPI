@@ -10,11 +10,9 @@
 
 
 @implementation EVECharacterIDItem
-@synthesize characterID;
-@synthesize name;
 
 + (id) characterIDItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVECharacterIDItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVECharacterIDItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -25,59 +23,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[name release];
-	[super dealloc];
-}
-
 @end
 
 @implementation EVECharacterID
-@synthesize characters;
-
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) characterIDWithNames:(NSArray*) names error:(NSError **)errorPtr {
-	return [[[EVECharacterID alloc] initWithNames:names error:errorPtr] autorelease];
++ (id) characterIDWithNames:(NSArray*) names error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVECharacterID alloc] initWithNames:names error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) characterIDWithNames:(NSArray*) names target:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVECharacterID alloc] initWithNames:names target:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithNames:(NSArray*) names error:(NSError **)errorPtr {
+- (id) initWithNames:(NSArray*) names error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterID.xml.aspx?names=%@", EVEOnlineAPIHost,
 														[[names componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithNames:(NSArray*) names target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterID.xml.aspx?names=%@", EVEOnlineAPIHost,
-														[[names componentsJoinedByString:@","] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[characters release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"characters"]) {
-		characters = [[NSMutableArray alloc] init];
-		return characters;
+		self.characters = [[NSMutableArray alloc] init];
+		return self.characters;
 	}
 	else
 		return nil;

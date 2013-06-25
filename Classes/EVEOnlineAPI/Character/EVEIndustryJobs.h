@@ -9,18 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEIndustryJobsItem : NSObject {
-	NSInteger jobID, assemblyLineID, installedItemQuantity,
-		installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
-		runs, licensedProductionRuns, installedInSolarSystemID,
-		containerLocationID, installedItemTypeID, outputTypeID, containerTypeID, installedItemCopy, completed,
-		completedSuccessfully, installedItemFlag, outputFlag, activityID, completedStatus;
-	long long installedItemID, containerID, installedItemLocationID, outputLocationID, installerID;
-	
-	float materialMultiplier,charMaterialMultiplier, timeMultiplier,charTimeMultiplier;
-	
-	NSDate *installTime, *beginProductionTime, *endProductionTime, *pauseProductionTime;
-}
+@interface EVEIndustryJobsItem : NSObject
 @property (nonatomic) NSInteger jobID, assemblyLineID, installedItemQuantity,
 								installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
 								runs, licensedProductionRuns, installedInSolarSystemID,
@@ -29,7 +18,7 @@
 @property (nonatomic) long long installedItemID, containerID, installedItemLocationID, outputLocationID, installerID;
 
 @property (nonatomic) float materialMultiplier,charMaterialMultiplier, timeMultiplier,charTimeMultiplier;
-@property (nonatomic, retain) NSDate *installTime, *beginProductionTime, *endProductionTime, *pauseProductionTime;
+@property (nonatomic, strong) NSDate *installTime, *beginProductionTime, *endProductionTime, *pauseProductionTime;
 
 + (id) industryJobsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -37,14 +26,10 @@
 @end
 
 
-@interface EVEIndustryJobs : EVERequest {
-	NSMutableArray *jobs;
-}
-@property (nonatomic, retain) NSArray *jobs;
+@interface EVEIndustryJobs : EVERequest
+@property (nonatomic, strong) NSArray *jobs;
 
-+ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-+ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
++ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

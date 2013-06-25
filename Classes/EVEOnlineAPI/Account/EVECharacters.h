@@ -9,12 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECharactersItem : NSObject {
-	NSString *name;
-	NSInteger characterID;
-	NSString *corporationName;
-	NSInteger corporationID;
-}
+@interface EVECharactersItem : NSObject
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *corporationName;
@@ -26,14 +21,10 @@
 @end
 
 
-@interface EVECharacters : EVERequest {
-	NSMutableArray *characters;
-}
-@property (nonatomic, retain) NSArray *characters;
+@interface EVECharacters : EVERequest
+@property (nonatomic, strong) NSArray *characters;
 
-+ (id) charactersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr;
-+ (id) charactersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object;
++ (id) charactersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

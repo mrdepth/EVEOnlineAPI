@@ -6,24 +6,15 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBInvType;
 @class EVEDBRamAssemblyLineType;
-@interface EVEDBRamInstallationTypeContent : NSObject {
-	NSInteger installationTypeID;
-	EVEDBInvType* installationType;
-	NSInteger assemblyLineTypeID;
-	EVEDBRamAssemblyLineType* assemblyLineType;
-	NSInteger quantity;
-}
+@interface EVEDBRamInstallationTypeContent : EVEDBObject
 @property (nonatomic) NSInteger installationTypeID;
-@property (nonatomic, retain) EVEDBInvType* installationType;
+@property (nonatomic, strong) EVEDBInvType* installationType;
 @property (nonatomic) NSInteger assemblyLineTypeID;
-@property (nonatomic, retain) EVEDBRamAssemblyLineType* assemblyLineType;
+@property (nonatomic, strong) EVEDBRamAssemblyLineType* assemblyLineType;
 @property (nonatomic) NSInteger quantity;
-
-+ (id) ramInstallationTypeContentWithDictionary: (NSDictionary*) dictionary;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

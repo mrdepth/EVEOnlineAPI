@@ -9,13 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RSSFeed.h"
 
-@interface RSSParser20 : NSObject<NSXMLParserDelegate> {
-	RSSFeed *feed;
-@private
-	NSMutableString *text;
-	NSMutableArray *stack;
-	NSDateFormatter *dateFormatter;
-}
-@property (nonatomic, retain) RSSFeed *feed;
+@interface RSSParser20 : NSObject<NSXMLParserDelegate>
+@property (nonatomic, strong) RSSFeed *feed;
 
 @end

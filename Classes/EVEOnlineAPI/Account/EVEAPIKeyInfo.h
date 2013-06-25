@@ -9,12 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAPIKeyInfoCharactersItem : NSObject {
-	NSInteger characterID;
-	NSString *characterName;
-	NSInteger corporationID;
-	NSString *corporationName;
-}
+@interface EVEAPIKeyInfoCharactersItem : NSObject
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *characterName;
 @property (nonatomic) NSInteger corporationID;
@@ -25,14 +20,10 @@
 
 @end
 
-@interface EVEAPIKeyInfoKey : NSObject {
-	NSInteger accessMask;
-	EVEAPIKeyType type;
-	NSDate *expires;
-}
+@interface EVEAPIKeyInfoKey : NSObject
 @property (nonatomic) NSInteger accessMask;
 @property (nonatomic) EVEAPIKeyType type;
-@property (nonatomic, retain) NSDate *expires;
+@property (nonatomic, strong) NSDate *expires;
 
 + (id) keyWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -41,16 +32,11 @@
 
 
 
-@interface EVEAPIKeyInfo : EVERequest {
-	EVEAPIKeyInfoKey *key;
-	NSMutableArray *characters;
-}
-@property (nonatomic, retain) EVEAPIKeyInfoKey *key;
-@property (nonatomic, retain) NSArray *characters;
+@interface EVEAPIKeyInfo : EVERequest
+@property (nonatomic, strong) EVEAPIKeyInfoKey *key;
+@property (nonatomic, strong) NSArray *characters;
 
-+ (id) apiKeyInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr;
-+ (id) apiKeyInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object;
++ (id) apiKeyInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

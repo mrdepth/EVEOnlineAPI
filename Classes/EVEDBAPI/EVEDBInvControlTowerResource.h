@@ -6,30 +6,18 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBInvControlTowerResourcePurpose;
 @class EVEDBInvType;
-@interface EVEDBInvControlTowerResource : NSObject {
-	NSInteger controlTowerTypeID;
-	NSInteger resourceTypeID;
-	EVEDBInvType *resourceType;
-	NSInteger purposeID;
-	EVEDBInvControlTowerResourcePurpose *purpose;
-	NSInteger quantity;
-	double minSecurityLevel;
-	NSInteger factionID;
-}
+@interface EVEDBInvControlTowerResource : EVEDBObject
 @property (nonatomic) NSInteger controlTowerTypeID;
 @property (nonatomic) NSInteger resourceTypeID;
-@property (nonatomic, retain) EVEDBInvType *resourceType;
+@property (nonatomic, strong) EVEDBInvType *resourceType;
 @property (nonatomic) NSInteger purposeID;
 @property (nonatomic) NSInteger quantity;
-@property (nonatomic, retain) EVEDBInvControlTowerResourcePurpose *purpose;
+@property (nonatomic, strong) EVEDBInvControlTowerResourcePurpose *purpose;
 @property (nonatomic) double minSecurityLevel;
 @property (nonatomic) NSInteger factionID;
-
-+ (id) invControlTowerResourceWithDictionary: (NSDictionary*) dictionary;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

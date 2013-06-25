@@ -10,16 +10,9 @@
 
 
 @implementation EVEStarbaseListItem
-@synthesize itemID;
-@synthesize typeID;
-@synthesize locationID;
-@synthesize moonID;
-@synthesize state;
-@synthesize stateTimestamp;
-@synthesize onlineTimestamp;
 
 + (id) starbaseListItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEStarbaseListItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEStarbaseListItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -35,58 +28,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[stateTimestamp release];
-	[onlineTimestamp release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEStarbaseList
-@synthesize starbases;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) starbaseListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEStarbaseList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) starbaseListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEStarbaseList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) starbaseListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEStarbaseList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/StarbaseList.xml.aspx?keyID=%d&vCode=%@&characterID=%d&version=2", EVEOnlineAPIHost, keyID, vCode, characterID]]
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/StarbaseList.xml.aspx?keyID=%d&vCode=%@&characterID=%d&version=2", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/StarbaseList.xml.aspx?keyID=%d&vCode=%@&characterID=%d&version=2", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[starbases release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"starbases"]) {
-		starbases = [[NSMutableArray alloc] init];
-		return starbases;
+		self.starbases = [[NSMutableArray alloc] init];
+		return self.starbases;
 	}
 	else
 		return nil;
@@ -95,7 +64,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"starbases"]) {
 		EVEStarbaseListItem *starbaseListItem = [EVEStarbaseListItem starbaseListItemWithXMLAttributes:attributeDict];
-		[starbases addObject:starbaseListItem];
+		[(NSMutableArray*) self.starbases addObject:starbaseListItem];
 		return starbaseListItem;
 	}
 	return nil;

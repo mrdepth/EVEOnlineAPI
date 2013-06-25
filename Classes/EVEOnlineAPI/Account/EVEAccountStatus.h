@@ -9,21 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAccountStatus : EVERequest {
-	NSDate *paidUntil;
-	NSDate *createDate;
-	NSInteger logonCount;
-	NSInteger logonMinutes;
-}
-@property (nonatomic, retain) NSDate *paidUntil;
-@property (nonatomic, retain) NSDate *createDate;
+@interface EVEAccountStatus : EVERequest
+@property (nonatomic, strong) NSDate *paidUntil;
+@property (nonatomic, strong) NSDate *createDate;
 @property (nonatomic) NSInteger logonCount;
 @property (nonatomic) NSInteger logonMinutes;
 
-+ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr;
-+ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode target:(id)target action:(SEL)action object:(id)object;
++ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 
 @end

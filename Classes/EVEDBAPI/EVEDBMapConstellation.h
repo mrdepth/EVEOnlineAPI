@@ -6,27 +6,18 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBMapRegion;
-@interface EVEDBMapConstellation : NSObject {
-	NSInteger regionID;
-	EVEDBMapRegion *region;
-	NSInteger constellationID;
-	NSString *constellationName;
-	NSInteger factionID;
-	float radius;
-}
+@interface EVEDBMapConstellation : EVEDBObject
 @property(nonatomic) NSInteger regionID;
-@property(nonatomic, retain) EVEDBMapRegion *region;
+@property(nonatomic, strong) EVEDBMapRegion *region;
 @property(nonatomic) NSInteger constellationID;
-@property(nonatomic, retain) NSString *constellationName;
+@property(nonatomic, strong) NSString *constellationName;
 @property(nonatomic) NSInteger factionID;
 @property(nonatomic) float radius;
 
 + (id) mapConstellationWithConstellationID: (NSInteger)aConstellationID error:(NSError **)errorPtr;
-+ (id) mapConstellationWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithConstellationID: (NSInteger)aConstellationID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

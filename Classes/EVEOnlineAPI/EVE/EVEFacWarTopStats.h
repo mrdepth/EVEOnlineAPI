@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarTopStatsCharactersItem : NSObject {
-	NSInteger characterID;
-	NSString *characterName;
-	NSInteger kills;
-}
+@interface EVEFacWarTopStatsCharactersItem : NSObject
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *characterName;
 @property (nonatomic) NSInteger kills;
@@ -24,11 +20,7 @@
 @end
 
 
-@interface EVEFacWarTopStatsCorporationsItem : NSObject {
-	NSInteger corporationID;
-	NSString *corporationName;
-	NSInteger kills;
-}
+@interface EVEFacWarTopStatsCorporationsItem : NSObject
 @property (nonatomic) NSInteger corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 @property (nonatomic) NSInteger kills;
@@ -39,11 +31,7 @@
 @end
 
 
-@interface EVEFacWarTopStatsFactionsItem : NSObject {
-	NSInteger factionID;
-	NSString *factionName;
-	NSInteger kills;
-}
+@interface EVEFacWarTopStatsFactionsItem : NSObject
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic) NSInteger kills;
@@ -54,37 +42,22 @@
 @end
 
 
-@interface EVEFacWarTopStatsSection : NSObject {
-	NSMutableArray *killsYesterday;
-	NSMutableArray *killsLastWeek;
-	NSMutableArray *killsTotal;
-	NSMutableArray *victoryPointsYesterday;
-	NSMutableArray *victoryPointsLastWeek;
-	NSMutableArray *victoryPointsTotal;
-}
-@property (nonatomic, retain) NSArray *killsYesterday;
-@property (nonatomic, retain) NSArray *killsLastWeek;
-@property (nonatomic, retain) NSArray *killsTotal;
-@property (nonatomic, retain) NSArray *victoryPointsYesterday;
-@property (nonatomic, retain) NSArray *victoryPointsLastWeek;
-@property (nonatomic, retain) NSArray *victoryPointsTotal;
+@interface EVEFacWarTopStatsSection : NSObject
+@property (nonatomic, strong) NSArray *killsYesterday;
+@property (nonatomic, strong) NSArray *killsLastWeek;
+@property (nonatomic, strong) NSArray *killsTotal;
+@property (nonatomic, strong) NSArray *victoryPointsYesterday;
+@property (nonatomic, strong) NSArray *victoryPointsLastWeek;
+@property (nonatomic, strong) NSArray *victoryPointsTotal;
 
 @end
 
 
-@interface EVEFacWarTopStats : EVERequest {
-	EVEFacWarTopStatsSection *characters;
-	EVEFacWarTopStatsSection *corporations;
-	EVEFacWarTopStatsSection *factions;
-	
-	EVEFacWarTopStatsSection *currentSection;
-}
-@property (nonatomic, retain) EVEFacWarTopStatsSection *characters;
-@property (nonatomic, retain) EVEFacWarTopStatsSection *corporations;
-@property (nonatomic, retain) EVEFacWarTopStatsSection *factions;
+@interface EVEFacWarTopStats : EVERequest
+@property (nonatomic, strong) EVEFacWarTopStatsSection *characters;
+@property (nonatomic, strong) EVEFacWarTopStatsSection *corporations;
+@property (nonatomic, strong) EVEFacWarTopStatsSection *factions;
 
-+ (id) facWarTopStatsWithError:(NSError **)errorPtr;
-+ (id) facWarTopStatsWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

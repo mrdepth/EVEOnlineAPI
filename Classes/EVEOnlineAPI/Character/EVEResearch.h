@@ -9,16 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEResearchItem : NSObject {
-	NSInteger agentID;
-	NSInteger skillTypeID;
-	NSDate *researchStartDate;
-	float pointsPerDay;
-	float remainderPoints;
-}
+@interface EVEResearchItem : NSObject
 @property (nonatomic) NSInteger agentID;
 @property (nonatomic) NSInteger skillTypeID;
-@property (nonatomic, retain) NSDate *researchStartDate;
+@property (nonatomic, strong) NSDate *researchStartDate;
 @property (nonatomic) float pointsPerDay;
 @property (nonatomic) float remainderPoints;
 
@@ -27,14 +21,10 @@
 
 @end
 
-@interface EVEResearch : EVERequest {
-	NSMutableArray *research;
-}
-@property (nonatomic, retain) NSArray *research;
+@interface EVEResearch : EVERequest
+@property (nonatomic, strong) NSArray *research;
 
-+ (id) researchWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-+ (id) researchWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
++ (id) researchWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

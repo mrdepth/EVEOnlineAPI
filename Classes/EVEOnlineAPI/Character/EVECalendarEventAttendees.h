@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECalendarEventAttendeesItem : NSObject {
-	NSInteger characterID;
-	NSString *characterName;
-	NSString *response;
-}
+@interface EVECalendarEventAttendeesItem : NSObject
 
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *characterName;
@@ -24,14 +20,10 @@
 
 @end
 
-@interface EVECalendarEventAttendees : EVERequest {
-	NSMutableArray *eventAttendees;
-}
-@property (nonatomic, retain) NSArray *eventAttendees;
+@interface EVECalendarEventAttendees : EVERequest
+@property (nonatomic, strong) NSArray *eventAttendees;
 
-+ (id) calendarEventAttendeesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr;
-+ (id) calendarEventAttendeesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID target:(id)target action:(SEL)action object:(id)object;
++ (id) calendarEventAttendeesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

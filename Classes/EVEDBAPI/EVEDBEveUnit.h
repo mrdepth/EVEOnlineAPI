@@ -6,23 +6,16 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 
-@interface EVEDBEveUnit : NSObject {
-	NSInteger unitID;
-	NSString *unitName;
-	NSString *displayName;
-	NSString *description;
-}
+@interface EVEDBEveUnit : EVEDBObject
 @property (nonatomic) NSInteger unitID;
-@property (nonatomic, retain) NSString *unitName;
-@property (nonatomic, retain) NSString *displayName;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) NSString *unitName;
+@property (nonatomic, strong) NSString *displayName;
+@property (nonatomic, strong) NSString *description;
 
 + (id) eveUnitWithUnitID: (NSInteger)aUnitID error:(NSError **)errorPtr;
-+ (id) eveUnitWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithUnitID: (NSInteger)aUnitID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

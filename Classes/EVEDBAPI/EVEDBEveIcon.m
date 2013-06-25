@@ -7,89 +7,49 @@
 //
 
 #import "EVEDBEveIcon.h"
-#import "EVEDBDatabase.h"
 
-@interface EVEDBEveIcon(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBEveIcon(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.iconID = [[dictionary valueForKey:@"iconID"] integerValue];
-	self.iconFile = [dictionary valueForKey:@"iconFile"];
-	self.description = [dictionary valueForKey:@"description"];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
+@interface EVEDBEveIcon()
+@property(nonatomic, strong, readwrite) NSString *iconImageName;
 @end
 
 @implementation EVEDBEveIcon
-@synthesize iconID;
-@synthesize iconFile;
-@synthesize description;
 
-+ (id) eveIconWithIconID: (NSInteger)aIconID error:(NSError **)errorPtr {
-	return [[[EVEDBEveIcon alloc] initWithIconID:aIconID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
+		  @"iconFile" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"iconFile"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"}
+		  };
+	return map;
 }
 
-+ (id) eveIconWithWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBEveIcon alloc] initWithDictionary:dictionary] autorelease];
++ (id) eveIconWithIconID: (NSInteger)iconID error:(NSError **)errorPtr {
+	return [[EVEDBEveIcon alloc] initWithIconID:iconID error:errorPtr];
 }
 
-- (id) initWithIconID: (NSInteger)aIconID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from eveIcons WHERE iconID=%d;", aIconID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
-	}
-	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
+- (id) initWithIconID: (NSInteger)iconID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from eveIcons WHERE iconID=%d;", iconID]
+								   error:errorPtr]) {
 	}
 	return self;
 }
 
 - (NSString*) iconImageName {
-	if (!iconImageName) {
-		if (!iconFile)
-			iconImageName = (NSString*) [[NSNull null] retain];
+	if (!_iconImageName) {
+		if (!self.iconFile)
+			_iconImageName = (NSString*) [NSNull null];
 		else {
-			if ([iconFile hasPrefix:@"res:/"])
-				iconImageName = [[NSString stringWithFormat:@"Icons/%@", [iconFile lastPathComponent]] retain];
+			if ([self.iconFile hasPrefix:@"res:/"])
+				_iconImageName = [NSString stringWithFormat:@"Icons/%@", [self.iconFile lastPathComponent]];
 			else
-				iconImageName = [[NSString stringWithFormat:@"Icons/icon%@.png", iconFile] retain];
+				_iconImageName = [NSString stringWithFormat:@"Icons/icon%@.png", self.iconFile];
 		}
 	}
-	if ((NSNull*) iconImageName == [NSNull null])
+	if ((NSNull*) _iconImageName == [NSNull null])
 		return NULL;
 	else
-		return iconImageName;
-}
-
-- (void) dealloc {
-	[iconFile release];
-	[description release];
-	[iconImageName release];
-	[super dealloc];
+		return _iconImageName;
 }
 
 @end

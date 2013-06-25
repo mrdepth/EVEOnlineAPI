@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEJumpsItem : NSObject {
-	NSInteger solarSystemID;
-	NSInteger shipJumps;
-}
+@interface EVEJumpsItem : NSObject
 @property (nonatomic) NSInteger solarSystemID;
 @property (nonatomic) NSInteger shipJumps;
 
@@ -22,13 +19,9 @@
 @end
 
 
-@interface EVEJumps : EVERequest {
-	NSMutableArray *solarSystems;
-}
-@property (nonatomic, retain) NSArray *solarSystems;
+@interface EVEJumps : EVERequest
+@property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) jumpsWithError:(NSError **)errorPtr;
-+ (id) jumpsWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) jumpsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

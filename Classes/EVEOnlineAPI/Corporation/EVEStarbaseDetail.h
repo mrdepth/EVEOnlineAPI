@@ -9,12 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEStarbaseDetailGeneralSettings : NSObject {
-	NSInteger usageFlags;
-	NSInteger deployFlags;
-	BOOL allowCorporationMembers;
-	BOOL allowAllianceMembers;
-}
+@interface EVEStarbaseDetailGeneralSettings : NSObject
 @property (nonatomic) NSInteger usageFlags;
 @property (nonatomic) NSInteger deployFlags;
 @property (nonatomic) BOOL allowCorporationMembers;
@@ -22,14 +17,7 @@
 
 @end
 
-@interface EVEStarbaseDetailCombatSettings : NSObject {
-	NSInteger useStandingsFromOwnerID;
-	NSInteger onStandingDropStading;
-	BOOL onStatusDropEnabled;
-	NSInteger onStatusDropStanding;
-	BOOL onAggressionEnabled;
-	NSInteger onCorporationWarEnabled;
-}
+@interface EVEStarbaseDetailCombatSettings : NSObject
 @property (nonatomic) NSInteger useStandingsFromOwnerID;
 @property (nonatomic) NSInteger onStandingDropStading;
 @property (nonatomic) BOOL onStatusDropEnabled;
@@ -39,10 +27,7 @@
 
 @end
 
-@interface EVEStarbaseDetailFuelItem : NSObject {
-	NSInteger typeID;
-	NSInteger quantity;
-}
+@interface EVEStarbaseDetailFuelItem : NSObject
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger quantity;
 
@@ -51,24 +36,15 @@
 
 @end
 
-@interface EVEStarbaseDetail : EVERequest {
-	NSInteger state;
-	NSDate *stateTimestamp;
-	NSDate *onlineTimestamp;
-	EVEStarbaseDetailGeneralSettings *generalSettings;
-	EVEStarbaseDetailCombatSettings *combatSettings;
-	NSMutableArray *fuel;
-}
+@interface EVEStarbaseDetail : EVERequest
 @property (nonatomic) NSInteger state;
-@property (nonatomic, retain) NSDate *stateTimestamp;
-@property (nonatomic, retain) NSDate *onlineTimestamp;
-@property (nonatomic, retain) EVEStarbaseDetailGeneralSettings *generalSettings;
-@property (nonatomic, retain) EVEStarbaseDetailCombatSettings *combatSettings;
-@property (nonatomic, retain) NSArray *fuel;
+@property (nonatomic, strong) NSDate *stateTimestamp;
+@property (nonatomic, strong) NSDate *onlineTimestamp;
+@property (nonatomic, strong) EVEStarbaseDetailGeneralSettings *generalSettings;
+@property (nonatomic, strong) EVEStarbaseDetailCombatSettings *combatSettings;
+@property (nonatomic, strong) NSArray *fuel;
 
-+ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr;
-+ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID target:(id)target action:(SEL)action object:(id)object;
++ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

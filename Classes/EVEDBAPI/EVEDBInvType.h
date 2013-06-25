@@ -6,55 +6,24 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 #import "EVEDBDgmAttributeCategory.h"
 
-@interface EVEDBInvTypeAttributeCategory: EVEDBDgmAttributeCategory {
-	NSMutableArray *publishedAttributes;
-	NSMutableArray *unpublishedAttributes;
-}
-@property (nonatomic, retain) NSMutableArray *publishedAttributes;
-@property (nonatomic, retain) NSMutableArray *unpublishedAttributes;
+@interface EVEDBInvTypeAttributeCategory: EVEDBDgmAttributeCategory
+@property (nonatomic, strong) NSMutableArray *publishedAttributes;
+@property (nonatomic, strong) NSMutableArray *unpublishedAttributes;
 @end
 
 @class EVEDBInvGroup;
 @class EVEDBInvMarketGroup;
 @class EVEDBEveIcon;
 @class EVEDBInvBlueprintType;
-@interface EVEDBInvType : NSObject {
-	NSInteger typeID;
-	NSInteger groupID;
-	EVEDBInvGroup *group;
-	NSString *typeName;
-	NSString *description;
-	NSInteger graphicID;
-	float radius;
-	float mass;
-	float volume;
-	float capacity;
-	NSInteger portionSize;
-	NSInteger raceID;
-	float basePrice;
-	BOOL published;
-	NSInteger marketGroupID;
-	EVEDBInvMarketGroup *marketGroup;
-	float chanceOfDuplicating;
-	NSInteger iconID;
-	EVEDBEveIcon *icon;
-	NSString *imageName;
-	NSMutableArray *attributeCategories;
-	NSMutableDictionary *attributesDictionary;
-	NSMutableDictionary *effectsDictionary;
-	NSMutableArray *certificateRecommendations;
-	NSMutableArray *requiredSkills;
-	EVEDBInvBlueprintType* blueprintType;
-	EVEDBInvType* blueprint;
-}
+@interface EVEDBInvType : EVEDBObject
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger groupID;
-@property (nonatomic, retain) EVEDBInvGroup *group;
-@property (nonatomic, retain) NSString *typeName;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) EVEDBInvGroup *group;
+@property (nonatomic, strong) NSString *typeName;
+@property (nonatomic, strong) NSString *description;
 @property (nonatomic) NSInteger graphicID;
 @property (nonatomic) float radius;
 @property (nonatomic) float mass;
@@ -65,34 +34,29 @@
 @property (nonatomic) float basePrice;
 @property (nonatomic) BOOL published;
 @property (nonatomic) NSInteger marketGroupID;
-@property (nonatomic, retain) EVEDBInvMarketGroup *marketGroup;
+@property (nonatomic, strong) EVEDBInvMarketGroup *marketGroup;
 @property (nonatomic) float chanceOfDuplicating;
 @property (nonatomic) NSInteger iconID;
-@property (nonatomic, retain) EVEDBEveIcon *icon;
-@property (nonatomic, retain) NSString *imageName;
-@property (nonatomic, retain) NSMutableArray *attributeCategories;
-@property (nonatomic, retain) NSMutableDictionary *attributesDictionary;
-@property (nonatomic, retain) NSMutableDictionary *effectsDictionary;
-@property (nonatomic, retain) NSMutableArray *certificateRecommendations;
-@property (nonatomic, retain) NSMutableArray *requiredSkills;
-@property (nonatomic, retain) EVEDBInvBlueprintType* blueprintType;
-@property (nonatomic, retain) EVEDBInvType* blueprint;
+@property (nonatomic, strong) EVEDBEveIcon *icon;
+@property (nonatomic, strong) NSString *imageName;
+@property (nonatomic, strong) NSMutableArray *attributeCategories;
+@property (nonatomic, strong) NSMutableDictionary *attributesDictionary;
+@property (nonatomic, strong) NSMutableDictionary *effectsDictionary;
+@property (nonatomic, strong) NSMutableArray *certificateRecommendations;
+@property (nonatomic, strong) NSMutableArray *requiredSkills;
+@property (nonatomic, strong) EVEDBInvBlueprintType* blueprintType;
+@property (nonatomic, strong) EVEDBInvType* blueprint;
 
 + (id) invTypeWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr;
-+ (id) invTypeWithDictionary: (NSDictionary*) dictionary;
 + (id) invTypeWithInvType:(EVEDBInvType*) type;
 - (id) initWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithInvType:(EVEDBInvType*) type;
 - (NSString*) typeLargeImageName;
 - (NSString*) typeSmallImageName;
 
 @end
 
-@interface EVEDBInvTypeRequiredSkill : EVEDBInvType {
-	NSInteger requiredLevel;
-	float requiredSP;
-}
+@interface EVEDBInvTypeRequiredSkill : EVEDBInvType
 @property (nonatomic, assign) NSInteger requiredLevel;
-@property (nonatomic, readonly) float requiredSP;
+@property (nonatomic, readonly, assign) float requiredSP;
 @end

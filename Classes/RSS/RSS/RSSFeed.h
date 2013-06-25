@@ -10,25 +10,15 @@
 #import "RSSImage.h"
 #import "RSSItem.h"
 
-@interface RSSFeed : NSObject {
-	NSString *title;
-	NSString *description;
-	NSString *copyright;
-	NSString *language;
-	NSString *link;
-	NSString *publisher;
-	NSDate *updated;
-	RSSImage *image;
-	NSMutableArray *items;
-}
+@interface RSSFeed : NSObject
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *description;
 @property (nonatomic, copy) NSString *copyright;
 @property (nonatomic, copy) NSString *language;
 @property (nonatomic, copy) NSString *link;
 @property (nonatomic, copy) NSString *publisher;
-@property (nonatomic, retain) NSDate *updated;
-@property (nonatomic, retain) RSSImage *image;
-@property (nonatomic, retain) NSMutableArray *items;
+@property (nonatomic, strong) NSDate *updated;
+@property (nonatomic, strong) RSSImage *image;
+@property (nonatomic, strong) NSMutableArray *items;
 
 @end

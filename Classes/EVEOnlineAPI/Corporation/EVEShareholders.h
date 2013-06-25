@@ -9,13 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEShareholdersCharactersItem : NSObject {
-	NSInteger shareholderID;
-	NSString *shareholderName;
-	NSInteger shareholderCorporationID;
-	NSString *shareholderCorporationName;
-	NSInteger shares;
-}
+@interface EVEShareholdersCharactersItem : NSObject
 @property (nonatomic) NSInteger shareholderID;
 @property (nonatomic, copy) NSString *shareholderName;
 @property (nonatomic) NSInteger shareholderCorporationID;
@@ -28,11 +22,7 @@
 @end
 
 
-@interface EVEShareholdersCorporationsItem : NSObject {
-	NSInteger shareholderID;
-	NSString *shareholderName;
-	NSInteger shares;
-}
+@interface EVEShareholdersCorporationsItem : NSObject
 @property (nonatomic) NSInteger shareholderID;
 @property (nonatomic, copy) NSString *shareholderName;
 @property (nonatomic) NSInteger shares;
@@ -43,16 +33,11 @@
 @end
 
 
-@interface EVEShareholders : EVERequest {
-	NSMutableArray *characters;
-	NSMutableArray *corporations;
-}
-@property (nonatomic, retain) NSArray *characters;
-@property (nonatomic, retain) NSArray *corporations;
+@interface EVEShareholders : EVERequest
+@property (nonatomic, strong) NSArray *characters;
+@property (nonatomic, strong) NSArray *corporations;
 
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
++ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

@@ -6,45 +6,29 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBCrtCategory;
 @class EVEDBCrtClass;
 @class EVEDBEveIcon;
-@interface EVEDBCrtCertificate : NSObject {
-	NSInteger certificateID;
-	NSInteger categoryID;
-	EVEDBCrtCategory* category;
-	NSInteger classID;
-	EVEDBCrtClass* certificateClass;
-	NSInteger grade;
-	NSInteger corpID;
-	NSInteger iconID;
-	EVEDBEveIcon *icon;
-	NSString* description;
-	NSMutableArray* prerequisites;
-	NSMutableArray* derivations;
-	NSMutableArray* recommendations;
-}
+@interface EVEDBCrtCertificate : EVEDBObject
 @property (nonatomic) NSInteger certificateID;
 @property (nonatomic) NSInteger categoryID;
-@property (nonatomic, retain) EVEDBCrtCategory* category;
+@property (nonatomic, strong) EVEDBCrtCategory* category;
 @property (nonatomic) NSInteger classID;
-@property (nonatomic, retain) EVEDBCrtClass* certificateClass;
+@property (nonatomic, strong) EVEDBCrtClass* certificateClass;
 @property (nonatomic) NSInteger grade;
 @property (nonatomic, readonly) NSString* gradeText;
 @property (nonatomic) NSInteger corpID;
 @property (nonatomic) NSInteger iconID;
-@property (nonatomic, retain) EVEDBEveIcon *icon;
-@property (nonatomic, retain) NSString *description;
-@property (nonatomic, retain) NSArray* prerequisites;
-@property (nonatomic, retain) NSArray* derivations;
-@property (nonatomic, retain) NSArray* recommendations;
+@property (nonatomic, strong) EVEDBEveIcon *icon;
+@property (nonatomic, strong) NSString *description;
+@property (nonatomic, readonly, strong) NSArray* prerequisites;
+@property (nonatomic, readonly, strong) NSArray* derivations;
+@property (nonatomic, readonly, strong) NSArray* recommendations;
 @property (nonatomic, readonly) NSString* iconImageName;
 
 + (id) crtCertificateWithCertificateID: (NSInteger)aCertificateID error:(NSError **)errorPtr;
-+ (id) crtCertificateWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithCertificateID: (NSInteger)aCertificateID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

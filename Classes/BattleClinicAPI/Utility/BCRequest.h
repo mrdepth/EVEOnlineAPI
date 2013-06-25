@@ -9,12 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVECachedURLRequest.h"
 
-@interface BCRequest : EVECachedURLRequest<NSXMLParserDelegate> {
-	NSMutableString *text;
-}
-
-@end
-
-@interface BCRequest (Protected)
+@interface BCRequest : EVECachedURLRequest<NSXMLParserDelegate>
 @property (nonatomic, readonly) NSString *text;
+
+
 @end

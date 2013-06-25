@@ -7,73 +7,28 @@
 //
 
 #import "EVEDBDgmAttributeCategory.h"
-#import "EVEDBDatabase.h"
-
-@interface EVEDBDgmAttributeCategory(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBDgmAttributeCategory(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.categoryID = [[dictionary valueForKey:@"categoryID"] integerValue];
-	self.categoryName = [dictionary valueForKey:@"categoryName"];
-	self.categoryDescription = [dictionary valueForKey:@"categoryDescription"];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
-
 
 @implementation EVEDBDgmAttributeCategory
-@synthesize categoryID;
-@synthesize categoryName;
-@synthesize categoryDescription;
 
-+ (id) dgmAttributeCategoryWithAttributeCategoryID: (NSInteger)aAttributeCategoryID error:(NSError **)errorPtr {
-	return [[[EVEDBDgmAttributeCategory alloc] initWithAttributeCategoryID:aAttributeCategoryID error:errorPtr] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"categoryID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"categoryID"},
+		  @"categoryName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"categoryName"},
+		  @"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"}
+		  };
+	return map;
 }
 
-+ (id) dgmAttributeCategoryWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBDgmAttributeCategory alloc] initWithDictionary:dictionary] autorelease];
++ (id) dgmAttributeCategoryWithAttributeCategoryID: (NSInteger)attributeCategoryID error:(NSError **)errorPtr {
+	return [[EVEDBDgmAttributeCategory alloc] initWithAttributeCategoryID:attributeCategoryID error:errorPtr];
 }
 
-- (id) initWithAttributeCategoryID: (NSInteger)aAttributeCategoryID error:(NSError **)errorPtr {
-	if (self = [super init]) {
-		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
-		if (!database) {
-			[self release];
-			return nil;
-		}
-		NSError *error = [database execWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmAttributeCategories WHERE categoryID=%d;", aAttributeCategoryID]
-											   target:self
-											   action:@selector(didReceiveRecord:)];
-		if (error) {
-			if (errorPtr)
-				*errorPtr = error;
-			[self release];
-			return nil;
-		}
+- (id) initWithAttributeCategoryID: (NSInteger)attributeCategoryID error:(NSError **)errorPtr {
+	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmAttributeCategories WHERE categoryID=%d;", attributeCategoryID]
+								   error:errorPtr]) {
 	}
 	return self;
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
-
-
-- (void) dealloc {
-	[categoryName release];
-	[categoryDescription release];
-	[super dealloc];
 }
 
 @end

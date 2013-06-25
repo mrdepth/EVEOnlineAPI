@@ -9,21 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECorpWalletJournalItem : NSObject {
-	NSDate *date;
-	NSInteger refID;
-	NSInteger refTypeID;
-	NSString *ownerName1;
-	NSInteger ownerID1;
-	NSString *ownerName2;
-	NSInteger ownerID2;
-	NSString *argName1;
-	NSInteger argID1;
-	float amount;
-	float balance;
-	NSString *reason;
-}
-@property (nonatomic, retain) NSDate *date;
+@interface EVECorpWalletJournalItem : NSObject
+@property (nonatomic, strong) NSDate *date;
 @property (nonatomic) NSInteger refID;
 @property (nonatomic) NSInteger refTypeID;
 @property (nonatomic, copy) NSString *ownerName1;
@@ -41,14 +28,10 @@
 
 @end
 
-@interface EVECorpWalletJournal : EVERequest {
-	NSMutableArray *corpWalletJournal;
-}
-@property (nonatomic, retain) NSArray *corpWalletJournal;
+@interface EVECorpWalletJournal : EVERequest
+@property (nonatomic, strong) NSArray *corpWalletJournal;
 
-+ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr;
-+ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount target:(id)target action:(SEL)action object:(id)object;
++ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

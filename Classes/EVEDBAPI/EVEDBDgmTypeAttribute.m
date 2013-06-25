@@ -7,63 +7,35 @@
 //
 
 #import "EVEDBDgmTypeAttribute.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBDgmAttributeType.h"
-
-@interface EVEDBDgmTypeAttribute(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBDgmTypeAttribute(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.typeID = [[dictionary valueForKey:@"typeID"] integerValue];
-	self.attributeID = [[dictionary valueForKey:@"attributeID"] integerValue];
-	self.value = [[dictionary valueForKey:@"value"] floatValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 
 @implementation EVEDBDgmTypeAttribute
-@synthesize typeID;
-@synthesize attributeID;
-@synthesize attribute;
-@synthesize value;
 
-+ (id) dgmTypeAttributeWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBDgmTypeAttribute alloc] initWithDictionary:dictionary] autorelease];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"typeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"typeID"},
+		  @"attributeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"attributeID"},
+		  @"value" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"value"}
+		  };
+	return map;
 }
 
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
+
 
 - (EVEDBDgmAttributeType*) attribute {
-	if (attributeID == 0)
+	if (self.attributeID == 0)
 		return NULL;
-	if (!attribute) {
-		attribute = [[EVEDBDgmAttributeType dgmAttributeTypeWithAttributeTypeID:attributeID error:nil] retain];
-		if (!attribute)
-			attribute = (EVEDBDgmAttributeType*) [[NSNull null] retain];
+	if (!_attribute) {
+		_attribute = [EVEDBDgmAttributeType dgmAttributeTypeWithAttributeTypeID:self.attributeID error:nil];
+		if (!_attribute)
+			_attribute = (EVEDBDgmAttributeType*) [NSNull null];
 	}
-	if ((NSNull*) attribute == [NSNull null])
+	if ((NSNull*) _attribute == [NSNull null])
 		return NULL;
 	else
-		return attribute;
-}
-
-- (void) dealloc {
-	[attribute release];
-	[super dealloc];
+		return _attribute;
 }
 
 @end

@@ -9,13 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarSystemsItem : NSObject {
-	NSInteger solarSystemID;
-	NSString *solarSystemName;
-	NSInteger occupyingFactionID;
-	NSString *occupyingFactionName;
-	BOOL contested;
-}
+@interface EVEFacWarSystemsItem : NSObject
 @property (nonatomic) NSInteger solarSystemID;
 @property (nonatomic, copy) NSString *solarSystemName;
 @property (nonatomic) NSInteger occupyingFactionID;
@@ -28,13 +22,9 @@
 @end
 
 
-@interface EVEFacWarSystems : EVERequest {
-	NSMutableArray *solarSystems;
-}
-@property (nonatomic, retain) NSArray *solarSystems;
+@interface EVEFacWarSystems : EVERequest
+@property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) facWarSystemsWithError:(NSError **)errorPtr;
-+ (id) facWarSystemsWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) facWarSystemsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

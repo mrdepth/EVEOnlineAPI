@@ -6,26 +6,17 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 @class EVEDBEveIcon;
-@interface EVEDBInvCategory : NSObject {
-	NSInteger categoryID;
-	NSString *categoryName;
-	NSString *description;
-	NSInteger iconID;
-	EVEDBEveIcon *icon;
-	BOOL published;
-}
+@interface EVEDBInvCategory : EVEDBObject
 @property (nonatomic) NSInteger categoryID;
-@property (nonatomic, retain) NSString *categoryName;
-@property (nonatomic, retain) NSString *description;
+@property (nonatomic, strong) NSString *categoryName;
+@property (nonatomic, strong) NSString *description;
 @property (nonatomic) NSInteger iconID;
-@property (nonatomic, retain) EVEDBEveIcon *icon;
+@property (nonatomic, strong) EVEDBEveIcon *icon;
 @property (nonatomic) BOOL published;
 
 + (id) invCategoryWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr;
-+ (id) invCategoryWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 @end

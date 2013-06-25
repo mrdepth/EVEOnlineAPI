@@ -10,11 +10,7 @@
 #import "EVERequest.h"
 
 
-@interface EVEStandingsItem : NSObject {
-	NSInteger fromID;
-	NSString *fromName;
-	float standing;
-}
+@interface EVEStandingsItem : NSObject
 @property (nonatomic) NSInteger fromID;
 @property (nonatomic, copy) NSString *fromName;
 @property (nonatomic) float standing;
@@ -24,26 +20,18 @@
 @end
 
 
-@interface EVEStandingsNPCStandings : NSObject {
-	NSMutableArray *agents;
-	NSMutableArray *NPCCorporations;
-	NSMutableArray *factions;
-}
-@property (nonatomic, retain) NSMutableArray *agents;
-@property (nonatomic, retain) NSMutableArray *NPCCorporations;
-@property (nonatomic, retain) NSMutableArray *factions;
+@interface EVEStandingsNPCStandings : NSObject
+@property (nonatomic, strong) NSMutableArray *agents;
+@property (nonatomic, strong) NSMutableArray *NPCCorporations;
+@property (nonatomic, strong) NSMutableArray *factions;
 
 @end
 
 
-@interface EVEStandings : EVERequest {
-	EVEStandingsNPCStandings *standings;
-}
-@property (nonatomic, retain) EVEStandingsNPCStandings *standings;
+@interface EVEStandings : EVERequest
+@property (nonatomic, strong) EVEStandingsNPCStandings *standings;
 
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
++ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

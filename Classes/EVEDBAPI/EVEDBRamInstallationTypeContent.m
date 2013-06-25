@@ -7,79 +7,48 @@
 //
 
 #import "EVEDBRamInstallationTypeContent.h"
-#import "EVEDBDatabase.h"
 #import "EVEDBRamAssemblyLineType.h"
 #import "EVEDBInvType.h"
 
-@interface EVEDBRamInstallationTypeContent(Private)
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary;
-- (void) didReceiveRecord: (NSDictionary*) record;
-@end
-
-@implementation EVEDBRamInstallationTypeContent(Private)
-
-- (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.installationTypeID = [[dictionary valueForKey:@"installationTypeID"] integerValue];
-	self.assemblyLineTypeID = [[dictionary valueForKey:@"assemblyLineTypeID"] integerValue];
-	self.quantity = [[dictionary valueForKey:@"quantity"] integerValue];
-}
-
-- (void) didReceiveRecord: (NSDictionary*) record {
-	[self setValuesWithDictionary:record];
-}
-
-@end
 
 @implementation EVEDBRamInstallationTypeContent
-@synthesize installationTypeID;
-@synthesize installationType;
-@synthesize assemblyLineTypeID;
-@synthesize assemblyLineType;
-@synthesize quantity;
 
-+ (id) ramInstallationTypeContentWithDictionary: (NSDictionary*) dictionary {
-	return [[[EVEDBRamInstallationTypeContent alloc] initWithDictionary:dictionary] autorelease];
-}
-
-- (id) initWithDictionary: (NSDictionary*) dictionary {
-	if (self = [super init]) {
-		[self setValuesWithDictionary:dictionary];
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[installationType release];
-	[assemblyLineType release];
-	[super dealloc];
++ (NSDictionary*) columnsMap {
+	static NSDictionary* map = nil;
+	if (!map)
+		map = @{@"installationTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"installationTypeID"},
+		  @"assemblyLineTypeID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"assemblyLineTypeID"},
+		  @"quantity" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"quantity"}
+		  };
+	return map;
 }
 
 - (EVEDBInvType*) installationType {
-	if (installationTypeID == 0)
+	if (self.installationTypeID == 0)
 		return NULL;
-	if (!installationType) {
-		installationType = [[EVEDBInvType invTypeWithTypeID:installationTypeID error:nil] retain];
-		if (!installationType)
-			installationType = (EVEDBInvType*) [[NSNull null] retain];
+	if (!_installationType) {
+		_installationType = [EVEDBInvType invTypeWithTypeID:self.installationTypeID error:nil];
+		if (!_installationType)
+			_installationType = (EVEDBInvType*) [NSNull null];
 	}
-	if ((NSNull*) installationType == [NSNull null])
+	if ((NSNull*) _installationType == [NSNull null])
 		return NULL;
 	else
-		return installationType;
+		return _installationType;
 }
 
 - (EVEDBRamAssemblyLineType*) assemblyLineType {
-	if (assemblyLineTypeID == 0)
+	if (self.assemblyLineTypeID == 0)
 		return NULL;
-	if (!assemblyLineType) {
-		assemblyLineType = [[EVEDBRamAssemblyLineType ramAssemblyLineTypeWithAssemblyLineTypeID:assemblyLineTypeID error:nil] retain];
-		if (!assemblyLineType)
-			assemblyLineType = (EVEDBRamAssemblyLineType*) [[NSNull null] retain];
+	if (!_assemblyLineType) {
+		_assemblyLineType = [EVEDBRamAssemblyLineType ramAssemblyLineTypeWithAssemblyLineTypeID:self.assemblyLineTypeID error:nil];
+		if (!_assemblyLineType)
+			_assemblyLineType = (EVEDBRamAssemblyLineType*) [NSNull null];
 	}
-	if ((NSNull*) assemblyLineType == [NSNull null])
+	if ((NSNull*) _assemblyLineType == [NSNull null])
 		return NULL;
 	else
-		return assemblyLineType;
+		return _assemblyLineType;
 }
 
 @end

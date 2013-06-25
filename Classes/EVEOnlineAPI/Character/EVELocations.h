@@ -9,13 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVELocationsItem : NSObject {
-	long long itemID;
-	NSString* itemName;
-	float x;
-	float y;
-	float z;
-}
+@interface EVELocationsItem : NSObject
 @property (nonatomic) long long itemID;
 @property (nonatomic, copy) NSString* itemName;
 @property (nonatomic) float x;
@@ -29,14 +23,10 @@
 
 
 
-@interface EVELocations : EVERequest {
-	NSMutableArray *locations;
-}
-@property (nonatomic, retain) NSArray *locations;
+@interface EVELocations : EVERequest
+@property (nonatomic, strong) NSArray *locations;
 
-+ (id) locationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate error:(NSError **)errorPtr;
-+ (id) locationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
++ (id) locationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

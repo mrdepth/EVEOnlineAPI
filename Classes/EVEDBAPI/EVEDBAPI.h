@@ -19,6 +19,7 @@
 #import "EVEDBInvControlTowerResourcePurpose.h"
 #import "EVEDBInvControlTowerResource.h"
 #import "EVEDBInvMarketGroup.h"
+#import "EVEDBInvMetaGroup.h"
 #import "EVEDBDgmAttributeCategory.h"
 #import "EVEDBDgmAttributeType.h"
 #import "EVEDBDgmTypeAttribute.h"
@@ -40,3 +41,4 @@
 #import "EVEDBCrtCertificate.h"
 #import "EVEDBCrtRecommendation.h"
 #import "EVEDBCrtRelationship.h"
+#import "NSDictionary+EVEDBAPI.h"

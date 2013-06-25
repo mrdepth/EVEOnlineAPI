@@ -10,13 +10,5 @@
 
 
 @implementation RSSSource
-@synthesize title;
-@synthesize url;
-
-- (void) dealloc {
-	[title release];
-	[url release];
-	[super dealloc];
-}
 
 @end

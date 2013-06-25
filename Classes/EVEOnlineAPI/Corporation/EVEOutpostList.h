@@ -9,18 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEOutpostListItem : NSObject {
-	NSInteger stationID;
-	NSInteger ownerID;
-	NSString *stationName;
-	NSInteger solarSystemID;
-	float dockingCostPerShipVolume;
-	float officeRentalCost;
-	NSInteger stationTypeID;
-	float reprocessingEfficiency;
-	float reprocessingStationTake;
-	NSInteger standingOwnerID;
-}
+@interface EVEOutpostListItem : NSObject
 @property (nonatomic) NSInteger stationID;
 @property (nonatomic) NSInteger ownerID;
 @property (nonatomic, copy) NSString *stationName;
@@ -37,14 +26,10 @@
 
 @end
 
-@interface EVEOutpostList : EVERequest {
-	NSMutableArray *corporationStarbases;
-}
-@property (nonatomic, retain) NSArray *corporationStarbases;
+@interface EVEOutpostList : EVERequest
+@property (nonatomic, strong) NSArray *corporationStarbases;
 
-+ (id) outpostListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-+ (id) outpostListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
++ (id) outpostListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

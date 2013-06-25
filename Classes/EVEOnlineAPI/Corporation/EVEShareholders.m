@@ -10,14 +10,9 @@
 
 
 @implementation EVEShareholdersCharactersItem
-@synthesize shareholderID;
-@synthesize shareholderName;
-@synthesize shareholderCorporationID;
-@synthesize shareholderCorporationName;
-@synthesize shares;
 
 + (id) shareholdersCharactersItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEShareholdersCharactersItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEShareholdersCharactersItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -31,22 +26,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[shareholderName release];
-	[shareholderCorporationName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEShareholdersCorporationsItem
-@synthesize shareholderID;
-@synthesize shareholderName;
-@synthesize shares;
 
 + (id) shareholdersCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEShareholdersCorporationsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEShareholdersCorporationsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -58,63 +44,38 @@
 	return self;
 }
 
-- (void) dealloc {
-	[shareholderName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEShareholders
-@synthesize characters;
-@synthesize corporations;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEShareholders alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEShareholders alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEShareholders alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Shareholders.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Shareholders.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Shareholders.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[characters release];
-	[corporations release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"characters"]) {
-		characters = [[NSMutableArray alloc] init];
-		return characters;
+		self.characters = [[NSMutableArray alloc] init];
+		return self.characters;
 	}
 	else if ([rowset isEqualToString:@"corporations"]) {
-		corporations = [[NSMutableArray alloc] init];
-		return corporations;
+		self.corporations = [[NSMutableArray alloc] init];
+		return self.corporations;
 	}
 	else
 		return nil;

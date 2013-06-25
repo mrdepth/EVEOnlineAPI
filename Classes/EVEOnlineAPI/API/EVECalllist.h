@@ -9,11 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECalllistCallGroupsItem : NSObject {
-	NSInteger groupID;
-	NSString *name;
-	NSString *description;
-}
+@interface EVECalllistCallGroupsItem : NSObject
 @property (nonatomic) NSInteger groupID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *description;
@@ -23,13 +19,7 @@
 
 @end
 
-@interface EVECalllistCallsItem : NSObject {
-	NSInteger accessMask;
-	EVECallType type;
-	NSString *name;
-	NSInteger groupID;
-	NSString *description;
-}
+@interface EVECalllistCallsItem : NSObject
 @property (nonatomic) NSInteger accessMask;
 @property (nonatomic) EVECallType type;
 @property (nonatomic, copy) NSString *name;
@@ -43,16 +33,11 @@
 
 
 
-@interface EVECalllist : EVERequest {
-	NSMutableArray *callGroups;
-	NSMutableArray *calls;
-}
-@property (nonatomic, retain) NSArray *callGroups;
-@property (nonatomic, retain) NSArray *calls;
+@interface EVECalllist : EVERequest
+@property (nonatomic, strong) NSArray *callGroups;
+@property (nonatomic, strong) NSArray *calls;
 
-+ (id) calllistWithError:(NSError **)errorPtr;
-+ (id) calllistWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) calllistWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

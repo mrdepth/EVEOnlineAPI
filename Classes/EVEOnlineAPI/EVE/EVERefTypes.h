@@ -9,10 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVERefTypesItem : NSObject {
-	NSInteger refTypeID;
-	NSString *refTypeName;
-}
+@interface EVERefTypesItem : NSObject
 @property (nonatomic) NSInteger refTypeID;
 @property (nonatomic, copy) NSString *refTypeName;
 
@@ -22,13 +19,9 @@
 @end
 
 
-@interface EVERefTypes : EVERequest {
-	NSMutableArray *refTypes;
-}
-@property (nonatomic, retain) NSArray *refTypes;
+@interface EVERefTypes : EVERequest
+@property (nonatomic, strong) NSArray *refTypes;
 
-+ (id) refTypesWithError:(NSError **)errorPtr;
-+ (id) refTypesWithTarget:(id)target action:(SEL)action object:(id)object;
-- (id) initWithError:(NSError **)errorPtr;
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)object;
++ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end

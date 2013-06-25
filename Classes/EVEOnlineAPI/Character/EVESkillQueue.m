@@ -10,16 +10,9 @@
 
 
 @implementation EVESkillQueueItem
-@synthesize queuePosition;
-@synthesize typeID;
-@synthesize level;
-@synthesize startSP;
-@synthesize endSP;
-@synthesize startTime;
-@synthesize endTime;
 
 + (id) skillQueueItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVESkillQueueItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVESkillQueueItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -35,58 +28,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[startTime release];
-	[endTime release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVESkillQueue
-@synthesize skillQueue;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVESkillQueue alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVESkillQueue alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVESkillQueue alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/SkillQueue.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/SkillQueue.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/SkillQueue.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[skillQueue release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"skillqueue"]) {
-		skillQueue = [[NSMutableArray alloc] init];
-		return skillQueue;
+		self.skillQueue = [[NSMutableArray alloc] init];
+		return self.skillQueue;
 	}
 	else
 		return nil;
@@ -95,14 +64,14 @@
 
 - (void) didEndRowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"skillqueue"]) {
-		[skillQueue sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
+		[(NSMutableArray*) self.skillQueue sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
 	}
 }
 
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"skillqueue"]) {
 		EVESkillQueueItem *skillQueueItem = [EVESkillQueueItem skillQueueItemWithXMLAttributes:attributeDict];
-		[skillQueue addObject:skillQueueItem];
+		[(NSMutableArray*) self.skillQueue addObject:skillQueueItem];
 		return skillQueueItem;
 	}
 	return nil;

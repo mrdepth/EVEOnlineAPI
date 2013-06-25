@@ -9,18 +9,9 @@
 #import "EVEIndustryJobs.h"
 
 @implementation EVEIndustryJobsItem
-@synthesize jobID, assemblyLineID, containerID, installedItemID, installedItemLocationID, installedItemQuantity,
-			installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
-			outputLocationID, installerID, runs, licensedProductionRuns, installedInSolarSystemID,
-			containerLocationID, installedItemTypeID, outputTypeID, containerTypeID, installedItemCopy, completed,
-			completedSuccessfully, installedItemFlag, outputFlag, activityID, completedStatus,
-			materialMultiplier,charMaterialMultiplier, timeMultiplier,charTimeMultiplier,
-			installTime, beginProductionTime, endProductionTime, pauseProductionTime;
-
-
 
 + (id) industryJobsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEIndustryJobsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEIndustryJobsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -62,58 +53,32 @@
 	return self;
 }
 
-- (void) dealloc {
-	[installTime release];
-	[beginProductionTime release];
-	[endProductionTime release];
-	[pauseProductionTime release];
-	[super dealloc];
-}
 @end
 
-
 @implementation EVEIndustryJobs
-@synthesize jobs;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr {
-	return [[[EVEIndustryJobs alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr] autorelease];
++ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEIndustryJobs alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEIndustryJobs alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/IndustryJobs.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, vCode, characterID]]
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/IndustryJobs.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/IndustryJobs.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[jobs release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"jobs"])
-		return jobs = [[NSMutableArray alloc] init];
+		return self.jobs = [[NSMutableArray alloc] init];
 	else
 		return nil;
 }
@@ -121,7 +86,7 @@
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"jobs"]) {
 		EVEIndustryJobsItem *job = [EVEIndustryJobsItem industryJobsItemWithXMLAttributes:attributeDict];
-		[jobs addObject:job];
+		[(NSMutableArray*)self.jobs addObject:job];
 		return job;
 	}
 	return nil;

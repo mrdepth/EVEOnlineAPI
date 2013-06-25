@@ -9,22 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEContainerLogItem : NSObject {
-	NSDate *logTime;
-	long long itemID;
-	NSInteger itemTypeID;
-	NSInteger actorID;
-	NSString *actorName;
-	EVEInventoryFlag flag;
-	long long locationID;
-	NSString *action;
-	NSString *passwordType;
-	NSInteger typeID;
-	NSInteger quantity;
-	NSString *oldConfiguration;
-	NSString *theNewConfiguration;
-}
-@property (nonatomic, retain) NSDate *logTime;
+@interface EVEContainerLogItem : NSObject
+@property (nonatomic, strong) NSDate *logTime;
 @property (nonatomic) long long itemID;
 @property (nonatomic) NSInteger itemTypeID;
 @property (nonatomic) NSInteger actorID;
@@ -43,14 +29,10 @@
 
 @end
 
-@interface EVEContainerLog : EVERequest {
-	NSMutableArray *containerLog;
-}
-@property (nonatomic, retain) NSArray *containerLog;
+@interface EVEContainerLog : EVERequest
+@property (nonatomic, strong) NSArray *containerLog;
 
-+ (id) containerLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-+ (id) containerLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object;
++ (id) containerLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end

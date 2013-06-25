@@ -6,21 +6,15 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "EVEDBObject.h"
 
 
-@interface EVEDBDgmAttributeCategory : NSObject {
-	NSInteger categoryID;
-	NSString *categoryName;
-	NSString *categoryDescription;
-}
+@interface EVEDBDgmAttributeCategory : EVEDBObject
 @property (nonatomic) NSInteger categoryID;
-@property (nonatomic, retain) NSString *categoryName;
-@property (nonatomic, retain) NSString *categoryDescription;
+@property (nonatomic, strong) NSString *categoryName;
+@property (nonatomic, strong) NSString *description;
 
 + (id) dgmAttributeCategoryWithAttributeCategoryID: (NSInteger)aAttributeCategoryID error:(NSError **)errorPtr;
-+ (id) dgmAttributeCategoryWithDictionary: (NSDictionary*) dictionary;
 - (id) initWithAttributeCategoryID: (NSInteger)aAttributeCategoryID error:(NSError **)errorPtr;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
 
 @end

@@ -10,11 +10,9 @@
 
 
 @implementation EVERefTypesItem
-@synthesize refTypeID;
-@synthesize refTypeName;
 
 + (id) refTypesItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVERefTypesItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVERefTypesItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -25,57 +23,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[refTypeName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVERefTypes
-@synthesize refTypes;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) refTypesWithError:(NSError **)errorPtr {
-	return [[[EVERefTypes alloc] initWithError:errorPtr] autorelease];
++ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVERefTypes alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) refTypesWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVERefTypes alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/RefTypes.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/RefTypes.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[refTypes release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"refTypes"]) {
-		refTypes = [[NSMutableArray alloc] init];
-		return refTypes;
+		self.refTypes = [[NSMutableArray alloc] init];
+		return self.refTypes;
 	}
 	else
 		return nil;

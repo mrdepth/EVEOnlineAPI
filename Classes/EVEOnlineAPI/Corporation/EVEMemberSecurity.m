@@ -9,20 +9,9 @@
 #import "EVEMemberSecurity.h"
 
 @implementation EVEMemberSecurityMember
-@synthesize characterID;
-@synthesize name;
-@synthesize roles;
-@synthesize grantableRoles;
-@synthesize rolesAtHQ;
-@synthesize grantableRolesAtHQ;
-@synthesize rolesAtBase;
-@synthesize grantableRolesAtBase;
-@synthesize rolesAtOther;
-@synthesize grantableRolesAtOther;
-@synthesize titles;
 
 + (id) memberSecurityMemberWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEMemberSecurityMember alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEMemberSecurityMember alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -33,29 +22,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[name release];
-	[roles release];
-	[grantableRoles release];
-	[rolesAtHQ release];
-	[grantableRolesAtHQ release];
-	[rolesAtBase release];
-	[grantableRolesAtBase release];
-	[rolesAtOther release];
-	[grantableRolesAtOther release];
-	[titles release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEMemberSecurityRoleItem
-@synthesize roleID;
-@synthesize roleName;
 
 + (id) memberSecurityRoleItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEMemberSecurityRoleItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEMemberSecurityRoleItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -66,20 +39,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[roleName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEMemberSecurityTitleItem
-@synthesize titleID;
-@synthesize titleName;
 
 + (id) memberSecurityTitleItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVEMemberSecurityTitleItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVEMemberSecurityTitleItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -90,96 +56,73 @@
 	return self;
 }
 
-- (void) dealloc {
-	[titleName release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVEMemberSecurity
-@synthesize members;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	return [[[EVEMemberSecurity alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr] autorelease];
++ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEMemberSecurity alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)object {
-	return [[[EVEMemberSecurity alloc] initWithKeyID:keyID vCode:vCode characterID:characterID target:target action:action object:object] autorelease];
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberSecurity.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberSecurity.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID target:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberSecurity.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, vCode, characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[members release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"roles"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.roles = [NSMutableArray array];
 		return member.roles;
 	}
 	else if ([rowset isEqualToString:@"grantableRoles"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.grantableRoles = [NSMutableArray array];
 		return member.grantableRoles;
 	}
 	else if ([rowset isEqualToString:@"rolesAtHQ"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.rolesAtHQ = [NSMutableArray array];
 		return member.rolesAtHQ;
 	}
 	else if ([rowset isEqualToString:@"grantableRolesAtHQ"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.grantableRolesAtHQ = [NSMutableArray array];
 		return member.grantableRolesAtHQ;
 	}
 	else if ([rowset isEqualToString:@"rolesAtBase"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.rolesAtBase = [NSMutableArray array];
 		return member.rolesAtBase;
 	}
 	else if ([rowset isEqualToString:@"grantableRolesAtBase"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.grantableRolesAtBase = [NSMutableArray array];
 		return member.grantableRolesAtBase;
 	}
 	else if ([rowset isEqualToString:@"rolesAtOther"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.rolesAtOther = [NSMutableArray array];
 		return member.rolesAtOther;
 	}
 	else if ([rowset isEqualToString:@"grantableRolesAtOther"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.grantableRolesAtOther = [NSMutableArray array];
 		return member.grantableRolesAtOther;
 	}
 	else if ([rowset isEqualToString:@"titles"]) {
-		EVEMemberSecurityMember *member = [members lastObject];
+		EVEMemberSecurityMember *member = [self.members lastObject];
 		member.titles = [NSMutableArray array];
 		return member.titles;
 	}
@@ -243,10 +186,10 @@ didStartElement:(NSString *)elementName
 	 attributes:(NSDictionary *)attributeDict {
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"member"]) {
-		if (!members)
+		if (!self.members)
 			self.members = [NSMutableArray array];
 		EVEMemberSecurityMember *member = [EVEMemberSecurityMember memberSecurityMemberWithXMLAttributes:attributeDict];
-		[members addObject:member];
+		[(NSMutableArray*) self.members addObject:member];
 	}
 }
 @end

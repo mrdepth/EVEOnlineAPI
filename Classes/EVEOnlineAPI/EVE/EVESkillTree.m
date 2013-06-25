@@ -9,17 +9,13 @@
 #import "EVESkillTree.h"
 
 @implementation EVESkillTreeRequiredAttributes
-@synthesize primaryAttribute;
-@synthesize secondaryAttribute;
 @end
 
 
 @implementation EVESkillTreeRequiredSkillsItem
-@synthesize typeID;
-@synthesize skillLevel;
 
 + (id) skillTreeRequiredSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVESkillTreeRequiredSkillsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVESkillTreeRequiredSkillsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -30,19 +26,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVESkillTreeSkillBonusCollectionItem
-@synthesize bonusType;
-@synthesize bonusValue;
 
 + (id) skillTreeSkillBonusCollectionItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVESkillTreeSkillBonusCollectionItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVESkillTreeSkillBonusCollectionItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -53,21 +43,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[bonusType release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVESkillTreeSkillGroupsItem
-@synthesize groupID;
-@synthesize groupName;
-@synthesize skills;
 
 + (id) skillTreeSkillGroupsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVESkillTreeSkillGroupsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVESkillTreeSkillGroupsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -78,28 +60,13 @@
 	return self;
 }
 
-- (void) dealloc {
-	[groupName release];
-	[skills release];
-	[super dealloc];
-}
-
 @end
 
 	
 @implementation EVESkillTreeSkillsItem
-@synthesize groupID;
-@synthesize typeID;
-@synthesize typeName;
-@synthesize description;
-@synthesize rank;
-@synthesize requiredSkills;
-@synthesize requiredAttributes;
-@synthesize skillBonusCollection;	
-@synthesize published;
 
 + (id) skillTreeSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[[EVESkillTreeSkillsItem alloc] initWithXMLAttributes:attributeDict] autorelease];
+	return [[EVESkillTreeSkillsItem alloc] initWithXMLAttributes:attributeDict];
 }
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
@@ -112,61 +79,34 @@
 	return self;
 }
 
-- (void) dealloc {
-	[typeName release];
-	[description release];
-	[requiredSkills release];
-	[requiredAttributes release];
-	[skillBonusCollection release];
-	[super dealloc];
-}
-
 @end
 
 
 @implementation EVESkillTree
-@synthesize skillGroups;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) skillTreeWithError:(NSError **)errorPtr {
-	return [[[EVESkillTree alloc] initWithError:errorPtr] autorelease];
++ (id) skillTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVESkillTree alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) skillTreeWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVESkillTree alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/SkillTree.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/SkillTree.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[skillGroups release];
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"skillGroups"]) {
-		skillGroups = [[NSMutableArray alloc] init];
-		return skillGroups;
+		self.skillGroups = [[NSMutableArray alloc] init];
+		return self.skillGroups;
 	}
 	else if ([rowset isEqualToString:@"skills"]) {
 		NSMutableArray *skills = [NSMutableArray array];
@@ -218,7 +158,7 @@ didStartElement:(NSString *)elementName
 	 attributes:(NSDictionary *)attributeDict {
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"requiredAttributes"])
-		[self.currentRow setRequiredAttributes:[[[EVESkillTreeRequiredAttributes alloc] init] autorelease]];
+		[self.currentRow setRequiredAttributes:[[EVESkillTreeRequiredAttributes alloc] init]];
 }
 
 - (void) parser:(NSXMLParser *)parser

@@ -9,27 +9,20 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVENotificationTextsItem : NSObject {
-	NSInteger notificationID;
-	NSDictionary* properties;
-}
+@interface EVENotificationTextsItem : NSObject
 @property (nonatomic) NSInteger notificationID;
-@property (nonatomic, retain) NSDictionary* properties;
+@property (nonatomic, strong) NSDictionary* properties;
 
 + (id) notificationsTextItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
 
 @end
 
-@interface EVENotificationTexts : EVERequest {
-	NSMutableArray *notifications;
-}
-@property (nonatomic, retain) NSArray *notifications;
+@interface EVENotificationTexts : EVERequest
+@property (nonatomic, strong) NSArray *notifications;
 
-+ (id) notificationTextsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr;
-+ (id) notificationTextsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids target:(id)target action:(SEL)action object:(id)object;
++ (id) notificationTextsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 
 @end
 

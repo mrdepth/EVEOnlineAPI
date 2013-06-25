@@ -10,40 +10,22 @@
 
 
 @implementation EVEServerStatus
-@synthesize serverOpen;
-@synthesize onlinePlayers;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) serverStatusWithError:(NSError **)errorPtr {
-	return [[[EVEServerStatus alloc] initWithError:errorPtr] autorelease];
++ (id) serverStatusWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+	return [[EVEServerStatus alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-+ (id) serverStatusWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	return [[[EVEServerStatus alloc] initWithTarget:target action:action object:aObject] autorelease];
-}
-
-- (id) initWithError:(NSError **)errorPtr {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/server/ServerStatus.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleShort
-							error:errorPtr]) {
+							error:errorPtr
+				  progressHandler:progressHandler]) {
 	}
 	return self;
-}
-
-- (id) initWithTarget:(id)target action:(SEL)action object:(id)aObject {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/server/ServerStatus.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleShort
-						   target:target
-						   action:action object:aObject]) {
-	}
-	return self;
-}
-
-- (void) dealloc {
-	[super dealloc];
 }
 
 #pragma mark NSXMLParserDelegate

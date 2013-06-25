@@ -10,29 +10,9 @@
 
 static EVEDBDatabase *singleton;
 
-static int callback(void *pArg, int argc, char **argv, char **azColName){
-	RequestArgument *requestArg = (RequestArgument*) pArg;
-	NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-	for (int i = 0; i < argc; i++) {
-		if (argv[i] && azColName[i]) {
-			NSString *value = [[NSString alloc] initWithCString:argv[i] encoding:NSUTF8StringEncoding];
-			NSString *key = [[NSString alloc] initWithCString:azColName[i] encoding:NSUTF8StringEncoding];
-			[dic setValue:value
-				   forKey:key];
-			[value release];
-			[key release];
-		}
-	}
-	BOOL needsMore = YES;
-	if (requestArg->delegate)
-		requestArg->method(requestArg->delegate, requestArg->selector, dic, &needsMore);
-	else if (requestArg->resultBlock)
-		requestArg->resultBlock(dic, &needsMore);
-	requestArg->numRecords++;
-	[dic release];
-
-	return needsMore ? SQLITE_OK : SQLITE_DONE;
-}
+@interface EVEDBDatabase()
+@property (nonatomic, assign) sqlite3 *db;
+@end
 
 @implementation EVEDBDatabase
 
@@ -44,61 +24,45 @@ static int callback(void *pArg, int argc, char **argv, char **azColName){
 
 - (id) init {
 	if (self = [super init]) {
-		pDB = NULL;
+		_db = NULL;
 		NSString *databasePath = [[NSBundle mainBundle] pathForResource:@"evedb" ofType:@"sqlite"];
-		sqlite3_open([databasePath cStringUsingEncoding:NSUTF8StringEncoding], &pDB);
-		if (!pDB) {
-			[self release];
+		sqlite3_open([databasePath cStringUsingEncoding:NSUTF8StringEncoding], &_db);
+		if (!_db) {
 			return nil;
 		}
 	}
 	return self;
 }
 
-- (NSError*) execWithSQLRequest: (NSString*)sqlRequest target:(id) target action:(SEL) action {
-	RequestArgument arg;
-	arg.delegate = target;
-	arg.selector = action;
-	arg.method = [target methodForSelector:action];
-	arg.numRecords = 0;
-	arg.resultBlock = nil;
-	return [self execWithSQLRequest:sqlRequest argument:&arg];
-}
-
-- (NSError*) execWithSQLRequest: (NSString*)sqlRequest resultBlock:(EVEDBDatabaseResultBlock) block {
-	RequestArgument arg;
-	arg.delegate = nil;
-	arg.selector = nil;
-	arg.method = nil;
-	arg.numRecords = 0;
-	arg.resultBlock = block;
-	return [self execWithSQLRequest:sqlRequest argument:&arg];
-}
-
-- (NSError*) execWithSQLRequest: (NSString*)sqlRequest argument:(RequestArgument*) argument {
-	char *errmsg = NULL;
-	int rc;
+- (NSError*) execSQLRequest: (NSString*)sqlRequest resultBlock:(void (^)(sqlite3_stmt* stmt, BOOL *needsMore)) resultBlock {
 	@synchronized(self) {
-		rc = sqlite3_exec(pDB, [sqlRequest cStringUsingEncoding:NSUTF8StringEncoding], callback, argument, &errmsg);
+		sqlite3_stmt* stmt = NULL;
+		int result = sqlite3_prepare_v2(_db, [sqlRequest cStringUsingEncoding:NSUTF8StringEncoding], [sqlRequest lengthOfBytesUsingEncoding:NSUTF8StringEncoding], &stmt, NULL);
+		
+		if (!stmt) {
+			const char* text = sqlite3_errmsg(_db);
+			NSString* description = text ? [NSString stringWithCString:text encoding:NSUTF8StringEncoding] : nil;
+			NSError* error = [NSError errorWithDomain:EVEDBErrorDomain code:result userInfo:description ? @{NSLocalizedDescriptionKey : description} : nil];
+			return error;
+		}
+		
+		BOOL needsMore = YES;
+		int n = 0;
+		while (sqlite3_step(stmt) == SQLITE_ROW && needsMore) {
+			n++;
+			resultBlock(stmt, &needsMore);
+		}
+		
+		sqlite3_finalize(stmt);
+		return n == 0 ? [NSError errorWithDomain:EVEDBErrorDomain code:EVEDBErrorNothingFound userInfo:@{NSLocalizedDescriptionKey : EVEDBErrorNothingFoundText}] : nil;
 	}
-	if( rc!=SQLITE_OK ){
-		NSString *errorString = [NSString stringWithCString:errmsg encoding:NSUTF8StringEncoding];
-		NSError *error = [NSError errorWithDomain:EVEDBErrorDomain code:rc userInfo:[NSDictionary dictionaryWithObject:errorString forKey:NSLocalizedDescriptionKey]];
-		sqlite3_free(errmsg);
-		return error;
-	}
-	else if (argument->numRecords == 0)
-		return [NSError errorWithDomain:EVEDBErrorDomain code:EVEDBErrorNothingFound userInfo:[NSDictionary dictionaryWithObject:EVEDBErrorNothingFoundText forKey:NSLocalizedDescriptionKey]];
-	
-	return nil;
 }
 
 - (void) dealloc {
 	@synchronized(self) {
-		sqlite3_close(pDB);
+		sqlite3_close(_db);
 	}
 	singleton = nil;
-	[super dealloc];
 }
 
 @end

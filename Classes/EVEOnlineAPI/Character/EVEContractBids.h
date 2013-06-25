@@ -9,17 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEContractBidsItem : NSObject {
-	long long bidID;
-	NSInteger contractID;
-	NSInteger bidderID;
-	NSDate *dateBid;
-	float amount;
-}
+@interface EVEContractBidsItem : NSObject
 @property (nonatomic) long long bidID;
 @property (nonatomic) NSInteger contractID;
 @property (nonatomic) NSInteger bidderID;
-@property (nonatomic, retain) NSDate *dateBid;
+@property (nonatomic, strong) NSDate *dateBid;
 @property (nonatomic) float amount;
 
 + (id) contractBidsItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -27,13 +21,9 @@
 
 @end
 
-@interface EVEContractBids : EVERequest {
-	NSMutableArray *bidList;
-}
-@property (nonatomic, retain) NSArray *bidList;
+@interface EVEContractBids : EVERequest
+@property (nonatomic, strong) NSArray *bidList;
 
-+ (id) contractBidsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-+ (id) contractBidsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate target:(id)target action:(SEL)action object:(id)object;
++ (id) contractBidsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 @end
