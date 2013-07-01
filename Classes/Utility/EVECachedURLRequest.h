@@ -8,17 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
+#define EVECachedURLRequestErrorDomain @"EVECachedURLRequestErrorDomain"
+
 typedef enum {
 	EVERequestCacheStyleShort,
 	EVERequestCacheStyleModifiedShort,
 	EVERequestCacheStyleLong
 } EVERequestCacheStyle;
 
+
 @interface EVECachedURLRequest : NSObject
 
 @property (assign, nonatomic, readonly, getter = isCashed) BOOL cached;
 @property (strong, nonatomic) NSDate* cacheDate;
 @property (strong, nonatomic) NSDate* cacheExpireDate;
+
++ (void) setOfflineMode:(BOOL) offlineMode;
++ (BOOL) isOfflineMode;
 
 - (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
 - (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;

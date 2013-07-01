@@ -12,11 +12,21 @@
 
 #define DEFAULT_CACHE_TIME 60*60
 
+static BOOL offlineMode = NO;
+
 @interface EVECachedURLRequest()
 @property (assign, nonatomic, readwrite, getter = isCashed) BOOL cached;
 @end
 
 @implementation EVECachedURLRequest
+
++ (void) setOfflineMode:(BOOL) aOfflineMode {
+	offlineMode = aOfflineMode;
+}
+
++ (BOOL) isOfflineMode {
+	return offlineMode;
+}
 
 - (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [self initWithRequest:[NSURLRequest requestWithURL:url] cacheStyle:cacheStyle error:errorPtr progressHandler:progressHandler]) {
@@ -51,19 +61,26 @@
 		NSError* error = nil;
 
 		NSURLResponse* response = nil;
-		if (!data) {
-			data = [ASURLConnection sendSynchronousRequest:request returningResponse:&response error:&error progressHandler:progressHandler];
-			if (data) {
-				self.cacheDate = [NSDate date];
-				self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:DEFAULT_CACHE_TIME];
-			}
-			else if (cachedResponse && [[error domain] isEqualToString:@"NSURLErrorDomain"] && cacheStyle > EVERequestCacheStyleShort) {
-				self.cached = YES;
-				data = [cachedResponse data];
-			}
+		if (offlineMode) {
+			data = cachedResponse.data;
+			if (!data)
+				error = [NSError errorWithDomain:EVECachedURLRequestErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : NSLocalizedString(@"This page is not available in offline mode", nil)}];
 		}
-		else
-			self.cached = YES;
+		else {
+			if (!data) {
+				data = [ASURLConnection sendSynchronousRequest:request returningResponse:&response error:&error progressHandler:progressHandler];
+				if (data) {
+					self.cacheDate = [NSDate date];
+					self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:DEFAULT_CACHE_TIME];
+				}
+				else if (cachedResponse && [[error domain] isEqualToString:@"NSURLErrorDomain"] && cacheStyle > EVERequestCacheStyleShort) {
+					self.cached = YES;
+					data = [cachedResponse data];
+				}
+			}
+			else
+				self.cached = YES;
+		}
 		
 		if (data) {
 			error = [self parseData:data];
