@@ -94,6 +94,8 @@ static BOOL offlineMode = NO;
 		}
 		if (errorPtr)
 			*errorPtr = error;
+		if (error)
+			self = nil;
 	}
 	return self;
 }
