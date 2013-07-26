@@ -90,8 +90,7 @@ didStartElement:(NSString *)elementName
 		self.types = [NSMutableDictionary dictionary];
 	else if ([elementName isEqualToString:@"row"]) {
 		EVEC0rporationFactionItem* item = [EVEC0rporationFactionItem factionItemWithXMLAttributes:attributeDict];
-		NSString* typeID = [NSString stringWithFormat:@"%d", item.typeID];
-		[(NSMutableDictionary*) self.types setValue:item forKey:typeID];
+		((NSMutableDictionary*) self.types)[@(item.typeID)] = item;
 	}
 }
 

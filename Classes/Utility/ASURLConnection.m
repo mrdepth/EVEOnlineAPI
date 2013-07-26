@@ -10,7 +10,7 @@
 
 @interface ASURLConnection()<NSURLConnectionDataDelegate>
 @property (nonatomic, copy) void (^progressHandler)(CGFloat progress);
-@property (nonatomic, strong) NSURLResponse* response;
+@property (nonatomic, strong) NSHTTPURLResponse* response;
 @property (nonatomic, strong) NSError* error;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, strong) NSMutableData* data;
@@ -39,7 +39,7 @@
 		*response = connection.response;
 	if (error)
 		*error = connection.error;
-	return connection.data;
+	return !connection.error ? connection.data : nil;
 }
 
 @end
@@ -71,6 +71,10 @@
 	else
 		connection.data = [NSMutableData data];
 	connection.response = response;
+	if (response.statusCode >= 400)
+		connection.error = [NSError errorWithDomain:@"HTTP"
+											   code:response.statusCode
+										   userInfo:@{NSLocalizedDescriptionKey:[NSHTTPURLResponse localizedStringForStatusCode:response.statusCode]}];
 }
 
 - (void)connection:(ASURLConnection *)connection didReceiveData:(NSData *)data {

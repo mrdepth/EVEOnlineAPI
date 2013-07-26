@@ -102,7 +102,7 @@
 	if (!_skillsMap) {
 		_skillsMap = [[NSMutableDictionary alloc] initWithCapacity:self.skills.count];
 		for (EVECharacterSheetSkill* skill in self.skills)
-			[(NSMutableDictionary*)self.skillsMap setValue:skill forKey:[NSString stringWithFormat:@"%d", skill.typeID]];
+			[(NSMutableDictionary*)self.skillsMap setObject:skill forKey:@(skill.typeID)];
 	}
 	return _skillsMap;
 }

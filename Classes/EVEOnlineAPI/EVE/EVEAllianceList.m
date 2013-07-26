@@ -75,10 +75,10 @@
 }
 
 - (NSDictionary*) alliancesMap {
-	if (!self.alliancesMap) {
-		self.alliancesMap = [[NSMutableDictionary alloc] initWithCapacity:self.alliances.count];
+	if (!_alliancesMap) {
+		_alliancesMap = [[NSMutableDictionary alloc] initWithCapacity:self.alliances.count];
 		for (EVEAllianceListItem* item in self.alliances)
-			[self.alliancesMap setValue:item forKey:[NSString stringWithFormat:@"%d", item.allianceID]];
+			((NSMutableDictionary*) _alliancesMap)[@(item.allianceID)] = item;
 	}
 	return _alliancesMap;
 }

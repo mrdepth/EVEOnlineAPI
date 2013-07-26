@@ -48,7 +48,7 @@
 	if (!_mailingListsMap) {
 		_mailingListsMap = [[NSMutableDictionary alloc] initWithCapacity:self.mailingLists.count];
 		for (EVEMailingListsItem* item in self.mailingLists)
-			[_mailingListsMap setValue:item forKey:[NSString stringWithFormat:@"%d", item.listID]];
+			((NSMutableDictionary*)_mailingListsMap)[@(item.listID)] = item;
 	}
 	return _mailingListsMap;
 }

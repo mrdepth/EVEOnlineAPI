@@ -11,6 +11,6 @@
 
 @interface EVEDBInvType(Skill)
 
-- (float) skillpointsAtLevel:(NSInteger) level;
+- (float) skillPointsAtLevel:(NSInteger) level;
 
 @end

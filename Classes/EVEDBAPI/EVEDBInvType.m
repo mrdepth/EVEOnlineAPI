@@ -246,12 +246,12 @@
 - (NSMutableArray*) requiredSkills {
 	if (!_requiredSkills) {
 		_requiredSkills = [[NSMutableArray alloc] init];
-		NSArray* requirementIDs = [NSArray arrayWithObjects:@"182", @"183", @"184", @"1285", @"1289", @"1290", nil];
-		NSArray* skillLevelIDs = [NSArray arrayWithObjects:@"277", @"278", @"279", @"1286", @"1287", @"1288", nil];
+		NSArray* requirementIDs = [NSArray arrayWithObjects:@(182), @(183), @(184), @(1285), @(1289), @(1290), nil];
+		NSArray* skillLevelIDs = [NSArray arrayWithObjects:@(277), @(278), @(279), @(1286), @(1287), @(1288), nil];
 		for (int i = 0; i < 5; i++) {
-			EVEDBDgmTypeAttribute* attributeTypeID = [self.attributesDictionary valueForKey:[requirementIDs objectAtIndex:i]];
+			EVEDBDgmTypeAttribute* attributeTypeID = self.attributesDictionary[requirementIDs[i]];
 			if (attributeTypeID) {
-				EVEDBDgmTypeAttribute* attributeLevel = [self.attributesDictionary valueForKey:[skillLevelIDs objectAtIndex:i]];
+				EVEDBDgmTypeAttribute* attributeLevel = self.attributesDictionary[skillLevelIDs[i]];
 				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(NSInteger) attributeTypeID.value error:nil];
 				if (skill) {
 					skill.requiredLevel = attributeLevel.value;
@@ -350,7 +350,7 @@
 					 
 					 [typeAttribute setAttribute:attributeType];
 					 [attributeType setCategory:attributeCategory];
-					 [_attributesDictionary setObject:typeAttribute forKey:[NSString stringWithFormat:@"%d", attributeType.attributeID]];
+					 _attributesDictionary[@(attributeType.attributeID)] = typeAttribute;
 				 }];
 	
 	[_attributeCategories sortUsingSelector:@selector(compare:)];
@@ -368,7 +368,7 @@
 					 EVEDBDgmEffect *effect = [[EVEDBDgmEffect alloc] initWithStatement:stmt];
 					 
 					 [typeEffect setEffect:effect];
-					 [_effectsDictionary setValue:typeEffect forKey:[NSString stringWithFormat:@"%d", effect.effectID]];
+					 _effectsDictionary[@(effect.effectID)] = typeEffect;
 				 }];
 }
 
@@ -395,7 +395,7 @@
 
 - (float) requiredSP {
 	if (_requiredSP == 0.0 && self.requiredLevel > 0)
-		_requiredSP = [self skillpointsAtLevel:self.requiredLevel];
+		_requiredSP = [self skillPointsAtLevel:self.requiredLevel];
 	return _requiredSP;
 }
 
