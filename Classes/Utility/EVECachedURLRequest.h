@@ -22,6 +22,7 @@ typedef enum {
 @property (assign, nonatomic, readonly, getter = isCashed) BOOL cached;
 @property (strong, nonatomic) NSDate* cacheDate;
 @property (strong, nonatomic) NSDate* cacheExpireDate;
+@property (strong, nonatomic) NSURL* url;
 
 + (void) setOfflineMode:(BOOL) offlineMode;
 + (BOOL) isOfflineMode;

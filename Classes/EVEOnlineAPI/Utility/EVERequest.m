@@ -60,6 +60,12 @@
 - (NSError*) parseData: (NSData*) aData {
 	NSXMLParser *parser = [[NSXMLParser alloc] initWithData:aData];
 	[parser setDelegate:self];
+
+#ifdef LOG_REQUESTS
+	NSString *dir = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES)[0];
+	NSString* name = [[self.url lastPathComponent] stringByDeletingPathExtension];
+	[aData writeToFile:[dir stringByAppendingPathComponent:name] atomically:YES];
+#endif
 	
 	self.rowsets = [[NSMutableArray alloc] init];
 	self.rowsetObjects = [[NSMutableArray alloc] init];

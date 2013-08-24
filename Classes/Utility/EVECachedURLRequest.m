@@ -47,6 +47,8 @@ static BOOL offlineMode = NO;
 
 - (id) initWithRequest:(NSURLRequest*) request cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
 	if (self = [super init]) {
+		self.url = request.URL;
+		
 		NSURLCache* cache = [NSURLCache sharedURLCache];
 		NSCachedURLResponse* cachedResponse = [cache cachedResponseForRequest:request];
 		
