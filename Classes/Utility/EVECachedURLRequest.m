@@ -86,7 +86,7 @@ static BOOL offlineMode = NO;
 		
 		if (data) {
 			error = [self parseData:data];
-			if (!self.cached && response && cacheStyle > EVERequestCacheStyleShort) {
+			if (!self.cached && response/* && cacheStyle > EVERequestCacheStyleShort*/) {
 				cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response
 																		  data:data
 																	  userInfo:@{@"cacheDate": self.cacheDate, @"cacheExpireDate": self.cacheExpireDate}
