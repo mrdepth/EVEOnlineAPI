@@ -13,7 +13,7 @@
 @implementation EVEImage
 
 + (NSURL*) characterPortraitURLWithCharacterID: (NSInteger) characterID size: (EVEImageSize) size error:(NSError **)errorPtr {
-	if (size != EVEImageSize32 && size != EVEImageSize64 && size != EVEImageSize128 && size != EVEImageSize256) {
+	if (size != EVEImageSize32 && size != EVEImageSize64 && size != EVEImageSize128 && size != EVEImageSize200 && size != EVEImageSize256 && size != EVEImageSize512 && size != EVEImageSize1024) {
 		if (errorPtr)
 			*errorPtr = [NSError errorWithDomain:EVEOnlineErrorDomain code:EVEErrorCodeInvalidImageSize userInfo:[NSDictionary dictionaryWithObject:EVEErrorCodeInvalidImageSizeText forKey:NSLocalizedDescriptionKey]];
 		return nil;

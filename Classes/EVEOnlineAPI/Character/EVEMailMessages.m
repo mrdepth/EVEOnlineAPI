@@ -24,7 +24,7 @@
 		self.toCorpOrAllianceID = [[attributeDict valueForKey:@"toCorpOrAllianceID"] integerValue];
 		
 		NSString* toCharacterIDsString = [attributeDict valueForKey:@"toCharacterIDs"];
-		self.toCharacterIDs = toCharacterIDsString.length > 1 ? [toCharacterIDsString componentsSeparatedByString:@","] : 0;
+		self.toCharacterIDs = toCharacterIDsString.length > 1 ? [toCharacterIDsString componentsSeparatedByString:@","] : nil;
 
 		NSString* toListIDsString = [attributeDict valueForKey:@"toListID"];
 		self.toListID = toListIDsString.length > 1 ? [toListIDsString componentsSeparatedByString:@","] : nil;

@@ -12,7 +12,10 @@ typedef enum {
 	EVEImageSize32 = 32,
 	EVEImageSize64 = 64,
 	EVEImageSize128 = 128,
-	EVEImageSize256 = 256
+	EVEImageSize200 = 200,
+	EVEImageSize256 = 256,
+	EVEImageSize512 = 512,
+	EVEImageSize1024 = 1024
 } EVEImageSize;
 
 @interface EVEImage : UIImage {
