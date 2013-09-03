@@ -56,7 +56,7 @@ static BOOL offlineMode = NO;
 		if (cachedResponse) {
 			self.cacheExpireDate = [cachedResponse.userInfo valueForKey:@"cacheExpireDate"];
 			self.cacheDate = [cachedResponse.userInfo valueForKey:@"cacheDate"];
-			if ([self.cacheExpireDate laterDate:[NSDate date]] == self.cacheExpireDate)
+			if (self.cacheExpireDate && [self.cacheExpireDate laterDate:[NSDate date]] == self.cacheExpireDate)
 				data = cachedResponse.data;
 		}
 		
