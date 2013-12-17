@@ -24,6 +24,23 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.contactID forKey:@"contactID"];
+	[aCoder encodeObject:self.contactName forKey:@"contactName"];
+	[aCoder encodeFloat:self.standing forKey:@"standing"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.contactID = [aDecoder decodeIntegerForKey:@"contactID"];
+		self.contactName = [aDecoder decodeObjectForKey:@"contactName"];
+		self.standing = [aDecoder decodeFloatForKey:@"standing"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -33,11 +50,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) corpContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) corpContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorpContactList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/ContactList.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
 							error:errorPtr
@@ -70,4 +87,21 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.corporateContactList forKey:@"corporateContactList"];
+	[aCoder encodeObject:self.allianceContactList forKey:@"allianceContactList"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.corporateContactList = [aDecoder decodeObjectForKey:@"corporateContactList"];
+		self.allianceContactList = [aDecoder decodeObjectForKey:@"allianceContactList"];
+	}
+	return self;
+}
+
 @end

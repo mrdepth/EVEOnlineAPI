@@ -10,6 +10,6 @@
 
 @interface ASURLConnection : NSURLConnection
 
-+ (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

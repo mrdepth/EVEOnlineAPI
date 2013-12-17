@@ -16,7 +16,7 @@
 @interface RSS : EVECachedURLRequest<NSXMLParserDelegate>
 @property (nonatomic, strong) RSSFeed *feed;
 
-+ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

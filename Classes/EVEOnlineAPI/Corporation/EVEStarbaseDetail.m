@@ -10,9 +10,52 @@
 
 
 @implementation EVEStarbaseDetailGeneralSettings
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.usageFlags forKey:@"usageFlags"];
+	[aCoder encodeInteger:self.deployFlags forKey:@"deployFlags"];
+	[aCoder encodeBool:self.allowCorporationMembers forKey:@"allowCorporationMembers"];
+	[aCoder encodeBool:self.allowAllianceMembers forKey:@"allowAllianceMembers"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.usageFlags = [aDecoder decodeIntegerForKey:@"usageFlags"];
+		self.deployFlags = [aDecoder decodeIntegerForKey:@"deployFlags"];
+		self.allowCorporationMembers = [aDecoder decodeBoolForKey:@"allowCorporationMembers"];
+		self.allowAllianceMembers = [aDecoder decodeBoolForKey:@"allowAllianceMembers"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVEStarbaseDetailCombatSettings
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.useStandingsFromOwnerID forKey:@"useStandingsFromOwnerID"];
+	[aCoder encodeInteger:self.onStandingDropStading forKey:@"onStandingDropStading"];
+	[aCoder encodeBool:self.onStatusDropEnabled forKey:@"onStatusDropEnabled"];
+	[aCoder encodeInteger:self.onStatusDropStanding forKey:@"onStatusDropStanding"];
+	[aCoder encodeBool:self.onAggressionEnabled forKey:@"onAggressionEnabled"];
+	[aCoder encodeInteger:self.onCorporationWarEnabled forKey:@"onCorporationWarEnabled"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.useStandingsFromOwnerID = [aDecoder decodeIntegerForKey:@"useStandingsFromOwnerID"];
+		self.onStandingDropStading = [aDecoder decodeIntegerForKey:@"onStandingDropStading"];
+		self.onStatusDropEnabled = [aDecoder decodeBoolForKey:@"onStatusDropEnabled"];
+		self.onStatusDropStanding = [aDecoder decodeIntegerForKey:@"onStatusDropStanding"];
+		self.onAggressionEnabled = [aDecoder decodeBoolForKey:@"onAggressionEnabled"];
+		self.onCorporationWarEnabled = [aDecoder decodeIntegerForKey:@"onCorporationWarEnabled"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -29,6 +72,22 @@
 	}
 	return self;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.quantity forKey:@"quantity"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.quantity = [aDecoder decodeIntegerForKey:@"quantity"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -38,11 +97,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEStarbaseDetail alloc] initWithKeyID:keyID vCode:vCode characterID:characterID itemID:itemID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/StarbaseDetail.xml.aspx?keyID=%d&vCode=%@&characterID=%d&itemID=%qi&version=2", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, itemID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -115,6 +174,30 @@ didStartElement:(NSString *)elementName
 		self.generalSettings.allowCorporationMembers = (BOOL) [self.text integerValue];
 	else if ([elementName isEqualToString:@"allowAllianceMembers"])
 		self.generalSettings.allowAllianceMembers = (BOOL) [self.text integerValue];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeInteger:self.state forKey:@"state"];
+	[aCoder encodeObject:self.stateTimestamp forKey:@"stateTimestamp"];
+	[aCoder encodeObject:self.onlineTimestamp forKey:@"onlineTimestamp"];
+	[aCoder encodeObject:self.generalSettings forKey:@"generalSettings"];
+	[aCoder encodeObject:self.combatSettings forKey:@"combatSettings"];
+	[aCoder encodeObject:self.fuel forKey:@"fuel"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.state = [aDecoder decodeIntegerForKey:@"state"];
+		self.stateTimestamp = [aDecoder decodeObjectForKey:@"stateTimestamp"];
+		self.onlineTimestamp = [aDecoder decodeObjectForKey:@"onlineTimestamp"];
+		self.generalSettings = [aDecoder decodeObjectForKey:@"generalSettings"];
+		self.combatSettings = [aDecoder decodeObjectForKey:@"combatSettings"];
+		self.fuel = [aDecoder decodeObjectForKey:@"fuel"];
+	}
+	return self;
 }
 
 @end

@@ -9,7 +9,7 @@
 #import "ASURLConnection.h"
 
 @interface ASURLConnection()<NSURLConnectionDataDelegate>
-@property (nonatomic, copy) void (^progressHandler)(CGFloat progress);
+@property (nonatomic, copy) void (^progressHandler)(CGFloat progress, BOOL* stop);
 @property (nonatomic, strong) NSHTTPURLResponse* response;
 @property (nonatomic, strong) NSError* error;
 @property (nonatomic, assign) BOOL finished;
@@ -23,7 +23,7 @@
 
 @implementation ASURLConnection
 
-+ (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	ASURLConnectionDelegate* delegate = [[ASURLConnectionDelegate alloc] init];
 	ASURLConnection* connection = [[ASURLConnection alloc] initWithRequest:request delegate:delegate startImmediately:NO];
 
@@ -78,9 +78,14 @@
 }
 
 - (void)connection:(ASURLConnection *)connection didReceiveData:(NSData *)data {
+	BOOL stop = NO;
 	[connection.data  appendBytes:[data bytes] length:data.length];
 	if (connection.progressHandler && connection.contentLength > 0)
-		connection.progressHandler((float) connection.data.length / (float) connection.contentLength);
+		connection.progressHandler((float) connection.data.length / (float) connection.contentLength, &stop);
+	if (stop) {
+		[connection cancel];
+		connection.finished = YES;
+	}
 }
 
 - (void)connectionDidFinishLoading:(ASURLConnection *)connection {

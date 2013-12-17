@@ -33,6 +33,33 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.messageID forKey:@"messageID"];
+	[aCoder encodeInteger:self.senderID forKey:@"senderID"];
+	[aCoder encodeObject:self.sentDate forKey:@"sentDate"];
+	[aCoder encodeObject:self.title forKey:@"title"];
+	[aCoder encodeInteger:self.toCorpOrAllianceID forKey:@"toCorpOrAllianceID"];
+	[aCoder encodeObject:self.toCharacterIDs forKey:@"toCharacterIDs"];
+	[aCoder encodeObject:self.toListID forKey:@"toListID"];
+	[aCoder encodeBool:self.read forKey:@"read"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.messageID = [aDecoder decodeIntegerForKey:@"messageID"];
+		self.senderID = [aDecoder decodeIntegerForKey:@"senderID"];
+		self.sentDate = [aDecoder decodeObjectForKey:@"sentDate"];
+		self.title = [aDecoder decodeObjectForKey:@"title"];
+		self.toCorpOrAllianceID = [aDecoder decodeIntegerForKey:@"toCorpOrAllianceID"];
+		self.toCharacterIDs = [aDecoder decodeObjectForKey:@"toCharacterIDs"];
+		self.toListID = [aDecoder decodeObjectForKey:@"toListID"];
+		self.read = [aDecoder decodeBoolForKey:@"read"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -42,11 +69,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) mailMessagesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) mailMessagesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMailMessages alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailMessages.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
 							error:errorPtr
@@ -55,7 +82,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"messages"]) {
@@ -73,6 +100,20 @@
 		return mailMessagesItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.mailMessages forKey:@"mailMessages"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.mailMessages = [aDecoder decodeObjectForKey:@"mailMessages"];
+	}
+	return self;
 }
 
 @end

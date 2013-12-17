@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECharacterSheetAttributes : NSObject
+@interface EVECharacterSheetAttributes : NSObject<NSCoding>
 @property NSInteger intelligence;
 @property NSInteger memory;
 @property NSInteger charisma;
@@ -21,7 +21,7 @@
 
 #pragma mark --
 
-@interface EVECharacterSheetAttributeEnhancer : NSObject
+@interface EVECharacterSheetAttributeEnhancer : NSObject<NSCoding>
 @property (nonatomic) EVECharacterAttribute attribute;
 @property (nonatomic, copy) NSString *augmentatorName;
 @property (nonatomic) NSInteger augmentatorValue;
@@ -29,7 +29,7 @@
 
 #pragma mark --
 
-@interface EVECharacterSheetSkill : NSObject
+@interface EVECharacterSheetSkill : NSObject<NSCoding>
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger skillpoints;
 @property (nonatomic) NSInteger level;
@@ -42,7 +42,7 @@
 
 #pragma mark --
 
-@interface EVECharacterSheetRole : NSObject
+@interface EVECharacterSheetRole : NSObject<NSCoding>
 @property (nonatomic) NSInteger roleID;
 @property (nonatomic, copy) NSString *roleName;
 
@@ -53,7 +53,7 @@
 
 #pragma mark --
 
-@interface EVECharacterSheetCorporationTitle : NSObject
+@interface EVECharacterSheetCorporationTitle : NSObject<NSCoding>
 @property (nonatomic) NSInteger titleID;
 @property (nonatomic, copy) NSString *titleName;
 
@@ -91,7 +91,7 @@
 @property (nonatomic, strong) NSMutableArray *corporationTitles;
 @property (nonatomic, strong) NSDictionary *skillsMap;
 
-+ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

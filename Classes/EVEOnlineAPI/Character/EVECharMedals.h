@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECharCurrentCorporationMedal : NSObject
+@interface EVECharCurrentCorporationMedal : NSObject<NSCoding>
 @property (nonatomic) NSInteger medalID;
 @property (nonatomic, copy) NSString *reason;
 @property (nonatomic, copy) NSString *status;
@@ -21,7 +21,7 @@
 
 @end
 
-@interface EVECharOtherCorporationsMedal : NSObject
+@interface EVECharOtherCorporationsMedal : NSObject<NSCoding>
 @property (nonatomic) NSInteger medalID;
 @property (nonatomic, copy) NSString *reason;
 @property (nonatomic, copy) NSString *status;
@@ -40,8 +40,8 @@
 @property (nonatomic, strong) NSArray *currentCorporation;
 @property (nonatomic, strong) NSArray *otherCorporations;
 
-+ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end
 

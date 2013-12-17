@@ -15,11 +15,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) serverStatusWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) serverStatusWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEServerStatus alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/server/ServerStatus.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleShort
 							error:errorPtr
@@ -39,6 +39,22 @@
 		self.serverOpen = [self.text compare:@"True" options:NSCaseInsensitiveSearch] == NSOrderedSame ? TRUE : FALSE;
 	else if ([elementName isEqualToString:@"onlinePlayers"])
 		self.onlinePlayers = [self.text integerValue];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeBool:self.serverOpen forKey:@"serverOpen"];
+	[aCoder encodeInteger:self.onlinePlayers forKey:@"onlinePlayers"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.serverOpen = [aDecoder decodeBoolForKey:@"serverOpen"];
+		self.onlinePlayers = [aDecoder decodeIntegerForKey:@"onlinePlayers"];
+	}
+	return self;
 }
 
 @end

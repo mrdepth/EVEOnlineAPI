@@ -26,6 +26,27 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.shareholderID forKey:@"shareholderID"];
+	[aCoder encodeObject:self.shareholderName forKey:@"shareholderName"];
+	[aCoder encodeInteger:self.shareholderCorporationID forKey:@"shareholderCorporationID"];
+	[aCoder encodeObject:self.shareholderCorporationName forKey:@"shareholderCorporationName"];
+	[aCoder encodeInteger:self.shares forKey:@"shares"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.shareholderID = [aDecoder decodeIntegerForKey:@"shareholderID"];
+		self.shareholderName = [aDecoder decodeObjectForKey:@"shareholderName"];
+		self.shareholderCorporationID = [aDecoder decodeIntegerForKey:@"shareholderCorporationID"];
+		self.shareholderCorporationName = [aDecoder decodeObjectForKey:@"shareholderCorporationName"];
+		self.shares = [aDecoder decodeIntegerForKey:@"shares"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -44,6 +65,23 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.shareholderID forKey:@"shareholderID"];
+	[aCoder encodeObject:self.shareholderName forKey:@"shareholderName"];
+	[aCoder encodeInteger:self.shares forKey:@"shares"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.shareholderID = [aDecoder decodeIntegerForKey:@"shareholderID"];
+		self.shareholderName = [aDecoder decodeObjectForKey:@"shareholderName"];
+		self.shares = [aDecoder decodeIntegerForKey:@"shares"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -53,11 +91,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEShareholders alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Shareholders.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -93,6 +131,22 @@
 		return shareholdersCorporationsItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.characters forKey:@"characters"];
+	[aCoder encodeObject:self.corporations forKey:@"corporations"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.characters = [aDecoder decodeObjectForKey:@"characters"];
+		self.corporations = [aDecoder decodeObjectForKey:@"corporations"];
+	}
+	return self;
 }
 
 @end

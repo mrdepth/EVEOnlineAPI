@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEShareholdersCharactersItem : NSObject
+@interface EVEShareholdersCharactersItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger shareholderID;
 @property (nonatomic, copy) NSString *shareholderName;
 @property (nonatomic) NSInteger shareholderCorporationID;
@@ -22,7 +22,7 @@
 @end
 
 
-@interface EVEShareholdersCorporationsItem : NSObject
+@interface EVEShareholdersCorporationsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger shareholderID;
 @property (nonatomic, copy) NSString *shareholderName;
 @property (nonatomic) NSInteger shares;
@@ -37,7 +37,7 @@
 @property (nonatomic, strong) NSArray *characters;
 @property (nonatomic, strong) NSArray *corporations;
 
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

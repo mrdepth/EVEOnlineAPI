@@ -23,6 +23,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.name forKey:@"name"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVECharacterName
@@ -32,11 +47,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) characterNameWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) characterNameWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECharacterName alloc] initWithIDs:ids error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSString* body = [NSString stringWithFormat:@"ids=%@", [ids componentsJoinedByString:@","]];
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterName.xml.aspx",
 														EVEOnlineAPIHost]]
@@ -69,4 +84,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.characters forKey:@"characters"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.characters = [aDecoder decodeObjectForKey:@"characters"];
+	}
+	return self;
+}
+
 @end

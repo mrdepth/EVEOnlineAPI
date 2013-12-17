@@ -25,6 +25,25 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInteger:self.shipKills forKey:@"shipKills"];
+	[aCoder encodeInteger:self.factionKills forKey:@"factionKills"];
+	[aCoder encodeInteger:self.podKills forKey:@"podKills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.shipKills = [aDecoder decodeIntegerForKey:@"shipKills"];
+		self.factionKills = [aDecoder decodeIntegerForKey:@"factionKills"];
+		self.podKills = [aDecoder decodeIntegerForKey:@"podKills"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -34,11 +53,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) killsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) killsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEKills alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Kills.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -66,4 +85,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.solarSystems forKey:@"solarSystems"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.solarSystems = [aDecoder decodeObjectForKey:@"solarSystems"];
+	}
+	return self;
+}
+
 @end

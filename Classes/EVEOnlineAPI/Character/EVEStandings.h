@@ -10,7 +10,7 @@
 #import "EVERequest.h"
 
 
-@interface EVEStandingsItem : NSObject
+@interface EVEStandingsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger fromID;
 @property (nonatomic, copy) NSString *fromName;
 @property (nonatomic) float standing;
@@ -20,7 +20,7 @@
 @end
 
 
-@interface EVEStandingsNPCStandings : NSObject
+@interface EVEStandingsNPCStandings : NSObject<NSCoding>
 @property (nonatomic, strong) NSMutableArray *agents;
 @property (nonatomic, strong) NSMutableArray *NPCCorporations;
 @property (nonatomic, strong) NSMutableArray *factions;
@@ -31,7 +31,7 @@
 @interface EVEStandings : EVERequest
 @property (nonatomic, strong) EVEStandingsNPCStandings *standings;
 
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

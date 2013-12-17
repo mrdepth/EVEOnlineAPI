@@ -9,6 +9,22 @@
 #import "EVESkillTree.h"
 
 @implementation EVESkillTreeRequiredAttributes
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.primaryAttribute forKey:@"primaryAttribute"];
+	[aCoder encodeInteger:self.secondaryAttribute forKey:@"secondaryAttribute"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.primaryAttribute = [aDecoder decodeIntegerForKey:@"primaryAttribute"];
+		self.secondaryAttribute = [aDecoder decodeIntegerForKey:@"secondaryAttribute"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -22,6 +38,21 @@
 	if (self = [super init]) {
 		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
 		self.skillLevel = [[attributeDict valueForKey:@"skillLevel"] integerValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.skillLevel forKey:@"skillLevel"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.skillLevel = [aDecoder decodeIntegerForKey:@"skillLevel"];
 	}
 	return self;
 }
@@ -43,6 +74,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.bonusType forKey:@"bonusType"];
+	[aCoder encodeInteger:self.bonusValue forKey:@"bonusValue"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.bonusType = [aDecoder decodeObjectForKey:@"bonusType"];
+		self.bonusValue = [aDecoder decodeIntegerForKey:@"bonusValue"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -56,6 +102,23 @@
 	if (self = [super init]) {
 		self.groupID = [[attributeDict valueForKey:@"groupID"] integerValue];
 		self.groupName = [attributeDict valueForKey:@"groupName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeObject:self.groupName forKey:@"groupName"];
+	[aCoder encodeObject:self.skills forKey:@"skills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.groupName = [aDecoder decodeObjectForKey:@"groupName"];
+		self.skills = [aDecoder decodeObjectForKey:@"skills"];
 	}
 	return self;
 }
@@ -79,6 +142,35 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeObject:self.typeName forKey:@"typeName"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+	[aCoder encodeInteger:self.rank forKey:@"rank"];
+	[aCoder encodeObject:self.requiredSkills forKey:@"requiredSkills"];
+	[aCoder encodeObject:self.requiredAttributes forKey:@"requiredAttributes"];
+	[aCoder encodeObject:self.skillBonusCollection forKey:@"skillBonusCollection"];
+	[aCoder encodeBool:self.published forKey:@"published"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+		self.rank = [aDecoder decodeIntegerForKey:@"rank"];
+		self.requiredSkills = [aDecoder decodeObjectForKey:@"requiredSkills"];
+		self.requiredAttributes = [aDecoder decodeObjectForKey:@"requiredAttributes"];
+		self.skillBonusCollection = [aDecoder decodeObjectForKey:@"skillBonusCollection"];
+		self.published = [aDecoder decodeBoolForKey:@"published"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -88,11 +180,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) skillTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) skillTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVESkillTree alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/SkillTree.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -196,6 +288,20 @@ didStartElement:(NSString *)elementName
 	}
 	else if ([elementName isEqualToString:@"cachedUntil"])
 		self.cachedUntil = [NSDate dateWithTimeInterval:60*60*24*14 sinceDate:self.currentTime];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.skillGroups forKey:@"skillGroups"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.skillGroups = [aDecoder decodeObjectForKey:@"skillGroups"];
+	}
+	return self;
 }
 
 @end

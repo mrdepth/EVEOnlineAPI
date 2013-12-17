@@ -24,6 +24,25 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -33,11 +52,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) charactersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) charactersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECharacters alloc] initWithKeyID:keyID vCode:vCode error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void (^)(CGFloat))progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/account/Characters.xml.aspx?keyID=%d&vCode=%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -46,7 +65,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"characters"]) {
@@ -64,6 +83,20 @@
 	}
 	else
 		return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.characters forKey:@"characters"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.characters = [aDecoder decodeObjectForKey:@"characters"];
+	}
+	return self;
 }
 
 @end

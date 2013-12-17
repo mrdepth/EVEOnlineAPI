@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEMemberSecurityMember : NSObject
+@interface EVEMemberSecurityMember : NSObject<NSCoding>
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *roles;
@@ -28,7 +28,7 @@
 @end
 
 
-@interface EVEMemberSecurityRoleItem : NSObject
+@interface EVEMemberSecurityRoleItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger roleID;
 @property (nonatomic, copy) NSString *roleName;
 
@@ -38,7 +38,7 @@
 @end
 
 
-@interface EVEMemberSecurityTitleItem : NSObject
+@interface EVEMemberSecurityTitleItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger titleID;
 @property (nonatomic, copy) NSString *titleName;
 
@@ -51,7 +51,7 @@
 @interface EVEMemberSecurity : EVERequest
 @property (nonatomic, strong) NSArray *members;
 
-+ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

@@ -26,6 +26,27 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeObject:self.solarSystemName forKey:@"solarSystemName"];
+	[aCoder encodeInteger:self.occupyingFactionID forKey:@"occupyingFactionID"];
+	[aCoder encodeObject:self.occupyingFactionName forKey:@"occupyingFactionName"];
+	[aCoder encodeBool:self.contested forKey:@"contested"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.solarSystemName = [aDecoder decodeObjectForKey:@"solarSystemName"];
+		self.occupyingFactionID = [aDecoder decodeIntegerForKey:@"occupyingFactionID"];
+		self.occupyingFactionName = [aDecoder decodeObjectForKey:@"occupyingFactionName"];
+		self.contested = [aDecoder decodeBoolForKey:@"contested"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -35,11 +56,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarSystemsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) facWarSystemsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEFacWarSystems alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/FacWarSystems.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -68,4 +89,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.solarSystems forKey:@"solarSystems"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.solarSystems = [aDecoder decodeObjectForKey:@"solarSystems"];
+	}
+	return self;
+}
+
 @end

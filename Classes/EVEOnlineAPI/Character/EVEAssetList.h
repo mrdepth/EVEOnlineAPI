@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAssetListItem : NSObject
+@interface EVEAssetListItem : NSObject<NSCoding>
 @property (nonatomic) long long itemID;
 @property (nonatomic) long long locationID;
 @property (nonatomic) NSInteger typeID;
@@ -17,7 +17,6 @@
 @property (nonatomic) EVEInventoryFlag flag;
 @property (nonatomic) BOOL singleton;
 @property (nonatomic, strong) NSMutableArray *contents;
-@property (nonatomic, weak) EVEAssetListItem* parent;
 
 + (id) assetListItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -29,7 +28,7 @@
 @interface EVEAssetList : EVERequest
 @property (nonatomic, strong) NSArray *assets;
 
-+ (id) assetListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) assetListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

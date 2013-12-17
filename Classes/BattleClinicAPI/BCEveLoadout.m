@@ -12,11 +12,11 @@
 
 @implementation BCEveLoadout
 
-+ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[BCEveLoadout alloc] initWithAPIKey:apiKey loadoutID:loadoutID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)aLoadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)aLoadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSString *s = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><eveLoadoutGet xmlns=\"urn:api\"><applicationKey>%@</applicationKey><id>%d</id></eveLoadoutGet></soap:Body></soap:Envelope>",
 				   apiKey,
 				   aLoadoutID];

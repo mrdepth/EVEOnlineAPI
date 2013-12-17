@@ -35,7 +35,7 @@ typedef enum {
 @interface EVEC0rporationFaction : EVECachedURLRequest<NSXMLParserDelegate>
 @property (nonatomic, strong) NSDictionary* types;
 
-+ (id) factionWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) factionWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

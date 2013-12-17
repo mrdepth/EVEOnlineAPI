@@ -15,11 +15,11 @@
 
 @implementation NAPISearch
 
-+ (id) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[NAPISearch alloc] initWithCriteria:criteria order:order error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableArray* arguments = [[NSMutableArray alloc] init];
 	for (NSString* key in [criteria allKeys])
 		[arguments addObject:[NSString stringWithFormat:@"%@=%@", key, [criteria valueForKey:key]]];

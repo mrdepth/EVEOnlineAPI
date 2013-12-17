@@ -33,6 +33,41 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.date forKey:@"date"];
+	[aCoder encodeInteger:self.refID forKey:@"refID"];
+	[aCoder encodeInteger:self.refTypeID forKey:@"refTypeID"];
+	[aCoder encodeObject:self.ownerName1 forKey:@"ownerName1"];
+	[aCoder encodeInteger:self.ownerID1 forKey:@"ownerID1"];
+	[aCoder encodeObject:self.ownerName2 forKey:@"ownerName2"];
+	[aCoder encodeInteger:self.ownerID2 forKey:@"ownerID2"];
+	[aCoder encodeObject:self.argName1 forKey:@"argName1"];
+	[aCoder encodeInteger:self.argID1 forKey:@"argID1"];
+	[aCoder encodeFloat:self.amount forKey:@"amount"];
+	[aCoder encodeFloat:self.balance forKey:@"balance"];
+	[aCoder encodeObject:self.reason forKey:@"reason"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.date = [aDecoder decodeObjectForKey:@"date"];
+		self.refID = [aDecoder decodeIntegerForKey:@"refID"];
+		self.refTypeID = [aDecoder decodeIntegerForKey:@"refTypeID"];
+		self.ownerName1 = [aDecoder decodeObjectForKey:@"ownerName1"];
+		self.ownerID1 = [aDecoder decodeIntegerForKey:@"ownerID1"];
+		self.ownerName2 = [aDecoder decodeObjectForKey:@"ownerName2"];
+		self.ownerID2 = [aDecoder decodeIntegerForKey:@"ownerID2"];
+		self.argName1 = [aDecoder decodeObjectForKey:@"argName1"];
+		self.argID1 = [aDecoder decodeIntegerForKey:@"argID1"];
+		self.amount = [aDecoder decodeFloatForKey:@"amount"];
+		self.balance = [aDecoder decodeFloatForKey:@"balance"];
+		self.reason = [aDecoder decodeObjectForKey:@"reason"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -42,11 +77,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorpWalletJournal alloc] initWithKeyID:keyID vCode:vCode characterID:characterID accountKey:accountKey fromID:fromID rowCount:rowCount error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/WalletJournal.xml.aspx?keyID=%d&vCode=%@&characterID=%d&accountKey=%d%@%@",
 														EVEOnlineAPIHost,
 														keyID,
@@ -80,6 +115,20 @@
 		return corpWalletJournalItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.corpWalletJournal forKey:@"corpWalletJournal"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.corpWalletJournal = [aDecoder decodeObjectForKey:@"corpWalletJournal"];
+	}
+	return self;
 }
 
 @end

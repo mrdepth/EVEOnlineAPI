@@ -27,6 +27,29 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	[aCoder encodeObject:self.stationName forKey:@"stationName"];
+	[aCoder encodeInteger:self.stationTypeID forKey:@"stationTypeID"];
+	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
+		self.stationTypeID = [aDecoder decodeIntegerForKey:@"stationTypeID"];
+		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -36,11 +59,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) conquerableStationListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) conquerableStationListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEConquerableStationList alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ConquerableStationList.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -68,4 +91,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.outposts forKey:@"outposts"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.outposts = [aDecoder decodeObjectForKey:@"outposts"];
+	}
+	return self;
+}
+
 @end

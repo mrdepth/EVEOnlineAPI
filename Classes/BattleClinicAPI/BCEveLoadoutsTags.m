@@ -11,11 +11,11 @@
 
 @implementation BCEveLoadoutsTags
 
-+ (id) eveLoadoutsTagsWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) eveLoadoutsTagsWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[BCEveLoadoutsTags alloc] initWithAPIKey:apiKey error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithAPIKey:(NSString*) apiKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSString *s = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><eveLoadoutsGetTags xmlns=\"urn:api\"><applicationKey>%@</applicationKey></eveLoadoutsGetTags></soap:Body></soap:Envelope>",
 				   apiKey];
 	NSData *bodyData = [s dataUsingEncoding:NSUTF8StringEncoding];

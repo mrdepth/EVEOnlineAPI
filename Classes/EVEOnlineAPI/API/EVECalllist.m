@@ -24,6 +24,23 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -44,6 +61,27 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.accessMask forKey:@"accessMask"];
+	[aCoder encodeInteger:self.type forKey:@"type"];
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.accessMask = [aDecoder decodeIntegerForKey:@"accessMask"];
+		self.type = [aDecoder decodeIntegerForKey:@"type"];
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -54,11 +92,11 @@
 }
 
 
-+ (id) calllistWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) calllistWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECalllist alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/calllist.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -67,7 +105,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"callGroups"]) {
@@ -96,5 +134,20 @@
 		return nil;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.callGroups forKey:@"callGroups"];
+	[aCoder encodeObject:self.calls forKey:@"calls"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.callGroups = [aDecoder decodeObjectForKey:@"callGroups"];
+		self.calls = [aDecoder decodeObjectForKey:@"calls"];
+	}
+	return self;
+}
 
 @end

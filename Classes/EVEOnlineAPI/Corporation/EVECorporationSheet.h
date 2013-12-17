@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECorporationSheetDivisionItem : NSObject
+@interface EVECorporationSheetDivisionItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger accountKey;
 @property (nonatomic, copy) NSString *description;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface EVECorporationSheetLogo : NSObject
+@interface EVECorporationSheetLogo : NSObject<NSCoding>
 @property (nonatomic) NSInteger graphicID;
 @property (nonatomic) NSInteger shape1;
 @property (nonatomic) NSInteger shape2;
@@ -50,7 +50,7 @@
 @property (nonatomic, strong) NSArray *walletDivisions;
 @property (nonatomic, strong) EVECorporationSheetLogo *logo;
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

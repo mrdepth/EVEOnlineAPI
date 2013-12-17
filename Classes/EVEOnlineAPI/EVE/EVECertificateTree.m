@@ -23,6 +23,23 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.categoryID forKey:@"categoryID"];
+	[aCoder encodeObject:self.categoryName forKey:@"categoryName"];
+	[aCoder encodeObject:self.classes forKey:@"classes"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.categoryID = [aDecoder decodeIntegerForKey:@"categoryID"];
+		self.categoryName = [aDecoder decodeObjectForKey:@"categoryName"];
+		self.classes = [aDecoder decodeObjectForKey:@"classes"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -36,6 +53,23 @@
 	if (self = [super init]) {
 		self.classID = [[attributeDict valueForKey:@"classID"] integerValue];
 		self.className = [attributeDict valueForKey:@"className"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.classID forKey:@"classID"];
+	[aCoder encodeObject:self.className forKey:@"className"];
+	[aCoder encodeObject:self.certificates forKey:@"certificates"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.classID = [aDecoder decodeIntegerForKey:@"classID"];
+		self.className = [aDecoder decodeObjectForKey:@"className"];
+		self.certificates = [aDecoder decodeObjectForKey:@"certificates"];
 	}
 	return self;
 }
@@ -59,6 +93,29 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.certificateID forKey:@"certificateID"];
+	[aCoder encodeInteger:self.grade forKey:@"grade"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+	[aCoder encodeObject:self.requiredSkills forKey:@"requiredSkills"];
+	[aCoder encodeObject:self.requiredCertificates forKey:@"requiredCertificates"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.certificateID = [aDecoder decodeIntegerForKey:@"certificateID"];
+		self.grade = [aDecoder decodeIntegerForKey:@"grade"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+		self.requiredSkills = [aDecoder decodeObjectForKey:@"requiredSkills"];
+		self.requiredCertificates = [aDecoder decodeObjectForKey:@"requiredCertificates"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -72,6 +129,21 @@
 	if (self = [super init]) {
 		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
 		self.skillLevel = [[attributeDict valueForKey:@"skillLevel"] integerValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.skillLevel forKey:@"skillLevel"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.skillLevel = [aDecoder decodeIntegerForKey:@"skillLevel"];
 	}
 	return self;
 }
@@ -93,6 +165,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.certificateID forKey:@"certificateID"];
+	[aCoder encodeInteger:self.grade forKey:@"grade"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.certificateID = [aDecoder decodeIntegerForKey:@"certificateID"];
+		self.grade = [aDecoder decodeIntegerForKey:@"grade"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -102,11 +189,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) certificateTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) certificateTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECertificateTree alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CertificateTree.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -174,4 +261,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.categories forKey:@"categories"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.categories = [aDecoder decodeObjectForKey:@"categories"];
+	}
+	return self;
+}
+
 @end

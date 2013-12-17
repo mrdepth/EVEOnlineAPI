@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAllianceListItem : NSObject
+@interface EVEAllianceListItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *shortName;
 @property (nonatomic) NSInteger allianceID;
@@ -24,7 +24,7 @@
 @end
 
 
-@interface EVEAllianceListMemberCorporationsItem : NSObject
+@interface EVEAllianceListMemberCorporationsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger corporationID;
 @property (nonatomic, strong) NSDate *startDate;
 
@@ -38,6 +38,6 @@
 @property (nonatomic, strong) NSArray *alliances;
 @property (nonatomic, strong) NSDictionary* alliancesMap;
 
-+ (id) allianceListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) allianceListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

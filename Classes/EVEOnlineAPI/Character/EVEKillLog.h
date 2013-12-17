@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEKillLogVictim : NSObject
+@interface EVEKillLogVictim : NSObject<NSCoding>
 @property (nonatomic) NSInteger allianceID;
 @property (nonatomic, copy) NSString *allianceName;
 @property (nonatomic) NSInteger characterID;
@@ -26,7 +26,7 @@
 
 @end
 
-@interface EVEKillLogAttacker : NSObject
+@interface EVEKillLogAttacker : NSObject<NSCoding>
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *characterName;
 @property (nonatomic) NSInteger corporationID;
@@ -44,7 +44,7 @@
 
 @end
 
-@interface EVEKillLogItem : NSObject
+@interface EVEKillLogItem : NSObject<NSCoding>
 @property (nonatomic) EVEInventoryFlag flag;
 @property (nonatomic) NSInteger qtyDropped;
 @property (nonatomic) NSInteger qtyDestroyed;
@@ -57,7 +57,7 @@
 
 @end
 
-@interface EVEKillLogKill : NSObject
+@interface EVEKillLogKill : NSObject<NSCoding>
 @property (nonatomic) NSInteger killID;
 @property (nonatomic) NSInteger solarSystemID;
 @property (nonatomic, strong) NSDate *killTime;
@@ -75,7 +75,7 @@
 @interface EVEKillLog : EVERequest
 @property (nonatomic, strong) NSArray *kills;
 
-+ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

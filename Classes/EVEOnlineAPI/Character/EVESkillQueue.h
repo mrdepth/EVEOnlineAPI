@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVESkillQueueItem : NSObject
+@interface EVESkillQueueItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger queuePosition;
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger level;
@@ -27,7 +27,7 @@
 @interface EVESkillQueue : EVERequest
 @property (nonatomic, strong) NSArray *skillQueue;
 
-+ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

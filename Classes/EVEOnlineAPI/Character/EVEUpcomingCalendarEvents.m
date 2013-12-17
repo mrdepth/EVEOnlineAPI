@@ -30,6 +30,41 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.eventID forKey:@"eventID"];
+	[aCoder encodeInteger:self.ownerID forKey:@"ownerID"];
+
+	[aCoder encodeObject:self.ownerName forKey:@"ownerName"];
+	[aCoder encodeObject:self.eventDate forKey:@"eventDate"];
+	[aCoder encodeObject:self.eventTitle forKey:@"eventTitle"];
+	
+	[aCoder encodeInteger:self.duration forKey:@"duration"];
+	[aCoder encodeInteger:self.importance forKey:@"importance"];
+
+	[aCoder encodeObject:self.response forKey:@"response"];
+	[aCoder encodeObject:self.eventText forKey:@"eventText"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.eventID = [aDecoder decodeIntegerForKey:@"eventID"];
+		self.ownerID = [aDecoder decodeIntegerForKey:@"ownerID"];
+		
+		self.ownerName = [aDecoder decodeObjectForKey:@"ownerName"];
+		self.eventDate = [aDecoder decodeObjectForKey:@"eventDate"];
+		self.eventTitle = [aDecoder decodeObjectForKey:@"eventTitle"];
+		
+		self.duration = [aDecoder decodeIntegerForKey:@"duration"];
+		self.importance = [aDecoder decodeIntegerForKey:@"importance"];
+
+		self.response = [aDecoder decodeObjectForKey:@"response"];
+		self.eventText = [aDecoder decodeObjectForKey:@"eventText"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -39,11 +74,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) upcomingCalendarEventsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) upcomingCalendarEventsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEUpcomingCalendarEvents alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/UpcomingCalendarEvents.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -70,6 +105,20 @@
 		return upcomingCalendarEventsItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.upcomingCalendarEvents forKey:@"upcomingCalendarEvents"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.upcomingCalendarEvents = [aDecoder decodeObjectForKey:@"upcomingCalendarEvents"];
+	}
+	return self;
 }
 
 @end

@@ -25,6 +25,28 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.medalID forKey:@"medalID"];
+	[aCoder encodeObject:self.reason forKey:@"reason"];
+	[aCoder encodeObject:self.status forKey:@"status"];
+	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeObject:self.issued forKey:@"issued"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.medalID = [aDecoder decodeIntegerForKey:@"medalID"];
+		self.reason = [aDecoder decodeObjectForKey:@"reason"];
+		self.status = [aDecoder decodeObjectForKey:@"status"];
+		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.issued = [aDecoder decodeObjectForKey:@"issued"];
+	}
+	return self;
+}
+
+
 @end
 
 
@@ -48,6 +70,33 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.medalID forKey:@"medalID"];
+	[aCoder encodeObject:self.reason forKey:@"reason"];
+	[aCoder encodeObject:self.status forKey:@"status"];
+	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeObject:self.issued forKey:@"issued"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.title forKey:@"title"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.medalID = [aDecoder decodeIntegerForKey:@"medalID"];
+		self.reason = [aDecoder decodeObjectForKey:@"reason"];
+		self.status = [aDecoder decodeObjectForKey:@"status"];
+		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.issued = [aDecoder decodeObjectForKey:@"issued"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.title = [aDecoder decodeObjectForKey:@"title"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -57,11 +106,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECharMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -97,6 +146,22 @@
 		return charOtherCorporationsMedal;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.currentCorporation forKey:@"currentCorporation"];
+	[aCoder encodeObject:self.otherCorporations forKey:@"otherCorporations"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.currentCorporation = [aDecoder decodeObjectForKey:@"currentCorporation"];
+		self.otherCorporations = [aDecoder decodeObjectForKey:@"otherCorporations"];
+	}
+	return self;
 }
 
 @end

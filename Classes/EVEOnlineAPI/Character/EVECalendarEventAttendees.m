@@ -24,6 +24,23 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.characterName forKey:@"characterName"];
+	[aCoder encodeObject:self.response forKey:@"response"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
+		self.response = [aDecoder decodeObjectForKey:@"response"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -33,11 +50,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) calendarEventAttendeesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) calendarEventAttendeesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECalendarEventAttendees alloc] initWithKeyID:keyID vCode:vCode characterID:characterID eventID:eventID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void (^)(CGFloat))progressHandler{
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler{
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CalendarEventAttendees.xml.aspx?keyID=%d&vCode=%@&characterID=%d&eventID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, eventID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -47,7 +64,7 @@
 }
 
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"eventAttendees"]) {
@@ -65,6 +82,20 @@
 		return eventAttendeesItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.eventAttendees forKey:@"eventAttendees"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.eventAttendees = [aDecoder decodeObjectForKey:@"eventAttendees"];
+	}
+	return self;
 }
 
 @end

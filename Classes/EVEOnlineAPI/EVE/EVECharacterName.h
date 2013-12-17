@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECharacterNameItem : NSObject
+@interface EVECharacterNameItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *name;
 
@@ -22,6 +22,6 @@
 @interface EVECharacterName : EVERequest
 @property (nonatomic, strong) NSDictionary *characters;
 
-+ (id) characterNameWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) characterNameWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

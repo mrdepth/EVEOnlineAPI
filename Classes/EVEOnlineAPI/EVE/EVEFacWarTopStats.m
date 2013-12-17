@@ -28,6 +28,23 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.characterName forKey:@"characterName"];
+	[aCoder encodeInteger:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
+		self.kills = [aDecoder decodeIntegerForKey:@"kills"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -45,6 +62,24 @@
 	}
 	return self;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	[aCoder encodeInteger:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		self.kills = [aDecoder decodeIntegerForKey:@"kills"];
+	}
+	return self;
+}
+
 
 @end
 
@@ -64,9 +99,49 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.factionID forKey:@"factionID"];
+	[aCoder encodeObject:self.factionName forKey:@"factionName"];
+	[aCoder encodeInteger:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.factionID = [aDecoder decodeIntegerForKey:@"factionID"];
+		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
+		self.kills = [aDecoder decodeIntegerForKey:@"kills"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVEFacWarTopStatsSection
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.killsYesterday forKey:@"killsYesterday"];
+	[aCoder encodeObject:self.killsLastWeek forKey:@"killsLastWeek"];
+	[aCoder encodeObject:self.killsTotal forKey:@"killsTotal"];
+	[aCoder encodeObject:self.victoryPointsYesterday forKey:@"victoryPointsYesterday"];
+	[aCoder encodeObject:self.victoryPointsLastWeek forKey:@"victoryPointsLastWeek"];
+	[aCoder encodeObject:self.victoryPointsTotal forKey:@"victoryPointsTotal"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.killsYesterday = [aDecoder decodeObjectForKey:@"killsYesterday"];
+		self.killsLastWeek = [aDecoder decodeObjectForKey:@"killsLastWeek"];
+		self.killsTotal = [aDecoder decodeObjectForKey:@"killsTotal"];
+		self.victoryPointsYesterday = [aDecoder decodeObjectForKey:@"victoryPointsYesterday"];
+		self.victoryPointsLastWeek = [aDecoder decodeObjectForKey:@"victoryPointsLastWeek"];
+		self.victoryPointsTotal = [aDecoder decodeObjectForKey:@"victoryPointsTotal"];
+	}
+	return self;
+}
 @end
 
 
@@ -76,11 +151,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEFacWarTopStats alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ErrorList.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -157,6 +232,24 @@ didStartElement:(NSString *)elementName
 		self.corporations = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
 	else if ([elementName isEqualToString:@"factions"])
 		self.factions = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.characters forKey:@"characters"];
+	[aCoder encodeObject:self.corporations forKey:@"corporations"];
+	[aCoder encodeObject:self.factions forKey:@"factions"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.characters= [aDecoder decodeObjectForKey:@"characters"];
+		self.corporations = [aDecoder decodeObjectForKey:@"corporations"];
+		self.factions = [aDecoder decodeObjectForKey:@"factions"];
+	}
+	return self;
 }
 
 @end

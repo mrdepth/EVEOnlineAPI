@@ -23,6 +23,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInteger:self.shipJumps forKey:@"shipJumps"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.shipJumps = [aDecoder decodeIntegerForKey:@"shipJumps"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -32,11 +47,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) jumpsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) jumpsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEJumps alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Jumps.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -64,4 +79,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.solarSystems forKey:@"solarSystems"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.solarSystems = [aDecoder decodeObjectForKey:@"solarSystems"];
+	}
+	return self;
+}
+
 @end

@@ -23,9 +23,50 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.accountKey forKey:@"accountKey"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.accountKey = [aDecoder decodeIntegerForKey:@"accountKey"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVECorporationSheetLogo
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.graphicID forKey:@"graphicID"];
+	[aCoder encodeInteger:self.shape1 forKey:@"shape1"];
+	[aCoder encodeInteger:self.shape2 forKey:@"shape2"];
+	[aCoder encodeInteger:self.shape3 forKey:@"shape3"];
+	[aCoder encodeInteger:self.color1 forKey:@"color1"];
+	[aCoder encodeInteger:self.color2 forKey:@"color2"];
+	[aCoder encodeInteger:self.color3 forKey:@"color3"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.graphicID = [aDecoder decodeIntegerForKey:@"graphicID"];
+		self.shape1 = [aDecoder decodeIntegerForKey:@"shape1"];
+		self.shape2 = [aDecoder decodeIntegerForKey:@"shape2"];
+		self.shape3 = [aDecoder decodeIntegerForKey:@"shape3"];
+		self.color1 = [aDecoder decodeIntegerForKey:@"color1"];
+		self.color2 = [aDecoder decodeIntegerForKey:@"color2"];
+		self.color3 = [aDecoder decodeIntegerForKey:@"color3"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -35,11 +76,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorporationSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporationID:corporationID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) aCorporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) aCorporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/CorporationSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID,
 														(aCorporationID > 0 ? [NSString stringWithFormat:@"&corporationID=%d", aCorporationID] : @"")]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
@@ -132,6 +173,62 @@ didStartElement:(NSString *)elementName
 		self.logo.color2 = [self.text integerValue];
 	else if ([elementName isEqualToString:@"color3"])
 		self.logo.color3 = [self.text integerValue];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	[aCoder encodeObject:self.ticker forKey:@"ticker"];
+	[aCoder encodeInteger:self.ceoID forKey:@"ceoID"];
+	[aCoder encodeObject:self.ceoName forKey:@"ceoName"];
+	
+	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	[aCoder encodeObject:self.stationName forKey:@"stationName"];
+	[aCoder encodeObject:self.description forKey:@"description"];
+	[aCoder encodeObject:self.url forKey:@"url"];
+
+	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
+	[aCoder encodeFloat:self.taxRate forKey:@"taxRate"];
+
+	[aCoder encodeInteger:self.memberCount forKey:@"memberCount"];
+	[aCoder encodeInteger:self.memberLimit forKey:@"memberLimit"];
+	[aCoder encodeInteger:self.shares forKey:@"shares"];
+	
+	[aCoder encodeObject:self.divisions forKey:@"divisions"];
+	[aCoder encodeObject:self.walletDivisions forKey:@"walletDivisions"];
+	[aCoder encodeObject:self.logo forKey:@"logo"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		self.ticker = [aDecoder decodeObjectForKey:@"ticker"];
+		self.ceoID = [aDecoder decodeIntegerForKey:@"ceoID"];
+		self.ceoName = [aDecoder decodeObjectForKey:@"ceoName"];
+		
+		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
+		self.description = [aDecoder decodeObjectForKey:@"description"];
+		self.url = [aDecoder decodeObjectForKey:@"url"];
+
+		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
+		self.taxRate = [aDecoder decodeIntegerForKey:@"taxRate"];
+
+		self.memberCount = [aDecoder decodeIntegerForKey:@"memberCount"];
+		self.memberLimit = [aDecoder decodeIntegerForKey:@"memberLimit"];
+		self.shares = [aDecoder decodeIntegerForKey:@"shares"];
+		
+		self.divisions = [aDecoder decodeObjectForKey:@"divisions"];
+		self.walletDivisions= [aDecoder decodeObjectForKey:@"walletDivisions"];
+		self.logo = [aDecoder decodeObjectForKey:@"logo"];
+	}
+	return self;
 }
 
 @end

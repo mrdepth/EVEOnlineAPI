@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEErrorListItem : NSObject
+@interface EVEErrorListItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger errorCode;
 @property (nonatomic, copy) NSString *errorText;
 
@@ -22,6 +22,6 @@
 @interface EVEErrorList : EVERequest
 @property (nonatomic, strong) NSArray *errors;
 
-+ (id) errorListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) errorListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

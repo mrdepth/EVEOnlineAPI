@@ -9,13 +9,13 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVESkillTreeRequiredAttributes : NSObject
+@interface EVESkillTreeRequiredAttributes : NSObject<NSCoding>
 @property (nonatomic) EVECharacterAttribute primaryAttribute;
 @property (nonatomic) EVECharacterAttribute secondaryAttribute;
 @end
 
 
-@interface EVESkillTreeRequiredSkillsItem : NSObject
+@interface EVESkillTreeRequiredSkillsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger skillLevel;
 
@@ -25,7 +25,7 @@
 @end
 
 
-@interface EVESkillTreeSkillBonusCollectionItem : NSObject
+@interface EVESkillTreeSkillBonusCollectionItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *bonusType;
 @property (nonatomic) NSInteger bonusValue;
 
@@ -36,7 +36,7 @@
 
 
 
-@interface EVESkillTreeSkillGroupsItem : NSObject
+@interface EVESkillTreeSkillGroupsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger groupID;
 @property (nonatomic, copy) NSString *groupName;
 @property (nonatomic, strong) NSArray *skills;
@@ -47,7 +47,7 @@
 @end
 
 
-@interface EVESkillTreeSkillsItem : NSObject
+@interface EVESkillTreeSkillsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger groupID;
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic, copy) NSString *typeName;
@@ -67,6 +67,6 @@
 @interface EVESkillTree : EVERequest
 @property (nonatomic, strong) NSArray *skillGroups;
 
-+ (id) skillTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) skillTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

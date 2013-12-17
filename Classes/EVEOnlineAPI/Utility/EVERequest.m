@@ -185,4 +185,21 @@ didStartElement:(NSString *)elementName
 	[(NSMutableString*) self.text setString:s];
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.currentTime forKey:@"currentTime"];
+	[aCoder encodeObject:self.cachedUntil forKey:@"cachedUntil"];
+	[aCoder encodeObject:self.apiVersion forKey:@"apiVersion"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.currentTime = [aDecoder decodeObjectForKey:@"currentTime"];
+		self.cachedUntil = [aDecoder decodeObjectForKey:@"cachedUntil"];
+		self.apiVersion = [aDecoder decodeObjectForKey:@"apiVersion"];
+	}
+	return self;
+}
+
 @end

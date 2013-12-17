@@ -22,6 +22,39 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeObject:self.roles forKey:@"roles"];
+	[aCoder encodeObject:self.grantableRoles forKey:@"grantableRoles"];
+	[aCoder encodeObject:self.rolesAtHQ forKey:@"rolesAtHQ"];
+	[aCoder encodeObject:self.grantableRolesAtHQ forKey:@"grantableRolesAtHQ"];
+	[aCoder encodeObject:self.rolesAtBase forKey:@"rolesAtBase"];
+	[aCoder encodeObject:self.grantableRolesAtBase forKey:@"grantableRolesAtBase"];
+	[aCoder encodeObject:self.rolesAtOther forKey:@"rolesAtOther"];
+	[aCoder encodeObject:self.grantableRolesAtOther forKey:@"grantableRolesAtOther"];
+	[aCoder encodeObject:self.titles forKey:@"titles"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.roles = [aDecoder decodeObjectForKey:@"roles"];
+		self.grantableRoles = [aDecoder decodeObjectForKey:@"grantableRoles"];
+		self.rolesAtHQ = [aDecoder decodeObjectForKey:@"rolesAtHQ"];
+		self.grantableRolesAtHQ = [aDecoder decodeObjectForKey:@"grantableRolesAtHQ"];
+		self.rolesAtBase = [aDecoder decodeObjectForKey:@"rolesAtBase"];
+		self.grantableRolesAtBase = [aDecoder decodeObjectForKey:@"grantableRolesAtBase"];
+		self.rolesAtOther = [aDecoder decodeObjectForKey:@"rolesAtOther"];
+		self.grantableRolesAtOther = [aDecoder decodeObjectForKey:@"grantableRolesAtOther"];
+		self.titles = [aDecoder decodeObjectForKey:@"titles"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -35,6 +68,21 @@
 	if (self = [super init]) {
 		self.roleID = [[attributeDict valueForKey:@"roleID"] integerValue];
 		self.roleName = [attributeDict valueForKey:@"roleName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.roleID forKey:@"roleID"];
+	[aCoder encodeObject:self.roleName forKey:@"roleName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.roleID = [aDecoder decodeIntegerForKey:@"roleID"];
+		self.roleName = [aDecoder decodeObjectForKey:@"roleName"];
 	}
 	return self;
 }
@@ -56,6 +104,22 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.titleID forKey:@"titleID"];
+	[aCoder encodeObject:self.titleName forKey:@"titleName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.titleID = [aDecoder decodeIntegerForKey:@"titleID"];
+		self.titleName = [aDecoder decodeObjectForKey:@"titleName"];
+	}
+	return self;
+}
+
+
 @end
 
 
@@ -65,11 +129,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMemberSecurity alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberSecurity.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -192,4 +256,19 @@ didStartElement:(NSString *)elementName
 		[(NSMutableArray*) self.members addObject:member];
 	}
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.members forKey:@"members"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.members = [aDecoder decodeObjectForKey:@"members"];
+	}
+	return self;
+}
+
 @end

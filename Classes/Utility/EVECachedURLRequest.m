@@ -28,13 +28,13 @@ static BOOL offlineMode = NO;
 	return offlineMode;
 }
 
-- (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [self initWithRequest:[NSURLRequest requestWithURL:url] cacheStyle:cacheStyle error:errorPtr progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
 	[request setHTTPBody:bodyData];
@@ -45,7 +45,7 @@ static BOOL offlineMode = NO;
 	return self;
 }
 
-- (id) initWithRequest:(NSURLRequest*) request cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithRequest:(NSURLRequest*) request cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super init]) {
 		self.url = request.URL;
 		

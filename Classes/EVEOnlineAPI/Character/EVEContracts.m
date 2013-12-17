@@ -147,6 +147,68 @@
 		return nil;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt64:self.contractID forKey:@"contractID"];
+
+	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeInteger:self.issuerCorpID forKey:@"issuerCorpID"];
+	[aCoder encodeInteger:self.assigneeID forKey:@"assigneeID"];
+	[aCoder encodeInteger:self.acceptorID forKey:@"acceptorID"];
+	[aCoder encodeInteger:self.startStationID forKey:@"startStationID"];
+	[aCoder encodeInteger:self.forCorp forKey:@"forCorp"];
+	[aCoder encodeInteger:self.numDays forKey:@"numDays"];
+
+	[aCoder encodeObject:self.title forKey:@"title"];
+
+	[aCoder encodeInteger:self.type forKey:@"type"];
+	[aCoder encodeInteger:self.status forKey:@"status"];
+	[aCoder encodeInteger:self.availability forKey:@"availability"];
+
+	[aCoder encodeObject:self.dateIssued forKey:@"dateIssued"];
+	[aCoder encodeObject:self.dateExpired forKey:@"dateExpired"];
+	[aCoder encodeObject:self.dateAccepted forKey:@"dateAccepted"];
+	[aCoder encodeObject:self.dateCompleted forKey:@"dateCompleted"];
+
+	[aCoder encodeFloat:self.price forKey:@"price"];
+	[aCoder encodeFloat:self.reward forKey:@"reward"];
+	[aCoder encodeFloat:self.collateral forKey:@"collateral"];
+	[aCoder encodeFloat:self.buyout forKey:@"buyout"];
+	[aCoder encodeFloat:self.volume forKey:@"volume"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.contractID = [aDecoder decodeInt64ForKey:@"contractID"];
+		
+		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.issuerCorpID = [aDecoder decodeIntegerForKey:@"issuerCorpID"];
+		self.assigneeID = [aDecoder decodeIntegerForKey:@"assigneeID"];
+		self.acceptorID = [aDecoder decodeIntegerForKey:@"acceptorID"];
+		self.startStationID = [aDecoder decodeIntegerForKey:@"startStationID"];
+		self.forCorp = [aDecoder decodeIntegerForKey:@"forCorp"];
+		self.numDays = [aDecoder decodeIntegerForKey:@"numDays"];
+
+		self.title = [aDecoder decodeObjectForKey:@"title"];
+
+		self.type = [aDecoder decodeIntegerForKey:@"type"];
+		self.status = [aDecoder decodeIntegerForKey:@"status"];
+		self.availability = [aDecoder decodeIntegerForKey:@"availability"];
+		
+		self.dateIssued = [aDecoder decodeObjectForKey:@"dateIssued"];
+		self.dateExpired = [aDecoder decodeObjectForKey:@"dateExpired"];
+		self.dateAccepted = [aDecoder decodeObjectForKey:@"dateAccepted"];
+		self.dateCompleted = [aDecoder decodeObjectForKey:@"dateCompleted"];
+		
+		self.price = [aDecoder decodeFloatForKey:@"price"];
+		self.reward = [aDecoder decodeFloatForKey:@"reward"];
+		self.collateral = [aDecoder decodeFloatForKey:@"collateral"];
+		self.buyout = [aDecoder decodeFloatForKey:@"buyout"];
+		self.volume = [aDecoder decodeFloatForKey:@"volume"];
+	}
+	return self;
+}
 
 @end
 
@@ -158,11 +220,11 @@
 }
 
 
-+ (id) contractsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) contractsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEContracts alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Contracts.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -172,7 +234,7 @@
 }
 
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"contractList"]) {
@@ -191,4 +253,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.contractList forKey:@"contractList"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.contractList = [aDecoder decodeObjectForKey:@"contractList"];
+	}
+	return self;
+}
+
 @end

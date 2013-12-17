@@ -25,6 +25,27 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.notificationID forKey:@"notificationID"];
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.senderID forKey:@"senderID"];
+	[aCoder encodeObject:self.sentDate forKey:@"sentDate"];
+	[aCoder encodeBool:self.read forKey:@"read"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.notificationID = [aDecoder decodeIntegerForKey:@"notificationID"];
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.senderID = [aDecoder decodeIntegerForKey:@"senderID"];
+		self.sentDate = [aDecoder decodeObjectForKey:@"sentDate"];
+		self.read = [aDecoder decodeBoolForKey:@"read"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -34,11 +55,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) notificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) notificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVENotifications alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Notifications.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
 							error:errorPtr
@@ -47,7 +68,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"notifications"]) {
@@ -65,6 +86,20 @@
 		return notificationsItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.notifications forKey:@"notifications"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.notifications = [aDecoder decodeObjectForKey:@"notifications"];
+	}
+	return self;
 }
 
 @end

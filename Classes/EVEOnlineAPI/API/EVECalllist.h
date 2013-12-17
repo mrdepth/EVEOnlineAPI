@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECalllistCallGroupsItem : NSObject
+@interface EVECalllistCallGroupsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger groupID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *description;
@@ -19,7 +19,7 @@
 
 @end
 
-@interface EVECalllistCallsItem : NSObject
+@interface EVECalllistCallsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger accessMask;
 @property (nonatomic) EVECallType type;
 @property (nonatomic, copy) NSString *name;
@@ -37,7 +37,7 @@
 @property (nonatomic, strong) NSArray *callGroups;
 @property (nonatomic, strong) NSArray *calls;
 
-+ (id) calllistWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) calllistWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

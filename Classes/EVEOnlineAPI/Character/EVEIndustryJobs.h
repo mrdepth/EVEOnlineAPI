@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEIndustryJobsItem : NSObject
+@interface EVEIndustryJobsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger jobID, assemblyLineID, installedItemQuantity,
 								installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
 								runs, licensedProductionRuns, installedInSolarSystemID,
@@ -29,7 +29,7 @@
 @interface EVEIndustryJobs : EVERequest
 @property (nonatomic, strong) NSArray *jobs;
 
-+ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) industryJobsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

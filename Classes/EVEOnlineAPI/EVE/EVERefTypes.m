@@ -23,6 +23,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.refTypeID forKey:@"refTypeID"];
+	[aCoder encodeObject:self.refTypeName forKey:@"refTypeName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.refTypeID = [aDecoder decodeIntegerForKey:@"refTypeID"];
+		self.refTypeName = [aDecoder decodeObjectForKey:@"refTypeName"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -32,11 +47,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVERefTypes alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/RefTypes.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -64,4 +79,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.refTypes forKey:@"refTypes"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.refTypes = [aDecoder decodeObjectForKey:@"refTypes"];
+	}
+	return self;
+}
+
 @end

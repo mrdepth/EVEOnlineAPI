@@ -27,6 +27,29 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.medalID forKey:@"medalID"];
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.reason forKey:@"reason"];
+	[aCoder encodeObject:self.status forKey:@"status"];
+	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeObject:self.issued forKey:@"issued"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.medalID = [aDecoder decodeIntegerForKey:@"medalID"];
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.reason = [aDecoder decodeObjectForKey:@"reason"];
+		self.status = [aDecoder decodeObjectForKey:@"status"];
+		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.issued = [aDecoder decodeObjectForKey:@"issued"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -36,11 +59,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) memberMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) memberMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMemberMedals alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberMedals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -67,6 +90,20 @@
 		return memberMedalsItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.issuedMedals forKey:@"issuedMedals"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.issuedMedals = [aDecoder decodeObjectForKey:@"issuedMedals"];
+	}
+	return self;
 }
 
 @end

@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAPIKeyInfoCharactersItem : NSObject
+@interface EVEAPIKeyInfoCharactersItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *characterName;
 @property (nonatomic) NSInteger corporationID;
@@ -20,7 +20,7 @@
 
 @end
 
-@interface EVEAPIKeyInfoKey : NSObject
+@interface EVEAPIKeyInfoKey : NSObject<NSCoding>
 @property (nonatomic) NSInteger accessMask;
 @property (nonatomic) EVEAPIKeyType type;
 @property (nonatomic, strong) NSDate *expires;
@@ -36,7 +36,7 @@
 @property (nonatomic, strong) EVEAPIKeyInfoKey *key;
 @property (nonatomic, strong) NSArray *characters;
 
-+ (id) apiKeyInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) apiKeyInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

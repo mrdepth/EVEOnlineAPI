@@ -44,6 +44,45 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeObject:self.startDateTime forKey:@"startDateTime"];
+	[aCoder encodeInteger:self.baseID forKey:@"baseID"];
+	[aCoder encodeObject:self.base forKey:@"base"];
+	[aCoder encodeObject:self.title forKey:@"title"];
+	[aCoder encodeObject:self.logonDateTime forKey:@"logonDateTime"];
+	[aCoder encodeObject:self.logoffDateTime forKey:@"logoffDateTime"];
+	[aCoder encodeInt64:self.locationID forKey:@"locationID"];
+	[aCoder encodeObject:self.location forKey:@"location"];
+	[aCoder encodeInteger:self.shipTypeID forKey:@"shipTypeID"];
+	[aCoder encodeObject:self.shipType forKey:@"shipType"];
+	[aCoder encodeObject:self.roles forKey:@"roles"];
+	[aCoder encodeObject:self.grantableRoles forKey:@"grantableRoles"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.startDateTime = [aDecoder decodeObjectForKey:@"startDateTime"];
+		self.baseID = [aDecoder decodeIntegerForKey:@"baseID"];
+		self.base = [aDecoder decodeObjectForKey:@"base"];
+		self.title = [aDecoder decodeObjectForKey:@"title"];
+		self.logonDateTime = [aDecoder decodeObjectForKey:@"logonDateTime"];
+		self.logoffDateTime = [aDecoder decodeObjectForKey:@"logoffDateTime"];
+		self.locationID = [aDecoder decodeInt64ForKey:@"locationID"];
+		self.location = [aDecoder decodeObjectForKey:@"location"];
+		self.shipTypeID = [aDecoder decodeIntegerForKey:@"shipTypeID"];
+		self.shipType = [aDecoder decodeObjectForKey:@"shipType"];
+		self.roles = [aDecoder decodeObjectForKey:@"roles"];
+		self.grantableRoles = [aDecoder decodeObjectForKey:@"grantableRoles"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -53,11 +92,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) memberTrackingWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) memberTrackingWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMemberTracking alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberTracking.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -84,6 +123,20 @@
 		return memberTrackingItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.members forKey:@"members"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.members = [aDecoder decodeObjectForKey:@"members"];
+	}
+	return self;
 }
 
 @end

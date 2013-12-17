@@ -88,11 +88,11 @@
 
 @implementation EVEKillNetLog
 
-+ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEKillNetLog alloc] initWithFilter:filter mask:mask error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableString* args = [NSMutableString string];
 	for (NSString* key in [filter allKeys]) {
 		NSString* value = [filter valueForKey:key];

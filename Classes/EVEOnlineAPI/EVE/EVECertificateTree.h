@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECertificateTreeItem : NSObject
+@interface EVECertificateTreeItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger categoryID;
 @property (nonatomic, copy) NSString *categoryName;
 @property (nonatomic, strong) NSArray *classes;
@@ -20,7 +20,7 @@
 @end
 
 
-@interface EVECertificateTreeClassesItem : NSObject
+@interface EVECertificateTreeClassesItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger classID;
 @property (nonatomic, copy) NSString *className;
 @property (nonatomic, strong) NSArray *certificates;
@@ -31,7 +31,7 @@
 @end
 
 
-@interface EVECertificateTreeCertificatesItem : NSObject
+@interface EVECertificateTreeCertificatesItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger certificateID;
 @property (nonatomic) NSInteger grade;
 @property (nonatomic) NSInteger corporationID;
@@ -45,7 +45,7 @@
 @end
 
 
-@interface EVECertificateTreeRequiredSkillsItem : NSObject
+@interface EVECertificateTreeRequiredSkillsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger skillLevel;
 
@@ -55,7 +55,7 @@
 @end
 
 
-@interface EVECertificateTreeRequiredCertificatesItem : NSObject
+@interface EVECertificateTreeRequiredCertificatesItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger certificateID;
 @property (nonatomic) NSInteger grade;
 
@@ -68,6 +68,6 @@
 @interface EVECertificateTree : EVERequest
 @property (nonatomic, strong) NSArray *categories;
 
-+ (id) certificateTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) certificateTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

@@ -15,11 +15,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEAccountStatus alloc] initWithKeyID:keyID vCode:vCode error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/account/AccountStatus.xml.aspx?keyID=%d&vCode=%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -29,7 +29,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	return nil;
@@ -54,4 +54,25 @@
 		self.logonMinutes = [self.text integerValue];
 
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.paidUntil forKey:@"paidUntil"];
+	[aCoder encodeObject:self.createDate forKey:@"createDate"];
+	[aCoder encodeInteger:self.logonCount forKey:@"logonCount"];
+	[aCoder encodeInteger:self.logonMinutes forKey:@"logonMinutes"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.paidUntil = [aDecoder decodeObjectForKey:@"paidUntil"];
+		self.createDate = [aDecoder decodeObjectForKey:@"createDate"];
+		self.logonCount = [aDecoder decodeIntegerForKey:@"logonCount"];
+		self.logonMinutes = [aDecoder decodeIntegerForKey:@"logonMinutes"];
+	}
+	return self;
+}
+
 @end

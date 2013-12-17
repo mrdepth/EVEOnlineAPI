@@ -9,12 +9,52 @@
 #import "EVECharacterSheet.h"
 
 @implementation EVECharacterSheetAttributes
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.intelligence forKey:@"intelligence"];
+	[aCoder encodeInteger:self.memory forKey:@"memory"];
+	[aCoder encodeInteger:self.charisma forKey:@"charisma"];
+	[aCoder encodeInteger:self.perception forKey:@"perception"];
+	[aCoder encodeInteger:self.willpower forKey:@"willpower"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.intelligence = [aDecoder decodeIntegerForKey:@"intelligence"];
+		self.memory = [aDecoder decodeIntegerForKey:@"memory"];
+		self.charisma = [aDecoder decodeIntegerForKey:@"charisma"];
+		self.perception = [aDecoder decodeIntegerForKey:@"perception"];
+		self.willpower = [aDecoder decodeIntegerForKey:@"willpower"];
+	}
+	return self;
+}
+
 @end
 
 
 #pragma mark --
 
 @implementation EVECharacterSheetAttributeEnhancer
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.attribute forKey:@"attribute"];
+	[aCoder encodeObject:self.augmentatorName forKey:@"augmentatorName"];
+	[aCoder encodeInteger:self.augmentatorValue forKey:@"augmentatorValue"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.attribute = [aDecoder decodeIntegerForKey:@"attribute"];
+		self.augmentatorName = [aDecoder decodeObjectForKey:@"augmentatorName"];
+		self.augmentatorValue = [aDecoder decodeIntegerForKey:@"augmentatorValue"];
+	}
+	return self;
+}
+
 @end
 
 #pragma mark --
@@ -39,6 +79,25 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.skillpoints forKey:@"skillpoints"];
+	[aCoder encodeInteger:self.level forKey:@"level"];
+	[aCoder encodeBool:self.unpublished forKey:@"unpublished"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.skillpoints = [aDecoder decodeIntegerForKey:@"skillpoints"];
+		self.level = [aDecoder decodeIntegerForKey:@"level"];
+		self.unpublished = [aDecoder decodeBoolForKey:@"unpublished"];
+	}
+	return self;
+}
+
 @end
 
 #pragma mark --
@@ -53,6 +112,21 @@
 	if (self = [super init]) {
 		self.roleID = [[attributeDict valueForKey:@"roleID"] integerValue];
 		self.roleName = [attributeDict valueForKey:@"roleName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.roleID forKey:@"roleID"];
+	[aCoder encodeObject:self.roleName forKey:@"roleName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.roleID = [aDecoder decodeIntegerForKey:@"roleID"];
+		self.roleName = [aDecoder decodeObjectForKey:@"roleName"];
 	}
 	return self;
 }
@@ -75,6 +149,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.titleID forKey:@"titleID"];
+	[aCoder encodeObject:self.titleName forKey:@"titleName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.titleID = [aDecoder decodeIntegerForKey:@"titleID"];
+		self.titleName = [aDecoder decodeObjectForKey:@"titleName"];
+	}
+	return self;
+}
+
 @end
 
 #pragma mark --
@@ -85,11 +174,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECharacterSheet alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CharacterSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], aCharacterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -107,7 +196,7 @@
 	return _skillsMap;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"skills"])
@@ -230,6 +319,64 @@ didStartElement:(NSString *)elementName
 		self.attributes.perception = [self.text integerValue];
 	else if ([elementName isEqualToString:@"willpower"])
 		self.attributes.willpower = [self.text integerValue];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeObject:self.race forKey:@"race"];
+	[aCoder encodeObject:self.DoB forKey:@"DoB"];
+	[aCoder encodeObject:self.bloodLine forKey:@"bloodLine"];
+	[aCoder encodeObject:self.ancestry forKey:@"ancestry"];
+	[aCoder encodeObject:self.gender forKey:@"gender"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
+	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeObject:self.cloneName forKey:@"cloneName"];
+	[aCoder encodeInteger:self.cloneSkillPoints forKey:@"cloneSkillPoints"];
+	[aCoder encodeFloat:self.balance forKey:@"balance"];
+	[aCoder encodeObject:self.attributeEnhancers forKey:@"attributeEnhancers"];
+	[aCoder encodeObject:self.attributes forKey:@"attributes"];
+	[aCoder encodeObject:self.skills forKey:@"skills"];
+	[aCoder encodeObject:self.certificates forKey:@"certificates"];
+	[aCoder encodeObject:self.corporationRoles forKey:@"corporationRoles"];
+	[aCoder encodeObject:self.corporationRolesAtHQ forKey:@"corporationRolesAtHQ"];
+	[aCoder encodeObject:self.corporationRolesAtBase forKey:@"corporationRolesAtBase"];
+	[aCoder encodeObject:self.corporationRolesAtOther forKey:@"corporationRolesAtOther"];
+	[aCoder encodeObject:self.corporationTitles forKey:@"corporationTitles"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.race = [aDecoder decodeObjectForKey:@"race"];
+		self.DoB = [aDecoder decodeObjectForKey:@"DoB"];
+		self.bloodLine = [aDecoder decodeObjectForKey:@"bloodLine"];
+		self.ancestry = [aDecoder decodeObjectForKey:@"ancestry"];
+		self.gender = [aDecoder decodeObjectForKey:@"gender"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
+		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.cloneName = [aDecoder decodeObjectForKey:@"cloneName"];
+		self.cloneSkillPoints = [aDecoder decodeIntegerForKey:@"cloneSkillPoints"];
+		self.balance = [aDecoder decodeFloatForKey:@"balance"];
+		self.attributeEnhancers = [aDecoder decodeObjectForKey:@"attributeEnhancers"];
+		self.attributes = [aDecoder decodeObjectForKey:@"attributes"];
+		self.skills = [aDecoder decodeObjectForKey:@"skills"];
+		self.certificates = [aDecoder decodeObjectForKey:@"certificates"];
+		self.corporationRoles = [aDecoder decodeObjectForKey:@"corporationRoles"];
+		self.corporationRolesAtHQ = [aDecoder decodeObjectForKey:@"corporationRolesAtHQ"];
+		self.corporationRolesAtBase = [aDecoder decodeObjectForKey:@"corporationRolesAtBase"];
+		self.corporationRolesAtOther = [aDecoder decodeObjectForKey:@"corporationRolesAtOther"];
+		self.corporationTitles = [aDecoder decodeObjectForKey:@"corporationTitles"];
+	}
+	return self;
 }
 
 @end

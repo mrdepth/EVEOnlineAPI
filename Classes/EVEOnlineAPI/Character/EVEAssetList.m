@@ -35,6 +35,31 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt64:self.itemID forKey:@"itemID"];
+	[aCoder encodeInt64:self.locationID forKey:@"locationID"];
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.quantity forKey:@"quantity"];
+	[aCoder encodeInteger:self.flag forKey:@"flag"];
+	[aCoder encodeBool:self.singleton forKey:@"singleton"];
+	[aCoder encodeObject:self.contents forKey:@"contents"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.itemID = [aDecoder decodeInt64ForKey:@"itemID"];
+		self.locationID = [aDecoder decodeInt64ForKey:@"locationID"];
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.quantity = [aDecoder decodeIntegerForKey:@"quantity"];
+		self.flag = [aDecoder decodeIntegerForKey:@"flag"];
+		self.singleton = [aDecoder decodeBoolForKey:@"singleton"];
+		self.contents = [aDecoder decodeObjectForKey:@"contents"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -44,11 +69,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) assetListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) assetListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEAssetList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/AssetList.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleLong
 							error:errorPtr
@@ -57,7 +82,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"assets"]) {
@@ -75,10 +100,23 @@
 	if ([rowset isEqualToString:@"assets"] || [rowset isEqualToString:@"contents"]) {
 		EVEAssetListItem *asset = [EVEAssetListItem assetListItemWithXMLAttributes:attributeDict];
 		[object addObject:asset];
-		asset.parent = self.currentRow;
 		return asset;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.assets forKey:@"assets"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.assets = [aDecoder decodeObjectForKey:@"assets"];
+	}
+	return self;
 }
 
 @end

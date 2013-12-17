@@ -8,7 +8,7 @@
 
 #import "EVERequest.h"
 
-@interface EVECharacterInfoEmploymentHistoryItem : NSObject
+@interface EVECharacterInfoEmploymentHistoryItem : NSObject<NSCoding>
 @property (nonatomic, assign) NSInteger recordID;
 @property (nonatomic, assign) NSInteger corporationID;
 @property (nonatomic, strong) NSDate *startDate;
@@ -39,6 +39,6 @@
 @property (nonatomic, assign) float securityStatus;
 @property (nonatomic, strong) NSArray* employmentHistory;
 
-+ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) characterInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

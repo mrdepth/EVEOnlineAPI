@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarTopStatsCharactersItem : NSObject
+@interface EVEFacWarTopStatsCharactersItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *characterName;
 @property (nonatomic) NSInteger kills;
@@ -20,7 +20,7 @@
 @end
 
 
-@interface EVEFacWarTopStatsCorporationsItem : NSObject
+@interface EVEFacWarTopStatsCorporationsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 @property (nonatomic) NSInteger kills;
@@ -31,7 +31,7 @@
 @end
 
 
-@interface EVEFacWarTopStatsFactionsItem : NSObject
+@interface EVEFacWarTopStatsFactionsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic) NSInteger kills;
@@ -42,7 +42,7 @@
 @end
 
 
-@interface EVEFacWarTopStatsSection : NSObject
+@interface EVEFacWarTopStatsSection : NSObject<NSCoding>
 @property (nonatomic, strong) NSArray *killsYesterday;
 @property (nonatomic, strong) NSArray *killsLastWeek;
 @property (nonatomic, strong) NSArray *killsTotal;
@@ -58,6 +58,6 @@
 @property (nonatomic, strong) EVEFacWarTopStatsSection *corporations;
 @property (nonatomic, strong) EVEFacWarTopStatsSection *factions;
 
-+ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

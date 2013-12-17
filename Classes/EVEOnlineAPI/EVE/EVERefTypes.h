@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVERefTypesItem : NSObject
+@interface EVERefTypesItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger refTypeID;
 @property (nonatomic, copy) NSString *refTypeName;
 
@@ -22,6 +22,6 @@
 @interface EVERefTypes : EVERequest
 @property (nonatomic, strong) NSArray *refTypes;
 
-+ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

@@ -10,7 +10,7 @@
 #import "EVEGlobals.h"
 #import "EVECachedURLRequest.h"
 
-@interface EVERequest : EVECachedURLRequest<NSXMLParserDelegate>
+@interface EVERequest : EVECachedURLRequest<NSXMLParserDelegate, NSCoding>
 
 @property (nonatomic, strong) NSDate *currentTime;
 @property (nonatomic, strong) NSDate *cachedUntil;

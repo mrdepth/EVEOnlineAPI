@@ -28,7 +28,7 @@
 @interface NAPISearch : EVECachedURLRequest
 @property (nonatomic, strong) NSArray* loadouts;
 
-+ (id) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCriteria:(NSDictionary*) criteria order:(NSString*) order error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

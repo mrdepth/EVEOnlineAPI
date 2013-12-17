@@ -26,6 +26,27 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.agentID forKey:@"agentID"];
+	[aCoder encodeInteger:self.skillTypeID forKey:@"skillTypeID"];
+	[aCoder encodeObject:self.researchStartDate forKey:@"researchStartDate"];
+	[aCoder encodeFloat:self.pointsPerDay forKey:@"pointsPerDay"];
+	[aCoder encodeFloat:self.remainderPoints forKey:@"remainderPoints"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.agentID = [aDecoder decodeIntegerForKey:@"agentID"];
+		self.skillTypeID = [aDecoder decodeIntegerForKey:@"skillTypeID"];
+		self.researchStartDate = [aDecoder decodeObjectForKey:@"researchStartDate"];
+		self.pointsPerDay = [aDecoder decodeFloatForKey:@"pointsPerDay"];
+		self.remainderPoints = [aDecoder decodeFloatForKey:@"remainderPoints"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -35,11 +56,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) researchWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) researchWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEResearch alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Research.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -66,6 +87,20 @@
 		return researchItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.research forKey:@"research"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.research = [aDecoder decodeObjectForKey:@"research"];
+	}
+	return self;
 }
 
 @end

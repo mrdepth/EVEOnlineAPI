@@ -30,6 +30,37 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.characterName forKey:@"characterName"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	[aCoder encodeInteger:self.damageTaken forKey:@"damageTaken"];
+	[aCoder encodeInteger:self.factionID forKey:@"factionID"];
+	[aCoder encodeObject:self.factionName forKey:@"factionName"];
+	[aCoder encodeInteger:self.shipTypeID forKey:@"shipTypeID"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		self.damageTaken = [aDecoder decodeIntegerForKey:@"damageTaken"];
+		self.factionID = [aDecoder decodeIntegerForKey:@"factionID"];
+		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
+		self.shipTypeID = [aDecoder decodeIntegerForKey:@"shipTypeID"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -56,6 +87,41 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
+	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.characterName forKey:@"characterName"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	
+	[aCoder encodeFloat:self.securityStatus forKey:@"securityStatus"];
+	[aCoder encodeInteger:self.damageDone forKey:@"damageDone"];
+	[aCoder encodeBool:self.finalBlow forKey:@"finalBlow"];
+	[aCoder encodeInteger:self.weaponTypeID forKey:@"weaponTypeID"];
+	[aCoder encodeInteger:self.shipTypeID forKey:@"shipTypeID"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
+		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		
+		self.securityStatus = [aDecoder decodeFloatForKey:@"securityStatus"];
+		self.damageDone = [aDecoder decodeIntegerForKey:@"damageDone"];
+		self.finalBlow = [aDecoder decodeBoolForKey:@"finalBlow"];
+		self.weaponTypeID = [aDecoder decodeIntegerForKey:@"weaponTypeID"];
+		self.shipTypeID = [aDecoder decodeIntegerForKey:@"shipTypeID"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVEKillLogItem
@@ -70,6 +136,27 @@
 		self.qtyDropped = [[attributeDict valueForKey:@"qtyDropped"] integerValue];
 		self.qtyDestroyed = [[attributeDict valueForKey:@"qtyDestroyed"] integerValue];
 		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.flag forKey:@"flag"];
+	[aCoder encodeInteger:self.qtyDropped forKey:@"qtyDropped"];
+	[aCoder encodeInteger:self.qtyDestroyed forKey:@"qtyDestroyed"];
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeObject:self.items forKey:@"items"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.flag = [aDecoder decodeIntegerForKey:@"flag"];
+		self.qtyDropped = [aDecoder decodeIntegerForKey:@"qtyDropped"];
+		self.qtyDestroyed = [aDecoder decodeIntegerForKey:@"qtyDestroyed"];
+		self.typeID= [aDecoder decodeIntegerForKey:@"typeID"];
+		self.items = [aDecoder decodeObjectForKey:@"items"];
 	}
 	return self;
 }
@@ -92,6 +179,31 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.killID forKey:@"killID"];
+	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeObject:self.killTime forKey:@"killTime"];
+	[aCoder encodeInteger:self.moonID forKey:@"moonID"];
+	[aCoder encodeObject:self.victim forKey:@"victim"];
+	[aCoder encodeObject:self.attackers forKey:@"attackers"];
+	[aCoder encodeObject:self.items forKey:@"items"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.killID = [aDecoder decodeIntegerForKey:@"killID"];
+		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.killTime = [aDecoder decodeObjectForKey:@"killTime"];
+		self.moonID = [aDecoder decodeIntegerForKey:@"moonID"];
+		self.victim = [aDecoder decodeObjectForKey:@"victim"];
+		self.attackers = [aDecoder decodeObjectForKey:@"attackers"];
+		self.items = [aDecoder decodeObjectForKey:@"items"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -101,11 +213,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) killLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEKillLog alloc] initWithKeyID:keyID vCode:vCode characterID:characterID beforeKillID:beforeKillID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID beforeKillID: (NSInteger) beforeKillID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/KillLog.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") ,keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID,
 														(beforeKillID > 0 ? [NSString stringWithFormat:@"&beforeKillID=%d", beforeKillID] : @"")]]
 					   cacheStyle:EVERequestCacheStyleLong
@@ -115,7 +227,7 @@
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"kills"]) {
@@ -163,6 +275,20 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
 	if ([elementName isEqualToString:@"victim"])
 		[[self currentRow] setVictim:[EVEKillLogVictim killLogVictimWithXMLAttributes:attributeDict]];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.kills = [aDecoder decodeObjectForKey:@"kills"];
+	}
+	return self;
 }
 
 @end

@@ -28,6 +28,31 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.queuePosition forKey:@"queuePosition"];
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.level forKey:@"level"];
+	[aCoder encodeInteger:self.startSP forKey:@"startSP"];
+	[aCoder encodeInteger:self.endSP forKey:@"endSP"];
+	[aCoder encodeObject:self.startTime forKey:@"startTime"];
+	[aCoder encodeObject:self.endTime forKey:@"endTime"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.queuePosition = [aDecoder decodeIntegerForKey:@"queuePosition"];
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.level = [aDecoder decodeIntegerForKey:@"level"];
+		self.startSP = [aDecoder decodeIntegerForKey:@"startSP"];
+		self.endSP = [aDecoder decodeIntegerForKey:@"endSP"];
+		self.startTime = [aDecoder decodeObjectForKey:@"startTime"];
+		self.endTime = [aDecoder decodeObjectForKey:@"endTime"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -37,11 +62,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVESkillQueue alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/SkillQueue.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -75,6 +100,20 @@
 		return skillQueueItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.skillQueue forKey:@"skillQueue"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.skillQueue = [aDecoder decodeObjectForKey:@"skillQueue"];
+	}
+	return self;
 }
 
 @end

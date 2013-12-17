@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEConquerableStationListItem : NSObject
+@interface EVEConquerableStationListItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger stationID;
 @property (nonatomic, copy) NSString *stationName;
 @property (nonatomic) NSInteger stationTypeID;
@@ -26,6 +26,6 @@
 @interface EVEConquerableStationList : EVERequest
 @property (nonatomic, strong) NSArray *outposts;
 
-+ (id) conquerableStationListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) conquerableStationListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

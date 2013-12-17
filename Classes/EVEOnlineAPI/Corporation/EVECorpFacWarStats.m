@@ -15,11 +15,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) corpFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) corpFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorpFacWarStats alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/FacWarStats.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -57,4 +57,39 @@
 	else if ([elementName isEqualToString:@"victoryPointsTotal"])
 		self.victoryPointsTotal = [self.text integerValue];
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeInteger:self.factionID forKey:@"factionID"];
+	[aCoder encodeObject:self.factionName forKey:@"factionName"];
+	[aCoder encodeObject:self.enlisted forKey:@"enlisted"];
+	
+	[aCoder encodeInteger:self.pilots forKey:@"pilots"];
+	[aCoder encodeInteger:self.killsYesterday forKey:@"killsYesterday"];
+	[aCoder encodeInteger:self.killsLastWeek forKey:@"killsLastWeek"];
+	[aCoder encodeInteger:self.killsTotal forKey:@"killsTotal"];
+	[aCoder encodeInteger:self.victoryPointsYesterday forKey:@"victoryPointsYesterday"];
+	[aCoder encodeInteger:self.victoryPointsLastWeek forKey:@"victoryPointsLastWeek"];
+	[aCoder encodeInteger:self.victoryPointsTotal forKey:@"victoryPointsTotal"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.factionID = [aDecoder decodeIntegerForKey:@"factionID"];
+		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
+		self.enlisted = [aDecoder decodeObjectForKey:@"enlisted"];
+
+		self.pilots = [aDecoder decodeIntegerForKey:@"pilots"];
+		self.killsYesterday = [aDecoder decodeIntegerForKey:@"killsYesterday"];
+		self.killsLastWeek = [aDecoder decodeIntegerForKey:@"killsLastWeek"];
+		self.killsTotal = [aDecoder decodeIntegerForKey:@"killsTotal"];
+		self.victoryPointsYesterday = [aDecoder decodeIntegerForKey:@"victoryPointsYesterday"];
+		self.victoryPointsLastWeek = [aDecoder decodeIntegerForKey:@"victoryPointsLastWeek"];
+		self.victoryPointsTotal = [aDecoder decodeIntegerForKey:@"victoryPointsTotal"];
+	}
+	return self;
+}
+
 @end

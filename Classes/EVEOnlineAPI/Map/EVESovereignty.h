@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVESovereigntyItem : NSObject
+@interface EVESovereigntyItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger solarSystemID;
 @property (nonatomic) NSInteger allianceID;
 @property (nonatomic) NSInteger factionID;
@@ -25,6 +25,6 @@
 @interface EVESovereignty : EVERequest
 @property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) sovereigntyWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) sovereigntyWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

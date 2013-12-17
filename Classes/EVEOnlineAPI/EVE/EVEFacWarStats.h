@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarStatsTotals : NSObject
+@interface EVEFacWarStatsTotals : NSObject<NSCoding>
 @property (nonatomic) NSInteger killsYesterday;
 @property (nonatomic) NSInteger killsLastWeek;
 @property (nonatomic) NSInteger killsTotal;
@@ -19,7 +19,7 @@
 @end
 
 
-@interface EVEFacWarStatsFactionsItem : NSObject
+@interface EVEFacWarStatsFactionsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic) NSInteger pilots;
@@ -37,7 +37,7 @@
 @end
 
 
-@interface EVEFacWarStatsFactionWarsItem : NSObject
+@interface EVEFacWarStatsFactionWarsItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic) NSInteger againstID;
@@ -54,6 +54,6 @@
 @property (nonatomic, strong) NSArray *factions;
 @property (nonatomic, strong) NSArray *factionWars;
 
-+ (id) facWarStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) facWarStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

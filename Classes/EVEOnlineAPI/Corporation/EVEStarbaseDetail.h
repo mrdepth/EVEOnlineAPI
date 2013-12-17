@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEStarbaseDetailGeneralSettings : NSObject
+@interface EVEStarbaseDetailGeneralSettings : NSObject<NSCoding>
 @property (nonatomic) NSInteger usageFlags;
 @property (nonatomic) NSInteger deployFlags;
 @property (nonatomic) BOOL allowCorporationMembers;
@@ -17,7 +17,7 @@
 
 @end
 
-@interface EVEStarbaseDetailCombatSettings : NSObject
+@interface EVEStarbaseDetailCombatSettings : NSObject<NSCoding>
 @property (nonatomic) NSInteger useStandingsFromOwnerID;
 @property (nonatomic) NSInteger onStandingDropStading;
 @property (nonatomic) BOOL onStatusDropEnabled;
@@ -27,7 +27,7 @@
 
 @end
 
-@interface EVEStarbaseDetailFuelItem : NSObject
+@interface EVEStarbaseDetailFuelItem : NSObject<NSCoding>
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic) NSInteger quantity;
 
@@ -44,7 +44,7 @@
 @property (nonatomic, strong) EVEStarbaseDetailCombatSettings *combatSettings;
 @property (nonatomic, strong) NSArray *fuel;
 
-+ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) starbaseDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID: (long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

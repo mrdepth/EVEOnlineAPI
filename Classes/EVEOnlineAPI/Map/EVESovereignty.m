@@ -26,6 +26,27 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeInteger:self.factionID forKey:@"factionID"];
+	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.solarSystemName forKey:@"solarSystemName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.factionID = [aDecoder decodeIntegerForKey:@"factionID"];
+		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.solarSystemName = [aDecoder decodeObjectForKey:@"solarSystemName"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -35,11 +56,11 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) sovereigntyWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) sovereigntyWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVESovereignty alloc] initWithError:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/Sovereignty.xml.aspx", EVEOnlineAPIHost]]
 					   cacheStyle:EVERequestCacheStyleModifiedShort
 							error:errorPtr
@@ -74,4 +95,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.solarSystems forKey:@"solarSystems"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.solarSystems = [aDecoder decodeObjectForKey:@"solarSystems"];
+	}
+	return self;
+}
+
 @end
