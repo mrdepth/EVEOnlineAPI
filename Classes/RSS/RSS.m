@@ -17,7 +17,7 @@
 }
 
 - (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:url cacheStyle:(EVERequestCacheStyle)EVERequestCacheStyleModifiedShort error:errorPtr progressHandler:progressHandler]) {
+	if (self = [super initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy error:errorPtr progressHandler:progressHandler]) {
 	}
 	return self;
 }

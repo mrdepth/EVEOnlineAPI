@@ -22,6 +22,6 @@
 @interface EVECharacterName : EVERequest
 @property (nonatomic, strong) NSDictionary *characters;
 
-+ (id) characterNameWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) characterNameWithIDs:(NSArray*) ids cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithIDs:(NSArray*) ids cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

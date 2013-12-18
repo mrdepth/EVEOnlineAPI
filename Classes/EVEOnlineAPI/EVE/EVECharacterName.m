@@ -47,17 +47,17 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) characterNameWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVECharacterName alloc] initWithIDs:ids error:errorPtr progressHandler:progressHandler];
++ (id) characterNameWithIDs:(NSArray*) ids cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVECharacterName alloc] initWithIDs:ids cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithIDs:(NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithIDs:(NSArray*) ids cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSString* body = [NSString stringWithFormat:@"ids=%@", [ids componentsJoinedByString:@","]];
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/CharacterName.xml.aspx",
 														EVEOnlineAPIHost]]
 						 bodyData:[body dataUsingEncoding:NSUTF8StringEncoding]
 					  contentType:nil
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 		

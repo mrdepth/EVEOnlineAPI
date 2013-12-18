@@ -59,13 +59,13 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) outpostServiceDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID:(long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVEOutpostServiceDetail alloc] initWithKeyID:keyID vCode:vCode characterID:characterID itemID:itemID error:errorPtr progressHandler:progressHandler];
++ (id) outpostServiceDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID itemID:(long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEOutpostServiceDetail alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID itemID:itemID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID:(long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID itemID:(long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/OutpostServiceDetail.xml.aspx?keyID=%d&vCode=%@&characterID=%d&itemID=%qi", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, itemID]]
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

@@ -22,7 +22,7 @@
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/upload", NeocomAPIHost]]
 						 bodyData:data
 					  contentType:@"application/json"
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:NSURLRequestUseProtocolCachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

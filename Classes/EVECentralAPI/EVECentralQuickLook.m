@@ -74,7 +74,7 @@
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/quicklook?%@",
 														EVECentralAPIHost,
 														[self argumentsStringWithTypeID:aTypeID regionIDs:regionIDs systemID:systemID hours:aHours minQ:aMinQ]]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:NSURLRequestUseProtocolCachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

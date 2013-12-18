@@ -46,13 +46,13 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) mailBodiesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVEMailBodies alloc] initWithKeyID:keyID vCode:vCode characterID:characterID ids:ids error:errorPtr progressHandler:progressHandler];
++ (id) mailBodiesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEMailBodies alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID ids:ids error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailBodies.xml.aspx?keyID=%d&vCode=%@&characterID=%d&ids=%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, [ids componentsJoinedByString:@","]]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

@@ -82,15 +82,15 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) charWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVECharWalletJournal alloc] initWithKeyID:keyID vCode:vCode characterID:characterID fromID:fromID rowCount:rowCount error:errorPtr progressHandler:progressHandler];
++ (id) charWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVECharWalletJournal alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID fromID:fromID rowCount:rowCount error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/WalletJournal.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID,
 														(fromID > 0 ? [NSString stringWithFormat:@"&fromID=%qi", fromID] : @""),
 														(rowCount > 0 ? [NSString stringWithFormat:@"&rowCount=%d", rowCount] : @"")]]
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

@@ -77,11 +77,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVECorpWalletJournal alloc] initWithKeyID:keyID vCode:vCode characterID:characterID accountKey:accountKey fromID:fromID rowCount:rowCount error:errorPtr progressHandler:progressHandler];
++ (id) corpWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVECorpWalletJournal alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID accountKey:accountKey fromID:fromID rowCount:rowCount error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID accountKey: (NSInteger) accountKey fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/WalletJournal.xml.aspx?keyID=%d&vCode=%@&characterID=%d&accountKey=%d%@%@",
 														EVEOnlineAPIHost,
 														keyID,
@@ -90,7 +90,7 @@
 														accountKey,
 														(fromID > 0 ? [NSString stringWithFormat:@"&fromID=%qi", fromID] : @""),
 														(rowCount > 0 ? [NSString stringWithFormat:@"&rowCount=%d", rowCount] : @"")]]
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

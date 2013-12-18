@@ -22,7 +22,7 @@
 	
 	NSString* argumentsString = [arguments componentsJoinedByString:@"&"];
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/lookup?%@", NeocomAPIHost, argumentsString]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:NSURLRequestUseProtocolCachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 		

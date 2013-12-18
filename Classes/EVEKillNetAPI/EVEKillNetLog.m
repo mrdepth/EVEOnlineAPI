@@ -103,7 +103,7 @@
 	[args appendFormat:@"mask:%d", mask];
 	NSURL* url = [NSURL URLWithString:[EVEKillNetLogAPIHost stringByAppendingPathComponent:args]];
 	
-	if (self = [super initWithURL:url cacheStyle:EVERequestCacheStyleModifiedShort error:errorPtr progressHandler:progressHandler]) {
+	if (self = [super initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy error:errorPtr progressHandler:progressHandler]) {
 		
 	}
 	return self;

@@ -52,7 +52,7 @@
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/marketstat?%@",
 														EVECentralAPIHost,
 														[self argumentsStringWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ]]]
-											cacheStyle:EVERequestCacheStyleModifiedShort
+											cachePolicy:NSURLRequestUseProtocolCachePolicy
 												 error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

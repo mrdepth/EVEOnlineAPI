@@ -15,13 +15,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) serverStatusWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVEServerStatus alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) serverStatusWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEServerStatus alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/server/ServerStatus.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

@@ -22,7 +22,7 @@
 	if (self = [super initWithURL:[NSURL URLWithString:BattleClinicAPIHost]
 						 bodyData:bodyData
 					  contentType:@"text/xml"
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:NSURLRequestUseProtocolCachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
