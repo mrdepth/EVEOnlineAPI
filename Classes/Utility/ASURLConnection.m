@@ -7,6 +7,7 @@
 //
 
 #import "ASURLConnection.h"
+#import "UIApplication+NetworkActivity.h"
 
 @interface ASURLConnection()<NSURLConnectionDataDelegate>
 @property (nonatomic, copy) void (^progressHandler)(CGFloat progress, BOOL* stop);
@@ -24,6 +25,7 @@
 @implementation ASURLConnection
 
 + (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+    [[UIApplication sharedApplication] beginNetworkActivity];
 	ASURLConnectionDelegate* delegate = [[ASURLConnectionDelegate alloc] init];
 	ASURLConnection* connection = [[ASURLConnection alloc] initWithRequest:request delegate:delegate startImmediately:NO];
 
@@ -34,7 +36,8 @@
 	[connection start];
 	
 	while (!connection.finished && [runLoop runMode:mode beforeDate:[NSDate distantFuture]]);
-	
+	[[UIApplication sharedApplication] endNetworkActivity];
+    
 	if (response)
 		*response = connection.response;
 	if (error)
