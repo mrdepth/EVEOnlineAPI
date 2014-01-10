@@ -191,6 +191,7 @@ didStartElement:(NSString *)elementName
 	[aCoder encodeObject:self.currentTime forKey:@"currentTime"];
 	[aCoder encodeObject:self.cachedUntil forKey:@"cachedUntil"];
 	[aCoder encodeObject:self.apiVersion forKey:@"apiVersion"];
+	[aCoder encodeObject:self.cacheDate forKey:@"cacheDate"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -198,6 +199,7 @@ didStartElement:(NSString *)elementName
 		self.currentTime = [aDecoder decodeObjectForKey:@"currentTime"];
 		self.cachedUntil = [aDecoder decodeObjectForKey:@"cachedUntil"];
 		self.apiVersion = [aDecoder decodeObjectForKey:@"apiVersion"];
+		self.cacheDate = [aDecoder decodeObjectForKey:@"cacheDate"];
 	}
 	return self;
 }

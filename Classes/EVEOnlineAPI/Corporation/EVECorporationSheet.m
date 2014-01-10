@@ -218,7 +218,7 @@ didStartElement:(NSString *)elementName
 
 		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
 		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
-		self.taxRate = [aDecoder decodeIntegerForKey:@"taxRate"];
+		self.taxRate = [aDecoder decodeFloatForKey:@"taxRate"];
 
 		self.memberCount = [aDecoder decodeIntegerForKey:@"memberCount"];
 		self.memberLimit = [aDecoder decodeIntegerForKey:@"memberLimit"];
