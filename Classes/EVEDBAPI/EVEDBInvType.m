@@ -246,12 +246,12 @@
 - (NSMutableArray*) requiredSkills {
 	if (!_requiredSkills) {
 		_requiredSkills = [[NSMutableArray alloc] init];
-		NSArray* requirementIDs = [NSArray arrayWithObjects:@(182), @(183), @(184), @(1285), @(1289), @(1290), nil];
-		NSArray* skillLevelIDs = [NSArray arrayWithObjects:@(277), @(278), @(279), @(1286), @(1287), @(1288), nil];
+		NSInteger requirementIDs[] = {182, 183, 184, 1285, 1289, 1290};
+		NSInteger skillLevelIDs[] = {277, 278, 279, 1286, 1287, 1288};
 		for (int i = 0; i < 5; i++) {
-			EVEDBDgmTypeAttribute* attributeTypeID = self.attributesDictionary[requirementIDs[i]];
+			EVEDBDgmTypeAttribute* attributeTypeID = self.attributesDictionary[@(requirementIDs[i])];
 			if (attributeTypeID) {
-				EVEDBDgmTypeAttribute* attributeLevel = self.attributesDictionary[skillLevelIDs[i]];
+				EVEDBDgmTypeAttribute* attributeLevel = self.attributesDictionary[@(skillLevelIDs[i])];
 				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(NSInteger) attributeTypeID.value error:nil];
 				if (skill) {
 					skill.requiredLevel = attributeLevel.value;
@@ -324,24 +324,18 @@
 	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 	if (!database)
 		return;
-	_attributeCategories = [[NSMutableArray alloc] init];
-	_attributesDictionary = [[NSMutableDictionary alloc] init];
+	NSMutableDictionary* attributeCategories = [NSMutableDictionary new];
+	_attributesDictionary = [NSMutableDictionary new];
 	
 	[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM dgmTypeAttributes, dgmAttributeTypes, dgmAttributeCategories WHERE dgmAttributeTypes.attributeID=dgmTypeAttributes.attributeID AND dgmAttributeCategories.categoryID=dgmAttributeTypes.categoryID AND typeID=%d;", self.typeID]
 				 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
 					 EVEDBDgmTypeAttribute *typeAttribute = [[EVEDBDgmTypeAttribute alloc] initWithStatement:stmt];
 					 EVEDBDgmAttributeType *attributeType = [[EVEDBDgmAttributeType alloc] initWithStatement:stmt];
 					 EVEDBDgmAttributeCategory *attributeCategory = [[EVEDBDgmAttributeCategory alloc] initWithStatement:stmt];
-					 EVEDBInvTypeAttributeCategory *category = nil;
-					 for (EVEDBInvTypeAttributeCategory *cat in _attributeCategories) {
-						 if (cat.categoryID == attributeCategory.categoryID) {
-							 category = cat;
-							 break;
-						 }
-					 }
+					 EVEDBInvTypeAttributeCategory *category = attributeCategories[@(attributeCategory.categoryID)];
 					 if (!category) {
 						 category = [[EVEDBInvTypeAttributeCategory alloc] initWithStatement:stmt];
-						 [_attributeCategories addObject:category];
+						 attributeCategories[@(category.categoryID)] = category;
 					 }
 					 if (attributeType.published)
 						 [category.publishedAttributes addObject:typeAttribute];
@@ -353,6 +347,45 @@
 					 _attributesDictionary[@(attributeType.attributeID)] = typeAttribute;
 				 }];
 	
+	EVEDBInvTypeAttributeCategory *category = attributeCategories[@(9)];
+	if (!category) {
+		category = [EVEDBInvTypeAttributeCategory dgmAttributeCategoryWithAttributeCategoryID:9 error:nil];
+		attributeCategories[@(9)] = category;
+	}
+	
+	EVEDBDgmTypeAttribute* typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 4;
+	typeAttribute.value = self.mass;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 38;
+	typeAttribute.value = self.capacity;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 161;
+	typeAttribute.value = self.volume;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 162;
+	typeAttribute.value = self.radius;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	if (self.raceID) {
+		typeAttribute = [EVEDBDgmTypeAttribute new];
+		typeAttribute.typeID = self.typeID;
+		typeAttribute.attributeID = 195;
+		typeAttribute.value = self.raceID;
+		[category.publishedAttributes addObject:typeAttribute];
+	}
+	
+	_attributeCategories = [NSMutableArray arrayWithArray:[attributeCategories allValues]];
 	[_attributeCategories sortUsingSelector:@selector(compare:)];
 }
 
