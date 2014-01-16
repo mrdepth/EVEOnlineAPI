@@ -45,7 +45,7 @@
 
 
 @interface EVEDBInvTypeRequiredSkill()
-@property (nonatomic, readwrite, assign) float requiredSP;
+@property (nonatomic, readwrite, assign) float requiredSkillPoints;
 @end
 
 @interface EVEDBInvType()
@@ -426,15 +426,15 @@
 	return [object isKindOfClass:[self class]] && self.typeID == [object typeID] && self.requiredLevel == [object requiredLevel];
 }
 
-- (float) requiredSP {
-	if (_requiredSP == 0.0 && self.requiredLevel > 0)
-		_requiredSP = [self skillPointsAtLevel:self.requiredLevel];
-	return _requiredSP;
+- (float) requiredSkillPoints {
+	if (_requiredSkillPoints == 0.0 && self.requiredLevel > 0)
+		_requiredSkillPoints = [self skillPointsAtLevel:self.requiredLevel];
+	return _requiredSkillPoints;
 }
 
 - (void) setRequiredLevel:(NSInteger)value {
 	if (_requiredLevel != value)
-		_requiredSP = 0.0;
+		_requiredSkillPoints = 0.0;
 	_requiredLevel = value;
 }
 

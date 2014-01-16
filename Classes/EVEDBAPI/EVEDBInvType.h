@@ -58,5 +58,5 @@
 
 @interface EVEDBInvTypeRequiredSkill : EVEDBInvType
 @property (nonatomic, assign) NSInteger requiredLevel;
-@property (nonatomic, readonly, assign) float requiredSP;
+@property (nonatomic, readonly, assign) float requiredSkillPoints;
 @end

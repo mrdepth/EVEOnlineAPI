@@ -21,7 +21,7 @@
 }
 
 + (id) dgmAttributeCategoryWithAttributeCategoryID: (NSInteger)attributeCategoryID error:(NSError **)errorPtr {
-	return [[EVEDBDgmAttributeCategory alloc] initWithAttributeCategoryID:attributeCategoryID error:errorPtr];
+	return [[self alloc] initWithAttributeCategoryID:attributeCategoryID error:errorPtr];
 }
 
 - (id) initWithAttributeCategoryID: (NSInteger)attributeCategoryID error:(NSError **)errorPtr {
