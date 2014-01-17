@@ -86,4 +86,19 @@ didStartElement:(NSString *)elementName
 	return validText;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.cacheExpireDate forKey:@"cacheExpireDate"];
+	[aCoder encodeObject:self.cacheDate forKey:@"cacheDate"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.cacheExpireDate = [aDecoder decodeObjectForKey:@"cacheExpireDate"];
+		self.cacheDate = [aDecoder decodeObjectForKey:@"cacheDate"];
+	}
+	return self;
+}
+
 @end

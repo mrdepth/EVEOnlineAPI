@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "EVECentralRequest.h"
 
-@interface EVECentralMarketStatTypeStat : NSObject
+@interface EVECentralMarketStatTypeStat : NSObject<NSCoding>
 @property (nonatomic) float volume;
 @property (nonatomic) float avg;
 @property (nonatomic) float max;
@@ -22,7 +22,7 @@
 @end
 
 
-@interface EVECentralMarketStatType: NSObject
+@interface EVECentralMarketStatType: NSObject<NSCoding>
 @property (nonatomic) NSInteger typeID;
 @property (nonatomic, strong) EVECentralMarketStatTypeStat *all;
 @property (nonatomic, strong) EVECentralMarketStatTypeStat *buy;

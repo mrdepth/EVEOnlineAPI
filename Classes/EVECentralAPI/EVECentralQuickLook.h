@@ -11,7 +11,7 @@
 
 @class EVEDBMapRegion;
 @class EVEDBStaStation;
-@interface EVECentralQuickLookOrder: NSObject
+@interface EVECentralQuickLookOrder: NSObject<NSCoding>
 @property (nonatomic) NSInteger orderID;
 @property (nonatomic) NSInteger regionID;
 @property (nonatomic, strong) EVEDBMapRegion *region;

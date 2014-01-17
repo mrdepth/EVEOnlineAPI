@@ -50,6 +50,49 @@
 		return _station;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.orderID forKey:@"orderID"];
+	[aCoder encodeInteger:self.regionID forKey:@"regionID"];
+	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	
+	if  (self.stationName)
+		[aCoder encodeObject:self.stationName forKey:@"stationName"];
+
+	[aCoder encodeFloat:self.security forKey:@"security"];
+	[aCoder encodeInteger:self.range forKey:@"range"];
+	[aCoder encodeFloat:self.price forKey:@"price"];
+	[aCoder encodeInteger:self.volRemain forKey:@"volRemain"];
+	[aCoder encodeInteger:self.minVolume forKey:@"minVolume"];
+	
+	if  (self.expires)
+		[aCoder encodeObject:self.expires forKey:@"expires"];
+	if  (self.reportedTime)
+		[aCoder encodeObject:self.reportedTime forKey:@"reportedTime"];
+
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.orderID = [aDecoder decodeIntegerForKey:@"orderID"];
+		self.regionID = [aDecoder decodeIntegerForKey:@"regionID"];
+		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		
+		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
+		
+		self.security = [aDecoder decodeFloatForKey:@"security"];
+		self.range = [aDecoder decodeIntegerForKey:@"range"];
+		self.price = [aDecoder decodeFloatForKey:@"price"];
+		self.volRemain = [aDecoder decodeIntegerForKey:@"volRemain"];
+		self.minVolume = [aDecoder decodeIntegerForKey:@"minVolume"];
+
+		self.expires = [aDecoder decodeObjectForKey:@"expires"];
+		self.reportedTime = [aDecoder decodeObjectForKey:@"reportedTime"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -165,6 +208,39 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"reported_time"])
 		self.currentOrder.reportedTime = [self.reportedTimeDateFormatter dateFromString:self.validText];
 	
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	
+	if  (self.typeName)
+		[aCoder encodeObject:self.typeName forKey:@"typeName"];
+	if  (self.regions)
+		[aCoder encodeObject:self.regions forKey:@"regions"];
+	
+	[aCoder encodeInteger:self.hours forKey:@"hours"];
+	[aCoder encodeInteger:self.minQ forKey:@"minQ"];
+	
+	if  (self.sellOrders)
+		[aCoder encodeObject:self.sellOrders forKey:@"sellOrders"];
+	if  (self.buyOrders)
+		[aCoder encodeObject:self.buyOrders forKey:@"buyOrders"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
+		self.regions = [aDecoder decodeObjectForKey:@"regions"];
+		self.hours = [aDecoder decodeIntegerForKey:@"hours"];
+		self.minQ = [aDecoder decodeIntegerForKey:@"minQ"];
+		self.sellOrders = [aDecoder decodeObjectForKey:@"sellOrders"];
+		self.buyOrders = [aDecoder decodeObjectForKey:@"buyOrders"];
+	}
+	return self;
 }
 
 #pragma mark - Private
