@@ -55,6 +55,9 @@
 
 @end
 
+@interface EVESkillQueue()
+@end
+
 
 @implementation EVESkillQueue
 
@@ -73,6 +76,11 @@
 				  progressHandler:progressHandler]) {
 	}
 	return self;
+}
+
+- (NSTimeInterval) timeLeft {
+	NSDate *endTime = [[self.skillQueue lastObject] endTime];
+	return [endTime timeIntervalSinceDate:[self serverTimeWithLocalTime:[NSDate date]]];
 }
 
 #pragma mark NSXMLParserDelegate
