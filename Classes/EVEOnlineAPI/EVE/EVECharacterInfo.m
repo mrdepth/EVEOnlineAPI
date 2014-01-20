@@ -139,6 +139,7 @@
 	[aCoder encodeObject:self.shipTypeName forKey:@"shipTypeName"];
 	[aCoder encodeObject:self.corporation forKey:@"corporation"];
 	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationDate forKey:@"corporationDate"];
 	[aCoder encodeObject:self.alliance forKey:@"alliance"];
 	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
 	[aCoder encodeObject:self.allianceDate forKey:@"allianceDate"];
@@ -160,6 +161,7 @@
 		self.shipTypeName = [aDecoder decodeObjectForKey:@"shipTypeName"];
 		self.corporation = [aDecoder decodeObjectForKey:@"corporation"];
 		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationDate = [aDecoder decodeObjectForKey:@"corporationDate"];
 		self.alliance = [aDecoder decodeObjectForKey:@"alliance"];
 		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
 		self.allianceDate = [aDecoder decodeObjectForKey:@"allianceDate"];
