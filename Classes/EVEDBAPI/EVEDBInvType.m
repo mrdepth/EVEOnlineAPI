@@ -20,6 +20,8 @@
 #import "EVEDBInvType+Skill.h"
 #import "EVEDBInvTypeMaterial.h"
 #import "EVEDBInvBlueprintType.h"
+#import "murmurhash3.h"
+#import <objc/runtime.h>
 
 
 @implementation EVEDBInvTypeAttributeCategory
@@ -236,11 +238,18 @@
 }
 
 - (BOOL) isEqual:(id)object {
-	return [object isKindOfClass:[self class]] && self.typeID == [object typeID];
+	return [object isKindOfClass:[self class]] && self.hash == [object hash];
 }
 
 - (NSUInteger) hash {
-	return self.typeID;
+	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
+	if (!hash) {
+		NSUInteger hash = murmurHash3(&_typeID, sizeof(NSInteger), (uint32_t)[self class]);
+		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+		return hash;
+	}
+	else
+		return [hash unsignedIntegerValue];
 }
 
 - (NSMutableArray*) requiredSkills {
@@ -423,7 +432,19 @@
 @implementation EVEDBInvTypeRequiredSkill
 
 - (BOOL) isEqual:(id)object {
-	return [object isKindOfClass:[self class]] && self.typeID == [object typeID] && self.requiredLevel == [object requiredLevel];
+	return [object isKindOfClass:[self class]] && self.hash == [object hash];
+}
+
+- (NSUInteger) hash {
+	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
+	if (!hash) {
+		NSInteger data[] = {self.typeID, self.requiredLevel};
+		NSUInteger hash = murmurHash3(data, sizeof(data), (uint32_t)[self class]);
+		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+		return hash;
+	}
+	else
+		return [hash unsignedIntegerValue];
 }
 
 - (float) requiredSkillPoints {
@@ -433,6 +454,7 @@
 }
 
 - (void) setRequiredLevel:(NSInteger)value {
+	objc_setAssociatedObject(self, @"hash", nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	if (_requiredLevel != value)
 		_requiredSkillPoints = 0.0;
 	_requiredLevel = value;
