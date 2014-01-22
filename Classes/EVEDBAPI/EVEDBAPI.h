@@ -41,4 +41,7 @@
 #import "EVEDBCrtCertificate.h"
 #import "EVEDBCrtRecommendation.h"
 #import "EVEDBCrtRelationship.h"
+#import "EVEDBCertCertificate.h"
+#import "EVEDBCertMastery.h"
+#import "EVEDBCertSkill.h"
 #import "NSDictionary+EVEDBAPI.h"

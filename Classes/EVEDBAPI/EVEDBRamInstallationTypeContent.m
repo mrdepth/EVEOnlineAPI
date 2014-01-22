@@ -25,28 +25,28 @@
 
 - (EVEDBInvType*) installationType {
 	if (self.installationTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_installationType) {
 		_installationType = [EVEDBInvType invTypeWithTypeID:self.installationTypeID error:nil];
 		if (!_installationType)
 			_installationType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _installationType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _installationType;
 }
 
 - (EVEDBRamAssemblyLineType*) assemblyLineType {
 	if (self.assemblyLineTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_assemblyLineType) {
 		_assemblyLineType = [EVEDBRamAssemblyLineType ramAssemblyLineTypeWithAssemblyLineTypeID:self.assemblyLineTypeID error:nil];
 		if (!_assemblyLineType)
 			_assemblyLineType = (EVEDBRamAssemblyLineType*) [NSNull null];
 	}
 	if ((NSNull*) _assemblyLineType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _assemblyLineType;
 }

@@ -65,6 +65,7 @@
 
 #pragma mark --
 
+@class EVESkillQueue;
 @interface EVECharacterSheet : EVERequest
 @property (nonatomic) NSInteger characterID;
 @property (nonatomic, copy) NSString *name;
@@ -94,4 +95,5 @@
 + (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 - (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
+- (void) updateSkillPointsFromSkillQueue:(EVESkillQueue*) skillQueue;
 @end

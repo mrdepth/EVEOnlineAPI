@@ -41,14 +41,14 @@
 
 - (EVEDBRamActivity*) activity {
 	if (self.activityID == 0)
-		return NULL;
+		return nil;
 	if (!_activity) {
 		_activity = [EVEDBRamActivity ramActivityWithActivityID:self.activityID error:nil];
 		if (!_activity)
 			_activity = (EVEDBRamActivity*) [NSNull null];
 	}
 	if ((NSNull*) _activity == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _activity;
 }

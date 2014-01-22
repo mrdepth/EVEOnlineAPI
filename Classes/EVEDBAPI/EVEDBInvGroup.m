@@ -81,28 +81,28 @@
 
 - (EVEDBInvCategory*) category {
 	if (self.categoryID == 0)
-		return NULL;
+		return nil;
 	if (!_category) {
 		_category = [EVEDBInvCategory invCategoryWithCategoryID:self.categoryID error:nil];
 		if (!_category)
 			_category = (EVEDBInvCategory*) [NSNull null];
 	}
 	if ((NSNull*) _category == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _category;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }

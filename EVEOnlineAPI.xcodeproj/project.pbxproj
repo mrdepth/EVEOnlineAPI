@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1222E162188F8890003C1361 /* murmurhash3.c in Sources */ = {isa = PBXBuildFile; fileRef = 1222E15E188F8890003C1361 /* murmurhash3.c */; };
+		1222E163188F8890003C1361 /* UIApplication+NetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E161188F8890003C1361 /* UIApplication+NetworkActivity.m */; };
+		1222E165188F88C8003C1361 /* evedb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 1222E164188F88C8003C1361 /* evedb.sqlite */; };
+		1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */; };
+		1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */; };
+		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
 		1248696B17717B0B0025C647 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
@@ -35,7 +41,6 @@
 		12D6EDDD176F193100F45382 /* EVEDBInvMetaGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D6EDDC176F193000F45382 /* EVEDBInvMetaGroup.m */; };
 		12D81ACB15D8D977006AA4B2 /* EVEDBInvBlueprintType.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81ACA15D8D977006AA4B2 /* EVEDBInvBlueprintType.m */; };
 		12D81ACF15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81ACE15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m */; };
-		12D81AD115D8E2F8006AA4B2 /* evedb.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 12D81AD015D8E2F8006AA4B2 /* evedb.sqlite */; };
 		12D81B4115D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D81B4015D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m */; };
 		12DF9C0F11B7CD9100350938 /* EVECharFacWarStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */; };
 		12E1A0FF11B80A6500F004D7 /* EVEKillLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */; };
@@ -150,6 +155,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1222E15E188F8890003C1361 /* murmurhash3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = murmurhash3.c; sourceTree = "<group>"; };
+		1222E15F188F8890003C1361 /* murmurhash3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = murmurhash3.h; sourceTree = "<group>"; };
+		1222E160188F8890003C1361 /* UIApplication+NetworkActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+NetworkActivity.h"; sourceTree = "<group>"; };
+		1222E161188F8890003C1361 /* UIApplication+NetworkActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+NetworkActivity.m"; sourceTree = "<group>"; };
+		1222E164188F88C8003C1361 /* evedb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = evedb.sqlite; path = ../../evedb.sqlite; sourceTree = "<group>"; };
+		1222E169188F8941003C1361 /* EVEDBCertCertificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCertCertificate.h; sourceTree = "<group>"; };
+		1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertCertificate.m; sourceTree = "<group>"; };
+		1222E16C188F8BF6003C1361 /* EVEDBCertMastery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCertMastery.h; sourceTree = "<group>"; };
+		1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertMastery.m; sourceTree = "<group>"; };
+		1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCertSkill.h; sourceTree = "<group>"; };
+		1222E170188F8D82003C1361 /* EVEDBCertSkill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertSkill.m; sourceTree = "<group>"; };
 		1248696917717B0B0025C647 /* NAPILookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPILookup.h; sourceTree = "<group>"; };
 		1248696A17717B0B0025C647 /* NAPILookup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAPILookup.m; sourceTree = "<group>"; };
 		124D20CC11B7EF7A00D84307 /* EVEIndustryJobs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEIndustryJobs.h; sourceTree = "<group>"; };
@@ -209,7 +225,6 @@
 		12D81ACA15D8D977006AA4B2 /* EVEDBInvBlueprintType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBInvBlueprintType.m; sourceTree = "<group>"; };
 		12D81ACD15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBInvTypeMaterial.h; sourceTree = "<group>"; };
 		12D81ACE15D8DC61006AA4B2 /* EVEDBInvTypeMaterial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBInvTypeMaterial.m; sourceTree = "<group>"; };
-		12D81AD015D8E2F8006AA4B2 /* evedb.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = evedb.sqlite; path = ../evedb.sqlite; sourceTree = "<group>"; };
 		12D81B3F15D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBRamTypeRequirement.h; sourceTree = "<group>"; };
 		12D81B4015D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBRamTypeRequirement.m; sourceTree = "<group>"; };
 		12DF9C0D11B7CD9100350938 /* EVECharFacWarStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECharFacWarStats.h; sourceTree = "<group>"; };
@@ -472,6 +487,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		1222E15D188F8890003C1361 /* MurmurHash3 */ = {
+			isa = PBXGroup;
+			children = (
+				1222E15E188F8890003C1361 /* murmurhash3.c */,
+				1222E15F188F8890003C1361 /* murmurhash3.h */,
+			);
+			path = MurmurHash3;
+			sourceTree = "<group>";
+		};
 		12AA3031140B9D0400B33BE8 /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -638,7 +662,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				12D81AD015D8E2F8006AA4B2 /* evedb.sqlite */,
+				1222E164188F88C8003C1361 /* evedb.sqlite */,
 				28AD733E0D9D9553002E5188 /* MainWindow.xib */,
 				8D1107310486CEB800E47090 /* EVEOnlineAPI-Info.plist */,
 			);
@@ -831,6 +855,9 @@
 			children = (
 				7186DAB313059D0700C22AEC /* NSMutableString+HTML */,
 				7186898213059CCC00C22AEC /* NSString+HTML */,
+				1222E15D188F8890003C1361 /* MurmurHash3 */,
+				1222E160188F8890003C1361 /* UIApplication+NetworkActivity.h */,
+				1222E161188F8890003C1361 /* UIApplication+NetworkActivity.m */,
 				718C3315121EC87B00E4E065 /* EVECachedURLRequest.h */,
 				718C3316121EC87B00E4E065 /* EVECachedURLRequest.m */,
 				718BB48B12DA64C600FF9D26 /* NSString+MD5.h */,
@@ -942,6 +969,12 @@
 				3764AC6714CDC3FE00C7DEC5 /* EVEDBCrtRecommendation.m */,
 				3764AC6914CDC7A200C7DEC5 /* EVEDBCrtRelationship.h */,
 				3764AC6A14CDC7A200C7DEC5 /* EVEDBCrtRelationship.m */,
+				1222E169188F8941003C1361 /* EVEDBCertCertificate.h */,
+				1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */,
+				1222E16C188F8BF6003C1361 /* EVEDBCertMastery.h */,
+				1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */,
+				1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */,
+				1222E170188F8D82003C1361 /* EVEDBCertSkill.m */,
 				7183B4FD12254891005CB8EE /* EVEDBAPI.h */,
 			);
 			path = EVEDBAPI;
@@ -1013,6 +1046,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EVEOnlineAPI" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -1037,8 +1072,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1222E165188F88C8003C1361 /* evedb.sqlite in Resources */,
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
-				12D81AD115D8E2F8006AA4B2 /* evedb.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1067,6 +1102,7 @@
 				126413B411B954C0001417FE /* EVECharMedals.m in Sources */,
 				12641E3C11B9641F001417FE /* EVENotifications.m in Sources */,
 				12641E6C11B96621001417FE /* EVEResearch.m in Sources */,
+				1222E162188F8890003C1361 /* murmurhash3.c in Sources */,
 				71954C0311FB111600850FC1 /* EVESkillInTraining.m in Sources */,
 				71954C6A11FB1CF400850FC1 /* EVESkillQueue.m in Sources */,
 				7182DB1311FB220900997FAD /* EVEStandings.m in Sources */,
@@ -1078,6 +1114,7 @@
 				71A3C14111FC5B77002F338D /* EVEContainerLog.m in Sources */,
 				71A3C14E11FC67CD002F338D /* EVECorporationSheet.m in Sources */,
 				7189860111FD943400A4ED9B /* EVECorpFacWarStats.m in Sources */,
+				1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */,
 				7189861311FD97B600A4ED9B /* EVECorpMedals.m in Sources */,
 				7189861A11FD99EC00A4ED9B /* EVEMemberMedals.m in Sources */,
 				7189862411FD9BDD00A4ED9B /* EVEMemberSecurity.m in Sources */,
@@ -1140,9 +1177,11 @@
 				71A6530F131DA7FA0082FFAC /* EVEDBInvControlTowerResourcePurpose.m in Sources */,
 				7180B9B2136C763E001D8B90 /* EVEDBDgmEffect.m in Sources */,
 				7180B9BD136C795D001D8B90 /* EVEDBDgmTypeEffect.m in Sources */,
+				1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */,
 				71997889137F0A770061BA4E /* BCRequest.m in Sources */,
 				719978AD137F0EC90061BA4E /* NSData+MD5.m in Sources */,
 				719978BE137F0FE90061BA4E /* BCEveLoadoutsTags.m in Sources */,
+				1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */,
 				71997988137F18BB0061BA4E /* BCEveLoadoutsList.m in Sources */,
 				719979CF137F21710061BA4E /* BCEveLoadout.m in Sources */,
 				12AA3027140B991F00B33BE8 /* EVEAPIKeyInfo.m in Sources */,
@@ -1182,6 +1221,7 @@
 				12774E171770347100E98F8C /* ASURLConnection.m in Sources */,
 				12D5F8BD17706AA50061D57C /* NAPIUpload.m in Sources */,
 				12D5F8C017706D010061D57C /* NAPISearch.m in Sources */,
+				1222E163188F8890003C1361 /* UIApplication+NetworkActivity.m in Sources */,
 				1248696B17717B0B0025C647 /* NAPILookup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -24,14 +24,14 @@
 
 - (EVEDBDgmEffect*) effect {
 	if (self.effectID == 0)
-		return NULL;
+		return nil;
 	if (!_effect) {
 		_effect = [EVEDBDgmEffect dgmEffectWithEffectID:self.effectID error:nil];
 		if (!_effect)
 			_effect = (EVEDBDgmEffect*) [NSNull null];
 	}
 	if ((NSNull*) _effect == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _effect;
 }

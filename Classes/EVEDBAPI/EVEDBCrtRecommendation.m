@@ -42,28 +42,28 @@
 
 - (EVEDBInvType*) shipType {
 	if (self.shipTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_shipType) {
 		_shipType = [EVEDBInvType invTypeWithTypeID:self.shipTypeID error:nil];
 		if (!_shipType)
 			_shipType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _shipType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _shipType;
 }
 
 - (EVEDBCrtCertificate*) certificate {
 	if (self.certificateID == 0)
-		return NULL;
+		return nil;
 	if (!_certificate) {
 		_certificate = [EVEDBCrtCertificate crtCertificateWithCertificateID:self.certificateID error:nil];
 		if (!_certificate)
 			_certificate = (EVEDBCrtCertificate*) [NSNull null];
 	}
 	if ((NSNull*) _certificate == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _certificate;
 }

@@ -42,8 +42,8 @@
 @property (nonatomic, strong) NSMutableArray *attributeCategories;
 @property (nonatomic, strong) NSMutableDictionary *attributesDictionary;
 @property (nonatomic, strong) NSMutableDictionary *effectsDictionary;
-@property (nonatomic, strong) NSMutableArray *certificateRecommendations;
-@property (nonatomic, strong) NSMutableArray *requiredSkills;
+@property (nonatomic, strong, readonly) NSArray *masteries;
+@property (nonatomic, strong, readonly) NSArray *requiredSkills;
 @property (nonatomic, strong) EVEDBInvBlueprintType* blueprintType;
 @property (nonatomic, strong) EVEDBInvType* blueprint;
 

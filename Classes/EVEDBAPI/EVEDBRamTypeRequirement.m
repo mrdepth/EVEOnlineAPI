@@ -29,42 +29,42 @@
 
 - (EVEDBInvType*) type {
 	if (self.typeID == 0)
-		return NULL;
+		return nil;
 	if (!_type) {
 		_type = [EVEDBInvType invTypeWithTypeID:self.typeID error:nil];
 		if (!_type)
 			_type = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _type == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _type;
 }
 
 - (EVEDBRamActivity*) activity {
 	if (self.activityID == 0)
-		return NULL;
+		return nil;
 	if (!_activity) {
 		_activity = [EVEDBRamActivity ramActivityWithActivityID:self.activityID error:nil];
 		if (!_activity)
 			_activity = (EVEDBRamActivity*) [NSNull null];
 	}
 	if ((NSNull*) _activity == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _activity;
 }
 
 - (EVEDBInvType*) requiredType {
 	if (self.requiredTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_requiredType) {
 		_requiredType = [EVEDBInvType invTypeWithTypeID:self.requiredTypeID error:nil];
 		if (!_requiredType)
 			_requiredType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _requiredType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _requiredType;
 }

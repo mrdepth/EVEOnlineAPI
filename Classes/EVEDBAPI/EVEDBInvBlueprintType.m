@@ -49,42 +49,42 @@
 
 - (EVEDBInvType*) blueprintType {
 	if (_blueprintTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_blueprintType) {
 		_blueprintType = [EVEDBInvType invTypeWithTypeID:_blueprintTypeID error:nil];
 		if (!_blueprintType)
 			_blueprintType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _blueprintType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _blueprintType;
 }
 
 - (EVEDBInvBlueprintType*) parentBlueprintType {
 	if (_parentBlueprintTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_parentBlueprintType) {
 		_parentBlueprintType = [EVEDBInvBlueprintType invBlueprintTypeWithBlueprintTypeID:_parentBlueprintTypeID error:nil];
 		if (!_parentBlueprintType)
 			_parentBlueprintType = (EVEDBInvBlueprintType*) [NSNull null];
 	}
 	if ((NSNull*) _parentBlueprintType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _parentBlueprintType;
 }
 
 - (EVEDBInvType*) productType {
 	if (_productTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_productType) {
 		_productType = [EVEDBInvType invTypeWithTypeID:_productTypeID error:nil];
 		if (!_productType)
 			_productType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _productType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _productType;
 }

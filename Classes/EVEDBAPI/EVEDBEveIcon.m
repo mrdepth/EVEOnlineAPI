@@ -47,7 +47,7 @@
 		}
 	}
 	if ((NSNull*) _iconImageName == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _iconImageName;
 }

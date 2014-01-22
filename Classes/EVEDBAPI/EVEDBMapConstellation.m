@@ -37,14 +37,14 @@
 
 - (EVEDBMapRegion*) region {
 	if (self.regionID == 0)
-		return NULL;
+		return nil;
 	if (!_region) {
 		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
 		if (!_region)
 			_region = (EVEDBMapRegion*) [NSNull null];
 	}
 	if ((NSNull*) _region == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _region;
 }

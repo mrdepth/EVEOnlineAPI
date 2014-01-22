@@ -24,28 +24,28 @@
 
 - (EVEDBMapRegion*) region {
 	if (self.regionID == 0)
-		return NULL;
+		return nil;
 	if (!_region) {
 		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
 		if (!_region)
 			_region = (EVEDBMapRegion*) [NSNull null];
 	}
 	if ((NSNull*) _region == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _region;
 }
 
 - (EVEDBStaStation*) station {
 	if (self.stationID == 0)
-		return NULL;
+		return nil;
 	if (!_station) {
 		_station = [EVEDBStaStation staStationWithStationID:self.stationID error:nil];
 		if (!_station)
 			_station = (EVEDBStaStation*) [NSNull null];
 	}
 	if ((NSNull*) _station == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _station;
 }

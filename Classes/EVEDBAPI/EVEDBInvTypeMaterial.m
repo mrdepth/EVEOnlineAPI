@@ -24,28 +24,28 @@
 
 - (EVEDBInvType*) type {
 	if (self.typeID == 0)
-		return NULL;
+		return nil;
 	if (!_type) {
 		_type = [EVEDBInvType invTypeWithTypeID:self.typeID error:nil];
 		if (!_type)
 			_type = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _type == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _type;
 }
 
 - (EVEDBInvType*) materialType {
 	if (self.materialTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_materialType) {
 		_materialType = [EVEDBInvType invTypeWithTypeID:self.materialTypeID error:nil];
 		if (!_materialType)
 			_materialType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _materialType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _materialType;
 }

@@ -7,6 +7,7 @@
 //
 
 #import "EVECharacterSheet.h"
+#import "EVESkillQueue.h"
 
 @implementation EVECharacterSheetAttributes
 
@@ -194,6 +195,26 @@
 			[(NSMutableDictionary*)self.skillsMap setObject:skill forKey:@(skill.typeID)];
 	}
 	return _skillsMap;
+}
+
+- (void) updateSkillPointsFromSkillQueue:(EVESkillQueue*) skillQueue {
+	if (skillQueue) {
+		NSDate *currentTime = [skillQueue serverTimeWithLocalTime:[NSDate date]];
+		for (EVESkillQueueItem *item in skillQueue.skillQueue) {
+			if (item.endTime && item.startTime) {
+				EVECharacterSheetSkill *skill = self.skillsMap[@(item.typeID)];
+				if (item.endTime && item.startTime) {
+					float spps = (item.endSP - item.startSP) / [item.endTime timeIntervalSinceDate:item.startTime];
+					if (spps > 0) {
+						if (item.queuePosition == 0)
+							skill.skillpoints = item.endSP - [item.endTime timeIntervalSinceDate:currentTime] * spps;
+						else if (item.level - 1 == skill.level)
+							skill.skillpoints = item.endSP - [item.endTime timeIntervalSinceDate:item.startTime] * spps;
+					}
+				}
+			}
+		}
+	}
 }
 
 #pragma mark - NSXMLParserDelegate

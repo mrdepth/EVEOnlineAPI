@@ -20,6 +20,7 @@
 #import "EVEDBInvType+Skill.h"
 #import "EVEDBInvTypeMaterial.h"
 #import "EVEDBInvBlueprintType.h"
+#import "EVEDBCertMastery.h"
 #import "murmurhash3.h"
 #import <objc/runtime.h>
 
@@ -51,9 +52,12 @@
 @end
 
 @interface EVEDBInvType()
+@property (nonatomic, strong, readwrite) NSArray *masteries;
+@property (nonatomic, strong, readwrite) NSArray *requiredSkills;
+
 - (void) loadAttributes;
 - (void) loadEffects;
-- (void) loadCertificateRecommendations;
+- (void) loadMasteries;
 @end
 
 
@@ -130,49 +134,49 @@
 		self.effectsDictionary = type->_effectsDictionary;
 		self.attributesDictionary = type->_attributesDictionary;
 		self.effectsDictionary = type->_effectsDictionary;
-		self.certificateRecommendations = type->_certificateRecommendations;
+		self.masteries = type->_masteries;
 	}
 	return self;
 }
 
 - (EVEDBInvGroup*) group {
 	if (self.groupID == 0)
-		return NULL;
+		return nil;
 	if (!_group) {
 		_group = [EVEDBInvGroup invGroupWithGroupID:self.groupID error:nil];
 		if (!_group)
 			_group = (EVEDBInvGroup*) [NSNull null];
 	}
 	if ((NSNull*) _group == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _group;
 }
 
 - (EVEDBInvMarketGroup*) marketGroup {
 	if (self.marketGroupID == 0)
-		return NULL;
+		return nil;
 	if (!_marketGroup) {
 		_marketGroup = [EVEDBInvMarketGroup invMarketGroupWithMarketGroupID:self.marketGroupID error:nil];
 		if (!_marketGroup)
 			_marketGroup = (EVEDBInvMarketGroup*) [NSNull null];
 	}
 	if ((NSNull*) _marketGroup == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _marketGroup;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }
@@ -198,11 +202,14 @@
 	return _effectsDictionary;
 }
 
-- (NSMutableArray*) certificateRecommendations {
-	if (!_certificateRecommendations) {
-		[self loadCertificateRecommendations];
+- (NSArray*) masteries {
+	if (!_masteries) {
+		[self loadMasteries];
 	}
-	return _certificateRecommendations;
+	if ((NSNull*) _masteries == [NSNull null])
+		return nil;
+	else
+		return _masteries;
 }
 
 - (NSString*) typeLargeImageName {
@@ -252,9 +259,9 @@
 		return [hash unsignedIntegerValue];
 }
 
-- (NSMutableArray*) requiredSkills {
+- (NSArray*) requiredSkills {
 	if (!_requiredSkills) {
-		_requiredSkills = [[NSMutableArray alloc] init];
+		NSMutableArray* requiredSkills = [NSMutableArray new];
 		NSInteger requirementIDs[] = {182, 183, 184, 1285, 1289, 1290};
 		NSInteger skillLevelIDs[] = {277, 278, 279, 1286, 1287, 1288};
 		for (int i = 0; i < 5; i++) {
@@ -264,10 +271,11 @@
 				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(NSInteger) attributeTypeID.value error:nil];
 				if (skill) {
 					skill.requiredLevel = attributeLevel.value;
-					[_requiredSkills addObject:skill];
+					[requiredSkills addObject:skill];
 				}
 			}
 		}
+		_requiredSkills = requiredSkills;
 	}
 	return _requiredSkills;
 }
@@ -287,7 +295,7 @@
 			_blueprintType = (EVEDBInvBlueprintType*) [NSNull null];
 	}
 	if ((NSNull*) _blueprintType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _blueprintType;
 }
@@ -307,7 +315,7 @@
 			_blueprint = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _blueprint == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _blueprint;
 }
@@ -414,17 +422,26 @@
 				 }];
 }
 
-- (void) loadCertificateRecommendations {
+- (void) loadMasteries {
 	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 	if (!database)
 		return;
-	_certificateRecommendations = [[NSMutableArray alloc] init];
-	
-	[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRecommendations WHERE shipTypeID=%d;", self.typeID]
+	NSMutableArray* masteries = [NSMutableArray new];
+	for (int i = 0; i <= 4; i++)
+		[masteries addObject:[NSMutableArray new]];
+	__block BOOL empty = YES;
+	[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM certMasteries WHERE typeID=%d;", self.typeID]
 				 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
-					 EVEDBCrtRecommendation* recommendation = [[EVEDBCrtRecommendation alloc] initWithStatement:stmt];
-					 [_certificateRecommendations addObject:recommendation];
+					 EVEDBCertMastery* mastery = [[EVEDBCertMastery alloc] initWithStatement:stmt];
+					 if (mastery.masteryLevel >= 0 && mastery.masteryLevel <= 4) {
+						 [masteries[mastery.masteryLevel] addObject:mastery];
+						 empty = NO;
+					 }
 				 }];
+	for (NSMutableArray* array in masteries)
+		[array sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"certificate.name" ascending:YES]]];
+	
+	_masteries = empty ? (NSArray*) [NSNull null] : masteries;
 }
 
 @end

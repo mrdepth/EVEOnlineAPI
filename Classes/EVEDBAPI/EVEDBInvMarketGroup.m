@@ -37,28 +37,28 @@
 
 - (EVEDBInvMarketGroup*) parentGroup {
 	if (self.parentGroupID == 0)
-		return NULL;
+		return nil;
 	if (!_parentGroup) {
 		_parentGroup = [EVEDBInvMarketGroup invMarketGroupWithMarketGroupID:self.parentGroupID error:nil];
 		if (!_parentGroup)
 			_parentGroup = (EVEDBInvMarketGroup*) [NSNull null];
 	}
 	if ((NSNull*) _parentGroup == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _parentGroup;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }

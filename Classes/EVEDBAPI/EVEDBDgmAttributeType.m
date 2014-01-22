@@ -45,28 +45,28 @@
 
 - (EVEDBDgmAttributeCategory*) category {
 	if (self.categoryID == 0)
-		return NULL;
+		return nil;
 	if (!_category) {
 		_category = [EVEDBDgmAttributeCategory dgmAttributeCategoryWithAttributeCategoryID:self.categoryID error:nil];
 		if (!_category)
 			_category = (EVEDBDgmAttributeCategory*) [NSNull null];
 	}
 	if ((NSNull*) _category == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _category;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }
@@ -74,14 +74,14 @@
 
 - (EVEDBEveUnit*) unit {
 	if (self.unitID == 0)
-		return NULL;
+		return nil;
 	if (!_unit) {
 		_unit = [EVEDBEveUnit eveUnitWithUnitID:self.unitID error:nil];
 		if (!_unit)
 			_unit = (EVEDBEveUnit*) [NSNull null];
 	}
 	if ((NSNull*) _unit == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _unit;
 }

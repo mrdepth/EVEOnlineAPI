@@ -61,28 +61,28 @@
 
 - (EVEDBMapRegion*) region {
 	if (self.regionID == 0)
-		return NULL;
+		return nil;
 	if (!_region) {
 		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
 		if (!_region)
 			_region = (EVEDBMapRegion*) [NSNull null];
 	}
 	if ((NSNull*) _region == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _region;
 }
 
 - (EVEDBMapConstellation*) constellation {
 	if (self.constellationID == 0)
-		return NULL;
+		return nil;
 	if (!_constellation) {
 		_constellation = [EVEDBMapConstellation mapConstellationWithConstellationID:self.constellationID error:nil];
 		if (!_constellation)
 			_constellation = (EVEDBMapConstellation*) [NSNull null];
 	}
 	if ((NSNull*) _constellation == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _constellation;
 }

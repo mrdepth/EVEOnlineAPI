@@ -26,14 +26,14 @@
 
 - (EVEDBDgmAttributeType*) attribute {
 	if (self.attributeID == 0)
-		return NULL;
+		return nil;
 	if (!_attribute) {
 		_attribute = [EVEDBDgmAttributeType dgmAttributeTypeWithAttributeTypeID:self.attributeID error:nil];
 		if (!_attribute)
 			_attribute = (EVEDBDgmAttributeType*) [NSNull null];
 	}
 	if ((NSNull*) _attribute == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _attribute;
 }

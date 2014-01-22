@@ -22,6 +22,11 @@
 #define V_CODE @""
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	EVEDBInvType* dominix = [EVEDBInvType invTypeWithTypeID:645 error:nil];
+	for (NSArray* masteries in dominix.masteries) {
+		for (EVEDBCertMastery* mastery in masteries)
+			NSLog(@"%@ %d", mastery.certificate.name, mastery.masteryLevel);
+	}
 	[window makeKeyAndVisible];
 	return YES;
 }
