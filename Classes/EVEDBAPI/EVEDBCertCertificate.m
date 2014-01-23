@@ -77,4 +77,11 @@
 	return _skills;
 }
 
++ (NSString*) iconImageNameWithMasteryLevel:(NSInteger) masteryLevel {
+	if (masteryLevel >= -1 && masteryLevel <= 4)
+		return [NSString stringWithFormat:@"Icons/icon79_0%d.png", 2 + masteryLevel];
+	else
+		return @"Icons/icon79_1.png";
+}
+
 @end

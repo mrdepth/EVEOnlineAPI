@@ -21,4 +21,5 @@
 + (id) certCertificateWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr;
 - (id) initWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr;
 
++ (NSString*) iconImageNameWithMasteryLevel:(NSInteger) masteryLevel;
 @end
