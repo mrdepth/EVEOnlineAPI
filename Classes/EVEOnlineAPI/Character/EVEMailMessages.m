@@ -29,6 +29,7 @@
 		NSString* toListIDsString = [attributeDict valueForKey:@"toListID"];
 		self.toListID = toListIDsString.length > 1 ? [toListIDsString componentsSeparatedByString:@","] : nil;
 		self.read = [[attributeDict valueForKey:@"read"] boolValue];
+		self.senderTypeID = [[attributeDict valueForKey:@"senderTypeID"] integerValue];
 	}
 	return self;
 }
@@ -44,6 +45,7 @@
 	[aCoder encodeObject:self.toCharacterIDs forKey:@"toCharacterIDs"];
 	[aCoder encodeObject:self.toListID forKey:@"toListID"];
 	[aCoder encodeBool:self.read forKey:@"read"];
+	[aCoder encodeInteger:self.senderTypeID forKey:@"senderTypeID"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -56,6 +58,7 @@
 		self.toCharacterIDs = [aDecoder decodeObjectForKey:@"toCharacterIDs"];
 		self.toListID = [aDecoder decodeObjectForKey:@"toListID"];
 		self.read = [aDecoder decodeBoolForKey:@"read"];
+		self.senderTypeID = [aDecoder decodeIntegerForKey:@"senderTypeID"];
 	}
 	return self;
 }

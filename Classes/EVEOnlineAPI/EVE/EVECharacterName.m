@@ -79,7 +79,7 @@
 
 - (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"characters"]) {
-		[(NSMutableDictionary*) self.characters setValue:[attributeDict valueForKey:@"name"] forKey:[attributeDict valueForKey:@"characterID"]];
+		[(NSMutableDictionary*) self.characters setObject:[attributeDict valueForKey:@"name"] forKey:@([attributeDict[@"characterID"] integerValue])];
 		return nil;
 	}
 	return nil;

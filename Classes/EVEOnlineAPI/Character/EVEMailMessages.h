@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSArray *toCharacterIDs;
 @property (nonatomic, strong) NSArray *toListID;
 @property (nonatomic) BOOL read;
+@property (nonatomic, assign) NSInteger senderTypeID;
 
 + (id) mailMessagesItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
