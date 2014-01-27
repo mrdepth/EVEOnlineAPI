@@ -13,6 +13,7 @@
 		1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */; };
 		1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */; };
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
+		1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243770D18969D170078F526 /* EVEDBNpcGroup.m */; };
 		1248696B17717B0B0025C647 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
@@ -166,6 +167,8 @@
 		1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertMastery.m; sourceTree = "<group>"; };
 		1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCertSkill.h; sourceTree = "<group>"; };
 		1222E170188F8D82003C1361 /* EVEDBCertSkill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertSkill.m; sourceTree = "<group>"; };
+		1243770C18969D170078F526 /* EVEDBNpcGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBNpcGroup.h; sourceTree = "<group>"; };
+		1243770D18969D170078F526 /* EVEDBNpcGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBNpcGroup.m; sourceTree = "<group>"; };
 		1248696917717B0B0025C647 /* NAPILookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPILookup.h; sourceTree = "<group>"; };
 		1248696A17717B0B0025C647 /* NAPILookup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAPILookup.m; sourceTree = "<group>"; };
 		124D20CC11B7EF7A00D84307 /* EVEIndustryJobs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEIndustryJobs.h; sourceTree = "<group>"; };
@@ -975,6 +978,8 @@
 				1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */,
 				1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */,
 				1222E170188F8D82003C1361 /* EVEDBCertSkill.m */,
+				1243770C18969D170078F526 /* EVEDBNpcGroup.h */,
+				1243770D18969D170078F526 /* EVEDBNpcGroup.m */,
 				7183B4FD12254891005CB8EE /* EVEDBAPI.h */,
 			);
 			path = EVEDBAPI;
@@ -1086,6 +1091,7 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* EVEOnlineAPIAppDelegate.m in Sources */,
+				1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */,
 				12CAF63C11B4010C008696F3 /* EVERequest.m in Sources */,
 				12CAF64311B4015F008696F3 /* EVECharacters.m in Sources */,
 				12CAF6EE11B40B9A008696F3 /* EVEAccountBalance.m in Sources */,

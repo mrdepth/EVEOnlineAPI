@@ -44,4 +44,5 @@
 #import "EVEDBCertCertificate.h"
 #import "EVEDBCertMastery.h"
 #import "EVEDBCertSkill.h"
+#import "EVEDBNpcGroup.h"
 #import "NSDictionary+EVEDBAPI.h"
