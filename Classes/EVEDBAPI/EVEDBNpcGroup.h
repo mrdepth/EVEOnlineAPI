@@ -14,8 +14,7 @@
 @property (nonatomic, assign) NSInteger parentNpcGroupID;
 @property (nonatomic, strong) NSString* npcGroupName;
 @property (nonatomic, assign) NSInteger groupID;
-@property (nonatomic) NSInteger iconID;
-@property (nonatomic, strong) EVEDBEveIcon *icon;
+@property (nonatomic, strong) NSString *iconName;
 
 
 

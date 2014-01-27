@@ -18,25 +18,11 @@
 		map = @{@"npcGroupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"npcGroupID"},
 				@"parentNpcGroupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"parentNpcGroupID"},
 				@"groupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"groupID"},
-				@"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
+				@"iconName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"iconName"},
 				@"npcGroupName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"npcGroupName"}
 				};
 	
 	return map;
 }
 
-- (EVEDBEveIcon*) icon {
-	if (self.iconID == 0)
-		return nil;
-	if (!_icon) {
-		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
-		if (!_icon)
-			_icon = (EVEDBEveIcon*) [NSNull null];
-	}
-	if ((NSNull*) _icon == [NSNull null])
-		return nil;
-	else
-		return _icon;
-}
-		
 @end
