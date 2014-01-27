@@ -57,7 +57,7 @@ static BOOL offlineMode = NO;
 		NSCachedURLResponse* cachedResponse = [cache cachedResponseForRequest:request];
 		
 		NSData* data = nil;
-		if (cachedResponse) {
+		if (cachedResponse && request.cachePolicy != NSURLRequestReloadIgnoringCacheData) {
 			self.cacheExpireDate = [cachedResponse.userInfo valueForKey:@"cacheExpireDate"];
 			self.cacheDate = [cachedResponse.userInfo valueForKey:@"cacheDate"];
 			if (self.cacheExpireDate && [self.cacheExpireDate laterDate:[NSDate date]] == self.cacheExpireDate)
