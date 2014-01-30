@@ -21,7 +21,6 @@
 #import "EVEDBInvTypeMaterial.h"
 #import "EVEDBInvBlueprintType.h"
 #import "EVEDBCertMastery.h"
-#import "murmurhash3.h"
 #import <objc/runtime.h>
 
 
@@ -251,7 +250,7 @@
 - (NSUInteger) hash {
 	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
 	if (!hash) {
-		NSUInteger hash = murmurHash3(&_typeID, sizeof(NSInteger), (uint32_t)[self class]);
+		NSUInteger hash = [[NSData dataWithBytes:&_typeID length:sizeof(_typeID)] hash];
 		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 		return hash;
 	}
@@ -456,7 +455,7 @@
 	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
 	if (!hash) {
 		NSInteger data[] = {self.typeID, self.requiredLevel};
-		NSUInteger hash = murmurHash3(data, sizeof(data), (uint32_t)[self class]);
+		NSUInteger hash = [[NSData dataWithBytes:data length:sizeof(data)] hash];
 		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 		return hash;
 	}
