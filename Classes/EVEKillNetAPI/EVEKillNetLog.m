@@ -117,7 +117,7 @@
 		[self didParseObject:object];
 	}
 	else
-		error = [NSError errorWithDomain:EVEKillNetAPIErrorDomain code:EVEKillNetAPIErrorCodeParsingError userInfo:[NSDictionary dictionaryWithObject:EVEKillNetAPIErrorCodeParsingErrorText forKey:NSLocalizedDescriptionKey]];
+		error = [NSError errorWithDomain:EVEKillNetAPIErrorDomain code:EVEKillNetAPIErrorCodeParsingError userInfo:@{NSLocalizedDescriptionKey: EVEKillNetAPIErrorCodeParsingErrorText}];
 	return error;
 }
 

@@ -158,7 +158,7 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"cachedUntil"])
 		self.cachedUntil = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
 	else if ([elementName isEqualToString:@"error"]) {
-		self.error = [NSError errorWithDomain:EVEOnlineErrorDomain code:self.errorCode userInfo:[NSDictionary dictionaryWithObject:[self.text copy] forKey:NSLocalizedDescriptionKey]];
+		self.error = [NSError errorWithDomain:EVEOnlineErrorDomain code:self.errorCode userInfo:@{NSLocalizedDescriptionKey: [self.text copy]}];
 	}
 	else if ([elementName isEqualToString:@"rowset"]) {
 		id rowsetObject = [self.rowsetObjects lastObject];

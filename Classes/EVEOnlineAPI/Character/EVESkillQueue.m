@@ -97,7 +97,7 @@
 
 - (void) didEndRowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"skillqueue"]) {
-		[(NSMutableArray*) self.skillQueue sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
+		[(NSMutableArray*) self.skillQueue sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
 	}
 }
 
