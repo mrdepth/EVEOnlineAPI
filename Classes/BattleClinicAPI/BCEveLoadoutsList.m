@@ -10,6 +10,45 @@
 #import "BCGlobals.h"
 
 @implementation BCEveLoadoutsListItem
+
+- (id) initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.thumbsUp = [aDecoder decodeIntegerForKey:@"thumbsUp"];
+		self.thumbsDown = [aDecoder decodeIntegerForKey:@"thumbsDown"];
+		self.topicID = [aDecoder decodeIntegerForKey:@"topicID"];
+		self.loadoutID = [aDecoder decodeIntegerForKey:@"loadoutID"];
+		self.raceID = [aDecoder decodeIntegerForKey:@"raceID"];
+		self.thumbsTotal = [aDecoder decodeIntegerForKey:@"thumbsTotal"];
+		self.memberID = [aDecoder decodeIntegerForKey:@"memberID"];
+
+		self.subject = [aDecoder decodeObjectForKey:@"subject"];
+		self.posterTime = [aDecoder decodeObjectForKey:@"posterTime"];
+		self.modifiedTime = [aDecoder decodeObjectForKey:@"modifiedTime"];
+		self.author = [aDecoder decodeObjectForKey:@"author"];
+	}
+	return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInteger:self.thumbsUp forKey:@"thumbsUp"];
+	[aCoder encodeInteger:self.thumbsDown forKey:@"thumbsDown"];
+	[aCoder encodeInteger:self.topicID forKey:@"topicID"];
+	[aCoder encodeInteger:self.loadoutID forKey:@"loadoutID"];
+	[aCoder encodeInteger:self.raceID forKey:@"raceID"];
+	[aCoder encodeInteger:self.thumbsTotal forKey:@"thumbsTotal"];
+	[aCoder encodeInteger:self.memberID forKey:@"memberID"];
+	
+	if (self.subject)
+		[aCoder encodeObject:self.subject forKey:@"subject"];
+	if (self.posterTime)
+		[aCoder encodeObject:self.subject forKey:@"posterTime"];
+	if (self.modifiedTime)
+		[aCoder encodeObject:self.subject forKey:@"modifiedTime"];
+	if (self.author)
+		[aCoder encodeObject:self.subject forKey:@"author"];
+}
 @end
 
 @interface BCEveLoadoutsList()

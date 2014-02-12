@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "BCRequest.h"
 
-@interface BCEveLoadoutsListItem: NSObject
+@interface BCEveLoadoutsListItem: NSObject<NSCoding>
 @property (nonatomic, assign) NSInteger typeID;
 @property (nonatomic, assign) NSInteger thumbsUp;
 @property (nonatomic, assign) NSInteger thumbsDown;
