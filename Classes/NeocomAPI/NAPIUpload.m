@@ -11,18 +11,18 @@
 
 @implementation NAPIUpload
 
-+ (id) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[NAPIUpload alloc] initWithCannonicalNames:cannonicalNames userID:userID error:errorPtr progressHandler:progressHandler];
++ (id) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[NAPIUpload alloc] initWithCannonicalNames:cannonicalNames userID:userID cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSDictionary* jsonObject = @{@"userID" : userID, @"loadouts" : [cannonicalNames sortedArrayUsingSelector:@selector(compare:)]};
 	NSData* data = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:errorPtr];
 
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/upload", NeocomAPIHost]]
 						 bodyData:data
 					  contentType:@"application/json"
-					   cachePolicy:NSURLRequestUseProtocolCachePolicy
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}

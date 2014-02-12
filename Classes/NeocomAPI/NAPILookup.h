@@ -11,7 +11,7 @@
 @interface NAPILookup : EVECachedURLRequest
 @property (nonatomic, assign) NSInteger count;
 
-+ (id) lookupWithCriteria:(NSDictionary*) criteria error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCriteria:(NSDictionary*) criteria error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) lookupWithCriteria:(NSDictionary*) criteria cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCriteria:(NSDictionary*) criteria cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

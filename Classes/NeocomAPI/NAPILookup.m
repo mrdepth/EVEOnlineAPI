@@ -11,18 +11,18 @@
 
 @implementation NAPILookup
 
-+ (id) lookupWithCriteria:(NSDictionary*) criteria error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[NAPILookup alloc] initWithCriteria:criteria error:errorPtr progressHandler:progressHandler];
++ (id) lookupWithCriteria:(NSDictionary*) criteria cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[NAPILookup alloc] initWithCriteria:criteria cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithCriteria:(NSDictionary*) criteria error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithCriteria:(NSDictionary*) criteria cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableArray* arguments = [[NSMutableArray alloc] init];
 	for (NSString* key in [criteria allKeys])
 		[arguments addObject:[NSString stringWithFormat:@"%@=%@", key, [criteria valueForKey:key]]];
 	
 	NSString* argumentsString = [arguments componentsJoinedByString:@"&"];
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/lookup?%@", NeocomAPIHost, argumentsString]]
-					   cachePolicy:NSURLRequestUseProtocolCachePolicy
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 		
