@@ -8,7 +8,7 @@
 
 #import "EVECachedURLRequest.h"
 
-@interface NAPISearchItem : NSObject
+@interface NAPISearchItem : NSObject<NSCoding>
 @property (nonatomic, strong) NSString* canonicalName;
 @property (nonatomic, assign) NSInteger typeID;
 @property (nonatomic, strong) NSString* typeName;
