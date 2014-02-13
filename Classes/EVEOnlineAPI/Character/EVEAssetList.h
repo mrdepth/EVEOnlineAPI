@@ -17,6 +17,7 @@
 @property (nonatomic) EVEInventoryFlag flag;
 @property (nonatomic) BOOL singleton;
 @property (nonatomic, strong) NSMutableArray *contents;
+@property (nonatomic, weak) EVEAssetListItem* parent;
 
 + (id) assetListItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;

@@ -56,6 +56,8 @@
 		self.flag = [aDecoder decodeIntegerForKey:@"flag"];
 		self.singleton = [aDecoder decodeBoolForKey:@"singleton"];
 		self.contents = [aDecoder decodeObjectForKey:@"contents"];
+		for (EVEAssetListItem* asset in self.contents)
+			asset.parent = self;
 	}
 	return self;
 }
@@ -100,6 +102,7 @@
 	if ([rowset isEqualToString:@"assets"] || [rowset isEqualToString:@"contents"]) {
 		EVEAssetListItem *asset = [EVEAssetListItem assetListItemWithXMLAttributes:attributeDict];
 		[object addObject:asset];
+		asset.parent = self.currentRow;
 		return asset;
 	}
 	return nil;
