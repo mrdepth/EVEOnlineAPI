@@ -13,6 +13,7 @@
 		1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */; };
 		1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */; };
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
+		122AC51018BCCBC7005F0F46 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; };
 		1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243770D18969D170078F526 /* EVEDBNpcGroup.m */; };
 		1248696B17717B0B0025C647 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
@@ -167,6 +168,9 @@
 		1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertMastery.m; sourceTree = "<group>"; };
 		1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCertSkill.h; sourceTree = "<group>"; };
 		1222E170188F8D82003C1361 /* EVEDBCertSkill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertSkill.m; sourceTree = "<group>"; };
+		122AC50D18BCCB92005F0F46 /* EVEzKillBoardAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardAPI.h; sourceTree = "<group>"; };
+		122AC50E18BCCBC7005F0F46 /* EVEzKillBoardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardSearch.h; sourceTree = "<group>"; };
+		122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEzKillBoardSearch.m; sourceTree = "<group>"; };
 		1243770C18969D170078F526 /* EVEDBNpcGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBNpcGroup.h; sourceTree = "<group>"; };
 		1243770D18969D170078F526 /* EVEDBNpcGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBNpcGroup.m; sourceTree = "<group>"; };
 		1248696917717B0B0025C647 /* NAPILookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPILookup.h; sourceTree = "<group>"; };
@@ -484,6 +488,7 @@
 				37DF48E6151CC7D600BC87A5 /* EVEC0rporationAPI */,
 				12FDCC5616390FEC0000709F /* EVEKillNetAPI */,
 				12F7A69017687D2000F39962 /* NeocomAPI */,
+				122AC50C18BCCB8B005F0F46 /* EVEzKillBoardAPI */,
 				1D3623240D0F684500981E51 /* EVEOnlineAPIAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */,
 			);
@@ -497,6 +502,16 @@
 				1222E15F188F8890003C1361 /* murmurhash3.h */,
 			);
 			path = MurmurHash3;
+			sourceTree = "<group>";
+		};
+		122AC50C18BCCB8B005F0F46 /* EVEzKillBoardAPI */ = {
+			isa = PBXGroup;
+			children = (
+				122AC50D18BCCB92005F0F46 /* EVEzKillBoardAPI.h */,
+				122AC50E18BCCBC7005F0F46 /* EVEzKillBoardSearch.h */,
+				122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */,
+			);
+			path = EVEzKillBoardAPI;
 			sourceTree = "<group>";
 		};
 		12AA3031140B9D0400B33BE8 /* API */ = {
@@ -1167,6 +1182,7 @@
 				71814B7A12D7BD2F0031CA0F /* EVEMemberSecurityLog.m in Sources */,
 				717E179612D9333000266573 /* EVEDBEveIcon.m in Sources */,
 				717E19AE12D947CF00266573 /* EVECentralRequest.m in Sources */,
+				122AC51018BCCBC7005F0F46 /* EVEzKillBoardSearch.m in Sources */,
 				7182CCBC12D9E2C300F8CD02 /* EVECentralMarketStat.m in Sources */,
 				718BB48F12DA64C600FF9D26 /* NSString+MD5.m in Sources */,
 				718BB49012DA64C600FF9D26 /* NSURL+MD5.m in Sources */,
