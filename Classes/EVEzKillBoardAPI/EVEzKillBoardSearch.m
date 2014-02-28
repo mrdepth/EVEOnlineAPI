@@ -54,6 +54,8 @@
 	for (NSDictionary* dictionary in object) {
 		if ([dictionary isKindOfClass:[NSDictionary class]]) {
 			EVEKillLogKill* kill = [[EVEKillLogKill alloc] initWithXMLAttributes:dictionary];
+			if (!kill.killID)
+				continue;
 			kill.victim = [[EVEKillLogVictim alloc] initWithXMLAttributes:dictionary[@"victim"]];
 			NSMutableArray* items = [NSMutableArray new];
 			for (NSDictionary* dictionaryItem in dictionary[@"items"])

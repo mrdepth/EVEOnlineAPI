@@ -173,7 +173,7 @@
 	if (self = [super init]) {
 		self.killID = [[attributeDict valueForKey:@"killID"] integerValue];
 		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
-		self.killTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"killTime"]];
+		self.killTime = [[NSDateFormatter eveDateFormatter] dateFromString:[[attributeDict valueForKey:@"killTime"] stringByReplacingOccurrencesOfString:@"\n" withString:@""]];
 		self.moonID = [[attributeDict valueForKey:@"moonID"] integerValue];
 	}
 	return self;
