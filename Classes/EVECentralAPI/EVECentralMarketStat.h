@@ -16,6 +16,7 @@
 @property (nonatomic) float min;
 @property (nonatomic) float stddev;
 @property (nonatomic) float median;
+@property (nonatomic) float percentile;
 
 + (id) marketStatTypeStat;
 

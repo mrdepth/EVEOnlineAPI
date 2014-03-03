@@ -23,6 +23,7 @@
 	[aCoder encodeFloat:self.min forKey:@"min"];
 	[aCoder encodeFloat:self.stddev forKey:@"stddev"];
 	[aCoder encodeFloat:self.median forKey:@"median"];
+	[aCoder encodeFloat:self.percentile forKey:@"percentile"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -33,6 +34,7 @@
 		self.min = [aDecoder decodeFloatForKey:@"min"];
 		self.stddev = [aDecoder decodeFloatForKey:@"stddev"];
 		self.median = [aDecoder decodeFloatForKey:@"median"];
+		self.percentile = [aDecoder decodeFloatForKey:@"percentile"];
 	}
 	return self;
 }
@@ -55,16 +57,18 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
 	if (self.all)
 		[aCoder encodeObject:self.all forKey:@"all"];
 	if (self.buy)
-		[aCoder encodeObject:self.all forKey:@"buy"];
+		[aCoder encodeObject:self.buy forKey:@"buy"];
 	if (self.sell)
-		[aCoder encodeObject:self.all forKey:@"sell"];
+		[aCoder encodeObject:self.sell forKey:@"sell"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
+		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
 		self.all = [aDecoder decodeObjectForKey:@"all"];
 		self.buy = [aDecoder decodeObjectForKey:@"buy"];
 		self.sell = [aDecoder decodeObjectForKey:@"sell"];
@@ -149,7 +153,8 @@ didStartElement:(NSString *)elementName
 		self.currentStat.stddev = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"median"])
 		self.currentStat.median = [self.validText floatValue];
-		
+	else if ([elementName isEqualToString:@"percentile"])
+		self.currentStat.percentile = [self.validText floatValue];
 }
 
 #pragma mark - NSCoding
