@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface RSSImage : NSObject
+@interface RSSImage : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) NSURL *link;
 @property (nonatomic, strong) NSURL *url;

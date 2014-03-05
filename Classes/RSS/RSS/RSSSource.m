@@ -11,4 +11,19 @@
 
 @implementation RSSSource
 
+- (id) initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.title = [aDecoder decodeObjectForKey:@"title"];
+		self.url = [aDecoder decodeObjectForKey:@"url"];
+	}
+	return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)aCoder {
+	if (self.title)
+		[aCoder encodeObject:self.title forKey:@"title"];
+	if (self.url)
+		[aCoder encodeObject:self.url forKey:@"url"];
+}
+
 @end

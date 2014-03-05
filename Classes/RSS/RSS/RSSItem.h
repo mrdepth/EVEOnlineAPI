@@ -10,7 +10,7 @@
 #import "RSSSource.h"
 #import "RSSEnclosure.h"
 
-@interface RSSItem : NSObject
+@interface RSSItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) NSURL *link;
 @property (nonatomic, copy) NSString *description;

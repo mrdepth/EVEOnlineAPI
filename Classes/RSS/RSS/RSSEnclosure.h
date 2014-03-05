@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface RSSEnclosure : NSObject
+@interface RSSEnclosure : NSObject<NSCoding>
 @property (nonatomic, strong) NSURL *url;
 @property (nonatomic) NSInteger length;
 @property (nonatomic, copy) NSString *type;
