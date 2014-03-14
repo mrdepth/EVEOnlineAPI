@@ -13,14 +13,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.primaryAttribute forKey:@"primaryAttribute"];
-	[aCoder encodeInteger:self.secondaryAttribute forKey:@"secondaryAttribute"];
+	[aCoder encodeInt32:self.primaryAttribute forKey:@"primaryAttribute"];
+	[aCoder encodeInt32:self.secondaryAttribute forKey:@"secondaryAttribute"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.primaryAttribute = [aDecoder decodeIntegerForKey:@"primaryAttribute"];
-		self.secondaryAttribute = [aDecoder decodeIntegerForKey:@"secondaryAttribute"];
+		self.primaryAttribute = [aDecoder decodeInt32ForKey:@"primaryAttribute"];
+		self.secondaryAttribute = [aDecoder decodeInt32ForKey:@"secondaryAttribute"];
 	}
 	return self;
 }
@@ -36,8 +36,8 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
-		self.skillLevel = [[attributeDict valueForKey:@"skillLevel"] integerValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.skillLevel = [[attributeDict valueForKey:@"skillLevel"] intValue];
 	}
 	return self;
 }
@@ -45,14 +45,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
-	[aCoder encodeInteger:self.skillLevel forKey:@"skillLevel"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.skillLevel forKey:@"skillLevel"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
-		self.skillLevel = [aDecoder decodeIntegerForKey:@"skillLevel"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.skillLevel = [aDecoder decodeInt32ForKey:@"skillLevel"];
 	}
 	return self;
 }
@@ -69,7 +69,7 @@
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
 		self.bonusType = [attributeDict valueForKey:@"bonusType"];
-		self.bonusValue = [[attributeDict valueForKey:@"bonusValue"] integerValue];
+		self.bonusValue = [[attributeDict valueForKey:@"bonusValue"] intValue];
 	}
 	return self;
 }
@@ -78,13 +78,13 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[aCoder encodeObject:self.bonusType forKey:@"bonusType"];
-	[aCoder encodeInteger:self.bonusValue forKey:@"bonusValue"];
+	[aCoder encodeInt32:self.bonusValue forKey:@"bonusValue"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
 		self.bonusType = [aDecoder decodeObjectForKey:@"bonusType"];
-		self.bonusValue = [aDecoder decodeIntegerForKey:@"bonusValue"];
+		self.bonusValue = [aDecoder decodeInt32ForKey:@"bonusValue"];
 	}
 	return self;
 }
@@ -100,7 +100,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.groupID = [[attributeDict valueForKey:@"groupID"] integerValue];
+		self.groupID = [[attributeDict valueForKey:@"groupID"] intValue];
 		self.groupName = [attributeDict valueForKey:@"groupName"];
 	}
 	return self;
@@ -109,14 +109,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeInt32:self.groupID forKey:@"groupID"];
 	[aCoder encodeObject:self.groupName forKey:@"groupName"];
 	[aCoder encodeObject:self.skills forKey:@"skills"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.groupID = [aDecoder decodeInt32ForKey:@"groupID"];
 		self.groupName = [aDecoder decodeObjectForKey:@"groupName"];
 		self.skills = [aDecoder decodeObjectForKey:@"skills"];
 	}
@@ -134,8 +134,8 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.groupID = [[attributeDict valueForKey:@"groupID"] integerValue];
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
+		self.groupID = [[attributeDict valueForKey:@"groupID"] intValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
 		self.typeName = [attributeDict valueForKey:@"typeName"];
 		self.published = [[attributeDict valueForKey:@"published"] boolValue];
 	}
@@ -145,11 +145,11 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.groupID forKey:@"groupID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
 	[aCoder encodeObject:self.typeName forKey:@"typeName"];
 	[aCoder encodeObject:self.description forKey:@"description"];
-	[aCoder encodeInteger:self.rank forKey:@"rank"];
+	[aCoder encodeInt32:self.rank forKey:@"rank"];
 	[aCoder encodeObject:self.requiredSkills forKey:@"requiredSkills"];
 	[aCoder encodeObject:self.requiredAttributes forKey:@"requiredAttributes"];
 	[aCoder encodeObject:self.skillBonusCollection forKey:@"skillBonusCollection"];
@@ -158,11 +158,11 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.groupID = [aDecoder decodeInt32ForKey:@"groupID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
 		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
-		self.rank = [aDecoder decodeIntegerForKey:@"rank"];
+		self.rank = [aDecoder decodeInt32ForKey:@"rank"];
 		self.requiredSkills = [aDecoder decodeObjectForKey:@"requiredSkills"];
 		self.requiredAttributes = [aDecoder decodeObjectForKey:@"requiredAttributes"];
 		self.skillBonusCollection = [aDecoder decodeObjectForKey:@"skillBonusCollection"];
@@ -261,7 +261,7 @@ didStartElement:(NSString *)elementName
 	if ([elementName isEqualToString:@"description"])
 		[self.currentRow setDescription:self.text];
 	else if ([elementName isEqualToString:@"rank"])
-		 [self.currentRow setRank:[self.text integerValue]];
+		 [self.currentRow setRank:[self.text intValue]];
 	else if ([elementName isEqualToString:@"primaryAttribute"]) {
 		if ([self.text isEqualToString:@"intelligence"])
 			[[self.currentRow requiredAttributes] setPrimaryAttribute:EVECharacterAttributeIntelligence];

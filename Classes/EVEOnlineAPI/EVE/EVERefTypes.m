@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.refTypeID = [[attributeDict valueForKey:@"refTypeID"] integerValue];
+		self.refTypeID = [[attributeDict valueForKey:@"refTypeID"] intValue];
 		self.refTypeName = [attributeDict valueForKey:@"refTypeName"];
 	}
 	return self;
@@ -26,13 +26,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.refTypeID forKey:@"refTypeID"];
+	[aCoder encodeInt32:self.refTypeID forKey:@"refTypeID"];
 	[aCoder encodeObject:self.refTypeName forKey:@"refTypeName"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.refTypeID = [aDecoder decodeIntegerForKey:@"refTypeID"];
+		self.refTypeID = [aDecoder decodeInt32ForKey:@"refTypeID"];
 		self.refTypeName = [aDecoder decodeObjectForKey:@"refTypeName"];
 	}
 	return self;

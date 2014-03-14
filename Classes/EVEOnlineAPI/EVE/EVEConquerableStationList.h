@@ -10,11 +10,11 @@
 #import "EVERequest.h"
 
 @interface EVEConquerableStationListItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger stationID;
+@property (nonatomic) int32_t stationID;
 @property (nonatomic, copy) NSString *stationName;
-@property (nonatomic) NSInteger stationTypeID;
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t stationTypeID;
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 
 + (id) conquerableStationListItemWithXMLAttributes:(NSDictionary *)attributeDict;

@@ -45,11 +45,11 @@
 	return map;
 }
 
-+ (id) dgmEffectWithEffectID: (NSInteger)effectID error:(NSError **)errorPtr {
++ (id) dgmEffectWithEffectID: (int32_t)effectID error:(NSError **)errorPtr {
 	return [[EVEDBDgmEffect alloc] initWithEffectID:effectID error:errorPtr];
 }
 
-- (id) initWithEffectID: (NSInteger)effectID error:(NSError **)errorPtr {
+- (id) initWithEffectID: (int32_t)effectID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmEffects WHERE effectID=%d;", effectID]
 								   error:errorPtr]) {
 	}

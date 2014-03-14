@@ -11,9 +11,9 @@
 @class EVEDBInvGroup;
 @class EVEDBCertCertificate;
 @interface EVEDBCertMastery : EVEDBObject
-@property (nonatomic, assign) NSInteger typeID;
-@property (nonatomic, assign) NSInteger masteryLevel;
-@property (nonatomic, assign) NSInteger certificateID;
+@property (nonatomic, assign) int32_t typeID;
+@property (nonatomic, assign) int32_t masteryLevel;
+@property (nonatomic, assign) int32_t certificateID;
 @property (nonatomic, strong, readonly) EVEDBCertCertificate* certificate;
 
 @end

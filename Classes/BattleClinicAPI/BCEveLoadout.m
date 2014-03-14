@@ -12,11 +12,11 @@
 
 @implementation BCEveLoadout
 
-+ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(int32_t)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[BCEveLoadout alloc] initWithAPIKey:apiKey loadoutID:loadoutID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(NSInteger)aLoadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithAPIKey:(NSString*) apiKey loadoutID:(int32_t)aLoadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSString *s = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><eveLoadoutGet xmlns=\"urn:api\"><applicationKey>%@</applicationKey><id>%d</id></eveLoadoutGet></soap:Body></soap:Envelope>",
 				   apiKey,
 				   aLoadoutID];
@@ -55,13 +55,13 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	
 	if ([elementName isEqualToString:@"typeID"])
-		self.typeID = [self.text integerValue];
+		self.typeID = [self.text intValue];
 	else if ([elementName isEqualToString:@"thumbsUp"])
-		self.thumbsUp = [self.text integerValue];
+		self.thumbsUp = [self.text intValue];
 	else if ([elementName isEqualToString:@"thumbsDown"])
-		self.thumbsDown = [self.text integerValue];
+		self.thumbsDown = [self.text intValue];
 	else if ([elementName isEqualToString:@"topic"])
-		self.topic = [self.text integerValue];
+		self.topic = [self.text intValue];
 	else if ([elementName isEqualToString:@"title"])
 		self.title = self.text;
 	else if ([elementName isEqualToString:@"description"])

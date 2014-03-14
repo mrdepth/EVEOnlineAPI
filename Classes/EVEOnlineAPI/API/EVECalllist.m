@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.groupID = [[attributeDict valueForKey:@"groupID"] integerValue];
+		self.groupID = [[attributeDict valueForKey:@"groupID"] intValue];
 		self.name = [attributeDict valueForKey:@"name"];
 		self.description = [attributeDict valueForKey:@"description"];
 	}
@@ -27,14 +27,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeInt32:self.groupID forKey:@"groupID"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 	[aCoder encodeObject:self.description forKey:@"description"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.groupID = [aDecoder decodeInt32ForKey:@"groupID"];
 		self.name = [aDecoder decodeObjectForKey:@"name"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
 	}
@@ -52,10 +52,10 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.accessMask = [[attributeDict valueForKey:@"accessMask"] integerValue];
+		self.accessMask = [[attributeDict valueForKey:@"accessMask"] intValue];
 		self.type = [[attributeDict valueForKey:@"type"] isEqualToString:@"Character"] ? EVECallTypeCharacter : EVECallTypeCorporation;
 		self.name = [attributeDict valueForKey:@"name"];
-		self.groupID = [[attributeDict valueForKey:@"groupID"] integerValue];
+		self.groupID = [[attributeDict valueForKey:@"groupID"] intValue];
 		self.description = [attributeDict valueForKey:@"description"];
 	}
 	return self;
@@ -64,19 +64,19 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.accessMask forKey:@"accessMask"];
-	[aCoder encodeInteger:self.type forKey:@"type"];
+	[aCoder encodeInt32:self.accessMask forKey:@"accessMask"];
+	[aCoder encodeInt32:self.type forKey:@"type"];
 	[aCoder encodeObject:self.name forKey:@"name"];
-	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
+	[aCoder encodeInt32:self.groupID forKey:@"groupID"];
 	[aCoder encodeObject:self.description forKey:@"description"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.accessMask = [aDecoder decodeIntegerForKey:@"accessMask"];
-		self.type = [aDecoder decodeIntegerForKey:@"type"];
+		self.accessMask = [aDecoder decodeInt32ForKey:@"accessMask"];
+		self.type = [aDecoder decodeInt32ForKey:@"type"];
 		self.name = [aDecoder decodeObjectForKey:@"name"];
-		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
+		self.groupID = [aDecoder decodeInt32ForKey:@"groupID"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
 	}
 	return self;

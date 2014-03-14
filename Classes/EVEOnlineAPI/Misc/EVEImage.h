@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, EVEImageSize) {
+typedef NS_ENUM(int32_t, EVEImageSize) {
 	EVEImageSize32 = 32,
 	EVEImageSize64 = 64,
 	EVEImageSize128 = 128,
@@ -31,12 +31,12 @@ typedef NS_ENUM(NSInteger, EVEImageSize) {
 
 @interface EVEImage : UIImage {
 }
-+ (NSURL*) characterPortraitURLWithCharacterID: (NSInteger) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
-+ (NSURL*) corporationLogoURLWithCorporationID: (NSInteger) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
-+ (NSURL*) allianceLogoURLWithAllianceID: (NSInteger) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (NSURL*) characterPortraitURLWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (NSURL*) corporationLogoURLWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (NSURL*) allianceLogoURLWithAllianceID: (int32_t) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr;
 
-+ (id) characterPortraitImageWithCharacterID: (NSInteger) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
-+ (id) corporationLogoImageWithCorporationID: (NSInteger) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
-+ (id) allianceLogoImageWithAllianceID: (NSInteger) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (id) characterPortraitImageWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (id) corporationLogoImageWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (id) allianceLogoImageWithAllianceID: (int32_t) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr;
 
 @end

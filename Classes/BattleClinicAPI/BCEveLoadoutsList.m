@@ -13,14 +13,14 @@
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
-		self.thumbsUp = [aDecoder decodeIntegerForKey:@"thumbsUp"];
-		self.thumbsDown = [aDecoder decodeIntegerForKey:@"thumbsDown"];
-		self.topicID = [aDecoder decodeIntegerForKey:@"topicID"];
-		self.loadoutID = [aDecoder decodeIntegerForKey:@"loadoutID"];
-		self.raceID = [aDecoder decodeIntegerForKey:@"raceID"];
-		self.thumbsTotal = [aDecoder decodeIntegerForKey:@"thumbsTotal"];
-		self.memberID = [aDecoder decodeIntegerForKey:@"memberID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.thumbsUp = [aDecoder decodeInt32ForKey:@"thumbsUp"];
+		self.thumbsDown = [aDecoder decodeInt32ForKey:@"thumbsDown"];
+		self.topicID = [aDecoder decodeInt32ForKey:@"topicID"];
+		self.loadoutID = [aDecoder decodeInt32ForKey:@"loadoutID"];
+		self.raceID = [aDecoder decodeInt32ForKey:@"raceID"];
+		self.thumbsTotal = [aDecoder decodeInt32ForKey:@"thumbsTotal"];
+		self.memberID = [aDecoder decodeInt32ForKey:@"memberID"];
 
 		self.subject = [aDecoder decodeObjectForKey:@"subject"];
 		self.posterTime = [aDecoder decodeObjectForKey:@"posterTime"];
@@ -31,14 +31,14 @@
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
-	[aCoder encodeInteger:self.thumbsUp forKey:@"thumbsUp"];
-	[aCoder encodeInteger:self.thumbsDown forKey:@"thumbsDown"];
-	[aCoder encodeInteger:self.topicID forKey:@"topicID"];
-	[aCoder encodeInteger:self.loadoutID forKey:@"loadoutID"];
-	[aCoder encodeInteger:self.raceID forKey:@"raceID"];
-	[aCoder encodeInteger:self.thumbsTotal forKey:@"thumbsTotal"];
-	[aCoder encodeInteger:self.memberID forKey:@"memberID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.thumbsUp forKey:@"thumbsUp"];
+	[aCoder encodeInt32:self.thumbsDown forKey:@"thumbsDown"];
+	[aCoder encodeInt32:self.topicID forKey:@"topicID"];
+	[aCoder encodeInt32:self.loadoutID forKey:@"loadoutID"];
+	[aCoder encodeInt32:self.raceID forKey:@"raceID"];
+	[aCoder encodeInt32:self.thumbsTotal forKey:@"thumbsTotal"];
+	[aCoder encodeInt32:self.memberID forKey:@"memberID"];
 	
 	if (self.subject)
 		[aCoder encodeObject:self.subject forKey:@"subject"];
@@ -57,11 +57,11 @@
 
 @implementation BCEveLoadoutsList
 
-+ (id) eveLoadoutsListWithAPIKey:(NSString*) apiKey raceID:(NSInteger) raceID typeID:(NSInteger) typeID classID:(NSInteger) classID userID:(NSInteger) userID tags:(NSArray*) tags error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) eveLoadoutsListWithAPIKey:(NSString*) apiKey raceID:(int32_t) raceID typeID:(int32_t) typeID classID:(int32_t) classID userID:(int32_t) userID tags:(NSArray*) tags error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[BCEveLoadoutsList alloc] initWithAPIKey:apiKey raceID:raceID typeID:typeID classID:classID userID:userID tags:tags error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithAPIKey:(NSString*) apiKey raceID:(NSInteger) raceID typeID:(NSInteger) typeID classID:(NSInteger) classID userID:(NSInteger) userID tags:(NSArray*) tags error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithAPIKey:(NSString*) apiKey raceID:(int32_t) raceID typeID:(int32_t) typeID classID:(int32_t) classID userID:(int32_t) userID tags:(NSArray*) tags error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableString *sTags = [NSMutableString string];
 	int i = 0;
 	for (NSString *tag in [tags sortedArrayUsingSelector:@selector(compare:)]) {
@@ -112,13 +112,13 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	
 	if ([elementName isEqualToString:@"typeID"])
-		self.currentItem.typeID = [self.text integerValue];
+		self.currentItem.typeID = [self.text intValue];
 	else if ([elementName isEqualToString:@"thumbsUp"])
-		self.currentItem.thumbsUp = [self.text integerValue];
+		self.currentItem.thumbsUp = [self.text intValue];
 	else if ([elementName isEqualToString:@"thumbsDown"])
-		self.currentItem.thumbsDown = [self.text integerValue];
+		self.currentItem.thumbsDown = [self.text intValue];
 	else if ([elementName isEqualToString:@"id_topic"])
-		self.currentItem.topicID = [self.text integerValue];
+		self.currentItem.topicID = [self.text intValue];
 	else if ([elementName isEqualToString:@"subject"])
 		self.currentItem.subject = self.text;
 	else if ([elementName isEqualToString:@"poster_time"])
@@ -126,17 +126,17 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"modified_time"])
 		self.currentItem.posterTime = [NSDate dateWithTimeIntervalSince1970:[self.text floatValue]];
 	else if ([elementName isEqualToString:@"loadout_ID"])
-		self.currentItem.loadoutID = [self.text integerValue];
+		self.currentItem.loadoutID = [self.text intValue];
 	else if ([elementName isEqualToString:@"raceID"])
-		self.currentItem.raceID = [self.text integerValue];
+		self.currentItem.raceID = [self.text intValue];
 	else if ([elementName isEqualToString:@"thumbsTotal"])
-		self.currentItem.thumbsTotal = [self.text integerValue];
+		self.currentItem.thumbsTotal = [self.text intValue];
 	else if ([elementName isEqualToString:@"author"]) {
 		if (!self.currentItem.author)
 			self.currentItem.author = self.text;
 	}
 	else if ([elementName isEqualToString:@"id_member"])
-		self.currentItem.memberID = [self.text integerValue];
+		self.currentItem.memberID = [self.text intValue];
 }
 
 @end

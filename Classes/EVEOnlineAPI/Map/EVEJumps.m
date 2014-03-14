@@ -17,8 +17,8 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
-		self.shipJumps = [[attributeDict valueForKey:@"shipJumps"] integerValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
+		self.shipJumps = [[attributeDict valueForKey:@"shipJumps"] intValue];
 	}
 	return self;
 }
@@ -26,14 +26,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
-	[aCoder encodeInteger:self.shipJumps forKey:@"shipJumps"];
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInt32:self.shipJumps forKey:@"shipJumps"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
-		self.shipJumps = [aDecoder decodeIntegerForKey:@"shipJumps"];
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
+		self.shipJumps = [aDecoder decodeInt32ForKey:@"shipJumps"];
 	}
 	return self;
 }

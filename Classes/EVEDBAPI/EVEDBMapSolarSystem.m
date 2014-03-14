@@ -36,7 +36,7 @@
 	return map;
 }
 
-+ (id) mapSolarSystemWithSolarSystemID: (NSInteger)solarSystemID error:(NSError **)errorPtr {
++ (id) mapSolarSystemWithSolarSystemID: (int32_t)solarSystemID error:(NSError **)errorPtr {
 	return [[EVEDBMapSolarSystem alloc] initWithSolarSystemID:solarSystemID error:errorPtr];
 }
 
@@ -45,7 +45,7 @@
 	
 }
 
-- (id) initWithSolarSystemID: (NSInteger)solarSystemID error:(NSError **)errorPtr {
+- (id) initWithSolarSystemID: (int32_t)solarSystemID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapSolarSystems WHERE solarSystemID=%d;", solarSystemID]
 								   error:errorPtr]) {
 	}

@@ -10,7 +10,7 @@
 #import "EVERequest.h"
 
 @interface EVERefTypesItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger refTypeID;
+@property (nonatomic) int32_t refTypeID;
 @property (nonatomic, copy) NSString *refTypeName;
 
 + (id) refTypesItemWithXMLAttributes:(NSDictionary *)attributeDict;

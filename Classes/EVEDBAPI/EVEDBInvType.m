@@ -88,7 +88,7 @@
 	return map;
 }
 
-+ (id) invTypeWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr {
++ (id) invTypeWithTypeID: (int32_t)aTypeID error:(NSError **)errorPtr {
 	return [[self alloc] initWithTypeID:aTypeID error:errorPtr];
 }
 
@@ -96,7 +96,7 @@
 	return [[self alloc] initWithInvType:type];
 }
 
-- (id) initWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr {
+- (id) initWithTypeID: (int32_t)aTypeID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invTypes WHERE typeID=%d;", aTypeID] error:errorPtr]) {
 	}
 	return self;
@@ -261,13 +261,13 @@
 - (NSArray*) requiredSkills {
 	if (!_requiredSkills) {
 		NSMutableArray* requiredSkills = [NSMutableArray new];
-		NSInteger requirementIDs[] = {182, 183, 184, 1285, 1289, 1290};
-		NSInteger skillLevelIDs[] = {277, 278, 279, 1286, 1287, 1288};
+		int32_t requirementIDs[] = {182, 183, 184, 1285, 1289, 1290};
+		int32_t skillLevelIDs[] = {277, 278, 279, 1286, 1287, 1288};
 		for (int i = 0; i < 5; i++) {
 			EVEDBDgmTypeAttribute* attributeTypeID = self.attributesDictionary[@(requirementIDs[i])];
 			if (attributeTypeID) {
 				EVEDBDgmTypeAttribute* attributeLevel = self.attributesDictionary[@(skillLevelIDs[i])];
-				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(NSInteger) attributeTypeID.value error:nil];
+				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(int32_t) attributeTypeID.value error:nil];
 				if (skill) {
 					skill.requiredLevel = attributeLevel.value;
 					[requiredSkills addObject:skill];
@@ -454,7 +454,7 @@
 - (NSUInteger) hash {
 	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
 	if (!hash) {
-		NSInteger data[] = {self.typeID, self.requiredLevel};
+		int32_t data[] = {self.typeID, self.requiredLevel};
 		NSUInteger hash = [[NSData dataWithBytes:data length:sizeof(data)] hash];
 		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 		return hash;
@@ -469,7 +469,7 @@
 	return _requiredSkillPoints;
 }
 
-- (void) setRequiredLevel:(NSInteger)value {
+- (void) setRequiredLevel:(int32_t)value {
 	objc_setAssociatedObject(self, @"hash", nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	if (_requiredLevel != value)
 		_requiredSkillPoints = 0.0;

@@ -10,11 +10,11 @@
 #import "EVERequest.h"
 
 @interface EVESovereigntyItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger allianceID;
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t allianceID;
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *solarSystemName;
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t corporationID;
 
 + (id) sovereigntyItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;

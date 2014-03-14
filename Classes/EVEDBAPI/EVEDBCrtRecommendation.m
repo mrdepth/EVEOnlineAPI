@@ -29,11 +29,11 @@
 	return map;
 }
 
-+ (id) crtRecommendationWithRecommendationID: (NSInteger)recommendationID error:(NSError **)errorPtr {
++ (id) crtRecommendationWithRecommendationID: (int32_t)recommendationID error:(NSError **)errorPtr {
 	return [[EVEDBCrtRecommendation alloc] initWithRecommendationID:recommendationID error:errorPtr];
 }
 
-- (id) initWithRecommendationID: (NSInteger)recommendationID error:(NSError **)errorPtr {
+- (id) initWithRecommendationID: (int32_t)recommendationID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtRecommendations WHERE recommendationID=%d;", recommendationID]
 								   error:errorPtr]) {
 	}

@@ -17,9 +17,9 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
 		self.solarSystemName = [attributeDict valueForKey:@"solarSystemName"];
-		self.occupyingFactionID = [[attributeDict valueForKey:@"occupyingFactionID"] integerValue];
+		self.occupyingFactionID = [[attributeDict valueForKey:@"occupyingFactionID"] intValue];
 		self.occupyingFactionName = [attributeDict valueForKey:@"occupyingFactionName"];
 		self.contested = [[attributeDict valueForKey:@"contested"] compare:@"True" options:NSCaseInsensitiveSearch] == NSOrderedSame ? TRUE : FALSE;
 	}
@@ -29,18 +29,18 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
 	[aCoder encodeObject:self.solarSystemName forKey:@"solarSystemName"];
-	[aCoder encodeInteger:self.occupyingFactionID forKey:@"occupyingFactionID"];
+	[aCoder encodeInt32:self.occupyingFactionID forKey:@"occupyingFactionID"];
 	[aCoder encodeObject:self.occupyingFactionName forKey:@"occupyingFactionName"];
 	[aCoder encodeBool:self.contested forKey:@"contested"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
 		self.solarSystemName = [aDecoder decodeObjectForKey:@"solarSystemName"];
-		self.occupyingFactionID = [aDecoder decodeIntegerForKey:@"occupyingFactionID"];
+		self.occupyingFactionID = [aDecoder decodeInt32ForKey:@"occupyingFactionID"];
 		self.occupyingFactionName = [aDecoder decodeObjectForKey:@"occupyingFactionName"];
 		self.contested = [aDecoder decodeBoolForKey:@"contested"];
 	}

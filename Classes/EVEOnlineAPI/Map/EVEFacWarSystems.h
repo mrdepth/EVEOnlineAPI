@@ -10,9 +10,9 @@
 #import "EVERequest.h"
 
 @interface EVEFacWarSystemsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger solarSystemID;
+@property (nonatomic) int32_t solarSystemID;
 @property (nonatomic, copy) NSString *solarSystemName;
-@property (nonatomic) NSInteger occupyingFactionID;
+@property (nonatomic) int32_t occupyingFactionID;
 @property (nonatomic, copy) NSString *occupyingFactionName;
 @property (nonatomic) BOOL contested;
 

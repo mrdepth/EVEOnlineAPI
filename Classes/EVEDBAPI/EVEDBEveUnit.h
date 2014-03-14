@@ -10,12 +10,12 @@
 
 
 @interface EVEDBEveUnit : EVEDBObject
-@property (nonatomic) NSInteger unitID;
+@property (nonatomic) int32_t unitID;
 @property (nonatomic, strong) NSString *unitName;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) NSString *description;
 
-+ (id) eveUnitWithUnitID: (NSInteger)aUnitID error:(NSError **)errorPtr;
-- (id) initWithUnitID: (NSInteger)aUnitID error:(NSError **)errorPtr;
++ (id) eveUnitWithUnitID: (int32_t)aUnitID error:(NSError **)errorPtr;
+- (id) initWithUnitID: (int32_t)aUnitID error:(NSError **)errorPtr;
 
 @end

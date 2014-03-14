@@ -17,10 +17,10 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
-		self.shipKills = [[attributeDict valueForKey:@"shipKills"] integerValue];
-		self.factionKills = [[attributeDict valueForKey:@"factionKills"] integerValue];
-		self.podKills = [[attributeDict valueForKey:@"podKills"] integerValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
+		self.shipKills = [[attributeDict valueForKey:@"shipKills"] intValue];
+		self.factionKills = [[attributeDict valueForKey:@"factionKills"] intValue];
+		self.podKills = [[attributeDict valueForKey:@"podKills"] intValue];
 	}
 	return self;
 }
@@ -28,18 +28,18 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
-	[aCoder encodeInteger:self.shipKills forKey:@"shipKills"];
-	[aCoder encodeInteger:self.factionKills forKey:@"factionKills"];
-	[aCoder encodeInteger:self.podKills forKey:@"podKills"];
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInt32:self.shipKills forKey:@"shipKills"];
+	[aCoder encodeInt32:self.factionKills forKey:@"factionKills"];
+	[aCoder encodeInt32:self.podKills forKey:@"podKills"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
-		self.shipKills = [aDecoder decodeIntegerForKey:@"shipKills"];
-		self.factionKills = [aDecoder decodeIntegerForKey:@"factionKills"];
-		self.podKills = [aDecoder decodeIntegerForKey:@"podKills"];
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
+		self.shipKills = [aDecoder decodeInt32ForKey:@"shipKills"];
+		self.factionKills = [aDecoder decodeInt32ForKey:@"factionKills"];
+		self.podKills = [aDecoder decodeInt32ForKey:@"podKills"];
 	}
 	return self;
 }

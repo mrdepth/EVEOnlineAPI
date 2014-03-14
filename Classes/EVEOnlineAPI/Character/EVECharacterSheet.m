@@ -14,20 +14,20 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.intelligence forKey:@"intelligence"];
-	[aCoder encodeInteger:self.memory forKey:@"memory"];
-	[aCoder encodeInteger:self.charisma forKey:@"charisma"];
-	[aCoder encodeInteger:self.perception forKey:@"perception"];
-	[aCoder encodeInteger:self.willpower forKey:@"willpower"];
+	[aCoder encodeInt32:self.intelligence forKey:@"intelligence"];
+	[aCoder encodeInt32:self.memory forKey:@"memory"];
+	[aCoder encodeInt32:self.charisma forKey:@"charisma"];
+	[aCoder encodeInt32:self.perception forKey:@"perception"];
+	[aCoder encodeInt32:self.willpower forKey:@"willpower"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.intelligence = [aDecoder decodeIntegerForKey:@"intelligence"];
-		self.memory = [aDecoder decodeIntegerForKey:@"memory"];
-		self.charisma = [aDecoder decodeIntegerForKey:@"charisma"];
-		self.perception = [aDecoder decodeIntegerForKey:@"perception"];
-		self.willpower = [aDecoder decodeIntegerForKey:@"willpower"];
+		self.intelligence = [aDecoder decodeInt32ForKey:@"intelligence"];
+		self.memory = [aDecoder decodeInt32ForKey:@"memory"];
+		self.charisma = [aDecoder decodeInt32ForKey:@"charisma"];
+		self.perception = [aDecoder decodeInt32ForKey:@"perception"];
+		self.willpower = [aDecoder decodeInt32ForKey:@"willpower"];
 	}
 	return self;
 }
@@ -42,16 +42,16 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.attribute forKey:@"attribute"];
+	[aCoder encodeInt32:self.attribute forKey:@"attribute"];
 	[aCoder encodeObject:self.augmentatorName forKey:@"augmentatorName"];
-	[aCoder encodeInteger:self.augmentatorValue forKey:@"augmentatorValue"];
+	[aCoder encodeInt32:self.augmentatorValue forKey:@"augmentatorValue"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.attribute = [aDecoder decodeIntegerForKey:@"attribute"];
+		self.attribute = [aDecoder decodeInt32ForKey:@"attribute"];
 		self.augmentatorName = [aDecoder decodeObjectForKey:@"augmentatorName"];
-		self.augmentatorValue = [aDecoder decodeIntegerForKey:@"augmentatorValue"];
+		self.augmentatorValue = [aDecoder decodeInt32ForKey:@"augmentatorValue"];
 	}
 	return self;
 }
@@ -68,9 +68,9 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
-		self.skillpoints = [[attributeDict valueForKey:@"skillpoints"] integerValue];
-		self.level = [[attributeDict valueForKey:@"level"] integerValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.skillpoints = [[attributeDict valueForKey:@"skillpoints"] intValue];
+		self.level = [[attributeDict valueForKey:@"level"] intValue];
 		if ([attributeDict valueForKey:@"unpublished"])
 			self.unpublished = [[attributeDict valueForKey:@"unpublished"] boolValue];
 		else
@@ -83,17 +83,17 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
-	[aCoder encodeInteger:self.skillpoints forKey:@"skillpoints"];
-	[aCoder encodeInteger:self.level forKey:@"level"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.skillpoints forKey:@"skillpoints"];
+	[aCoder encodeInt32:self.level forKey:@"level"];
 	[aCoder encodeBool:self.unpublished forKey:@"unpublished"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
-		self.skillpoints = [aDecoder decodeIntegerForKey:@"skillpoints"];
-		self.level = [aDecoder decodeIntegerForKey:@"level"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.skillpoints = [aDecoder decodeInt32ForKey:@"skillpoints"];
+		self.level = [aDecoder decodeInt32ForKey:@"level"];
 		self.unpublished = [aDecoder decodeBoolForKey:@"unpublished"];
 	}
 	return self;
@@ -111,7 +111,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.roleID = [[attributeDict valueForKey:@"roleID"] integerValue];
+		self.roleID = [[attributeDict valueForKey:@"roleID"] intValue];
 		self.roleName = [attributeDict valueForKey:@"roleName"];
 	}
 	return self;
@@ -120,13 +120,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.roleID forKey:@"roleID"];
+	[aCoder encodeInt32:self.roleID forKey:@"roleID"];
 	[aCoder encodeObject:self.roleName forKey:@"roleName"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.roleID = [aDecoder decodeIntegerForKey:@"roleID"];
+		self.roleID = [aDecoder decodeInt32ForKey:@"roleID"];
 		self.roleName = [aDecoder decodeObjectForKey:@"roleName"];
 	}
 	return self;
@@ -144,7 +144,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.titleID = [[attributeDict valueForKey:@"titleID"] integerValue];
+		self.titleID = [[attributeDict valueForKey:@"titleID"] intValue];
 		self.titleName = [attributeDict valueForKey:@"titleName"];
 	}
 	return self;
@@ -153,13 +153,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.titleID forKey:@"titleID"];
+	[aCoder encodeInt32:self.titleID forKey:@"titleID"];
 	[aCoder encodeObject:self.titleName forKey:@"titleName"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.titleID = [aDecoder decodeIntegerForKey:@"titleID"];
+		self.titleID = [aDecoder decodeInt32ForKey:@"titleID"];
 		self.titleName = [aDecoder decodeObjectForKey:@"titleName"];
 	}
 	return self;
@@ -175,11 +175,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) characterSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) characterSheetWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECharacterSheet alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) aCharacterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) aCharacterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CharacterSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], aCharacterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr
@@ -299,7 +299,7 @@ didStartElement:(NSString *)elementName
   qualifiedName:(NSString *)qName {
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	if ([elementName isEqualToString:@"characterID"])
-		self.characterID = [self.text integerValue];
+		self.characterID = [self.text intValue];
 	else if ([elementName isEqualToString:@"name"])
 		self.name = self.text;
 	else if ([elementName isEqualToString:@"race"])
@@ -315,38 +315,38 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"corporationName"])
 		self.corporationName = self.text;
 	else if ([elementName isEqualToString:@"corporationID"])
-		self.corporationID = [self.text integerValue];
+		self.corporationID = [self.text intValue];
 	else if ([elementName isEqualToString:@"allianceName"])
 		self.allianceName = self.text;
 	else if ([elementName isEqualToString:@"allianceID"])
-		self.allianceID = [self.text integerValue];
+		self.allianceID = [self.text intValue];
 	else if ([elementName isEqualToString:@"cloneName"])
 		self.cloneName = self.text;
 	else if ([elementName isEqualToString:@"cloneSkillPoints"])
-		self.cloneSkillPoints = [self.text integerValue];
+		self.cloneSkillPoints = [self.text intValue];
 	else if ([elementName isEqualToString:@"balance"])
 		self.balance = [self.text floatValue];
 	else if ([elementName isEqualToString:@"augmentatorName"])
 		[[self.attributeEnhancers lastObject] setAugmentatorName:self.text];
 	else if ([elementName isEqualToString:@"augmentatorValue"])
-		[[self.attributeEnhancers lastObject] setAugmentatorValue:[self.text integerValue]];
+		[[self.attributeEnhancers lastObject] setAugmentatorValue:[self.text intValue]];
 	else if ([elementName isEqualToString:@"intelligence"])
-		self.attributes.intelligence = [self.text integerValue];
+		self.attributes.intelligence = [self.text intValue];
 	else if ([elementName isEqualToString:@"memory"])
-		self.attributes.memory = [self.text integerValue];
+		self.attributes.memory = [self.text intValue];
 	else if ([elementName isEqualToString:@"charisma"])
-		self.attributes.charisma = [self.text integerValue];
+		self.attributes.charisma = [self.text intValue];
 	else if ([elementName isEqualToString:@"perception"])
-		self.attributes.perception = [self.text integerValue];
+		self.attributes.perception = [self.text intValue];
 	else if ([elementName isEqualToString:@"willpower"])
-		self.attributes.willpower = [self.text integerValue];
+		self.attributes.willpower = [self.text intValue];
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[super encodeWithCoder:aCoder];
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 	[aCoder encodeObject:self.race forKey:@"race"];
 	[aCoder encodeObject:self.DoB forKey:@"DoB"];
@@ -354,11 +354,11 @@ didStartElement:(NSString *)elementName
 	[aCoder encodeObject:self.ancestry forKey:@"ancestry"];
 	[aCoder encodeObject:self.gender forKey:@"gender"];
 	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
-	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeInt32:self.allianceID forKey:@"allianceID"];
 	[aCoder encodeObject:self.cloneName forKey:@"cloneName"];
-	[aCoder encodeInteger:self.cloneSkillPoints forKey:@"cloneSkillPoints"];
+	[aCoder encodeInt32:self.cloneSkillPoints forKey:@"cloneSkillPoints"];
 	[aCoder encodeFloat:self.balance forKey:@"balance"];
 	[aCoder encodeObject:self.attributeEnhancers forKey:@"attributeEnhancers"];
 	[aCoder encodeObject:self.attributes forKey:@"attributes"];
@@ -373,7 +373,7 @@ didStartElement:(NSString *)elementName
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
 		self.name = [aDecoder decodeObjectForKey:@"name"];
 		self.race = [aDecoder decodeObjectForKey:@"race"];
 		self.DoB = [aDecoder decodeObjectForKey:@"DoB"];
@@ -381,11 +381,11 @@ didStartElement:(NSString *)elementName
 		self.ancestry = [aDecoder decodeObjectForKey:@"ancestry"];
 		self.gender = [aDecoder decodeObjectForKey:@"gender"];
 		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
-		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.allianceID = [aDecoder decodeInt32ForKey:@"allianceID"];
 		self.cloneName = [aDecoder decodeObjectForKey:@"cloneName"];
-		self.cloneSkillPoints = [aDecoder decodeIntegerForKey:@"cloneSkillPoints"];
+		self.cloneSkillPoints = [aDecoder decodeInt32ForKey:@"cloneSkillPoints"];
 		self.balance = [aDecoder decodeFloatForKey:@"balance"];
 		self.attributeEnhancers = [aDecoder decodeObjectForKey:@"attributeEnhancers"];
 		self.attributes = [aDecoder decodeObjectForKey:@"attributes"];

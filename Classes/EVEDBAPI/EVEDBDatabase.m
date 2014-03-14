@@ -37,7 +37,7 @@ static EVEDBDatabase *singleton;
 - (NSError*) execSQLRequest: (NSString*)sqlRequest resultBlock:(void (^)(sqlite3_stmt* stmt, BOOL *needsMore)) resultBlock {
 	@synchronized(self) {
 		sqlite3_stmt* stmt = NULL;
-		int result = sqlite3_prepare_v2(_db, [sqlRequest cStringUsingEncoding:NSUTF8StringEncoding], [sqlRequest lengthOfBytesUsingEncoding:NSUTF8StringEncoding], &stmt, NULL);
+		int result = sqlite3_prepare_v2(_db, [sqlRequest cStringUsingEncoding:NSUTF8StringEncoding], (int) [sqlRequest lengthOfBytesUsingEncoding:NSUTF8StringEncoding], &stmt, NULL);
 		
 		if (!stmt) {
 			const char* text = sqlite3_errmsg(_db);

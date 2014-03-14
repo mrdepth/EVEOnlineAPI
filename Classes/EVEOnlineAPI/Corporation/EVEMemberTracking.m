@@ -17,10 +17,10 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
 		self.name = [attributeDict valueForKey:@"name"];
 		self.startDateTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"startDateTime"]];
-		self.baseID = [[attributeDict valueForKey:@"baseID"] integerValue];
+		self.baseID = [[attributeDict valueForKey:@"baseID"] intValue];
 		self.base = [attributeDict valueForKey:@"base"];
 		self.title = [attributeDict valueForKey:@"title"];
 		
@@ -29,11 +29,11 @@
 		if ([attributeDict valueForKey:@"logoffDateTime"])
 			self.logoffDateTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"logoffDateTime"]];
 		if ([attributeDict valueForKey:@"locationID"])
-			self.locationID = [[attributeDict valueForKey:@"locationID"] longLongValue];
+			self.locationID = [[attributeDict valueForKey:@"locationID"] intValue];
 		if ([attributeDict valueForKey:@"location"])
 			self.location = [attributeDict valueForKey:@"location"];
 		if ([attributeDict valueForKey:@"shipTypeID"])
-			self.shipTypeID = [[attributeDict valueForKey:@"shipTypeID"] integerValue];
+			self.shipTypeID = [[attributeDict valueForKey:@"shipTypeID"] intValue];
 		if ([attributeDict valueForKey:@"shipType"])
 			self.shipType = [attributeDict valueForKey:@"shipType"];
 		if ([attributeDict valueForKey:@"roles"])
@@ -47,17 +47,17 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 	[aCoder encodeObject:self.startDateTime forKey:@"startDateTime"];
-	[aCoder encodeInteger:self.baseID forKey:@"baseID"];
+	[aCoder encodeInt32:self.baseID forKey:@"baseID"];
 	[aCoder encodeObject:self.base forKey:@"base"];
 	[aCoder encodeObject:self.title forKey:@"title"];
 	[aCoder encodeObject:self.logonDateTime forKey:@"logonDateTime"];
 	[aCoder encodeObject:self.logoffDateTime forKey:@"logoffDateTime"];
-	[aCoder encodeInt64:self.locationID forKey:@"locationID"];
+	[aCoder encodeInt32:self.locationID forKey:@"locationID"];
 	[aCoder encodeObject:self.location forKey:@"location"];
-	[aCoder encodeInteger:self.shipTypeID forKey:@"shipTypeID"];
+	[aCoder encodeInt32:self.shipTypeID forKey:@"shipTypeID"];
 	[aCoder encodeObject:self.shipType forKey:@"shipType"];
 	[aCoder encodeObject:self.roles forKey:@"roles"];
 	[aCoder encodeObject:self.grantableRoles forKey:@"grantableRoles"];
@@ -65,17 +65,17 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
 		self.name = [aDecoder decodeObjectForKey:@"name"];
 		self.startDateTime = [aDecoder decodeObjectForKey:@"startDateTime"];
-		self.baseID = [aDecoder decodeIntegerForKey:@"baseID"];
+		self.baseID = [aDecoder decodeInt32ForKey:@"baseID"];
 		self.base = [aDecoder decodeObjectForKey:@"base"];
 		self.title = [aDecoder decodeObjectForKey:@"title"];
 		self.logonDateTime = [aDecoder decodeObjectForKey:@"logonDateTime"];
 		self.logoffDateTime = [aDecoder decodeObjectForKey:@"logoffDateTime"];
-		self.locationID = [aDecoder decodeInt64ForKey:@"locationID"];
+		self.locationID = [aDecoder decodeInt32ForKey:@"locationID"];
 		self.location = [aDecoder decodeObjectForKey:@"location"];
-		self.shipTypeID = [aDecoder decodeIntegerForKey:@"shipTypeID"];
+		self.shipTypeID = [aDecoder decodeInt32ForKey:@"shipTypeID"];
 		self.shipType = [aDecoder decodeObjectForKey:@"shipType"];
 		self.roles = [aDecoder decodeObjectForKey:@"roles"];
 		self.grantableRoles = [aDecoder decodeObjectForKey:@"grantableRoles"];
@@ -92,11 +92,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) memberTrackingWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) memberTrackingWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMemberTracking alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberTracking.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

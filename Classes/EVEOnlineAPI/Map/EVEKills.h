@@ -10,10 +10,10 @@
 #import "EVERequest.h"
 
 @interface EVEKillsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger shipKills;
-@property (nonatomic) NSInteger factionKills;
-@property (nonatomic) NSInteger podKills;
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t shipKills;
+@property (nonatomic) int32_t factionKills;
+@property (nonatomic) int32_t podKills;
 
 + (id) killsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;

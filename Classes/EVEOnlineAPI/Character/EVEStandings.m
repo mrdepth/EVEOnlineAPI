@@ -16,7 +16,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.fromID = [[attributeDict valueForKey:@"fromID"] integerValue];
+		self.fromID = [[attributeDict valueForKey:@"fromID"] intValue];
 		self.fromName = [attributeDict valueForKey:@"fromName"];
 		self.standing = [[attributeDict valueForKey:@"standing"] floatValue];
 	}
@@ -26,14 +26,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.fromID forKey:@"fromID"];
+	[aCoder encodeInt32:self.fromID forKey:@"fromID"];
 	[aCoder encodeObject:self.fromName forKey:@"fromName"];
 	[aCoder encodeFloat:self.standing forKey:@"standing"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.fromID = [aDecoder decodeIntegerForKey:@"fromID"];
+		self.fromID = [aDecoder decodeInt32ForKey:@"fromID"];
 		self.fromName = [aDecoder decodeObjectForKey:@"fromName"];
 		self.standing = [aDecoder decodeFloatForKey:@"standing"];
 	}
@@ -70,11 +70,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) standingsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEStandings alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Standings.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") , keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

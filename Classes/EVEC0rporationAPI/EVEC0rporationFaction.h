@@ -19,7 +19,7 @@ typedef enum {
 #define EVEC0rporationErrorCodeParsingErrorText @"Result parsing error"
 
 @interface EVEC0rporationFactionItem : NSObject
-@property (nonatomic, assign) NSInteger typeID;
+@property (nonatomic, assign) int32_t typeID;
 @property (nonatomic, assign) float avg;
 @property (nonatomic, assign) float median;
 @property (nonatomic, assign) float lo;

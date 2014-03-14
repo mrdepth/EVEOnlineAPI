@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
 		self.characterName = [attributeDict valueForKey:@"characterName"];
 		self.response = [attributeDict valueForKey:@"response"];
 	}
@@ -27,14 +27,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
 	[aCoder encodeObject:self.characterName forKey:@"characterName"];
 	[aCoder encodeObject:self.response forKey:@"response"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
 		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
 		self.response = [aDecoder decodeObjectForKey:@"response"];
 	}
@@ -50,11 +50,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) calendarEventAttendeesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) calendarEventAttendeesWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID eventID: (int32_t) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECalendarEventAttendees alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID eventID:eventID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID eventID: (NSInteger) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler{
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID eventID: (int32_t) eventID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler{
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/CalendarEventAttendees.xml.aspx?keyID=%d&vCode=%@&characterID=%d&eventID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, eventID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

@@ -10,11 +10,11 @@
 
 
 @interface EVEDBDgmAttributeCategory : EVEDBObject
-@property (nonatomic) NSInteger categoryID;
+@property (nonatomic) int32_t categoryID;
 @property (nonatomic, strong) NSString *categoryName;
 @property (nonatomic, strong) NSString *description;
 
-+ (id) dgmAttributeCategoryWithAttributeCategoryID: (NSInteger)aAttributeCategoryID error:(NSError **)errorPtr;
-- (id) initWithAttributeCategoryID: (NSInteger)aAttributeCategoryID error:(NSError **)errorPtr;
++ (id) dgmAttributeCategoryWithAttributeCategoryID: (int32_t)aAttributeCategoryID error:(NSError **)errorPtr;
+- (id) initWithAttributeCategoryID: (int32_t)aAttributeCategoryID error:(NSError **)errorPtr;
 
 @end

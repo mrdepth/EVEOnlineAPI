@@ -36,11 +36,11 @@
 	return map;
 }
 
-+ (id) crtCertificateWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
++ (id) crtCertificateWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr {
 	return [[EVEDBCrtCertificate alloc] initWithCertificateID:certificateID error:errorPtr];
 }
 
-- (id) initWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
+- (id) initWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCertificates WHERE certificateID=%d;", certificateID]
 								   error:errorPtr]) {
 	}

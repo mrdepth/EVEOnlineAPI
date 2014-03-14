@@ -17,11 +17,11 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
-		self.allianceID = [[attributeDict valueForKey:@"allianceID"] integerValue];
-		self.factionID = [[attributeDict valueForKey:@"factionID"] integerValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
+		self.allianceID = [[attributeDict valueForKey:@"allianceID"] intValue];
+		self.factionID = [[attributeDict valueForKey:@"factionID"] intValue];
 		self.solarSystemName = [attributeDict valueForKey:@"solarSystemName"];
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] integerValue];
+		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
 	}
 	return self;
 }
@@ -29,19 +29,19 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
-	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
-	[aCoder encodeInteger:self.factionID forKey:@"factionID"];
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInt32:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeInt32:self.factionID forKey:@"factionID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.solarSystemName forKey:@"solarSystemName"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
-		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
-		self.factionID = [aDecoder decodeIntegerForKey:@"factionID"];
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
+		self.allianceID = [aDecoder decodeInt32ForKey:@"allianceID"];
+		self.factionID = [aDecoder decodeInt32ForKey:@"factionID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.solarSystemName = [aDecoder decodeObjectForKey:@"solarSystemName"];
 	}
 	return self;

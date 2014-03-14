@@ -49,7 +49,7 @@
 
 - (id) initWithDictionary: (NSDictionary*) dictionary {
 	if (self = [super init]) {
-		self.typeID = [[dictionary valueForKey:@"id"] integerValue];
+		self.typeID = [[dictionary valueForKey:@"id"] intValue];
 	}
 	return self;
 }
@@ -57,7 +57,7 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
 	if (self.all)
 		[aCoder encodeObject:self.all forKey:@"all"];
 	if (self.buy)
@@ -68,7 +68,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
 		self.all = [aDecoder decodeObjectForKey:@"all"];
 		self.buy = [aDecoder decodeObjectForKey:@"buy"];
 		self.sell = [aDecoder decodeObjectForKey:@"sell"];
@@ -85,17 +85,17 @@
 @property(nonatomic, strong) EVECentralMarketStatType *currentType;
 @property(nonatomic, strong) EVECentralMarketStatTypeStat *currentStat;
 
-- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ;
+- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ;
 
 @end
 
 @implementation EVECentralMarketStat
 
-+ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECentralMarketStat alloc] initWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/marketstat?%@",
 														EVECentralAPIHost,
 														[self argumentsStringWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ]]]
@@ -174,7 +174,7 @@ didStartElement:(NSString *)elementName
 
 #pragma mark - Private
 
-- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ {
+- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ {
 	NSMutableArray *typeIDsArgs = [NSMutableArray array];
 	NSMutableArray *regionIDsArgs = [NSMutableArray array];
 	

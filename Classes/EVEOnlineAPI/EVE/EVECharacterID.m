@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
 		self.name = [attributeDict valueForKey:@"name"];
 	}
 	return self;
@@ -26,13 +26,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
 	[aCoder encodeObject:self.name forKey:@"name"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
 		self.name = [aDecoder decodeObjectForKey:@"name"];
 	}
 	return self;

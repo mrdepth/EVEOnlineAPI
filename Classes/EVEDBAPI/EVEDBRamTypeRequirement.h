@@ -11,15 +11,15 @@
 @class EVEDBInvType;
 @class EVEDBRamActivity;
 @interface EVEDBRamTypeRequirement : EVEDBObject
-@property (nonatomic) NSInteger typeID;
+@property (nonatomic) int32_t typeID;
 @property (nonatomic, strong) EVEDBInvType* type;
-@property (nonatomic) NSInteger activityID;
+@property (nonatomic) int32_t activityID;
 @property (nonatomic, strong) EVEDBRamActivity* activity;
-@property (nonatomic) NSInteger requiredTypeID;
+@property (nonatomic) int32_t requiredTypeID;
 @property (nonatomic, strong) EVEDBInvType* requiredType;
-@property (nonatomic) NSInteger quantity;
+@property (nonatomic) int32_t quantity;
 @property (nonatomic) float damagePerJob;
-@property (nonatomic) NSInteger recycle;
+@property (nonatomic) int32_t recycle;
 
 
 @end

@@ -10,8 +10,8 @@
 #import "EVERequest.h"
 
 @interface EVEResearchItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger agentID;
-@property (nonatomic) NSInteger skillTypeID;
+@property (nonatomic) int32_t agentID;
+@property (nonatomic) int32_t skillTypeID;
 @property (nonatomic, strong) NSDate *researchStartDate;
 @property (nonatomic) float pointsPerDay;
 @property (nonatomic) float remainderPoints;
@@ -24,7 +24,7 @@
 @interface EVEResearch : EVERequest
 @property (nonatomic, strong) NSArray *research;
 
-+ (id) researchWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) researchWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

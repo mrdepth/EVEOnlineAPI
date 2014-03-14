@@ -36,11 +36,11 @@
 	return map;
 }
 
-+ (id) invBlueprintTypeWithBlueprintTypeID: (NSInteger)aBlueprintTypeID error:(NSError **)errorPtr {
++ (id) invBlueprintTypeWithBlueprintTypeID: (int32_t)aBlueprintTypeID error:(NSError **)errorPtr {
 	return [[EVEDBInvBlueprintType alloc] initWithBlueprintTypeID:aBlueprintTypeID error:errorPtr];
 }
 
-- (id) initWithBlueprintTypeID: (NSInteger)aBlueprintTypeID error:(NSError **)errorPtr {
+- (id) initWithBlueprintTypeID: (int32_t)aBlueprintTypeID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invBlueprintTypes WHERE blueprintTypeID=%d;", aBlueprintTypeID]
 								   error:errorPtr]) {
 	}
@@ -144,7 +144,7 @@
 		if (requirements.count > 0)
 			activity = [requirements[0] activity];
 		else
-			activity = [EVEDBRamActivity ramActivityWithActivityID:[key integerValue] error:nil];
+			activity = [EVEDBRamActivity ramActivityWithActivityID:[key intValue] error:nil];
 		[activities addObject:activity];
 	}
 	if (activities.count == 0 && self.typeMaterials.count > 0)
@@ -152,7 +152,7 @@
 	return activities;
 }
 
-- (NSArray*) requiredSkillsForActivity:(NSInteger) activityID {
+- (NSArray*) requiredSkillsForActivity:(int32_t) activityID {
 	NSMutableArray* skills = [NSMutableArray array];
 	NSArray* requirements = self.ramTypeRequirements[@(activityID)];
 	for (EVEDBRamTypeRequirement* requirement in requirements) {
@@ -167,7 +167,7 @@
 	return skills;
 }
 
-- (NSArray*) requiredMaterialsForActivity:(NSInteger) activityID {
+- (NSArray*) requiredMaterialsForActivity:(int32_t) activityID {
 	NSMutableArray* requirements = [NSMutableArray array];
 
 	for (EVEDBRamTypeRequirement* requirement in self.ramTypeRequirements[@(activityID)]) {

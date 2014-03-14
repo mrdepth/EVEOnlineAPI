@@ -31,11 +31,11 @@
 	return map;
 }
 
-+ (id) certCertificateWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
++ (id) certCertificateWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr {
 	return [[EVEDBCertCertificate alloc] initWithCertificateID:certificateID error:errorPtr];
 }
 
-- (id) initWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
+- (id) initWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from certCerts WHERE certID=%d;", certificateID]
 								   error:errorPtr]) {
 	}
@@ -77,7 +77,7 @@
 	return _skills;
 }
 
-+ (NSString*) iconImageNameWithMasteryLevel:(NSInteger) masteryLevel {
++ (NSString*) iconImageNameWithMasteryLevel:(int32_t) masteryLevel {
 	if (masteryLevel >= -1 && masteryLevel <= 4)
 		return [NSString stringWithFormat:@"Icons/icon79_0%d.png", 2 + masteryLevel];
 	else

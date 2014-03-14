@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) invCategoryWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr {
++ (id) invCategoryWithCategoryID: (int32_t)aCategoryID error:(NSError **)errorPtr {
 	return [[EVEDBInvCategory alloc] initWithCategoryID:aCategoryID error:errorPtr];
 }
 
-- (id) initWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr {
+- (id) initWithCategoryID: (int32_t)aCategoryID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invCategories WHERE categoryID=%d;", aCategoryID]
 								   error:errorPtr]) {
 	}

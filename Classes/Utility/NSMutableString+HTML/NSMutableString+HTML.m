@@ -40,7 +40,7 @@ NSMutableDictionary *sequencesMap = nil;
 		if (endRange.location != NSNotFound) {
 			NSString *entity = [self substringWithRange:NSMakeRange(startRange.location + 1, endRange.location - startRange.location - 1)];
 			if ([entity characterAtIndex:0] == '#') {
-				unichar symbol = [[entity substringWithRange:NSMakeRange(1, entity.length - 1)] integerValue];
+				unichar symbol = [[entity substringWithRange:NSMakeRange(1, entity.length - 1)] intValue];
 				[self replaceCharactersInRange:NSMakeRange(startRange.location, endRange.location + endRange.length - startRange.location) withString:[NSString stringWithCharacters:&symbol length:1]];
 				findStartRange.location++;
 				findStartRange.length = self.length - findStartRange.location;
@@ -66,11 +66,11 @@ NSMutableDictionary *sequencesMap = nil;
 		if (startRange.location + startRange.length < self.length) {
 			unichar uc = 0;
 			
-			int n = startRange.location + startRange.length;
+			int n = (int) (startRange.location + startRange.length);
 			if (n >= self.length)
-				n = self.length - 1;
+				n = (int)(self.length - 1);
 			
-			for (int i = startRange.location + 2; i < n; i++) {
+			for (int i = (int)(startRange.location + 2); i < n; i++) {
 				int v = 0;
 				char c = [self characterAtIndex:i];
 				if (c >= '0' && c <= '9')

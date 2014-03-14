@@ -10,15 +10,15 @@
 #import "EVERequest.h"
 
 @interface EVEMailMessagesItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger messageID;
-@property (nonatomic) NSInteger senderID;
+@property (nonatomic) int32_t messageID;
+@property (nonatomic) int32_t senderID;
 @property (nonatomic, strong) NSDate *sentDate;
 @property (nonatomic, copy) NSString *title;
-@property (nonatomic) NSInteger toCorpOrAllianceID;
+@property (nonatomic) int32_t toCorpOrAllianceID;
 @property (nonatomic, strong) NSArray *toCharacterIDs;
 @property (nonatomic, strong) NSArray *toListID;
 @property (nonatomic) BOOL read;
-@property (nonatomic, assign) NSInteger senderTypeID;
+@property (nonatomic, assign) int32_t senderTypeID;
 
 + (id) mailMessagesItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -28,7 +28,7 @@
 @interface EVEMailMessages : EVERequest
 @property (nonatomic, strong) NSArray *mailMessages;
 
-+ (id) mailMessagesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) mailMessagesWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

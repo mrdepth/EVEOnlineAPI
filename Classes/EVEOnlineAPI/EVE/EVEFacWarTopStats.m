@@ -21,9 +21,9 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
 		self.characterName = [attributeDict valueForKey:@"characterName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] integerValue];
+		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
 	}
 	return self;
 }
@@ -31,16 +31,16 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
 	[aCoder encodeObject:self.characterName forKey:@"characterName"];
-	[aCoder encodeInteger:self.kills forKey:@"kills"];
+	[aCoder encodeInt32:self.kills forKey:@"kills"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
 		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
-		self.kills = [aDecoder decodeIntegerForKey:@"kills"];
+		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
 	}
 	return self;
 }
@@ -56,9 +56,9 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] integerValue];
+		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
 		self.corporationName = [attributeDict valueForKey:@"corporationName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] integerValue];
+		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
 	}
 	return self;
 }
@@ -66,16 +66,16 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
-	[aCoder encodeInteger:self.kills forKey:@"kills"];
+	[aCoder encodeInt32:self.kills forKey:@"kills"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
-		self.kills = [aDecoder decodeIntegerForKey:@"kills"];
+		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
 	}
 	return self;
 }
@@ -92,9 +92,9 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.factionID = [[attributeDict valueForKey:@"factionID"] integerValue];
+		self.factionID = [[attributeDict valueForKey:@"factionID"] intValue];
 		self.factionName = [attributeDict valueForKey:@"factionName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] integerValue];
+		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
 	}
 	return self;
 }
@@ -102,16 +102,16 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.factionID forKey:@"factionID"];
+	[aCoder encodeInt32:self.factionID forKey:@"factionID"];
 	[aCoder encodeObject:self.factionName forKey:@"factionName"];
-	[aCoder encodeInteger:self.kills forKey:@"kills"];
+	[aCoder encodeInt32:self.kills forKey:@"kills"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.factionID = [aDecoder decodeIntegerForKey:@"factionID"];
+		self.factionID = [aDecoder decodeInt32ForKey:@"factionID"];
 		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
-		self.kills = [aDecoder decodeIntegerForKey:@"kills"];
+		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
 	}
 	return self;
 }

@@ -32,11 +32,11 @@
 	return map;
 }
 
-+ (id) crtRelationshipWithRelationshipID: (NSInteger)relationshipID error:(NSError **)errorPtr {
++ (id) crtRelationshipWithRelationshipID: (int32_t)relationshipID error:(NSError **)errorPtr {
 	return [[EVEDBCrtRelationship alloc] initWithRelationshipID:relationshipID error:errorPtr];
 }
 
-- (id) initWithRelationshipID: (NSInteger)relationshipID error:(NSError **)errorPtr {
+- (id) initWithRelationshipID: (int32_t)relationshipID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtRelationships WHERE relationshipID=%d;", relationshipID]
 								   error:errorPtr]) {
 	}

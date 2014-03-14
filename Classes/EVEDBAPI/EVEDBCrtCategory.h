@@ -9,11 +9,11 @@
 #import "EVEDBObject.h"
 
 @interface EVEDBCrtCategory : EVEDBObject
-@property (nonatomic) NSInteger categoryID;
+@property (nonatomic) int32_t categoryID;
 @property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) NSString *categoryName;
 
-+ (id) crtCategoryWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr;
-- (id) initWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr;
++ (id) crtCategoryWithCategoryID: (int32_t)aCategoryID error:(NSError **)errorPtr;
+- (id) initWithCategoryID: (int32_t)aCategoryID error:(NSError **)errorPtr;
 
 @end

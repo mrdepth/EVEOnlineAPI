@@ -34,7 +34,7 @@
 	NSError* error = nil;
 	NSDictionary* result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 	if ([result isKindOfClass:[NSDictionary class]]) {
-		self.count = [result[@"count"] integerValue];
+		self.count = [result[@"count"] intValue];
 		return nil;
 	}
 	else

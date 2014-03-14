@@ -12,22 +12,22 @@
 @class EVEDBEveUnit;
 @class EVEDBDgmAttributeCategory;
 @interface EVEDBDgmAttributeType : EVEDBObject
-@property (nonatomic) NSInteger attributeID;
+@property (nonatomic) int32_t attributeID;
 @property (nonatomic, strong) NSString *attributeName;
 @property (nonatomic, strong) NSString *description;
-@property (nonatomic) NSInteger iconID;
+@property (nonatomic) int32_t iconID;
 @property (nonatomic, strong) EVEDBEveIcon *icon;
 @property (nonatomic) float defaultValue;
 @property (nonatomic) BOOL published;
 @property (nonatomic, strong) NSString *displayName;
-@property (nonatomic) NSInteger unitID;
+@property (nonatomic) int32_t unitID;
 @property (nonatomic, strong) EVEDBEveUnit *unit;
 @property (nonatomic) BOOL stackable;
 @property (nonatomic) BOOL highIsGood;
-@property (nonatomic) NSInteger categoryID;
+@property (nonatomic) int32_t categoryID;
 @property (nonatomic, strong) EVEDBDgmAttributeCategory *category;
 
-+ (id) dgmAttributeTypeWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr;
-- (id) initWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr;
++ (id) dgmAttributeTypeWithAttributeTypeID: (int32_t)aAttributeTypeID error:(NSError **)errorPtr;
+- (id) initWithAttributeTypeID: (int32_t)aAttributeTypeID error:(NSError **)errorPtr;
 
 @end

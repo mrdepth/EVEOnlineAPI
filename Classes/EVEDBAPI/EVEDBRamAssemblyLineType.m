@@ -27,11 +27,11 @@
 	return map;
 }
 
-+ (id) ramAssemblyLineTypeWithAssemblyLineTypeID: (NSInteger)assemblyLineTypeID error:(NSError **)errorPtr {
++ (id) ramAssemblyLineTypeWithAssemblyLineTypeID: (int32_t)assemblyLineTypeID error:(NSError **)errorPtr {
 	return [[EVEDBRamAssemblyLineType alloc] initWithAssemblyLineTypeID:assemblyLineTypeID error:errorPtr];
 }
 
-- (id) initWithAssemblyLineTypeID: (NSInteger)assemblyLineTypeID error:(NSError **)errorPtr {
+- (id) initWithAssemblyLineTypeID: (int32_t)assemblyLineTypeID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from ramAssemblyLineTypes WHERE assemblyLineTypeID=%d;", assemblyLineTypeID]
 								   error:errorPtr]) {
 	}

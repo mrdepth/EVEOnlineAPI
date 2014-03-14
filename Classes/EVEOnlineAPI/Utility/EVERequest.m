@@ -10,7 +10,7 @@
 
 @interface EVERequest()
 @property (nonatomic, strong) NSError* error;
-@property (nonatomic, assign) NSInteger errorCode;
+@property (nonatomic, assign) int32_t errorCode;
 @property (nonatomic, strong, readwrite) NSMutableString* text;
 
 @property (nonatomic, strong) NSMutableArray *rowsets;
@@ -127,7 +127,7 @@ didStartElement:(NSString *)elementName
 		self.apiVersion = [attributeDict valueForKey:@"version"];
 	}
 	else if ([elementName isEqualToString:@"error"]) {
-		self.errorCode = [[attributeDict valueForKey:@"code"] integerValue];
+		self.errorCode = [[attributeDict valueForKey:@"code"] intValue];
 	}
 	else if ([elementName isEqualToString:@"rowset"]) {
 		NSString *rowset = [attributeDict valueForKey:@"name"];

@@ -10,19 +10,19 @@
 #import "EVERequest.h"
 
 @interface EVECharFacWarStats : EVERequest
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic, strong) NSDate *enlisted;
-@property (nonatomic) NSInteger currentRank;
-@property (nonatomic) NSInteger highestRank;
-@property (nonatomic) NSInteger killsYesterday;
-@property (nonatomic) NSInteger killsLastWeek;
-@property (nonatomic) NSInteger killsTotal;
-@property (nonatomic) NSInteger victoryPointsYesterday;
-@property (nonatomic) NSInteger victoryPointsLastWeek;
-@property (nonatomic) NSInteger victoryPointsTotal;
+@property (nonatomic) int32_t currentRank;
+@property (nonatomic) int32_t highestRank;
+@property (nonatomic) int32_t killsYesterday;
+@property (nonatomic) int32_t killsLastWeek;
+@property (nonatomic) int32_t killsTotal;
+@property (nonatomic) int32_t victoryPointsYesterday;
+@property (nonatomic) int32_t victoryPointsLastWeek;
+@property (nonatomic) int32_t victoryPointsTotal;
 
-+ (id) charFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) charFacWarStatsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

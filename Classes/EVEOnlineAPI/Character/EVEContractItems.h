@@ -10,10 +10,10 @@
 #import "EVERequest.h"
 
 @interface EVEContractItemsItem : NSObject<NSCoding>
-@property (nonatomic) long long recordID;
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger quantity;
-@property (nonatomic) NSInteger rawQuantity;
+@property (nonatomic) int32_t recordID;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t quantity;
+@property (nonatomic) int32_t rawQuantity;
 @property (nonatomic) BOOL singleton;
 @property (nonatomic) BOOL included;
 
@@ -25,6 +25,6 @@
 @interface EVEContractItems : EVERequest
 @property (nonatomic, strong) NSArray *itemList;
 
-+ (id) contractItemsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID contractID:(long long) contractID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID contractID:(long long) contractID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) contractItemsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID contractID:(int32_t) contractID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID contractID:(int32_t) contractID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

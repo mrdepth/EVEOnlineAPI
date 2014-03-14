@@ -16,9 +16,9 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.notificationID = [[attributeDict valueForKey:@"notificationID"] integerValue];
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
-		self.senderID = [[attributeDict valueForKey:@"senderID"] integerValue];
+		self.notificationID = [[attributeDict valueForKey:@"notificationID"] intValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.senderID = [[attributeDict valueForKey:@"senderID"] intValue];
 		self.sentDate = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"sentDate"]];
 		self.read = [[attributeDict valueForKey:@"read"] boolValue];
 	}
@@ -28,18 +28,18 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.notificationID forKey:@"notificationID"];
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
-	[aCoder encodeInteger:self.senderID forKey:@"senderID"];
+	[aCoder encodeInt32:self.notificationID forKey:@"notificationID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.senderID forKey:@"senderID"];
 	[aCoder encodeObject:self.sentDate forKey:@"sentDate"];
 	[aCoder encodeBool:self.read forKey:@"read"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.notificationID = [aDecoder decodeIntegerForKey:@"notificationID"];
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
-		self.senderID = [aDecoder decodeIntegerForKey:@"senderID"];
+		self.notificationID = [aDecoder decodeInt32ForKey:@"notificationID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.senderID = [aDecoder decodeInt32ForKey:@"senderID"];
 		self.sentDate = [aDecoder decodeObjectForKey:@"sentDate"];
 		self.read = [aDecoder decodeBoolForKey:@"read"];
 	}
@@ -55,11 +55,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) notificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) notificationsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVENotifications alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Notifications.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

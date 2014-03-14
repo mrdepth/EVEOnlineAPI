@@ -11,9 +11,9 @@
 
 @interface EVECharactersItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic) NSInteger characterID;
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *corporationName;
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t corporationID;
 
 + (id) charactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -24,7 +24,7 @@
 @interface EVECharacters : EVERequest
 @property (nonatomic, strong) NSArray *characters;
 
-+ (id) charactersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) charactersWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

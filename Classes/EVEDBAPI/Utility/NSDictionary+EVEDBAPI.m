@@ -13,7 +13,7 @@
 + (NSDictionary*) dictionaryWithStatement:(sqlite3_stmt*) stmt {
 	NSMutableDictionary* dic = [NSMutableDictionary dictionary];
 	int n = sqlite3_column_count(stmt);
-	for (NSInteger i = 0; i < n; i++) {
+	for (int32_t i = 0; i < n; i++) {
 		const char* text = (const char*) sqlite3_column_text(stmt, i);
 		const char* column = (const char*) sqlite3_column_name(stmt, i);
 		if (text && column) {

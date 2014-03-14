@@ -11,7 +11,7 @@
 
 @interface RSSEnclosure : NSObject<NSCoding>
 @property (nonatomic, strong) NSURL *url;
-@property (nonatomic) NSInteger length;
+@property (nonatomic) int32_t length;
 @property (nonatomic, copy) NSString *type;
 
 @end

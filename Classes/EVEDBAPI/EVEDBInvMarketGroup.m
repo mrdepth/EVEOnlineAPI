@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) invMarketGroupWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr {
++ (id) invMarketGroupWithMarketGroupID: (int32_t)aMarketGroupID error:(NSError **)errorPtr {
 	return [[EVEDBInvMarketGroup alloc] initWithMarketGroupID:aMarketGroupID error:errorPtr];
 }
 
-- (id) initWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr {
+- (id) initWithMarketGroupID: (int32_t)aMarketGroupID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invMarketGroups WHERE marketGroupID=%d;", aMarketGroupID]
 								   error:errorPtr]) {
 	}

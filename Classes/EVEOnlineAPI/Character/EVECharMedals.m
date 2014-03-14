@@ -16,10 +16,10 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.medalID = [[attributeDict valueForKey:@"medalID"] integerValue];
+		self.medalID = [[attributeDict valueForKey:@"medalID"] intValue];
 		self.reason = [attributeDict valueForKey:@"reason"];
 		self.status = [attributeDict valueForKey:@"status"];
-		self.issuerID = [[attributeDict valueForKey:@"issuerID"] integerValue];
+		self.issuerID = [[attributeDict valueForKey:@"issuerID"] intValue];
 		self.issued = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"issued"]];
 	}
 	return self;
@@ -28,19 +28,19 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.medalID forKey:@"medalID"];
+	[aCoder encodeInt32:self.medalID forKey:@"medalID"];
 	[aCoder encodeObject:self.reason forKey:@"reason"];
 	[aCoder encodeObject:self.status forKey:@"status"];
-	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeInt32:self.issuerID forKey:@"issuerID"];
 	[aCoder encodeObject:self.issued forKey:@"issued"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.medalID = [aDecoder decodeIntegerForKey:@"medalID"];
+		self.medalID = [aDecoder decodeInt32ForKey:@"medalID"];
 		self.reason = [aDecoder decodeObjectForKey:@"reason"];
 		self.status = [aDecoder decodeObjectForKey:@"status"];
-		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.issuerID = [aDecoder decodeInt32ForKey:@"issuerID"];
 		self.issued = [aDecoder decodeObjectForKey:@"issued"];
 	}
 	return self;
@@ -58,12 +58,12 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.medalID = [[attributeDict valueForKey:@"medalID"] integerValue];
+		self.medalID = [[attributeDict valueForKey:@"medalID"] intValue];
 		self.reason = [attributeDict valueForKey:@"reason"];
 		self.status = [attributeDict valueForKey:@"status"];
-		self.issuerID = [[attributeDict valueForKey:@"issuerID"] integerValue];
+		self.issuerID = [[attributeDict valueForKey:@"issuerID"] intValue];
 		self.issued = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"issued"]];
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] integerValue];
+		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
 		self.title = [attributeDict valueForKey:@"title"];
 		self.description = [attributeDict valueForKey:@"description"];
 	}
@@ -73,24 +73,24 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.medalID forKey:@"medalID"];
+	[aCoder encodeInt32:self.medalID forKey:@"medalID"];
 	[aCoder encodeObject:self.reason forKey:@"reason"];
 	[aCoder encodeObject:self.status forKey:@"status"];
-	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeInt32:self.issuerID forKey:@"issuerID"];
 	[aCoder encodeObject:self.issued forKey:@"issued"];
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.title forKey:@"title"];
 	[aCoder encodeObject:self.description forKey:@"description"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.medalID = [aDecoder decodeIntegerForKey:@"medalID"];
+		self.medalID = [aDecoder decodeInt32ForKey:@"medalID"];
 		self.reason = [aDecoder decodeObjectForKey:@"reason"];
 		self.status = [aDecoder decodeObjectForKey:@"status"];
-		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.issuerID = [aDecoder decodeInt32ForKey:@"issuerID"];
 		self.issued = [aDecoder decodeObjectForKey:@"issued"];
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.title = [aDecoder decodeObjectForKey:@"title"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
 	}
@@ -106,11 +106,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) charMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) charMedalsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECharMedals alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) mapConstellationWithConstellationID: (NSInteger)constellationID error:(NSError **)errorPtr {
++ (id) mapConstellationWithConstellationID: (int32_t)constellationID error:(NSError **)errorPtr {
 	return [[EVEDBMapConstellation alloc] initWithConstellationID:constellationID error:errorPtr];
 }
 
-- (id) initWithConstellationID: (NSInteger)constellationID error:(NSError **)errorPtr {
+- (id) initWithConstellationID: (int32_t)constellationID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapConstellations WHERE constellationID=%d;", constellationID]
 								   error:errorPtr]) {
 	}

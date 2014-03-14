@@ -10,9 +10,9 @@
 #import "EVERequest.h"
 
 @interface EVENotificationsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger notificationID;
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger senderID;
+@property (nonatomic) int32_t notificationID;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t senderID;
 @property (nonatomic, strong) NSDate *sentDate;
 @property (nonatomic) BOOL read;
 
@@ -24,8 +24,8 @@
 @interface EVENotifications : EVERequest
 @property (nonatomic, strong) NSArray *notifications;
 
-+ (id) notificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) notificationsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end
 

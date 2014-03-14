@@ -13,18 +13,18 @@
 #import "EVERequest.h"
 
 @interface EVECorpFacWarStats : EVERequest
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *factionName;
 @property (nonatomic, strong) NSDate *enlisted;
-@property (nonatomic) NSInteger pilots;
-@property (nonatomic) NSInteger killsYesterday;
-@property (nonatomic) NSInteger killsLastWeek;
-@property (nonatomic) NSInteger killsTotal;
-@property (nonatomic) NSInteger victoryPointsYesterday;
-@property (nonatomic) NSInteger victoryPointsLastWeek;
-@property (nonatomic) NSInteger victoryPointsTotal;
+@property (nonatomic) int32_t pilots;
+@property (nonatomic) int32_t killsYesterday;
+@property (nonatomic) int32_t killsLastWeek;
+@property (nonatomic) int32_t killsTotal;
+@property (nonatomic) int32_t victoryPointsYesterday;
+@property (nonatomic) int32_t victoryPointsLastWeek;
+@property (nonatomic) int32_t victoryPointsTotal;
 
-+ (id) corpFacWarStatsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) corpFacWarStatsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

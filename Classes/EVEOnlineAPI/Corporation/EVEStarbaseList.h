@@ -13,10 +13,10 @@
 #import "EVERequest.h"
 
 @interface EVEStarbaseListItem : NSObject<NSCoding>
-@property (nonatomic) long long itemID;
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) long long locationID;
-@property (nonatomic) NSInteger moonID;
+@property (nonatomic) int64_t itemID;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t locationID;
+@property (nonatomic) int32_t moonID;
 @property (nonatomic) EVEPOSState state;
 @property (nonatomic, strong) NSDate *stateTimestamp;
 @property (nonatomic, strong) NSDate *onlineTimestamp;
@@ -29,7 +29,7 @@
 @interface EVEStarbaseList : EVERequest
 @property (nonatomic, strong) NSArray *starbases;
 
-+ (id) starbaseListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) starbaseListWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

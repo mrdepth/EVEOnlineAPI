@@ -10,8 +10,8 @@
 
 @class EVEDBDgmAttributeType;
 @interface EVEDBDgmTypeAttribute : EVEDBObject
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger attributeID;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t attributeID;
 @property (nonatomic, strong) EVEDBDgmAttributeType *attribute;
 @property (nonatomic) float value;
 

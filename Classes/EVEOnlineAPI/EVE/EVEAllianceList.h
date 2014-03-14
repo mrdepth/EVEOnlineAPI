@@ -12,9 +12,9 @@
 @interface EVEAllianceListItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *shortName;
-@property (nonatomic) NSInteger allianceID;
-@property (nonatomic) NSInteger executorCorpID;
-@property (nonatomic) NSInteger memberCount;
+@property (nonatomic) int32_t allianceID;
+@property (nonatomic) int32_t executorCorpID;
+@property (nonatomic) int32_t memberCount;
 @property (nonatomic, strong) NSDate *startDate;
 @property (nonatomic, strong) NSArray *memberCorporations;
 
@@ -25,7 +25,7 @@
 
 
 @interface EVEAllianceListMemberCorporationsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, strong) NSDate *startDate;
 
 + (id) allianceListMemberCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict;

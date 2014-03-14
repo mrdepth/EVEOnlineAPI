@@ -10,8 +10,8 @@
 #import "EVERequest.h"
 
 @interface EVEJumpsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger shipJumps;
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t shipJumps;
 
 + (id) jumpsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;

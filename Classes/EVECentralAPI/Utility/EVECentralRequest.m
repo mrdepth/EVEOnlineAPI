@@ -65,8 +65,8 @@ didStartElement:(NSString *)elementName
 	NSInteger n = [self.text lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	const char* s = [self.text UTF8String];
 	
-	int start;
-	int end;
+	NSInteger start;
+	NSInteger end;
 	
 	for (start = 0; start < n; start++) {
 		if (s[start] != '\n' && s[start] != ' ' && s[start] != '\t')

@@ -19,9 +19,9 @@
 	if (self = [super init]) {
 		self.name = [attributeDict valueForKey:@"name"];
 		self.shortName = [attributeDict valueForKey:@"shortName"];
-		self.allianceID = [[attributeDict valueForKey:@"allianceID"] integerValue];
-		self.executorCorpID = [[attributeDict valueForKey:@"executorCorpID"] integerValue];
-		self.memberCount = [[attributeDict valueForKey:@"memberCount"] integerValue];
+		self.allianceID = [[attributeDict valueForKey:@"allianceID"] intValue];
+		self.executorCorpID = [[attributeDict valueForKey:@"executorCorpID"] intValue];
+		self.memberCount = [[attributeDict valueForKey:@"memberCount"] intValue];
 		self.startDate = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"startDate"]];
 	}
 	return self;
@@ -32,9 +32,9 @@
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[aCoder encodeObject:self.name forKey:@"name"];
 	[aCoder encodeObject:self.shortName forKey:@"shortName"];
-	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
-	[aCoder encodeInteger:self.executorCorpID forKey:@"executorCorpID"];
-	[aCoder encodeInteger:self.memberCount forKey:@"memberCount"];
+	[aCoder encodeInt32:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeInt32:self.executorCorpID forKey:@"executorCorpID"];
+	[aCoder encodeInt32:self.memberCount forKey:@"memberCount"];
 	[aCoder encodeObject:self.startDate forKey:@"startDate"];
 	[aCoder encodeObject:self.memberCorporations forKey:@"memberCorporations"];
 }
@@ -43,9 +43,9 @@
 	if (self = [super init]) {
 		self.name = [aDecoder decodeObjectForKey:@"name"];
 		self.shortName = [aDecoder decodeObjectForKey:@"shortName"];
-		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
-		self.executorCorpID = [aDecoder decodeIntegerForKey:@"executorCorpID"];
-		self.memberCount = [aDecoder decodeIntegerForKey:@"memberCount"];
+		self.allianceID = [aDecoder decodeInt32ForKey:@"allianceID"];
+		self.executorCorpID = [aDecoder decodeInt32ForKey:@"executorCorpID"];
+		self.memberCount = [aDecoder decodeInt32ForKey:@"memberCount"];
 		self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
 		self.memberCorporations = [aDecoder decodeObjectForKey:@"memberCorporations"];
 	}
@@ -73,13 +73,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.startDate forKey:@"startDate"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
 	}
 	return self;

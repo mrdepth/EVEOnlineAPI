@@ -10,7 +10,7 @@
 #import "EVERequest.h"
 
 @interface EVEMemberSecurityMember : NSObject<NSCoding>
-@property (nonatomic) NSInteger characterID;
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *roles;
 @property (nonatomic, strong) NSArray *grantableRoles;
@@ -29,7 +29,7 @@
 
 
 @interface EVEMemberSecurityRoleItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger roleID;
+@property (nonatomic) int32_t roleID;
 @property (nonatomic, copy) NSString *roleName;
 
 + (id) memberSecurityRoleItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -39,7 +39,7 @@
 
 
 @interface EVEMemberSecurityTitleItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger titleID;
+@property (nonatomic) int32_t titleID;
 @property (nonatomic, copy) NSString *titleName;
 
 + (id) memberSecurityTitleItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -51,7 +51,7 @@
 @interface EVEMemberSecurity : EVERequest
 @property (nonatomic, strong) NSArray *members;
 
-+ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) memberSecurityWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

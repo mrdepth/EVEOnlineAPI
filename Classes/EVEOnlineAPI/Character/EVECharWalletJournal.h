@@ -11,18 +11,18 @@
 
 @interface EVECharWalletJournalItem : NSObject<NSCoding>
 @property (nonatomic, strong) NSDate *date;
-@property (nonatomic) NSInteger refID;
-@property (nonatomic) NSInteger refTypeID;
+@property (nonatomic) int64_t refID;
+@property (nonatomic) int32_t refTypeID;
 @property (nonatomic, copy) NSString *ownerName1;
-@property (nonatomic) NSInteger ownerID1;
+@property (nonatomic) int32_t ownerID1;
 @property (nonatomic, copy) NSString *ownerName2;
-@property (nonatomic) NSInteger ownerID2;
+@property (nonatomic) int32_t ownerID2;
 @property (nonatomic, copy) NSString *argName1;
-@property (nonatomic) NSInteger argID1;
+@property (nonatomic) int32_t argID1;
 @property (nonatomic) float amount;
 @property (nonatomic) float balance;
 @property (nonatomic, copy) NSString *reason;
-@property (nonatomic) NSInteger taxReceiverID;
+@property (nonatomic) int32_t taxReceiverID;
 @property (nonatomic) float taxAmount;
 
 + (id) charWalletJournalItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -33,7 +33,7 @@
 @interface EVECharWalletJournal : EVERequest
 @property (nonatomic, strong) NSArray *charWalletJournal;
 
-+ (id) charWalletJournalWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID fromID: (long long) fromID rowCount:(NSInteger) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) charWalletJournalWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID fromID: (int64_t) fromID rowCount:(int32_t) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID fromID: (int64_t) fromID rowCount:(int32_t) rowCount error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

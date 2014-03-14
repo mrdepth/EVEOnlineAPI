@@ -51,7 +51,7 @@
 		NSString* key = [NSString stringWithCString:columnName encoding:NSUTF8StringEncoding];
 		NSDictionary* record = map[key];
 		if (record) {
-			EVEDBType type = [record[@"type"] integerValue];
+			EVEDBType type = [record[@"type"] intValue];
 			NSString* keyPath = record[@"keyPath"];
 			switch (type) {
 				case EVEDBTypeInt: {

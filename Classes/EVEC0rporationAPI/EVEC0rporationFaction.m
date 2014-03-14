@@ -22,7 +22,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
 		self.avg = [[attributeDict valueForKey:@"avg"] floatValue];
 		self.median = [[attributeDict valueForKey:@"median"] floatValue];
 		self.lo = [[attributeDict valueForKey:@"lo"] floatValue];

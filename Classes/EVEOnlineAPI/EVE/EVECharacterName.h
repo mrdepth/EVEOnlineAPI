@@ -10,7 +10,7 @@
 #import "EVERequest.h"
 
 @interface EVECharacterNameItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger characterID;
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *name;
 
 + (id) characterNameItemWithXMLAttributes:(NSDictionary *)attributeDict;

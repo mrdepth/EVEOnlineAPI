@@ -17,11 +17,11 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.stationID = [[attributeDict valueForKey:@"stationID"] integerValue];
+		self.stationID = [[attributeDict valueForKey:@"stationID"] intValue];
 		self.stationName = [attributeDict valueForKey:@"stationName"];
-		self.stationTypeID = [[attributeDict valueForKey:@"stationTypeID"] integerValue];
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] integerValue];
+		self.stationTypeID = [[attributeDict valueForKey:@"stationTypeID"] intValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
+		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
 		self.corporationName = [attributeDict valueForKey:@"corporationName"];
 	}
 	return self;
@@ -30,21 +30,21 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
 	[aCoder encodeObject:self.stationName forKey:@"stationName"];
-	[aCoder encodeInteger:self.stationTypeID forKey:@"stationTypeID"];
-	[aCoder encodeInteger:self.solarSystemID forKey:@"solarSystemID"];
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.stationTypeID forKey:@"stationTypeID"];
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
 		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
-		self.stationTypeID = [aDecoder decodeIntegerForKey:@"stationTypeID"];
-		self.solarSystemID = [aDecoder decodeIntegerForKey:@"solarSystemID"];
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.stationTypeID = [aDecoder decodeInt32ForKey:@"stationTypeID"];
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
 	}
 	return self;

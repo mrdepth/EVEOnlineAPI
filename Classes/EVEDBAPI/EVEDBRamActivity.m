@@ -22,11 +22,11 @@
 	return map;
 }
 
-+ (id) ramActivityWithActivityID: (NSInteger)activityID error:(NSError **)errorPtr {
++ (id) ramActivityWithActivityID: (int32_t)activityID error:(NSError **)errorPtr {
 	return [[EVEDBRamActivity alloc] initWithActivityID:activityID error:errorPtr];
 }
 
-- (id) initWithActivityID: (NSInteger)activityID error:(NSError **)errorPtr {
+- (id) initWithActivityID: (int32_t)activityID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from ramActivities WHERE activityID=%d;", activityID]
 								   error:errorPtr]) {
 	}

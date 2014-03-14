@@ -16,8 +16,8 @@
 
 
 @interface EVESkillTreeRequiredSkillsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger skillLevel;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t skillLevel;
 
 + (id) skillTreeRequiredSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -27,7 +27,7 @@
 
 @interface EVESkillTreeSkillBonusCollectionItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *bonusType;
-@property (nonatomic) NSInteger bonusValue;
+@property (nonatomic) int32_t bonusValue;
 
 + (id) skillTreeSkillBonusCollectionItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -37,7 +37,7 @@
 
 
 @interface EVESkillTreeSkillGroupsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger groupID;
+@property (nonatomic) int32_t groupID;
 @property (nonatomic, copy) NSString *groupName;
 @property (nonatomic, strong) NSArray *skills;
 
@@ -48,11 +48,11 @@
 
 
 @interface EVESkillTreeSkillsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger groupID;
-@property (nonatomic) NSInteger typeID;
+@property (nonatomic) int32_t groupID;
+@property (nonatomic) int32_t typeID;
 @property (nonatomic, copy) NSString *typeName;
 @property (nonatomic, copy) NSString *description;
-@property (nonatomic) NSInteger rank;
+@property (nonatomic) int32_t rank;
 @property (nonatomic, strong) NSArray *requiredSkills;
 @property (nonatomic, strong) EVESkillTreeRequiredAttributes *requiredAttributes;
 @property (nonatomic, strong) NSArray *skillBonusCollection;	

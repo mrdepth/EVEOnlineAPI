@@ -16,8 +16,8 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.notificationID = [[attributeDict valueForKey:@"contactID"] integerValue];
-		self.senderID = [[attributeDict valueForKey:@"senderID"] integerValue];
+		self.notificationID = [[attributeDict valueForKey:@"contactID"] intValue];
+		self.senderID = [[attributeDict valueForKey:@"senderID"] intValue];
 		self.senderName = [attributeDict valueForKey:@"senderName"];
 
 		self.sentDate = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"sentDate"]];
@@ -30,8 +30,8 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.notificationID forKey:@"notificationID"];
-	[aCoder encodeInteger:self.senderID forKey:@"senderID"];
+	[aCoder encodeInt32:self.notificationID forKey:@"notificationID"];
+	[aCoder encodeInt32:self.senderID forKey:@"senderID"];
 	[aCoder encodeObject:self.senderName forKey:@"senderName"];
 	[aCoder encodeObject:self.sentDate forKey:@"sentDate"];
 	[aCoder encodeObject:self.messageData forKey:@"messageData"];
@@ -39,8 +39,8 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.notificationID = [aDecoder decodeIntegerForKey:@"notificationID"];
-		self.senderID = [aDecoder decodeIntegerForKey:@"senderID"];
+		self.notificationID = [aDecoder decodeInt32ForKey:@"notificationID"];
+		self.senderID = [aDecoder decodeInt32ForKey:@"senderID"];
 		self.senderName = [aDecoder decodeObjectForKey:@"senderName"];
 		self.sentDate = [aDecoder decodeObjectForKey:@"sentDate"];
 		self.messageData = [aDecoder decodeObjectForKey:@"messageData"];
@@ -56,11 +56,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) contactNotificationsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) contactNotificationsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEContactNotifications alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/ContactNotifications.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

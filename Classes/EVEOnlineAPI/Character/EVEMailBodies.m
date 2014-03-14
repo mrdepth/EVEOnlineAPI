@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.messageID = [[attributeDict valueForKey:@"messageID"] integerValue];
+		self.messageID = [[attributeDict valueForKey:@"messageID"] intValue];
 	}
 	return self;
 }
@@ -25,13 +25,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.messageID forKey:@"messageID"];
+	[aCoder encodeInt32:self.messageID forKey:@"messageID"];
 	[aCoder encodeObject:self.text forKey:@"text"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.messageID = [aDecoder decodeIntegerForKey:@"messageID"];
+		self.messageID = [aDecoder decodeInt32ForKey:@"messageID"];
 		self.text = [aDecoder decodeObjectForKey:@"text"];
 	}
 	return self;
@@ -46,11 +46,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) mailBodiesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) mailBodiesWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMailBodies alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID ids:ids error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailBodies.xml.aspx?keyID=%d&vCode=%@&characterID=%d&ids=%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, [ids componentsJoinedByString:@","]]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

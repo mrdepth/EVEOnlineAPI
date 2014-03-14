@@ -18,16 +18,16 @@
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
 		self.transactionDateTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"transactionDateTime"]];
-		self.transactionID = [[attributeDict valueForKey:@"transactionID"] integerValue];
-		self.quantity = [[attributeDict valueForKey:@"quantity"] integerValue];
+		self.transactionID = [[attributeDict valueForKey:@"transactionID"] longLongValue];
+		self.quantity = [[attributeDict valueForKey:@"quantity"] intValue];
 		self.typeName = [attributeDict valueForKey:@"typeName"];
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
 		self.price = [[attributeDict valueForKey:@"price"] floatValue];
-		self.clientID = [[attributeDict valueForKey:@"clientID"] integerValue];
+		self.clientID = [[attributeDict valueForKey:@"clientID"] intValue];
 		self.clientName = [attributeDict valueForKey:@"clientName"];
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
 		self.characterName = [attributeDict valueForKey:@"characterName"];
-		self.stationID = [[attributeDict valueForKey:@"stationID"] integerValue];
+		self.stationID = [[attributeDict valueForKey:@"stationID"] intValue];
 		self.stationName = [attributeDict valueForKey:@"stationName"];
 		self.transactionType = [attributeDict valueForKey:@"transactionType"];
 		self.transactionFor = [attributeDict valueForKey:@"transactionFor"];
@@ -39,16 +39,16 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[aCoder encodeObject:self.transactionDateTime forKey:@"transactionDateTime"];
-	[aCoder encodeInteger:self.transactionID forKey:@"transactionID"];
-	[aCoder encodeInteger:self.quantity forKey:@"quantity"];
+	[aCoder encodeInt64:self.transactionID forKey:@"transactionID"];
+	[aCoder encodeInt32:self.quantity forKey:@"quantity"];
 	[aCoder encodeObject:self.typeName forKey:@"typeName"];
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
 	[aCoder encodeFloat:self.price forKey:@"price"];
-	[aCoder encodeInteger:self.clientID forKey:@"clientID"];
+	[aCoder encodeInt32:self.clientID forKey:@"clientID"];
 	[aCoder encodeObject:self.clientName forKey:@"clientName"];
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
 	[aCoder encodeObject:self.characterName forKey:@"characterName"];
-	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
 	[aCoder encodeObject:self.stationName forKey:@"stationName"];
 	[aCoder encodeObject:self.transactionType forKey:@"transactionType"];
 	[aCoder encodeObject:self.transactionFor forKey:@"transactionFor"];
@@ -57,16 +57,16 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
 		self.transactionDateTime = [aDecoder decodeObjectForKey:@"transactionDateTime"];
-		self.transactionID = [aDecoder decodeIntegerForKey:@"transactionID"];
-		self.quantity = [aDecoder decodeIntegerForKey:@"quantity"];
+		self.transactionID = [aDecoder decodeInt64ForKey:@"transactionID"];
+		self.quantity = [aDecoder decodeInt32ForKey:@"quantity"];
 		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
 		self.price = [aDecoder decodeFloatForKey:@"price"];
-		self.clientID = [aDecoder decodeIntegerForKey:@"clientID"];
+		self.clientID = [aDecoder decodeInt32ForKey:@"clientID"];
 		self.clientName = [aDecoder decodeObjectForKey:@"clientName"];
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
 		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
-		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
 		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
 		self.transactionType = [aDecoder decodeObjectForKey:@"transactionType"];
 		self.transactionFor = [aDecoder decodeObjectForKey:@"transactionFor"];
@@ -83,13 +83,13 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) corpWalletTransactionsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) corpWalletTransactionsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID beforeTransID: (int64_t) beforeTransID accountKey: (int32_t) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorpWalletTransactions alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID beforeTransID:beforeTransID accountKey:accountKey error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID beforeTransID: (NSInteger) beforeTransID accountKey: (NSInteger) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID beforeTransID: (int64_t) beforeTransID accountKey: (int32_t) accountKey error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/WalletTransactions.xml.aspx?keyID=%d&vCode=%@&characterID=%d&accountKey=%d%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID, accountKey, 
-														(beforeTransID > 0 ? [NSString stringWithFormat:@"&beforeTransID=%d", beforeTransID] : @"")]]
+														(beforeTransID > 0 ? [NSString stringWithFormat:@"&beforeTransID=%qi", beforeTransID] : @"")]]
 					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {

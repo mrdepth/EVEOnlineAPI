@@ -17,7 +17,7 @@
 
 - (id) initWithDictionary: (NSDictionary*) dictionary {
 	if (self = [super init]) {
-		self.orderID = [[dictionary valueForKey:@"id"] integerValue];
+		self.orderID = [[dictionary valueForKey:@"id"] intValue];
 	}
 	return self;
 }
@@ -53,18 +53,18 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.orderID forKey:@"orderID"];
-	[aCoder encodeInteger:self.regionID forKey:@"regionID"];
-	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	[aCoder encodeInt32:self.orderID forKey:@"orderID"];
+	[aCoder encodeInt32:self.regionID forKey:@"regionID"];
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
 	
 	if  (self.stationName)
 		[aCoder encodeObject:self.stationName forKey:@"stationName"];
 
 	[aCoder encodeFloat:self.security forKey:@"security"];
-	[aCoder encodeInteger:self.range forKey:@"range"];
+	[aCoder encodeInt32:self.range forKey:@"range"];
 	[aCoder encodeFloat:self.price forKey:@"price"];
-	[aCoder encodeInteger:self.volRemain forKey:@"volRemain"];
-	[aCoder encodeInteger:self.minVolume forKey:@"minVolume"];
+	[aCoder encodeInt32:self.volRemain forKey:@"volRemain"];
+	[aCoder encodeInt32:self.minVolume forKey:@"minVolume"];
 	
 	if  (self.expires)
 		[aCoder encodeObject:self.expires forKey:@"expires"];
@@ -75,17 +75,17 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.orderID = [aDecoder decodeIntegerForKey:@"orderID"];
-		self.regionID = [aDecoder decodeIntegerForKey:@"regionID"];
-		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		self.orderID = [aDecoder decodeInt32ForKey:@"orderID"];
+		self.regionID = [aDecoder decodeInt32ForKey:@"regionID"];
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
 		
 		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
 		
 		self.security = [aDecoder decodeFloatForKey:@"security"];
-		self.range = [aDecoder decodeIntegerForKey:@"range"];
+		self.range = [aDecoder decodeInt32ForKey:@"range"];
 		self.price = [aDecoder decodeFloatForKey:@"price"];
-		self.volRemain = [aDecoder decodeIntegerForKey:@"volRemain"];
-		self.minVolume = [aDecoder decodeIntegerForKey:@"minVolume"];
+		self.volRemain = [aDecoder decodeInt32ForKey:@"volRemain"];
+		self.minVolume = [aDecoder decodeInt32ForKey:@"minVolume"];
 
 		self.expires = [aDecoder decodeObjectForKey:@"expires"];
 		self.reportedTime = [aDecoder decodeObjectForKey:@"reportedTime"];
@@ -102,18 +102,18 @@
 @property (nonatomic, strong) NSDateFormatter *expiresDateFormatter;
 @property (nonatomic, strong) NSDateFormatter *reportedTimeDateFormatter;
 
-- (NSString*) argumentsStringWithTypeID: (NSInteger) typeIDs regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ;
+- (NSString*) argumentsStringWithTypeID: (int32_t) typeIDs regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ;
 
 @end
 
 
 @implementation EVECentralQuickLook
 
-+ (id) quickLookWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECentralQuickLook alloc] initWithTypeID:typeID regionIDs:regionIDs systemID:systemID hours:hours minQ:minQ cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithTypeID: (int32_t) aTypeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) aHours minQ: (int32_t) aMinQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/quicklook?%@",
 														EVECentralAPIHost,
 														[self argumentsStringWithTypeID:aTypeID regionIDs:regionIDs systemID:systemID hours:aHours minQ:aMinQ]]]
@@ -176,33 +176,33 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	
 	if ([elementName isEqualToString:@"item"])
-		self.typeID = [self.validText integerValue];
+		self.typeID = [self.validText intValue];
 	else if ([elementName isEqualToString:@"itemname"])
 		self.typeName = self.validText;
 	else if ([elementName isEqualToString:@"region"]) {
 		if (self.currentOrder)
-			self.currentOrder.regionID = [self.validText integerValue];
+			self.currentOrder.regionID = [self.validText intValue];
 		else
 			[(NSMutableArray*) self.regions addObject:self.validText];
 	}
 	else if ([elementName isEqualToString:@"hours"])
-		self.hours = [self.validText integerValue];
+		self.hours = [self.validText intValue];
 	else if ([elementName isEqualToString:@"minqty"])
-		self.minQ = [self.validText integerValue];
+		self.minQ = [self.validText intValue];
 	else if ([elementName isEqualToString:@"station"])
-		self.currentOrder.stationID = [self.validText integerValue];
+		self.currentOrder.stationID = [self.validText intValue];
 	else if ([elementName isEqualToString:@"station_name"])
 		self.currentOrder.stationName = self.validText;
 	else if ([elementName isEqualToString:@"security"])
 		self.currentOrder.security = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"range"])
-		self.currentOrder.range = [self.validText integerValue];
+		self.currentOrder.range = [self.validText intValue];
 	else if ([elementName isEqualToString:@"price"])
 		self.currentOrder.price = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"vol_remain"])
-		self.currentOrder.volRemain = [self.validText integerValue];
+		self.currentOrder.volRemain = [self.validText intValue];
 	else if ([elementName isEqualToString:@"min_volume"])
-		self.currentOrder.minVolume = [self.validText integerValue];
+		self.currentOrder.minVolume = [self.validText intValue];
 	else if ([elementName isEqualToString:@"expires"])
 		self.currentOrder.expires = [self.expiresDateFormatter dateFromString:self.validText];
 	else if ([elementName isEqualToString:@"reported_time"])
@@ -214,15 +214,15 @@ didStartElement:(NSString *)elementName
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[super encodeWithCoder:aCoder];
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
 	
 	if  (self.typeName)
 		[aCoder encodeObject:self.typeName forKey:@"typeName"];
 	if  (self.regions)
 		[aCoder encodeObject:self.regions forKey:@"regions"];
 	
-	[aCoder encodeInteger:self.hours forKey:@"hours"];
-	[aCoder encodeInteger:self.minQ forKey:@"minQ"];
+	[aCoder encodeInt32:self.hours forKey:@"hours"];
+	[aCoder encodeInt32:self.minQ forKey:@"minQ"];
 	
 	if  (self.sellOrders)
 		[aCoder encodeObject:self.sellOrders forKey:@"sellOrders"];
@@ -232,11 +232,11 @@ didStartElement:(NSString *)elementName
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
 		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
 		self.regions = [aDecoder decodeObjectForKey:@"regions"];
-		self.hours = [aDecoder decodeIntegerForKey:@"hours"];
-		self.minQ = [aDecoder decodeIntegerForKey:@"minQ"];
+		self.hours = [aDecoder decodeInt32ForKey:@"hours"];
+		self.minQ = [aDecoder decodeInt32ForKey:@"minQ"];
 		self.sellOrders = [aDecoder decodeObjectForKey:@"sellOrders"];
 		self.buyOrders = [aDecoder decodeObjectForKey:@"buyOrders"];
 	}
@@ -245,7 +245,7 @@ didStartElement:(NSString *)elementName
 
 #pragma mark - Private
 
-- (NSString*) argumentsStringWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ {
+- (NSString*) argumentsStringWithTypeID: (int32_t) aTypeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) aHours minQ: (int32_t) aMinQ {
 	NSMutableArray *regionIDsArgs = [NSMutableArray array];
 	
 	for (NSNumber *regionID in regionIDs)

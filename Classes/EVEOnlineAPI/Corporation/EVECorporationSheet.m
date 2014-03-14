@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.accountKey = [[attributeDict valueForKey:@"accountKey"] integerValue];
+		self.accountKey = [[attributeDict valueForKey:@"accountKey"] intValue];
 		self.description = [attributeDict valueForKey:@"description"];
 	}
 	return self;
@@ -26,13 +26,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.accountKey forKey:@"accountKey"];
+	[aCoder encodeInt32:self.accountKey forKey:@"accountKey"];
 	[aCoder encodeObject:self.description forKey:@"description"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.accountKey = [aDecoder decodeIntegerForKey:@"accountKey"];
+		self.accountKey = [aDecoder decodeInt32ForKey:@"accountKey"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
 	}
 	return self;
@@ -45,24 +45,24 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.graphicID forKey:@"graphicID"];
-	[aCoder encodeInteger:self.shape1 forKey:@"shape1"];
-	[aCoder encodeInteger:self.shape2 forKey:@"shape2"];
-	[aCoder encodeInteger:self.shape3 forKey:@"shape3"];
-	[aCoder encodeInteger:self.color1 forKey:@"color1"];
-	[aCoder encodeInteger:self.color2 forKey:@"color2"];
-	[aCoder encodeInteger:self.color3 forKey:@"color3"];
+	[aCoder encodeInt32:self.graphicID forKey:@"graphicID"];
+	[aCoder encodeInt32:self.shape1 forKey:@"shape1"];
+	[aCoder encodeInt32:self.shape2 forKey:@"shape2"];
+	[aCoder encodeInt32:self.shape3 forKey:@"shape3"];
+	[aCoder encodeInt32:self.color1 forKey:@"color1"];
+	[aCoder encodeInt32:self.color2 forKey:@"color2"];
+	[aCoder encodeInt32:self.color3 forKey:@"color3"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.graphicID = [aDecoder decodeIntegerForKey:@"graphicID"];
-		self.shape1 = [aDecoder decodeIntegerForKey:@"shape1"];
-		self.shape2 = [aDecoder decodeIntegerForKey:@"shape2"];
-		self.shape3 = [aDecoder decodeIntegerForKey:@"shape3"];
-		self.color1 = [aDecoder decodeIntegerForKey:@"color1"];
-		self.color2 = [aDecoder decodeIntegerForKey:@"color2"];
-		self.color3 = [aDecoder decodeIntegerForKey:@"color3"];
+		self.graphicID = [aDecoder decodeInt32ForKey:@"graphicID"];
+		self.shape1 = [aDecoder decodeInt32ForKey:@"shape1"];
+		self.shape2 = [aDecoder decodeInt32ForKey:@"shape2"];
+		self.shape3 = [aDecoder decodeInt32ForKey:@"shape3"];
+		self.color1 = [aDecoder decodeInt32ForKey:@"color1"];
+		self.color2 = [aDecoder decodeInt32ForKey:@"color2"];
+		self.color3 = [aDecoder decodeInt32ForKey:@"color3"];
 	}
 	return self;
 }
@@ -76,11 +76,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) corporationSheetWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporationID: (int32_t) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorporationSheet alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID corporationID:corporationID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID corporationID: (NSInteger) aCorporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporationID: (int32_t) aCorporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/CorporationSheet.xml.aspx?keyID=%d&vCode=%@&characterID=%d%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID,
 														(aCorporationID > 0 ? [NSString stringWithFormat:@"&corporationID=%d", aCorporationID] : @"")]]
 					   cachePolicy:cachePolicy
@@ -130,17 +130,17 @@ didStartElement:(NSString *)elementName
   qualifiedName:(NSString *)qName {
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	if ([elementName isEqualToString:@"corporationID"])
-		self.corporationID = [self.text integerValue];
+		self.corporationID = [self.text intValue];
 	else if ([elementName isEqualToString:@"corporationName"])
 		self.corporationName = self.text;
 	else if ([elementName isEqualToString:@"ticker"])
 		self.ticker = self.text;
 	else if ([elementName isEqualToString:@"ceoID"])
-		self.ceoID = [self.text integerValue];
+		self.ceoID = [self.text intValue];
 	else if ([elementName isEqualToString:@"ceoName"])
 		self.ceoName = self.text;
 	else if ([elementName isEqualToString:@"stationID"])
-		self.stationID = [self.text integerValue];
+		self.stationID = [self.text intValue];
 	else if ([elementName isEqualToString:@"stationName"])
 		self.stationName = self.text;
 	else if ([elementName isEqualToString:@"description"])
@@ -148,55 +148,55 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"url"])
 		self.url = self.text;
 	else if ([elementName isEqualToString:@"allianceID"])
-		self.allianceID = [self.text integerValue];
+		self.allianceID = [self.text intValue];
 	else if ([elementName isEqualToString:@"allianceName"])
 		self.allianceName = self.text;
 	else if ([elementName isEqualToString:@"taxRate"])
 		self.taxRate = [self.text floatValue];
 	else if ([elementName isEqualToString:@"memberCount"])
-		self.memberCount = [self.text integerValue];
+		self.memberCount = [self.text intValue];
 	else if ([elementName isEqualToString:@"memberLimit"])
-		self.memberLimit = [self.text integerValue];
+		self.memberLimit = [self.text intValue];
 	else if ([elementName isEqualToString:@"shares"])
-		self.shares = [self.text integerValue];
+		self.shares = [self.text intValue];
 	else if ([elementName isEqualToString:@"graphicID"])
-		self.logo.graphicID = [self.text integerValue];
+		self.logo.graphicID = [self.text intValue];
 	else if ([elementName isEqualToString:@"shape1"])
-		self.logo.shape1 = [self.text integerValue];
+		self.logo.shape1 = [self.text intValue];
 	else if ([elementName isEqualToString:@"shape2"])
-		self.logo.shape2 = [self.text integerValue];
+		self.logo.shape2 = [self.text intValue];
 	else if ([elementName isEqualToString:@"shape3"])
-		self.logo.shape3 = [self.text integerValue];
+		self.logo.shape3 = [self.text intValue];
 	else if ([elementName isEqualToString:@"color1"])
-		self.logo.color1 = [self.text integerValue];
+		self.logo.color1 = [self.text intValue];
 	else if ([elementName isEqualToString:@"color2"])
-		self.logo.color2 = [self.text integerValue];
+		self.logo.color2 = [self.text intValue];
 	else if ([elementName isEqualToString:@"color3"])
-		self.logo.color3 = [self.text integerValue];
+		self.logo.color3 = [self.text intValue];
 }
 
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[super encodeWithCoder:aCoder];
-	[aCoder encodeInteger:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
 	[aCoder encodeObject:self.ticker forKey:@"ticker"];
-	[aCoder encodeInteger:self.ceoID forKey:@"ceoID"];
+	[aCoder encodeInt32:self.ceoID forKey:@"ceoID"];
 	[aCoder encodeObject:self.ceoName forKey:@"ceoName"];
 	
-	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
 	[aCoder encodeObject:self.stationName forKey:@"stationName"];
 	[aCoder encodeObject:self.description forKey:@"description"];
 	[aCoder encodeObject:self.url forKey:@"url"];
 
-	[aCoder encodeInteger:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeInt32:self.allianceID forKey:@"allianceID"];
 	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
 	[aCoder encodeFloat:self.taxRate forKey:@"taxRate"];
 
-	[aCoder encodeInteger:self.memberCount forKey:@"memberCount"];
-	[aCoder encodeInteger:self.memberLimit forKey:@"memberLimit"];
-	[aCoder encodeInteger:self.shares forKey:@"shares"];
+	[aCoder encodeInt32:self.memberCount forKey:@"memberCount"];
+	[aCoder encodeInt32:self.memberLimit forKey:@"memberLimit"];
+	[aCoder encodeInt32:self.shares forKey:@"shares"];
 	
 	[aCoder encodeObject:self.divisions forKey:@"divisions"];
 	[aCoder encodeObject:self.walletDivisions forKey:@"walletDivisions"];
@@ -205,24 +205,24 @@ didStartElement:(NSString *)elementName
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super initWithCoder:aDecoder]) {
-		self.corporationID = [aDecoder decodeIntegerForKey:@"corporationID"];
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
 		self.ticker = [aDecoder decodeObjectForKey:@"ticker"];
-		self.ceoID = [aDecoder decodeIntegerForKey:@"ceoID"];
+		self.ceoID = [aDecoder decodeInt32ForKey:@"ceoID"];
 		self.ceoName = [aDecoder decodeObjectForKey:@"ceoName"];
 		
-		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
 		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
 		self.url = [aDecoder decodeObjectForKey:@"url"];
 
-		self.allianceID = [aDecoder decodeIntegerForKey:@"allianceID"];
+		self.allianceID = [aDecoder decodeInt32ForKey:@"allianceID"];
 		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
 		self.taxRate = [aDecoder decodeFloatForKey:@"taxRate"];
 
-		self.memberCount = [aDecoder decodeIntegerForKey:@"memberCount"];
-		self.memberLimit = [aDecoder decodeIntegerForKey:@"memberLimit"];
-		self.shares = [aDecoder decodeIntegerForKey:@"shares"];
+		self.memberCount = [aDecoder decodeInt32ForKey:@"memberCount"];
+		self.memberLimit = [aDecoder decodeInt32ForKey:@"memberLimit"];
+		self.shares = [aDecoder decodeInt32ForKey:@"shares"];
 		
 		self.divisions = [aDecoder decodeObjectForKey:@"divisions"];
 		self.walletDivisions= [aDecoder decodeObjectForKey:@"walletDivisions"];

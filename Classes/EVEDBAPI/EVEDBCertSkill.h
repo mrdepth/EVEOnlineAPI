@@ -11,11 +11,11 @@
 @class EVEDBInvGroup;
 @class EVEDBInvType;
 @interface EVEDBCertSkill : EVEDBObject
-@property (nonatomic, assign) NSInteger certificateID;
-@property (nonatomic, assign) NSInteger skillID;
+@property (nonatomic, assign) int32_t certificateID;
+@property (nonatomic, assign) int32_t skillID;
 @property (nonatomic, strong, readonly) EVEDBInvType* skill;
-@property (nonatomic, assign) NSInteger certificateLevel;
-@property (nonatomic, assign) NSInteger skillLevel;
+@property (nonatomic, assign) int32_t certificateLevel;
+@property (nonatomic, assign) int32_t skillLevel;
 @property (nonatomic, strong) NSString* certificateLevelText;
 
 @end

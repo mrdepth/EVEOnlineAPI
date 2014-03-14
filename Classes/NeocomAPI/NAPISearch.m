@@ -13,9 +13,9 @@
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
-		self.groupID = [aDecoder decodeIntegerForKey:@"groupID"];
-		self.flags = [aDecoder decodeIntegerForKey:@"flags"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.groupID = [aDecoder decodeInt32ForKey:@"groupID"];
+		self.flags = [aDecoder decodeInt32ForKey:@"flags"];
 		
 		self.canonicalName = [aDecoder decodeObjectForKey:@"canonicalName"];
 		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
@@ -34,9 +34,9 @@
 }
 
 - (void) encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
-	[aCoder encodeInteger:self.groupID forKey:@"groupID"];
-	[aCoder encodeInteger:self.flags forKey:@"flags"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.groupID forKey:@"groupID"];
+	[aCoder encodeInt32:self.flags forKey:@"flags"];
 	
 	if (self.canonicalName)
 		[aCoder encodeObject:self.canonicalName forKey:@"canonicalName"];
@@ -89,11 +89,11 @@
 		for (NSDictionary* record in records) {
 			NAPISearchItem* loadout = [[NAPISearchItem alloc] init];
 			loadout.canonicalName = record[@"loadout"];
-			loadout.typeID = [record[@"typeID"] integerValue];
+			loadout.typeID = [record[@"typeID"] intValue];
 			loadout.typeName = record[@"typeName"];
-			loadout.groupID = [record[@"groupID"] integerValue];
+			loadout.groupID = [record[@"groupID"] intValue];
 			loadout.groupName = record[@"groupName"];
-			loadout.flags = [record[@"flags"] integerValue];
+			loadout.flags = [record[@"flags"] intValue];
 			loadout.ehp = [record[@"ehp"] floatValue];
 			loadout.tank = [record[@"tank"] floatValue];
 			loadout.speed = [record[@"speed"] floatValue];

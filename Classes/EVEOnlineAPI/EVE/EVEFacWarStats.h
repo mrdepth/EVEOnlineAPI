@@ -10,26 +10,26 @@
 #import "EVERequest.h"
 
 @interface EVEFacWarStatsTotals : NSObject<NSCoding>
-@property (nonatomic) NSInteger killsYesterday;
-@property (nonatomic) NSInteger killsLastWeek;
-@property (nonatomic) NSInteger killsTotal;
-@property (nonatomic) NSInteger victoryPointsYesterday;
-@property (nonatomic) NSInteger victoryPointsLastWeek;
-@property (nonatomic) NSInteger victoryPointsTotal;
+@property (nonatomic) int32_t killsYesterday;
+@property (nonatomic) int32_t killsLastWeek;
+@property (nonatomic) int32_t killsTotal;
+@property (nonatomic) int32_t victoryPointsYesterday;
+@property (nonatomic) int32_t victoryPointsLastWeek;
+@property (nonatomic) int32_t victoryPointsTotal;
 @end
 
 
 @interface EVEFacWarStatsFactionsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *factionName;
-@property (nonatomic) NSInteger pilots;
-@property (nonatomic) NSInteger systemsControlled;
-@property (nonatomic) NSInteger killsYesterday;
-@property (nonatomic) NSInteger killsLastWeek;
-@property (nonatomic) NSInteger killsTotal;
-@property (nonatomic) NSInteger victoryPointsYesterday;
-@property (nonatomic) NSInteger victoryPointsLastWeek;
-@property (nonatomic) NSInteger victoryPointsTotal;
+@property (nonatomic) int32_t pilots;
+@property (nonatomic) int32_t systemsControlled;
+@property (nonatomic) int32_t killsYesterday;
+@property (nonatomic) int32_t killsLastWeek;
+@property (nonatomic) int32_t killsTotal;
+@property (nonatomic) int32_t victoryPointsYesterday;
+@property (nonatomic) int32_t victoryPointsLastWeek;
+@property (nonatomic) int32_t victoryPointsTotal;
 
 + (id) facWarStatsFactionsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -38,9 +38,9 @@
 
 
 @interface EVEFacWarStatsFactionWarsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *factionName;
-@property (nonatomic) NSInteger againstID;
+@property (nonatomic) int32_t againstID;
 @property (nonatomic, copy) NSString *againstName;
 
 + (id) facWarStatsFactionWarsItemWithXMLAttributes:(NSDictionary *)attributeDict;

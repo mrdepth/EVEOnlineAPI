@@ -17,17 +17,17 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.orderID = [[attributeDict valueForKey:@"orderID"] integerValue];
-		self.charID = [[attributeDict valueForKey:@"charID"] integerValue];
-		self.stationID = [[attributeDict valueForKey:@"stationID"] integerValue];
-		self.volEntered = [[attributeDict valueForKey:@"volEntered"] integerValue];
-		self.volRemaining = [[attributeDict valueForKey:@"volRemaining"] integerValue];
-		self.minVolume = [[attributeDict valueForKey:@"minVolume"] integerValue];
-		self.orderState = [[attributeDict valueForKey:@"orderState"] integerValue];
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
-		self.range = [[attributeDict valueForKey:@"range"] integerValue];
-		self.accountKey = [[attributeDict valueForKey:@"accountKey"] integerValue];
-		self.duration = [[attributeDict valueForKey:@"duration"] integerValue];
+		self.orderID = [[attributeDict valueForKey:@"orderID"] intValue];
+		self.charID = [[attributeDict valueForKey:@"charID"] intValue];
+		self.stationID = [[attributeDict valueForKey:@"stationID"] intValue];
+		self.volEntered = [[attributeDict valueForKey:@"volEntered"] intValue];
+		self.volRemaining = [[attributeDict valueForKey:@"volRemaining"] intValue];
+		self.minVolume = [[attributeDict valueForKey:@"minVolume"] intValue];
+		self.orderState = [[attributeDict valueForKey:@"orderState"] intValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.range = [[attributeDict valueForKey:@"range"] intValue];
+		self.accountKey = [[attributeDict valueForKey:@"accountKey"] intValue];
+		self.duration = [[attributeDict valueForKey:@"duration"] intValue];
 		self.escrow = [[attributeDict valueForKey:@"escrow"] floatValue];
 		self.price = [[attributeDict valueForKey:@"price"] floatValue];
 		self.bid = [[attributeDict valueForKey:@"bid"] boolValue];
@@ -39,17 +39,17 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.orderID forKey:@"orderID"];
-	[aCoder encodeInteger:self.charID forKey:@"charID"];
-	[aCoder encodeInteger:self.stationID forKey:@"stationID"];
-	[aCoder encodeInteger:self.volEntered forKey:@"volEntered"];
-	[aCoder encodeInteger:self.volRemaining forKey:@"volRemaining"];
-	[aCoder encodeInteger:self.minVolume forKey:@"minVolume"];
-	[aCoder encodeInteger:self.orderState forKey:@"orderState"];
-	[aCoder encodeInteger:self.typeID forKey:@"typeID"];
-	[aCoder encodeInteger:self.range forKey:@"range"];
-	[aCoder encodeInteger:self.accountKey forKey:@"accountKey"];
-	[aCoder encodeInteger:self.duration forKey:@"duration"];
+	[aCoder encodeInt32:self.orderID forKey:@"orderID"];
+	[aCoder encodeInt32:self.charID forKey:@"charID"];
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
+	[aCoder encodeInt32:self.volEntered forKey:@"volEntered"];
+	[aCoder encodeInt32:self.volRemaining forKey:@"volRemaining"];
+	[aCoder encodeInt32:self.minVolume forKey:@"minVolume"];
+	[aCoder encodeInt32:self.orderState forKey:@"orderState"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.range forKey:@"range"];
+	[aCoder encodeInt32:self.accountKey forKey:@"accountKey"];
+	[aCoder encodeInt32:self.duration forKey:@"duration"];
 	[aCoder encodeFloat:self.escrow forKey:@"escrow"];
 	[aCoder encodeFloat:self.price forKey:@"price"];
 	[aCoder encodeBool:self.bid forKey:@"bid"];
@@ -58,17 +58,17 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.orderID = [aDecoder decodeIntegerForKey:@"orderID"];
-		self.charID = [aDecoder decodeIntegerForKey:@"charID"];
-		self.stationID = [aDecoder decodeIntegerForKey:@"stationID"];
-		self.volEntered = [aDecoder decodeIntegerForKey:@"volEntered"];
-		self.volRemaining = [aDecoder decodeIntegerForKey:@"volRemaining"];
-		self.minVolume = [aDecoder decodeIntegerForKey:@"minVolume"];
-		self.orderState = [aDecoder decodeIntegerForKey:@"orderState"];
-		self.typeID = [aDecoder decodeIntegerForKey:@"typeID"];
-		self.range = [aDecoder decodeIntegerForKey:@"range"];
-		self.accountKey = [aDecoder decodeIntegerForKey:@"accountKey"];
-		self.duration = [aDecoder decodeIntegerForKey:@"duration"];
+		self.orderID = [aDecoder decodeInt32ForKey:@"orderID"];
+		self.charID = [aDecoder decodeInt32ForKey:@"charID"];
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
+		self.volEntered = [aDecoder decodeInt32ForKey:@"volEntered"];
+		self.volRemaining = [aDecoder decodeInt32ForKey:@"volRemaining"];
+		self.minVolume = [aDecoder decodeInt32ForKey:@"minVolume"];
+		self.orderState = [aDecoder decodeInt32ForKey:@"orderState"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.range = [aDecoder decodeInt32ForKey:@"range"];
+		self.accountKey = [aDecoder decodeInt32ForKey:@"accountKey"];
+		self.duration = [aDecoder decodeInt32ForKey:@"duration"];
 		self.escrow = [aDecoder decodeFloatForKey:@"escrow"];
 		self.price = [aDecoder decodeFloatForKey:@"price"];
 		self.bid = [aDecoder decodeBoolForKey:@"bid"];
@@ -86,11 +86,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) marketOrdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) marketOrdersWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMarketOrders alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/MarketOrders.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

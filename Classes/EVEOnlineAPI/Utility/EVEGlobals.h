@@ -11,19 +11,19 @@
 #define EVEOnlineAPIHost @"https://api.eveonline.com"
 #define EVEOnlineErrorDomain @"EVEOnlineAPI"
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEErrorCodes) {
 	EVEErrorCodeInvalidImageSize = 1000
-} EVEErrorCodes;
+};
 
 #define EVEErrorCodeInvalidImageSizeText @"Invalid image size"
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEApiKeyType) {
 	EVEApiKeyTypeNone,
 	EVEApiKeyTypeLimited,
 	EVEApiKeyTypeFull
-} EVEApiKeyType;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEInventoryFlag) {
 	EVEInventoryFlagNone = 0,
 	EVEInventoryFlagWallet = 1,
 	EVEInventoryFlagFactory = 2,
@@ -131,42 +131,41 @@ typedef enum {
 	EVEInventoryFlagStructureInactive = 145,
 	EVEInventoryFlagJunkyardReprocessed = 146,
 	EVEInventoryFlagJunkyardTrashed = 147
-	
-} EVEInventoryFlag;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVECharacterAttribute) {
 	EVECharacterAttributeIntelligence,
 	EVECharacterAttributeMemory,
 	EVECharacterAttributeCharisma,
 	EVECharacterAttributePerception,
 	EVECharacterAttributeWillpower
-} EVECharacterAttribute;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEOrderState) {
 	EVEOrderStateOpen = 0,
 	EVEOrderStateClosed = 1,
 	EVEOrderStateExpired = 2,
 	EVEOrderStateCancelled = 3,
 	EVEOrderStatePending = 4,
 	EVEOrderStateCharacterDeleted = 5
-} EVEOrderState;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEPOSState) {
 	EVEPOSStateUnanchored = 0,
 	EVEPOSStateAnchoredOffline = 1,
 	EVEPOSStateOnlining = 2,
 	EVEPOSStateReinforced = 3,
 	EVEPOSStateOnline = 4
-} EVEPOSState;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEContractType) {
 	EVEContractTypeItemExchange = 0,
 	EVEContractTypeAuction,
 	EVEContractTypeLoan,
 	EVEContractTypeCourier
-} EVEContractType;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEContractStatus) {
 	EVEContractStatusCompleted = 0,
 	EVEContractStatusCompletedByIssuer,
 	EVEContractStatusCompletedByContractor,
@@ -177,21 +176,21 @@ typedef enum {
 	EVEContractStatusRejected,
 	EVEContractStatusFailed,
 	EVEContractStatusDeleted
-} EVEContractStatus;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEContractavAilability) {
 	EVEContractavAilabilityPublic = 0,
 	EVEContractavAilabilityPrivate
-} EVEContractavAilability;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVECallType) {
 	EVECallTypeCharacter = 0,
 	EVECallTypeCorporation,
-} EVECallType;
+};
 
-typedef enum {
+typedef NS_ENUM(int32_t, EVEAPIKeyType) {
 	EVEAPIKeyTypeAccount = 0,
 	EVEAPIKeyTypeCharacter,
 	EVEAPIKeyTypeCorporation
-} EVEAPIKeyType;
+};
 

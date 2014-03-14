@@ -42,10 +42,10 @@
 - (id) initWithDictinary:(NSDictionary*) dictionary {
 	if (self = [super init]) {
 		self.typeName = [dictionary notNullValueForKey:@"typeName"];
-		self.typeID = [[dictionary notNullValueForKey:@"typeID"] integerValue];
-		self.itemSlot = [[dictionary notNullValueForKey:@"itemSlot"] integerValue];
-		self.qtyDropped = [[dictionary notNullValueForKey:@"qtyDropped"] integerValue];
-		self.qtyDestroyed = [[dictionary notNullValueForKey:@"qtyDestroyed"] integerValue];
+		self.typeID = [[dictionary notNullValueForKey:@"typeID"] intValue];
+		self.itemSlot = [[dictionary notNullValueForKey:@"itemSlot"] intValue];
+		self.qtyDropped = [[dictionary notNullValueForKey:@"qtyDropped"] intValue];
+		self.qtyDestroyed = [[dictionary notNullValueForKey:@"qtyDestroyed"] intValue];
 	}
 	return self;
 }
@@ -56,19 +56,19 @@
 
 - (id) initWithDictinary:(NSDictionary*) dictionary {
 	if (self = [super init]) {
-		self.characterID = [[dictionary notNullValueForKey:@"characterID"] integerValue];
+		self.characterID = [[dictionary notNullValueForKey:@"characterID"] intValue];
 		self.characterName = [dictionary notNullValueForKey:@"characterName"];
-		self.corporationID = [[dictionary notNullValueForKey:@"corporationID"] integerValue];
+		self.corporationID = [[dictionary notNullValueForKey:@"corporationID"] intValue];
 		self.corporationName = [dictionary notNullValueForKey:@"corporationName"];
-		self.allianceID = [[dictionary notNullValueForKey:@"allianceID"] integerValue];
+		self.allianceID = [[dictionary notNullValueForKey:@"allianceID"] intValue];
 		self.allianceName = [dictionary notNullValueForKey:@"allianceName"];
-		self.factionID = [[dictionary notNullValueForKey:@"factionID"] integerValue];
+		self.factionID = [[dictionary notNullValueForKey:@"factionID"] intValue];
 		self.factionName = [dictionary notNullValueForKey:@"factionName"];
 		self.securityStatus = [[dictionary notNullValueForKey:@"securityStatus"] floatValue];
 		self.damageDone = [[dictionary notNullValueForKey:@"damageDone"] floatValue];
 		self.finalBlow = [[dictionary notNullValueForKey:@"finalBlow"] boolValue];
-		self.weaponTypeID = [[dictionary notNullValueForKey:@"weaponTypeID"] integerValue];
-		self.shipTypeID = [[dictionary notNullValueForKey:@"shipTypeID"] integerValue];
+		self.weaponTypeID = [[dictionary notNullValueForKey:@"weaponTypeID"] intValue];
+		self.shipTypeID = [[dictionary notNullValueForKey:@"shipTypeID"] intValue];
 	}
 	return self;
 }
@@ -88,11 +88,11 @@
 
 @implementation EVEKillNetLog
 
-+ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) logWithFilter:(NSDictionary*) filter mask:(int32_t) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEKillNetLog alloc] initWithFilter:filter mask:mask error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithFilter:(NSDictionary*) filter mask:(int32_t) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableString* args = [NSMutableString string];
 	for (NSString* key in [filter allKeys]) {
 		NSString* value = [filter valueForKey:key];
@@ -133,25 +133,25 @@
 		EVEKillNetLogEntry* entry = [[EVEKillNetLogEntry alloc] init];
 		entry.url = [NSURL URLWithString:[dic notNullValueForKey:@"url"]];
 		entry.timestamp = [formatter dateFromString:[dic notNullValueForKey:@"timestamp"]];
-		entry.internalID = [[dic notNullValueForKey:@"internalID"] integerValue];
-		entry.externalID = [[dic notNullValueForKey:@"externalID"] integerValue];
+		entry.internalID = [[dic notNullValueForKey:@"internalID"] intValue];
+		entry.externalID = [[dic notNullValueForKey:@"externalID"] intValue];
 		entry.victimName = [dic notNullValueForKey:@"victimName"];
-		entry.victimExternalID = [[dic notNullValueForKey:@"victimExternalID"] integerValue];
+		entry.victimExternalID = [[dic notNullValueForKey:@"victimExternalID"] intValue];
 		entry.victimCorpName = [dic notNullValueForKey:@"victimCorpName"];
 		entry.victimAllianceName = [dic notNullValueForKey:@"victimAllianceName"];
 		entry.victimShipName = [dic notNullValueForKey:@"victimShipName"];
 		entry.victimShipClass = [dic notNullValueForKey:@"victimShipClass"];
-		entry.victimShipID = [[dic notNullValueForKey:@"victimShipID"] integerValue];
+		entry.victimShipID = [[dic notNullValueForKey:@"victimShipID"] intValue];
 		entry.fbPilotName = [dic notNullValueForKey:@"FBPilotName"];
 		entry.fbCorpName = [dic notNullValueForKey:@"FBCorpName"];
 		entry.fbAllianceName = [dic notNullValueForKey:@"FBAllianceName"];
-		entry.involvedPartyCount = [[dic notNullValueForKey:@"involvedPartyCount"] integerValue];
+		entry.involvedPartyCount = [[dic notNullValueForKey:@"involvedPartyCount"] intValue];
 		entry.solarSystemName = [dic notNullValueForKey:@"solarSystemName"];
 		entry.solarSystemSecurity = [[dic notNullValueForKey:@"solarSystemSecurity"] floatValue];
 		entry.regionName = [dic notNullValueForKey:@"regionName"];
 		entry.isk = [[dic notNullValueForKey:@"ISK"] longLongValue];
-		entry.eveKillID = [[dic notNullValueForKey:@"eveKillID"] integerValue];
-		entry.eveKillExternalID = [[dic notNullValueForKey:@"eveKillExternalID"] integerValue];
+		entry.eveKillID = [[dic notNullValueForKey:@"eveKillID"] intValue];
+		entry.eveKillExternalID = [[dic notNullValueForKey:@"eveKillExternalID"] intValue];
 		entry.corpName = [dic notNullValueForKey:@"corpName"];
 		entry.allianceName = [dic notNullValueForKey:@"allianceName"];
 		entry.factionName = [dic valueForKey:@"factionName"];

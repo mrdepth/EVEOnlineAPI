@@ -12,11 +12,11 @@
 @interface EVEAccountStatus : EVERequest
 @property (nonatomic, strong) NSDate *paidUntil;
 @property (nonatomic, strong) NSDate *createDate;
-@property (nonatomic) NSInteger logonCount;
-@property (nonatomic) NSInteger logonMinutes;
+@property (nonatomic) int32_t logonCount;
+@property (nonatomic) int32_t logonMinutes;
 
-+ (id) accountStatusWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) accountStatusWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 
 @end

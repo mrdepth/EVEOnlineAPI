@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.errorCode = [[attributeDict valueForKey:@"errorCode"] integerValue];
+		self.errorCode = [[attributeDict valueForKey:@"errorCode"] intValue];
 		self.errorText = [attributeDict valueForKey:@"errorText"];
 	}
 	return self;
@@ -26,13 +26,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.errorCode forKey:@"errorCode"];
+	[aCoder encodeInt32:self.errorCode forKey:@"errorCode"];
 	[aCoder encodeObject:self.errorText forKey:@"errorText"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.errorCode = [aDecoder decodeIntegerForKey:@"errorCode"];
+		self.errorCode = [aDecoder decodeInt32ForKey:@"errorCode"];
 		self.errorText = [aDecoder decodeObjectForKey:@"errorText"];
 	}
 	return self;

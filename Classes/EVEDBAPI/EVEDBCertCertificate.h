@@ -11,15 +11,15 @@
 
 @class EVEDBInvGroup;
 @interface EVEDBCertCertificate : EVEDBObject
-@property (nonatomic, assign) NSInteger certificateID;
+@property (nonatomic, assign) int32_t certificateID;
 @property (nonatomic, strong) NSString* description;
-@property (nonatomic, assign) NSInteger groupID;
+@property (nonatomic, assign) int32_t groupID;
 @property (nonatomic, strong, readonly) EVEDBInvGroup* group;
 @property (nonatomic, strong) NSString* name;
 @property (nonatomic, strong, readonly) NSArray* skills;
 
-+ (id) certCertificateWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr;
-- (id) initWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr;
++ (id) certCertificateWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr;
+- (id) initWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr;
 
-+ (NSString*) iconImageNameWithMasteryLevel:(NSInteger) masteryLevel;
++ (NSString*) iconImageNameWithMasteryLevel:(int32_t) masteryLevel;
 @end

@@ -10,7 +10,7 @@
 #import "EVERequest.h"
 
 @interface EVECalllistCallGroupsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger groupID;
+@property (nonatomic) int32_t groupID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, copy) NSString *description;
 
@@ -20,10 +20,10 @@
 @end
 
 @interface EVECalllistCallsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger accessMask;
+@property (nonatomic) int32_t accessMask;
 @property (nonatomic) EVECallType type;
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic) NSInteger groupID;
+@property (nonatomic) int32_t groupID;
 @property (nonatomic, copy) NSString *description;
 
 + (id) callsItemWithXMLAttributes:(NSDictionary *)attributeDict;

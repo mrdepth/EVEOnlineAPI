@@ -11,11 +11,11 @@
 #import "EVERequest.h"
 
 @interface EVESkillQueueItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger queuePosition;
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger level;
-@property (nonatomic) NSInteger startSP;
-@property (nonatomic) NSInteger endSP;
+@property (nonatomic) int32_t queuePosition;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t level;
+@property (nonatomic) int32_t startSP;
+@property (nonatomic) int32_t endSP;
 @property (nonatomic, strong) NSDate *startTime;
 @property (nonatomic, strong) NSDate *endTime;
 
@@ -28,7 +28,7 @@
 @property (nonatomic, strong) NSArray *skillQueue;
 @property (nonatomic, assign, readonly) NSTimeInterval timeLeft;
 
-+ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) skillQueueWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

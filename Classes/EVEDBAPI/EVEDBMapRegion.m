@@ -22,11 +22,11 @@
 	return map;
 }
 
-+ (id) mapRegionWithRegionID: (NSInteger)regionID error:(NSError **)errorPtr {
++ (id) mapRegionWithRegionID: (int32_t)regionID error:(NSError **)errorPtr {
 	return [[EVEDBMapRegion alloc] initWithRegionID:regionID error:errorPtr];
 }
 
-- (id) initWithRegionID: (NSInteger)regionID error:(NSError **)errorPtr {
+- (id) initWithRegionID: (int32_t)regionID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapRegions WHERE regionID=%d;", regionID]
 								   error:errorPtr]) {
 	}

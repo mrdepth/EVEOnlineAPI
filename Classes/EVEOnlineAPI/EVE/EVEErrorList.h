@@ -10,7 +10,7 @@
 #import "EVERequest.h"
 
 @interface EVEErrorListItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger errorCode;
+@property (nonatomic) int32_t errorCode;
 @property (nonatomic, copy) NSString *errorText;
 
 + (id) errorListItemWithXMLAttributes:(NSDictionary *)attributeDict;

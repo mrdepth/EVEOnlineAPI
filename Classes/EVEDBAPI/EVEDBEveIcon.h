@@ -10,11 +10,11 @@
 
 
 @interface EVEDBEveIcon : EVEDBObject
-@property(nonatomic) NSInteger iconID;
+@property(nonatomic) int32_t iconID;
 @property(nonatomic, strong) NSString *iconFile;
 @property(nonatomic, strong) NSString *description;
 @property(nonatomic, strong, readonly) NSString *iconImageName;
 
-+ (id) eveIconWithIconID: (NSInteger)aIconID error:(NSError **)errorPtr;
-- (id) initWithIconID: (NSInteger)aIconID error:(NSError **)errorPtr;
++ (id) eveIconWithIconID: (int32_t)aIconID error:(NSError **)errorPtr;
+- (id) initWithIconID: (int32_t)aIconID error:(NSError **)errorPtr;
 @end

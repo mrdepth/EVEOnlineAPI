@@ -32,11 +32,11 @@
 	return map;
 }
 
-+ (id) dgmAttributeTypeWithAttributeTypeID: (NSInteger)aAttributeTypeID error:(NSError **)errorPtr {
++ (id) dgmAttributeTypeWithAttributeTypeID: (int32_t)aAttributeTypeID error:(NSError **)errorPtr {
 	return [[EVEDBDgmAttributeType alloc] initWithAttributeTypeID:aAttributeTypeID error:errorPtr];
 }
 
-- (id) initWithAttributeTypeID: (NSInteger)attributeTypeID error:(NSError **)errorPtr {
+- (id) initWithAttributeTypeID: (int32_t)attributeTypeID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmAttributeTypes WHERE attributeID=%d;", attributeTypeID]
 								   error:errorPtr]) {
 	}

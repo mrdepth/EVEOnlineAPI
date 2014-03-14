@@ -20,11 +20,11 @@
 	return map;
 }
 
-+ (id) invControlTowerResourcePurposeWithPurposeID: (NSInteger)aPurposeID error:(NSError **)errorPtr {
++ (id) invControlTowerResourcePurposeWithPurposeID: (int32_t)aPurposeID error:(NSError **)errorPtr {
 	return [[EVEDBInvControlTowerResourcePurpose alloc] initWithPurposeID:aPurposeID error:errorPtr];
 }
 
-- (id) initWithPurposeID: (NSInteger)purposeID error:(NSError **)errorPtr {
+- (id) initWithPurposeID: (int32_t)purposeID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invControlTowerResourcePurposes WHERE purpose=%d;", purposeID]
 								   error:errorPtr]) {
 	}

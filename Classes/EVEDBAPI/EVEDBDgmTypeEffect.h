@@ -11,8 +11,8 @@
 @class EVEDBInvType;
 @class EVEDBDgmEffect;
 @interface EVEDBDgmTypeEffect : EVEDBObject
-@property(nonatomic) NSInteger typeID;
-@property(nonatomic) NSInteger effectID;
+@property(nonatomic) int32_t typeID;
+@property(nonatomic) int32_t effectID;
 @property(nonatomic, strong) EVEDBDgmEffect *effect;
 @property(nonatomic) BOOL isDefault;
 

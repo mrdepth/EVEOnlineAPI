@@ -11,16 +11,16 @@
 
 @interface EVEContainerLogItem : NSObject<NSCoding>
 @property (nonatomic, strong) NSDate *logTime;
-@property (nonatomic) long long itemID;
-@property (nonatomic) NSInteger itemTypeID;
-@property (nonatomic) NSInteger actorID;
+@property (nonatomic) int64_t itemID;
+@property (nonatomic) int32_t itemTypeID;
+@property (nonatomic) int32_t actorID;
 @property (nonatomic, copy) NSString *actorName;
 @property (nonatomic) EVEInventoryFlag flag;
-@property (nonatomic) long long locationID;
+@property (nonatomic) int32_t locationID;
 @property (nonatomic, copy) NSString *action;
 @property (nonatomic, copy) NSString *passwordType;
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger quantity;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t quantity;
 @property (nonatomic, copy) NSString *oldConfiguration;
 @property (nonatomic, copy) NSString *theNewConfiguration;
 
@@ -32,7 +32,7 @@
 @interface EVEContainerLog : EVERequest
 @property (nonatomic, strong) NSArray *containerLog;
 
-+ (id) containerLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) containerLogWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

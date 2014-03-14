@@ -16,7 +16,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.roleID = [[attributeDict valueForKey:@"roleID"] integerValue];
+		self.roleID = [[attributeDict valueForKey:@"roleID"] intValue];
 		self.roleName = [attributeDict valueForKey:@"roleName"];
 	}
 	return self;
@@ -25,13 +25,13 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.roleID forKey:@"roleID"];
+	[aCoder encodeInt32:self.roleID forKey:@"roleID"];
 	[aCoder encodeObject:self.roleName forKey:@"roleName"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.roleID = [aDecoder decodeIntegerForKey:@"roleID"];
+		self.roleID = [aDecoder decodeInt32ForKey:@"roleID"];
 		self.roleName = [aDecoder decodeObjectForKey:@"roleName"];
 	}
 	return self;
@@ -49,8 +49,8 @@
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
 		self.changeTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"changeTime"]];
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
-		self.issuerID = [[attributeDict valueForKey:@"issuerID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
+		self.issuerID = [[attributeDict valueForKey:@"issuerID"] intValue];
 		self.roleLocationType = [attributeDict valueForKey:@"roleLocationType"];
 	}
 	return self;
@@ -60,8 +60,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
 	[aCoder encodeObject:self.changeTime forKey:@"changeTime"];
-	[aCoder encodeInteger:self.characterID forKey:@"characterID"];
-	[aCoder encodeInteger:self.issuerID forKey:@"issuerID"];
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
+	[aCoder encodeInt32:self.issuerID forKey:@"issuerID"];
 	[aCoder encodeObject:self.roleLocationType forKey:@"roleLocationType"];
 	[aCoder encodeObject:self.oldRoles forKey:@"oldRoles"];
 	[aCoder encodeObject:self.theNewRoles forKey:@"theNewRoles"];
@@ -70,8 +70,8 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
 		self.changeTime = [aDecoder decodeObjectForKey:@"changeTime"];
-		self.characterID = [aDecoder decodeIntegerForKey:@"characterID"];
-		self.issuerID = [aDecoder decodeIntegerForKey:@"issuerID"];
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
+		self.issuerID = [aDecoder decodeInt32ForKey:@"issuerID"];
 		self.roleLocationType = [aDecoder decodeObjectForKey:@"roleLocationType"];
 		self.oldRoles = [aDecoder decodeObjectForKey:@"oldRoles"];
 		self.theNewRoles = [aDecoder decodeObjectForKey:@"theNewRoles"];
@@ -88,11 +88,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) memberSecurityLogWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) memberSecurityLogWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVEMemberSecurityLog alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/MemberSecurityLog.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

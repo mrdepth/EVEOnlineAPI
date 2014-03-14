@@ -17,10 +17,10 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.medalID = [[attributeDict valueForKey:@"medalID"] integerValue];
+		self.medalID = [[attributeDict valueForKey:@"medalID"] intValue];
 		self.title = [attributeDict valueForKey:@"title"];
 		self.description = [attributeDict valueForKey:@"description"];
-		self.creatorID = [[attributeDict valueForKey:@"creatorID"] integerValue];
+		self.creatorID = [[attributeDict valueForKey:@"creatorID"] intValue];
 		self.created = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"created"]];
 	}
 	return self;
@@ -29,19 +29,19 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.medalID forKey:@"medalID"];
+	[aCoder encodeInt32:self.medalID forKey:@"medalID"];
 	[aCoder encodeObject:self.title forKey:@"title"];
 	[aCoder encodeObject:self.description forKey:@"description"];
-	[aCoder encodeInteger:self.creatorID forKey:@"creatorID"];
+	[aCoder encodeInt32:self.creatorID forKey:@"creatorID"];
 	[aCoder encodeObject:self.created forKey:@"created"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.medalID = [aDecoder decodeIntegerForKey:@"medalID"];
+		self.medalID = [aDecoder decodeInt32ForKey:@"medalID"];
 		self.title = [aDecoder decodeObjectForKey:@"title"];
 		self.description = [aDecoder decodeObjectForKey:@"description"];
-		self.creatorID = [aDecoder decodeIntegerForKey:@"creatorID"];
+		self.creatorID = [aDecoder decodeInt32ForKey:@"creatorID"];
 		self.created = [aDecoder decodeObjectForKey:@"created"];
 	}
 	return self;
@@ -56,11 +56,11 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) corpMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) corpMedalsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVECorpMedals alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Medals.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

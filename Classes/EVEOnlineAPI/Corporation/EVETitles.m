@@ -17,7 +17,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.titleID = [[attributeDict valueForKey:@"titleID"] integerValue];
+		self.titleID = [[attributeDict valueForKey:@"titleID"] intValue];
 		self.titleName = [attributeDict valueForKey:@"titleName"];
 	}
 	return self;
@@ -26,7 +26,7 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.titleID forKey:@"titleID"];
+	[aCoder encodeInt32:self.titleID forKey:@"titleID"];
 	[aCoder encodeObject:self.titleName forKey:@"titleName"];
 	[aCoder encodeObject:self.roles forKey:@"roles"];
 	[aCoder encodeObject:self.grantableRoles forKey:@"grantableRoles"];
@@ -40,7 +40,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.titleID = [aDecoder decodeIntegerForKey:@"titleID"];
+		self.titleID = [aDecoder decodeInt32ForKey:@"titleID"];
 		self.titleName = [aDecoder decodeObjectForKey:@"titleName"];
 		self.roles = [aDecoder decodeObjectForKey:@"roles"];
 		self.grantableRoles = [aDecoder decodeObjectForKey:@"grantableRoles"];
@@ -65,7 +65,7 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.roleID = [[attributeDict valueForKey:@"roleID"] integerValue];
+		self.roleID = [[attributeDict valueForKey:@"roleID"] intValue];
 		self.roleName = [attributeDict valueForKey:@"roleName"];
 		self.roleDescription = [attributeDict valueForKey:@"roleDescription"];
 	}
@@ -75,14 +75,14 @@
 #pragma mark - NSCoding
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInteger:self.roleID forKey:@"roleID"];
+	[aCoder encodeInt32:self.roleID forKey:@"roleID"];
 	[aCoder encodeObject:self.roleName forKey:@"roleName"];
 	[aCoder encodeObject:self.roleDescription forKey:@"roleDescription"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {
-		self.roleID = [aDecoder decodeIntegerForKey:@"roleID"];
+		self.roleID = [aDecoder decodeInt32ForKey:@"roleID"];
 		self.roleName = [aDecoder decodeObjectForKey:@"roleName"];
 		self.roleDescription = [aDecoder decodeObjectForKey:@"roleDescription"];
 	}
@@ -98,11 +98,11 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) titlesWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
++ (id) titlesWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[EVETitles alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/Titles.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
 					   cachePolicy:cachePolicy
 							error:errorPtr

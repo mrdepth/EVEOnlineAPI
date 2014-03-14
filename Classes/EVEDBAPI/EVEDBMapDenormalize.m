@@ -35,11 +35,11 @@
 	return map;
 }
 
-+ (id) mapDenormalizeWithItemID: (NSInteger) itemID error:(NSError **)errorPtr {
++ (id) mapDenormalizeWithItemID: (int32_t) itemID error:(NSError **)errorPtr {
 	return [[EVEDBMapDenormalize alloc] initWithItemID:itemID error:errorPtr];
 }
 
-- (id) initWithItemID: (NSInteger) itemID error:(NSError **)errorPtr {
+- (id) initWithItemID: (int32_t) itemID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapDenormalize WHERE itemID=%d;", itemID]
 								   error:errorPtr]) {
 	}

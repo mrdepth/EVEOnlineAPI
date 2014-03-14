@@ -10,14 +10,14 @@
 
 @class EVEDBMapRegion;
 @interface EVEDBMapConstellation : EVEDBObject
-@property(nonatomic) NSInteger regionID;
+@property(nonatomic) int32_t regionID;
 @property(nonatomic, strong) EVEDBMapRegion *region;
-@property(nonatomic) NSInteger constellationID;
+@property(nonatomic) int32_t constellationID;
 @property(nonatomic, strong) NSString *constellationName;
-@property(nonatomic) NSInteger factionID;
+@property(nonatomic) int32_t factionID;
 @property(nonatomic) float radius;
 
-+ (id) mapConstellationWithConstellationID: (NSInteger)aConstellationID error:(NSError **)errorPtr;
-- (id) initWithConstellationID: (NSInteger)aConstellationID error:(NSError **)errorPtr;
++ (id) mapConstellationWithConstellationID: (int32_t)aConstellationID error:(NSError **)errorPtr;
+- (id) initWithConstellationID: (int32_t)aConstellationID error:(NSError **)errorPtr;
 
 @end

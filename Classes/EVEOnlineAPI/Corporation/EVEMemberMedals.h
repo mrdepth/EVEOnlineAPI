@@ -10,11 +10,11 @@
 #import "EVERequest.h"
 
 @interface EVEMemberMedalsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger medalID;
-@property (nonatomic) NSInteger characterID;
+@property (nonatomic) int32_t medalID;
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *reason;
 @property (nonatomic, copy) NSString *status;
-@property (nonatomic) NSInteger issuerID;
+@property (nonatomic) int32_t issuerID;
 @property (nonatomic, strong) NSDate *issued;
 
 + (id) memberMedalsItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -25,7 +25,7 @@
 @interface EVEMemberMedals : EVERequest
 @property (nonatomic, strong) NSArray *issuedMedals;
 
-+ (id) memberMedalsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (id) memberMedalsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

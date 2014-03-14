@@ -10,9 +10,9 @@
 #import "EVERequest.h"
 
 @interface EVEFacWarTopStatsCharactersItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger characterID;
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *characterName;
-@property (nonatomic) NSInteger kills;
+@property (nonatomic) int32_t kills;
 
 + (id) facWarTopStatsCharactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -21,9 +21,9 @@
 
 
 @interface EVEFacWarTopStatsCorporationsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *corporationName;
-@property (nonatomic) NSInteger kills;
+@property (nonatomic) int32_t kills;
 
 + (id) facWarTopStatsCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -32,9 +32,9 @@
 
 
 @interface EVEFacWarTopStatsFactionsItem : NSObject<NSCoding>
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *factionName;
-@property (nonatomic) NSInteger kills;
+@property (nonatomic) int32_t kills;
 
 + (id) facWarTopStatsFactionsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;

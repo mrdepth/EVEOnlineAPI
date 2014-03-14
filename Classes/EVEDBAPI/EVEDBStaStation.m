@@ -36,11 +36,11 @@
 	return map;
 }
 
-+ (id) staStationWithStationID: (NSInteger)stationID error:(NSError **)errorPtr {
++ (id) staStationWithStationID: (int32_t)stationID error:(NSError **)errorPtr {
 	return [[EVEDBStaStation alloc] initWithStationID:stationID error:errorPtr];
 }
 
-- (id) initWithStationID: (NSInteger)stationID error:(NSError **)errorPtr {
+- (id) initWithStationID: (int32_t)stationID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from staStations WHERE stationID=%d;", stationID]
 								   error:errorPtr]) {
 	}
