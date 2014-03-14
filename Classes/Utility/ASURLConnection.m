@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSError* error;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, strong) NSMutableData* data;
-@property (nonatomic, assign) NSInteger contentLength;
+@property (nonatomic, assign) long long contentLength;
 @end
 
 @interface ASURLConnectionDelegate: NSObject<NSURLConnectionDataDelegate>
@@ -70,7 +70,7 @@
 - (void)connection:(ASURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
 	connection.contentLength = [response expectedContentLength];
 	if (connection.contentLength > 0)
-		connection.data = [NSMutableData dataWithCapacity:connection.contentLength];
+		connection.data = [NSMutableData dataWithCapacity:(NSUInteger) connection.contentLength];
 	else
 		connection.data = [NSMutableData data];
 	connection.response = response;

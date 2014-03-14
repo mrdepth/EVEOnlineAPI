@@ -20,7 +20,7 @@
 		self.itemID = [[attributeDict valueForKey:@"itemID"] longLongValue];
 		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
 		self.locationID = [[attributeDict valueForKey:@"locationID"] longLongValue];
-		self.moonID = [[attributeDict valueForKey:@"moonID"] longLongValue];
+		self.moonID = [[attributeDict valueForKey:@"moonID"] integerValue];
 		self.state = (EVEPOSState) [[attributeDict valueForKey:@"state"] integerValue];
 		self.stateTimestamp = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"stateTimestamp"]];
 		self.onlineTimestamp = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"onlineTimestamp"]];
