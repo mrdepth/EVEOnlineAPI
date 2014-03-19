@@ -24,10 +24,21 @@
 		self.toCorpOrAllianceID = [[attributeDict valueForKey:@"toCorpOrAllianceID"] intValue];
 		
 		NSString* toCharacterIDsString = [attributeDict valueForKey:@"toCharacterIDs"];
-		self.toCharacterIDs = toCharacterIDsString.length > 1 ? [toCharacterIDsString componentsSeparatedByString:@","] : nil;
+		if (toCharacterIDsString.length > 1) {
+			NSMutableArray* toCharacterIDs = [NSMutableArray new];
+			for (NSString* charID in [toCharacterIDsString componentsSeparatedByString:@","])
+				[toCharacterIDs addObject:@([charID intValue])];
+			self.toCharacterIDs = toCharacterIDs;
+		}
 
 		NSString* toListIDsString = [attributeDict valueForKey:@"toListID"];
-		self.toListID = toListIDsString.length > 1 ? [toListIDsString componentsSeparatedByString:@","] : nil;
+		if (toListIDsString.length > 1) {
+			NSMutableArray* toListID = [NSMutableArray new];
+			for (NSString* listID in [toListIDsString componentsSeparatedByString:@","])
+				[toListID addObject:@([listID intValue])];
+			self.toListID = toListID;
+		}
+		
 		self.read = [[attributeDict valueForKey:@"read"] boolValue];
 		self.senderTypeID = [[attributeDict valueForKey:@"senderTypeID"] intValue];
 	}
