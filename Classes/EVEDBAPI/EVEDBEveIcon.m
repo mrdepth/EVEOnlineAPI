@@ -45,6 +45,8 @@
 			else
 				_iconImageName = [NSString stringWithFormat:@"Icons/icon%@.png", self.iconFile];
 		}
+		if (![[NSBundle mainBundle] pathForResource:_iconImageName ofType:nil])
+			_iconImageName = (NSString*) [NSNull null];
 	}
 	if ((NSNull*) _iconImageName == [NSNull null])
 		return nil;
