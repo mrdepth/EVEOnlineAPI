@@ -47,6 +47,7 @@
 		12DF9C0F11B7CD9100350938 /* EVECharFacWarStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */; };
 		12E1A0FF11B80A6500F004D7 /* EVEKillLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */; };
 		12EBB729167EF30A002CDAB6 /* EVECharacterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EBB728167EF30A002CDAB6 /* EVECharacterInfo.m */; };
+		12F86DD818E5C22500AFDA97 /* EVEOwnerID.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F86DD718E5C22500AFDA97 /* EVEOwnerID.m */; };
 		12FDCC5A16390FEC0000709F /* EVEKillNetLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12FDCC5916390FEC0000709F /* EVEKillNetLog.m */; };
 		1D3623260D0F684500981E51 /* EVEOnlineAPIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -240,6 +241,8 @@
 		12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEKillLog.m; sourceTree = "<group>"; };
 		12EBB727167EF30A002CDAB6 /* EVECharacterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECharacterInfo.h; sourceTree = "<group>"; };
 		12EBB728167EF30A002CDAB6 /* EVECharacterInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECharacterInfo.m; sourceTree = "<group>"; };
+		12F86DD618E5C22500AFDA97 /* EVEOwnerID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEOwnerID.h; sourceTree = "<group>"; };
+		12F86DD718E5C22500AFDA97 /* EVEOwnerID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEOwnerID.m; sourceTree = "<group>"; };
 		12FDCC5716390FEC0000709F /* EVEKillNetAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillNetAPI.h; sourceTree = "<group>"; };
 		12FDCC5816390FEC0000709F /* EVEKillNetLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillNetLog.h; sourceTree = "<group>"; };
 		12FDCC5916390FEC0000709F /* EVEKillNetLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEKillNetLog.m; sourceTree = "<group>"; };
@@ -809,6 +812,8 @@
 		718C3208121EB0FD00E4E065 /* EVE */ = {
 			isa = PBXGroup;
 			children = (
+				12F86DD618E5C22500AFDA97 /* EVEOwnerID.h */,
+				12F86DD718E5C22500AFDA97 /* EVEOwnerID.m */,
 				718C3209121EB0FD00E4E065 /* EVEAllianceList.h */,
 				718C320A121EB0FD00E4E065 /* EVEAllianceList.m */,
 				718C320B121EB0FD00E4E065 /* EVECertificateTree.h */,
@@ -1143,6 +1148,7 @@
 				71986B901200621A00A50906 /* EVEStarbaseDetail.m in Sources */,
 				71986BFB12006AA200A50906 /* EVEStarbaseList.m in Sources */,
 				7182E37A1200717F00F6B50C /* EVEShareholders.m in Sources */,
+				12F86DD818E5C22500AFDA97 /* EVEOwnerID.m in Sources */,
 				71AA33061201ABBF00B95DD6 /* EVETitles.m in Sources */,
 				71AA338D1201C8DF00B95DD6 /* EVECorpWalletJournal.m in Sources */,
 				71AA33941201C9D700B95DD6 /* EVECorpWalletTransactions.m in Sources */,
