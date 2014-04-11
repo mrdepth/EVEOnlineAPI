@@ -46,6 +46,8 @@
 @property (nonatomic, strong, readonly) NSArray *requiredSkills;
 @property (nonatomic, strong) EVEDBInvBlueprintType* blueprintType;
 @property (nonatomic, strong) EVEDBInvType* blueprint;
+@property (nonatomic, strong, readonly) NSArray* traits;
+@property (nonatomic, strong, readonly) NSString* traitsString;
 
 + (id) invTypeWithTypeID: (int32_t)aTypeID error:(NSError **)errorPtr;
 + (id) invTypeWithInvType:(EVEDBInvType*) type;

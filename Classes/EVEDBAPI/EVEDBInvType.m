@@ -21,6 +21,8 @@
 #import "EVEDBInvTypeMaterial.h"
 #import "EVEDBInvBlueprintType.h"
 #import "EVEDBCertMastery.h"
+#import "EVEDBInvTrait.h"
+#import "EVEDBEveUnit.h"
 #import <objc/runtime.h>
 
 
@@ -53,6 +55,9 @@
 @interface EVEDBInvType()
 @property (nonatomic, strong, readwrite) NSArray *masteries;
 @property (nonatomic, strong, readwrite) NSArray *requiredSkills;
+@property (nonatomic, strong, readwrite) NSArray* traits;
+@property (nonatomic, strong, readwrite) NSString* traitsString;
+@property (nonatomic, strong, readwrite) NSAttributedString* traitsAttributedString;
 
 - (void) loadAttributes;
 - (void) loadEffects;
@@ -332,6 +337,72 @@
 					 }];
 	}
 	return _description;
+}
+
+- (NSArray*) traits {
+	if (!_traits) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (database) {
+			NSMutableArray* traits = [NSMutableArray new];
+			[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invTraits WHERE typeID=%d;", self.typeID]
+						 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+							 EVEDBInvTrait* trait = [[EVEDBInvTrait alloc] initWithStatement:stmt];
+							 [traits addObject:trait];
+						 }];
+			_traits = traits;
+		}
+		if (!_traits)
+			_traits = (NSArray*) [NSNull null];
+	}
+	if ((NSNull*) _traits == [NSNull null])
+		return nil;
+	else
+		return _traits;
+}
+
+- (NSString*) traitsString {
+	if (!_traitsString) {
+		NSArray* traits = self.traits;
+		if (traits.count > 0) {
+			NSMutableDictionary* sections = [NSMutableDictionary new];
+			for (EVEDBInvTrait* trait in traits) {
+				NSDictionary* section = sections[@(trait.skillID)];
+				if (!section) {
+					NSString* title;
+					if (trait.skillID > 0) {
+						title = [NSString stringWithFormat:NSLocalizedString(@"<b>%@</b> bonuses (per skill level):", nil),
+								 trait.skill.typeName ?
+								 trait.skill.typeName :
+								 [NSString stringWithFormat:NSLocalizedString(@"Unknown skill %d", nil), trait.skillID]];
+					}
+					else
+						title = NSLocalizedString(@"<b>Role Bonus</b>:", nil);
+					
+					section = @{@"array": [NSMutableArray new], @"title": title};
+					sections[@(trait.skillID)] = section;
+				}
+				[section[@"array"] addObject:trait];
+			}
+			
+			NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:@"(<a*[^>]*>)([^<]*)(</a>)"
+																						options:NSRegularExpressionCaseInsensitive
+																						  error:nil];
+			NSMutableString* html = [NSMutableString new];
+			for (NSDictionary* section in [[sections allValues] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES]]]) {
+				[html appendFormat:@"\n%@\n", section[@"title"]];
+				for (EVEDBInvTrait* trait in section[@"array"]) {
+					if (trait.bonus > 0)
+						[html appendFormat:@"<b>%d%@</b> %@\n", trait.bonus, trait.unit.displayName ? trait.unit.displayName : @"", trait.bonusText];
+					else
+						[html appendFormat:@"<b>-</b> %@\n", trait.bonusText];
+				}
+			}
+			
+			[expression replaceMatchesInString:html options:0 range:NSMakeRange(0, html.length) withTemplate:@"<b>$2</b>"];
+			_traitsString = html;
+		}
+	}
+	return _traitsString;
 }
 
 #pragma mark - Private

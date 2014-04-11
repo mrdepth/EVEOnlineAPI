@@ -24,6 +24,7 @@
 		12641E3C11B9641F001417FE /* EVENotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 12641E3B11B9641F001417FE /* EVENotifications.m */; };
 		12641E6C11B96621001417FE /* EVEResearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12641E6B11B96621001417FE /* EVEResearch.m */; };
 		12774E171770347100E98F8C /* ASURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 12774E161770347100E98F8C /* ASURLConnection.m */; };
+		1292319718F7C18F00CE7A41 /* EVEDBInvTrait.m in Sources */ = {isa = PBXBuildFile; fileRef = 1292319618F7C18F00CE7A41 /* EVEDBInvTrait.m */; };
 		12AA3027140B991F00B33BE8 /* EVEAPIKeyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3026140B991F00B33BE8 /* EVEAPIKeyInfo.m */; };
 		12AA3034140B9D1900B33BE8 /* EVECalllist.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3033140B9D1900B33BE8 /* EVECalllist.m */; };
 		12AA3162140BB71B00B33BE8 /* EVEContracts.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3161140BB71B00B33BE8 /* EVEContracts.m */; };
@@ -192,6 +193,8 @@
 		12641E6B11B96621001417FE /* EVEResearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEResearch.m; sourceTree = "<group>"; };
 		12774E151770347100E98F8C /* ASURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASURLConnection.h; sourceTree = "<group>"; };
 		12774E161770347100E98F8C /* ASURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASURLConnection.m; sourceTree = "<group>"; };
+		1292319518F7C18F00CE7A41 /* EVEDBInvTrait.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBInvTrait.h; sourceTree = "<group>"; };
+		1292319618F7C18F00CE7A41 /* EVEDBInvTrait.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBInvTrait.m; sourceTree = "<group>"; };
 		12AA3025140B991F00B33BE8 /* EVEAPIKeyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEAPIKeyInfo.h; sourceTree = "<group>"; };
 		12AA3026140B991F00B33BE8 /* EVEAPIKeyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEAPIKeyInfo.m; sourceTree = "<group>"; };
 		12AA3032140B9D1900B33BE8 /* EVECalllist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECalllist.h; sourceTree = "<group>"; };
@@ -950,6 +953,8 @@
 				71A6530E131DA7FA0082FFAC /* EVEDBInvControlTowerResourcePurpose.m */,
 				71A65306131DA6A90082FFAC /* EVEDBInvControlTowerResource.h */,
 				71A65307131DA6A90082FFAC /* EVEDBInvControlTowerResource.m */,
+				1292319518F7C18F00CE7A41 /* EVEDBInvTrait.h */,
+				1292319618F7C18F00CE7A41 /* EVEDBInvTrait.m */,
 				7199F6FB122430EC004B1032 /* EVEDBDgmAttributeCategory.h */,
 				7199F6FC122430EC004B1032 /* EVEDBDgmAttributeCategory.m */,
 				7199F72512243484004B1032 /* EVEDBDgmAttributeType.h */,
@@ -1174,6 +1179,7 @@
 				7199F5F9122419D2004B1032 /* EVEDBInvGroup.m in Sources */,
 				7199F5FC122419E1004B1032 /* EVEDBInvCategory.m in Sources */,
 				7199F6BD12242B83004B1032 /* EVEDBInvMarketGroup.m in Sources */,
+				1292319718F7C18F00CE7A41 /* EVEDBInvTrait.m in Sources */,
 				7199F6FD122430EC004B1032 /* EVEDBDgmAttributeCategory.m in Sources */,
 				7199F72712243484004B1032 /* EVEDBDgmAttributeType.m in Sources */,
 				7199F73C122436D9004B1032 /* EVEDBDgmTypeAttribute.m in Sources */,
