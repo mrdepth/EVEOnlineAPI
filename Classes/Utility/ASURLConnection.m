@@ -78,6 +78,10 @@
 		connection.error = [NSError errorWithDomain:@"HTTP"
 											   code:response.statusCode
 										   userInfo:@{NSLocalizedDescriptionKey:[NSHTTPURLResponse localizedStringForStatusCode:response.statusCode]}];
+	if (connection.progressHandler && connection.contentLength <= 0) {
+		BOOL stop = NO;
+		connection.progressHandler(0.5, &stop);
+	}
 }
 
 - (void)connection:(ASURLConnection *)connection didReceiveData:(NSData *)data {
