@@ -22,11 +22,21 @@ static EVEDBDatabase *singleton;
 	return singleton;
 }
 
++ (void) setSharedDatabase:(EVEDBDatabase*) database {
+	singleton = database;
+}
+
 - (id) init {
+	NSString *databasePath = [[NSBundle mainBundle] pathForResource:@"evedb" ofType:@"sqlite"];
+	if (self = [self initWithDatabasePath:databasePath]) {
+	}
+	return self;
+}
+
+- (id) initWithDatabasePath:(NSString*) path {
 	if (self = [super init]) {
 		_db = NULL;
-		NSString *databasePath = [[NSBundle mainBundle] pathForResource:@"evedb" ofType:@"sqlite"];
-		sqlite3_open([databasePath cStringUsingEncoding:NSUTF8StringEncoding], &_db);
+		sqlite3_open([path cStringUsingEncoding:NSUTF8StringEncoding], &_db);
 		if (!_db) {
 			return nil;
 		}

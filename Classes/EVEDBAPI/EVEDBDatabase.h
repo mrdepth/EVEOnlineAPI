@@ -24,5 +24,7 @@ typedef enum {
 @interface EVEDBDatabase : NSObject
 
 + (id) sharedDatabase;
++ (void) setSharedDatabase:(EVEDBDatabase*) database;
+- (id) initWithDatabasePath:(NSString*) path;
 - (NSError*) execSQLRequest: (NSString*)sqlRequest resultBlock:(void (^)(sqlite3_stmt* stmt, BOOL *needsMore)) resultBlock;
 @end

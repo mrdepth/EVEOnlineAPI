@@ -21,7 +21,8 @@
 		  @"purpose" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"purposeID"},
 		  @"quantity" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"quantity"},
 		  @"minSecurityLevel" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"minSecurityLevel"},
-		  @"factionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"factionID"}
+		  @"factionID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"factionID"},
+		  @"wormholeClassID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"wormholeClassID"}
 		  };
 	return map;
 }

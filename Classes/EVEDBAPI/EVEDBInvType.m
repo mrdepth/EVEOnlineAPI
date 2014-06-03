@@ -88,7 +88,7 @@
 		  @"marketGroupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"marketGroupID"},
 		  @"chanceOfDuplicating" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"chanceOfDuplicating"},
 		  @"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
-		  @"imageName" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"imageName"}
+		  @"imageName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"imageName"}
 		  };
 	return map;
 }

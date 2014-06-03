@@ -19,5 +19,6 @@
 @property (nonatomic, strong) EVEDBInvControlTowerResourcePurpose *purpose;
 @property (nonatomic) double minSecurityLevel;
 @property (nonatomic) int32_t factionID;
+@property (nonatomic) int32_t wormholeClassID;
 
 @end

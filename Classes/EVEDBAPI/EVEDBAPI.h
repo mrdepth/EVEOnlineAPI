@@ -20,6 +20,7 @@
 #import "EVEDBInvControlTowerResource.h"
 #import "EVEDBInvMarketGroup.h"
 #import "EVEDBInvMetaGroup.h"
+#import "EVEDBInvMetaType.h"
 #import "EVEDBInvTrait.h"
 #import "EVEDBDgmAttributeCategory.h"
 #import "EVEDBDgmAttributeType.h"
