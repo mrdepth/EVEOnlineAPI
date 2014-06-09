@@ -14,6 +14,7 @@
 		1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */; };
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
 		122AC51018BCCBC7005F0F46 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; };
+		12436CB519458EF10090D4A6 /* EVEDBChrRace.m in Sources */ = {isa = PBXBuildFile; fileRef = 12436CB419458EF10090D4A6 /* EVEDBChrRace.m */; };
 		1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243770D18969D170078F526 /* EVEDBNpcGroup.m */; };
 		1248696B17717B0B0025C647 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
@@ -173,6 +174,8 @@
 		122AC50D18BCCB92005F0F46 /* EVEzKillBoardAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardAPI.h; sourceTree = "<group>"; };
 		122AC50E18BCCBC7005F0F46 /* EVEzKillBoardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardSearch.h; sourceTree = "<group>"; };
 		122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEzKillBoardSearch.m; sourceTree = "<group>"; };
+		12436CB319458EF10090D4A6 /* EVEDBChrRace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBChrRace.h; sourceTree = "<group>"; };
+		12436CB419458EF10090D4A6 /* EVEDBChrRace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBChrRace.m; sourceTree = "<group>"; };
 		1243770C18969D170078F526 /* EVEDBNpcGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBNpcGroup.h; sourceTree = "<group>"; };
 		1243770D18969D170078F526 /* EVEDBNpcGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBNpcGroup.m; sourceTree = "<group>"; };
 		1248696917717B0B0025C647 /* NAPILookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPILookup.h; sourceTree = "<group>"; };
@@ -1003,6 +1006,8 @@
 				1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */,
 				1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */,
 				1222E170188F8D82003C1361 /* EVEDBCertSkill.m */,
+				12436CB319458EF10090D4A6 /* EVEDBChrRace.h */,
+				12436CB419458EF10090D4A6 /* EVEDBChrRace.m */,
 				1243770C18969D170078F526 /* EVEDBNpcGroup.h */,
 				1243770D18969D170078F526 /* EVEDBNpcGroup.m */,
 				7183B4FD12254891005CB8EE /* EVEDBAPI.h */,
@@ -1217,6 +1222,7 @@
 				719978BE137F0FE90061BA4E /* BCEveLoadoutsTags.m in Sources */,
 				1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */,
 				71997988137F18BB0061BA4E /* BCEveLoadoutsList.m in Sources */,
+				12436CB519458EF10090D4A6 /* EVEDBChrRace.m in Sources */,
 				719979CF137F21710061BA4E /* BCEveLoadout.m in Sources */,
 				12AA3027140B991F00B33BE8 /* EVEAPIKeyInfo.m in Sources */,
 				12AA3034140B9D1900B33BE8 /* EVECalllist.m in Sources */,
