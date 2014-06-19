@@ -9,14 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVECentralRequest.h"
 
-@class EVEDBMapRegion;
-@class EVEDBStaStation;
 @interface EVECentralQuickLookOrder: NSObject<NSCoding>
 @property (nonatomic) int32_t orderID;
 @property (nonatomic) int32_t regionID;
-@property (nonatomic, strong) EVEDBMapRegion *region;
 @property (nonatomic) int32_t stationID;
-@property (nonatomic, strong) EVEDBStaStation *station;
 @property (nonatomic, copy) NSString *stationName;
 @property (nonatomic) float security;
 @property (nonatomic) int32_t range;
