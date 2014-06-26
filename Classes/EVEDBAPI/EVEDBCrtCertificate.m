@@ -36,11 +36,11 @@
 	return map;
 }
 
-+ (id) crtCertificateWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
++ (id) crtCertificateWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr {
 	return [[EVEDBCrtCertificate alloc] initWithCertificateID:certificateID error:errorPtr];
 }
 
-- (id) initWithCertificateID: (NSInteger)certificateID error:(NSError **)errorPtr {
+- (id) initWithCertificateID: (int32_t)certificateID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCertificates WHERE certificateID=%d;", certificateID]
 								   error:errorPtr]) {
 	}
@@ -49,42 +49,42 @@
 
 - (EVEDBCrtCategory*) category {
 	if (self.categoryID == 0)
-		return NULL;
+		return nil;
 	if (!_category) {
 		_category = [EVEDBCrtCategory crtCategoryWithCategoryID:self.categoryID error:nil];
 		if (!_category)
 			_category = (EVEDBCrtCategory*) [NSNull null];
 	}
 	if ((NSNull*) _category == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _category;
 }
 
 - (EVEDBCrtClass*) certificateClass {
 	if (self.classID == 0)
-		return NULL;
+		return nil;
 	if (!_certificateClass) {
 		_certificateClass = [EVEDBCrtClass crtClassWithClassID:self.classID error:nil];
 		if (!_certificateClass)
 			_certificateClass = (EVEDBCrtClass*) [NSNull null];
 	}
 	if ((NSNull*) _certificateClass == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _certificateClass;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }

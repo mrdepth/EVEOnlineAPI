@@ -10,7 +10,7 @@
 
 @interface EVERequest()
 @property (nonatomic, strong) NSError* error;
-@property (nonatomic, assign) NSInteger errorCode;
+@property (nonatomic, assign) int32_t errorCode;
 @property (nonatomic, strong, readwrite) NSMutableString* text;
 
 @property (nonatomic, strong) NSMutableArray *rowsets;
@@ -127,7 +127,7 @@ didStartElement:(NSString *)elementName
 		self.apiVersion = [attributeDict valueForKey:@"version"];
 	}
 	else if ([elementName isEqualToString:@"error"]) {
-		self.errorCode = [[attributeDict valueForKey:@"code"] integerValue];
+		self.errorCode = [[attributeDict valueForKey:@"code"] intValue];
 	}
 	else if ([elementName isEqualToString:@"rowset"]) {
 		NSString *rowset = [attributeDict valueForKey:@"name"];
@@ -158,7 +158,7 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"cachedUntil"])
 		self.cachedUntil = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
 	else if ([elementName isEqualToString:@"error"]) {
-		self.error = [NSError errorWithDomain:EVEOnlineErrorDomain code:self.errorCode userInfo:[NSDictionary dictionaryWithObject:[self.text copy] forKey:NSLocalizedDescriptionKey]];
+		self.error = [NSError errorWithDomain:EVEOnlineErrorDomain code:self.errorCode userInfo:@{NSLocalizedDescriptionKey: [self.text copy]}];
 	}
 	else if ([elementName isEqualToString:@"rowset"]) {
 		id rowsetObject = [self.rowsetObjects lastObject];
@@ -183,6 +183,27 @@ didStartElement:(NSString *)elementName
 - (void)parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock {
 	NSString *s = [[NSString alloc] initWithData:CDATABlock encoding:NSUTF8StringEncoding];
 	[(NSMutableString*) self.text setString:s];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.currentTime forKey:@"currentTime"];
+	[aCoder encodeObject:self.cachedUntil forKey:@"cachedUntil"];
+	[aCoder encodeObject:self.apiVersion forKey:@"apiVersion"];
+	[aCoder encodeObject:self.cacheDate forKey:@"cacheDate"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.currentTime = [aDecoder decodeObjectForKey:@"currentTime"];
+		self.cachedUntil = [aDecoder decodeObjectForKey:@"cachedUntil"];
+		self.apiVersion = [aDecoder decodeObjectForKey:@"apiVersion"];
+		self.cacheDate = [aDecoder decodeObjectForKey:@"cacheDate"];
+		self.cacheExpireDate = [self localTimeWithServerTime:self.cachedUntil];
+	}
+	
+	return self;
 }
 
 @end

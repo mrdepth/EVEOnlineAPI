@@ -10,21 +10,21 @@
 
 
 @interface EVEDBDgmEffect : EVEDBObject
-@property (nonatomic, assign) NSInteger effectID;
+@property (nonatomic, assign) int32_t effectID;
 @property (nonatomic, strong) NSString *effectName;
-@property (nonatomic, assign) NSInteger effectCategory;
-@property (nonatomic, assign) NSInteger preExpression;
-@property (nonatomic, assign) NSInteger postExpression;
+@property (nonatomic, assign) int32_t effectCategory;
+@property (nonatomic, assign) int32_t preExpression;
+@property (nonatomic, assign) int32_t postExpression;
 @property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) NSString *guid;
-@property (nonatomic, assign) NSInteger iconID;
+@property (nonatomic, assign) int32_t iconID;
 @property (nonatomic, assign) BOOL isOffensive;
 @property (nonatomic, assign) BOOL isAssistance;
-@property (nonatomic, assign) NSInteger durationAttributeID;
-@property (nonatomic, assign) NSInteger trackingSpeedAttributeID;
-@property (nonatomic, assign) NSInteger dischargeAttributeID;
-@property (nonatomic, assign) NSInteger rangeAttributeID;
-@property (nonatomic, assign) NSInteger falloffAttributeID;
+@property (nonatomic, assign) int32_t durationAttributeID;
+@property (nonatomic, assign) int32_t trackingSpeedAttributeID;
+@property (nonatomic, assign) int32_t dischargeAttributeID;
+@property (nonatomic, assign) int32_t rangeAttributeID;
+@property (nonatomic, assign) int32_t falloffAttributeID;
 @property (nonatomic, assign) BOOL disallowAutoRepeat;
 @property (nonatomic, assign) BOOL published;
 @property (nonatomic, strong) NSString *displayName;
@@ -32,13 +32,13 @@
 @property (nonatomic, assign) BOOL rangeChance;
 @property (nonatomic, assign) BOOL electronicChance;
 @property (nonatomic, assign) BOOL propulsionChance;
-@property (nonatomic, assign) NSInteger distribution;
+@property (nonatomic, assign) int32_t distribution;
 @property (nonatomic, strong) NSString *sfxName;
-@property (nonatomic, assign) NSInteger npcUsageChanceAttributeID;
-@property (nonatomic, assign) NSInteger npcActivationChanceAttributeID;
-@property (nonatomic, assign) NSInteger fittingUsageChanceAttributeID;
+@property (nonatomic, assign) int32_t npcUsageChanceAttributeID;
+@property (nonatomic, assign) int32_t npcActivationChanceAttributeID;
+@property (nonatomic, assign) int32_t fittingUsageChanceAttributeID;
 
-+ (id) dgmEffectWithEffectID: (NSInteger)aEffectID error:(NSError **)errorPtr;
-- (id) initWithEffectID: (NSInteger)aEffectID error:(NSError **)errorPtr;
++ (id) dgmEffectWithEffectID: (int32_t)aEffectID error:(NSError **)errorPtr;
+- (id) initWithEffectID: (int32_t)aEffectID error:(NSError **)errorPtr;
 
 @end

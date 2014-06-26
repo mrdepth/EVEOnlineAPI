@@ -17,8 +17,23 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.refTypeID = [[attributeDict valueForKey:@"refTypeID"] integerValue];
+		self.refTypeID = [[attributeDict valueForKey:@"refTypeID"] intValue];
 		self.refTypeName = [attributeDict valueForKey:@"refTypeName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.refTypeID forKey:@"refTypeID"];
+	[aCoder encodeObject:self.refTypeName forKey:@"refTypeName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.refTypeID = [aDecoder decodeInt32ForKey:@"refTypeID"];
+		self.refTypeName = [aDecoder decodeObjectForKey:@"refTypeName"];
 	}
 	return self;
 }
@@ -32,13 +47,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) refTypesWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVERefTypes alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) refTypesWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVERefTypes alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/RefTypes.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -64,4 +79,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.refTypes forKey:@"refTypes"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.refTypes = [aDecoder decodeObjectForKey:@"refTypes"];
+	}
+	return self;
+}
+
 @end

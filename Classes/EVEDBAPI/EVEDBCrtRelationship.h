@@ -11,16 +11,16 @@
 @class EVEDBCrtCertificate;
 @class EVEDBInvTypeRequiredSkill;
 @interface EVEDBCrtRelationship : EVEDBObject
-@property (nonatomic) NSInteger relationshipID;
-@property (nonatomic) NSInteger parentID;
+@property (nonatomic) int32_t relationshipID;
+@property (nonatomic) int32_t parentID;
 @property (nonatomic, readonly, strong) EVEDBCrtCertificate* parent;
-@property (nonatomic) NSInteger parentTypeID;
+@property (nonatomic) int32_t parentTypeID;
 @property (nonatomic, readonly, strong) EVEDBInvTypeRequiredSkill* parentType;
-@property (nonatomic) NSInteger parentLevel;
-@property (nonatomic) NSInteger childID;
+@property (nonatomic) int32_t parentLevel;
+@property (nonatomic) int32_t childID;
 @property (nonatomic, readonly, strong) EVEDBCrtCertificate* child;
 
-+ (id) crtRelationshipWithRelationshipID: (NSInteger)aRelationshipID error:(NSError **)errorPtr;
-- (id) initWithRelationshipID: (NSInteger)aRelationshipID error:(NSError **)errorPtr;
++ (id) crtRelationshipWithRelationshipID: (int32_t)aRelationshipID error:(NSError **)errorPtr;
+- (id) initWithRelationshipID: (int32_t)aRelationshipID error:(NSError **)errorPtr;
 
 @end

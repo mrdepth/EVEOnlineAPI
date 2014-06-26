@@ -17,11 +17,32 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
 		self.solarSystemName = [attributeDict valueForKey:@"solarSystemName"];
-		self.occupyingFactionID = [[attributeDict valueForKey:@"occupyingFactionID"] integerValue];
+		self.occupyingFactionID = [[attributeDict valueForKey:@"occupyingFactionID"] intValue];
 		self.occupyingFactionName = [attributeDict valueForKey:@"occupyingFactionName"];
 		self.contested = [[attributeDict valueForKey:@"contested"] compare:@"True" options:NSCaseInsensitiveSearch] == NSOrderedSame ? TRUE : FALSE;
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeObject:self.solarSystemName forKey:@"solarSystemName"];
+	[aCoder encodeInt32:self.occupyingFactionID forKey:@"occupyingFactionID"];
+	[aCoder encodeObject:self.occupyingFactionName forKey:@"occupyingFactionName"];
+	[aCoder encodeBool:self.contested forKey:@"contested"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
+		self.solarSystemName = [aDecoder decodeObjectForKey:@"solarSystemName"];
+		self.occupyingFactionID = [aDecoder decodeInt32ForKey:@"occupyingFactionID"];
+		self.occupyingFactionName = [aDecoder decodeObjectForKey:@"occupyingFactionName"];
+		self.contested = [aDecoder decodeBoolForKey:@"contested"];
 	}
 	return self;
 }
@@ -35,13 +56,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarSystemsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEFacWarSystems alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) facWarSystemsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEFacWarSystems alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/map/FacWarSystems.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -68,4 +89,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.solarSystems forKey:@"solarSystems"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.solarSystems = [aDecoder decodeObjectForKey:@"solarSystems"];
+	}
+	return self;
+}
+
 @end

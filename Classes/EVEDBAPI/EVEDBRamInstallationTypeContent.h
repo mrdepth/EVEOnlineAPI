@@ -11,10 +11,10 @@
 @class EVEDBInvType;
 @class EVEDBRamAssemblyLineType;
 @interface EVEDBRamInstallationTypeContent : EVEDBObject
-@property (nonatomic) NSInteger installationTypeID;
+@property (nonatomic) int32_t installationTypeID;
 @property (nonatomic, strong) EVEDBInvType* installationType;
-@property (nonatomic) NSInteger assemblyLineTypeID;
+@property (nonatomic) int32_t assemblyLineTypeID;
 @property (nonatomic, strong) EVEDBRamAssemblyLineType* assemblyLineType;
-@property (nonatomic) NSInteger quantity;
+@property (nonatomic) int32_t quantity;
 
 @end

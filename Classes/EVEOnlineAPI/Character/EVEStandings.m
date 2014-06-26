@@ -16,9 +16,26 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.fromID = [[attributeDict valueForKey:@"fromID"] integerValue];
+		self.fromID = [[attributeDict valueForKey:@"fromID"] intValue];
 		self.fromName = [attributeDict valueForKey:@"fromName"];
 		self.standing = [[attributeDict valueForKey:@"standing"] floatValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.fromID forKey:@"fromID"];
+	[aCoder encodeObject:self.fromName forKey:@"fromName"];
+	[aCoder encodeFloat:self.standing forKey:@"standing"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.fromID = [aDecoder decodeInt32ForKey:@"fromID"];
+		self.fromName = [aDecoder decodeObjectForKey:@"fromName"];
+		self.standing = [aDecoder decodeFloatForKey:@"standing"];
 	}
 	return self;
 }
@@ -27,6 +44,24 @@
 
 
 @implementation EVEStandingsNPCStandings
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.agents forKey:@"agents"];
+	[aCoder encodeObject:self.NPCCorporations forKey:@"NPCCorporations"];
+	[aCoder encodeObject:self.factions forKey:@"factions"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.agents = [aDecoder decodeObjectForKey:@"agents"];
+		self.NPCCorporations = [aDecoder decodeObjectForKey:@"NPCCorporations"];
+		self.factions = [aDecoder decodeObjectForKey:@"factions"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVEStandings
@@ -35,13 +70,13 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) standingsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEStandings alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
++ (id) standingsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEStandings alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/Standings.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char") , keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -73,6 +108,20 @@
 	EVEStandingsItem *standingsItem = [EVEStandingsItem standingsItemWithXMLAttributes:attributeDict];
 	[object addObject:standingsItem];
 	return standingsItem;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.standings forKey:@"standings"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.standings = [aDecoder decodeObjectForKey:@"standings"];
+	}
+	return self;
 }
 
 @end

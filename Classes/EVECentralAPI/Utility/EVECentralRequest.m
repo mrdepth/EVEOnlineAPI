@@ -65,8 +65,8 @@ didStartElement:(NSString *)elementName
 	NSInteger n = [self.text lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	const char* s = [self.text UTF8String];
 	
-	int start;
-	int end;
+	NSInteger start;
+	NSInteger end;
 	
 	for (start = 0; start < n; start++) {
 		if (s[start] != '\n' && s[start] != ' ' && s[start] != '\t')
@@ -84,6 +84,21 @@ didStartElement:(NSString *)elementName
 	else
 		validText = self.text;
 	return validText;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.cacheExpireDate forKey:@"cacheExpireDate"];
+	[aCoder encodeObject:self.cacheDate forKey:@"cacheDate"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.cacheExpireDate = [aDecoder decodeObjectForKey:@"cacheExpireDate"];
+		self.cacheDate = [aDecoder decodeObjectForKey:@"cacheDate"];
+	}
+	return self;
 }
 
 @end

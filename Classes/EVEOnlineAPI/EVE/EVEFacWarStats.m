@@ -9,6 +9,30 @@
 #import "EVEFacWarStats.h"
 
 @implementation EVEFacWarStatsTotals
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.killsYesterday forKey:@"killsYesterday"];
+	[aCoder encodeInt32:self.killsLastWeek forKey:@"killsLastWeek"];
+	[aCoder encodeInt32:self.killsTotal forKey:@"killsTotal"];
+	[aCoder encodeInt32:self.victoryPointsYesterday forKey:@"victoryPointsYesterday"];
+	[aCoder encodeInt32:self.victoryPointsLastWeek forKey:@"victoryPointsLastWeek"];
+	[aCoder encodeInt32:self.victoryPointsTotal forKey:@"victoryPointsTotal"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.killsYesterday = [aDecoder decodeInt32ForKey:@"killsYesterday"];
+		self.killsLastWeek = [aDecoder decodeInt32ForKey:@"killsLastWeek"];
+		self.killsTotal = [aDecoder decodeInt32ForKey:@"killsTotal"];
+		self.victoryPointsYesterday = [aDecoder decodeInt32ForKey:@"victoryPointsYesterday"];
+		self.victoryPointsLastWeek = [aDecoder decodeInt32ForKey:@"victoryPointsLastWeek"];
+		self.victoryPointsTotal = [aDecoder decodeInt32ForKey:@"victoryPointsTotal"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -20,16 +44,47 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.factionID = [[attributeDict valueForKey:@"factionID"] integerValue];
+		self.factionID = [[attributeDict valueForKey:@"factionID"] intValue];
 		self.factionName = [attributeDict valueForKey:@"factionName"];
-		self.pilots = [[attributeDict valueForKey:@"pilots"] integerValue];
-		self.systemsControlled = [[attributeDict valueForKey:@"systemsControlled"] integerValue];
-		self.killsYesterday = [[attributeDict valueForKey:@"killsYesterday"] integerValue];
-		self.killsLastWeek = [[attributeDict valueForKey:@"killsLastWeek"] integerValue];
-		self.killsTotal = [[attributeDict valueForKey:@"killsTotal"] integerValue];
-		self.victoryPointsYesterday = [[attributeDict valueForKey:@"victoryPointsYesterday"] integerValue];
-		self.victoryPointsLastWeek = [[attributeDict valueForKey:@"victoryPointsLastWeek"] integerValue];
-		self.victoryPointsTotal = [[attributeDict valueForKey:@"victoryPointsTotal"] integerValue];
+		self.pilots = [[attributeDict valueForKey:@"pilots"] intValue];
+		self.systemsControlled = [[attributeDict valueForKey:@"systemsControlled"] intValue];
+		self.killsYesterday = [[attributeDict valueForKey:@"killsYesterday"] intValue];
+		self.killsLastWeek = [[attributeDict valueForKey:@"killsLastWeek"] intValue];
+		self.killsTotal = [[attributeDict valueForKey:@"killsTotal"] intValue];
+		self.victoryPointsYesterday = [[attributeDict valueForKey:@"victoryPointsYesterday"] intValue];
+		self.victoryPointsLastWeek = [[attributeDict valueForKey:@"victoryPointsLastWeek"] intValue];
+		self.victoryPointsTotal = [[attributeDict valueForKey:@"victoryPointsTotal"] intValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.factionID forKey:@"factionID"];
+	[aCoder encodeObject:self.factionName forKey:@"factionName"];
+	[aCoder encodeInt32:self.pilots forKey:@"pilots"];
+	[aCoder encodeInt32:self.systemsControlled forKey:@"systemsControlled"];
+	[aCoder encodeInt32:self.killsYesterday forKey:@"killsYesterday"];
+	[aCoder encodeInt32:self.killsLastWeek forKey:@"killsLastWeek"];
+	[aCoder encodeInt32:self.killsTotal forKey:@"killsTotal"];
+	[aCoder encodeInt32:self.victoryPointsYesterday forKey:@"victoryPointsYesterday"];
+	[aCoder encodeInt32:self.victoryPointsLastWeek forKey:@"victoryPointsLastWeek"];
+	[aCoder encodeInt32:self.victoryPointsTotal forKey:@"victoryPointsTotal"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.factionID = [aDecoder decodeInt32ForKey:@"factionID"];
+		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
+		self.pilots = [aDecoder decodeInt32ForKey:@"pilots"];
+		self.systemsControlled = [aDecoder decodeInt32ForKey:@"systemsControlled"];
+		self.killsYesterday = [aDecoder decodeInt32ForKey:@"killsYesterday"];
+		self.killsLastWeek = [aDecoder decodeInt32ForKey:@"killsLastWeek"];
+		self.killsTotal = [aDecoder decodeInt32ForKey:@"killsTotal"];
+		self.victoryPointsYesterday = [aDecoder decodeInt32ForKey:@"victoryPointsYesterday"];
+		self.victoryPointsLastWeek = [aDecoder decodeInt32ForKey:@"victoryPointsLastWeek"];
+		self.victoryPointsTotal = [aDecoder decodeInt32ForKey:@"victoryPointsTotal"];
 	}
 	return self;
 }
@@ -45,10 +100,29 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.factionID = [[attributeDict valueForKey:@"factionID"] integerValue];
+		self.factionID = [[attributeDict valueForKey:@"factionID"] intValue];
 		self.factionName = [attributeDict valueForKey:@"factionName"];
-		self.againstID = [[attributeDict valueForKey:@"againstID"] integerValue];
+		self.againstID = [[attributeDict valueForKey:@"againstID"] intValue];
 		self.againstName = [attributeDict valueForKey:@"againstName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.factionID forKey:@"factionID"];
+	[aCoder encodeObject:self.factionName forKey:@"factionName"];
+	[aCoder encodeInt32:self.againstID forKey:@"againstID"];
+	[aCoder encodeObject:self.againstName forKey:@"againstName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.factionID = [aDecoder decodeInt32ForKey:@"factionID"];
+		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
+		self.againstID = [aDecoder decodeInt32ForKey:@"againstID"];
+		self.againstName = [aDecoder decodeObjectForKey:@"againstName"];
 	}
 	return self;
 }
@@ -62,13 +136,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEFacWarStats alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) facWarStatsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEFacWarStats alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/FacWarStats.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -120,16 +194,35 @@ didStartElement:(NSString *)elementName
   qualifiedName:(NSString *)qName {
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	if ([elementName isEqualToString:@"killsYesterday"])
-		self.totals.killsYesterday = [self.text integerValue];
+		self.totals.killsYesterday = [self.text intValue];
 	else if ([elementName isEqualToString:@"killsLastWeek"])
-		self.totals.killsLastWeek = [self.text integerValue];
+		self.totals.killsLastWeek = [self.text intValue];
 	else if ([elementName isEqualToString:@"killsTotal"])
-		self.totals.killsTotal = [self.text integerValue];
+		self.totals.killsTotal = [self.text intValue];
 	else if ([elementName isEqualToString:@"victoryPointsYesterday"])
-		self.totals.victoryPointsYesterday = [self.text integerValue];
+		self.totals.victoryPointsYesterday = [self.text intValue];
 	else if ([elementName isEqualToString:@"victoryPointsLastWeek"])
-		self.totals.victoryPointsLastWeek = [self.text integerValue];
+		self.totals.victoryPointsLastWeek = [self.text intValue];
 	else if ([elementName isEqualToString:@"victoryPointsTotal"])
-		self.totals.victoryPointsTotal = [self.text integerValue];
+		self.totals.victoryPointsTotal = [self.text intValue];
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.totals forKey:@"totals"];
+	[aCoder encodeObject:self.factions forKey:@"factions"];
+	[aCoder encodeObject:self.factionWars forKey:@"factionWars"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.totals = [aDecoder decodeObjectForKey:@"totals"];
+		self.factions = [aDecoder decodeObjectForKey:@"factions"];
+		self.factionWars = [aDecoder decodeObjectForKey:@"factionWars"];
+	}
+	return self;
+}
+
 @end

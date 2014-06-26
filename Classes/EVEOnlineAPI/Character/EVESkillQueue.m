@@ -17,17 +17,45 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.queuePosition = [[attributeDict valueForKey:@"queuePosition"] integerValue];
-		self.typeID = [[attributeDict valueForKey:@"typeID"] integerValue];
-		self.level = [[attributeDict valueForKey:@"level"] integerValue];
-		self.startSP = [[attributeDict valueForKey:@"startSP"] integerValue];
-		self.endSP = [[attributeDict valueForKey:@"endSP"] integerValue];
+		self.queuePosition = [[attributeDict valueForKey:@"queuePosition"] intValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.level = [[attributeDict valueForKey:@"level"] intValue];
+		self.startSP = [[attributeDict valueForKey:@"startSP"] intValue];
+		self.endSP = [[attributeDict valueForKey:@"endSP"] intValue];
 		self.startTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"startTime"]];
 		self.endTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"endTime"]];
 	}
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.queuePosition forKey:@"queuePosition"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt32:self.level forKey:@"level"];
+	[aCoder encodeInt32:self.startSP forKey:@"startSP"];
+	[aCoder encodeInt32:self.endSP forKey:@"endSP"];
+	[aCoder encodeObject:self.startTime forKey:@"startTime"];
+	[aCoder encodeObject:self.endTime forKey:@"endTime"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.queuePosition = [aDecoder decodeInt32ForKey:@"queuePosition"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.level = [aDecoder decodeInt32ForKey:@"level"];
+		self.startSP = [aDecoder decodeInt32ForKey:@"startSP"];
+		self.endSP = [aDecoder decodeInt32ForKey:@"endSP"];
+		self.startTime = [aDecoder decodeObjectForKey:@"startTime"];
+		self.endTime = [aDecoder decodeObjectForKey:@"endTime"];
+	}
+	return self;
+}
+
+@end
+
+@interface EVESkillQueue()
 @end
 
 
@@ -37,17 +65,22 @@
 	return EVEApiKeyTypeLimited;
 }
 
-+ (id) skillQueueWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVESkillQueue alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
++ (id) skillQueueWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVESkillQueue alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/SkillQueue.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
 	return self;
+}
+
+- (NSTimeInterval) timeLeft {
+	NSDate *endTime = [[self.skillQueue lastObject] endTime];
+	return [endTime timeIntervalSinceDate:[self serverTimeWithLocalTime:[NSDate date]]];
 }
 
 #pragma mark NSXMLParserDelegate
@@ -64,7 +97,7 @@
 
 - (void) didEndRowset:(NSString*) rowset rowsetObject:(id) object {
 	if ([rowset isEqualToString:@"skillqueue"]) {
-		[(NSMutableArray*) self.skillQueue sortUsingDescriptors:[NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
+		[(NSMutableArray*) self.skillQueue sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
 	}
 }
 
@@ -75,6 +108,20 @@
 		return skillQueueItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.skillQueue forKey:@"skillQueue"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.skillQueue = [aDecoder decodeObjectForKey:@"skillQueue"];
+	}
+	return self;
 }
 
 @end

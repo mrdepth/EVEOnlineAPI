@@ -13,12 +13,12 @@
 @property (nonatomic, strong) NSDate *currentTQTime;
 @property (nonatomic, strong) NSDate *trainingEndTime;
 @property (nonatomic, strong) NSDate *trainingStartTime;
-@property (nonatomic) NSInteger trainingTypeID;
-@property (nonatomic) NSInteger trainingStartSP;
-@property (nonatomic) NSInteger trainingDestinationSP;
-@property (nonatomic) NSInteger trainingToLevel;
-@property (nonatomic) NSInteger skillInTraining;
+@property (nonatomic) int32_t trainingTypeID;
+@property (nonatomic) int32_t trainingStartSP;
+@property (nonatomic) int32_t trainingDestinationSP;
+@property (nonatomic) int32_t trainingToLevel;
+@property (nonatomic) int32_t skillInTraining;
 
-+ (id) skillInTrainingWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) skillInTrainingWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

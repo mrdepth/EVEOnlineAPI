@@ -28,24 +28,28 @@ static BOOL offlineMode = NO;
 	return offlineMode;
 }
 
-- (id) initWithURL: (NSURL*) url cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	if (self = [self initWithRequest:[NSURLRequest requestWithURL:url] cacheStyle:cacheStyle error:errorPtr progressHandler:progressHandler]) {
+- (id) initWithURL: (NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
+	request.cachePolicy = cachePolicy;
+	
+	if (self = [self initWithRequest:request error:errorPtr progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithURL: (NSURL*) url bodyData:(NSData*) bodyData contentType:(NSString*) contentType cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableURLRequest* request = [[NSMutableURLRequest alloc] initWithURL:url];
 	[request setHTTPMethod:@"POST"];
 	[request setHTTPBody:bodyData];
 	[request setValue:contentType forHTTPHeaderField:@"Content-Type"];
-	if (self = [self initWithRequest:request cacheStyle:cacheStyle error:errorPtr progressHandler:progressHandler]) {
+	request.cachePolicy = cachePolicy;
+	if (self = [self initWithRequest:request error:errorPtr progressHandler:progressHandler]) {
 		
 	}
 	return self;
 }
 
-- (id) initWithRequest:(NSURLRequest*) request cacheStyle:(EVERequestCacheStyle) cacheStyle error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithRequest:(NSURLRequest*) request error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super init]) {
 		self.url = request.URL;
 		
@@ -53,7 +57,7 @@ static BOOL offlineMode = NO;
 		NSCachedURLResponse* cachedResponse = [cache cachedResponseForRequest:request];
 		
 		NSData* data = nil;
-		if (cachedResponse) {
+		if (cachedResponse && request.cachePolicy != NSURLRequestReloadIgnoringCacheData) {
 			self.cacheExpireDate = [cachedResponse.userInfo valueForKey:@"cacheExpireDate"];
 			self.cacheDate = [cachedResponse.userInfo valueForKey:@"cacheDate"];
 			if (self.cacheExpireDate && [self.cacheExpireDate laterDate:[NSDate date]] == self.cacheExpireDate)
@@ -75,7 +79,7 @@ static BOOL offlineMode = NO;
 					self.cacheDate = [NSDate date];
 					self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:DEFAULT_CACHE_TIME];
 				}
-				else if (cachedResponse && [[error domain] isEqualToString:@"NSURLErrorDomain"] && cacheStyle > EVERequestCacheStyleShort) {
+				else if (cachedResponse && [[error domain] isEqualToString:@"NSURLErrorDomain"] && request.cachePolicy != NSURLRequestReloadIgnoringLocalCacheData) {
 					self.cached = YES;
 					data = [cachedResponse data];
 				}
@@ -86,7 +90,7 @@ static BOOL offlineMode = NO;
 		
 		if (data) {
 			error = [self parseData:data];
-			if (!self.cached && response/* && cacheStyle > EVERequestCacheStyleShort*/) {
+			if (!self.cached && response) {
 				cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response
 																		  data:data
 																	  userInfo:@{@"cacheDate": self.cacheDate, @"cacheExpireDate": self.cacheExpireDate}

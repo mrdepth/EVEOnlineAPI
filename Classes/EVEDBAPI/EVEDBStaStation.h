@@ -12,27 +12,27 @@
 @class EVEDBMapConstellation;
 @class EVEDBMapSolarSystem;
 @interface EVEDBStaStation : EVEDBObject
-@property(nonatomic) NSInteger stationID;
-@property(nonatomic) NSInteger security;
+@property(nonatomic) int32_t stationID;
+@property(nonatomic) int32_t security;
 @property(nonatomic) float dockingCostPerVolume;
 @property(nonatomic) float maxShipVolumeDockable;
-@property(nonatomic) NSInteger officeRentalCost;
-@property(nonatomic) NSInteger operationID;
-@property(nonatomic) NSInteger stationTypeID;
-@property(nonatomic) NSInteger corporationID;
-@property(nonatomic) NSInteger solarSystemID;
+@property(nonatomic) int32_t officeRentalCost;
+@property(nonatomic) int32_t operationID;
+@property(nonatomic) int32_t stationTypeID;
+@property(nonatomic) int32_t corporationID;
+@property(nonatomic) int32_t solarSystemID;
 @property(nonatomic, strong) EVEDBMapSolarSystem *solarSystem;
-@property(nonatomic) NSInteger constellationID;
+@property(nonatomic) int32_t constellationID;
 @property(nonatomic, strong) EVEDBMapConstellation *constellation;
-@property(nonatomic) NSInteger regionID;
+@property(nonatomic) int32_t regionID;
 @property(nonatomic, strong) EVEDBMapRegion *region;
 @property(nonatomic, strong) NSString *stationName;
 @property(nonatomic) float reprocessingEfficiency;
 @property(nonatomic) float reprocessingStationsTake;
-@property(nonatomic) NSInteger reprocessingHangarFlag;
+@property(nonatomic) int32_t reprocessingHangarFlag;
 
 
-+ (id) staStationWithStationID: (NSInteger)aStationID error:(NSError **)errorPtr;
-- (id) initWithStationID: (NSInteger)aStationID error:(NSError **)errorPtr;
++ (id) staStationWithStationID: (int32_t)aStationID error:(NSError **)errorPtr;
+- (id) initWithStationID: (int32_t)aStationID error:(NSError **)errorPtr;
 
 @end

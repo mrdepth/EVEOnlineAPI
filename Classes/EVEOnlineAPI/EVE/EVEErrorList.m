@@ -17,8 +17,23 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.errorCode = [[attributeDict valueForKey:@"errorCode"] integerValue];
+		self.errorCode = [[attributeDict valueForKey:@"errorCode"] intValue];
 		self.errorText = [attributeDict valueForKey:@"errorText"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.errorCode forKey:@"errorCode"];
+	[aCoder encodeObject:self.errorText forKey:@"errorText"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.errorCode = [aDecoder decodeInt32ForKey:@"errorCode"];
+		self.errorText = [aDecoder decodeObjectForKey:@"errorText"];
 	}
 	return self;
 }
@@ -32,13 +47,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) errorListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEErrorList alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) errorListWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEErrorList alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ErrorList.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -64,4 +79,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.errors forKey:@"errors"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.errors = [aDecoder decodeObjectForKey:@"errors"];
+	}
+	return self;
+}
+
 @end

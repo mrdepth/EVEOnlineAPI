@@ -29,11 +29,11 @@
 	return map;
 }
 
-+ (id) crtRecommendationWithRecommendationID: (NSInteger)recommendationID error:(NSError **)errorPtr {
++ (id) crtRecommendationWithRecommendationID: (int32_t)recommendationID error:(NSError **)errorPtr {
 	return [[EVEDBCrtRecommendation alloc] initWithRecommendationID:recommendationID error:errorPtr];
 }
 
-- (id) initWithRecommendationID: (NSInteger)recommendationID error:(NSError **)errorPtr {
+- (id) initWithRecommendationID: (int32_t)recommendationID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtRecommendations WHERE recommendationID=%d;", recommendationID]
 								   error:errorPtr]) {
 	}
@@ -42,28 +42,28 @@
 
 - (EVEDBInvType*) shipType {
 	if (self.shipTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_shipType) {
 		_shipType = [EVEDBInvType invTypeWithTypeID:self.shipTypeID error:nil];
 		if (!_shipType)
 			_shipType = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _shipType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _shipType;
 }
 
 - (EVEDBCrtCertificate*) certificate {
 	if (self.certificateID == 0)
-		return NULL;
+		return nil;
 	if (!_certificate) {
 		_certificate = [EVEDBCrtCertificate crtCertificateWithCertificateID:self.certificateID error:nil];
 		if (!_certificate)
 			_certificate = (EVEDBCrtCertificate*) [NSNull null];
 	}
 	if ((NSNull*) _certificate == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _certificate;
 }

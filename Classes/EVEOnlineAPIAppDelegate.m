@@ -13,6 +13,7 @@
 #import "RSS.h"
 #import "BattleClinicAPI.h"
 #import "EVEKillNetAPI.h"
+#import "EVEzKillBoardAPI.h"
 
 @implementation EVEOnlineAPIAppDelegate
 
@@ -22,6 +23,11 @@
 #define V_CODE @""
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	EVEzKillBoardSearch* search = [[EVEzKillBoardSearch alloc] initWithFilter:@{@"characterID": @1554561480,
+																				@"orderDirection": @"asc",
+																				@"limit": @1}
+																		error:Nil
+															  progressHandler:nil];
 	[window makeKeyAndVisible];
 	return YES;
 }

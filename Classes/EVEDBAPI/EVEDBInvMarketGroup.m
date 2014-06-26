@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) invMarketGroupWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr {
++ (id) invMarketGroupWithMarketGroupID: (int32_t)aMarketGroupID error:(NSError **)errorPtr {
 	return [[EVEDBInvMarketGroup alloc] initWithMarketGroupID:aMarketGroupID error:errorPtr];
 }
 
-- (id) initWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr {
+- (id) initWithMarketGroupID: (int32_t)aMarketGroupID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invMarketGroups WHERE marketGroupID=%d;", aMarketGroupID]
 								   error:errorPtr]) {
 	}
@@ -37,28 +37,28 @@
 
 - (EVEDBInvMarketGroup*) parentGroup {
 	if (self.parentGroupID == 0)
-		return NULL;
+		return nil;
 	if (!_parentGroup) {
 		_parentGroup = [EVEDBInvMarketGroup invMarketGroupWithMarketGroupID:self.parentGroupID error:nil];
 		if (!_parentGroup)
 			_parentGroup = (EVEDBInvMarketGroup*) [NSNull null];
 	}
 	if ((NSNull*) _parentGroup == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _parentGroup;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }

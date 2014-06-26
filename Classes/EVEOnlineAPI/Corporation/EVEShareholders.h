@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEShareholdersCharactersItem : NSObject
-@property (nonatomic) NSInteger shareholderID;
+@interface EVEShareholdersCharactersItem : NSObject<NSCoding>
+@property (nonatomic) int32_t shareholderID;
 @property (nonatomic, copy) NSString *shareholderName;
-@property (nonatomic) NSInteger shareholderCorporationID;
+@property (nonatomic) int32_t shareholderCorporationID;
 @property (nonatomic, copy) NSString *shareholderCorporationName;
-@property (nonatomic) NSInteger shares;
+@property (nonatomic) int32_t shares;
 
 + (id) shareholdersCharactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -22,10 +22,10 @@
 @end
 
 
-@interface EVEShareholdersCorporationsItem : NSObject
-@property (nonatomic) NSInteger shareholderID;
+@interface EVEShareholdersCorporationsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t shareholderID;
 @property (nonatomic, copy) NSString *shareholderName;
-@property (nonatomic) NSInteger shares;
+@property (nonatomic) int32_t shares;
 
 + (id) shareholdersCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -37,7 +37,7 @@
 @property (nonatomic, strong) NSArray *characters;
 @property (nonatomic, strong) NSArray *corporations;
 
-+ (id) shareholdersWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) shareholdersWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

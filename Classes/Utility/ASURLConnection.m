@@ -7,14 +7,15 @@
 //
 
 #import "ASURLConnection.h"
+#import "UIApplication+NetworkActivity.h"
 
 @interface ASURLConnection()<NSURLConnectionDataDelegate>
-@property (nonatomic, copy) void (^progressHandler)(CGFloat progress);
+@property (nonatomic, copy) void (^progressHandler)(CGFloat progress, BOOL* stop);
 @property (nonatomic, strong) NSHTTPURLResponse* response;
 @property (nonatomic, strong) NSError* error;
 @property (nonatomic, assign) BOOL finished;
 @property (nonatomic, strong) NSMutableData* data;
-@property (nonatomic, assign) NSInteger contentLength;
+@property (nonatomic, assign) long long contentLength;
 @end
 
 @interface ASURLConnectionDelegate: NSObject<NSURLConnectionDataDelegate>
@@ -23,7 +24,8 @@
 
 @implementation ASURLConnection
 
-+ (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (NSData *)sendSynchronousRequest:(NSURLRequest *)request returningResponse:(NSURLResponse **)response error:(NSError **)error progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+    [[UIApplication sharedApplication] beginNetworkActivity];
 	ASURLConnectionDelegate* delegate = [[ASURLConnectionDelegate alloc] init];
 	ASURLConnection* connection = [[ASURLConnection alloc] initWithRequest:request delegate:delegate startImmediately:NO];
 
@@ -34,7 +36,8 @@
 	[connection start];
 	
 	while (!connection.finished && [runLoop runMode:mode beforeDate:[NSDate distantFuture]]);
-	
+	[[UIApplication sharedApplication] endNetworkActivity];
+    
 	if (response)
 		*response = connection.response;
 	if (error)
@@ -67,7 +70,7 @@
 - (void)connection:(ASURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
 	connection.contentLength = [response expectedContentLength];
 	if (connection.contentLength > 0)
-		connection.data = [NSMutableData dataWithCapacity:connection.contentLength];
+		connection.data = [NSMutableData dataWithCapacity:(NSUInteger) connection.contentLength];
 	else
 		connection.data = [NSMutableData data];
 	connection.response = response;
@@ -75,12 +78,21 @@
 		connection.error = [NSError errorWithDomain:@"HTTP"
 											   code:response.statusCode
 										   userInfo:@{NSLocalizedDescriptionKey:[NSHTTPURLResponse localizedStringForStatusCode:response.statusCode]}];
+	if (connection.progressHandler && connection.contentLength <= 0) {
+		BOOL stop = NO;
+		connection.progressHandler(0.5, &stop);
+	}
 }
 
 - (void)connection:(ASURLConnection *)connection didReceiveData:(NSData *)data {
+	BOOL stop = NO;
 	[connection.data  appendBytes:[data bytes] length:data.length];
 	if (connection.progressHandler && connection.contentLength > 0)
-		connection.progressHandler((float) connection.data.length / (float) connection.contentLength);
+		connection.progressHandler((float) connection.data.length / (float) connection.contentLength, &stop);
+	if (stop) {
+		[connection cancel];
+		connection.finished = YES;
+	}
 }
 
 - (void)connectionDidFinishLoading:(ASURLConnection *)connection {

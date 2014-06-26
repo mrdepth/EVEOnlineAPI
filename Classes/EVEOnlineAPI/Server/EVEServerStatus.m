@@ -15,13 +15,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) serverStatusWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEServerStatus alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) serverStatusWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEServerStatus alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/server/ServerStatus.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -38,7 +38,23 @@
 	if ([elementName isEqualToString:@"serverOpen"])
 		self.serverOpen = [self.text compare:@"True" options:NSCaseInsensitiveSearch] == NSOrderedSame ? TRUE : FALSE;
 	else if ([elementName isEqualToString:@"onlinePlayers"])
-		self.onlinePlayers = [self.text integerValue];
+		self.onlinePlayers = [self.text intValue];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeBool:self.serverOpen forKey:@"serverOpen"];
+	[aCoder encodeInt32:self.onlinePlayers forKey:@"onlinePlayers"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.serverOpen = [aDecoder decodeBoolForKey:@"serverOpen"];
+		self.onlinePlayers = [aDecoder decodeInt32ForKey:@"onlinePlayers"];
+	}
+	return self;
 }
 
 @end

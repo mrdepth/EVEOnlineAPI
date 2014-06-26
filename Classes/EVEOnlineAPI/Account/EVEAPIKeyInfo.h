@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAPIKeyInfoCharactersItem : NSObject
-@property (nonatomic) NSInteger characterID;
+@interface EVEAPIKeyInfoCharactersItem : NSObject<NSCoding>
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *characterName;
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 
 + (id) charactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -20,8 +20,8 @@
 
 @end
 
-@interface EVEAPIKeyInfoKey : NSObject
-@property (nonatomic) NSInteger accessMask;
+@interface EVEAPIKeyInfoKey : NSObject<NSCoding>
+@property (nonatomic) int32_t accessMask;
 @property (nonatomic) EVEAPIKeyType type;
 @property (nonatomic, strong) NSDate *expires;
 
@@ -36,7 +36,7 @@
 @property (nonatomic, strong) EVEAPIKeyInfoKey *key;
 @property (nonatomic, strong) NSArray *characters;
 
-+ (id) apiKeyInfoWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) apiKeyInfoWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) mapConstellationWithConstellationID: (NSInteger)constellationID error:(NSError **)errorPtr {
++ (id) mapConstellationWithConstellationID: (int32_t)constellationID error:(NSError **)errorPtr {
 	return [[EVEDBMapConstellation alloc] initWithConstellationID:constellationID error:errorPtr];
 }
 
-- (id) initWithConstellationID: (NSInteger)constellationID error:(NSError **)errorPtr {
+- (id) initWithConstellationID: (int32_t)constellationID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from mapConstellations WHERE constellationID=%d;", constellationID]
 								   error:errorPtr]) {
 	}
@@ -37,14 +37,14 @@
 
 - (EVEDBMapRegion*) region {
 	if (self.regionID == 0)
-		return NULL;
+		return nil;
 	if (!_region) {
 		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
 		if (!_region)
 			_region = (EVEDBMapRegion*) [NSNull null];
 	}
 	if ((NSNull*) _region == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _region;
 }

@@ -11,14 +11,14 @@
 @class EVEDBCrtCertificate;
 @class EVEDBInvType;
 @interface EVEDBCrtRecommendation : EVEDBObject
-@property (nonatomic) NSInteger recommendationID;
-@property (nonatomic) NSInteger shipTypeID;
+@property (nonatomic) int32_t recommendationID;
+@property (nonatomic) int32_t shipTypeID;
 @property (nonatomic, readonly, strong) EVEDBInvType* shipType;
-@property (nonatomic) NSInteger certificateID;
+@property (nonatomic) int32_t certificateID;
 @property (nonatomic, readonly, strong) EVEDBCrtCertificate* certificate;
-@property (nonatomic) NSInteger recommendationLevel;
+@property (nonatomic) int32_t recommendationLevel;
 
-+ (id) crtRecommendationWithRecommendationID: (NSInteger)aRecommendationID error:(NSError **)errorPtr;
-- (id) initWithRecommendationID: (NSInteger)aRecommendationID error:(NSError **)errorPtr;
++ (id) crtRecommendationWithRecommendationID: (int32_t)aRecommendationID error:(NSError **)errorPtr;
+- (id) initWithRecommendationID: (int32_t)aRecommendationID error:(NSError **)errorPtr;
 
 @end

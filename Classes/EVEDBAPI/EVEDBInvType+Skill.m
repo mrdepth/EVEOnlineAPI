@@ -11,12 +11,15 @@
 
 @implementation EVEDBInvType(Skill)
 
-- (float) skillPointsAtLevel:(NSInteger) level {
+- (float) skillPointsAtLevel:(int32_t) level {
 	if (level == 0)
 		return 0;
 	EVEDBDgmTypeAttribute *rank = self.attributesDictionary[@(275)];
-	float sp = pow(2, 2.5 * level - 2.5) * 250 * rank.value;
-	return sp;
+	if (rank) {
+		float sp = pow(2, 2.5 * level - 2.5) * 250 * rank.value;
+		return sp;
+	}
+	return 0;
 }
 
 @end

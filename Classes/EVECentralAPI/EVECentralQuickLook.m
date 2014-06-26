@@ -7,8 +7,6 @@
 //
 
 #import "EVECentralQuickLook.h"
-#import "EVEDBAPI.h"
-
 
 @implementation EVECentralQuickLookOrder
 + (id) quickLookOrderWithDictionary: (NSDictionary*) dictionary {
@@ -17,37 +15,52 @@
 
 - (id) initWithDictionary: (NSDictionary*) dictionary {
 	if (self = [super init]) {
-		self.orderID = [[dictionary valueForKey:@"id"] integerValue];
+		self.orderID = [[dictionary valueForKey:@"id"] intValue];
 	}
 	return self;
 }
 
-- (EVEDBMapRegion*) region {
-	if (self.regionID == 0)
-		return NULL;
-	if (!_region) {
-		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
-		if (!_region)
-			_region = (EVEDBMapRegion*) [NSNull null];
-	}
-	if ((NSNull*) _region == [NSNull null])
-		return NULL;
-	else
-		return _region;
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.orderID forKey:@"orderID"];
+	[aCoder encodeInt32:self.regionID forKey:@"regionID"];
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
+	
+	if  (self.stationName)
+		[aCoder encodeObject:self.stationName forKey:@"stationName"];
+
+	[aCoder encodeFloat:self.security forKey:@"security"];
+	[aCoder encodeInt32:self.range forKey:@"range"];
+	[aCoder encodeFloat:self.price forKey:@"price"];
+	[aCoder encodeInt32:self.volRemain forKey:@"volRemain"];
+	[aCoder encodeInt32:self.minVolume forKey:@"minVolume"];
+	
+	if  (self.expires)
+		[aCoder encodeObject:self.expires forKey:@"expires"];
+	if  (self.reportedTime)
+		[aCoder encodeObject:self.reportedTime forKey:@"reportedTime"];
+
 }
 
-- (EVEDBStaStation*) station {
-	if (self.stationID == 0)
-		return NULL;
-	if (!_station) {
-		_station = [EVEDBStaStation staStationWithStationID:self.stationID error:nil];
-		if (!_station)
-			_station = (EVEDBStaStation*) [NSNull null];
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.orderID = [aDecoder decodeInt32ForKey:@"orderID"];
+		self.regionID = [aDecoder decodeInt32ForKey:@"regionID"];
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
+		
+		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
+		
+		self.security = [aDecoder decodeFloatForKey:@"security"];
+		self.range = [aDecoder decodeInt32ForKey:@"range"];
+		self.price = [aDecoder decodeFloatForKey:@"price"];
+		self.volRemain = [aDecoder decodeInt32ForKey:@"volRemain"];
+		self.minVolume = [aDecoder decodeInt32ForKey:@"minVolume"];
+
+		self.expires = [aDecoder decodeObjectForKey:@"expires"];
+		self.reportedTime = [aDecoder decodeObjectForKey:@"reportedTime"];
 	}
-	if ((NSNull*) _station == [NSNull null])
-		return NULL;
-	else
-		return _station;
+	return self;
 }
 
 @end
@@ -59,22 +72,22 @@
 @property (nonatomic, strong) NSDateFormatter *expiresDateFormatter;
 @property (nonatomic, strong) NSDateFormatter *reportedTimeDateFormatter;
 
-- (NSString*) argumentsStringWithTypeID: (NSInteger) typeIDs regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ;
+- (NSString*) argumentsStringWithTypeID: (int32_t) typeIDs regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ;
 
 @end
 
 
 @implementation EVECentralQuickLook
 
-+ (id) quickLookWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVECentralQuickLook alloc] initWithTypeID:typeID regionIDs:regionIDs systemID:systemID hours:hours minQ:minQ error:errorPtr progressHandler:progressHandler];
++ (id) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVECentralQuickLook alloc] initWithTypeID:typeID regionIDs:regionIDs systemID:systemID hours:hours minQ:minQ cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithTypeID: (int32_t) aTypeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) aHours minQ: (int32_t) aMinQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/quicklook?%@",
 														EVECentralAPIHost,
 														[self argumentsStringWithTypeID:aTypeID regionIDs:regionIDs systemID:systemID hours:aHours minQ:aMinQ]]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -133,33 +146,33 @@ didStartElement:(NSString *)elementName
 	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
 	
 	if ([elementName isEqualToString:@"item"])
-		self.typeID = [self.validText integerValue];
+		self.typeID = [self.validText intValue];
 	else if ([elementName isEqualToString:@"itemname"])
 		self.typeName = self.validText;
 	else if ([elementName isEqualToString:@"region"]) {
 		if (self.currentOrder)
-			self.currentOrder.regionID = [self.validText integerValue];
+			self.currentOrder.regionID = [self.validText intValue];
 		else
 			[(NSMutableArray*) self.regions addObject:self.validText];
 	}
 	else if ([elementName isEqualToString:@"hours"])
-		self.hours = [self.validText integerValue];
+		self.hours = [self.validText intValue];
 	else if ([elementName isEqualToString:@"minqty"])
-		self.minQ = [self.validText integerValue];
+		self.minQ = [self.validText intValue];
 	else if ([elementName isEqualToString:@"station"])
-		self.currentOrder.stationID = [self.validText integerValue];
+		self.currentOrder.stationID = [self.validText intValue];
 	else if ([elementName isEqualToString:@"station_name"])
 		self.currentOrder.stationName = self.validText;
 	else if ([elementName isEqualToString:@"security"])
 		self.currentOrder.security = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"range"])
-		self.currentOrder.range = [self.validText integerValue];
+		self.currentOrder.range = [self.validText intValue];
 	else if ([elementName isEqualToString:@"price"])
 		self.currentOrder.price = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"vol_remain"])
-		self.currentOrder.volRemain = [self.validText integerValue];
+		self.currentOrder.volRemain = [self.validText intValue];
 	else if ([elementName isEqualToString:@"min_volume"])
-		self.currentOrder.minVolume = [self.validText integerValue];
+		self.currentOrder.minVolume = [self.validText intValue];
 	else if ([elementName isEqualToString:@"expires"])
 		self.currentOrder.expires = [self.expiresDateFormatter dateFromString:self.validText];
 	else if ([elementName isEqualToString:@"reported_time"])
@@ -167,9 +180,42 @@ didStartElement:(NSString *)elementName
 	
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	
+	if  (self.typeName)
+		[aCoder encodeObject:self.typeName forKey:@"typeName"];
+	if  (self.regions)
+		[aCoder encodeObject:self.regions forKey:@"regions"];
+	
+	[aCoder encodeInt32:self.hours forKey:@"hours"];
+	[aCoder encodeInt32:self.minQ forKey:@"minQ"];
+	
+	if  (self.sellOrders)
+		[aCoder encodeObject:self.sellOrders forKey:@"sellOrders"];
+	if  (self.buyOrders)
+		[aCoder encodeObject:self.buyOrders forKey:@"buyOrders"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
+		self.regions = [aDecoder decodeObjectForKey:@"regions"];
+		self.hours = [aDecoder decodeInt32ForKey:@"hours"];
+		self.minQ = [aDecoder decodeInt32ForKey:@"minQ"];
+		self.sellOrders = [aDecoder decodeObjectForKey:@"sellOrders"];
+		self.buyOrders = [aDecoder decodeObjectForKey:@"buyOrders"];
+	}
+	return self;
+}
+
 #pragma mark - Private
 
-- (NSString*) argumentsStringWithTypeID: (NSInteger) aTypeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) aHours minQ: (NSInteger) aMinQ {
+- (NSString*) argumentsStringWithTypeID: (int32_t) aTypeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) aHours minQ: (int32_t) aMinQ {
 	NSMutableArray *regionIDsArgs = [NSMutableArray array];
 	
 	for (NSNumber *regionID in regionIDs)

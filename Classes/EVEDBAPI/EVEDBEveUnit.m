@@ -21,11 +21,11 @@
 	return map;
 }
 
-+ (id) eveUnitWithUnitID: (NSInteger)unitID error:(NSError **)errorPtr {
++ (id) eveUnitWithUnitID: (int32_t)unitID error:(NSError **)errorPtr {
 	return [[EVEDBEveUnit alloc] initWithUnitID:unitID error:errorPtr];
 }
 
-- (id) initWithUnitID: (NSInteger)unitID error:(NSError **)errorPtr {
+- (id) initWithUnitID: (int32_t)unitID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from eveUnits WHERE unitID=%d;", unitID]
 								   error:nil]) {
 	}

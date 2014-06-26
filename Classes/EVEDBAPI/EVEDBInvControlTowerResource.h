@@ -11,13 +11,14 @@
 @class EVEDBInvControlTowerResourcePurpose;
 @class EVEDBInvType;
 @interface EVEDBInvControlTowerResource : EVEDBObject
-@property (nonatomic) NSInteger controlTowerTypeID;
-@property (nonatomic) NSInteger resourceTypeID;
+@property (nonatomic) int32_t controlTowerTypeID;
+@property (nonatomic) int32_t resourceTypeID;
 @property (nonatomic, strong) EVEDBInvType *resourceType;
-@property (nonatomic) NSInteger purposeID;
-@property (nonatomic) NSInteger quantity;
+@property (nonatomic) int32_t purposeID;
+@property (nonatomic) int32_t quantity;
 @property (nonatomic, strong) EVEDBInvControlTowerResourcePurpose *purpose;
 @property (nonatomic) double minSecurityLevel;
-@property (nonatomic) NSInteger factionID;
+@property (nonatomic) int32_t factionID;
+@property (nonatomic) int32_t wormholeClassID;
 
 @end

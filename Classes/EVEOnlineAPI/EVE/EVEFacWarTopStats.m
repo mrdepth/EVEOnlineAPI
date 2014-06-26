@@ -21,9 +21,26 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.characterID = [[attributeDict valueForKey:@"characterID"] integerValue];
+		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
 		self.characterName = [attributeDict valueForKey:@"characterName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] integerValue];
+		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
+	[aCoder encodeObject:self.characterName forKey:@"characterName"];
+	[aCoder encodeInt32:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
+		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
+		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
 	}
 	return self;
 }
@@ -39,12 +56,30 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] integerValue];
+		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
 		self.corporationName = [attributeDict valueForKey:@"corporationName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] integerValue];
+		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
 	}
 	return self;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
+	[aCoder encodeInt32:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
+		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
+		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
+	}
+	return self;
+}
+
 
 @end
 
@@ -57,9 +92,26 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.factionID = [[attributeDict valueForKey:@"factionID"] integerValue];
+		self.factionID = [[attributeDict valueForKey:@"factionID"] intValue];
 		self.factionName = [attributeDict valueForKey:@"factionName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] integerValue];
+		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.factionID forKey:@"factionID"];
+	[aCoder encodeObject:self.factionName forKey:@"factionName"];
+	[aCoder encodeInt32:self.kills forKey:@"kills"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.factionID = [aDecoder decodeInt32ForKey:@"factionID"];
+		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
+		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
 	}
 	return self;
 }
@@ -67,6 +119,29 @@
 @end
 
 @implementation EVEFacWarTopStatsSection
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.killsYesterday forKey:@"killsYesterday"];
+	[aCoder encodeObject:self.killsLastWeek forKey:@"killsLastWeek"];
+	[aCoder encodeObject:self.killsTotal forKey:@"killsTotal"];
+	[aCoder encodeObject:self.victoryPointsYesterday forKey:@"victoryPointsYesterday"];
+	[aCoder encodeObject:self.victoryPointsLastWeek forKey:@"victoryPointsLastWeek"];
+	[aCoder encodeObject:self.victoryPointsTotal forKey:@"victoryPointsTotal"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.killsYesterday = [aDecoder decodeObjectForKey:@"killsYesterday"];
+		self.killsLastWeek = [aDecoder decodeObjectForKey:@"killsLastWeek"];
+		self.killsTotal = [aDecoder decodeObjectForKey:@"killsTotal"];
+		self.victoryPointsYesterday = [aDecoder decodeObjectForKey:@"victoryPointsYesterday"];
+		self.victoryPointsLastWeek = [aDecoder decodeObjectForKey:@"victoryPointsLastWeek"];
+		self.victoryPointsTotal = [aDecoder decodeObjectForKey:@"victoryPointsTotal"];
+	}
+	return self;
+}
 @end
 
 
@@ -76,13 +151,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEFacWarTopStats alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) facWarTopStatsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEFacWarTopStats alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ErrorList.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -157,6 +232,24 @@ didStartElement:(NSString *)elementName
 		self.corporations = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
 	else if ([elementName isEqualToString:@"factions"])
 		self.factions = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.characters forKey:@"characters"];
+	[aCoder encodeObject:self.corporations forKey:@"corporations"];
+	[aCoder encodeObject:self.factions forKey:@"factions"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.characters= [aDecoder decodeObjectForKey:@"characters"];
+		self.corporations = [aDecoder decodeObjectForKey:@"corporations"];
+		self.factions = [aDecoder decodeObjectForKey:@"factions"];
+	}
+	return self;
 }
 
 @end

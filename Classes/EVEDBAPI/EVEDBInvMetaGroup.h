@@ -10,10 +10,10 @@
 
 @class EVEDBEveIcon;
 @interface EVEDBInvMetaGroup : EVEDBObject
-@property (nonatomic) NSInteger metaGroupID;
+@property (nonatomic) int32_t metaGroupID;
 @property (nonatomic, strong) NSString *metaGroupName;
 @property (nonatomic, strong) NSString *description;
-@property (nonatomic) NSInteger iconID;
+@property (nonatomic) int32_t iconID;
 @property (nonatomic, strong) EVEDBEveIcon *icon;
 
 @end

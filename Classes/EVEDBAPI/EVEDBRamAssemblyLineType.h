@@ -10,17 +10,17 @@
 
 @class EVEDBRamActivity;
 @interface EVEDBRamAssemblyLineType : EVEDBObject
-@property (nonatomic) NSInteger assemblyLineTypeID;
+@property (nonatomic) int32_t assemblyLineTypeID;
 @property (nonatomic, strong) NSString* assemblyLineTypeName;
 @property (nonatomic, strong) NSString* description;
 @property (nonatomic) float baseTimeMultiplier;
 @property (nonatomic) float baseMaterialMultiplier;
 @property (nonatomic) float volume;
-@property (nonatomic) NSInteger activityID;
+@property (nonatomic) int32_t activityID;
 @property (nonatomic, strong) EVEDBRamActivity* activity;
 @property (nonatomic) float minCostPerHour;
 
-+ (id) ramAssemblyLineTypeWithAssemblyLineTypeID: (NSInteger)aAssemblyLineTypeID error:(NSError **)errorPtr;
-- (id) initWithAssemblyLineTypeID: (NSInteger)aAssemblyLineTypeID error:(NSError **)errorPtr;
++ (id) ramAssemblyLineTypeWithAssemblyLineTypeID: (int32_t)aAssemblyLineTypeID error:(NSError **)errorPtr;
+- (id) initWithAssemblyLineTypeID: (int32_t)aAssemblyLineTypeID error:(NSError **)errorPtr;
 
 @end

@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) invCategoryWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr {
++ (id) invCategoryWithCategoryID: (int32_t)aCategoryID error:(NSError **)errorPtr {
 	return [[EVEDBInvCategory alloc] initWithCategoryID:aCategoryID error:errorPtr];
 }
 
-- (id) initWithCategoryID: (NSInteger)aCategoryID error:(NSError **)errorPtr {
+- (id) initWithCategoryID: (int32_t)aCategoryID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invCategories WHERE categoryID=%d;", aCategoryID]
 								   error:errorPtr]) {
 	}
@@ -37,14 +37,14 @@
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }

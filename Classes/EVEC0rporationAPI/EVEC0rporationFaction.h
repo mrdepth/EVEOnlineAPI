@@ -19,7 +19,7 @@ typedef enum {
 #define EVEC0rporationErrorCodeParsingErrorText @"Result parsing error"
 
 @interface EVEC0rporationFactionItem : NSObject
-@property (nonatomic, assign) NSInteger typeID;
+@property (nonatomic, assign) int32_t typeID;
 @property (nonatomic, assign) float avg;
 @property (nonatomic, assign) float median;
 @property (nonatomic, assign) float lo;
@@ -35,7 +35,7 @@ typedef enum {
 @interface EVEC0rporationFaction : EVECachedURLRequest<NSXMLParserDelegate>
 @property (nonatomic, strong) NSDictionary* types;
 
-+ (id) factionWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) factionWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

@@ -20,6 +20,10 @@
 #import "EVEDBInvType+Skill.h"
 #import "EVEDBInvTypeMaterial.h"
 #import "EVEDBInvBlueprintType.h"
+#import "EVEDBCertMastery.h"
+#import "EVEDBInvTrait.h"
+#import "EVEDBEveUnit.h"
+#import <objc/runtime.h>
 
 
 @implementation EVEDBInvTypeAttributeCategory
@@ -45,13 +49,19 @@
 
 
 @interface EVEDBInvTypeRequiredSkill()
-@property (nonatomic, readwrite, assign) float requiredSP;
+@property (nonatomic, readwrite, assign) float requiredSkillPoints;
 @end
 
 @interface EVEDBInvType()
+@property (nonatomic, strong, readwrite) NSArray *masteries;
+@property (nonatomic, strong, readwrite) NSArray *requiredSkills;
+@property (nonatomic, strong, readwrite) NSArray* traits;
+@property (nonatomic, strong, readwrite) NSString* traitsString;
+@property (nonatomic, strong, readwrite) NSAttributedString* traitsAttributedString;
+
 - (void) loadAttributes;
 - (void) loadEffects;
-- (void) loadCertificateRecommendations;
+- (void) loadMasteries;
 @end
 
 
@@ -78,12 +88,12 @@
 		  @"marketGroupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"marketGroupID"},
 		  @"chanceOfDuplicating" : @{@"type" : @(EVEDBTypeFloat), @"keyPath" : @"chanceOfDuplicating"},
 		  @"iconID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"iconID"},
-		  @"imageName" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"imageName"}
+		  @"imageName" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"imageName"}
 		  };
 	return map;
 }
 
-+ (id) invTypeWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr {
++ (id) invTypeWithTypeID: (int32_t)aTypeID error:(NSError **)errorPtr {
 	return [[self alloc] initWithTypeID:aTypeID error:errorPtr];
 }
 
@@ -91,7 +101,7 @@
 	return [[self alloc] initWithInvType:type];
 }
 
-- (id) initWithTypeID: (NSInteger)aTypeID error:(NSError **)errorPtr {
+- (id) initWithTypeID: (int32_t)aTypeID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invTypes WHERE typeID=%d;", aTypeID] error:errorPtr]) {
 	}
 	return self;
@@ -128,49 +138,49 @@
 		self.effectsDictionary = type->_effectsDictionary;
 		self.attributesDictionary = type->_attributesDictionary;
 		self.effectsDictionary = type->_effectsDictionary;
-		self.certificateRecommendations = type->_certificateRecommendations;
+		self.masteries = type->_masteries;
 	}
 	return self;
 }
 
 - (EVEDBInvGroup*) group {
 	if (self.groupID == 0)
-		return NULL;
+		return nil;
 	if (!_group) {
 		_group = [EVEDBInvGroup invGroupWithGroupID:self.groupID error:nil];
 		if (!_group)
 			_group = (EVEDBInvGroup*) [NSNull null];
 	}
 	if ((NSNull*) _group == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _group;
 }
 
 - (EVEDBInvMarketGroup*) marketGroup {
 	if (self.marketGroupID == 0)
-		return NULL;
+		return nil;
 	if (!_marketGroup) {
 		_marketGroup = [EVEDBInvMarketGroup invMarketGroupWithMarketGroupID:self.marketGroupID error:nil];
 		if (!_marketGroup)
 			_marketGroup = (EVEDBInvMarketGroup*) [NSNull null];
 	}
 	if ((NSNull*) _marketGroup == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _marketGroup;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }
@@ -196,11 +206,14 @@
 	return _effectsDictionary;
 }
 
-- (NSMutableArray*) certificateRecommendations {
-	if (!_certificateRecommendations) {
-		[self loadCertificateRecommendations];
+- (NSArray*) masteries {
+	if (!_masteries) {
+		[self loadMasteries];
 	}
-	return _certificateRecommendations;
+	if ((NSNull*) _masteries == [NSNull null])
+		return nil;
+	else
+		return _masteries;
 }
 
 - (NSString*) typeLargeImageName {
@@ -236,29 +249,37 @@
 }
 
 - (BOOL) isEqual:(id)object {
-	return [object isKindOfClass:[self class]] && self.typeID == [object typeID];
+	return [object isKindOfClass:[self class]] && self.hash == [object hash];
 }
 
 - (NSUInteger) hash {
-	return self.typeID;
+	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
+	if (!hash) {
+		NSUInteger hash = [[NSData dataWithBytes:&_typeID length:sizeof(_typeID)] hash];
+		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+		return hash;
+	}
+	else
+		return [hash unsignedIntegerValue];
 }
 
-- (NSMutableArray*) requiredSkills {
+- (NSArray*) requiredSkills {
 	if (!_requiredSkills) {
-		_requiredSkills = [[NSMutableArray alloc] init];
-		NSArray* requirementIDs = [NSArray arrayWithObjects:@(182), @(183), @(184), @(1285), @(1289), @(1290), nil];
-		NSArray* skillLevelIDs = [NSArray arrayWithObjects:@(277), @(278), @(279), @(1286), @(1287), @(1288), nil];
+		NSMutableArray* requiredSkills = [NSMutableArray new];
+		int32_t requirementIDs[] = {182, 183, 184, 1285, 1289, 1290};
+		int32_t skillLevelIDs[] = {277, 278, 279, 1286, 1287, 1288};
 		for (int i = 0; i < 5; i++) {
-			EVEDBDgmTypeAttribute* attributeTypeID = self.attributesDictionary[requirementIDs[i]];
+			EVEDBDgmTypeAttribute* attributeTypeID = self.attributesDictionary[@(requirementIDs[i])];
 			if (attributeTypeID) {
-				EVEDBDgmTypeAttribute* attributeLevel = self.attributesDictionary[skillLevelIDs[i]];
-				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(NSInteger) attributeTypeID.value error:nil];
+				EVEDBDgmTypeAttribute* attributeLevel = self.attributesDictionary[@(skillLevelIDs[i])];
+				EVEDBInvTypeRequiredSkill* skill = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:(int32_t) attributeTypeID.value error:nil];
 				if (skill) {
 					skill.requiredLevel = attributeLevel.value;
-					[_requiredSkills addObject:skill];
+					[requiredSkills addObject:skill];
 				}
 			}
 		}
+		_requiredSkills = requiredSkills;
 	}
 	return _requiredSkills;
 }
@@ -278,7 +299,7 @@
 			_blueprintType = (EVEDBInvBlueprintType*) [NSNull null];
 	}
 	if ((NSNull*) _blueprintType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _blueprintType;
 }
@@ -298,7 +319,7 @@
 			_blueprint = (EVEDBInvType*) [NSNull null];
 	}
 	if ((NSNull*) _blueprint == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _blueprint;
 }
@@ -318,30 +339,90 @@
 	return _description;
 }
 
+- (NSArray*) traits {
+	if (!_traits) {
+		EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
+		if (database) {
+			NSMutableArray* traits = [NSMutableArray new];
+			[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM invTraits WHERE typeID=%d;", self.typeID]
+						 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
+							 EVEDBInvTrait* trait = [[EVEDBInvTrait alloc] initWithStatement:stmt];
+							 [traits addObject:trait];
+						 }];
+			_traits = traits;
+		}
+		if (!_traits)
+			_traits = (NSArray*) [NSNull null];
+	}
+	if ((NSNull*) _traits == [NSNull null])
+		return nil;
+	else
+		return _traits;
+}
+
+- (NSString*) traitsString {
+	if (!_traitsString) {
+		NSArray* traits = self.traits;
+		if (traits.count > 0) {
+			NSMutableDictionary* sections = [NSMutableDictionary new];
+			for (EVEDBInvTrait* trait in traits) {
+				NSDictionary* section = sections[@(trait.skillID)];
+				if (!section) {
+					NSString* title;
+					if (trait.skillID > 0) {
+						title = [NSString stringWithFormat:NSLocalizedString(@"<b>%@</b> bonuses (per skill level):", nil),
+								 trait.skill.typeName ?
+								 trait.skill.typeName :
+								 [NSString stringWithFormat:NSLocalizedString(@"Unknown skill %d", nil), trait.skillID]];
+					}
+					else
+						title = NSLocalizedString(@"<b>Role Bonus</b>:", nil);
+					
+					section = @{@"array": [NSMutableArray new], @"title": title};
+					sections[@(trait.skillID)] = section;
+				}
+				[section[@"array"] addObject:trait];
+			}
+			
+			NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:@"(<a*[^>]*>)([^<]*)(</a>)"
+																						options:NSRegularExpressionCaseInsensitive
+																						  error:nil];
+			NSMutableString* html = [NSMutableString new];
+			for (NSDictionary* section in [[sections allValues] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES]]]) {
+				[html appendFormat:@"\n%@\n", section[@"title"]];
+				for (EVEDBInvTrait* trait in section[@"array"]) {
+					if (trait.bonus > 0)
+						[html appendFormat:@"<b>%d%@</b> %@\n", trait.bonus, trait.unit.displayName ? trait.unit.displayName : @"", trait.bonusText];
+					else
+						[html appendFormat:@"<b>-</b> %@\n", trait.bonusText];
+				}
+			}
+			
+			[expression replaceMatchesInString:html options:0 range:NSMakeRange(0, html.length) withTemplate:@"<b>$2</b>"];
+			_traitsString = html;
+		}
+	}
+	return _traitsString;
+}
+
 #pragma mark - Private
 
 - (void) loadAttributes {
 	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 	if (!database)
 		return;
-	_attributeCategories = [[NSMutableArray alloc] init];
-	_attributesDictionary = [[NSMutableDictionary alloc] init];
+	NSMutableDictionary* attributeCategories = [NSMutableDictionary new];
+	_attributesDictionary = [NSMutableDictionary new];
 	
 	[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM dgmTypeAttributes, dgmAttributeTypes, dgmAttributeCategories WHERE dgmAttributeTypes.attributeID=dgmTypeAttributes.attributeID AND dgmAttributeCategories.categoryID=dgmAttributeTypes.categoryID AND typeID=%d;", self.typeID]
 				 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
 					 EVEDBDgmTypeAttribute *typeAttribute = [[EVEDBDgmTypeAttribute alloc] initWithStatement:stmt];
 					 EVEDBDgmAttributeType *attributeType = [[EVEDBDgmAttributeType alloc] initWithStatement:stmt];
 					 EVEDBDgmAttributeCategory *attributeCategory = [[EVEDBDgmAttributeCategory alloc] initWithStatement:stmt];
-					 EVEDBInvTypeAttributeCategory *category = nil;
-					 for (EVEDBInvTypeAttributeCategory *cat in _attributeCategories) {
-						 if (cat.categoryID == attributeCategory.categoryID) {
-							 category = cat;
-							 break;
-						 }
-					 }
+					 EVEDBInvTypeAttributeCategory *category = attributeCategories[@(attributeCategory.categoryID)];
 					 if (!category) {
 						 category = [[EVEDBInvTypeAttributeCategory alloc] initWithStatement:stmt];
-						 [_attributeCategories addObject:category];
+						 attributeCategories[@(category.categoryID)] = category;
 					 }
 					 if (attributeType.published)
 						 [category.publishedAttributes addObject:typeAttribute];
@@ -353,6 +434,45 @@
 					 _attributesDictionary[@(attributeType.attributeID)] = typeAttribute;
 				 }];
 	
+	EVEDBInvTypeAttributeCategory *category = attributeCategories[@(9)];
+	if (!category) {
+		category = [EVEDBInvTypeAttributeCategory dgmAttributeCategoryWithAttributeCategoryID:9 error:nil];
+		attributeCategories[@(9)] = category;
+	}
+	
+	EVEDBDgmTypeAttribute* typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 4;
+	typeAttribute.value = self.mass;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 38;
+	typeAttribute.value = self.capacity;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 161;
+	typeAttribute.value = self.volume;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	typeAttribute = [EVEDBDgmTypeAttribute new];
+	typeAttribute.typeID = self.typeID;
+	typeAttribute.attributeID = 162;
+	typeAttribute.value = self.radius;
+	[category.publishedAttributes addObject:typeAttribute];
+
+	if (self.raceID) {
+		typeAttribute = [EVEDBDgmTypeAttribute new];
+		typeAttribute.typeID = self.typeID;
+		typeAttribute.attributeID = 195;
+		typeAttribute.value = self.raceID;
+		[category.publishedAttributes addObject:typeAttribute];
+	}
+	
+	_attributeCategories = [NSMutableArray arrayWithArray:[attributeCategories allValues]];
 	[_attributeCategories sortUsingSelector:@selector(compare:)];
 }
 
@@ -372,17 +492,26 @@
 				 }];
 }
 
-- (void) loadCertificateRecommendations {
+- (void) loadMasteries {
 	EVEDBDatabase *database = [EVEDBDatabase sharedDatabase];
 	if (!database)
 		return;
-	_certificateRecommendations = [[NSMutableArray alloc] init];
-	
-	[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM crtRecommendations WHERE shipTypeID=%d;", self.typeID]
+	NSMutableArray* masteries = [NSMutableArray new];
+	for (int i = 0; i <= 4; i++)
+		[masteries addObject:[NSMutableArray new]];
+	__block BOOL empty = YES;
+	[database execSQLRequest:[NSString stringWithFormat:@"SELECT * FROM certMasteries WHERE typeID=%d;", self.typeID]
 				 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
-					 EVEDBCrtRecommendation* recommendation = [[EVEDBCrtRecommendation alloc] initWithStatement:stmt];
-					 [_certificateRecommendations addObject:recommendation];
+					 EVEDBCertMastery* mastery = [[EVEDBCertMastery alloc] initWithStatement:stmt];
+					 if (mastery.masteryLevel >= 0 && mastery.masteryLevel <= 4) {
+						 [masteries[mastery.masteryLevel] addObject:mastery];
+						 empty = NO;
+					 }
 				 }];
+	for (NSMutableArray* array in masteries)
+		[array sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"certificate.name" ascending:YES]]];
+	
+	_masteries = empty ? (NSArray*) [NSNull null] : masteries;
 }
 
 @end
@@ -390,18 +519,31 @@
 @implementation EVEDBInvTypeRequiredSkill
 
 - (BOOL) isEqual:(id)object {
-	return [object isKindOfClass:[self class]] && self.typeID == [object typeID] && self.requiredLevel == [object requiredLevel];
+	return [object isKindOfClass:[self class]] && self.hash == [object hash];
 }
 
-- (float) requiredSP {
-	if (_requiredSP == 0.0 && self.requiredLevel > 0)
-		_requiredSP = [self skillPointsAtLevel:self.requiredLevel];
-	return _requiredSP;
+- (NSUInteger) hash {
+	NSNumber* hash = objc_getAssociatedObject(self, @"hash");
+	if (!hash) {
+		int32_t data[] = {self.typeID, self.requiredLevel};
+		NSUInteger hash = [[NSData dataWithBytes:data length:sizeof(data)] hash];
+		objc_setAssociatedObject(self, @"hash", @(hash), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+		return hash;
+	}
+	else
+		return [hash unsignedIntegerValue];
 }
 
-- (void) setRequiredLevel:(NSInteger)value {
+- (float) requiredSkillPoints {
+	if (_requiredSkillPoints == 0.0 && self.requiredLevel > 0)
+		_requiredSkillPoints = [self skillPointsAtLevel:self.requiredLevel];
+	return _requiredSkillPoints;
+}
+
+- (void) setRequiredLevel:(int32_t)value {
+	objc_setAssociatedObject(self, @"hash", nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	if (_requiredLevel != value)
-		_requiredSP = 0.0;
+		_requiredSkillPoints = 0.0;
 	_requiredLevel = value;
 }
 

@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVESkillTreeRequiredAttributes : NSObject
+@interface EVESkillTreeRequiredAttributes : NSObject<NSCoding>
 @property (nonatomic) EVECharacterAttribute primaryAttribute;
 @property (nonatomic) EVECharacterAttribute secondaryAttribute;
 @end
 
 
-@interface EVESkillTreeRequiredSkillsItem : NSObject
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger skillLevel;
+@interface EVESkillTreeRequiredSkillsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t skillLevel;
 
 + (id) skillTreeRequiredSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -25,9 +25,9 @@
 @end
 
 
-@interface EVESkillTreeSkillBonusCollectionItem : NSObject
+@interface EVESkillTreeSkillBonusCollectionItem : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *bonusType;
-@property (nonatomic) NSInteger bonusValue;
+@property (nonatomic) int32_t bonusValue;
 
 + (id) skillTreeSkillBonusCollectionItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -36,8 +36,8 @@
 
 
 
-@interface EVESkillTreeSkillGroupsItem : NSObject
-@property (nonatomic) NSInteger groupID;
+@interface EVESkillTreeSkillGroupsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t groupID;
 @property (nonatomic, copy) NSString *groupName;
 @property (nonatomic, strong) NSArray *skills;
 
@@ -47,12 +47,12 @@
 @end
 
 
-@interface EVESkillTreeSkillsItem : NSObject
-@property (nonatomic) NSInteger groupID;
-@property (nonatomic) NSInteger typeID;
+@interface EVESkillTreeSkillsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t groupID;
+@property (nonatomic) int32_t typeID;
 @property (nonatomic, copy) NSString *typeName;
 @property (nonatomic, copy) NSString *description;
-@property (nonatomic) NSInteger rank;
+@property (nonatomic) int32_t rank;
 @property (nonatomic, strong) NSArray *requiredSkills;
 @property (nonatomic, strong) EVESkillTreeRequiredAttributes *requiredAttributes;
 @property (nonatomic, strong) NSArray *skillBonusCollection;	
@@ -67,6 +67,6 @@
 @interface EVESkillTree : EVERequest
 @property (nonatomic, strong) NSArray *skillGroups;
 
-+ (id) skillTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) skillTreeWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

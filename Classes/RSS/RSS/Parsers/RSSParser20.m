@@ -63,7 +63,7 @@
 		if ([object respondsToSelector:@selector(setEnclosure:)])
 			[object setEnclosure:enclosure];
 		enclosure.url = [NSURL URLWithString:[attributeDict valueForKey:@"url"]];
-		enclosure.length = [[attributeDict valueForKey:@"length"] integerValue];
+		enclosure.length = [[attributeDict valueForKey:@"length"] intValue];
 		enclosure.type = [attributeDict valueForKey:@"type"];
 	}
 }

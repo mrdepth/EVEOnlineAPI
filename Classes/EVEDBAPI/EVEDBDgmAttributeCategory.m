@@ -20,11 +20,11 @@
 	return map;
 }
 
-+ (id) dgmAttributeCategoryWithAttributeCategoryID: (NSInteger)attributeCategoryID error:(NSError **)errorPtr {
-	return [[EVEDBDgmAttributeCategory alloc] initWithAttributeCategoryID:attributeCategoryID error:errorPtr];
++ (id) dgmAttributeCategoryWithAttributeCategoryID: (int32_t)attributeCategoryID error:(NSError **)errorPtr {
+	return [[self alloc] initWithAttributeCategoryID:attributeCategoryID error:errorPtr];
 }
 
-- (id) initWithAttributeCategoryID: (NSInteger)attributeCategoryID error:(NSError **)errorPtr {
+- (id) initWithAttributeCategoryID: (int32_t)attributeCategoryID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from dgmAttributeCategories WHERE categoryID=%d;", attributeCategoryID]
 								   error:errorPtr]) {
 	}

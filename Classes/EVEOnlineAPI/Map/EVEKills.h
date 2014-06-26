@@ -9,11 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEKillsItem : NSObject
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger shipKills;
-@property (nonatomic) NSInteger factionKills;
-@property (nonatomic) NSInteger podKills;
+@interface EVEKillsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t shipKills;
+@property (nonatomic) int32_t factionKills;
+@property (nonatomic) int32_t podKills;
 
 + (id) killsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -24,6 +24,6 @@
 @interface EVEKills : EVERequest
 @property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) killsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) killsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

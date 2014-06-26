@@ -19,18 +19,18 @@
 @implementation EVEDBInvGroup(Private)
 
 - (void) setValuesWithDictionary:(NSDictionary *)dictionary {
-	self.groupID = [[dictionary valueForKey:@"groupID"] integerValue];
-	self.categoryID = [[dictionary valueForKey:@"categoryID"] integerValue];
+	self.groupID = [[dictionary valueForKey:@"groupID"] intValue];
+	self.categoryID = [[dictionary valueForKey:@"categoryID"] intValue];
 	self.groupName = [dictionary valueForKey:@"groupName"];
 	self.description = [dictionary valueForKey:@"description"];
-	self.iconID = [[dictionary valueForKey:@"iconID"] integerValue];
-	self.useBasePrice = [[dictionary valueForKey:@"useBasePrice"] integerValue];
-	self.allowManufacture = [[dictionary valueForKey:@"allowManufacture"] integerValue];
-	self.allowRecycler = [[dictionary valueForKey:@"allowRecycler"] integerValue];
-	self.anchored = [[dictionary valueForKey:@"anchored"] integerValue];
-	self.anchorable = [[dictionary valueForKey:@"anchorable"] integerValue];
-	self.fittableNonSingleton = [[dictionary valueForKey:@"fittableNonSingleton"] integerValue];
-	self.published = [[dictionary valueForKey:@"published"] integerValue];
+	self.iconID = [[dictionary valueForKey:@"iconID"] intValue];
+	self.useBasePrice = [[dictionary valueForKey:@"useBasePrice"] intValue];
+	self.allowManufacture = [[dictionary valueForKey:@"allowManufacture"] intValue];
+	self.allowRecycler = [[dictionary valueForKey:@"allowRecycler"] intValue];
+	self.anchored = [[dictionary valueForKey:@"anchored"] intValue];
+	self.anchorable = [[dictionary valueForKey:@"anchorable"] intValue];
+	self.fittableNonSingleton = [[dictionary valueForKey:@"fittableNonSingleton"] intValue];
+	self.published = [[dictionary valueForKey:@"published"] intValue];
 }
 
 - (void) didReceiveRecord: (NSDictionary*) record {
@@ -61,11 +61,11 @@
 	return map;
 }
 
-+ (id) invGroupWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr {
++ (id) invGroupWithGroupID: (int32_t)aGroupID error:(NSError **)errorPtr {
 	return [[EVEDBInvGroup alloc] initWithGroupID:aGroupID error:errorPtr];
 }
 
-- (id) initWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr {
+- (id) initWithGroupID: (int32_t)aGroupID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from invGroups WHERE groupID=%d;", aGroupID]
 								   error:errorPtr]) {
 	}
@@ -81,28 +81,28 @@
 
 - (EVEDBInvCategory*) category {
 	if (self.categoryID == 0)
-		return NULL;
+		return nil;
 	if (!_category) {
 		_category = [EVEDBInvCategory invCategoryWithCategoryID:self.categoryID error:nil];
 		if (!_category)
 			_category = (EVEDBInvCategory*) [NSNull null];
 	}
 	if ((NSNull*) _category == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _category;
 }
 
 - (EVEDBEveIcon*) icon {
 	if (self.iconID == 0)
-		return NULL;
+		return nil;
 	if (!_icon) {
 		_icon = [EVEDBEveIcon eveIconWithIconID:self.iconID error:nil];
 		if (!_icon)
 			_icon = (EVEDBEveIcon*) [NSNull null];
 	}
 	if ((NSNull*) _icon == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _icon;
 }

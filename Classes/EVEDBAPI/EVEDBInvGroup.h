@@ -12,12 +12,12 @@
 @class EVEDBEveIcon;
 @interface EVEDBInvGroup : EVEDBObject
 
-@property (nonatomic) NSInteger groupID;
-@property (nonatomic) NSInteger categoryID;
+@property (nonatomic) int32_t groupID;
+@property (nonatomic) int32_t categoryID;
 @property (nonatomic, strong) EVEDBInvCategory *category;
 @property (nonatomic, strong) NSString *groupName;
 @property (nonatomic, strong) NSString *description;
-@property (nonatomic) NSInteger iconID;
+@property (nonatomic) int32_t iconID;
 @property (nonatomic, strong) EVEDBEveIcon *icon;
 @property (nonatomic) BOOL useBasePrice;
 @property (nonatomic) BOOL allowManufacture;
@@ -27,7 +27,7 @@
 @property (nonatomic) BOOL fittableNonSingleton;
 @property (nonatomic) BOOL published;
 
-+ (id) invGroupWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr;
-- (id) initWithGroupID: (NSInteger)aGroupID error:(NSError **)errorPtr;
++ (id) invGroupWithGroupID: (int32_t)aGroupID error:(NSError **)errorPtr;
+- (id) initWithGroupID: (int32_t)aGroupID error:(NSError **)errorPtr;
 
 @end

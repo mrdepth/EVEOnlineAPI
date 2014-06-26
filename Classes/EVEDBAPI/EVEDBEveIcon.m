@@ -24,11 +24,11 @@
 	return map;
 }
 
-+ (id) eveIconWithIconID: (NSInteger)iconID error:(NSError **)errorPtr {
++ (id) eveIconWithIconID: (int32_t)iconID error:(NSError **)errorPtr {
 	return [[EVEDBEveIcon alloc] initWithIconID:iconID error:errorPtr];
 }
 
-- (id) initWithIconID: (NSInteger)iconID error:(NSError **)errorPtr {
+- (id) initWithIconID: (int32_t)iconID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from eveIcons WHERE iconID=%d;", iconID]
 								   error:errorPtr]) {
 	}
@@ -45,9 +45,11 @@
 			else
 				_iconImageName = [NSString stringWithFormat:@"Icons/icon%@.png", self.iconFile];
 		}
+		if (![[NSBundle mainBundle] pathForResource:_iconImageName ofType:nil])
+			_iconImageName = (NSString*) [NSNull null];
 	}
 	if ((NSNull*) _iconImageName == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _iconImageName;
 }

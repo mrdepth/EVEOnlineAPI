@@ -36,11 +36,11 @@
 	return map;
 }
 
-+ (id) staStationWithStationID: (NSInteger)stationID error:(NSError **)errorPtr {
++ (id) staStationWithStationID: (int32_t)stationID error:(NSError **)errorPtr {
 	return [[EVEDBStaStation alloc] initWithStationID:stationID error:errorPtr];
 }
 
-- (id) initWithStationID: (NSInteger)stationID error:(NSError **)errorPtr {
+- (id) initWithStationID: (int32_t)stationID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from staStations WHERE stationID=%d;", stationID]
 								   error:errorPtr]) {
 	}
@@ -49,42 +49,42 @@
 
 - (EVEDBMapRegion*) region {
 	if (self.regionID == 0)
-		return NULL;
+		return nil;
 	if (!_region) {
 		_region = [EVEDBMapRegion mapRegionWithRegionID:self.regionID error:nil];
 		if (!_region)
 			_region = (EVEDBMapRegion*) [NSNull null];
 	}
 	if ((NSNull*) _region == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _region;
 }
 
 - (EVEDBMapConstellation*) constellation {
 	if (self.constellationID == 0)
-		return NULL;
+		return nil;
 	if (!_constellation) {
 		_constellation = [EVEDBMapConstellation mapConstellationWithConstellationID:self.constellationID error:nil];
 		if (!_constellation)
 			_constellation = (EVEDBMapConstellation*) [NSNull null];
 	}
 	if ((NSNull*) _constellation == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _constellation;
 }
 
 - (EVEDBMapSolarSystem*) solarSystem {
 	if (self.solarSystemID == 0)
-		return NULL;
+		return nil;
 	if (!_solarSystem) {
 		_solarSystem = [EVEDBMapSolarSystem mapSolarSystemWithSolarSystemID:self.solarSystemID error:nil];
 		if (!_solarSystem)
 			_solarSystem = (EVEDBMapSolarSystem*) [NSNull null];
 	}
 	if ((NSNull*) _solarSystem == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _solarSystem;
 }

@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarTopStatsCharactersItem : NSObject
-@property (nonatomic) NSInteger characterID;
+@interface EVEFacWarTopStatsCharactersItem : NSObject<NSCoding>
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *characterName;
-@property (nonatomic) NSInteger kills;
+@property (nonatomic) int32_t kills;
 
 + (id) facWarTopStatsCharactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -20,10 +20,10 @@
 @end
 
 
-@interface EVEFacWarTopStatsCorporationsItem : NSObject
-@property (nonatomic) NSInteger corporationID;
+@interface EVEFacWarTopStatsCorporationsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *corporationName;
-@property (nonatomic) NSInteger kills;
+@property (nonatomic) int32_t kills;
 
 + (id) facWarTopStatsCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -31,10 +31,10 @@
 @end
 
 
-@interface EVEFacWarTopStatsFactionsItem : NSObject
-@property (nonatomic) NSInteger factionID;
+@interface EVEFacWarTopStatsFactionsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t factionID;
 @property (nonatomic, copy) NSString *factionName;
-@property (nonatomic) NSInteger kills;
+@property (nonatomic) int32_t kills;
 
 + (id) facWarTopStatsFactionsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -42,7 +42,7 @@
 @end
 
 
-@interface EVEFacWarTopStatsSection : NSObject
+@interface EVEFacWarTopStatsSection : NSObject<NSCoding>
 @property (nonatomic, strong) NSArray *killsYesterday;
 @property (nonatomic, strong) NSArray *killsLastWeek;
 @property (nonatomic, strong) NSArray *killsTotal;
@@ -58,6 +58,6 @@
 @property (nonatomic, strong) EVEFacWarTopStatsSection *corporations;
 @property (nonatomic, strong) EVEFacWarTopStatsSection *factions;
 
-+ (id) facWarTopStatsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) facWarTopStatsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

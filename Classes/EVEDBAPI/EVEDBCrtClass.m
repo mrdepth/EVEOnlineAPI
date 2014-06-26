@@ -21,11 +21,11 @@
 	return map;
 }
 
-+ (id) crtClassWithClassID: (NSInteger)classID error:(NSError **)errorPtr {
++ (id) crtClassWithClassID: (int32_t)classID error:(NSError **)errorPtr {
 	return [[EVEDBCrtClass alloc] initWithClassID:classID error:errorPtr];
 }
 
-- (id) initWithClassID: (NSInteger)classID error:(NSError **)errorPtr {
+- (id) initWithClassID: (int32_t)classID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtClasses WHERE classID=%d;", classID]
 								   error:errorPtr]) {
 	}

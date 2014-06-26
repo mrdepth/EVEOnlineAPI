@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEContractsItem : NSObject
-@property (nonatomic) long long contractID;
-@property (nonatomic) NSInteger issuerID, issuerCorpID, assigneeID, acceptorID, startStationID, endStationID, forCorp, numDays;
+@interface EVEContractsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t contractID;
+@property (nonatomic) int32_t issuerID, issuerCorpID, assigneeID, acceptorID, forCorp;
+@property (nonatomic) int32_t startStationID, endStationID, numDays;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic) EVEContractType type;
 @property (nonatomic) EVEContractStatus status;
@@ -31,6 +32,6 @@
 @interface EVEContracts : EVERequest
 @property (nonatomic, strong) NSArray *contractList;
 
-+ (id) contractsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) contractsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

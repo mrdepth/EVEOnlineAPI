@@ -97,28 +97,28 @@ typedef enum {
 
 @interface EVEKillNetLogItem : NSObject
 @property (nonatomic, copy) NSString* typeName;
-@property (nonatomic, assign) NSInteger typeID;
-@property (nonatomic, assign) NSInteger itemSlot;
-@property (nonatomic, assign) NSInteger qtyDropped;
-@property (nonatomic, assign) NSInteger qtyDestroyed;
+@property (nonatomic, assign) int32_t typeID;
+@property (nonatomic, assign) int32_t itemSlot;
+@property (nonatomic, assign) int32_t qtyDropped;
+@property (nonatomic, assign) int32_t qtyDestroyed;
 
 - (id) initWithDictinary:(NSDictionary*) dictionary;
 @end
 
 @interface EVEKillNetLogInvolved : NSObject
-@property (nonatomic, assign) NSInteger characterID;
+@property (nonatomic, assign) int32_t characterID;
 @property (nonatomic, copy) NSString* characterName;
-@property (nonatomic, assign) NSInteger corporationID;
+@property (nonatomic, assign) int32_t corporationID;
 @property (nonatomic, copy) NSString* corporationName;
-@property (nonatomic, assign) NSInteger allianceID;
+@property (nonatomic, assign) int32_t allianceID;
 @property (nonatomic, copy) NSString* allianceName;
-@property (nonatomic, assign) NSInteger factionID;
+@property (nonatomic, assign) int32_t factionID;
 @property (nonatomic, copy) NSString* factionName;
 @property (nonatomic, assign) float securityStatus;
 @property (nonatomic, assign) float damageDone;
 @property (nonatomic, assign) BOOL finalBlow;
-@property (nonatomic, assign) NSInteger weaponTypeID;
-@property (nonatomic, assign) NSInteger shipTypeID;
+@property (nonatomic, assign) int32_t weaponTypeID;
+@property (nonatomic, assign) int32_t shipTypeID;
 
 - (id) initWithDictinary:(NSDictionary*) dictionary;
 @end
@@ -126,28 +126,28 @@ typedef enum {
 @interface EVEKillNetLogEntry : NSObject
 @property (nonatomic, strong) NSURL* url;
 @property (nonatomic, strong) NSDate* timestamp;
-@property (nonatomic, assign) NSInteger internalID;
-@property (nonatomic, assign) NSInteger externalID;
+@property (nonatomic, assign) int32_t internalID;
+@property (nonatomic, assign) int32_t externalID;
 @property (nonatomic, copy) NSString* victimName;
-@property (nonatomic, assign) NSInteger victimExternalID;
+@property (nonatomic, assign) int32_t victimExternalID;
 @property (nonatomic, copy) NSString* victimCorpName;
 @property (nonatomic, copy) NSString* victimAllianceName;
 @property (nonatomic, copy) NSString* victimShipName;
 @property (nonatomic, copy) NSString* victimShipClass;
-@property (nonatomic, assign) NSInteger victimShipID;
+@property (nonatomic, assign) int32_t victimShipID;
 @property (nonatomic, copy) NSString* fbPilotName;
 @property (nonatomic, copy) NSString* fbCorpName;
 @property (nonatomic, copy) NSString* fbAllianceName;
-@property (nonatomic, assign) NSInteger involvedPartyCount;
+@property (nonatomic, assign) int32_t involvedPartyCount;
 @property (nonatomic, copy) NSString* solarSystemName;
 @property (nonatomic, assign) float solarSystemSecurity;
 @property (nonatomic, copy) NSString* regionName;
-@property (nonatomic, assign) long long isk;
+@property (nonatomic, assign) int64_t isk;
 @property (nonatomic, strong) NSArray* involved;
 @property (nonatomic, strong) NSArray* destroyedItems;
 @property (nonatomic, strong) NSArray* droppedItems;
-@property (nonatomic, assign) NSInteger eveKillID;
-@property (nonatomic, assign) NSInteger eveKillExternalID;
+@property (nonatomic, assign) int32_t eveKillID;
+@property (nonatomic, assign) int32_t eveKillExternalID;
 @property (nonatomic, copy) NSString* corpName;
 @property (nonatomic, copy) NSString* allianceName;
 @property (nonatomic, copy) NSString* factionName;
@@ -161,7 +161,7 @@ typedef enum {
 @interface EVEKillNetLog : EVECachedURLRequest
 @property (nonatomic, strong) NSArray* killLog;
 
-+ (id) logWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithFilter:(NSDictionary*) filter mask:(NSInteger) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) logWithFilter:(NSDictionary*) filter mask:(int32_t) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithFilter:(NSDictionary*) filter mask:(int32_t) mask error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

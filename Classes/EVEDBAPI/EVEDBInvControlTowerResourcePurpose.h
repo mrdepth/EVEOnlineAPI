@@ -10,10 +10,10 @@
 
 
 @interface EVEDBInvControlTowerResourcePurpose : EVEDBObject
-@property (nonatomic) NSInteger purposeID;
+@property (nonatomic) int32_t purposeID;
 @property (nonatomic, strong) NSString *purposeText;
 
-+ (id) invControlTowerResourcePurposeWithPurposeID: (NSInteger)aPurposeID error:(NSError **)errorPtr;
-- (id) initWithPurposeID: (NSInteger)aPurposeID error:(NSError **)errorPtr;
++ (id) invControlTowerResourcePurposeWithPurposeID: (int32_t)aPurposeID error:(NSError **)errorPtr;
+- (id) initWithPurposeID: (int32_t)aPurposeID error:(NSError **)errorPtr;
 
 @end

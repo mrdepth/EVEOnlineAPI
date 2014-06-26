@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECertificateTreeItem : NSObject
-@property (nonatomic) NSInteger categoryID;
+@interface EVECertificateTreeItem : NSObject<NSCoding>
+@property (nonatomic) int32_t categoryID;
 @property (nonatomic, copy) NSString *categoryName;
 @property (nonatomic, strong) NSArray *classes;
 
@@ -20,8 +20,8 @@
 @end
 
 
-@interface EVECertificateTreeClassesItem : NSObject
-@property (nonatomic) NSInteger classID;
+@interface EVECertificateTreeClassesItem : NSObject<NSCoding>
+@property (nonatomic) int32_t classID;
 @property (nonatomic, copy) NSString *className;
 @property (nonatomic, strong) NSArray *certificates;
 
@@ -31,10 +31,10 @@
 @end
 
 
-@interface EVECertificateTreeCertificatesItem : NSObject
-@property (nonatomic) NSInteger certificateID;
-@property (nonatomic) NSInteger grade;
-@property (nonatomic) NSInteger corporationID;
+@interface EVECertificateTreeCertificatesItem : NSObject<NSCoding>
+@property (nonatomic) int32_t certificateID;
+@property (nonatomic) int32_t grade;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *description;
 @property (nonatomic, strong) NSArray *requiredSkills;
 @property (nonatomic, strong) NSArray *requiredCertificates;
@@ -45,9 +45,9 @@
 @end
 
 
-@interface EVECertificateTreeRequiredSkillsItem : NSObject
-@property (nonatomic) NSInteger typeID;
-@property (nonatomic) NSInteger skillLevel;
+@interface EVECertificateTreeRequiredSkillsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int32_t skillLevel;
 
 + (id) certificateTreeRequiredSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -55,9 +55,9 @@
 @end
 
 
-@interface EVECertificateTreeRequiredCertificatesItem : NSObject
-@property (nonatomic) NSInteger certificateID;
-@property (nonatomic) NSInteger grade;
+@interface EVECertificateTreeRequiredCertificatesItem : NSObject<NSCoding>
+@property (nonatomic) int32_t certificateID;
+@property (nonatomic) int32_t grade;
 
 + (id) certificateTreeRequiredCertificatesItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -68,6 +68,6 @@
 @interface EVECertificateTree : EVERequest
 @property (nonatomic, strong) NSArray *categories;
 
-+ (id) certificateTreeWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) certificateTreeWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

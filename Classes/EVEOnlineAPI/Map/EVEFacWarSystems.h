@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEFacWarSystemsItem : NSObject
-@property (nonatomic) NSInteger solarSystemID;
+@interface EVEFacWarSystemsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t solarSystemID;
 @property (nonatomic, copy) NSString *solarSystemName;
-@property (nonatomic) NSInteger occupyingFactionID;
+@property (nonatomic) int32_t occupyingFactionID;
 @property (nonatomic, copy) NSString *occupyingFactionName;
 @property (nonatomic) BOOL contested;
 
@@ -25,6 +25,6 @@
 @interface EVEFacWarSystems : EVERequest
 @property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) facWarSystemsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) facWarSystemsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

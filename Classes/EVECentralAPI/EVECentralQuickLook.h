@@ -9,20 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "EVECentralRequest.h"
 
-@class EVEDBMapRegion;
-@class EVEDBStaStation;
-@interface EVECentralQuickLookOrder: NSObject
-@property (nonatomic) NSInteger orderID;
-@property (nonatomic) NSInteger regionID;
-@property (nonatomic, strong) EVEDBMapRegion *region;
-@property (nonatomic) NSInteger stationID;
-@property (nonatomic, strong) EVEDBStaStation *station;
+@interface EVECentralQuickLookOrder: NSObject<NSCoding>
+@property (nonatomic) int32_t orderID;
+@property (nonatomic) int32_t regionID;
+@property (nonatomic) int32_t stationID;
 @property (nonatomic, copy) NSString *stationName;
 @property (nonatomic) float security;
-@property (nonatomic) NSInteger range;
+@property (nonatomic) int32_t range;
 @property (nonatomic) float price;
-@property (nonatomic) NSInteger volRemain;
-@property (nonatomic) NSInteger minVolume;
+@property (nonatomic) int32_t volRemain;
+@property (nonatomic) int32_t minVolume;
 @property (nonatomic, strong) NSDate *expires;
 @property (nonatomic, strong) NSDate *reportedTime;
 
@@ -32,14 +28,14 @@
 @end
 
 @interface EVECentralQuickLook : EVECentralRequest
-@property (nonatomic) NSInteger typeID;
+@property (nonatomic) int32_t typeID;
 @property (nonatomic, copy) NSString *typeName;
 @property (nonatomic, strong) NSMutableArray *regions;
-@property (nonatomic) NSInteger hours;
-@property (nonatomic) NSInteger minQ;
+@property (nonatomic) int32_t hours;
+@property (nonatomic) int32_t minQ;
 @property (nonatomic, strong) NSMutableArray *sellOrders;
 @property (nonatomic, strong) NSMutableArray *buyOrders;
 
-+ (id) quickLookWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithTypeID: (NSInteger) typeID regionIDs: (NSArray*) regionIDs systemID: (NSInteger) systemID hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

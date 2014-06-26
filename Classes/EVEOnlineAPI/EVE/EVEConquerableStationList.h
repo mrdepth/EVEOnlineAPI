@@ -9,12 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEConquerableStationListItem : NSObject
-@property (nonatomic) NSInteger stationID;
+@interface EVEConquerableStationListItem : NSObject<NSCoding>
+@property (nonatomic) int32_t stationID;
 @property (nonatomic, copy) NSString *stationName;
-@property (nonatomic) NSInteger stationTypeID;
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t stationTypeID;
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 
 + (id) conquerableStationListItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -26,6 +26,6 @@
 @interface EVEConquerableStationList : EVERequest
 @property (nonatomic, strong) NSArray *outposts;
 
-+ (id) conquerableStationListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) conquerableStationListWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

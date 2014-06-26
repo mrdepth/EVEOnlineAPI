@@ -12,12 +12,12 @@
 
 @implementation RSS
 
-+ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
++ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[RSS alloc] initWithContentsOfURL:url error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	if (self = [super initWithURL:url cacheStyle:(EVERequestCacheStyle)EVERequestCacheStyleModifiedShort error:errorPtr progressHandler:progressHandler]) {
+- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	if (self = [super initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy error:errorPtr progressHandler:progressHandler]) {
 	}
 	return self;
 }
@@ -34,6 +34,5 @@
 	self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:RSS_CACHE_TIME];
 	return parserError;
 }
-
 
 @end

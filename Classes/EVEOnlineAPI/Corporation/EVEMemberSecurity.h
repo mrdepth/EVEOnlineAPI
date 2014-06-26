@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEMemberSecurityMember : NSObject
-@property (nonatomic) NSInteger characterID;
+@interface EVEMemberSecurityMember : NSObject<NSCoding>
+@property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *roles;
 @property (nonatomic, strong) NSArray *grantableRoles;
@@ -28,8 +28,8 @@
 @end
 
 
-@interface EVEMemberSecurityRoleItem : NSObject
-@property (nonatomic) NSInteger roleID;
+@interface EVEMemberSecurityRoleItem : NSObject<NSCoding>
+@property (nonatomic) int32_t roleID;
 @property (nonatomic, copy) NSString *roleName;
 
 + (id) memberSecurityRoleItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -38,8 +38,8 @@
 @end
 
 
-@interface EVEMemberSecurityTitleItem : NSObject
-@property (nonatomic) NSInteger titleID;
+@interface EVEMemberSecurityTitleItem : NSObject<NSCoding>
+@property (nonatomic) int32_t titleID;
 @property (nonatomic, copy) NSString *titleName;
 
 + (id) memberSecurityTitleItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -51,7 +51,7 @@
 @interface EVEMemberSecurity : EVERequest
 @property (nonatomic, strong) NSArray *members;
 
-+ (id) memberSecurityWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) memberSecurityWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

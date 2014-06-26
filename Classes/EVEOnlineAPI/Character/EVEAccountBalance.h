@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEAccountBalanceItem : NSObject
-@property (nonatomic) NSInteger accountID;
-@property (nonatomic) NSInteger accountKey;
+@interface EVEAccountBalanceItem : NSObject<NSCoding>
+@property (nonatomic) int32_t accountID;
+@property (nonatomic) int32_t accountKey;
 @property (nonatomic) float balance;
 
 + (id) accountBalanceItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -23,7 +23,7 @@
 @interface EVEAccountBalance : EVERequest
 @property (nonatomic, strong) NSArray *accounts;
 
-+ (id) accountBalanceWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) accountBalanceWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

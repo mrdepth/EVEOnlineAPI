@@ -19,10 +19,35 @@
 	if (self = [super init]) {
 		self.name = [attributeDict valueForKey:@"name"];
 		self.shortName = [attributeDict valueForKey:@"shortName"];
-		self.allianceID = [[attributeDict valueForKey:@"allianceID"] integerValue];
-		self.executorCorpID = [[attributeDict valueForKey:@"executorCorpID"] integerValue];
-		self.memberCount = [[attributeDict valueForKey:@"memberCount"] integerValue];
+		self.allianceID = [[attributeDict valueForKey:@"allianceID"] intValue];
+		self.executorCorpID = [[attributeDict valueForKey:@"executorCorpID"] intValue];
+		self.memberCount = [[attributeDict valueForKey:@"memberCount"] intValue];
 		self.startDate = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"startDate"]];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeObject:self.name forKey:@"name"];
+	[aCoder encodeObject:self.shortName forKey:@"shortName"];
+	[aCoder encodeInt32:self.allianceID forKey:@"allianceID"];
+	[aCoder encodeInt32:self.executorCorpID forKey:@"executorCorpID"];
+	[aCoder encodeInt32:self.memberCount forKey:@"memberCount"];
+	[aCoder encodeObject:self.startDate forKey:@"startDate"];
+	[aCoder encodeObject:self.memberCorporations forKey:@"memberCorporations"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.name = [aDecoder decodeObjectForKey:@"name"];
+		self.shortName = [aDecoder decodeObjectForKey:@"shortName"];
+		self.allianceID = [aDecoder decodeInt32ForKey:@"allianceID"];
+		self.executorCorpID = [aDecoder decodeInt32ForKey:@"executorCorpID"];
+		self.memberCount = [aDecoder decodeInt32ForKey:@"memberCount"];
+		self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
+		self.memberCorporations = [aDecoder decodeObjectForKey:@"memberCorporations"];
 	}
 	return self;
 }
@@ -45,6 +70,21 @@
 	return self;
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
+	[aCoder encodeObject:self.startDate forKey:@"startDate"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
+		self.startDate = [aDecoder decodeObjectForKey:@"startDate"];
+	}
+	return self;
+}
+
 @end
 
 
@@ -54,13 +94,13 @@
 	return EVEApiKeyTypeNone;
 }
 
-+ (id) allianceListWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEAllianceList alloc] initWithError:errorPtr progressHandler:progressHandler];
++ (id) allianceListWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEAllianceList alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/AllianceList.xml.aspx", EVEOnlineAPIHost]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -113,4 +153,19 @@
 	
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.alliances forKey:@"alliances"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.alliances = [aDecoder decodeObjectForKey:@"alliances"];
+	}
+	return self;
+}
+
 @end

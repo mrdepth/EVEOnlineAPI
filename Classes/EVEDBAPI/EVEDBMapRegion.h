@@ -10,12 +10,12 @@
 
 
 @interface EVEDBMapRegion : EVEDBObject
-@property(nonatomic) NSInteger regionID;
+@property(nonatomic) int32_t regionID;
 @property(nonatomic, strong) NSString *regionName;
-@property(nonatomic) NSInteger factionID;
+@property(nonatomic) int32_t factionID;
 @property(nonatomic) float radius;
 
 
-+ (id) mapRegionWithRegionID: (NSInteger)aRegionID error:(NSError **)errorPtr;
-- (id) initWithRegionID: (NSInteger)aRegionID error:(NSError **)errorPtr;
++ (id) mapRegionWithRegionID: (int32_t)aRegionID error:(NSError **)errorPtr;
+- (id) initWithRegionID: (int32_t)aRegionID error:(NSError **)errorPtr;
 @end

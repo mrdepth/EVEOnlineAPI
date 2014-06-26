@@ -10,7 +10,7 @@
 #import "RSSImage.h"
 #import "RSSItem.h"
 
-@interface RSSFeed : NSObject
+@interface RSSFeed : NSObject<NSCoding>
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *description;
 @property (nonatomic, copy) NSString *copyright;

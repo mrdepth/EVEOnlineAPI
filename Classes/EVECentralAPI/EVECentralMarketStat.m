@@ -14,6 +14,31 @@
 	return [[EVECentralMarketStatTypeStat alloc] init];
 }
 
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeFloat:self.volume forKey:@"volume"];
+	[aCoder encodeFloat:self.avg forKey:@"avg"];
+	[aCoder encodeFloat:self.max forKey:@"max"];
+	[aCoder encodeFloat:self.min forKey:@"min"];
+	[aCoder encodeFloat:self.stddev forKey:@"stddev"];
+	[aCoder encodeFloat:self.median forKey:@"median"];
+	[aCoder encodeFloat:self.percentile forKey:@"percentile"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.volume = [aDecoder decodeFloatForKey:@"volume"];
+		self.avg = [aDecoder decodeFloatForKey:@"avg"];
+		self.max = [aDecoder decodeFloatForKey:@"max"];
+		self.min = [aDecoder decodeFloatForKey:@"min"];
+		self.stddev = [aDecoder decodeFloatForKey:@"stddev"];
+		self.median = [aDecoder decodeFloatForKey:@"median"];
+		self.percentile = [aDecoder decodeFloatForKey:@"percentile"];
+	}
+	return self;
+}
+
 @end
 
 @implementation EVECentralMarketStatType
@@ -24,7 +49,29 @@
 
 - (id) initWithDictionary: (NSDictionary*) dictionary {
 	if (self = [super init]) {
-		self.typeID = [[dictionary valueForKey:@"id"] integerValue];
+		self.typeID = [[dictionary valueForKey:@"id"] intValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	if (self.all)
+		[aCoder encodeObject:self.all forKey:@"all"];
+	if (self.buy)
+		[aCoder encodeObject:self.buy forKey:@"buy"];
+	if (self.sell)
+		[aCoder encodeObject:self.sell forKey:@"sell"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.all = [aDecoder decodeObjectForKey:@"all"];
+		self.buy = [aDecoder decodeObjectForKey:@"buy"];
+		self.sell = [aDecoder decodeObjectForKey:@"sell"];
 	}
 	return self;
 }
@@ -38,21 +85,21 @@
 @property(nonatomic, strong) EVECentralMarketStatType *currentType;
 @property(nonatomic, strong) EVECentralMarketStatTypeStat *currentStat;
 
-- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ;
+- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ;
 
 @end
 
 @implementation EVECentralMarketStat
 
-+ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVECentralMarketStat alloc] initWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ error:errorPtr progressHandler:progressHandler];
++ (id) marketStatWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVECentralMarketStat alloc] initWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/marketstat?%@",
 														EVECentralAPIHost,
 														[self argumentsStringWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ]]]
-											cacheStyle:EVERequestCacheStyleModifiedShort
+											cachePolicy:cachePolicy
 												 error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -106,12 +153,28 @@ didStartElement:(NSString *)elementName
 		self.currentStat.stddev = [self.validText floatValue];
 	else if ([elementName isEqualToString:@"median"])
 		self.currentStat.median = [self.validText floatValue];
-		
+	else if ([elementName isEqualToString:@"percentile"])
+		self.currentStat.percentile = [self.validText floatValue];
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	if  (self.types)
+		[aCoder encodeObject:self.types forKey:@"types"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.types = [aDecoder decodeObjectForKey:@"types"];
+	}
+	return self;
 }
 
 #pragma mark - Private
 
-- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (NSInteger) hours minQ: (NSInteger) minQ {
+- (NSString*) argumentsStringWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ {
 	NSMutableArray *typeIDsArgs = [NSMutableArray array];
 	NSMutableArray *regionIDsArgs = [NSMutableArray array];
 	

@@ -16,10 +16,29 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.contactID = [[attributeDict valueForKey:@"contactID"] integerValue];
+		self.contactID = [[attributeDict valueForKey:@"contactID"] intValue];
 		self.contactName = [attributeDict valueForKey:@"contactName"];
 		self.inWatchlist = [[attributeDict valueForKey:@"inWatchlist"] compare:@"True" options:NSCaseInsensitiveSearch] == NSOrderedSame ? TRUE : FALSE;
 		self.standing = [[attributeDict valueForKey:@"standing"] floatValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.contactID forKey:@"contactID"];
+	[aCoder encodeObject:self.contactName forKey:@"contactName"];
+	[aCoder encodeBool:self.inWatchlist forKey:@"inWatchlist"];
+	[aCoder encodeFloat:self.standing forKey:@"standing"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.contactID = [aDecoder decodeInt32ForKey:@"contactID"];
+		self.contactName = [aDecoder decodeObjectForKey:@"contactName"];
+		self.inWatchlist = [aDecoder decodeBoolForKey:@"inWatchlist"];
+		self.standing = [aDecoder decodeFloatForKey:@"standing"];
 	}
 	return self;
 }
@@ -33,13 +52,13 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) charContactListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVECharContactList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
++ (id) charContactListWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVECharContactList alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/ContactList.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -47,7 +66,7 @@
 }
 
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"contactList"]) {
@@ -66,4 +85,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.contactList forKey:@"contactList"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.contactList = [aDecoder decodeObjectForKey:@"contactList"];
+	}
+	return self;
+}
+
 @end

@@ -10,10 +10,10 @@
 
 @class EVEDBInvType;
 @interface EVEDBInvTypeMaterial : EVEDBObject
-@property (nonatomic) NSInteger typeID;
+@property (nonatomic) int32_t typeID;
 @property (nonatomic, strong) EVEDBInvType* type;
-@property (nonatomic) NSInteger materialTypeID;
+@property (nonatomic) int32_t materialTypeID;
 @property (nonatomic, strong) EVEDBInvType* materialType;
-@property (nonatomic) NSInteger quantity;
+@property (nonatomic) int32_t quantity;
 
 @end

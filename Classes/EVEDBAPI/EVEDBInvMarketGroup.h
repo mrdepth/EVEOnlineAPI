@@ -10,15 +10,15 @@
 
 @class EVEDBEveIcon;
 @interface EVEDBInvMarketGroup : EVEDBObject
-@property (nonatomic) NSInteger marketGroupID;
-@property (nonatomic) NSInteger parentGroupID;
+@property (nonatomic) int32_t marketGroupID;
+@property (nonatomic) int32_t parentGroupID;
 @property (nonatomic, strong) EVEDBInvMarketGroup *parentGroup;
 @property (nonatomic, strong) NSString *marketGroupName;
 @property (nonatomic, strong) NSString *description;
-@property (nonatomic) NSInteger iconID;
+@property (nonatomic) int32_t iconID;
 @property (nonatomic, strong) EVEDBEveIcon *icon;
 @property (nonatomic) BOOL hasTypes;
 
-+ (id) invMarketGroupWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr;
-- (id) initWithMarketGroupID: (NSInteger)aMarketGroupID error:(NSError **)errorPtr;
++ (id) invMarketGroupWithMarketGroupID: (int32_t)aMarketGroupID error:(NSError **)errorPtr;
+- (id) initWithMarketGroupID: (int32_t)aMarketGroupID error:(NSError **)errorPtr;
 @end

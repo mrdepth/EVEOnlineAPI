@@ -17,16 +17,47 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.stationID = [[attributeDict valueForKey:@"stationID"] integerValue];
-		self.ownerID = [[attributeDict valueForKey:@"ownerID"] integerValue];
+		self.stationID = [[attributeDict valueForKey:@"stationID"] intValue];
+		self.ownerID = [[attributeDict valueForKey:@"ownerID"] intValue];
 		self.stationName = [attributeDict valueForKey:@"stationName"];
-		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] integerValue];
+		self.solarSystemID = [[attributeDict valueForKey:@"solarSystemID"] intValue];
 		self.dockingCostPerShipVolume = [[attributeDict valueForKey:@"dockingCostPerShipVolume"] floatValue];
 		self.officeRentalCost = [[attributeDict valueForKey:@"officeRentalCost"] floatValue];
-		self.stationTypeID = [[attributeDict valueForKey:@"stationTypeID"] integerValue];
+		self.stationTypeID = [[attributeDict valueForKey:@"stationTypeID"] intValue];
 		self.reprocessingEfficiency = [[attributeDict valueForKey:@"reprocessingEfficiency"] floatValue];
 		self.reprocessingStationTake = [[attributeDict valueForKey:@"reprocessingStationTake"] floatValue];
-		self.standingOwnerID = [[attributeDict valueForKey:@"standingOwnerID"] integerValue];
+		self.standingOwnerID = [[attributeDict valueForKey:@"standingOwnerID"] intValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.stationID forKey:@"stationID"];
+	[aCoder encodeInt32:self.ownerID forKey:@"ownerID"];
+	[aCoder encodeObject:self.stationName forKey:@"stationName"];
+	[aCoder encodeInt32:self.solarSystemID forKey:@"solarSystemID"];
+	[aCoder encodeFloat:self.officeRentalCost forKey:@"dockingCostPerShipVolume"];
+	[aCoder encodeFloat:self.dockingCostPerShipVolume forKey:@"officeRentalCost"];
+	[aCoder encodeInt32:self.stationTypeID forKey:@"stationTypeID"];
+	[aCoder encodeFloat:self.reprocessingEfficiency forKey:@"reprocessingEfficiency"];
+	[aCoder encodeFloat:self.reprocessingStationTake forKey:@"reprocessingStationTake"];
+	[aCoder encodeInt32:self.standingOwnerID	forKey:@"standingOwnerID"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.stationID = [aDecoder decodeInt32ForKey:@"stationID"];
+		self.ownerID = [aDecoder decodeInt32ForKey:@"ownerID"];
+		self.stationName = [aDecoder decodeObjectForKey:@"stationName"];
+		self.solarSystemID = [aDecoder decodeInt32ForKey:@"solarSystemID"];
+		self.dockingCostPerShipVolume = [aDecoder decodeFloatForKey:@"dockingCostPerShipVolume"];
+		self.officeRentalCost = [aDecoder decodeFloatForKey:@"officeRentalCost"];
+		self.stationTypeID = [aDecoder decodeInt32ForKey:@"stationTypeID"];
+		self.reprocessingEfficiency = [aDecoder decodeFloatForKey:@"reprocessingEfficiency"];
+		self.reprocessingStationTake = [aDecoder decodeFloatForKey:@"reprocessingStationTake"];
+		self.standingOwnerID = [aDecoder decodeInt32ForKey:@"standingOwnerID"];
 	}
 	return self;
 }
@@ -40,13 +71,13 @@
 	return EVEApiKeyTypeFull;
 }
 
-+ (id) outpostListWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEOutpostList alloc] initWithKeyID:keyID vCode:vCode characterID:characterID error:errorPtr progressHandler:progressHandler];
++ (id) outpostListWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEOutpostList alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/corp/OutpostList.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
-					   cacheStyle:EVERequestCacheStyleLong
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
@@ -72,6 +103,20 @@
 		return outpostListItem;
 	}
 	return nil;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.corporationStarbases forKey:@"corporationStarbases"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.corporationStarbases = [aDecoder decodeObjectForKey:@"corporationStarbases"];
+	}
+	return self;
 }
 
 @end

@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEJumpsItem : NSObject
-@property (nonatomic) NSInteger solarSystemID;
-@property (nonatomic) NSInteger shipJumps;
+@interface EVEJumpsItem : NSObject<NSCoding>
+@property (nonatomic) int32_t solarSystemID;
+@property (nonatomic) int32_t shipJumps;
 
 + (id) jumpsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -22,6 +22,6 @@
 @interface EVEJumps : EVERequest
 @property (nonatomic, strong) NSArray *solarSystems;
 
-+ (id) jumpsWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithError:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) jumpsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

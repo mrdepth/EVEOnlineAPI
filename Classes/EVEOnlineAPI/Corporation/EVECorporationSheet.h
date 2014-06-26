@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVECorporationSheetDivisionItem : NSObject
-@property (nonatomic) NSInteger accountKey;
+@interface EVECorporationSheetDivisionItem : NSObject<NSCoding>
+@property (nonatomic) int32_t accountKey;
 @property (nonatomic, copy) NSString *description;
 
 + (id) corporationSheetDivisionItemWithXMLAttributes:(NSDictionary *)attributeDict;
@@ -18,39 +18,39 @@
 
 @end
 
-@interface EVECorporationSheetLogo : NSObject
-@property (nonatomic) NSInteger graphicID;
-@property (nonatomic) NSInteger shape1;
-@property (nonatomic) NSInteger shape2;
-@property (nonatomic) NSInteger shape3;
-@property (nonatomic) NSInteger color1;
-@property (nonatomic) NSInteger color2;
-@property (nonatomic) NSInteger color3;
+@interface EVECorporationSheetLogo : NSObject<NSCoding>
+@property (nonatomic) int32_t graphicID;
+@property (nonatomic) int32_t shape1;
+@property (nonatomic) int32_t shape2;
+@property (nonatomic) int32_t shape3;
+@property (nonatomic) int32_t color1;
+@property (nonatomic) int32_t color2;
+@property (nonatomic) int32_t color3;
 
 @end
 
 
 @interface EVECorporationSheet : EVERequest
-@property (nonatomic) NSInteger corporationID;
+@property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *corporationName;
 @property (nonatomic, copy) NSString *ticker;
-@property (nonatomic) NSInteger ceoID;
+@property (nonatomic) int32_t ceoID;
 @property (nonatomic, copy) NSString *ceoName;
-@property (nonatomic) NSInteger stationID;
+@property (nonatomic) int32_t stationID;
 @property (nonatomic, copy) NSString *stationName;
 @property (nonatomic, copy) NSString *description;
 @property (nonatomic, copy) NSString *url;
-@property (nonatomic) NSInteger allianceID;
+@property (nonatomic) int32_t allianceID;
 @property (nonatomic, copy) NSString *allianceName;
 @property (nonatomic) float taxRate;
-@property (nonatomic) NSInteger memberCount;
-@property (nonatomic) NSInteger memberLimit;
-@property (nonatomic) NSInteger shares;
+@property (nonatomic) int32_t memberCount;
+@property (nonatomic) int32_t memberLimit;
+@property (nonatomic) int32_t shares;
 @property (nonatomic, strong) NSArray *divisions;
 @property (nonatomic, strong) NSArray *walletDivisions;
 @property (nonatomic, strong) EVECorporationSheetLogo *logo;
 
-+ (id) corporationSheetWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporationID: (NSInteger) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) corporationSheetWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporationID: (int32_t) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporationID: (int32_t) corporationID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

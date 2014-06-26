@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "EVERequest.h"
 
-@interface EVEOutpostServiceDetailItem : NSObject
-@property (nonatomic) NSInteger stationID;
-@property (nonatomic) NSInteger ownerID;
+@interface EVEOutpostServiceDetailItem : NSObject<NSCoding>
+@property (nonatomic) int32_t stationID;
+@property (nonatomic) int32_t ownerID;
 @property (nonatomic, copy) NSString *serviceName;
 @property (nonatomic) float minStanding;
 @property (nonatomic) float surchargePerBadStanding;
@@ -25,7 +25,7 @@
 @interface EVEOutpostServiceDetail : EVERequest
 @property (nonatomic, strong) NSArray *outpostServiceDetails;
 
-+ (id) outpostServiceDetailWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID:(long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID itemID:(long long) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler;
++ (id) outpostServiceDetailWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID itemID:(int64_t) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID itemID:(int64_t) itemID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

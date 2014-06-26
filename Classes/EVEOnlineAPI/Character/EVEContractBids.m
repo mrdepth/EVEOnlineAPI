@@ -17,11 +17,32 @@
 
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
 	if (self = [super init]) {
-		self.bidID = [[attributeDict valueForKey:@"bidID"] longLongValue];
-		self.contractID = [[attributeDict valueForKey:@"contractID"] integerValue];
-		self.bidderID = [[attributeDict valueForKey:@"bidderID"] integerValue];
+		self.bidID = [[attributeDict valueForKey:@"bidID"] intValue];
+		self.contractID = [[attributeDict valueForKey:@"contractID"] intValue];
+		self.bidderID = [[attributeDict valueForKey:@"bidderID"] intValue];
 		self.dateBid = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"dateBid"]];
 		self.amount = [[attributeDict valueForKey:@"amount"] floatValue];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.bidID forKey:@"bidID"];
+	[aCoder encodeInt32:self.contractID forKey:@"contractID"];
+	[aCoder encodeInt32:self.bidderID forKey:@"bidderID"];
+	[aCoder encodeObject:self.dateBid forKey:@"dateBid"];
+	[aCoder encodeFloat:self.amount forKey:@"amount"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.bidID = [aDecoder decodeInt32ForKey:@"bidID"];
+		self.contractID = [aDecoder decodeInt32ForKey:@"contractID"];
+		self.bidderID = [aDecoder decodeInt32ForKey:@"bidderID"];
+		self.dateBid = [aDecoder decodeObjectForKey:@"dateBid"];
+		self.amount = [aDecoder decodeFloatForKey:@"amount"];
 	}
 	return self;
 }
@@ -36,20 +57,20 @@
 }
 
 
-+ (id) contractBidsWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
-	return [[EVEContractBids alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
++ (id) contractBidsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
+	return [[EVEContractBids alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID corporate:corporate error:errorPtr progressHandler:progressHandler];
 }
 
-- (id) initWithKeyID: (NSInteger) keyID vCode: (NSString*) vCode characterID: (NSInteger) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress)) progressHandler {
+- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@/ContractBids.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, (corporate ? @"corp" : @"char"), keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
-					   cacheStyle:EVERequestCacheStyleModifiedShort
+					   cachePolicy:cachePolicy
 							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
 	return self;
 }
 
-#pragma mark NSXMLParserDelegate
+#pragma mark - NSXMLParserDelegate
 
 - (id) didStartRowset: (NSString*) rowset {
 	if ([rowset isEqualToString:@"bidList"]) {
@@ -68,4 +89,19 @@
 	}
 	return nil;
 }
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.bidList forKey:@"bidList"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.bidList = [aDecoder decodeObjectForKey:@"bidList"];
+	}
+	return self;
+}
+
 @end

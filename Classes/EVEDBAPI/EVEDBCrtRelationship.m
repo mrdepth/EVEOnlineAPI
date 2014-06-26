@@ -32,11 +32,11 @@
 	return map;
 }
 
-+ (id) crtRelationshipWithRelationshipID: (NSInteger)relationshipID error:(NSError **)errorPtr {
++ (id) crtRelationshipWithRelationshipID: (int32_t)relationshipID error:(NSError **)errorPtr {
 	return [[EVEDBCrtRelationship alloc] initWithRelationshipID:relationshipID error:errorPtr];
 }
 
-- (id) initWithRelationshipID: (NSInteger)relationshipID error:(NSError **)errorPtr {
+- (id) initWithRelationshipID: (int32_t)relationshipID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtRelationships WHERE relationshipID=%d;", relationshipID]
 								   error:errorPtr]) {
 	}
@@ -45,21 +45,21 @@
 
 - (EVEDBCrtCertificate*) parent {
 	if (self.parentID == 0)
-		return NULL;
+		return nil;
 	if (!_parent) {
 		_parent = [EVEDBCrtCertificate crtCertificateWithCertificateID:self.parentID error:nil];
 		if (!_parent)
 			_parent = (EVEDBCrtCertificate*) [NSNull null];
 	}
 	if ((NSNull*) _parent == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _parent;
 }
 
 - (EVEDBInvTypeRequiredSkill*) parentType {
 	if (self.parentTypeID == 0)
-		return NULL;
+		return nil;
 	if (!_parentType) {
 		_parentType = [EVEDBInvTypeRequiredSkill invTypeWithTypeID:self.parentTypeID error:nil];
 		_parentType.requiredLevel = self.parentLevel;
@@ -67,21 +67,21 @@
 			_parentType = (EVEDBInvTypeRequiredSkill*) [NSNull null];
 	}
 	if ((NSNull*) _parentType == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _parentType;
 }
 
 - (EVEDBCrtCertificate*) child {
 	if (self.childID == 0)
-		return NULL;
+		return nil;
 	if (!_child) {
 		_child = [EVEDBCrtCertificate crtCertificateWithCertificateID:self.childID error:nil];
 		if (!_child)
 			_child = (EVEDBCrtCertificate*) [NSNull null];
 	}
 	if ((NSNull*) _child == [NSNull null])
-		return NULL;
+		return nil;
 	else
 		return _child;
 }

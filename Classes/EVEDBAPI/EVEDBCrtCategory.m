@@ -21,11 +21,11 @@
 	return map;
 }
 
-+ (id) crtCategoryWithCategoryID: (NSInteger)categoryID error:(NSError **)errorPtr {
++ (id) crtCategoryWithCategoryID: (int32_t)categoryID error:(NSError **)errorPtr {
 	return [[EVEDBCrtCategory alloc] initWithCategoryID:categoryID error:errorPtr];
 }
 
-- (id) initWithCategoryID: (NSInteger)categoryID error:(NSError **)errorPtr {
+- (id) initWithCategoryID: (int32_t)categoryID error:(NSError **)errorPtr {
 	if (self = [super initWithSQLRequest:[NSString stringWithFormat:@"SELECT * from crtCategories WHERE categoryID=%d;", categoryID]
 								   error:errorPtr]) {
 	}
