@@ -200,7 +200,9 @@ didStartElement:(NSString *)elementName
 		self.cachedUntil = [aDecoder decodeObjectForKey:@"cachedUntil"];
 		self.apiVersion = [aDecoder decodeObjectForKey:@"apiVersion"];
 		self.cacheDate = [aDecoder decodeObjectForKey:@"cacheDate"];
+		self.cacheExpireDate = [self localTimeWithServerTime:self.cachedUntil];
 	}
+	
 	return self;
 }
 
