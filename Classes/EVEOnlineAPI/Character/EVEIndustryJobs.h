@@ -12,12 +12,13 @@
 @interface EVEIndustryJobsItem : NSObject<NSCoding>
 
 @property (nonatomic) int32_t runs, licensedRuns, stationID,
-  productTypeName, status, blueprintLocationID, productTypeID, activityID, blueprintTypeID;
+  productTypeName, status, productTypeID, activityID, blueprintTypeID, timeInSeconds,
+  facilityID, solarSystemID, teamID;
 
 @property (nonatomic) int64_t jobID, installerID,
-  facilityID, solarSystemID,
-  blueprintID, outputLocationID,
-  teamID, timeInSeconds, completedCharacterID;
+
+  blueprintID, outputLocationID, blueprintLocationID,
+  completedCharacterID;
 
 /* probability's type not shown in documentation, we assume it as float */
 @property (nonatomic) float cost, probability;
