@@ -10,16 +10,19 @@
 #import "EVERequest.h"
 
 @interface EVEIndustryJobsItem : NSObject<NSCoding>
-@property (nonatomic) int64_t installedItemID, containerID;
-@property (nonatomic) int32_t installedItemLocationID, outputLocationID, installerID;
-@property (nonatomic) int32_t jobID, assemblyLineID, installedItemQuantity,
-								installedItemProductivityLevel, installedItemMaterialLevel, installedItemLicensedProductionRunsRemaining,
-								runs, licensedProductionRuns, installedInSolarSystemID,
-								containerLocationID, installedItemTypeID, outputTypeID, containerTypeID, installedItemCopy, completed,
-								completedSuccessfully, installedItemFlag, outputFlag, activityID, completedStatus;
 
-@property (nonatomic) float materialMultiplier,charMaterialMultiplier, timeMultiplier,charTimeMultiplier;
-@property (nonatomic, strong) NSDate *installTime, *beginProductionTime, *endProductionTime, *pauseProductionTime;
+@property (nonatomic) int32_t runs, licensedRuns, stationID,
+  productTypeName, status, blueprintLocationID, productTypeID, activityID, blueprintTypeID;
+
+@property (nonatomic) int64_t jobID, installerID,
+  facilityID, solarSystemID,
+  blueprintID, outputLocationID,
+  teamID, timeInSeconds, completedCharacterID;
+
+/* probability's type not shown in documentation, we assume it as float */
+@property (nonatomic) float cost, probability;
+@property (nonatomic, strong) NSDate *startDate, *endDate, *pauseDate, *completedDate;
+@property (nonatomic, strong) NSString *installerName, *solarSystemName, *blueprintTypeName;
 
 + (id) industryJobsItemWithXMLAttributes:(NSDictionary *)attributeDict;
 - (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
