@@ -48,4 +48,12 @@
 #import "EVEDBCertSkill.h"
 #import "EVEDBChrRace.h"
 #import "EVEDBNpcGroup.h"
+#import "EVEDBIndustryActivity.h"
+#import "EVEDBIndustryActivityMaterial.h"
+#import "EVEDBIndustryActivityProbability.h"
+#import "EVEDBIndustryActivityProduct.h"
+#import "EVEDBIndustryActivityRace.h"
+#import "EVEDBIndustryActivitySkill.h"
+#import "EVEDBIndustryBlueprint.h"
+
 #import "NSDictionary+EVEDBAPI.h"
