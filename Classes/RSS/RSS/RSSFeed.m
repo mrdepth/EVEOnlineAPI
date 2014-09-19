@@ -10,6 +10,7 @@
 
 
 @implementation RSSFeed
+@synthesize description = _description;
 
 - (id) init {
 	if (self = [super init]) {

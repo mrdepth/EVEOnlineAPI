@@ -11,6 +11,7 @@
 
 
 @implementation BCEveLoadout
+@synthesize description = _description;
 
 + (id) eveLoadoutsWithAPIKey:(NSString*) apiKey loadoutID:(int32_t)loadoutID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	return [[BCEveLoadout alloc] initWithAPIKey:apiKey loadoutID:loadoutID error:errorPtr progressHandler:progressHandler];

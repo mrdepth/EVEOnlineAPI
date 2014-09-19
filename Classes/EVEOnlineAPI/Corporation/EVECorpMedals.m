@@ -10,6 +10,7 @@
 
 
 @implementation EVECorpMedalsItem
+@synthesize description = _description;
 
 + (id) corpMedalsItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVECorpMedalsItem alloc] initWithXMLAttributes:attributeDict];

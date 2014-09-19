@@ -78,6 +78,7 @@
 
 
 @implementation EVECertificateTreeCertificatesItem
+@synthesize description = _description;
 
 + (id) certificateTreeCertificatesItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVECertificateTreeCertificatesItem alloc] initWithXMLAttributes:attributeDict];

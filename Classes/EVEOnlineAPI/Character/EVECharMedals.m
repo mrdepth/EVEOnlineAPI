@@ -51,6 +51,7 @@
 
 
 @implementation EVECharOtherCorporationsMedal
+@synthesize description = _description;
 
 + (id) charOtherCorporationsMedalWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVECharOtherCorporationsMedal alloc] initWithXMLAttributes:attributeDict];

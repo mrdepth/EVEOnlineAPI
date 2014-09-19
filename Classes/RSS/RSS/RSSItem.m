@@ -10,6 +10,7 @@
 
 
 @implementation RSSItem
+@synthesize description = _description;
 
 - (id) initWithCoder:(NSCoder *)aDecoder {
 	if (self = [super init]) {

@@ -10,6 +10,7 @@
 
 
 @implementation EVECalllistCallGroupsItem
+@synthesize description = _description;
 
 + (id) callGroupsItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVECalllistCallGroupsItem alloc] initWithXMLAttributes:attributeDict];
@@ -45,6 +46,7 @@
 
 
 @implementation EVECalllistCallsItem
+@synthesize description = _description;
 
 + (id) callsItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVECalllistCallsItem alloc] initWithXMLAttributes:attributeDict];

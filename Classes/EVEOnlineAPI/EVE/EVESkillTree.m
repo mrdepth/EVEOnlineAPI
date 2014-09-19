@@ -127,6 +127,7 @@
 
 	
 @implementation EVESkillTreeSkillsItem
+@synthesize description = _description;
 
 + (id) skillTreeSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVESkillTreeSkillsItem alloc] initWithXMLAttributes:attributeDict];

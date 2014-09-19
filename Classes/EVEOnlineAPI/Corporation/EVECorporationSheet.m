@@ -10,6 +10,7 @@
 
 
 @implementation EVECorporationSheetDivisionItem
+@synthesize description = _description;
 
 + (id) corporationSheetDivisionItemWithXMLAttributes:(NSDictionary *)attributeDict {
 	return [[EVECorporationSheetDivisionItem alloc] initWithXMLAttributes:attributeDict];
@@ -71,6 +72,7 @@
 
 
 @implementation EVECorporationSheet
+@synthesize description = _description;
 
 + (EVEApiKeyType) requiredApiKeyType {
 	return EVEApiKeyTypeLimited;
