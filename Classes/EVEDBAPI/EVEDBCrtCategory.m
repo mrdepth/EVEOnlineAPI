@@ -9,6 +9,7 @@
 #import "EVEDBCrtCategory.h"
 
 @implementation EVEDBCrtCategory
+@synthesize description = _description;
 
 
 + (NSDictionary*) columnsMap {

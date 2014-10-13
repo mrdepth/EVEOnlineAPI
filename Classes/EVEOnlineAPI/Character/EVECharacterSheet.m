@@ -35,7 +35,7 @@
 @end
 
 
-#pragma mark --
+/*#pragma mark --
 
 @implementation EVECharacterSheetAttributeEnhancer
 
@@ -56,7 +56,7 @@
 	return self;
 }
 
-@end
+@end*/
 
 #pragma mark --
 
@@ -169,6 +169,114 @@
 
 #pragma mark --
 
+@implementation EVECharacterSheetImplant
+
++ (id) characterSheetImplantWithXMLAttributes:(NSDictionary *)attributeDict {
+	return [[EVECharacterSheetImplant alloc] initWithXMLAttributes:attributeDict];
+}
+
+- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
+	if (self = [super init]) {
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.typeName = [attributeDict valueForKey:@"typeName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeObject:self.typeName forKey:@"titleName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
+	}
+	return self;
+}
+
+@end
+
+#pragma mark --
+
+@implementation EVECharacterSheetJumpClone
+
++ (id) characterSheetJumpCloneWithXMLAttributes:(NSDictionary *)attributeDict {
+	return [[EVECharacterSheetJumpClone alloc] initWithXMLAttributes:attributeDict];
+}
+
+- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
+	if (self = [super init]) {
+		self.jumpCloneID = [[attributeDict valueForKey:@"jumpCloneID"] intValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.locationID = [[attributeDict valueForKey:@"locationID"] longLongValue];
+		self.cloneName = [attributeDict valueForKey:@"cloneName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.jumpCloneID forKey:@"jumpCloneID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeInt64:self.locationID forKey:@"locationID"];
+	[aCoder encodeObject:self.cloneName forKey:@"cloneName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.jumpCloneID = [aDecoder decodeInt32ForKey:@"jumpCloneID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.locationID = [aDecoder decodeInt64ForKey:@"locationID"];
+		self.cloneName = [aDecoder decodeObjectForKey:@"cloneName"];
+	}
+	return self;
+}
+
+@end
+
+#pragma mark --
+
+@implementation EVECharacterSheetJumpCloneImplant
+
++ (id) characterSheetJumpCloneImplantWithXMLAttributes:(NSDictionary *)attributeDict {
+	return [[EVECharacterSheetJumpCloneImplant alloc] initWithXMLAttributes:attributeDict];
+}
+
+- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
+	if (self = [super init]) {
+		self.jumpCloneID = [[attributeDict valueForKey:@"jumpCloneID"] intValue];
+		self.typeID = [[attributeDict valueForKey:@"typeID"] intValue];
+		self.typeName = [attributeDict valueForKey:@"typeName"];
+	}
+	return self;
+}
+
+#pragma mark - NSCoding
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+	[aCoder encodeInt32:self.jumpCloneID forKey:@"jumpCloneID"];
+	[aCoder encodeInt32:self.typeID forKey:@"typeID"];
+	[aCoder encodeObject:self.typeName forKey:@"typeName"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super init]) {
+		self.jumpCloneID = [aDecoder decodeInt32ForKey:@"jumpCloneID"];
+		self.typeID = [aDecoder decodeInt32ForKey:@"typeID"];
+		self.typeName = [aDecoder decodeObjectForKey:@"typeName"];
+	}
+	return self;
+}
+
+@end
+
+#pragma mark --
+
 @implementation EVECharacterSheet
 
 + (EVEApiKeyType) requiredApiKeyType {
@@ -234,6 +342,12 @@
 		return self.corporationRolesAtOther = [NSMutableArray array];
 	else if ([rowset isEqualToString:@"corporationTitles"])
 		return self.corporationTitles = [NSMutableArray array];
+	else if ([rowset isEqualToString:@"implants"])
+		return self.implants = [NSMutableArray array];
+	else if ([rowset isEqualToString:@"jumpClones"])
+		return self.jumpClones = [NSMutableArray array];
+	else if ([rowset isEqualToString:@"jumpCloneImplants"])
+		return self.jumpCloneImplants = [NSMutableArray array];
 	return nil;
 }
 
@@ -252,6 +366,12 @@
 		[self.corporationRolesAtOther addObject:[EVECharacterSheetRole characterSheetRoleWithXMLAttributes:attributeDict]];
 	else if ([rowset isEqualToString:@"corporationTitles"])
 		[self.corporationTitles addObject:[EVECharacterSheetCorporationTitle characterSheetCorporationTitleWithXMLAttributes:attributeDict]];
+	else if ([rowset isEqualToString:@"implants"])
+		[self.implants addObject:[EVECharacterSheetImplant characterSheetImplantWithXMLAttributes:attributeDict]];
+	else if ([rowset isEqualToString:@"jumpClones"])
+		[self.implants addObject:[EVECharacterSheetJumpClone characterSheetJumpCloneWithXMLAttributes:attributeDict]];
+	else if ([rowset isEqualToString:@"jumpCloneImplants"])
+		[self.jumpCloneImplants addObject:[EVECharacterSheetJumpCloneImplant characterSheetJumpCloneImplantWithXMLAttributes:attributeDict]];
 	return nil;
 }
 
@@ -264,7 +384,7 @@ didStartElement:(NSString *)elementName
 	if ([elementName isEqualToString:@"attributes"]) {
 		self.attributes = [[EVECharacterSheetAttributes alloc] init];
 	}
-	else if ([elementName isEqualToString:@"attributeEnhancers"])
+/*	else if ([elementName isEqualToString:@"attributeEnhancers"])
 		self.attributeEnhancers = [NSMutableArray array];
 	else if ([elementName isEqualToString:@"willpowerBonus"]) {
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
@@ -290,7 +410,7 @@ didStartElement:(NSString *)elementName
 		EVECharacterSheetAttributeEnhancer *attributeEnhancer = [[EVECharacterSheetAttributeEnhancer alloc] init];
 		attributeEnhancer.attribute = EVECharacterAttributeIntelligence;
 		[self.attributeEnhancers addObject:attributeEnhancer];
-	}
+	}*/
 }
 
 - (void) parser:(NSXMLParser *)parser
@@ -326,10 +446,10 @@ didStartElement:(NSString *)elementName
 		self.cloneSkillPoints = [self.text intValue];
 	else if ([elementName isEqualToString:@"balance"])
 		self.balance = [self.text floatValue];
-	else if ([elementName isEqualToString:@"augmentatorName"])
+/*	else if ([elementName isEqualToString:@"augmentatorName"])
 		[[self.attributeEnhancers lastObject] setAugmentatorName:self.text];
 	else if ([elementName isEqualToString:@"augmentatorValue"])
-		[[self.attributeEnhancers lastObject] setAugmentatorValue:[self.text intValue]];
+		[[self.attributeEnhancers lastObject] setAugmentatorValue:[self.text intValue]];*/
 	else if ([elementName isEqualToString:@"intelligence"])
 		self.attributes.intelligence = [self.text intValue];
 	else if ([elementName isEqualToString:@"memory"])
@@ -360,7 +480,7 @@ didStartElement:(NSString *)elementName
 	[aCoder encodeObject:self.cloneName forKey:@"cloneName"];
 	[aCoder encodeInt32:self.cloneSkillPoints forKey:@"cloneSkillPoints"];
 	[aCoder encodeFloat:self.balance forKey:@"balance"];
-	[aCoder encodeObject:self.attributeEnhancers forKey:@"attributeEnhancers"];
+//	[aCoder encodeObject:self.attributeEnhancers forKey:@"attributeEnhancers"];
 	[aCoder encodeObject:self.attributes forKey:@"attributes"];
 	[aCoder encodeObject:self.skills forKey:@"skills"];
 	[aCoder encodeObject:self.certificates forKey:@"certificates"];
@@ -369,6 +489,9 @@ didStartElement:(NSString *)elementName
 	[aCoder encodeObject:self.corporationRolesAtBase forKey:@"corporationRolesAtBase"];
 	[aCoder encodeObject:self.corporationRolesAtOther forKey:@"corporationRolesAtOther"];
 	[aCoder encodeObject:self.corporationTitles forKey:@"corporationTitles"];
+	[aCoder encodeObject:self.implants forKey:@"implants"];
+	[aCoder encodeObject:self.jumpClones forKey:@"jumpClonse"];
+	[aCoder encodeObject:self.jumpCloneImplants forKey:@"jumpCloneImplants"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
@@ -387,7 +510,7 @@ didStartElement:(NSString *)elementName
 		self.cloneName = [aDecoder decodeObjectForKey:@"cloneName"];
 		self.cloneSkillPoints = [aDecoder decodeInt32ForKey:@"cloneSkillPoints"];
 		self.balance = [aDecoder decodeFloatForKey:@"balance"];
-		self.attributeEnhancers = [aDecoder decodeObjectForKey:@"attributeEnhancers"];
+//		self.attributeEnhancers = [aDecoder decodeObjectForKey:@"attributeEnhancers"];
 		self.attributes = [aDecoder decodeObjectForKey:@"attributes"];
 		self.skills = [aDecoder decodeObjectForKey:@"skills"];
 		self.certificates = [aDecoder decodeObjectForKey:@"certificates"];
@@ -396,6 +519,9 @@ didStartElement:(NSString *)elementName
 		self.corporationRolesAtBase = [aDecoder decodeObjectForKey:@"corporationRolesAtBase"];
 		self.corporationRolesAtOther = [aDecoder decodeObjectForKey:@"corporationRolesAtOther"];
 		self.corporationTitles = [aDecoder decodeObjectForKey:@"corporationTitles"];
+		self.implants = [aDecoder decodeObjectForKey:@"implants"];
+		self.jumpClones = [aDecoder decodeObjectForKey:@"jumpClones"];
+		self.jumpCloneImplants = [aDecoder decodeObjectForKey:@"jumpCloneImplants"];
 	}
 	return self;
 }

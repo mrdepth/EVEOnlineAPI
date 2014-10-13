@@ -19,13 +19,13 @@
 @end
 
 
-#pragma mark --
+/*#pragma mark --
 
 @interface EVECharacterSheetAttributeEnhancer : NSObject<NSCoding>
 @property (nonatomic) EVECharacterAttribute attribute;
 @property (nonatomic, copy) NSString *augmentatorName;
 @property (nonatomic) int32_t augmentatorValue;
-@end
+@end*/
 
 #pragma mark --
 
@@ -65,6 +65,42 @@
 
 #pragma mark --
 
+@interface EVECharacterSheetImplant : NSObject<NSCoding>
+@property (nonatomic) int32_t typeID;
+@property (nonatomic, copy) NSString *typeName;
+
++ (id) characterSheetImplantWithXMLAttributes:(NSDictionary *)attributeDict;
+- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+
+@end
+
+#pragma mark --
+
+@interface EVECharacterSheetJumpClone : NSObject<NSCoding>
+@property (nonatomic) int32_t jumpCloneID;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic) int64_t locationID;
+@property (nonatomic, copy) NSString *cloneName;
+
++ (id) characterSheetJumpCloneWithXMLAttributes:(NSDictionary *)attributeDict;
+- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+
+@end
+
+@interface EVECharacterSheetJumpCloneImplant : NSObject<NSCoding>
+@property (nonatomic) int32_t jumpCloneID;
+@property (nonatomic) int32_t typeID;
+@property (nonatomic, copy) NSString *typeName;
+
++ (id) characterSheetJumpCloneImplantWithXMLAttributes:(NSDictionary *)attributeDict;
+- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+
+@end
+
+
+
+#pragma mark --
+
 @class EVESkillQueue;
 @interface EVECharacterSheet : EVERequest
 @property (nonatomic) int32_t characterID;
@@ -81,7 +117,7 @@
 @property (nonatomic, copy) NSString *cloneName;
 @property (nonatomic) int32_t cloneSkillPoints;
 @property (nonatomic) float balance;
-@property (nonatomic, strong) NSMutableArray *attributeEnhancers;
+//@property (nonatomic, strong) NSMutableArray *attributeEnhancers;
 @property (nonatomic, strong) EVECharacterSheetAttributes *attributes;
 @property (nonatomic, strong) NSMutableArray *skills;
 @property (nonatomic, strong) NSMutableArray *certificates;
@@ -91,6 +127,9 @@
 @property (nonatomic, strong) NSMutableArray *corporationRolesAtOther;
 @property (nonatomic, strong) NSMutableArray *corporationTitles;
 @property (nonatomic, strong) NSDictionary *skillsMap;
+@property (nonatomic, strong) NSMutableArray *implants;
+@property (nonatomic, strong) NSMutableArray *jumpClones;
+@property (nonatomic, strong) NSMutableArray *jumpCloneImplants;
 
 + (id) characterSheetWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 - (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;

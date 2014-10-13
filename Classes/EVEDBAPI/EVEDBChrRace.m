@@ -9,6 +9,7 @@
 #import "EVEDBChrRace.h"
 
 @implementation EVEDBChrRace
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;

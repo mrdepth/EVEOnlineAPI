@@ -10,6 +10,7 @@
 #import "EVEDBEveIcon.h"
 
 @implementation EVEDBInvMarketGroup
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;

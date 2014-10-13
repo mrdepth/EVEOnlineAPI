@@ -21,6 +21,7 @@
 @end
 
 @implementation EVEDBCrtCertificate
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;

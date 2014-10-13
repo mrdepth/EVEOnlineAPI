@@ -9,6 +9,7 @@
 #import "EVEDBDgmAttributeCategory.h"
 
 @implementation EVEDBDgmAttributeCategory
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;

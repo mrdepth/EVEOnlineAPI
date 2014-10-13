@@ -9,6 +9,7 @@
 #import "EVEDBEveUnit.h"
 
 @implementation EVEDBEveUnit
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;

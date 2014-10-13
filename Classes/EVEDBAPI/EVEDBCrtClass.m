@@ -10,6 +10,7 @@
 #import "EVEDBDatabase.h"
 
 @implementation EVEDBCrtClass
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;

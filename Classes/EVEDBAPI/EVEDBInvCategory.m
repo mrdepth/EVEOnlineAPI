@@ -11,6 +11,7 @@
 #import "EVEDBEveIcon.h"
 
 @implementation EVEDBInvCategory
+@synthesize description = _description;
 
 + (NSDictionary*) columnsMap {
 	static NSDictionary* map = nil;
