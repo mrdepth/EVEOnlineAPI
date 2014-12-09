@@ -114,8 +114,6 @@
 @property (nonatomic) int32_t corporationID;
 @property (nonatomic, copy) NSString *allianceName;
 @property (nonatomic) int32_t allianceID;
-@property (nonatomic, copy) NSString *cloneName;
-@property (nonatomic) int32_t cloneSkillPoints;
 @property (nonatomic) float balance;
 //@property (nonatomic, strong) NSMutableArray *attributeEnhancers;
 @property (nonatomic, strong) EVECharacterSheetAttributes *attributes;

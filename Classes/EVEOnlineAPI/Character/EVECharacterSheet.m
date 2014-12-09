@@ -440,10 +440,6 @@ didStartElement:(NSString *)elementName
 		self.allianceName = self.text;
 	else if ([elementName isEqualToString:@"allianceID"])
 		self.allianceID = [self.text intValue];
-	else if ([elementName isEqualToString:@"cloneName"])
-		self.cloneName = self.text;
-	else if ([elementName isEqualToString:@"cloneSkillPoints"])
-		self.cloneSkillPoints = [self.text intValue];
 	else if ([elementName isEqualToString:@"balance"])
 		self.balance = [self.text floatValue];
 /*	else if ([elementName isEqualToString:@"augmentatorName"])
@@ -477,8 +473,6 @@ didStartElement:(NSString *)elementName
 	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
 	[aCoder encodeObject:self.allianceName forKey:@"allianceName"];
 	[aCoder encodeInt32:self.allianceID forKey:@"allianceID"];
-	[aCoder encodeObject:self.cloneName forKey:@"cloneName"];
-	[aCoder encodeInt32:self.cloneSkillPoints forKey:@"cloneSkillPoints"];
 	[aCoder encodeFloat:self.balance forKey:@"balance"];
 //	[aCoder encodeObject:self.attributeEnhancers forKey:@"attributeEnhancers"];
 	[aCoder encodeObject:self.attributes forKey:@"attributes"];
@@ -507,8 +501,6 @@ didStartElement:(NSString *)elementName
 		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
 		self.allianceName = [aDecoder decodeObjectForKey:@"allianceName"];
 		self.allianceID = [aDecoder decodeInt32ForKey:@"allianceID"];
-		self.cloneName = [aDecoder decodeObjectForKey:@"cloneName"];
-		self.cloneSkillPoints = [aDecoder decodeInt32ForKey:@"cloneSkillPoints"];
 		self.balance = [aDecoder decodeFloatForKey:@"balance"];
 //		self.attributeEnhancers = [aDecoder decodeObjectForKey:@"attributeEnhancers"];
 		self.attributes = [aDecoder decodeObjectForKey:@"attributes"];
