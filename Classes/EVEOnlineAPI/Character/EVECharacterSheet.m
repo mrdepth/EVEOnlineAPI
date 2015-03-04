@@ -369,7 +369,7 @@
 	else if ([rowset isEqualToString:@"implants"])
 		[self.implants addObject:[EVECharacterSheetImplant characterSheetImplantWithXMLAttributes:attributeDict]];
 	else if ([rowset isEqualToString:@"jumpClones"])
-		[self.implants addObject:[EVECharacterSheetJumpClone characterSheetJumpCloneWithXMLAttributes:attributeDict]];
+		[self.jumpClones addObject:[EVECharacterSheetJumpClone characterSheetJumpCloneWithXMLAttributes:attributeDict]];
 	else if ([rowset isEqualToString:@"jumpCloneImplants"])
 		[self.jumpCloneImplants addObject:[EVECharacterSheetJumpCloneImplant characterSheetJumpCloneImplantWithXMLAttributes:attributeDict]];
 	return nil;
@@ -484,7 +484,7 @@ didStartElement:(NSString *)elementName
 	[aCoder encodeObject:self.corporationRolesAtOther forKey:@"corporationRolesAtOther"];
 	[aCoder encodeObject:self.corporationTitles forKey:@"corporationTitles"];
 	[aCoder encodeObject:self.implants forKey:@"implants"];
-	[aCoder encodeObject:self.jumpClones forKey:@"jumpClonse"];
+	[aCoder encodeObject:self.jumpClones forKey:@"jumpClones"];
 	[aCoder encodeObject:self.jumpCloneImplants forKey:@"jumpCloneImplants"];
 }
 
