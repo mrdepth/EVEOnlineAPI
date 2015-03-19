@@ -13,4 +13,5 @@
 
 - (NSString*) stringByReplacingHTMLEscapes;
 - (NSString*) stringByRemovingHTMLTags;
+- (NSString*) stringByUnescapingHTML;
 @end

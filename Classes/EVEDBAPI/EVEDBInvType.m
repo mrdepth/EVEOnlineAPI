@@ -371,7 +371,8 @@
 				if (!section) {
 					NSString* title;
 					if (trait.skillID > 0) {
-						title = [NSString stringWithFormat:NSLocalizedString(@"<b>%@</b> bonuses (per skill level):", nil),
+						title = [NSString stringWithFormat:NSLocalizedString(@"<a href=showinfo:%d>%@</a> bonuses (per skill level):", nil),
+								 trait.skillID,
 								 trait.skill.typeName ?
 								 trait.skill.typeName :
 								 [NSString stringWithFormat:NSLocalizedString(@"Unknown skill %d", nil), trait.skillID]];
@@ -385,9 +386,9 @@
 				[section[@"array"] addObject:trait];
 			}
 			
-			NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:@"(<a*[^>]*>)([^<]*)(</a>)"
-																						options:NSRegularExpressionCaseInsensitive
-																						  error:nil];
+//			NSRegularExpression* expression = [NSRegularExpression regularExpressionWithPattern:@"(<a*[^>]*>)([^<]*)(</a>)"
+//																						options:NSRegularExpressionCaseInsensitive
+//																						  error:nil];
 			NSMutableString* html = [NSMutableString new];
 			for (NSDictionary* section in [[sections allValues] sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES]]]) {
 				[html appendFormat:@"\n%@\n", section[@"title"]];
@@ -399,7 +400,7 @@
 				}
 			}
 			
-			[expression replaceMatchesInString:html options:0 range:NSMakeRange(0, html.length) withTemplate:@"<b>$2</b>"];
+//			[expression replaceMatchesInString:html options:0 range:NSMakeRange(0, html.length) withTemplate:@"<b>$2</b>"];
 			_traitsString = html;
 		}
 	}
