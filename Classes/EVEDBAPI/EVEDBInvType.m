@@ -394,9 +394,9 @@
 				[html appendFormat:@"\n%@\n", section[@"title"]];
 				for (EVEDBInvTrait* trait in section[@"array"]) {
 					if (trait.bonus > 0)
-						[html appendFormat:@"<b>%d%@</b> %@\n", trait.bonus, trait.unit.displayName ? trait.unit.displayName : @"", trait.bonusText];
+						[html appendFormat:@"<font color=0xFFFFFFFF><b>%d%@</b></font> %@\n", trait.bonus, trait.unit.displayName ? trait.unit.displayName : @"", trait.bonusText];
 					else
-						[html appendFormat:@"<b>-</b> %@\n", trait.bonusText];
+						[html appendFormat:@"<font color=0xFFFFFFFF><b>-</b></font> %@\n", trait.bonusText];
 				}
 			}
 			

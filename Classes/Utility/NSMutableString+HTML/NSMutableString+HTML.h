@@ -13,4 +13,6 @@
 
 - (void) replaceHTMLEscapes;
 - (void) removeHTMLTags;
+- (void) unescapeHTML;
+
 @end

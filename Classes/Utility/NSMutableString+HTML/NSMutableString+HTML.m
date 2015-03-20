@@ -113,6 +113,34 @@ NSMutableDictionary *sequencesMap = nil;
 	}
 }
 
+- (void) unescapeHTML {
+	NSRegularExpression *expression = [NSRegularExpression regularExpressionWithPattern:@"&(.*?);" options:0 error:nil];
+	NSTextCheckingResult* result;
+	while ((result = [expression firstMatchInString:self options:0 range:NSMakeRange(0, self.length)]) != nil) {
+		NSString* escape = [self substringWithRange:result.range];
+		[self replaceCharactersInRange:result.range withString:[[NSAttributedString alloc] initWithData:[escape dataUsingEncoding:NSUTF8StringEncoding] options:@{ NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute :@(NSUTF8StringEncoding) }
+																				  documentAttributes:nil
+																							   error:nil].string];
+	}
+	
+	
+	expression = [NSRegularExpression regularExpressionWithPattern:@"\\\\u(.{4})"
+														   options:NSRegularExpressionCaseInsensitive
+															 error:nil];
+	while ((result = [expression firstMatchInString:self options:0 range:NSMakeRange(0, self.length)]) != nil) {
+		NSScanner* scanner = [NSScanner scannerWithString:[self substringWithRange:result.range]];
+		unsigned int i = ' ';
+		unichar *u = (unichar*) &i;
+		[scanner scanHexInt:&i];
+		
+		[self replaceCharactersInRange:result.range withString:[NSString stringWithCharacters:u length:1]];
+	}
+	
+	[self replaceOccurrencesOfString:@"\\r" withString:@"" options:0 range:NSMakeRange(0, self.length)];
+	[self replaceOccurrencesOfString:@"\\n" withString:@"\n" options:0 range:NSMakeRange(0, self.length)];
+	[self replaceOccurrencesOfString:@"\\t" withString:@"\t" options:0 range:NSMakeRange(0, self.length)];
+}
+
 @end
 
 const unichar codes[] = {
