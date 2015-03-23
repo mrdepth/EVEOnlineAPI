@@ -44,16 +44,20 @@
 }
 
 - (NSDate*) currentServerTime {
+	if (!self.cacheDate || !self.currentTime)
+		return nil;
 	return [NSDate dateWithTimeIntervalSinceNow:-[self.cacheDate timeIntervalSinceDate:self.currentTime]];
 }
 
 - (NSDate*) serverTimeWithLocalTime:(NSDate*) localTime {
-	if (!localTime)
+	if (!localTime || !self.cacheDate || !self.currentTime)
 		return nil;
 	return [NSDate dateWithTimeInterval:[self.currentTime timeIntervalSinceDate:self.cacheDate] sinceDate:localTime];
 }
 
 - (NSDate*) localTimeWithServerTime:(NSDate*) serverTime {
+	if (!serverTime || !self.cacheDate || !self.currentTime)
+		return nil;
 	return [NSDate dateWithTimeInterval:[self.cacheDate timeIntervalSinceDate:self.currentTime] sinceDate:serverTime];
 }
 
