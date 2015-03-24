@@ -73,3 +73,7 @@
 #import "EVECalllist.h"
 #import "EVELocations.h"
 #import "EVEOwnerID.h"
+#import "EVEPlanetaryColonies.h"
+#import "EVEPlanetaryPins.h"
+#import "EVEPlanetaryRoutes.h"
+#import "EVEPlanetaryLinks.h"

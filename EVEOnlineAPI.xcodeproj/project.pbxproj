@@ -49,6 +49,10 @@
 		12DF9C0F11B7CD9100350938 /* EVECharFacWarStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */; };
 		12E1A0FF11B80A6500F004D7 /* EVEKillLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */; };
 		12EBB729167EF30A002CDAB6 /* EVECharacterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 12EBB728167EF30A002CDAB6 /* EVECharacterInfo.m */; };
+		12ED82CD1AC1339F00C593C4 /* EVEPlanetaryLinks.m in Sources */ = {isa = PBXBuildFile; fileRef = 12ED82C61AC1339F00C593C4 /* EVEPlanetaryLinks.m */; };
+		12ED82CE1AC1339F00C593C4 /* EVEPlanetaryPins.m in Sources */ = {isa = PBXBuildFile; fileRef = 12ED82C81AC1339F00C593C4 /* EVEPlanetaryPins.m */; };
+		12ED82CF1AC1339F00C593C4 /* EVEPlanetaryRoutes.m in Sources */ = {isa = PBXBuildFile; fileRef = 12ED82CA1AC1339F00C593C4 /* EVEPlanetaryRoutes.m */; };
+		12ED82D01AC1339F00C593C4 /* EVEPlanetaryColonies.m in Sources */ = {isa = PBXBuildFile; fileRef = 12ED82CC1AC1339F00C593C4 /* EVEPlanetaryColonies.m */; };
 		12F86DD818E5C22500AFDA97 /* EVEOwnerID.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F86DD718E5C22500AFDA97 /* EVEOwnerID.m */; };
 		12FDCC5A16390FEC0000709F /* EVEKillNetLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 12FDCC5916390FEC0000709F /* EVEKillNetLog.m */; };
 		1D3623260D0F684500981E51 /* EVEOnlineAPIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */; };
@@ -247,6 +251,14 @@
 		12E1A0FE11B80A6500F004D7 /* EVEKillLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEKillLog.m; sourceTree = "<group>"; };
 		12EBB727167EF30A002CDAB6 /* EVECharacterInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECharacterInfo.h; sourceTree = "<group>"; };
 		12EBB728167EF30A002CDAB6 /* EVECharacterInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECharacterInfo.m; sourceTree = "<group>"; };
+		12ED82C51AC1339F00C593C4 /* EVEPlanetaryLinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEPlanetaryLinks.h; sourceTree = "<group>"; };
+		12ED82C61AC1339F00C593C4 /* EVEPlanetaryLinks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEPlanetaryLinks.m; sourceTree = "<group>"; };
+		12ED82C71AC1339F00C593C4 /* EVEPlanetaryPins.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEPlanetaryPins.h; sourceTree = "<group>"; };
+		12ED82C81AC1339F00C593C4 /* EVEPlanetaryPins.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEPlanetaryPins.m; sourceTree = "<group>"; };
+		12ED82C91AC1339F00C593C4 /* EVEPlanetaryRoutes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEPlanetaryRoutes.h; sourceTree = "<group>"; };
+		12ED82CA1AC1339F00C593C4 /* EVEPlanetaryRoutes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEPlanetaryRoutes.m; sourceTree = "<group>"; };
+		12ED82CB1AC1339F00C593C4 /* EVEPlanetaryColonies.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEPlanetaryColonies.h; sourceTree = "<group>"; };
+		12ED82CC1AC1339F00C593C4 /* EVEPlanetaryColonies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEPlanetaryColonies.m; sourceTree = "<group>"; };
 		12F86DD618E5C22500AFDA97 /* EVEOwnerID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEOwnerID.h; sourceTree = "<group>"; };
 		12F86DD718E5C22500AFDA97 /* EVEOwnerID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEOwnerID.m; sourceTree = "<group>"; };
 		12FDCC5716390FEC0000709F /* EVEKillNetAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEKillNetAPI.h; sourceTree = "<group>"; };
@@ -629,6 +641,14 @@
 				7182DB9411FB2F6800997FAD /* EVECharWalletTransactions.m */,
 				37AF875714E991BB0047360D /* EVELocations.h */,
 				37AF875814E991BC0047360D /* EVELocations.m */,
+				12ED82C51AC1339F00C593C4 /* EVEPlanetaryLinks.h */,
+				12ED82C61AC1339F00C593C4 /* EVEPlanetaryLinks.m */,
+				12ED82C71AC1339F00C593C4 /* EVEPlanetaryPins.h */,
+				12ED82C81AC1339F00C593C4 /* EVEPlanetaryPins.m */,
+				12ED82C91AC1339F00C593C4 /* EVEPlanetaryRoutes.h */,
+				12ED82CA1AC1339F00C593C4 /* EVEPlanetaryRoutes.m */,
+				12ED82CB1AC1339F00C593C4 /* EVEPlanetaryColonies.h */,
+				12ED82CC1AC1339F00C593C4 /* EVEPlanetaryColonies.m */,
 			);
 			path = Character;
 			sourceTree = "<group>";
@@ -1123,6 +1143,7 @@
 				1D3623260D0F684500981E51 /* EVEOnlineAPIAppDelegate.m in Sources */,
 				1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */,
 				12CAF63C11B4010C008696F3 /* EVERequest.m in Sources */,
+				12ED82CF1AC1339F00C593C4 /* EVEPlanetaryRoutes.m in Sources */,
 				12CAF64311B4015F008696F3 /* EVECharacters.m in Sources */,
 				12CAF6EE11B40B9A008696F3 /* EVEAccountBalance.m in Sources */,
 				12D4D91F11B56A7900DA98DA /* EVEAssetList.m in Sources */,
@@ -1179,6 +1200,7 @@
 				718C3254121EB51600E4E065 /* EVEServerStatus.m in Sources */,
 				718C329C121EB9EC00E4E065 /* EVEImage.m in Sources */,
 				718C3317121EC87B00E4E065 /* EVECachedURLRequest.m in Sources */,
+				12ED82D01AC1339F00C593C4 /* EVEPlanetaryColonies.m in Sources */,
 				7199F592122411D9004B1032 /* EVEDBDatabase.m in Sources */,
 				7199F5F6122419B1004B1032 /* EVEDBInvType.m in Sources */,
 				7199F5F9122419D2004B1032 /* EVEDBInvGroup.m in Sources */,
@@ -1198,6 +1220,7 @@
 				71814B4812D7B9E60031CA0F /* EVEOutpostServiceDetail.m in Sources */,
 				71814B7A12D7BD2F0031CA0F /* EVEMemberSecurityLog.m in Sources */,
 				717E179612D9333000266573 /* EVEDBEveIcon.m in Sources */,
+				12ED82CD1AC1339F00C593C4 /* EVEPlanetaryLinks.m in Sources */,
 				717E19AE12D947CF00266573 /* EVECentralRequest.m in Sources */,
 				122AC51018BCCBC7005F0F46 /* EVEzKillBoardSearch.m in Sources */,
 				7182CCBC12D9E2C300F8CD02 /* EVECentralMarketStat.m in Sources */,
@@ -1243,6 +1266,7 @@
 				37D0E45314CDBAF7006A57BA /* EVEDBCrtClass.m in Sources */,
 				37D0E45614CDBC52006A57BA /* EVEDBCrtCertificate.m in Sources */,
 				3764AC6814CDC3FE00C7DEC5 /* EVEDBCrtRecommendation.m in Sources */,
+				12ED82CE1AC1339F00C593C4 /* EVEPlanetaryPins.m in Sources */,
 				3764AC6B14CDC7A300C7DEC5 /* EVEDBCrtRelationship.m in Sources */,
 				37C5B9B614E552BB00380B9B /* EVENotificationTexts.m in Sources */,
 				37AF875914E991BC0047360D /* EVELocations.m in Sources */,
