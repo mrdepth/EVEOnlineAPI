@@ -24,7 +24,7 @@
 		self.planetTypeName = [attributeDict valueForKey:@"planetTypeName"];
 		self.ownerID = [[attributeDict valueForKey:@"ownerID"] intValue];
 		self.ownerName = [attributeDict valueForKey:@"ownerName"];
-		self.lastUpdate = [attributeDict valueForKey:@"solarSystemName"];
+		self.lastUpdate = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"lastUpdate"]];
 		self.upgradeLevel = [[attributeDict valueForKey:@"upgradeLevel"] intValue];
 		self.numberOfPins = [[attributeDict valueForKey:@"numberOfPins"] intValue];
 	}

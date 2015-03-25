@@ -26,8 +26,8 @@
 		self.cycleTime = [[attributeDict valueForKey:@"cycleTime"] intValue];
 		self.quantityPerCycle = [[attributeDict valueForKey:@"quantityPerCycle"] intValue];
 
-		self.installTime = [attributeDict valueForKey:@"installTime"];
-		self.expiryTime = [attributeDict valueForKey:@"expiryTime"];
+		self.installTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"installTime"]];
+		self.expiryTime = [[NSDateFormatter eveDateFormatter] dateFromString:[attributeDict valueForKey:@"expiryTime"]];
 
 		self.contentTypeID = [[attributeDict valueForKey:@"contentTypeID"] intValue];
 		self.contentTypeName = [attributeDict valueForKey:@"contentTypeName"];
