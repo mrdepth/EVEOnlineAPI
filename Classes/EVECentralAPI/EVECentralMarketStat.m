@@ -96,11 +96,14 @@
 }
 
 - (id) initWithTypeIDs: (NSArray*) typeIDs regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/marketstat?%@",
-														EVECentralAPIHost,
-														[self argumentsStringWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ]]]
-											cachePolicy:cachePolicy
-												 error:errorPtr
+	NSString* body = [self argumentsStringWithTypeIDs:typeIDs regionIDs:regionIDs hours:hours minQ:minQ];
+	
+	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/api/marketstat",
+														EVECentralAPIHost]]
+						 bodyData:[body dataUsingEncoding:NSUTF8StringEncoding]
+					  contentType:nil
+					  cachePolicy:cachePolicy
+							error:errorPtr
 				  progressHandler:progressHandler]) {
 	}
 	return self;
@@ -179,16 +182,16 @@ didStartElement:(NSString *)elementName
 	NSMutableArray *regionIDsArgs = [NSMutableArray array];
 	
 	for (NSNumber *typeID in typeIDs)
-		[typeIDsArgs addObject:[NSString stringWithFormat:@"typeid=%@", typeID]];
+		[typeIDsArgs addObject:[NSString stringWithFormat:@"%@", typeID]];
 	
 	for (NSNumber *regionID in regionIDs)
-		[regionIDsArgs addObject:[NSString stringWithFormat:@"regionlimit=%@", regionID]];
+		[regionIDsArgs addObject:[NSString stringWithFormat:@"%@", regionID]];
 	
 	NSMutableString *argumentsString = [NSMutableString string];
-	[argumentsString appendString:[typeIDsArgs componentsJoinedByString:@"&"]];
+	[argumentsString appendFormat:@"typeid=%@", [typeIDsArgs componentsJoinedByString:@","]];
 	
 	if (regionIDsArgs.count > 0)
-		[argumentsString appendFormat:@"&%@", [regionIDsArgs componentsJoinedByString:@"&"]];
+		[argumentsString appendFormat:@"&regionlimit=%@", [regionIDsArgs componentsJoinedByString:@","]];
 	
 	if (hours)
 		[argumentsString appendFormat:@"&hours=%d", hours];
