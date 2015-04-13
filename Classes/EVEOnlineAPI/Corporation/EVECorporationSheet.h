@@ -39,7 +39,7 @@
 @property (nonatomic) int32_t stationID;
 @property (nonatomic, copy) NSString *stationName;
 @property (nonatomic, copy) NSString *description;
-@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *corporationURL;
 @property (nonatomic) int32_t allianceID;
 @property (nonatomic, copy) NSString *allianceName;
 @property (nonatomic) float taxRate;

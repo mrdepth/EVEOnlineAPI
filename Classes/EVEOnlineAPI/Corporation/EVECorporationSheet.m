@@ -148,7 +148,7 @@ didStartElement:(NSString *)elementName
 	else if ([elementName isEqualToString:@"description"])
 		self.description = self.text;
 	else if ([elementName isEqualToString:@"url"])
-		self.url = self.text;
+		self.corporationURL = self.text;
 	else if ([elementName isEqualToString:@"allianceID"])
 		self.allianceID = [self.text intValue];
 	else if ([elementName isEqualToString:@"allianceName"])
