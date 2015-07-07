@@ -31,7 +31,8 @@ static BOOL offlineMode = NO;
 - (id) initWithURL: (NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
 	NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url];
 	request.cachePolicy = cachePolicy;
-	
+	[request setTimeoutInterval:20];
+
 	if (self = [self initWithRequest:request error:errorPtr progressHandler:progressHandler]) {
 	}
 	return self;
@@ -43,6 +44,7 @@ static BOOL offlineMode = NO;
 	[request setHTTPBody:bodyData];
 	[request setValue:contentType forHTTPHeaderField:@"Content-Type"];
 	request.cachePolicy = cachePolicy;
+	[request setTimeoutInterval:20];
 	if (self = [self initWithRequest:request error:errorPtr progressHandler:progressHandler]) {
 		
 	}
