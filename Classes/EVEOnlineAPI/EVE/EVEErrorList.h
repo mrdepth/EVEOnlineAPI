@@ -6,22 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEErrorListItem : NSObject<NSCoding>
+@interface EVEErrorListItem : EVEObject
 @property (nonatomic) int32_t errorCode;
 @property (nonatomic, copy) NSString *errorText;
-
-+ (id) errorListItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVEErrorList : EVERequest
+@interface EVEErrorList : EVEResult
 @property (nonatomic, strong) NSArray *errors;
-
-+ (id) errorListWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

@@ -6,22 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVERefTypesItem : NSObject<NSCoding>
+@interface EVERefTypesItem : EVEObject
 @property (nonatomic) int32_t refTypeID;
 @property (nonatomic, copy) NSString *refTypeName;
-
-+ (id) refTypesItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVERefTypes : EVERequest
+@interface EVERefTypes : EVEResult
 @property (nonatomic, strong) NSArray *refTypes;
-
-+ (id) refTypesWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

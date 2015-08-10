@@ -6,22 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVECharacterIDItem : NSObject<NSCoding>
+@interface EVECharacterIDItem : EVEObject
 @property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *name;
-
-+ (id) characterIDItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVECharacterID : EVERequest
+@interface EVECharacterID : EVEResult
 @property (nonatomic, strong) NSArray *characters;
-
-+ (id) characterIDWithNames:(NSArray*) names cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithNames:(NSArray*) names cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

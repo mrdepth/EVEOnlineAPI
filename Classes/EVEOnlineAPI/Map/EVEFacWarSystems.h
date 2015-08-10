@@ -6,25 +6,21 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEFacWarSystemsItem : NSObject<NSCoding>
+@interface EVEFacWarSystemsItem : EVEObject
 @property (nonatomic) int32_t solarSystemID;
-@property (nonatomic, copy) NSString *solarSystemName;
+@property (nonatomic, strong) NSString *solarSystemName;
 @property (nonatomic) int32_t occupyingFactionID;
-@property (nonatomic, copy) NSString *occupyingFactionName;
+@property (nonatomic, strong) NSString *occupyingFactionName;
+@property (nonatomic) int32_t owningFactionID;
+@property (nonatomic, strong) NSString *owningFactionName;
 @property (nonatomic) BOOL contested;
-
-+ (id) facWarSystemsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic) int32_t victoryPoints;
+@property (nonatomic) int32_t victoryPointThreshold;
 @end
 
 
-@interface EVEFacWarSystems : EVERequest
+@interface EVEFacWarSystems : EVEResult
 @property (nonatomic, strong) NSArray *solarSystems;
-
-+ (id) facWarSystemsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

@@ -6,22 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEJumpsItem : NSObject<NSCoding>
+@interface EVEJumpsItem : EVEObject
 @property (nonatomic) int32_t solarSystemID;
 @property (nonatomic) int32_t shipJumps;
-
-+ (id) jumpsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVEJumps : EVERequest
+@interface EVEJumps : EVEResult
 @property (nonatomic, strong) NSArray *solarSystems;
-
-+ (id) jumpsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

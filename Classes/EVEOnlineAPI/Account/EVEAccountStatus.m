@@ -8,71 +8,28 @@
 
 #import "EVEAccountStatus.h"
 
+@implementation EVEAccountStatusMultiCharacterTrainingItem
+
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"trainingEnd":@{@"type":@(EVEXMLSchemePropertyTypeDate)}};
+	return scheme;
+}
+
+@end
 
 @implementation EVEAccountStatus
 
-+ (EVEApiKeyType) requiredApiKeyType {
-	return EVEApiKeyTypeFull;
-}
-
-+ (id) accountStatusWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVEAccountStatus alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
-}
-
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/account/AccountStatus.xml.aspx?keyID=%d&vCode=%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
-					   cachePolicy:cachePolicy
-							error:errorPtr
-				  progressHandler:progressHandler]) {
-		
-	}
-	return self;
-}
-
-#pragma mark - NSXMLParserDelegate
-
-- (id) didStartRowset: (NSString*) rowset {
-	return nil;
-}
-
-- (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
-	return nil;
-}
-
-- (void) parser:(NSXMLParser *)parser
-  didEndElement:(NSString *)elementName
-   namespaceURI:(NSString *)namespaceURI
-  qualifiedName:(NSString *)qName {
-	[super parser:parser didEndElement:elementName namespaceURI:namespaceURI qualifiedName:qName];
-	if ([elementName isEqualToString:@"paidUntil"])
-		self.paidUntil = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
-	else if ([elementName isEqualToString:@"createDate"])
-		self.createDate = [[NSDateFormatter eveDateFormatter] dateFromString:self.text];
-	else if ([elementName isEqualToString:@"logonCount"])
-		self.logonCount = [self.text intValue];
-	else if ([elementName isEqualToString:@"logonMinutes"])
-		self.logonMinutes = [self.text intValue];
-
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[super encodeWithCoder:aCoder];
-	[aCoder encodeObject:self.paidUntil forKey:@"paidUntil"];
-	[aCoder encodeObject:self.createDate forKey:@"createDate"];
-	[aCoder encodeInt32:self.logonCount forKey:@"logonCount"];
-	[aCoder encodeInt32:self.logonMinutes forKey:@"logonMinutes"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		self.paidUntil = [aDecoder decodeObjectForKey:@"paidUntil"];
-		self.createDate = [aDecoder decodeObjectForKey:@"createDate"];
-		self.logonCount = [aDecoder decodeInt32ForKey:@"logonCount"];
-		self.logonMinutes = [aDecoder decodeInt32ForKey:@"logonMinutes"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"paidUntil":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
+				   @"createDate":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
+				   @"logonCount":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"logonMinutes":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"multiCharacterTraining":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEAccountStatusMultiCharacterTrainingItem class]}};
+	return scheme;
 }
 
 @end

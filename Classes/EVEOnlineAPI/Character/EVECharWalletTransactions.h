@@ -7,31 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVECharWalletTransactionsItem : NSObject<NSCoding>
+@interface EVEWalletTransactionsItem : EVEObject
 @property (nonatomic, strong) NSDate *transactionDateTime;
 @property (nonatomic) int64_t transactionID;
 @property (nonatomic) int32_t quantity;
-@property (nonatomic, copy) NSString *typeName;
+@property (nonatomic, strong) NSString *typeName;
 @property (nonatomic) int32_t typeID;
 @property (nonatomic) float price;
 @property (nonatomic) int32_t clientID;
-@property (nonatomic, copy) NSString *clientName;
+@property (nonatomic, strong) NSString *clientName;
 @property (nonatomic) int32_t stationID;
-@property (nonatomic, copy) NSString *stationName;
-@property (nonatomic, copy) NSString *transactionType;
-@property (nonatomic, copy) NSString *transactionFor;
-
-+ (id) charWalletTransactionsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *stationName;
+@property (nonatomic, strong) NSString *transactionType;
+@property (nonatomic, strong) NSString *transactionFor;
+@property (nonatomic) int64_t journalTransactionID;
+@property (nonatomic) int32_t clientTypeID;
 @end
 
-@interface EVECharWalletTransactions : EVERequest
+@interface EVECharWalletTransactions : EVEResult
 @property (nonatomic, strong) NSArray *transactions;
-
-+ (id) charWalletTransactionsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID beforeTransID: (int64_t) beforeTransID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID beforeTransID: (int64_t) beforeTransID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end

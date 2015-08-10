@@ -6,22 +6,14 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEMailBodiesItem : NSObject<NSCoding>
+@interface EVEMailBodiesItem : EVEObject
 @property (nonatomic) int32_t messageID;
 @property (nonatomic, copy) NSString *text;
-
-+ (id) mailBodiesItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
-@interface EVEMailBodies : EVERequest
+@interface EVEMailBodies : EVEResult
 @property (nonatomic, strong) NSArray *messages;
-
-+ (id) mailBodiesWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID ids: (NSArray*) ids error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
+@property (nonatomic, strong) NSArray *missingMessageIDs;
 @end

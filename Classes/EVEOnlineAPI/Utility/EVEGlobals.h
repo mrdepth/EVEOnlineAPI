@@ -194,3 +194,12 @@ typedef NS_ENUM(int32_t, EVEAPIKeyType) {
 	EVEAPIKeyTypeCorporation
 };
 
+typedef NS_ENUM(int32_t, EVEIndustryJobStatus) {
+	EVEIndustryJobStatusActive = 1,
+	EVEIndustryJobStatusPaused = 2,
+	EVEIndustryJobStatusReady = 3,
+	EVEIndustryJobStatusDelivered = 101,
+	EVEIndustryJobStatusCancelled = 102,
+	EVEIndustryJobStatusReverted = 103
+};
+

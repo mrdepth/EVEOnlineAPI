@@ -6,35 +6,24 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEMemberSecurityLogRolesItem : NSObject<NSCoding>
-@property (nonatomic) int32_t roleID;
-@property (nonatomic, copy) NSString *roleName;
-
-+ (id) memberSecurityLogRolesItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@interface EVEMemberSecurityLogRolesItem : EVEObject
+@property (nonatomic) int64_t roleID;
+@property (nonatomic, strong) NSString *roleName;
 @end
 
-@interface EVEMemberSecurityLogRoleHistoryItem : NSObject<NSCoding>
+@interface EVEMemberSecurityLogRoleHistoryItem : EVEObject
 @property (nonatomic, strong) NSDate *changeTime;
-@property (nonatomic) int32_t characterID;
+@property (nonatomic) int32_t characterName;
+@property (nonatomic, strong) NSString *roleName;
 @property (nonatomic) int32_t issuerID;
-@property (nonatomic, copy) NSString *roleLocationType;
-@property (nonatomic, strong) NSArray *oldRoles;
-@property (nonatomic, strong) NSArray *theNewRoles;
-
-+ (id) memberSecurityLogRoleHistoryItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *issuerName;
+@property (nonatomic, strong) NSString *roleLocationType;
+@property (nonatomic, assign) NSArray *oldRoles;
+@property (nonatomic, assign) NSArray *theNewRoles;
 @end
 
-@interface EVEMemberSecurityLog : EVERequest
+@interface EVEMemberSecurityLog : EVEResult
 @property (nonatomic, strong) NSArray *roleHistory;
-
-+ (id) memberSecurityLogWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end

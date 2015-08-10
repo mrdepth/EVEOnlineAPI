@@ -6,67 +6,48 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
+#import "EVEGlobals.h"
 
-@interface EVESkillTreeRequiredAttributes : NSObject<NSCoding>
+@interface EVESkillTreeRequiredAttributes : EVEObject
 @property (nonatomic) EVECharacterAttribute primaryAttribute;
 @property (nonatomic) EVECharacterAttribute secondaryAttribute;
 @end
 
 
-@interface EVESkillTreeRequiredSkillsItem : NSObject<NSCoding>
+@interface EVESkillTreeRequiredSkillsItem : EVEObject
 @property (nonatomic) int32_t typeID;
 @property (nonatomic) int32_t skillLevel;
-
-+ (id) skillTreeRequiredSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVESkillTreeSkillBonusCollectionItem : NSObject<NSCoding>
+@interface EVESkillTreeSkillBonusCollectionItem : EVEObject
 @property (nonatomic, copy) NSString *bonusType;
 @property (nonatomic) int32_t bonusValue;
-
-+ (id) skillTreeSkillBonusCollectionItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
 
-@interface EVESkillTreeSkillGroupsItem : NSObject<NSCoding>
+@interface EVESkillTreeSkillGroupsItem : EVEObject
 @property (nonatomic) int32_t groupID;
 @property (nonatomic, copy) NSString *groupName;
 @property (nonatomic, strong) NSArray *skills;
-
-+ (id) skillTreeSkillGroupsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVESkillTreeSkillsItem : NSObject<NSCoding>
+@interface EVESkillTreeSkillsItem : EVEObject
 @property (nonatomic) int32_t groupID;
 @property (nonatomic) int32_t typeID;
 @property (nonatomic, copy) NSString *typeName;
-@property (nonatomic, copy) NSString *description;
+@property (nonatomic, copy) NSString *skillDescription;
 @property (nonatomic) int32_t rank;
 @property (nonatomic, strong) NSArray *requiredSkills;
 @property (nonatomic, strong) EVESkillTreeRequiredAttributes *requiredAttributes;
 @property (nonatomic, strong) NSArray *skillBonusCollection;	
 @property (nonatomic) BOOL published;
-
-+ (id) skillTreeSkillsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVESkillTree : EVERequest
+@interface EVESkillTree : EVEResult
 @property (nonatomic, strong) NSArray *skillGroups;
-
-+ (id) skillTreeWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

@@ -6,34 +6,27 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
+#import "EVEGlobals.h"
 
-@interface EVEIndustryJobsItem : NSObject<NSCoding>
+@interface EVEIndustryJobsItem : EVEObject
 
-@property (nonatomic) int32_t runs, licensedRuns, stationID, status, productTypeID, activityID, blueprintTypeID, timeInSeconds,
-  facilityID, solarSystemID, teamID;
+@property (nonatomic) int32_t runs, licensedRuns, stationID, productTypeID, activityID, blueprintTypeID, timeInSeconds,
+  facilityID, solarSystemID, teamID, successfulRuns;
 
 @property (nonatomic) int64_t jobID, installerID,
-
   blueprintID, outputLocationID, blueprintLocationID,
   completedCharacterID;
 
-/* probability's type not shown in documentation, we assume it as float */
 @property (nonatomic) float cost, probability;
 @property (nonatomic, strong) NSDate *startDate, *endDate, *pauseDate, *completedDate;
 @property (nonatomic, strong) NSString *installerName, *solarSystemName, *blueprintTypeName, *productTypeName;
-
-+ (id) industryJobsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+@property (nonatomic) EVEIndustryJobStatus status;
 
 @end
 
 
-@interface EVEIndustryJobs : EVERequest
+@interface EVEIndustryJobs : EVEResult
 @property (nonatomic, strong) NSArray *jobs;
-
-+ (id) industryJobsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

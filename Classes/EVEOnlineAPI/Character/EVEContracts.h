@@ -6,22 +6,19 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
+#import "EVEGlobals.h"
 
-@interface EVEContractsItem : NSObject<NSCoding>
-@property (nonatomic) int32_t contractID;
+@interface EVEContractsItem : EVEObject;
+@property (nonatomic) int64_t contractID;
 @property (nonatomic) int32_t issuerID, issuerCorpID, assigneeID, acceptorID, forCorp;
 @property (nonatomic) int32_t startStationID, endStationID, numDays;
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, strong) NSString *title;
 @property (nonatomic) EVEContractType type;
 @property (nonatomic) EVEContractStatus status;
 @property (nonatomic) EVEContractavAilability availability;
 @property (nonatomic, strong) NSDate *dateIssued, *dateExpired, *dateAccepted, *dateCompleted;
-@property (nonatomic) float price, reward, collateral, buyout, volume;
-
-+ (id) contractsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+@property (nonatomic) double price, reward, collateral, buyout, volume;
 
 - (NSString*) localizedTypeString;
 - (NSString*) localizedStatusString;
@@ -29,9 +26,6 @@
 
 @end
 
-@interface EVEContracts : EVERequest
+@interface EVEContracts : EVEResult
 @property (nonatomic, strong) NSArray *contractList;
-
-+ (id) contractsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

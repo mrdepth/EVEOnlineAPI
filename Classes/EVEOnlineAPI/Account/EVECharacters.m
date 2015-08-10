@@ -10,37 +10,18 @@
 
 @implementation EVECharactersItem
 
-+ (id) charactersItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[EVECharactersItem alloc] initWithXMLAttributes:attributeDict];
-}
-
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
-	if (self = [super init]) {
-		self.name = [attributeDict valueForKey:@"name"];
-		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
-		self.corporationName = [attributeDict valueForKey:@"corporationName"];
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
-	}
-	return self;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeObject:self.name forKey:@"name"];
-	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
-	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
-	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super init]) {
-		self.name = [aDecoder decodeObjectForKey:@"name"];
-		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
-		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
-		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"characterID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"characterName":@{@"type":@(EVEXMLSchemePropertyTypeString), @"elementName":@"name"},
+				   @"corporationID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"corporationName":@{@"type":@(EVEXMLSchemePropertyTypeString)},
+				   @"allianceID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"allianceName":@{@"type":@(EVEXMLSchemePropertyTypeString)},
+				   @"factionID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"factionName":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
+	return scheme;
 }
 
 @end
@@ -48,55 +29,12 @@
 
 @implementation EVECharacters
 
-+ (EVEApiKeyType) requiredApiKeyType {
-	return EVEApiKeyTypeLimited;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"characters":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVECharactersItem class]}};
+	return scheme;
 }
 
-+ (id) charactersWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVECharacters alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
-}
-
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/account/Characters.xml.aspx?keyID=%d&vCode=%@", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]]
-					   cachePolicy:cachePolicy
-							error:errorPtr
-				  progressHandler:progressHandler]) {
-	}
-	return self;
-}
-
-#pragma mark - NSXMLParserDelegate
-
-- (id) didStartRowset: (NSString*) rowset {
-	if ([rowset isEqualToString:@"characters"]) {
-		self.characters = [[NSMutableArray alloc] init];
-		return self.characters;
-	}
-	return nil;
-}
-
-- (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
-	if ([rowset isEqualToString:@"characters"]) {
-		EVECharactersItem *character = [EVECharactersItem charactersItemWithXMLAttributes:attributeDict];
-		[(NSMutableArray*) self.characters addObject:character];
-		return character;
-	}
-	else
-		return nil;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[super encodeWithCoder:aCoder];
-	[aCoder encodeObject:self.characters forKey:@"characters"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		self.characters = [aDecoder decodeObjectForKey:@"characters"];
-	}
-	return self;
-}
 
 @end

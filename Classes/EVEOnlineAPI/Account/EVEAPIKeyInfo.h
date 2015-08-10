@@ -6,37 +6,31 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
+#import "EVEGlobals.h"
 
-@interface EVEAPIKeyInfoCharactersItem : NSObject<NSCoding>
+@interface EVEAPIKeyInfoCharactersItem : EVEObject
 @property (nonatomic) int32_t characterID;
-@property (nonatomic, copy) NSString *characterName;
+@property (nonatomic, strong) NSString *characterName;
 @property (nonatomic) int32_t corporationID;
-@property (nonatomic, copy) NSString *corporationName;
-
-+ (id) charactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+@property (nonatomic, strong) NSString *corporationName;
+@property (nonatomic) int32_t allianceID;
+@property (nonatomic, strong) NSString *allianceName;
+@property (nonatomic) int32_t factionID;
+@property (nonatomic, copy) NSString *factionName;
 
 @end
 
-@interface EVEAPIKeyInfoKey : NSObject<NSCoding>
+@interface EVEAPIKeyInfoKey : EVEObject
 @property (nonatomic) int32_t accessMask;
 @property (nonatomic) EVEAPIKeyType type;
 @property (nonatomic, strong) NSDate *expires;
-
-+ (id) keyWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSArray *characters;
 @end
 
 
 
-@interface EVEAPIKeyInfo : EVERequest
+@interface EVEAPIKeyInfo : EVEResult
 @property (nonatomic, strong) EVEAPIKeyInfoKey *key;
-@property (nonatomic, strong) NSArray *characters;
-
-+ (id) apiKeyInfoWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 
 @end

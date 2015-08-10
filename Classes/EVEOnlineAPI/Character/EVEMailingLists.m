@@ -10,53 +10,26 @@
 
 @implementation EVEMailingListsItem
 
-+ (id) mailingListsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[EVEMailingListsItem alloc] initWithXMLAttributes:attributeDict];
-}
-
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
-	if (self = [super init]) {
-		self.listID = [[attributeDict valueForKey:@"listID"] intValue];
-		self.displayName = [attributeDict valueForKey:@"displayName"];
-	}
-	return self;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInt32:self.listID forKey:@"listID"];
-	[aCoder encodeObject:self.displayName forKey:@"displayName"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super init]) {
-		self.listID = [aDecoder decodeInt32ForKey:@"listID"];
-		self.displayName = [aDecoder decodeObjectForKey:@"displayName"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"listID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"displayName":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
+	return scheme;
 }
 
 @end
 
 
 @implementation EVEMailingLists
+@synthesize mailingListsMap = _mailingListsMap;
 
-+ (EVEApiKeyType) requiredApiKeyType {
-	return EVEApiKeyTypeFull;
-}
-
-+ (id) mailingListsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVEMailingLists alloc] initWithKeyID:keyID vCode:vCode cachePolicy:cachePolicy characterID:characterID error:errorPtr progressHandler:progressHandler];
-}
-
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/char/MailingLists.xml.aspx?keyID=%d&vCode=%@&characterID=%d", EVEOnlineAPIHost, keyID, [vCode stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], characterID]]
-					   cachePolicy:cachePolicy
-							error:errorPtr
-				  progressHandler:progressHandler]) {
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"mailingLists":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEMailingListsItem class]}};
+	
+	return scheme;
 }
 
 - (NSDictionary*) mailingListsMap {
@@ -66,40 +39,6 @@
 			((NSMutableDictionary*)_mailingListsMap)[@(item.listID)] = item;
 	}
 	return _mailingListsMap;
-}
-
-#pragma mark - NSXMLParserDelegate
-
-- (id) didStartRowset: (NSString*) rowset {
-	if ([rowset isEqualToString:@"mailingLists"]) {
-		self.mailingLists = [[NSMutableArray alloc] init];
-		return self.mailingLists;
-	}
-	else
-		return nil;
-}
-
-- (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
-	if ([rowset isEqualToString:@"mailingLists"]) {
-		EVEMailingListsItem *mailingListsItem = [EVEMailingListsItem mailingListsItemWithXMLAttributes:attributeDict];
-		[(NSMutableArray*) self.mailingLists addObject:mailingListsItem];
-		return mailingListsItem;
-	}
-	return nil;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[super encodeWithCoder:aCoder];
-	[aCoder encodeObject:self.mailingLists forKey:@"mailingLists"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		self.mailingLists = [aDecoder decodeObjectForKey:@"mailingLists"];
-	}
-	return self;
 }
 
 @end

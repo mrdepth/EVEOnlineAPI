@@ -53,16 +53,16 @@
 	NSMutableArray* kills = [NSMutableArray new];
 	for (NSDictionary* dictionary in object) {
 		if ([dictionary isKindOfClass:[NSDictionary class]]) {
-			EVEKillLogKill* kill = [[EVEKillLogKill alloc] initWithXMLAttributes:dictionary];
+			EVEKillMailsKill* kill = [[EVEKillMailsKill alloc] initWithDictionary:dictionary];
 			if (!kill.killID)
 				continue;
-			kill.victim = [[EVEKillLogVictim alloc] initWithXMLAttributes:dictionary[@"victim"]];
+			kill.victim = [[EVEKillMailsVictim alloc] initWithDictionary:dictionary[@"victim"]];
 			NSMutableArray* items = [NSMutableArray new];
 			for (NSDictionary* dictionaryItem in dictionary[@"items"])
-				[items addObject:[[EVEKillLogItem alloc] initWithXMLAttributes:dictionaryItem]];
+				[items addObject:[[EVEKillMailsItem alloc] initWithDictionary:dictionaryItem]];
 			NSMutableArray* attackers = [NSMutableArray new];
 			for (NSDictionary* dictionaryAttacker in dictionary[@"attackers"])
-				[attackers addObject:[[EVEKillLogAttacker alloc] initWithXMLAttributes:dictionaryAttacker]];
+				[attackers addObject:[[EVEKillMailsAttacker alloc] initWithDictionary:dictionaryAttacker]];
 			kill.items = items;
 			kill.attackers = attackers;
 			[kills addObject:kill];

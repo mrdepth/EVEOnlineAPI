@@ -6,10 +6,9 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEMemberSecurityMember : NSObject<NSCoding>
+@interface EVEMemberSecurityMember : EVEObject
 @property (nonatomic) int32_t characterID;
 @property (nonatomic, copy) NSString *name;
 @property (nonatomic, strong) NSArray *roles;
@@ -21,37 +20,21 @@
 @property (nonatomic, strong) NSArray *rolesAtOther;
 @property (nonatomic, strong) NSArray *grantableRolesAtOther;
 @property (nonatomic, strong) NSArray *titles;
-
-+ (id) memberSecurityMemberWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVEMemberSecurityRoleItem : NSObject<NSCoding>
-@property (nonatomic) int32_t roleID;
-@property (nonatomic, copy) NSString *roleName;
-
-+ (id) memberSecurityRoleItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@interface EVEMemberSecurityRoleItem : EVEObject
+@property (nonatomic) uint64_t roleID;
+@property (nonatomic, strong) NSString *roleName;
 @end
 
 
-@interface EVEMemberSecurityTitleItem : NSObject<NSCoding>
+@interface EVEMemberSecurityTitleItem : EVEObject
 @property (nonatomic) int32_t titleID;
-@property (nonatomic, copy) NSString *titleName;
-
-+ (id) memberSecurityTitleItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *titleName;
 @end
 
 
-@interface EVEMemberSecurity : EVERequest
+@interface EVEMemberSecurity : EVEResult
 @property (nonatomic, strong) NSArray *members;
-
-+ (id) memberSecurityWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end

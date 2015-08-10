@@ -6,131 +6,103 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVECharacterSheetAttributes : NSObject<NSCoding>
+@interface EVECharacterSheetAttributes : EVEObject
 @property int32_t intelligence;
 @property int32_t memory;
 @property int32_t charisma;
 @property int32_t perception;
 @property int32_t willpower;
-
 @end
 
 
-/*#pragma mark --
-
-@interface EVECharacterSheetAttributeEnhancer : NSObject<NSCoding>
-@property (nonatomic) EVECharacterAttribute attribute;
-@property (nonatomic, copy) NSString *augmentatorName;
-@property (nonatomic) int32_t augmentatorValue;
-@end*/
-
-#pragma mark --
-
-@interface EVECharacterSheetSkill : NSObject<NSCoding>
+@interface EVECharacterSheetSkill : EVEObject
 @property (nonatomic) int32_t typeID;
 @property (nonatomic) int32_t skillpoints;
 @property (nonatomic) int32_t level;
-@property (nonatomic) BOOL unpublished;
-
-+ (id) characterSheetSkillWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic) BOOL published;
 @end
 
-#pragma mark --
+@interface EVECharacterSheetCertificate : EVEObject
+@property (nonatomic) int32_t certificateID;
+@end
 
-@interface EVECharacterSheetRole : NSObject<NSCoding>
+
+@interface EVECharacterSheetRole : EVEObject
 @property (nonatomic) int32_t roleID;
-@property (nonatomic, copy) NSString *roleName;
-
-+ (id) characterSheetRoleWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *roleName;
 @end
 
-#pragma mark --
-
-@interface EVECharacterSheetCorporationTitle : NSObject<NSCoding>
+@interface EVECharacterSheetCorporationTitle : EVEObject
 @property (nonatomic) int32_t titleID;
-@property (nonatomic, copy) NSString *titleName;
-
-+ (id) characterSheetCorporationTitleWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *titleName;
 @end
 
 
-#pragma mark --
-
-@interface EVECharacterSheetImplant : NSObject<NSCoding>
+@interface EVECharacterSheetImplant : EVEObject
 @property (nonatomic) int32_t typeID;
-@property (nonatomic, copy) NSString *typeName;
-
-+ (id) characterSheetImplantWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *typeName;
 @end
 
-#pragma mark --
-
-@interface EVECharacterSheetJumpClone : NSObject<NSCoding>
+@interface EVECharacterSheetJumpClone : EVEObject
 @property (nonatomic) int32_t jumpCloneID;
 @property (nonatomic) int32_t typeID;
 @property (nonatomic) int64_t locationID;
-@property (nonatomic, copy) NSString *cloneName;
-
-+ (id) characterSheetJumpCloneWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *cloneName;
 @end
 
-@interface EVECharacterSheetJumpCloneImplant : NSObject<NSCoding>
+@interface EVECharacterSheetJumpCloneImplant : EVEObject
 @property (nonatomic) int32_t jumpCloneID;
 @property (nonatomic) int32_t typeID;
-@property (nonatomic, copy) NSString *typeName;
-
-+ (id) characterSheetJumpCloneImplantWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *typeName;
 @end
 
-
-
-#pragma mark --
-
 @class EVESkillQueue;
-@interface EVECharacterSheet : EVERequest
+@interface EVECharacterSheet : EVEResult
 @property (nonatomic) int32_t characterID;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *race;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic) int32_t homeStationID;
 @property (nonatomic, strong) NSDate *DoB;
-@property (nonatomic, copy) NSString *bloodLine;
-@property (nonatomic, copy) NSString *ancestry;
-@property (nonatomic, copy) NSString *gender;
-@property (nonatomic, copy) NSString *corporationName;
+@property (nonatomic, strong) NSString *race;
+@property (nonatomic) int32_t bloodLineID;
+@property (nonatomic, strong) NSString *bloodLine;
+@property (nonatomic) int32_t ancestryID;
+@property (nonatomic, strong) NSString *ancestry;
+@property (nonatomic, strong) NSString *gender;
+@property (nonatomic, strong) NSString *corporationName;
 @property (nonatomic) int32_t corporationID;
-@property (nonatomic, copy) NSString *allianceName;
+@property (nonatomic, strong) NSString *allianceName;
 @property (nonatomic) int32_t allianceID;
-@property (nonatomic) float balance;
-//@property (nonatomic, strong) NSMutableArray *attributeEnhancers;
+@property (nonatomic, strong) NSString *factionName;
+@property (nonatomic) int32_t factionID;
+@property (nonatomic) int32_t cloneTypeID;
+@property (nonatomic, strong) NSString *cloneName;
+@property (nonatomic) int32_t cloneSkillPoints;
+@property (nonatomic) int32_t freeSkillPoints;
+@property (nonatomic) int32_t freeRespecs;
+@property (nonatomic, strong) NSDate *cloneJumpDate;
+@property (nonatomic, strong) NSDate *lastRespecDate;
+@property (nonatomic, strong) NSDate *lastTimedRespec;
+@property (nonatomic, strong) NSDate *remoteStationDate;
+@property (nonatomic, strong) NSArray *jumpClones;
+@property (nonatomic, strong) NSArray *jumpCloneImplants;
+@property (nonatomic, strong) NSDate *jumpActivation;
+@property (nonatomic, strong) NSDate *jumpFatigue;
+@property (nonatomic, strong) NSDate *jumpLastUpdate;
+@property (nonatomic) double balance;
+@property (nonatomic, strong) NSArray *implants;
 @property (nonatomic, strong) EVECharacterSheetAttributes *attributes;
-@property (nonatomic, strong) NSMutableArray *skills;
-@property (nonatomic, strong) NSMutableArray *certificates;
-@property (nonatomic, strong) NSMutableArray *corporationRoles;
-@property (nonatomic, strong) NSMutableArray *corporationRolesAtHQ;
-@property (nonatomic, strong) NSMutableArray *corporationRolesAtBase;
-@property (nonatomic, strong) NSMutableArray *corporationRolesAtOther;
-@property (nonatomic, strong) NSMutableArray *corporationTitles;
-@property (nonatomic, strong) NSDictionary *skillsMap;
-@property (nonatomic, strong) NSMutableArray *implants;
-@property (nonatomic, strong) NSMutableArray *jumpClones;
-@property (nonatomic, strong) NSMutableArray *jumpCloneImplants;
+@property (nonatomic, strong) NSArray *skills;
+@property (nonatomic, strong) NSArray *certificates;
+@property (nonatomic, strong) NSArray *corporationRoles;
+@property (nonatomic, strong) NSArray *corporationRolesAtHQ;
+@property (nonatomic, strong) NSArray *corporationRolesAtBase;
+@property (nonatomic, strong) NSArray *corporationRolesAtOther;
+@property (nonatomic, strong) NSArray *corporationTitles;
 
-+ (id) characterSheetWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+@property (nonatomic, strong, readonly) NSDictionary *skillsMap;
 
 - (void) updateSkillPointsFromSkillQueue:(EVESkillQueue*) skillQueue;
+
 @end

@@ -6,25 +6,21 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVECharactersItem : NSObject<NSCoding>
-@property (nonatomic, copy) NSString *name;
+@interface EVECharactersItem : EVEObject
 @property (nonatomic) int32_t characterID;
-@property (nonatomic, copy) NSString *corporationName;
+@property (nonatomic, strong) NSString *characterName;
 @property (nonatomic) int32_t corporationID;
-
-+ (id) charactersItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
+@property (nonatomic, strong) NSString *corporationName;
+@property (nonatomic) int32_t allianceID;
+@property (nonatomic, strong) NSString *allianceName;
+@property (nonatomic) int32_t factionID;
+@property (nonatomic, strong) NSString *factionName;
 
 @end
 
 
-@interface EVECharacters : EVERequest
+@interface EVECharacters : EVEResult
 @property (nonatomic, strong) NSArray *characters;
-
-+ (id) charactersWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end

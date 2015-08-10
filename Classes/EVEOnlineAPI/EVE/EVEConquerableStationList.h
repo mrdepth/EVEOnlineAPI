@@ -6,26 +6,21 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEConquerableStationListItem : NSObject<NSCoding>
+@interface EVEConquerableStationListItem : EVEObject
 @property (nonatomic) int32_t stationID;
-@property (nonatomic, copy) NSString *stationName;
+@property (nonatomic, strong) NSString *stationName;
 @property (nonatomic) int32_t stationTypeID;
 @property (nonatomic) int32_t solarSystemID;
 @property (nonatomic) int32_t corporationID;
-@property (nonatomic, copy) NSString *corporationName;
-
-+ (id) conquerableStationListItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *corporationName;
+@property (nonatomic) double x;
+@property (nonatomic) double y;
+@property (nonatomic) double z;
 @end
 
 
-@interface EVEConquerableStationList : EVERequest
+@interface EVEConquerableStationList : EVEResult
 @property (nonatomic, strong) NSArray *outposts;
-
-+ (id) conquerableStationListWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

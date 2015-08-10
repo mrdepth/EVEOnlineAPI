@@ -6,23 +6,14 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEMailingListsItem : NSObject<NSCoding>
+@interface EVEMailingListsItem : EVEObject
 @property (nonatomic) int32_t listID;
-@property (nonatomic, copy) NSString *displayName;
-
-+ (id) mailingListsItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic, strong) NSString *displayName;
 @end
 
-@interface EVEMailingLists : EVERequest
+@interface EVEMailingLists : EVEResult
 @property (nonatomic, strong) NSArray *mailingLists;
-@property (nonatomic, strong) NSDictionary *mailingListsMap;
-
-+ (id) mailingListsWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
+@property (nonatomic, strong, readonly) NSDictionary *mailingListsMap;
 @end

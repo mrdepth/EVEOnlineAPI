@@ -6,10 +6,10 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
+#import "EVEGlobals.h"
 
-@interface EVEMarketOrdersItem : NSObject<NSCoding>
+@interface EVEMarketOrdersItem : EVEObject
 @property (nonatomic) int32_t orderID;
 @property (nonatomic) int32_t charID;
 @property (nonatomic) int32_t stationID;
@@ -26,17 +26,10 @@
 @property (nonatomic) BOOL bid;
 @property (nonatomic, strong) NSDate *issued;
 
-+ (id) marketOrdersItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
 @end
 
 
-@interface EVEMarketOrders : EVERequest
+@interface EVEMarketOrders : EVEResult
 @property (nonatomic, strong) NSArray *orders;
-
-+ (id) marketOrdersWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID corporate: (BOOL) corporate error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end
 

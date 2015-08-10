@@ -8,41 +8,16 @@
 
 #import "EVEFacWarTopStats.h"
 
-@interface EVEFacWarTopStats()
-@property (nonatomic, strong) EVEFacWarTopStatsSection *currentSection;
-
-@end
-
 @implementation EVEFacWarTopStatsCharactersItem
 
-+ (id) facWarTopStatsCharactersItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[EVEFacWarTopStatsCharactersItem alloc] initWithXMLAttributes:attributeDict];
-}
-
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
-	if (self = [super init]) {
-		self.characterID = [[attributeDict valueForKey:@"characterID"] intValue];
-		self.characterName = [attributeDict valueForKey:@"characterName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
-	}
-	return self;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInt32:self.characterID forKey:@"characterID"];
-	[aCoder encodeObject:self.characterName forKey:@"characterName"];
-	[aCoder encodeInt32:self.kills forKey:@"kills"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super init]) {
-		self.characterID = [aDecoder decodeInt32ForKey:@"characterID"];
-		self.characterName = [aDecoder decodeObjectForKey:@"characterName"];
-		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"factionID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"factionName":@{@"type":@(EVEXMLSchemePropertyTypeString)},
+				   @"againstID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"againstName":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
+	return scheme;
 }
 
 @end
@@ -50,34 +25,14 @@
 
 @implementation EVEFacWarTopStatsCorporationsItem
 
-+ (id) facWarTopStatsCorporationsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[EVEFacWarTopStatsCorporationsItem alloc] initWithXMLAttributes:attributeDict];
-}
-
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
-	if (self = [super init]) {
-		self.corporationID = [[attributeDict valueForKey:@"corporationID"] intValue];
-		self.corporationName = [attributeDict valueForKey:@"corporationName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
-	}
-	return self;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInt32:self.corporationID forKey:@"corporationID"];
-	[aCoder encodeObject:self.corporationName forKey:@"corporationName"];
-	[aCoder encodeInt32:self.kills forKey:@"kills"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super init]) {
-		self.corporationID = [aDecoder decodeInt32ForKey:@"corporationID"];
-		self.corporationName = [aDecoder decodeObjectForKey:@"corporationName"];
-		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"factionID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"factionName":@{@"type":@(EVEXMLSchemePropertyTypeString)},
+				   @"againstID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"againstName":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
+	return scheme;
 }
 
 
@@ -86,170 +41,79 @@
 
 @implementation EVEFacWarTopStatsFactionsItem
 
-+ (id) facWarTopStatsFactionsItemWithXMLAttributes:(NSDictionary *)attributeDict {
-	return [[EVEFacWarTopStatsFactionsItem alloc] initWithXMLAttributes:attributeDict];
-}
-
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict {
-	if (self = [super init]) {
-		self.factionID = [[attributeDict valueForKey:@"factionID"] intValue];
-		self.factionName = [attributeDict valueForKey:@"factionName"];
-		self.kills = [[attributeDict valueForKey:@"kills"] intValue];
-	}
-	return self;
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeInt32:self.factionID forKey:@"factionID"];
-	[aCoder encodeObject:self.factionName forKey:@"factionName"];
-	[aCoder encodeInt32:self.kills forKey:@"kills"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super init]) {
-		self.factionID = [aDecoder decodeInt32ForKey:@"factionID"];
-		self.factionName = [aDecoder decodeObjectForKey:@"factionName"];
-		self.kills = [aDecoder decodeInt32ForKey:@"kills"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"factionID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"factionName":@{@"type":@(EVEXMLSchemePropertyTypeString)},
+				   @"againstID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"againstName":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
+	return scheme;
 }
 
 @end
 
-@implementation EVEFacWarTopStatsSection
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[aCoder encodeObject:self.killsYesterday forKey:@"killsYesterday"];
-	[aCoder encodeObject:self.killsLastWeek forKey:@"killsLastWeek"];
-	[aCoder encodeObject:self.killsTotal forKey:@"killsTotal"];
-	[aCoder encodeObject:self.victoryPointsYesterday forKey:@"victoryPointsYesterday"];
-	[aCoder encodeObject:self.victoryPointsLastWeek forKey:@"victoryPointsLastWeek"];
-	[aCoder encodeObject:self.victoryPointsTotal forKey:@"victoryPointsTotal"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super init]) {
-		self.killsYesterday = [aDecoder decodeObjectForKey:@"killsYesterday"];
-		self.killsLastWeek = [aDecoder decodeObjectForKey:@"killsLastWeek"];
-		self.killsTotal = [aDecoder decodeObjectForKey:@"killsTotal"];
-		self.victoryPointsYesterday = [aDecoder decodeObjectForKey:@"victoryPointsYesterday"];
-		self.victoryPointsLastWeek = [aDecoder decodeObjectForKey:@"victoryPointsLastWeek"];
-		self.victoryPointsTotal = [aDecoder decodeObjectForKey:@"victoryPointsTotal"];
-	}
-	return self;
-}
+@implementation EVEFacWarTopStatsItem
 @end
 
+@implementation EVEFacWarTopStatsCharacters
+
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"killsYesterday":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCharactersItem class]},
+				   @"killsLastWeek":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCharactersItem class]},
+				   @"killsTotal":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCharactersItem class]},
+				   @"victoryPointsYesterday":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCharactersItem class]},
+				   @"victoryPointsLastWeek":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCharactersItem class]},
+				   @"victoryPointsTotal":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCharactersItem class]}};
+	return scheme;
+}
+
+@end
+
+@implementation EVEFacWarTopStatsCorporations
+
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"killsYesterday":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCorporationsItem class]},
+				   @"killsLastWeek":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCorporationsItem class]},
+				   @"killsTotal":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCorporationsItem class]},
+				   @"victoryPointsYesterday":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCorporationsItem class]},
+				   @"victoryPointsLastWeek":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCorporationsItem class]},
+				   @"victoryPointsTotal":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsCorporationsItem class]}};
+	return scheme;
+}
+
+@end
+
+
+@implementation EVEFacWarTopStatsFactions
+
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"killsYesterday":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsFactionsItem class]},
+				   @"killsLastWeek":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsFactionsItem class]},
+				   @"killsTotal":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsFactionsItem class]},
+				   @"victoryPointsYesterday":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsFactionsItem class]},
+				   @"victoryPointsLastWeek":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsFactionsItem class]},
+				   @"victoryPointsTotal":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEFacWarTopStatsFactionsItem class]}};
+	return scheme;
+}
+
+@end
 
 @implementation EVEFacWarTopStats
 
-+ (EVEApiKeyType) requiredApiKeyType {
-	return EVEApiKeyTypeNone;
-}
-
-+ (id) facWarTopStatsWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[EVEFacWarTopStats alloc] initWithCachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
-}
-
-- (id) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/eve/ErrorList.xml.aspx", EVEOnlineAPIHost]]
-					   cachePolicy:cachePolicy
-							error:errorPtr
-				  progressHandler:progressHandler]) {
-	}
-	return self;
-}
-
-#pragma mark NSXMLParserDelegate
-
-- (id) didStartRowset: (NSString*) rowset {
-	if ([rowset isEqualToString:@"KillsYesterday"]) {
-		NSMutableArray *stats = [[NSMutableArray alloc] init];
-		[self.currentSection setKillsYesterday:stats];
-		return stats;
-	}
-	else if ([rowset isEqualToString:@"KillsLastWeek"]) {
-		NSMutableArray *stats = [[NSMutableArray alloc] init];
-		[self.currentSection setKillsLastWeek:stats];
-		return stats;
-	}
-	else if ([rowset isEqualToString:@"KillsTotal"]) {
-		NSMutableArray *stats = [[NSMutableArray alloc] init];
-		[self.currentSection setKillsTotal:stats];
-		return stats;
-	}
-	else if ([rowset isEqualToString:@"VictoryPointsYesterday"]) {
-		NSMutableArray *stats = [[NSMutableArray alloc] init];
-		[self.currentSection setVictoryPointsYesterday:stats];
-		return stats;
-	}
-	else if ([rowset isEqualToString:@"VictoryPointsLastWeek"]) {
-		NSMutableArray *stats = [[NSMutableArray alloc] init];
-		[self.currentSection setVictoryPointsLastWeek:stats];
-		return stats;
-	}
-	else if ([rowset isEqualToString:@"VictoryPointsTotal"]) {
-		NSMutableArray *stats = [[NSMutableArray alloc] init];
-		[self.currentSection setVictoryPointsTotal:stats];
-		return stats;
-	}
-	else
-		return nil;
-}
-
-- (id) didStartRowWithAttributes:(NSDictionary *) attributeDict rowset:(NSString*) rowset rowsetObject:(id) object {
-	if (self.currentSection == self.characters) {
-		EVEFacWarTopStatsCharactersItem *facWarTopStatsCharactersItem = [EVEFacWarTopStatsCharactersItem facWarTopStatsCharactersItemWithXMLAttributes:attributeDict];
-		[object addObject:facWarTopStatsCharactersItem];
-		return facWarTopStatsCharactersItem;
-	}
-	else if (self.currentSection == self.corporations) {
-		EVEFacWarTopStatsCorporationsItem *facWarTopStatsCorporationsItem = [EVEFacWarTopStatsCorporationsItem facWarTopStatsCorporationsItemWithXMLAttributes:attributeDict];
-		[object addObject:facWarTopStatsCorporationsItem];
-		return facWarTopStatsCorporationsItem;
-	}
-	else if (self.currentSection == self.factions) {
-		EVEFacWarTopStatsFactionsItem *facWarTopStatsFactionsItem = [EVEFacWarTopStatsFactionsItem facWarTopStatsFactionsItemWithXMLAttributes:attributeDict];
-		[object addObject:facWarTopStatsFactionsItem];
-		return facWarTopStatsFactionsItem;
-	}
-	return nil;
-}
-
-- (void) parser:(NSXMLParser *)parser
-didStartElement:(NSString *)elementName
-   namespaceURI:(NSString *)namespaceURI
-  qualifiedName:(NSString *)qualifiedName
-	 attributes:(NSDictionary *)attributeDict {
-	[super parser:parser didStartElement:elementName namespaceURI:namespaceURI qualifiedName:qualifiedName attributes:attributeDict];
-	if ([elementName isEqualToString:@"characters"])
-		self.characters = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
-	else if ([elementName isEqualToString:@"corporations"])
-		self.corporations = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
-	else if ([elementName isEqualToString:@"factions"])
-		self.factions = self.currentSection = [[EVEFacWarTopStatsSection alloc] init];
-}
-
-#pragma mark - NSCoding
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-	[super encodeWithCoder:aCoder];
-	[aCoder encodeObject:self.characters forKey:@"characters"];
-	[aCoder encodeObject:self.corporations forKey:@"corporations"];
-	[aCoder encodeObject:self.factions forKey:@"factions"];
-}
-
-- (id)initWithCoder:(NSCoder *)aDecoder {
-	if (self = [super initWithCoder:aDecoder]) {
-		self.characters= [aDecoder decodeObjectForKey:@"characters"];
-		self.corporations = [aDecoder decodeObjectForKey:@"corporations"];
-		self.factions = [aDecoder decodeObjectForKey:@"factions"];
-	}
-	return self;
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"characters":@{@"type":@(EVEXMLSchemePropertyTypeObject), @"class":[EVEFacWarTopStatsCharacters class]},
+				   @"corporations":@{@"type":@(EVEXMLSchemePropertyTypeObject), @"class":[EVEFacWarTopStatsCorporations class]},
+				   @"factions":@{@"type":@(EVEXMLSchemePropertyTypeObject), @"class":[EVEFacWarTopStatsFactions class]}};
+	return scheme;
 }
 
 @end

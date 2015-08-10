@@ -6,13 +6,12 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVERequest.h"
+#import "EVEResult.h"
 
-@interface EVEOutpostListItem : NSObject<NSCoding>
+@interface EVEOutpostListItem : EVEObject
 @property (nonatomic) int32_t stationID;
 @property (nonatomic) int32_t ownerID;
-@property (nonatomic, copy) NSString *stationName;
+@property (nonatomic, strong) NSString *stationName;
 @property (nonatomic) int32_t solarSystemID;
 @property (nonatomic) float dockingCostPerShipVolume;
 @property (nonatomic) float officeRentalCost;
@@ -20,16 +19,11 @@
 @property (nonatomic) float reprocessingEfficiency;
 @property (nonatomic) float reprocessingStationTake;
 @property (nonatomic) int32_t standingOwnerID;
-
-+ (id) outpostListItemWithXMLAttributes:(NSDictionary *)attributeDict;
-- (id) initWithXMLAttributes:(NSDictionary *)attributeDict;
-
+@property (nonatomic) double x;
+@property (nonatomic) double y;
+@property (nonatomic) double z;
 @end
 
-@interface EVEOutpostList : EVERequest
+@interface EVEOutpostList : EVEResult
 @property (nonatomic, strong) NSArray *corporationStarbases;
-
-+ (id) outpostListWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithKeyID: (int32_t) keyID vCode: (NSString*) vCode cachePolicy:(NSURLRequestCachePolicy) cachePolicy characterID: (int32_t) characterID error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end
