@@ -7,7 +7,6 @@
 //
 
 #import "EVEResult.h"
-#import "EVEGlobals.h"
 
 @interface EVEBlueprintsItem : EVEObject
 @property (nonatomic) int64_t itemID;

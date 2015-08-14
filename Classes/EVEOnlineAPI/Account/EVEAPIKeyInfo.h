@@ -7,7 +7,6 @@
 //
 
 #import "EVEResult.h"
-#import "EVEGlobals.h"
 
 @interface EVEAPIKeyInfoCharactersItem : EVEObject
 @property (nonatomic) int32_t characterID;

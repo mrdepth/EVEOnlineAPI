@@ -7,7 +7,6 @@
 //
 
 #import "EVEImage.h"
-#import "EVEGlobals.h"
 
 @interface EVEImage()
 + (int32_t) imageDimensionWithSize:(EVEImageSize) size;

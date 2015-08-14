@@ -7,7 +7,6 @@
 //
 
 #import "EVEResult.h"
-#import "EVEGlobals.h"
 
 @interface EVECallListCallGroupsItem : EVEObject
 @property (nonatomic) int32_t groupID;

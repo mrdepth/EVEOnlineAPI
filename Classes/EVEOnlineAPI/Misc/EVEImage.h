@@ -6,7 +6,8 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
 
 typedef NS_ENUM(int32_t, EVEImageSize) {
 	EVEImageSize32 = 32,

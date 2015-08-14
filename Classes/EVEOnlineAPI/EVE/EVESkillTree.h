@@ -7,7 +7,6 @@
 //
 
 #import "EVEResult.h"
-#import "EVEGlobals.h"
 
 @interface EVESkillTreeRequiredAttributes : EVEObject
 @property (nonatomic) EVECharacterAttribute primaryAttribute;

@@ -7,7 +7,6 @@
 //
 
 #import "EVEResult.h"
-#import "EVEGlobals.h"
 
 @interface EVEContainerLogItem : EVEObject
 @property (nonatomic, strong) NSDate *logTime;

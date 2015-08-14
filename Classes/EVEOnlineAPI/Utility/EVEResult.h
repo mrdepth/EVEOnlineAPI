@@ -8,6 +8,7 @@
 
 #import "EVEObject.h"
 #import "EVEAPIObject.h"
+#import "EVEGlobals.h"
 
 @interface EVEResult : EVEObject
 @property (nonatomic, strong) EVEAPIObject* eveapi;

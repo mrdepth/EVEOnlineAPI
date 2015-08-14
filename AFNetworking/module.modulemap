@@ -1,0 +1,11 @@
+framework module AFNetworking {
+	umbrella header "AFNetworking.h"
+	
+	export *
+	module * { export *	}
+	
+	link framework "MobileCoreServices"
+	link framework "SystemConfiguration"
+	link framework "Foundation"
+	link framework "UIKit"
+}

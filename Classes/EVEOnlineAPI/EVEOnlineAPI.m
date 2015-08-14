@@ -19,6 +19,14 @@
 
 @implementation EVEAPIKey
 
++ (id) apiKeyWithKeyID:(NSInteger) keyID vCode:(NSString*) vCode {
+	return [[self alloc] initWithKeyID:keyID vCode:vCode];
+}
+
++ (id) apiKeyWithKeyID:(NSInteger) keyID vCode:(NSString*) vCode characterID:(NSInteger) characterID corporate:(BOOL) corporate {
+	return [[self alloc] initWithKeyID:keyID vCode:vCode characterID:characterID corporate:corporate];
+}
+
 - (id) initWithKeyID:(NSInteger) keyID vCode:(NSString*) vCode {
 	if (self = [self initWithKeyID:keyID vCode:vCode characterID:0 corporate:NO]) {
 		
