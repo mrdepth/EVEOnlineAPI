@@ -24,6 +24,12 @@
 
 @end
 
+@interface EVECharacterSheetSkill()
+@property (nonatomic, strong, readwrite) NSArray* skillQueueItems;
+@property (nonatomic, strong) NSDate* startTime;
+@property (nonatomic, strong) NSDate* endTime;
+@end
+
 
 @implementation EVECharacterSheetSkill
 
@@ -33,8 +39,27 @@
 		scheme = @{@"typeID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"skillpoints":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"level":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
-				   @"published":@{@"type":@(EVEXMLSchemePropertyTypeScalar)}};
+				   @"published":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"skillQueueItems":@{@"type":@(EVEXMLSchemePropertyTypeObject), @"class":[EVESkillQueueItem class]},
+				   @"startTime":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
+				   @"endTime":@{@"type":@(EVEXMLSchemePropertyTypeDate)}};
+	
 	return scheme;
+}
+
+- (int32_t) skillPoints {
+	if (self.skillQueueItems.count > 0 && self.startTime && self.endTime) {
+		EVESkillQueueItem* skillQueueItem = self.skillQueueItems[0];
+		NSDate* currentTime = [NSDate date];
+		float spps = (skillQueueItem.endSP - skillQueueItem.startSP) / [self.endTime timeIntervalSinceDate:self.startTime];
+		if (spps > 0) {
+			if (skillQueueItem.queuePosition == 0)
+				return  skillQueueItem.endSP - [self.endTime timeIntervalSinceDate:currentTime] * spps;
+			else
+				return skillQueueItem.endSP - [self.endTime timeIntervalSinceDate:self.startTime] * spps;
+		}
+	}
+	return _skillpoints;
 }
 
 @end
@@ -172,21 +197,26 @@
 	return _skillsMap;
 }
 
-- (void) updateSkillPointsFromSkillQueue:(EVESkillQueue*) skillQueue {
+- (void) attachSkillQueue:(EVESkillQueue*) skillQueue {
 	if (skillQueue) {
-		NSDate *currentTime = [skillQueue.eveapi serverTimeWithLocalTime:[NSDate date]];
+		[self.skills setValue:nil forKey:@"skillQueueItem"];
+		[self.skills setValue:nil forKey:@"startTime"];
+		[self.skills setValue:nil forKey:@"endTime"];
+		
 		for (EVESkillQueueItem *item in skillQueue.skillQueue) {
 			if (item.endTime && item.startTime) {
 				EVECharacterSheetSkill *skill = self.skillsMap[@(item.typeID)];
-				if (item.endTime && item.startTime) {
-					float spps = (item.endSP - item.startSP) / [item.endTime timeIntervalSinceDate:item.startTime];
-					if (spps > 0) {
-						if (item.queuePosition == 0)
-							skill.skillpoints = item.endSP - [item.endTime timeIntervalSinceDate:currentTime] * spps;
-						else if (item.level - 1 == skill.level)
-							skill.skillpoints = item.endSP - [item.endTime timeIntervalSinceDate:item.startTime] * spps;
-					}
+				NSMutableArray* array = (NSMutableArray*) skill.skillQueueItems;
+				if (!array)
+					skill.skillQueueItems = array = [NSMutableArray new];
+				
+				if (item.level - 1 == skill.level) {
+					skill.startTime = [skillQueue.eveapi localTimeWithServerTime:item.startTime];
+					skill.endTime = [skillQueue.eveapi localTimeWithServerTime:item.endTime];
 				}
+				
+				[array addObject:item];
+				[array sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"queuePosition" ascending:YES]]];
 			}
 		}
 	}

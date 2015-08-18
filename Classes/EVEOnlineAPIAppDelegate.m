@@ -33,6 +33,16 @@
 	[[EVEOnlineAPI apiWithAPIKey:apiKey cachePolicy:NSURLRequestUseProtocolCachePolicy] serverStatusWithCompletionBlock:^(EVEServerStatus *result, NSError *error) {
 		NSLog(@"%@", result);
 	} progressBlock:nil];
+	
+	[[EVEOnlineAPI apiWithAPIKey:apiKey cachePolicy:NSURLRequestUseProtocolCachePolicy] serverStatusWithCompletionBlock:^(EVEServerStatus *result, NSError *error) {
+		NSLog(@"%@", result);
+	} progressBlock:nil];
+
+	
+	[[EVEOnlineAPI apiWithAPIKey:apiKey cachePolicy:NSURLRequestUseProtocolCachePolicy] serverStatusWithCompletionBlock:^(EVEServerStatus *result, NSError *error) {
+		NSLog(@"%@", result);
+	} progressBlock:nil];
+
 	return YES;
 }
 

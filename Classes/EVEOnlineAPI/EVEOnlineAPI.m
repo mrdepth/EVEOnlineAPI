@@ -427,12 +427,43 @@
 	AFHTTPRequestSerializer* serializer = [AFHTTPRequestSerializer serializer];
 	serializer.cachePolicy = self.cachePolicy;
 	
-	AFHTTPRequestOperation *operation = [self.manager HTTPRequestOperationWithRequest:[serializer requestWithMethod:@"GET"
-																										  URLString:[[NSURL URLWithString:urlString relativeToURL:self.manager.baseURL] absoluteString]
-																										 parameters:param
-																											  error:nil]
+	static NSMutableDictionary* completionBlocks = nil;
+	if (!completionBlocks) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			completionBlocks = [NSMutableDictionary new];
+		});
+	}
+	
+	NSURLRequest* request = [serializer requestWithMethod:@"GET"
+												URLString:[[NSURL URLWithString:urlString relativeToURL:self.manager.baseURL] absoluteString]
+											   parameters:param
+													error:nil];
+	
+	if (completionBlock) {
+		@synchronized(completionBlocks) {
+			void (^oldHandler)(id result, NSError* error) = completionBlocks[request];
+			if (oldHandler)
+				completionBlocks[request] = completionBlock = ^(id result, NSError* error) {
+					oldHandler(result, error);
+					completionBlock(result, error);
+				};
+			else
+				completionBlocks[request] = completionBlock;
+		}
+	}
+	
+	
+	AFHTTPRequestOperation *operation = [self.manager HTTPRequestOperationWithRequest:request
 																				 success:^void(AFHTTPRequestOperation * operation, id result) {
-																					 completionBlock(result, nil);
+																					 void (^block)(id result, NSError* error);
+																					 @synchronized(completionBlocks) {
+																						 block = completionBlocks[request];
+																						 if (block)
+																							 [completionBlocks removeObjectForKey:request];
+																					 }
+																					 if (block)
+																						 block(result, nil);
 																					 
 																					 NSMutableDictionary* headers = [[operation.response allHeaderFields] mutableCopy];
 																					 

@@ -16,12 +16,13 @@
 @property int32_t willpower;
 @end
 
-
+@class EVESkillQueueItem;
 @interface EVECharacterSheetSkill : EVEObject
 @property (nonatomic) int32_t typeID;
 @property (nonatomic) int32_t skillpoints;
 @property (nonatomic) int32_t level;
 @property (nonatomic) BOOL published;
+@property (nonatomic, strong, readonly) NSArray* skillQueueItems;
 @end
 
 @interface EVECharacterSheetCertificate : EVEObject
@@ -103,6 +104,6 @@
 
 @property (nonatomic, strong, readonly) NSDictionary *skillsMap;
 
-- (void) updateSkillPointsFromSkillQueue:(EVESkillQueue*) skillQueue;
+- (void) attachSkillQueue:(EVESkillQueue*) skillQueue;
 
 @end
