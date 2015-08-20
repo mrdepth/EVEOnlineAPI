@@ -21,22 +21,27 @@ FOUNDATION_EXPORT const unsigned char AFNetworkingVersionString[];
 
 
 
+#import <Foundation/Foundation.h>
+#import <Availability.h>
+
 #ifndef _AFNETWORKING_
 #define _AFNETWORKING_
 
-#import <AFNetworking/AFURLRequestSerialization.h>
-#import <AFNetworking/AFURLResponseSerialization.h>
-#import <AFNetworking/AFSecurityPolicy.h>
-#import <AFNetworking/AFNetworkReachabilityManager.h>
-
-#import <AFNetworking/AFURLConnectionOperation.h>
-#import <AFNetworking/AFHTTPRequestOperation.h>
-#import <AFNetworking/AFHTTPRequestOperationManager.h>
+#import "AFURLRequestSerialization.h"
+#import "AFURLResponseSerialization.h"
+#import "AFSecurityPolicy.h"
+#if !TARGET_OS_WATCH
+#import "AFNetworkReachabilityManager.h"
+#import "AFURLConnectionOperation.h"
+#import "AFHTTPRequestOperation.h"
+#import "AFHTTPRequestOperationManager.h"
+#endif
 
 #if ( ( defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 1090) || \
-( defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000 ) )
-#import <AFNetworking/AFURLSessionManager.h>
-#import <AFNetworking/AFHTTPSessionManager.h>
+( defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000 ) || \
+TARGET_OS_WATCH )
+#import "AFURLSessionManager.h"
+#import "AFHTTPSessionManager.h"
 #endif
 
 #endif /* _AFNETWORKING_ */

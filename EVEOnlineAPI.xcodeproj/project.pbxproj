@@ -14,7 +14,6 @@
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
 		12436CB519458EF10090D4A6 /* EVEDBChrRace.m in Sources */ = {isa = PBXBuildFile; fileRef = 12436CB419458EF10090D4A6 /* EVEDBChrRace.m */; };
 		1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243770D18969D170078F526 /* EVEDBNpcGroup.m */; };
-		1248CD761B7DD2E2000266BE /* module.modulemap in Sources */ = {isa = PBXBuildFile; fileRef = 1248CD751B7DD2E2000266BE /* module.modulemap */; };
 		1248CD791B7DD450000266BE /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F273931B72017400941A98 /* AFNetworking.framework */; };
 		1248CD841B7DDA24000266BE /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1248CD831B7DDA24000266BE /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1248CD9F1B7DDAB6000266BE /* EVEOnlineAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F274CE1B74C19A00941A98 /* EVEOnlineAPI.m */; };
@@ -185,6 +184,8 @@
 		1248CE441B7DDBB5000266BE /* EVEOnlineAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D30C4E11B6A8F200D772CF /* EVEOnlineAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1248CE861B7DDE2A000266BE /* EVEGlobals.h in Headers */ = {isa = PBXBuildFile; fileRef = 12CAF64E11B402BA008696F3 /* EVEGlobals.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
+		12564C0A1B85CE12000F68D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		12564C0B1B85CE18000F68D8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F274D01B74C42C00941A98 /* Security.framework */; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
 		1264136E11B94B48001417FE /* EVEMailMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264136D11B94B48001417FE /* EVEMailMessages.m */; };
 		126413AB11B95161001417FE /* EVEMarketOrders.m in Sources */ = {isa = PBXBuildFile; fileRef = 126413AA11B95161001417FE /* EVEMarketOrders.m */; };
@@ -748,6 +749,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12564C0B1B85CE18000F68D8 /* Security.framework in Frameworks */,
+				12564C0A1B85CE12000F68D8 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1788,7 +1791,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1248CD761B7DD2E2000266BE /* module.modulemap in Sources */,
 				12F273D81B72019800941A98 /* AFURLSessionManager.m in Sources */,
 				12F273CB1B72019800941A98 /* AFHTTPSessionManager.m in Sources */,
 				12F273D01B72019800941A98 /* AFSecurityPolicy.m in Sources */,
@@ -2103,7 +2105,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
-					"$(inherited)",
+					"TARGET_OS_IOS=TARGET_OS_IPHONE",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -2155,6 +2157,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IOS=TARGET_OS_IPHONE";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
