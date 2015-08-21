@@ -60,6 +60,18 @@
 	return self;
 }
 
+- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
+	static AFHTTPRequestOperationManager* manager;
+	if (!manager) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.eveonline.com"]];
+			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+		});
+	}
+	return manager;
+}
+
 #pragma mark - Account
 
 - (AFHTTPRequestOperation*) accountStatusWithCompletionBlock:(void(^)(EVEAccountStatus* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
@@ -405,18 +417,6 @@
 
 #pragma mark - Private
 
-- (AFHTTPRequestOperationManager*) manager {
-	static AFHTTPRequestOperationManager* manager;
-	if (!manager) {
-		static dispatch_once_t onceToken;
-		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.eveonline.com"]];
-			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-		});
-	}
-	return manager;
-}
-
 - (AFHTTPRequestOperation*) GET:(NSString*) method path:(NSString*) path parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSString* urlString = [[path stringByAppendingPathComponent:method] stringByAppendingPathExtension:@"xml.aspx"];
 	
@@ -436,7 +436,7 @@
 	}
 	
 	NSURLRequest* request = [serializer requestWithMethod:@"GET"
-												URLString:[[NSURL URLWithString:urlString relativeToURL:self.manager.baseURL] absoluteString]
+												URLString:[[NSURL URLWithString:urlString relativeToURL:self.httpRequestOperationManager.baseURL] absoluteString]
 											   parameters:param
 													error:nil];
 	
@@ -454,45 +454,52 @@
 	}
 	
 	
-	AFHTTPRequestOperation *operation = [self.manager HTTPRequestOperationWithRequest:request
-																				 success:^void(AFHTTPRequestOperation * operation, id result) {
-																					 void (^block)(id result, NSError* error);
-																					 @synchronized(completionBlocks) {
-																						 block = completionBlocks[request];
-																						 if (block)
-																							 [completionBlocks removeObjectForKey:request];
-																					 }
-																					 if (block)
-																						 block(result, nil);
-																					 
-																					 NSMutableDictionary* headers = [[operation.response allHeaderFields] mutableCopy];
-																					 
-																					 NSString* md5 = [operation.request.URL md5];
-																					 NSString* etag = headers[@"Etag"];
-																					 if (!etag || ![md5 isEqualToString:etag]) {
-																						 EVEResult* eveResult = result;
-																						 NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
-																						 NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
-																						 if (date && expired) {
-																							 headers[@"Date"] = date;
-																							 headers[@"Expires"] = expired;
-																							 headers[@"Etag"] = md5;
-																							 [headers removeObjectForKey:@"Vary"];
-																							 NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:operation.response.URL statusCode:operation.response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
-																							 NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
-																							 [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:operation.request];
-																						 }
-																					 }
-																				 }
-																				 failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
-																					 completionBlock(nil, error);
-																				 }];
+	AFHTTPRequestOperation *operation = [self.httpRequestOperationManager HTTPRequestOperationWithRequest:request
+																								  success:^void(AFHTTPRequestOperation * operation, id result) {
+																									  void (^block)(id result, NSError* error);
+																									  @synchronized(completionBlocks) {
+																										  block = completionBlocks[request];
+																										  if (block)
+																											  [completionBlocks removeObjectForKey:request];
+																									  }
+																									  if (block)
+																										  block(result, nil);
+																									  
+																									  NSMutableDictionary* headers = [[operation.response allHeaderFields] mutableCopy];
+																									  
+																									  NSString* md5 = [operation.request.URL md5];
+																									  NSString* etag = headers[@"Etag"];
+																									  if (!etag || ![md5 isEqualToString:etag]) {
+																										  EVEResult* eveResult = result;
+																										  NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
+																										  NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
+																										  if (date && expired) {
+																											  headers[@"Date"] = date;
+																											  headers[@"Expires"] = expired;
+																											  headers[@"Etag"] = md5;
+																											  [headers removeObjectForKey:@"Vary"];
+																											  NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:operation.response.URL statusCode:operation.response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
+																											  NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
+																											  [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:operation.request];
+																										  }
+																									  }
+																								  }
+																								  failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
+																									  void (^block)(id result, NSError* error);
+																									  @synchronized(completionBlocks) {
+																										  block = completionBlocks[request];
+																										  if (block)
+																											  [completionBlocks removeObjectForKey:request];
+																									  }
+																									  if (block)
+																										  block(nil, error);
+																								  }];
 	operation.responseSerializer = [EVEAPISerializer serializerWithRootClass:responseClass];
 	[operation setCacheResponseBlock:^NSCachedURLResponse* (NSURLConnection* connection, NSCachedURLResponse* response) {
 		return nil;
 	}];
-
-	[self.manager.operationQueue addOperation:operation];
+	
+	[self.httpRequestOperationManager.operationQueue addOperation:operation];
 	return operation;
 }
 

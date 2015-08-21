@@ -186,6 +186,9 @@
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
 		12564C0A1B85CE12000F68D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		12564C0B1B85CE18000F68D8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F274D01B74C42C00941A98 /* Security.framework */; };
+		12564C471B872591000F68D8 /* NSURL+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 718BB48E12DA64C600FF9D26 /* NSURL+MD5.m */; };
+		12564C481B872594000F68D8 /* NSData+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 719978AC137F0EC90061BA4E /* NSData+MD5.m */; };
+		12564C491B872597000F68D8 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 718BB48C12DA64C600FF9D26 /* NSString+MD5.m */; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
 		1264136E11B94B48001417FE /* EVEMailMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264136D11B94B48001417FE /* EVEMailMessages.m */; };
 		126413AB11B95161001417FE /* EVEMarketOrders.m in Sources */ = {isa = PBXBuildFile; fileRef = 126413AA11B95161001417FE /* EVEMarketOrders.m */; };
@@ -1721,6 +1724,7 @@
 				1248CDB81B7DDAE9000266BE /* EVEIndustryJobs.m in Sources */,
 				1248CDD41B7DDAEE000266BE /* EVEOutpostList.m in Sources */,
 				1248CDD61B7DDAEE000266BE /* EVEShareholders.m in Sources */,
+				12564C491B872597000F68D8 /* NSString+MD5.m in Sources */,
 				1248CDBB1B7DDAE9000266BE /* EVELocations.m in Sources */,
 				1248CDB31B7DDAE9000266BE /* EVEContactList.m in Sources */,
 				1248CDA11B7DDAE1000266BE /* EVEResult.m in Sources */,
@@ -1731,6 +1735,7 @@
 				1248CDCC1B7DDAEE000266BE /* EVECorpFacWarStats.m in Sources */,
 				1248CDA21B7DDAE1000266BE /* EVEAPIObject.m in Sources */,
 				1248CDDF1B7DDAF5000266BE /* EVECharacterID.m in Sources */,
+				12564C481B872594000F68D8 /* NSData+MD5.m in Sources */,
 				1248CDCE1B7DDAEE000266BE /* EVEFacilities.m in Sources */,
 				1248CDC01B7DDAE9000266BE /* EVENotifications.m in Sources */,
 				1248CDCA1B7DDAEE000266BE /* EVEContainerLog.m in Sources */,
@@ -1769,6 +1774,7 @@
 				1248CDDC1B7DDAEE000266BE /* EVECorpWalletTransactions.m in Sources */,
 				1248CDE01B7DDAF5000266BE /* EVECharacterInfo.m in Sources */,
 				1248CDA61B7DDAE6000266BE /* EVEAccountStatus.m in Sources */,
+				12564C471B872591000F68D8 /* NSURL+MD5.m in Sources */,
 				1248CDEC1B7DDAFA000266BE /* EVEKills.m in Sources */,
 				1248CDB61B7DDAE9000266BE /* EVEContractItems.m in Sources */,
 				1248CDD31B7DDAEE000266BE /* EVEMemberTracking.m in Sources */,

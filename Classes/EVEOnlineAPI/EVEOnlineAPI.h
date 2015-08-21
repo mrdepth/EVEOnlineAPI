@@ -103,6 +103,8 @@
 @interface EVEOnlineAPI : NSObject
 @property (nonatomic, strong) EVEAPIKey* apiKey;
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
+@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+
 
 + (instancetype) apiWithAPIKey:(EVEAPIKey*) apiKey cachePolicy:(NSURLRequestCachePolicy) cachePolicy;
 - (instancetype) initWithAPIKey:(EVEAPIKey*) apiKey cachePolicy:(NSURLRequestCachePolicy) cachePolicy;

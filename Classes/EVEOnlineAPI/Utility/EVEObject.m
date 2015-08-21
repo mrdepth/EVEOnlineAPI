@@ -37,6 +37,11 @@
 
 			switch ([item[@"type"] integerValue]) {
 				case EVEXMLSchemePropertyTypeScalar:
+					if (value)
+						[self setValue:value forKey:key];
+					else
+						[self setValue:@(0) forKey:key];
+					break;
 				case EVEXMLSchemePropertyTypeString: {
 					[self setValue:value forKey:key];
 					break;

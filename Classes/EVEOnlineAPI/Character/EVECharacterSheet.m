@@ -199,7 +199,7 @@
 
 - (void) attachSkillQueue:(EVESkillQueue*) skillQueue {
 	if (skillQueue) {
-		[self.skills setValue:nil forKey:@"skillQueueItem"];
+		[self.skills setValue:nil forKey:@"skillQueueItems"];
 		[self.skills setValue:nil forKey:@"startTime"];
 		[self.skills setValue:nil forKey:@"endTime"];
 		
