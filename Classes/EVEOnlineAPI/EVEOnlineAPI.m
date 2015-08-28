@@ -52,10 +52,19 @@
 	return [[self alloc] initWithAPIKey:apiKey cachePolicy:cachePolicy];
 }
 
+- (instancetype) init {
+	if (self = [super init]) {
+		self.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+		self.startImmediately = YES;
+	}
+	return self;
+}
+
 - (instancetype) initWithAPIKey:(EVEAPIKey*) apiKey cachePolicy:(NSURLRequestCachePolicy) cachePolicy {
 	if (self = [super init]) {
 		self.apiKey = apiKey;
 		self.cachePolicy = cachePolicy;
+		self.startImmediately = YES;
 	}
 	return self;
 }
@@ -428,10 +437,17 @@
 	serializer.cachePolicy = self.cachePolicy;
 	
 	static NSMutableDictionary* dispatchGroups = nil;
+	static NSMutableDictionary* operations = nil;
 	if (!dispatchGroups) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
 			dispatchGroups = [NSMutableDictionary new];
+		});
+	}
+	if (!operations) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			operations = [NSMutableDictionary new];
 		});
 	}
 	
@@ -460,7 +476,7 @@
 	}
 	
 	if (load) {
-		AFHTTPRequestOperation *operation = [self.httpRequestOperationManager HTTPRequestOperationWithRequest:request
+		AFHTTPRequestOperation *operation = [self.httpRequestOperationManager HTTPRequestOperationWithRequest:[request copy]
 																									  success:^void(AFHTTPRequestOperation * operation, id result) {
 																										  if (result)
 																											  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":result});
@@ -469,8 +485,13 @@
 																										  
 																										  NSString* md5 = [operation.request.URL md5];
 																										  NSString* etag = headers[@"Etag"];
+																										  EVEResult* eveResult = result;
+
 																										  if (!etag || ![md5 isEqualToString:etag]) {
-																											  EVEResult* eveResult = result;
+																											  
+																											  if (!eveResult.eveapi.cacheDate)
+																												  eveResult.eveapi.cacheDate = [NSDate date];
+																											  
 																											  NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
 																											  NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
 																											  if (date && expired) {
@@ -479,14 +500,21 @@
 																												  headers[@"Etag"] = md5;
 																												  [headers removeObjectForKey:@"Vary"];
 																												  NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:operation.response.URL statusCode:operation.response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
-																												  NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:nil storagePolicy:NSURLCacheStorageAllowed];
+																												  NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:@{@"cacheDate":eveResult.eveapi.cacheDate} storagePolicy:NSURLCacheStorageAllowed];
 																												  [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:operation.request];
 																											  }
+																										  }
+																										  else {
+																											  NSCachedURLResponse* cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:operation.request];
+																											  eveResult.eveapi.cacheDate = cachedResponse.userInfo[@"cacheDate"];
 																										  }
 																										  
 																										  dispatch_group_leave(dispatchGroup);
 																										  @synchronized(dispatchGroups) {
 																											  [dispatchGroups removeObjectForKey:request];
+																										  }
+																										  @synchronized(operations) {
+																											  [operations removeObjectForKey:request];
 																										  }
 																									  }
 																									  failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
@@ -497,16 +525,22 @@
 																											  [dispatchGroups removeObjectForKey:request];
 																										  }
 																									  }];
+		@synchronized(operations) {
+			operations[request] = operation;
+		}
+		
 		operation.responseSerializer = [EVEAPISerializer serializerWithRootClass:responseClass];
 		[operation setCacheResponseBlock:^NSCachedURLResponse* (NSURLConnection* connection, NSCachedURLResponse* response) {
 			return nil;
 		}];
-		
-		[self.httpRequestOperationManager.operationQueue addOperation:operation];
+		if (self.startImmediately)
+			[self.httpRequestOperationManager.operationQueue addOperation:operation];
 		return operation;
 	}
 	else {
-		return nil;
+		@synchronized(operations) {
+			return operations[request];
+		}
 	}
 }
 

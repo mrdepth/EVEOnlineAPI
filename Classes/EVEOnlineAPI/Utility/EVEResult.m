@@ -10,4 +10,16 @@
 
 @implementation EVEResult
 
+- (id) initWithCoder:(NSCoder *)aDecoder {
+	if (self = [super initWithCoder:aDecoder]) {
+		self.eveapi = [aDecoder decodeObjectForKey:@"eveapi"];
+	}
+	return self;
+}
+
+- (void) encodeWithCoder:(NSCoder *)aCoder {
+	[super encodeWithCoder:aCoder];
+	[aCoder encodeObject:self.eveapi forKey:@"eveapi"];
+}
+
 @end

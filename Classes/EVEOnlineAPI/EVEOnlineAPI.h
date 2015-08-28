@@ -104,6 +104,7 @@
 @property (nonatomic, strong) EVEAPIKey* apiKey;
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
 @property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+@property (nonatomic, assign) BOOL startImmediately;
 
 
 + (instancetype) apiWithAPIKey:(EVEAPIKey*) apiKey cachePolicy:(NSURLRequestCachePolicy) cachePolicy;

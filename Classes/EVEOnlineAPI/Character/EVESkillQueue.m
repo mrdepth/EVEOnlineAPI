@@ -33,7 +33,7 @@
 + (NSDictionary*) scheme {
 	static NSDictionary* scheme = nil;
 	if (!scheme)
-		scheme = @{@"skillQueue":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVESkillQueueItem class]}};
+		scheme = @{@"skillQueue":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVESkillQueueItem class], @"elementName": @"skillqueue"}};
 	
 	return scheme;
 }
