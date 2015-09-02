@@ -15,7 +15,7 @@
 	static NSDictionary* scheme = nil;
 	if (!scheme)
 		scheme = @{@"accountKey":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
-				   @"divisionDescription":@{@"type":@(EVEXMLSchemePropertyTypeString)}, @"elementName":@"description"};
+				   @"divisionDescription":@{@"type":@(EVEXMLSchemePropertyTypeString), @"elementName":@"description"}};
 	
 	return scheme;
 }
