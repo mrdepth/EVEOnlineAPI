@@ -7,5 +7,5 @@
  *
  */
 
-#import "EVECentralMarketStat.h"
-#import "EVECentralQuickLook.h"
+#import <EVEAPI/EVECentralMarketStat.h>
+#import <EVEAPI/EVECentralQuickLook.h>
