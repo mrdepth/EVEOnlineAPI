@@ -203,9 +203,6 @@
 		12AA31BD140BC26700B33BE8 /* EVEContractBids.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA31BC140BC26700B33BE8 /* EVEContractBids.m */; };
 		12AA31C6140BC4A100B33BE8 /* EVEContractItems.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA31C5140BC4A100B33BE8 /* EVEContractItems.m */; };
 		12BA6FC6176AF1810090E12D /* EVEDBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 12BA6FC5176AF1810090E12D /* EVEDBObject.m */; };
-		12BFF6A41BA17E9100B80B6E /* EVECentralMarketStat.h in Headers */ = {isa = PBXBuildFile; fileRef = 7182CCBA12D9E2C300F8CD02 /* EVECentralMarketStat.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		12BFF6A51BA17E9100B80B6E /* EVECentralQuickLook.h in Headers */ = {isa = PBXBuildFile; fileRef = 717E897212DE36FA001A2ABD /* EVECentralQuickLook.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		12BFF6A61BA17E9100B80B6E /* EVECentralAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 7182CCDD12DA349B00F8CD02 /* EVECentralAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12CAF64311B4015F008696F3 /* EVECharacters.m in Sources */ = {isa = PBXBuildFile; fileRef = 12CAF64211B4015F008696F3 /* EVECharacters.m */; };
 		12CAF6EE11B40B9A008696F3 /* EVEAccountBalance.m in Sources */ = {isa = PBXBuildFile; fileRef = 12CAF6ED11B40B9A008696F3 /* EVEAccountBalance.m */; };
 		12D30A1C11B674B800D772CF /* EVECharacterSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D30A1B11B674B800D772CF /* EVECharacterSheet.m */; };
@@ -1561,9 +1558,6 @@
 				1248CE1A1B7DDBA3000266BE /* EVESkillInTraining.h in Headers */,
 				1248CE1B1B7DDBA3000266BE /* EVESkillQueue.h in Headers */,
 				1248CE1C1B7DDBA3000266BE /* EVEUpcomingCalendarEvents.h in Headers */,
-				12BFF6A41BA17E9100B80B6E /* EVECentralMarketStat.h in Headers */,
-				12BFF6A51BA17E9100B80B6E /* EVECentralQuickLook.h in Headers */,
-				12BFF6A61BA17E9100B80B6E /* EVECentralAPI.h in Headers */,
 				1248CDF61B7DDB96000266BE /* EVEAPISerializer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2026,7 +2020,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = EVEAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2073,7 +2067,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = EVEAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -2115,10 +2109,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"TARGET_OS_IOS=TARGET_OS_IPHONE",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -2127,7 +2118,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = AFNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = AFNetworking/module.modulemap;
@@ -2169,7 +2160,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "TARGET_OS_IOS=TARGET_OS_IPHONE";
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -2177,7 +2168,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				INFOPLIST_FILE = AFNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = AFNetworking/module.modulemap;
