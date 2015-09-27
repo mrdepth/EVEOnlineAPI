@@ -159,6 +159,7 @@ typedef NS_ENUM(int32_t, EVEPOSState) {
 };
 
 typedef NS_ENUM(int32_t, EVEContractType) {
+	EVEContractTypeUnknown = -1,
 	EVEContractTypeItemExchange = 0,
 	EVEContractTypeAuction,
 	EVEContractTypeLoan,
@@ -166,6 +167,7 @@ typedef NS_ENUM(int32_t, EVEContractType) {
 };
 
 typedef NS_ENUM(int32_t, EVEContractStatus) {
+	EVEContractStatusUnknown = -1,
 	EVEContractStatusCompleted = 0,
 	EVEContractStatusCompletedByIssuer,
 	EVEContractStatusCompletedByContractor,

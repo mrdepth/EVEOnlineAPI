@@ -129,8 +129,8 @@
 - (AFHTTPRequestOperation*) contactListWithCompletionBlock:(void(^)(EVEContactList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) contactNotificationsWithCompletionBlock:(void(^)(EVEContactNotifications* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) contractBidsWithCompletionBlock:(void(^)(EVEContractBids* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (AFHTTPRequestOperation*) contractItemsWithContractID:(int32_t) contractID completionBlock:(void(^)(EVEContractItems* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (AFHTTPRequestOperation*) contractsWithContractID:(int32_t) contractID completionBlock:(void(^)(EVEContracts* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (AFHTTPRequestOperation*) contractItemsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContractItems* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (AFHTTPRequestOperation*) contractsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContracts* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) industryJobsWithCompletionBlock:(void(^)(EVEIndustryJobs* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) industryJobsHistoryWithCompletionBlock:(void(^)(EVEIndustryJobsHistory* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) killMailsFromID:(int32_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVEKillMails* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
@@ -165,7 +165,7 @@
 - (AFHTTPRequestOperation*) outpostServiceDetailWithItemID:(int32_t) itemID completionBlock:(void(^)(EVEOutpostServiceDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) shareholdersWithCompletionBlock:(void(^)(EVEShareholders* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) corpStandingsWithCompletionBlock:(void(^)(EVECorpStandings* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (AFHTTPRequestOperation*) starbaseDetailWithItemID:(int32_t) itemID completionBlock:(void(^)(EVEStarbaseDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (AFHTTPRequestOperation*) starbaseDetailWithItemID:(int64_t) itemID completionBlock:(void(^)(EVEStarbaseDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) starbaseListWithCompletionBlock:(void(^)(EVEStarbaseList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) titlesWithCompletionBlock:(void(^)(EVETitles* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 - (AFHTTPRequestOperation*) corpWalletJournalWithAccountKey:(int32_t) accountKey fromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECorpWalletJournal* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;

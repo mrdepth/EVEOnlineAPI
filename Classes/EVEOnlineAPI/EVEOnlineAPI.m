@@ -158,15 +158,15 @@
 }
 
 - (AFHTTPRequestOperation*) contractBidsWithCompletionBlock:(void(^)(EVEContractBids* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContactNotifications" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContractBids class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self GET:@"ContractBids" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContractBids class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) contractItemsWithContractID:(int32_t) contractID completionBlock:(void(^)(EVEContractItems* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContactNotifications" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:@{@"contractID":@(contractID)} responseClass:[EVEContractItems class] completionBlock:completionBlock progressBlock:progressBlock];
+- (AFHTTPRequestOperation*) contractItemsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContractItems* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	return [self GET:@"ContractItems" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:@{@"contractID":@(contractID)} responseClass:[EVEContractItems class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) contractsWithContractID:(int32_t) contractID completionBlock:(void(^)(EVEContracts* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContactNotifications" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:contractID ? @{@"contractID":@(contractID)} : nil responseClass:[EVEContracts class] completionBlock:completionBlock progressBlock:progressBlock];
+- (AFHTTPRequestOperation*) contractsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContracts* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	return [self GET:@"Contracts" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:contractID ? @{@"contractID":@(contractID)} : nil responseClass:[EVEContracts class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
 - (AFHTTPRequestOperation*) industryJobsWithCompletionBlock:(void(^)(EVEIndustryJobs* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
@@ -305,7 +305,7 @@
 	return [self GET:@"Standings" path:@"Corp" parameters:nil responseClass:[EVECorpStandings class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) starbaseDetailWithItemID:(int32_t) itemID completionBlock:(void(^)(EVEStarbaseDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (AFHTTPRequestOperation*) starbaseDetailWithItemID:(int64_t) itemID completionBlock:(void(^)(EVEStarbaseDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	return [self GET:@"StarbaseDetail" path:@"Corp" parameters:@{@"itemID":@(itemID)} responseClass:[EVEStarbaseDetail class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
@@ -479,55 +479,56 @@
 	}
 	
 	if (load) {
-		AFHTTPRequestOperation *operation = [self.httpRequestOperationManager HTTPRequestOperationWithRequest:[request copy]
-																									  success:^void(AFHTTPRequestOperation * operation, id result) {
-																										  if (result)
-																											  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":result});
-																										  
-																										  NSMutableDictionary* headers = [[operation.response allHeaderFields] mutableCopy];
-																										  
-																										  NSString* md5 = [operation.request.URL md5];
-																										  NSString* etag = headers[@"Etag"];
-																										  EVEResult* eveResult = result;
-
-																										  if (!etag || ![md5 isEqualToString:etag]) {
-																											  
-																											  if (!eveResult.eveapi.cacheDate)
-																												  eveResult.eveapi.cacheDate = [NSDate date];
-																											  
-																											  NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
-																											  NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
-																											  if (date && expired) {
-																												  headers[@"Date"] = date;
-																												  headers[@"Expires"] = expired;
-																												  headers[@"Etag"] = md5;
-																												  [headers removeObjectForKey:@"Vary"];
-																												  NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:operation.response.URL statusCode:operation.response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
-																												  NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:@{@"cacheDate":eveResult.eveapi.cacheDate} storagePolicy:NSURLCacheStorageAllowed];
-																												  [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:operation.request];
-																											  }
-																										  }
-																										  else {
-																											  NSCachedURLResponse* cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:operation.request];
-																											  eveResult.eveapi.cacheDate = cachedResponse.userInfo[@"cacheDate"];
-																										  }
-																										  
-																										  dispatch_group_leave(dispatchGroup);
-																										  @synchronized(dispatchGroups) {
-																											  [dispatchGroups removeObjectForKey:request];
-																										  }
-																										  @synchronized(operations) {
-																											  [operations removeObjectForKey:request];
-																										  }
-																									  }
-																									  failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
-																										  if (error)
-																											  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
-																										  dispatch_group_leave(dispatchGroup);
-																										  @synchronized(dispatchGroups) {
-																											  [dispatchGroups removeObjectForKey:request];
-																										  }
-																									  }];
+		AFHTTPRequestOperation *operation =
+		[self.httpRequestOperationManager HTTPRequestOperationWithRequest:[request copy]
+																  success:^void(AFHTTPRequestOperation * operation, id result) {
+																	  if (result)
+																		  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":result});
+																	  
+																	  NSMutableDictionary* headers = [[operation.response allHeaderFields] mutableCopy];
+																	  
+																	  NSString* md5 = [operation.request.URL md5];
+																	  NSString* etag = headers[@"Etag"];
+																	  EVEResult* eveResult = result;
+																	  
+																	  if (!etag || ![md5 isEqualToString:etag]) {
+																		  
+																		  if (!eveResult.eveapi.cacheDate)
+																			  eveResult.eveapi.cacheDate = [NSDate date];
+																		  
+																		  NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
+																		  NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
+																		  if (date && expired) {
+																			  headers[@"Date"] = date;
+																			  headers[@"Expires"] = expired;
+																			  headers[@"Etag"] = md5;
+																			  [headers removeObjectForKey:@"Vary"];
+																			  NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:operation.response.URL statusCode:operation.response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
+																			  NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:@{@"cacheDate":eveResult.eveapi.cacheDate} storagePolicy:NSURLCacheStorageAllowed];
+																			  [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:operation.request];
+																		  }
+																	  }
+																	  else {
+																		  NSCachedURLResponse* cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:operation.request];
+																		  eveResult.eveapi.cacheDate = cachedResponse.userInfo[@"cacheDate"];
+																	  }
+																	  
+																	  dispatch_group_leave(dispatchGroup);
+																	  @synchronized(dispatchGroups) {
+																		  [dispatchGroups removeObjectForKey:request];
+																	  }
+																	  @synchronized(operations) {
+																		  [operations removeObjectForKey:request];
+																	  }
+																  }
+																  failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
+																	  if (error)
+																		  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
+																	  dispatch_group_leave(dispatchGroup);
+																	  @synchronized(dispatchGroups) {
+																		  [dispatchGroups removeObjectForKey:request];
+																	  }
+																  }];
 		@synchronized(operations) {
 			operations[request] = operation;
 		}

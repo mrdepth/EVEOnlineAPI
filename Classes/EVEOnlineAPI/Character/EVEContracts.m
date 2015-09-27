@@ -25,8 +25,44 @@
 				   @"endStationID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"numDays":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"title":@{@"type":@(EVEXMLSchemePropertyTypeString)},
-				   @"type":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
-				   @"status":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"type":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"transformer":^(id value) {
+					   NSString* string = value;
+					   if ([string compare:@"ItemExchange" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractTypeItemExchange);
+					   else if ([string compare:@"Courier" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractTypeCourier);
+					   else if ([string compare:@"Loan" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractTypeLoan);
+					   else if ([string compare:@"Auction" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractTypeAuction);
+					   else
+						   return @(EVEContractTypeUnknown);
+				   }},
+				   @"status":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"transformer":^(id value) {
+					   NSString* string = value;
+					   if ([string compare:@"Outstanding" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusOutstanding);
+					   else if ([string compare:@"Deleted" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusDeleted);
+					   else if ([string compare:@"Completed" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusCompleted);
+					   else if ([string compare:@"Failed" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusFailed);
+					   else if ([string compare:@"CompletedByIssuer" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusCompletedByIssuer);
+					   else if ([string compare:@"CompletedByContractor" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusCompletedByContractor);
+					   else if ([string compare:@"Cancelled" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusCancelled);
+					   else if ([string compare:@"Rejected" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusRejected);
+					   else if ([string compare:@"Reversed" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusReversed);
+					   else if ([string compare:@"InProgress" options:NSCaseInsensitiveSearch] == NSOrderedSame)
+						   return @(EVEContractStatusInProgress);
+					   else
+						   return @(EVEContractStatusUnknown);
+				   }},
 				   @"availability":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"dateIssued":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
 				   @"dateExpired":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
@@ -53,6 +89,8 @@
 		case EVEContractTypeCourier:
 			return @"Courier";
 			break;
+		default:
+			return @"Unknown Type";
 	};
 	return nil;
 }
@@ -89,6 +127,8 @@
 		case EVEContractStatusDeleted:
 			return @"Deleted";
 			break;
+		default:
+			return @"Unknown";
 	};
 	return nil;
 }

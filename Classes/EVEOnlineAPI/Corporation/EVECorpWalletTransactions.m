@@ -13,9 +13,13 @@
 
 + (NSDictionary*) scheme {
 	static NSDictionary* scheme = nil;
-	if (!scheme)
+	if (!scheme) {
 		scheme = @{@"characterID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"characterName":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
+		NSMutableDictionary* dic = [[super scheme] mutableCopy];
+		[dic setValuesForKeysWithDictionary:scheme];
+		scheme = dic;
+	}
 	
 	return scheme;
 }

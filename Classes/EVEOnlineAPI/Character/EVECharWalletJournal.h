@@ -14,5 +14,5 @@
 @end
 
 @interface EVECharWalletJournal : EVEResult
-@property (nonatomic, strong) NSArray *charWalletJournal;
+@property (nonatomic, strong) NSArray *transactions;
 @end
