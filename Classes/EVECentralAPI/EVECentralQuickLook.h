@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "EVECentralRequest.h"
+#import "EVEObject.h"
 
-@interface EVECentralQuickLookOrder: NSObject<NSCoding>
+@interface EVECentralQuickLookOrder: EVEObject
 @property (nonatomic) int32_t orderID;
 @property (nonatomic) int32_t regionID;
 @property (nonatomic) int32_t stationID;
@@ -21,21 +21,13 @@
 @property (nonatomic) int32_t minVolume;
 @property (nonatomic, strong) NSDate *expires;
 @property (nonatomic, strong) NSDate *reportedTime;
-
-+ (id) quickLookOrderWithDictionary: (NSDictionary*) dictionary;
-- (id) initWithDictionary: (NSDictionary*) dictionary;
-
 @end
 
-@interface EVECentralQuickLook : EVECentralRequest
+@interface EVECentralQuickLook : EVEObject
 @property (nonatomic) int32_t typeID;
-@property (nonatomic, copy) NSString *typeName;
-@property (nonatomic, strong) NSMutableArray *regions;
 @property (nonatomic) int32_t hours;
 @property (nonatomic) int32_t minQ;
-@property (nonatomic, strong) NSMutableArray *sellOrders;
-@property (nonatomic, strong) NSMutableArray *buyOrders;
+@property (nonatomic, strong) NSArray* sellOrders;
+@property (nonatomic, strong) NSArray* buyOrders;
 
-+ (id) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
 @end

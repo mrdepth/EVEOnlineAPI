@@ -55,7 +55,7 @@
 - (instancetype) init {
 	if (self = [super init]) {
 		self.cachePolicy = NSURLRequestUseProtocolCachePolicy;
-		self.startImmediately = YES;
+//		self.startImmediately = YES;
 	}
 	return self;
 }
@@ -64,7 +64,7 @@
 	if (self = [super init]) {
 		self.apiKey = apiKey;
 		self.cachePolicy = cachePolicy;
-		self.startImmediately = YES;
+//		self.startImmediately = YES;
 	}
 	return self;
 }
@@ -537,7 +537,7 @@
 		[operation setCacheResponseBlock:^NSCachedURLResponse* (NSURLConnection* connection, NSCachedURLResponse* response) {
 			return nil;
 		}];
-		if (self.startImmediately)
+//		if (self.startImmediately)
 			[self.httpRequestOperationManager.operationQueue addOperation:operation];
 		return operation;
 	}

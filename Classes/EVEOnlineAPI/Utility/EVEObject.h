@@ -19,7 +19,9 @@ typedef NS_ENUM(NSInteger, EVEXMLSchemePropertyType) {
 	EVEXMLSchemePropertyTypeRowset,
 	EVEXMLSchemePropertyTypeDate,
 	EVEXMLSchemePropertyTypeString,
-	EVEXMLSchemePropertyTypeError
+	EVEXMLSchemePropertyTypeError,
+	EVEXMLSchemePropertyTypeArray,
+	EVEXMLSchemePropertyTypeEveCentralDate
 };
 
 

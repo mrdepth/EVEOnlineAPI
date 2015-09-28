@@ -32,7 +32,7 @@
 	NSDictionary* dic = [NSDictionary dictionaryWithXMLData:data];
 	EVEAPIObject* api = [[EVEAPIObject alloc] initWithDictionary:dic[@"eveapi"]];
 	NSDictionary* result = dic[@"eveapi"][@"result"];
-	if (result) {
+	if (result && [result isKindOfClass:[NSDictionary class]]) {
 		EVEResult* object = [[self.rootClass alloc] initWithDictionary:result];
 		object.eveapi = api;
 		return object;

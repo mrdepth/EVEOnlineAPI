@@ -19,87 +19,108 @@
 
 - (id) initWithDictionary:(NSDictionary*) dictionary {
 	if (self = [super init]) {
-		[self.class.scheme enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary* item, BOOL *stop) {
-			NSString* elementName = item[@"elementName"];
-			if (!elementName)
-				elementName = key;
-			id value = dictionary[elementName];
-			
-			id transformer = item[@"transformer"];
-			if (transformer) {
-				if ([transformer isKindOfClass:[NSValueTransformer class]])
-					value = [(NSValueTransformer*) transformer transformedValue:value];
-				else {
-					id (^block)(id) = transformer;
-					value = block(value);
+		if (dictionary) {
+			[self.class.scheme enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary* item, BOOL *stop) {
+				NSString* elementName = item[@"elementName"];
+				if (!elementName)
+					elementName = key;
+				id value = dictionary[elementName];
+				
+				id transformer = item[@"transformer"];
+				if (transformer) {
+					if ([transformer isKindOfClass:[NSValueTransformer class]])
+						value = [(NSValueTransformer*) transformer transformedValue:value];
+					else {
+						id (^block)(id) = transformer;
+						value = block(value);
+					}
 				}
-			}
-
-			switch ([item[@"type"] integerValue]) {
-				case EVEXMLSchemePropertyTypeScalar:
-					if (value)
+				
+				switch ([item[@"type"] integerValue]) {
+					case EVEXMLSchemePropertyTypeScalar:
+						if (value)
+							[self setValue:value forKey:key];
+						else
+							[self setValue:@(0) forKey:key];
+						break;
+					case EVEXMLSchemePropertyTypeString: {
 						[self setValue:value forKey:key];
-					else
-						[self setValue:@(0) forKey:key];
-					break;
-				case EVEXMLSchemePropertyTypeString: {
-					[self setValue:value forKey:key];
-					break;
-				}
-					
-				case EVEXMLSchemePropertyTypeObject: {
-					Class class = item[@"class"];
-					if (class && [class isSubclassOfClass:[EVEObject class]])
-						value = [[class alloc] initWithDictionary:value];
-
-					[self setValue:value forKey:key];
-					break;
-				}
-					
-				case EVEXMLSchemePropertyTypeRowset: {
-					NSMutableArray* array = [NSMutableArray new];
-					Class class = item[@"class"];
-					
-					id object = dictionary[@"rowset"];
-					id rowset;
-					if ([object isKindOfClass:[NSArray class]])
-						rowset = object[[NSPredicate predicateWithFormat:@"name=%@", elementName]];
-					else if ([object isKindOfClass:[NSDictionary class]] && [object[@"name"] isEqualToString:elementName])
-						rowset = object;
-					
-					NSArray* rows = rowset[@"row"];
-					if (rows) {
-						if (![rows isKindOfClass:[NSArray class]])
-							rows = @[rows];
+						break;
+					}
 						
-						for (NSDictionary* row in rows) {
-							if (class && [class isSubclassOfClass:[EVEObject class]])
-								[array addObject:[[class alloc] initWithDictionary:row]];
-							else
-								[array addObject:row];
+					case EVEXMLSchemePropertyTypeObject: {
+						Class class = item[@"class"];
+						if (class && [class isSubclassOfClass:[EVEObject class]])
+							value = [[class alloc] initWithDictionary:value];
+						
+						[self setValue:value forKey:key];
+						break;
+					}
+						
+					case EVEXMLSchemePropertyTypeRowset: {
+						NSMutableArray* array = [NSMutableArray new];
+						Class class = item[@"class"];
+						
+						id object = dictionary[@"rowset"];
+						id rowset;
+						if ([object isKindOfClass:[NSArray class]])
+							rowset = object[[NSPredicate predicateWithFormat:@"name=%@", elementName]];
+						else if ([object isKindOfClass:[NSDictionary class]] && [object[@"name"] isEqualToString:elementName])
+							rowset = object;
+						
+						NSArray* rows = rowset[@"row"];
+						if (rows) {
+							if (![rows isKindOfClass:[NSArray class]])
+								rows = @[rows];
 							
+							for (NSDictionary* row in rows) {
+								if (class && [class isSubclassOfClass:[EVEObject class]])
+									[array addObject:[[class alloc] initWithDictionary:row]];
+								else
+									[array addObject:row];
+								
+							}
+							[self setValue:array forKey:key];
 						}
-						[self setValue:array forKey:key];
+						break;
 					}
-					break;
-				}
-				case EVEXMLSchemePropertyTypeDate:
-					if (value)
-						[self setValue:[[NSDateFormatter eveDateFormatter] dateFromString:value] forKey:key];
-					break;
-				case EVEXMLSchemePropertyTypeError: {
-					if (value) {
-						NSInteger errorCode = [value[@"code"] integerValue];
-						NSString* description = value[@"_"];
-						[self setValue:[NSError errorWithDomain:EVEOnlineErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:description ? description : @""}] forKey:key];
+					case EVEXMLSchemePropertyTypeArray: {
+						if (value) {
+							NSMutableArray* array = [NSMutableArray new];
+							Class class = item[@"class"];
+							
+							if (![value isKindOfClass:[NSArray class]])
+								value = @[value];
+							
+							for (NSDictionary* object in value) {
+								if (class && [class isSubclassOfClass:[EVEObject class]])
+									[array addObject:[[class alloc] initWithDictionary:object]];
+								else
+									[array addObject:object];
+								
+							}
+							[self setValue:array forKey:key];
+							break;
+						}
 					}
-					break;
+					case EVEXMLSchemePropertyTypeDate:
+						if (value)
+							[self setValue:[[NSDateFormatter eveDateFormatter] dateFromString:value] forKey:key];
+						break;
+					case EVEXMLSchemePropertyTypeError: {
+						if (value) {
+							NSInteger errorCode = [value[@"code"] integerValue];
+							NSString* description = value[@"_"];
+							[self setValue:[NSError errorWithDomain:EVEOnlineErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:description ? description : @""}] forKey:key];
+						}
+						break;
+					}
+						
+					default:
+						break;
 				}
-					
-				default:
-					break;
-			}
-		}];
+			}];
+		}
 	}
 	return self;
 }
