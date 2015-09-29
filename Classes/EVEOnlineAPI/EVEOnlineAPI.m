@@ -354,7 +354,7 @@
 }
 
 - (AFHTTPRequestOperation*) characterInfoWithCharacterID:(int32_t) characterID completionBlock:(void(^)(EVECharacterInfo* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	if (self.apiKey.corporate)
+	if (self.apiKey.characterID != characterID || self.apiKey.corporate)
 		return [self GET:@"CharacterInfo" path:@"Eve" parameters:@{@"characterID": @(characterID), @"keyID":@"", @"vCode":@""} responseClass:[EVECharacterInfo class] completionBlock:completionBlock progressBlock:progressBlock];
 	else
 		return [self GET:@"CharacterInfo" path:@"Eve" parameters:@{@"characterID": @(characterID)} responseClass:[EVECharacterInfo class] completionBlock:completionBlock progressBlock:progressBlock];

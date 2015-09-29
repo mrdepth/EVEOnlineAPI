@@ -27,22 +27,22 @@
 		NSDateFormatter *dateFormatter;
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmZZZ"];
 		[self.dateFormatters addObject:dateFormatter];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmssZZZ"];
 		[self.dateFormatters addObject:dateFormatter];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HHmmss.SZZZ"];
 		[self.dateFormatters addObject:dateFormatter];
 		
 		dateFormatter = [[NSDateFormatter alloc] init];
-		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+		[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
 		[dateFormatter setDateFormat:@"yyyy-MM-dd"];
 		[self.dateFormatters addObject:dateFormatter];
 	}

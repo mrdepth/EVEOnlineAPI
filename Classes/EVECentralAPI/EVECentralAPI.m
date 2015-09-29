@@ -14,8 +14,14 @@
 @implementation EVECentralAPI
 
 - (instancetype) init {
+	if (self = [self initWithCachePolicy:NSURLRequestUseProtocolCachePolicy]) {
+	}
+	return self;
+}
+
+- (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy {
 	if (self = [super init]) {
-		self.cachePolicy = NSURLRequestUseProtocolCachePolicy;
+		self.cachePolicy = cachePolicy;
 	}
 	return self;
 }

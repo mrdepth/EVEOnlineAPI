@@ -26,7 +26,7 @@
 		
 		self.dateFormatter = [[NSDateFormatter alloc] init];
 		[self.dateFormatter setDateFormat:@"EEE, dd MMM yyyy HH:mm:ss ZZZZ"];
-		[self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_GB"]];
+		[self.dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
 
 	}
 	return self;
