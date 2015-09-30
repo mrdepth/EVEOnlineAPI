@@ -37,10 +37,10 @@
 	static NSDictionary* scheme = nil;
 	if (!scheme)
 		scheme = @{@"typeID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
-				   @"skillpoints":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
+				   @"skillPoints":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"elementName":@"skillpoints"},
 				   @"level":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"published":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
-				   @"skillQueueItems":@{@"type":@(EVEXMLSchemePropertyTypeObject), @"class":[EVESkillQueueItem class]},
+				   @"skillQueueItems":@{@"type":@(EVEXMLSchemePropertyTypeArray), @"class":[EVESkillQueueItem class]},
 				   @"startTime":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
 				   @"endTime":@{@"type":@(EVEXMLSchemePropertyTypeDate)}};
 	
@@ -59,7 +59,7 @@
 				return skillQueueItem.endSP - [self.endTime timeIntervalSinceDate:self.startTime] * spps;
 		}
 	}
-	return _skillpoints;
+	return _skillPoints;
 }
 
 @end

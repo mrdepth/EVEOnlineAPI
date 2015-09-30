@@ -19,7 +19,7 @@
 @class EVESkillQueueItem;
 @interface EVECharacterSheetSkill : EVEObject
 @property (nonatomic) int32_t typeID;
-@property (nonatomic) int32_t skillpoints;
+@property (nonatomic) int32_t skillPoints;
 @property (nonatomic) int32_t level;
 @property (nonatomic) BOOL published;
 @property (nonatomic, strong, readonly) NSArray* skillQueueItems;
