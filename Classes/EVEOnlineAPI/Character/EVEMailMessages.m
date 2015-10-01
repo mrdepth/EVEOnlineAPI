@@ -42,7 +42,7 @@
 + (NSDictionary*) scheme {
 	static NSDictionary* scheme = nil;
 	if (!scheme)
-		scheme = @{@"mailMessages":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEMailMessagesItem class]}};
+		scheme = @{@"messages":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEMailMessagesItem class]}};
 	
 	return scheme;
 }

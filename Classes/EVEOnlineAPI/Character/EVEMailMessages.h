@@ -21,5 +21,5 @@
 @end
 
 @interface EVEMailMessages : EVEResult
-@property (nonatomic, strong) NSArray *mailMessages;
+@property (nonatomic, strong) NSArray *messages;
 @end
