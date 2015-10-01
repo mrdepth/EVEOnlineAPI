@@ -19,3 +19,4 @@ FOUNDATION_EXPORT const unsigned char EVEAPIVersionString[];
 
 #import <EVEAPI/EVEOnlineAPI.h>
 #import <EVEAPI/EVECentralAPI.h>
+#import <EVEAPI/NSString+HTML.h>

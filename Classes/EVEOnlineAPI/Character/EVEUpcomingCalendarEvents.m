@@ -22,7 +22,7 @@
 				   @"duration":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"importance":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"response":@{@"type":@(EVEXMLSchemePropertyTypeString)},
-				   @"eventText":@{@"type":@(EVEXMLSchemePropertyTypeDate)}};
+				   @"eventText":@{@"type":@(EVEXMLSchemePropertyTypeString)}};
 	
 	return scheme;
 }
@@ -35,7 +35,7 @@
 + (NSDictionary*) scheme {
 	static NSDictionary* scheme = nil;
 	if (!scheme)
-		scheme = @{@"upcomingCalendarEvents":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEUpcomingCalendarEventsItem class]}};
+		scheme = @{@"upcomingEvents":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEUpcomingCalendarEventsItem class]}};
 	
 	return scheme;
 }

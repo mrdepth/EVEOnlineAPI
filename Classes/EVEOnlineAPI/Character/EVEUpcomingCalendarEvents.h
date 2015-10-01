@@ -21,5 +21,5 @@
 @end
 
 @interface EVEUpcomingCalendarEvents : EVEResult
-@property (nonatomic, strong) NSArray *upcomingCalendarEvents;
+@property (nonatomic, strong) NSArray *upcomingEvents;
 @end

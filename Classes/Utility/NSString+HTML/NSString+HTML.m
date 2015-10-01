@@ -8,6 +8,7 @@
 
 #import "NSString+HTML.h"
 #import "NSMutableString+HTML.h"
+#import <UIKit/UIKit.h>
 
 @implementation NSString(HTML)
 

@@ -207,6 +207,10 @@
 		126AACEC1BB9890D0068AA99 /* EVECentralQuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 717E897312DE36FA001A2ABD /* EVECentralQuickLook.m */; settings = {ASSET_TAGS = (); }; };
 		126AACED1BB989100068AA99 /* EVECentralSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */; settings = {ASSET_TAGS = (); }; };
 		12774E171770347100E98F8C /* ASURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 12774E161770347100E98F8C /* ASURLConnection.m */; };
+		128310211BBD7CBB0018C8AC /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186898413059CCC00C22AEC /* NSString+HTML.m */; settings = {ASSET_TAGS = (); }; };
+		128310221BBD7CC00018C8AC /* NSString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186898313059CCC00C22AEC /* NSString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		128310241BBD845F0018C8AC /* NSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186DAB513059D0700C22AEC /* NSMutableString+HTML.m */; settings = {ASSET_TAGS = (); }; };
+		128310251BBD84690018C8AC /* NSMutableString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186DAB413059D0700C22AEC /* NSMutableString+HTML.h */; settings = {ASSET_TAGS = (); }; };
 		1292319718F7C18F00CE7A41 /* EVEDBInvTrait.m in Sources */ = {isa = PBXBuildFile; fileRef = 1292319618F7C18F00CE7A41 /* EVEDBInvTrait.m */; };
 		12AA3027140B991F00B33BE8 /* EVEAPIKeyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3026140B991F00B33BE8 /* EVEAPIKeyInfo.m */; };
 		12AA3034140B9D1900B33BE8 /* EVECallList.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3033140B9D1900B33BE8 /* EVECallList.m */; };
@@ -1492,6 +1496,7 @@
 				1248CDF41B7DDB96000266BE /* EVEResult.h in Headers */,
 				1248CDF51B7DDB96000266BE /* EVEAPIObject.h in Headers */,
 				1248CDF71B7DDB96000266BE /* NSDateFormatter+EVEOnlineAPI.h in Headers */,
+				128310251BBD84690018C8AC /* NSMutableString+HTML.h in Headers */,
 				126AACE41BB96BC60068AA99 /* EVECentralMarketStat.h in Headers */,
 				1248CDF81B7DDB96000266BE /* EVELocationIDTransformer.h in Headers */,
 				126AACE51BB96BC60068AA99 /* EVECentralQuickLook.h in Headers */,
@@ -1554,6 +1559,7 @@
 				1248CE071B7DDBA3000266BE /* EVEContactNotifications.h in Headers */,
 				1248CE081B7DDBA3000266BE /* EVEContractBids.h in Headers */,
 				1248CE091B7DDBA3000266BE /* EVEContractItems.h in Headers */,
+				128310221BBD7CC00018C8AC /* NSString+HTML.h in Headers */,
 				1248CE0A1B7DDBA3000266BE /* EVEContracts.h in Headers */,
 				1248CE0B1B7DDBA3000266BE /* EVEIndustryJobs.h in Headers */,
 				1248CE0C1B7DDBA3000266BE /* EVEIndustryJobsHistory.h in Headers */,
@@ -1745,7 +1751,9 @@
 				12564C491B872597000F68D8 /* NSString+MD5.m in Sources */,
 				1248CDBB1B7DDAE9000266BE /* EVELocations.m in Sources */,
 				1248CDB31B7DDAE9000266BE /* EVEContactList.m in Sources */,
+				128310241BBD845F0018C8AC /* NSMutableString+HTML.m in Sources */,
 				1248CDA11B7DDAE1000266BE /* EVEResult.m in Sources */,
+				128310211BBD7CBB0018C8AC /* NSString+HTML.m in Sources */,
 				1248CDA51B7DDAE1000266BE /* EVELocationIDTransformer.m in Sources */,
 				1248CDB71B7DDAE9000266BE /* EVEContracts.m in Sources */,
 				1248CDC91B7DDAE9000266BE /* EVEUpcomingCalendarEvents.m in Sources */,
