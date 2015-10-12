@@ -12,10 +12,12 @@
 #define EVEOnlineErrorDomain @"EVEOnlineAPI"
 
 typedef NS_ENUM(int32_t, EVEErrorCodes) {
-	EVEErrorCodeInvalidImageSize = 1000
+	EVEErrorCodeInvalidImageSize = 1000,
+	EVEErrorCodeInvalidAPIKeyType,
 };
 
 #define EVEErrorCodeInvalidImageSizeText @"Invalid image size"
+#define EVEErrorCodeInvalidAPIKeyTypeText @"Invalid api key type"
 
 typedef NS_ENUM(int32_t, EVEApiKeyType) {
 	EVEApiKeyTypeNone,
