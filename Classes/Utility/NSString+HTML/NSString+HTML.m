@@ -8,7 +8,9 @@
 
 #import "NSString+HTML.h"
 #import "NSMutableString+HTML.h"
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#endif
 
 @implementation NSString(HTML)
 

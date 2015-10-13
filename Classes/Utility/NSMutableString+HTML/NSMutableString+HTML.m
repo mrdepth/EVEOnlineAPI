@@ -7,7 +7,9 @@
 //
 
 #import "NSMutableString+HTML.h"
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
+#endif
 
 const unichar codes[241];
 const char *sequences[241];
