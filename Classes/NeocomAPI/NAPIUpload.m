@@ -11,37 +11,16 @@
 
 @implementation NAPIUpload
 
-+ (id) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[NAPIUpload alloc] initWithCannonicalNames:cannonicalNames userID:userID cachePolicy:cachePolicy error:errorPtr progressHandler:progressHandler];
-}
-
-- (id) initWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	NSDictionary* jsonObject = @{@"userID" : userID, @"loadouts" : [cannonicalNames sortedArrayUsingSelector:@selector(compare:)]};
-	NSData* data = [NSJSONSerialization dataWithJSONObject:jsonObject options:0 error:errorPtr];
-
-	if (self = [super initWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/upload", NeocomAPIHost]]
-						 bodyData:data
-					  contentType:@"application/json"
-					   cachePolicy:cachePolicy
-							error:errorPtr
-				  progressHandler:progressHandler]) {
-	}
-	return self;
-}
-
-- (NSError*) parseData:(NSData *)data {
-	NSError* error = nil;
-	NSDictionary* result = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-	if ([result isKindOfClass:[NSDictionary class]]) {
-		self.success = YES;
-		self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 24 * 30];
-		return nil;
-	}
-	else {
-		self.success = NO;
-		self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:60 * 60 * 24];
-		return error;
-	}
++ (NSDictionary*) scheme {
+	static NSDictionary* scheme = nil;
+	if (!scheme)
+		scheme = @{@"success":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"elementName":@"status", @"transformer":^(id value) {
+			if ([value isKindOfClass:[NSString class]] && [value isEqualToString:@"ok"])
+				return @(YES);
+			else
+				return @(NO);
+		}}};
+	return scheme;
 }
 
 @end

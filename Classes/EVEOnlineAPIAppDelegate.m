@@ -16,6 +16,7 @@
 #import "EVEzKillBoardAPI.h"
 #import "EVEAPISerializer.h"
 #import "EVEAPIObject.h"
+#import "NeocomAPI.h"
 
 @implementation EVEOnlineAPIAppDelegate
 
@@ -44,9 +45,18 @@
 		NSLog(@"%@", result);
 	} progressBlock:nil];*/
 	
-	[[EVECentralAPI new] quickLookWithTypeID:645 regionIDs:nil systemID:0 hours:0 minQ:0 completionBlock:^(EVECentralQuickLook *result, NSError *error) {
+/*	[[EVECentralAPI new] quickLookWithTypeID:645 regionIDs:nil systemID:0 hours:0 minQ:0 completionBlock:^(EVECentralQuickLook *result, NSError *error) {
 		NSLog(@"%@",result);
-	} progressBlock:nil];
+	} progressBlock:nil];*/
+/*	[[NeocomAPI new] searchWithCriteria:@{@"typeID":@(645)} order:nil completionBlock:^(NAPISearch *result, NSError *error) {
+		NSLog(@"%@", result);
+	} progressBlock:nil];*/
+	[[NeocomAPI new] uploadFitsWithCannonicalNames:@[@"645|2299::2;2303::1;3186:21740:6;12068::1;15895::3;19187::1;33844::4|28288:5",
+													 @"645|2299::2;2303::1;3186:21740:6;12068::1;15895::3;19187::1;33844::4|28288:5"]
+											userID:@"test"
+								   completionBlock:^(NAPIUpload *result, NSError *error) {
+									   
+								   } progressBlock:nil];
 	return YES;
 }
 

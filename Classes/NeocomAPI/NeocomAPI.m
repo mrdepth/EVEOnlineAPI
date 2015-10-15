@@ -1,21 +1,21 @@
 //
-//  EVECentralAPI.m
+//  NeocomAPI.m
 //  EVEOnlineAPI
 //
-//  Created by Артем Шиманский on 28.09.15.
+//  Created by Артем Шиманский on 15.10.15.
 //
 //
 
-#import "EVECentralAPI.h"
-#import "EVECentralSerializer.h"
+#import "NeocomAPI.h"
 #import "NSDateFormatter+EVEOnlineAPI.h"
 #import "NSURL+MD5.h"
+#import "NAPISerializer.h"
 
-@interface EVECentralAPI()
-- (AFHTTPRequestOperation*) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+@interface NeocomAPI()
+- (AFHTTPRequestOperation*) request:(NSString*) URLString method:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 @end
 
-@implementation EVECentralAPI
+@implementation NeocomAPI
 
 - (instancetype) init {
 	if (self = [self initWithCachePolicy:NSURLRequestUseProtocolCachePolicy]) {
@@ -30,41 +30,34 @@
 	return self;
 }
 
-
-- (AFHTTPRequestOperation*) marketStatWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralMarketStat* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	NSMutableDictionary* parameters = [NSMutableDictionary new];
-	parameters[@"typeid"] = @(typeID);
-	if (regionIDs.count > 0)
-		parameters[@"regionlimit"] = regionIDs;
-	if (hours > 0)
-		parameters[@"hours"] = @(hours);
-	if (minQ > 0)
-		parameters[@"minQ"] = @(minQ);
-	return [self GET:@"marketstat" parameters:parameters responseClass:[EVECentralMarketStat class] completionBlock:completionBlock progressBlock:progressBlock];
+- (AFHTTPRequestOperation*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	return [self request:@"lookup" method:@"GET" parameters:criteria responseClass:[NAPILookup class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralQuickLook* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	NSMutableDictionary* parameters = [NSMutableDictionary new];
+- (AFHTTPRequestOperation*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	NSMutableDictionary* parameters = [criteria mutableCopy] ?: [NSMutableDictionary new];
+	if (order)
+		parameters[@"order"] = order;
 	
-	parameters[@"typeid"] = @(typeID);
-	if (regionIDs.count > 0)
-		parameters[@"regionlimit"] = regionIDs;
-	if (systemID > 0)
-		parameters[@"usesystem"] = @(systemID);
-	if (hours > 0)
-		parameters[@"sethours"] = @(hours);
-	if (minQ > 0)
-		parameters[@"setminQ"] = @(minQ);
-	return [self GET:@"quicklook" parameters:parameters responseClass:[EVECentralQuickLook class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self request:@"search" method:@"GET"  parameters:parameters responseClass:[NAPISearch class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
+- (AFHTTPRequestOperation*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	NSMutableDictionary* parameters = [NSMutableDictionary new];
+	if (cannonicalNames)
+		parameters[@"loadouts"] = cannonicalNames;
+	if (userID)
+		parameters[@"userID"] = userID;
+	
+	return [self request:@"upload" method:@"POST"  parameters:parameters responseClass:[NAPIUpload class] completionBlock:completionBlock progressBlock:progressBlock];
+}
 
 - (AFHTTPRequestOperationManager*) httpRequestOperationManager {
 	static AFHTTPRequestOperationManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://api.eve-central.com"]];
+			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://neocom.by/"]];
 			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 		});
 	}
@@ -74,10 +67,14 @@
 
 #pragma mark - Private
 
-- (AFHTTPRequestOperation*) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	NSString* urlString = [@"api" stringByAppendingPathComponent:method];
+- (AFHTTPRequestOperation*) request:(NSString*) URLString method:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	NSString* urlString = [@"api" stringByAppendingPathComponent:URLString];
 	
-	AFHTTPRequestSerializer* serializer = [AFHTTPRequestSerializer serializer];
+	AFHTTPRequestSerializer* serializer;
+	if ([method isEqual:@"POST"])
+		serializer = [AFJSONRequestSerializer serializer];
+	else
+		serializer = [AFHTTPRequestSerializer serializer];
 	serializer.cachePolicy = self.cachePolicy;
 	
 	static NSMutableDictionary* dispatchGroups = nil;
@@ -95,7 +92,7 @@
 		});
 	}
 	
-	NSURLRequest* request = [serializer requestWithMethod:@"GET"
+	NSURLRequest* request = [serializer requestWithMethod:method
 												URLString:[[NSURL URLWithString:urlString relativeToURL:self.httpRequestOperationManager.baseURL] absoluteString]
 											   parameters:parameters
 													error:nil];
@@ -166,7 +163,7 @@
 			operations[request] = operation;
 		}
 		
-		operation.responseSerializer = [EVECentralSerializer serializerWithRootClass:responseClass];
+		operation.responseSerializer = [NAPISerializer serializerWithRootClass:responseClass];
 		[operation setCacheResponseBlock:^NSCachedURLResponse* (NSURLConnection* connection, NSCachedURLResponse* response) {
 			return nil;
 		}];

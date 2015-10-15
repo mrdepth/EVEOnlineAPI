@@ -6,12 +6,8 @@
 //
 //
 
-#import "EVECachedURLRequest.h"
+#import "EVEObject.h"
 
-@interface NAPILookup : EVECachedURLRequest
-@property (nonatomic, assign) int32_t count;
-
-+ (id) lookupWithCriteria:(NSDictionary*) criteria cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCriteria:(NSDictionary*) criteria cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
+@interface NAPILookup : EVEObject
+@property (nonatomic, assign) NSInteger count;
 @end

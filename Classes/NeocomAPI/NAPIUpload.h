@@ -6,12 +6,8 @@
 //
 //
 
-#import "EVECachedURLRequest.h"
+#import "EVEObject.h"
 
-@interface NAPIUpload : EVECachedURLRequest
+@interface NAPIUpload : EVEObject
 @property (nonatomic, assign, getter = isSuccess) BOOL success;
-
-+ (id) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end

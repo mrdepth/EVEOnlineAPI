@@ -6,9 +6,9 @@
 //
 //
 
-#import "EVECachedURLRequest.h"
+#import "EVEObject.h"
 
-@interface NAPISearchItem : NSObject<NSCoding>
+@interface NAPISearchItem : EVEObject
 @property (nonatomic, strong) NSString* canonicalName;
 @property (nonatomic, assign) int32_t typeID;
 @property (nonatomic, strong) NSString* typeName;
@@ -25,10 +25,9 @@
 @property (nonatomic, assign) float falloff;
 @end
 
-@interface NAPISearch : EVECachedURLRequest
+@interface NAPISearch : EVEObject
 @property (nonatomic, strong) NSArray* loadouts;
 
-+ (id) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithCriteria:(NSDictionary*) criteria order:(NSString*) order cachePolicy:(NSURLRequestCachePolicy) cachePolicy error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
+- (id) initWithArray:(NSArray*) array;
 
 @end

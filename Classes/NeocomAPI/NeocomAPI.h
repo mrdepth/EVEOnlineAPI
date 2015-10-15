@@ -6,14 +6,20 @@
 //
 //
 
-#ifndef EVEOnlineAPI_NeocomAPI_h
-#define EVEOnlineAPI_NeocomAPI_h
-
-#import "NAPISearch.h"
-#import "NAPIUpload.h"
-#import "NAPILookup.h"
+#import <AFNetworking/AFNetworking.h>
+#import <EVEAPI/NAPISearch.h>
+#import <EVEAPI/NAPIUpload.h>
+#import <EVEAPI/NAPILookup.h>
 
 #define NeocomAPIHost @"http://neocom.by/api"
+
+#define NeocomAPIErrorDomain @"EVECentralAPI"
+
+typedef enum {
+	NeocomAPIErrorCodeParsingError = 1
+} NeocomAPIErrorCodes;
+
+#define NeocomAPIErrorCodeParsingErrorText @"Result parsing error"
 
 typedef enum {
 	NeocomAPIFlagNone                = 0,
@@ -33,4 +39,13 @@ typedef enum {
 	NeocomAPIFlagValid               = 1 << 13,
 } NeocomAPIFlag;
 
-#endif
+@interface NeocomAPI : NSObject
+@property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
+@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+
+- (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy NS_DESIGNATED_INITIALIZER;
+- (AFHTTPRequestOperation*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (AFHTTPRequestOperation*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (AFHTTPRequestOperation*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+
+@end
