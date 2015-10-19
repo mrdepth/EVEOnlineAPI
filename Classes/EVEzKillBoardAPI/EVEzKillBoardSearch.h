@@ -6,8 +6,8 @@
 //
 //
 
-#import "EVECachedURLRequest.h"
-#import "EVEOnlineAPI.h"
+#import <Foundation/Foundation.h>
+#import "EVEObject.h"
 
 #define EVEzKillBoardSearchFilterLimitKey @"limit"
 #define EVEzKillBoardSearchFilterPageKey @"page"
@@ -43,10 +43,6 @@
 #define EVEzKillBoardSearchFilterOrderDirectionDescending @"desc"
 
 
-@interface EVEzKillBoardSearch : EVECachedURLRequest
+@interface EVEzKillBoardSearch : EVEObject
 @property (nonatomic, strong) NSArray* kills;
-
-+ (id) searchWithFilter:(NSDictionary*) filter error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithFilter:(NSDictionary*) filter error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-
 @end

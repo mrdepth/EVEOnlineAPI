@@ -51,12 +51,15 @@
 /*	[[NeocomAPI new] searchWithCriteria:@{@"typeID":@(645)} order:nil completionBlock:^(NAPISearch *result, NSError *error) {
 		NSLog(@"%@", result);
 	} progressBlock:nil];*/
-	[[NeocomAPI new] uploadFitsWithCannonicalNames:@[@"645|2299::2;2303::1;3186:21740:6;12068::1;15895::3;19187::1;33844::4|28288:5",
+/*	[[NeocomAPI new] uploadFitsWithCannonicalNames:@[@"645|2299::2;2303::1;3186:21740:6;12068::1;15895::3;19187::1;33844::4|28288:5",
 													 @"645|2299::2;2303::1;3186:21740:6;12068::1;15895::3;19187::1;33844::4|28288:5"]
 											userID:@"test"
 								   completionBlock:^(NAPIUpload *result, NSError *error) {
 									   
-								   } progressBlock:nil];
+								   } progressBlock:nil];*/
+	[[EVEzKillBoardAPI new] searchWithFilter:@{@"losses":@"solo"} completionBlock:^(EVEzKillBoardSearch *result, NSError *error) {
+		NSLog(@"%@", result);
+	} progressBlock:nil];
 	return YES;
 }
 

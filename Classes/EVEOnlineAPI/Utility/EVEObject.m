@@ -63,12 +63,13 @@
 						
 						id object = dictionary[@"rowset"];
 						id rowset;
-						if ([object isKindOfClass:[NSArray class]])
-							rowset = object[[NSPredicate predicateWithFormat:@"name=%@", elementName]];
-						else if ([object isKindOfClass:[NSDictionary class]] && [object[@"name"] isEqualToString:elementName])
-							rowset = object;
-						
-						NSArray* rows = rowset[@"row"];
+						if (object) {
+							if ([object isKindOfClass:[NSArray class]])
+								rowset = object[[NSPredicate predicateWithFormat:@"name=%@", elementName]];
+							else if ([object isKindOfClass:[NSDictionary class]] && [object[@"name"] isEqualToString:elementName])
+								rowset = object;
+						}
+						NSArray* rows = rowset[@"row"] ?: [value isKindOfClass:[NSArray class]] ? value : nil;
 						if (rows) {
 							if (![rows isKindOfClass:[NSArray class]])
 								rows = @[rows];

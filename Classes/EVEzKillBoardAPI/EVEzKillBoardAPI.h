@@ -6,14 +6,10 @@
 //
 //
 
-#ifndef EVEOnlineAPI_EVEzKillBoardAPI_h
-#define EVEOnlineAPI_EVEzKillBoardAPI_h
+#import <AFNetworking/AFNetworking.h>
+#import <EVEAPI/EVEzKillBoardSearch.h>
 
-#import "EVEzKillBoardSearch.h"
-
-#define EVEzKillBoardAPIHost @"https://zkillboard.com/api/"
-
-#define EVEzKillBoardAPIErrorDomain @"EVEMetricsAPI"
+#define EVEzKillBoardAPIErrorDomain @"EVEzKillBoardAPI"
 
 typedef enum {
 	EVEzKillBoardAPIErrorCodeParsingError = 1
@@ -21,5 +17,12 @@ typedef enum {
 
 #define EVEzKillBoardAPIErrorCodeParsingErrorText @"Result parsing error"
 
+@interface EVEzKillBoardAPI : NSObject
+@property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
+@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
 
-#endif
+- (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy NS_DESIGNATED_INITIALIZER;
+
+- (AFHTTPRequestOperation*) searchWithFilter:(NSDictionary*) filter completionBlock:(void(^)(EVEzKillBoardSearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+
+@end
