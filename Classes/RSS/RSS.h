@@ -6,17 +6,15 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "EVECachedURLRequest.h"
-#import "RSSFeed.h"
+#import <AFNetworking/AFNetworking.h>
+#import <EVEAPI/RSSFeed.h>
 
 #define RSS_CACHE_TIME (60*60)
 
 
-@interface RSS : EVECachedURLRequest<NSXMLParserDelegate>
+@interface RSS : NSObject
 @property (nonatomic, strong) RSSFeed *feed;
 
-+ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
-- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler;
++ (AFHTTPRequestOperation*) rssWithContentsOfURL:(NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy completionBlock:(void(^)(RSS* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 
 @end

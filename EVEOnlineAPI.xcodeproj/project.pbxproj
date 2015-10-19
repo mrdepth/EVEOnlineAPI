@@ -198,6 +198,28 @@
 		125DC6361BD4FDB6005C2F79 /* EVEzKillBoardAPISerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 125DC6301BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.h */; settings = {ASSET_TAGS = (); }; };
 		125DC64B1BD520EF005C2F79 /* EVEzKillBoardAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC62D1BD4FA90005C2F79 /* EVEzKillBoardAPI.m */; settings = {ASSET_TAGS = (); }; };
 		125DC64C1BD520EF005C2F79 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; settings = {ASSET_TAGS = (); }; };
+		125DC64F1BD52387005C2F79 /* RSS.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B172C12F4A95B009DDE48 /* RSS.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6501BD52394005C2F79 /* NSMutableString+RSSParser10.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324A9142224CA00DD0EF7 /* NSMutableString+RSSParser10.h */; settings = {ASSET_TAGS = (); }; };
+		125DC6511BD52394005C2F79 /* NSMutableString+RSSParser10.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AA142224CA00DD0EF7 /* NSMutableString+RSSParser10.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6521BD52394005C2F79 /* RSSParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AB142224CA00DD0EF7 /* RSSParser.h */; settings = {ASSET_TAGS = (); }; };
+		125DC6531BD52394005C2F79 /* RSSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AC142224CA00DD0EF7 /* RSSParser.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6541BD52394005C2F79 /* RSSParser10.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AD142224CA00DD0EF7 /* RSSParser10.h */; settings = {ASSET_TAGS = (); }; };
+		125DC6551BD52394005C2F79 /* RSSParser10.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AE142224CA00DD0EF7 /* RSSParser10.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6561BD52394005C2F79 /* RSSParser20.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AF142224CA00DD0EF7 /* RSSParser20.h */; settings = {ASSET_TAGS = (); }; };
+		125DC6571BD52394005C2F79 /* RSSParser20.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B0142224CA00DD0EF7 /* RSSParser20.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6581BD52394005C2F79 /* RSSParserAtom.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B1142224CA00DD0EF7 /* RSSParserAtom.h */; settings = {ASSET_TAGS = (); }; };
+		125DC6591BD52394005C2F79 /* RSSParserAtom.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B2142224CA00DD0EF7 /* RSSParserAtom.m */; settings = {ASSET_TAGS = (); }; };
+		125DC65A1BD52394005C2F79 /* RSSEnclosure.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B3142224CA00DD0EF7 /* RSSEnclosure.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		125DC65B1BD52394005C2F79 /* RSSEnclosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B4142224CA00DD0EF7 /* RSSEnclosure.m */; settings = {ASSET_TAGS = (); }; };
+		125DC65C1BD52394005C2F79 /* RSSFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B5142224CA00DD0EF7 /* RSSFeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		125DC65D1BD52394005C2F79 /* RSSFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B6142224CA00DD0EF7 /* RSSFeed.m */; settings = {ASSET_TAGS = (); }; };
+		125DC65E1BD52394005C2F79 /* RSSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B7142224CA00DD0EF7 /* RSSImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		125DC65F1BD52394005C2F79 /* RSSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B8142224CA00DD0EF7 /* RSSImage.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6601BD52394005C2F79 /* RSSItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B9142224CA00DD0EF7 /* RSSItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		125DC6611BD52394005C2F79 /* RSSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324BA142224CA00DD0EF7 /* RSSItem.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6621BD52394005C2F79 /* RSSSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324BB142224CA00DD0EF7 /* RSSSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		125DC6631BD52394005C2F79 /* RSSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324BC142224CA00DD0EF7 /* RSSSource.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6641BD52394005C2F79 /* RSS.h in Headers */ = {isa = PBXBuildFile; fileRef = 717B172B12F4A95B009DDE48 /* RSS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
 		1264136E11B94B48001417FE /* EVEMailMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264136D11B94B48001417FE /* EVEMailMessages.m */; };
 		126413AB11B95161001417FE /* EVEMarketOrders.m in Sources */ = {isa = PBXBuildFile; fileRef = 126413AA11B95161001417FE /* EVEMarketOrders.m */; };
@@ -234,7 +256,7 @@
 		128310211BBD7CBB0018C8AC /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186898413059CCC00C22AEC /* NSString+HTML.m */; settings = {ASSET_TAGS = (); }; };
 		128310221BBD7CC00018C8AC /* NSString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186898313059CCC00C22AEC /* NSString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		128310241BBD845F0018C8AC /* NSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186DAB513059D0700C22AEC /* NSMutableString+HTML.m */; settings = {ASSET_TAGS = (); }; };
-		128310251BBD84690018C8AC /* NSMutableString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186DAB413059D0700C22AEC /* NSMutableString+HTML.h */; settings = {ASSET_TAGS = (); }; };
+		128310251BBD84690018C8AC /* NSMutableString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186DAB413059D0700C22AEC /* NSMutableString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1292319718F7C18F00CE7A41 /* EVEDBInvTrait.m in Sources */ = {isa = PBXBuildFile; fileRef = 1292319618F7C18F00CE7A41 /* EVEDBInvTrait.m */; };
 		12AA3027140B991F00B33BE8 /* EVEAPIKeyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3026140B991F00B33BE8 /* EVEAPIKeyInfo.m */; };
 		12AA3034140B9D1900B33BE8 /* EVECallList.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3033140B9D1900B33BE8 /* EVECallList.m */; };
@@ -1539,6 +1561,7 @@
 				125DC6361BD4FDB6005C2F79 /* EVEzKillBoardAPISerializer.h in Headers */,
 				128257371BCFE87E00BC1F56 /* NeocomAPI.h in Headers */,
 				1248CDF91B7DDBA2000266BE /* EVEAccountStatus.h in Headers */,
+				125DC65E1BD52394005C2F79 /* RSSImage.h in Headers */,
 				1248CDFA1B7DDBA2000266BE /* EVEAPIKeyInfo.h in Headers */,
 				1248CDFB1B7DDBA2000266BE /* EVECharacters.h in Headers */,
 				1248CDFC1B7DDBA2000266BE /* EVEAccountBalance.h in Headers */,
@@ -1556,20 +1579,24 @@
 				1248CE251B7DDBB4000266BE /* EVEMemberSecurityLog.h in Headers */,
 				1248CE261B7DDBB4000266BE /* EVEMemberTracking.h in Headers */,
 				1248CE271B7DDBB4000266BE /* EVEOutpostList.h in Headers */,
+				125DC6561BD52394005C2F79 /* RSSParser20.h in Headers */,
 				1248CE281B7DDBB4000266BE /* EVEOutpostServiceDetail.h in Headers */,
 				1248CE291B7DDBB4000266BE /* EVEShareholders.h in Headers */,
 				1248CE2A1B7DDBB4000266BE /* EVECorpStandings.h in Headers */,
 				1248CE2B1B7DDBB4000266BE /* EVEStarbaseDetail.h in Headers */,
 				1248CE2C1B7DDBB4000266BE /* EVEStarbaseList.h in Headers */,
+				125DC6501BD52394005C2F79 /* NSMutableString+RSSParser10.h in Headers */,
 				1248CE2D1B7DDBB4000266BE /* EVETitles.h in Headers */,
 				1248CE2E1B7DDBB4000266BE /* EVECorpWalletJournal.h in Headers */,
 				1248CE2F1B7DDBB4000266BE /* EVECorpWalletTransactions.h in Headers */,
 				128257381BCFE87E00BC1F56 /* NAPIUpload.h in Headers */,
 				1248CE301B7DDBB4000266BE /* EVEAllianceList.h in Headers */,
 				1248CE311B7DDBB4000266BE /* EVECharacterAffiliation.h in Headers */,
+				125DC6621BD52394005C2F79 /* RSSSource.h in Headers */,
 				1248CE321B7DDBB4000266BE /* EVECharacterID.h in Headers */,
 				1248CE331B7DDBB4000266BE /* EVECharacterInfo.h in Headers */,
 				1248CE341B7DDBB4000266BE /* EVECharacterName.h in Headers */,
+				125DC65C1BD52394005C2F79 /* RSSFeed.h in Headers */,
 				1248CE351B7DDBB4000266BE /* EVEConquerableStationList.h in Headers */,
 				1282572E1BCFD11B00BC1F56 /* NAPISerializer.h in Headers */,
 				1248CE361B7DDBB4000266BE /* EVEErrorList.h in Headers */,
@@ -1584,6 +1611,7 @@
 				1248CE3E1B7DDBB5000266BE /* EVEJumps.h in Headers */,
 				1248CE3F1B7DDBB5000266BE /* EVEKills.h in Headers */,
 				1248CE401B7DDBB5000266BE /* EVESovereignty.h in Headers */,
+				125DC65A1BD52394005C2F79 /* RSSEnclosure.h in Headers */,
 				1248CE411B7DDBB5000266BE /* EVEServerStatus.h in Headers */,
 				1248CE421B7DDBB5000266BE /* EVEImage.h in Headers */,
 				1248CE431B7DDBB5000266BE /* EVECallList.h in Headers */,
@@ -1593,10 +1621,12 @@
 				1248CE001B7DDBA3000266BE /* EVECharacterSheet.h in Headers */,
 				1248CE011B7DDBA3000266BE /* EVECharFacWarStats.h in Headers */,
 				1248CE021B7DDBA3000266BE /* EVECharMedals.h in Headers */,
+				125DC6541BD52394005C2F79 /* RSSParser10.h in Headers */,
 				126AACE31BB96BBD0068AA99 /* EVECentralAPI.h in Headers */,
 				1248CE031B7DDBA3000266BE /* EVECharStandings.h in Headers */,
 				1248CE041B7DDBA3000266BE /* EVECharWalletJournal.h in Headers */,
 				1248CE051B7DDBA3000266BE /* EVECharWalletTransactions.h in Headers */,
+				125DC6641BD52394005C2F79 /* RSS.h in Headers */,
 				1282573A1BCFE87E00BC1F56 /* NAPILookup.h in Headers */,
 				1248CE061B7DDBA3000266BE /* EVEContactList.h in Headers */,
 				1248CE071B7DDBA3000266BE /* EVEContactNotifications.h in Headers */,
@@ -1607,6 +1637,7 @@
 				1248CE0B1B7DDBA3000266BE /* EVEIndustryJobs.h in Headers */,
 				1248CE0C1B7DDBA3000266BE /* EVEIndustryJobsHistory.h in Headers */,
 				1248CE0D1B7DDBA3000266BE /* EVEKillMails.h in Headers */,
+				125DC6581BD52394005C2F79 /* RSSParserAtom.h in Headers */,
 				1248CE0E1B7DDBA3000266BE /* EVELocations.h in Headers */,
 				1248CE0F1B7DDBA3000266BE /* EVEMailBodies.h in Headers */,
 				1248CE101B7DDBA3000266BE /* EVEMailingLists.h in Headers */,
@@ -1618,11 +1649,13 @@
 				1248CE161B7DDBA3000266BE /* EVEPlanetaryLinks.h in Headers */,
 				1248CE171B7DDBA3000266BE /* EVEPlanetaryPins.h in Headers */,
 				1248CE181B7DDBA3000266BE /* EVEPlanetaryRoutes.h in Headers */,
+				125DC6601BD52394005C2F79 /* RSSItem.h in Headers */,
 				1248CE861B7DDE2A000266BE /* EVEGlobals.h in Headers */,
 				1248CE191B7DDBA3000266BE /* EVEResearch.h in Headers */,
 				125DC6341BD4FDB6005C2F79 /* EVEzKillBoardAPI.h in Headers */,
 				1248CE1A1B7DDBA3000266BE /* EVESkillInTraining.h in Headers */,
 				1248CE1B1B7DDBA3000266BE /* EVESkillQueue.h in Headers */,
+				125DC6521BD52394005C2F79 /* RSSParser.h in Headers */,
 				1248CE1C1B7DDBA3000266BE /* EVEUpcomingCalendarEvents.h in Headers */,
 				126AACEA1BB988D20068AA99 /* EVECentralSerializer.h in Headers */,
 				1248CDF61B7DDB96000266BE /* EVEAPISerializer.h in Headers */,
@@ -1776,6 +1809,8 @@
 				126AACEB1BB9890D0068AA99 /* EVECentralMarketStat.m in Sources */,
 				1248CDAF1B7DDAE9000266BE /* EVECharMedals.m in Sources */,
 				1248CDCD1B7DDAEE000266BE /* EVECustomsOffices.m in Sources */,
+				125DC65D1BD52394005C2F79 /* RSSFeed.m in Sources */,
+				125DC6511BD52394005C2F79 /* NSMutableString+RSSParser10.m in Sources */,
 				128257301BCFD11B00BC1F56 /* NAPISerializer.m in Sources */,
 				1248CDAA1B7DDAE9000266BE /* EVEAssetList.m in Sources */,
 				1248CDBF1B7DDAE9000266BE /* EVEMarketOrders.m in Sources */,
@@ -1790,6 +1825,7 @@
 				1248CDDD1B7DDAF5000266BE /* EVEAllianceList.m in Sources */,
 				1282572B1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */,
 				1248CDF01B7DDB02000266BE /* EVECallList.m in Sources */,
+				125DC65B1BD52394005C2F79 /* RSSEnclosure.m in Sources */,
 				128257341BCFE4C400BC1F56 /* NAPIUpload.m in Sources */,
 				1248CD9F1B7DDAB6000266BE /* EVEOnlineAPI.m in Sources */,
 				1248CDB81B7DDAE9000266BE /* EVEIndustryJobs.m in Sources */,
@@ -1804,6 +1840,7 @@
 				128310211BBD7CBB0018C8AC /* NSString+HTML.m in Sources */,
 				1248CDA51B7DDAE1000266BE /* EVELocationIDTransformer.m in Sources */,
 				1248CDB71B7DDAE9000266BE /* EVEContracts.m in Sources */,
+				125DC6531BD52394005C2F79 /* RSSParser.m in Sources */,
 				1248CDC91B7DDAE9000266BE /* EVEUpcomingCalendarEvents.m in Sources */,
 				1248CDB91B7DDAE9000266BE /* EVEIndustryJobsHistory.m in Sources */,
 				1248CDCC1B7DDAEE000266BE /* EVECorpFacWarStats.m in Sources */,
@@ -1813,10 +1850,12 @@
 				125DC6331BD4FC8D005C2F79 /* EVEzKillBoardAPISerializer.m in Sources */,
 				12564C481B872594000F68D8 /* NSData+MD5.m in Sources */,
 				125DC64C1BD520EF005C2F79 /* EVEzKillBoardSearch.m in Sources */,
+				125DC6631BD52394005C2F79 /* RSSSource.m in Sources */,
 				1248CDCE1B7DDAEE000266BE /* EVEFacilities.m in Sources */,
 				1248CDC01B7DDAE9000266BE /* EVENotifications.m in Sources */,
 				1248CDCA1B7DDAEE000266BE /* EVEContainerLog.m in Sources */,
 				1248CDB01B7DDAE9000266BE /* EVECharStandings.m in Sources */,
+				125DC6551BD52394005C2F79 /* RSSParser10.m in Sources */,
 				126AACE21BB96B420068AA99 /* EVECentralAPI.m in Sources */,
 				1248CDAB1B7DDAE9000266BE /* EVEBlueprints.m in Sources */,
 				1248CDF21B7DDB1F000266BE /* NSDictionary+XML.m in Sources */,
@@ -1830,6 +1869,7 @@
 				1248CDC81B7DDAE9000266BE /* EVESkillQueue.m in Sources */,
 				1248CDE91B7DDAF5000266BE /* EVETypeName.m in Sources */,
 				1248CDE51B7DDAF5000266BE /* EVEFacWarTopStats.m in Sources */,
+				125DC6571BD52394005C2F79 /* RSSParser20.m in Sources */,
 				1248CDB51B7DDAE9000266BE /* EVEContractBids.m in Sources */,
 				1248CDC51B7DDAE9000266BE /* EVEPlanetaryRoutes.m in Sources */,
 				1248CDD51B7DDAEE000266BE /* EVEOutpostServiceDetail.m in Sources */,
@@ -1847,7 +1887,10 @@
 				1248CDD21B7DDAEE000266BE /* EVEMemberSecurityLog.m in Sources */,
 				1248CDBA1B7DDAE9000266BE /* EVEKillMails.m in Sources */,
 				126AACEC1BB9890D0068AA99 /* EVECentralQuickLook.m in Sources */,
+				125DC6611BD52394005C2F79 /* RSSItem.m in Sources */,
 				1248CDD11B7DDAEE000266BE /* EVEMemberSecurity.m in Sources */,
+				125DC65F1BD52394005C2F79 /* RSSImage.m in Sources */,
+				125DC64F1BD52387005C2F79 /* RSS.m in Sources */,
 				1248CDEF1B7DDB02000266BE /* EVEImage.m in Sources */,
 				1248CDE21B7DDAF5000266BE /* EVEConquerableStationList.m in Sources */,
 				1248CDDC1B7DDAEE000266BE /* EVECorpWalletTransactions.m in Sources */,
@@ -1866,6 +1909,7 @@
 				1248CDEA1B7DDAFA000266BE /* EVEFacWarSystems.m in Sources */,
 				1248CDDA1B7DDAEE000266BE /* EVETitles.m in Sources */,
 				1248CDD81B7DDAEE000266BE /* EVEStarbaseDetail.m in Sources */,
+				125DC6591BD52394005C2F79 /* RSSParserAtom.m in Sources */,
 				1248CDB21B7DDAE9000266BE /* EVECharWalletTransactions.m in Sources */,
 				1248CDD01B7DDAEE000266BE /* EVEMemberMedals.m in Sources */,
 				125DC64B1BD520EF005C2F79 /* EVEzKillBoardAPI.m in Sources */,

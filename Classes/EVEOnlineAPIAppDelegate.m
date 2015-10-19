@@ -57,7 +57,10 @@
 								   completionBlock:^(NAPIUpload *result, NSError *error) {
 									   
 								   } progressBlock:nil];*/
-	[[EVEzKillBoardAPI new] searchWithFilter:@{@"losses":@"solo"} completionBlock:^(EVEzKillBoardSearch *result, NSError *error) {
+	/*[[EVEzKillBoardAPI new] searchWithFilter:@{@"losses":@"solo"} completionBlock:^(EVEzKillBoardSearch *result, NSError *error) {
+		NSLog(@"%@", result);
+	} progressBlock:nil];*/
+	[RSS rssWithContentsOfURL:[NSURL URLWithString:@"http://www.eveuniverseiphone.com/feeds/posts/default"] completionBlock:^(RSS *result, NSError *error) {
 		NSLog(@"%@", result);
 	} progressBlock:nil];
 	return YES;

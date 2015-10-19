@@ -10,29 +10,40 @@
 #import "NSString+HTML.h"
 #import "RSSParser.h"
 
+@interface RSS()<NSXMLParserDelegate>
+
+@end
+
 @implementation RSS
 
-+ (id) rssWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	return [[RSS alloc] initWithContentsOfURL:url error:errorPtr progressHandler:progressHandler];
-}
-
-- (id) initWithContentsOfURL: (NSURL*) url error:(NSError **)errorPtr progressHandler:(void(^)(CGFloat progress, BOOL* stop)) progressHandler {
-	if (self = [super initWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy error:errorPtr progressHandler:progressHandler]) {
++ (AFHTTPRequestOperation*) rssWithContentsOfURL:(NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy completionBlock:(void(^)(RSS* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	static AFHTTPRequestOperationManager* manager;
+	if (!manager) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:nil];
+			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+			manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+//			manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"*/*"];
+		});
 	}
-	return self;
-}
-
-- (NSError*) parseData: (NSData*) aData {
-	RSSParser *parser = [[RSSParser alloc] init];
-	NSError *parserError = nil;
-	if ([parser parseXMLData:aData]) {
-		self.feed = parser.feed;
-	}
-	else {
-		parserError = [parser error];
-	}
-	self.cacheExpireDate = [NSDate dateWithTimeIntervalSinceNow:RSS_CACHE_TIME];
-	return parserError;
+	manager.requestSerializer.cachePolicy = cachePolicy;
+	
+	return [manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+		RSSParser *parser = [[RSSParser alloc] init];
+		NSError *parserError = nil;
+		if ([parser parseXMLData:responseObject]) {
+			RSS* rss = [RSS new];
+			rss.feed = parser.feed;
+			completionBlock(rss, nil);
+		}
+		else {
+			completionBlock(nil, parser.error);
+			parserError = [parser error];
+		}
+	} failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+		completionBlock(nil, error);
+	}];
 }
 
 @end
