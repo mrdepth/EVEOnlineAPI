@@ -25,7 +25,7 @@
 	if (!map)
 		map = @{@"certID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"certificateID"},
 				@"description" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"description"},
-				@"groupid" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"groupID"},
+				@"groupID" : @{@"type" : @(EVEDBTypeInt), @"keyPath" : @"groupID"},
 				@"name" : @{@"type" : @(EVEDBTypeText), @"keyPath" : @"name"}
 				};
 	
