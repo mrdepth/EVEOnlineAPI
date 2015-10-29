@@ -23,9 +23,11 @@
 	if (self = [super init]) {
 		NSMutableArray* result = [NSMutableArray new];
 		for (NSDictionary* dic in array) {
-			id obj = [[EVEKillMailsKill alloc] initWithDictionary:dic];
-			if (obj)
+			if ([dic isKindOfClass:[NSDictionary class]]) {
+				id obj = [[EVEKillMailsKill alloc] initWithDictionary:dic];
+				if (obj)
 				[result addObject:obj];
+			}
 		}
 		self.kills = result;
 	}

@@ -13,17 +13,21 @@
 + (NSDictionary*) scheme {
 	static NSDictionary* scheme = nil;
 	id (^transformer)(id) = ^(id value) {
-		NSString* string = value;
-		if ([string isEqualToString:@"intelligence"])
+		if ([value isKindOfClass:[NSString class]]) {
+			NSString* string = value;
+			if ([string isEqualToString:@"intelligence"])
 			return @(EVECharacterAttributeIntelligence);
-		else if ([string isEqualToString:@"memory"])
+			else if ([string isEqualToString:@"memory"])
 			return @(EVECharacterAttributeMemory);
-		else if ([string isEqualToString:@"charisma"])
+			else if ([string isEqualToString:@"charisma"])
 			return @(EVECharacterAttributeCharisma);
-		else if ([string isEqualToString:@"perception"])
+			else if ([string isEqualToString:@"perception"])
 			return @(EVECharacterAttributePerception);
-		else
+			else
 			return @(EVECharacterAttributeWillpower);
+		}
+		else
+			return @(0);
 	};
 
 	if (!scheme)

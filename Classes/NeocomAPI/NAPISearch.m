@@ -48,9 +48,11 @@
 	if (self = [super init]) {
 		NSMutableArray* result = [NSMutableArray new];
 		for (NSDictionary* dic in array) {
-			id obj = [[NAPISearchItem alloc] initWithDictionary:dic];
-			if (obj)
+			if ([dic isKindOfClass:[NSDictionary class]]) {
+				id obj = [[NAPISearchItem alloc] initWithDictionary:dic];
+				if (obj)
 				[result addObject:obj];
+			}
 		}
 		self.loadouts = result;
 	}

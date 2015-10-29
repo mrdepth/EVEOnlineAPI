@@ -19,11 +19,12 @@
 
 - (id) initWithDictionary:(NSDictionary*) dictionary {
 	if (self = [super init]) {
-		if (dictionary) {
+		if (dictionary && [dictionary isKindOfClass:[NSDictionary class]]) {
 			[self.class.scheme enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary* item, BOOL *stop) {
 				NSString* elementName = item[@"elementName"];
 				if (!elementName)
 					elementName = key;
+				
 				id value = dictionary[elementName];
 				
 				id transformer = item[@"transformer"];
@@ -38,19 +39,20 @@
 				
 				switch ([item[@"type"] integerValue]) {
 					case EVEXMLSchemePropertyTypeScalar:
-						if (value)
+						if (value && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]))
 							[self setValue:value forKey:key];
 						else
 							[self setValue:@(0) forKey:key];
 						break;
 					case EVEXMLSchemePropertyTypeString: {
-						[self setValue:value forKey:key];
+						if ([value isKindOfClass:[NSString class]])
+							[self setValue:value forKey:key];
 						break;
 					}
 						
 					case EVEXMLSchemePropertyTypeObject: {
 						Class class = item[@"class"];
-						if (class && [class isSubclassOfClass:[EVEObject class]])
+						if (class && [class isSubclassOfClass:[EVEObject class]] && [value isKindOfClass:[NSDictionary class]])
 							value = [[class alloc] initWithDictionary:value];
 						
 						[self setValue:value forKey:key];
@@ -75,7 +77,7 @@
 								rows = @[rows];
 							
 							for (NSDictionary* row in rows) {
-								if (class && [class isSubclassOfClass:[EVEObject class]])
+								if (class && [class isSubclassOfClass:[EVEObject class]] && [row isKindOfClass:[NSDictionary class]])
 									[array addObject:[[class alloc] initWithDictionary:row]];
 								else
 									[array addObject:row];
@@ -94,7 +96,7 @@
 								value = @[value];
 							
 							for (NSDictionary* object in value) {
-								if (class && [class isSubclassOfClass:[EVEObject class]])
+								if (class && [class isSubclassOfClass:[EVEObject class]] && [object isKindOfClass:[NSDictionary class]])
 									[array addObject:[[class alloc] initWithDictionary:object]];
 								else
 									[array addObject:object];
@@ -105,11 +107,11 @@
 						}
 					}
 					case EVEXMLSchemePropertyTypeDate:
-						if (value)
+						if (value && [value isKindOfClass:[NSString class]])
 							[self setValue:[[NSDateFormatter eveDateFormatter] dateFromString:value] forKey:key];
 						break;
 					case EVEXMLSchemePropertyTypeError: {
-						if (value) {
+						if (value && [value isKindOfClass:[NSDictionary class]]) {
 							NSInteger errorCode = [value[@"code"] integerValue];
 							NSString* description = value[@"_"];
 							[self setValue:[NSError errorWithDomain:EVEOnlineErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:description ? description : @""}] forKey:key];

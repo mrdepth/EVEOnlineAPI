@@ -14,10 +14,14 @@
 + (NSDictionary*) scheme {
 	static NSDictionary* scheme = nil;
 	id (^transformer)(id) = ^(id value) {
-		if ([value length] == 0)
+		if ([value isKindOfClass:[NSString class]]) {
+			if ([value length] == 0)
 			return (id) nil;
-		else
+			else
 			return [[value componentsSeparatedByString:@""] valueForKey:@"intValue"];
+		}
+		else
+			return (id) @[];
 	};
 	
 	if (!scheme)

@@ -35,8 +35,12 @@
 	if (!scheme)
 		scheme = @{@"accessMask":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"type":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"transformer":^(id value) {
-					   NSString* string = value;
-					   return @([string isEqualToString:@"Corporation"] ? EVEAPIKeyTypeCorporation : ([string isEqualToString:@"Character"] ? EVEAPIKeyTypeCharacter : EVEAPIKeyTypeAccount));
+					   if ([value isKindOfClass:[NSString class]]) {
+						   NSString* string = value;
+						   return @([string isEqualToString:@"Corporation"] ? EVEAPIKeyTypeCorporation : ([string isEqualToString:@"Character"] ? EVEAPIKeyTypeCharacter : EVEAPIKeyTypeAccount));
+					   }
+					   else
+						return @(EVEAPIKeyTypeCharacter);
 				   }},
 				   @"expires":@{@"type":@(EVEXMLSchemePropertyTypeDate)},
 				   @"characters":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEAPIKeyInfoCharactersItem class]}};

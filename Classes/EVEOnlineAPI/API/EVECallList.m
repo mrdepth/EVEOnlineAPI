@@ -31,7 +31,10 @@
 	if (!scheme)
 		scheme = @{@"accessMask":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},
 				   @"type":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"transformer":^(id value) {
-					   return [value isEqualToString:@"Corporation"] ? @(EVECallTypeCorporation) : @(EVECallTypeCharacter);
+					   if ([value isKindOfClass:[NSString class]])
+						return [value isEqualToString:@"Corporation"] ? @(EVECallTypeCorporation) : @(EVECallTypeCharacter);
+					   else
+						return @(EVECallTypeCharacter);
 				   }},
 				   @"name":@{@"type":@(EVEXMLSchemePropertyTypeString)},
 				   @"groupID":@{@"type":@(EVEXMLSchemePropertyTypeScalar)},

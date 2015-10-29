@@ -29,10 +29,14 @@
 	if (!scheme)
 		scheme = @{@"messages":@{@"type":@(EVEXMLSchemePropertyTypeRowset), @"class":[EVEMailBodiesItem class]},
 				   @"missingMessageIDs":@{@"type":@(EVEXMLSchemePropertyTypeObject), @"class":[NSArray class], @"transformer":^(id value) {
-					   if ([value length] == 0)
-						   return (id) nil;
+					   if ([value isKindOfClass:[NSString class]]) {
+						   if ([value length] == 0)
+							return (id) nil;
+						   else
+							return [[value componentsSeparatedByString:@""] valueForKey:@"intValue"];
+					   }
 					   else
-						   return [[value componentsSeparatedByString:@""] valueForKey:@"intValue"];
+						return (id)@[];
 				   }}};
 	
 	return scheme;
