@@ -39,7 +39,9 @@
 				
 				switch ([item[@"type"] integerValue]) {
 					case EVEXMLSchemePropertyTypeScalar:
-						if (value && ([value isKindOfClass:[NSString class]] || [value isKindOfClass:[NSNumber class]]))
+						if (value && [value isKindOfClass:[NSString class]])
+							[self setValue:@([value doubleValue]) forKey:key];
+						else if (value && [value isKindOfClass:[NSNumber class]])
 							[self setValue:value forKey:key];
 						else
 							[self setValue:@(0) forKey:key];
