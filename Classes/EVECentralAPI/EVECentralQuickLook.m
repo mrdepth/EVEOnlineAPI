@@ -77,10 +77,10 @@
 				   @"minQ":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"elementName":@"minqty"},
 				   @"buyOrders":@{@"type":@(EVEXMLSchemePropertyTypeArray), @"class":[EVECentralQuickLookOrder class],  @"transformer":^(id value) {
 					   return [value isKindOfClass:[NSDictionary class]] ? value[@"order"] : nil;
-				   }, @"elementName":@"sell_orders"},
+				   }, @"elementName":@"buy_orders"},
 				   @"sellOrders":@{@"type":@(EVEXMLSchemePropertyTypeArray), @"class":[EVECentralQuickLookOrder class],  @"transformer":^(id value) {
 					   return [value isKindOfClass:[NSDictionary class]] ? value[@"order"] : nil;
-				   }, @"elementName":@"buy_orders"}
+				   }, @"elementName":@"sell_orders"}
 		};
 	return scheme;
 }
