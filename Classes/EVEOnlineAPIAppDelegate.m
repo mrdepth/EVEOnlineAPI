@@ -17,6 +17,11 @@
 #import "EVEAPISerializer.h"
 #import "EVEAPIObject.h"
 #import "NeocomAPI.h"
+#import "CRAPI.h"
+
+@interface EVEOnlineAPIAppDelegate()
+//@property (strong, nonatomic) CRAPI* crapi;
+@end
 
 @implementation EVEOnlineAPIAppDelegate
 
@@ -26,6 +31,8 @@
 #define V_CODE @""
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	NSDictionary* d = @{@"key":@{@"subkey":@"value"}};
+	NSLog(@"%@", d[@"key.subkey"]);
 	window.rootViewController = [UIViewController new];
 	[window makeKeyAndVisible];
 	NSURLCache* cache = [[NSURLCache alloc] initWithMemoryCapacity:1024*1024 diskCapacity:1024*1024*50 diskPath:@"EVECache"];
@@ -60,9 +67,35 @@
 	/*[[EVEzKillBoardAPI new] searchWithFilter:@{@"losses":@"solo"} completionBlock:^(EVEzKillBoardSearch *result, NSError *error) {
 		NSLog(@"%@", result);
 	} progressBlock:nil];*/
-	[RSS rssWithContentsOfURL:[NSURL URLWithString:@"http://www.eveuniverseiphone.com/feeds/posts/default"] completionBlock:^(RSS *result, NSError *error) {
-		NSLog(@"%@", result);
-	} progressBlock:nil];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		NSString* file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"token.plist"];
+		CRToken* token = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+		CRAPI* crapi = [[CRAPI alloc] initWithCachePolicy:NSURLRequestUseProtocolCachePolicy
+											   clientID:@"c2cc974798d4485d966fba773a8f7ef8"
+											  secretKey:@"GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu"
+												  token:token
+											callbackURL:[NSURL URLWithString:@"neocom://sso"]];
+		
+		if (!token)
+			[crapi authenticateWithCompletionBlock:^(CRToken *token, NSError *error) {
+				if (token)
+					[NSKeyedArchiver archiveRootObject:token toFile:file];
+				NSLog(@"%@", error);
+			}];
+		else
+			[crapi loadFittingsWithCompletionBlock:^(NSArray<CRFitting *> *result, NSError *error) {
+				[crapi postFitting:result[0] WithCompletionBlock:^(BOOL completed, NSError *error) {
+					NSLog(@"%d %@", completed, error);
+				}];
+				NSLog(@"%@", result);
+			} progressBlock:nil];
+	});
+
+	return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options  {
+	[CRAPI handleOpenURL:url];
 	return YES;
 }
 

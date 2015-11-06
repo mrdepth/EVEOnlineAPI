@@ -25,7 +25,7 @@
 				if (!elementName)
 					elementName = key;
 				
-				id value = dictionary[elementName];
+				id value = [dictionary valueForKeyPath:elementName];
 				
 				id transformer = item[@"transformer"];
 				if (transformer) {

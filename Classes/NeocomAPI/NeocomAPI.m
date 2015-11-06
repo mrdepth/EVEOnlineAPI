@@ -158,6 +158,9 @@
 																	  @synchronized(dispatchGroups) {
 																		  [dispatchGroups removeObjectForKey:request];
 																	  }
+																	  @synchronized(operations) {
+																		  [operations removeObjectForKey:request];
+																	  }
 																  }];
 		@synchronized(operations) {
 			operations[request] = operation;

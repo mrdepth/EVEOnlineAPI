@@ -14,6 +14,18 @@
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
 		12436CB519458EF10090D4A6 /* EVEDBChrRace.m in Sources */ = {isa = PBXBuildFile; fileRef = 12436CB419458EF10090D4A6 /* EVEDBChrRace.m */; };
 		1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243770D18969D170078F526 /* EVEDBNpcGroup.m */; };
+		1247B0F81BEB698B00608852 /* CRAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0F71BEB698B00608852 /* CRAPI.m */; };
+		1247B0FB1BEB7C8600608852 /* CRToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0FA1BEB7C8600608852 /* CRToken.m */; };
+		1247B0FE1BEBA28F00608852 /* CRFitting.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0FD1BEBA28F00608852 /* CRFitting.m */; };
+		1247B1011BEBA9B900608852 /* CRAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B1001BEBA9B900608852 /* CRAPISerializer.m */; };
+		1247B1021BECA60500608852 /* CRAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1247B0F61BEB698B00608852 /* CRAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1247B1031BECA60500608852 /* CRAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0F71BEB698B00608852 /* CRAPI.m */; };
+		1247B1041BECA60500608852 /* CRToken.h in Headers */ = {isa = PBXBuildFile; fileRef = 1247B0F91BEB7C8600608852 /* CRToken.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1247B1051BECA60500608852 /* CRToken.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0FA1BEB7C8600608852 /* CRToken.m */; };
+		1247B1061BECA60500608852 /* CRFitting.h in Headers */ = {isa = PBXBuildFile; fileRef = 1247B0FC1BEBA28F00608852 /* CRFitting.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1247B1071BECA60500608852 /* CRFitting.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0FD1BEBA28F00608852 /* CRFitting.m */; };
+		1247B1081BECA60500608852 /* CRAPISerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1247B0FF1BEBA9B900608852 /* CRAPISerializer.h */; };
+		1247B1091BECA60500608852 /* CRAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B1001BEBA9B900608852 /* CRAPISerializer.m */; };
 		1248CD791B7DD450000266BE /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F273931B72017400941A98 /* AFNetworking.framework */; };
 		1248CD841B7DDA24000266BE /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1248CD831B7DDA24000266BE /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1248CD9F1B7DDAB6000266BE /* EVEOnlineAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F274CE1B74C19A00941A98 /* EVEOnlineAPI.m */; };
@@ -189,36 +201,36 @@
 		12564C471B872591000F68D8 /* NSURL+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 718BB48E12DA64C600FF9D26 /* NSURL+MD5.m */; };
 		12564C481B872594000F68D8 /* NSData+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 719978AC137F0EC90061BA4E /* NSData+MD5.m */; };
 		12564C491B872597000F68D8 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 718BB48C12DA64C600FF9D26 /* NSString+MD5.m */; };
-		125DC62E1BD4FA90005C2F79 /* EVEzKillBoardAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC62D1BD4FA90005C2F79 /* EVEzKillBoardAPI.m */; settings = {ASSET_TAGS = (); }; };
-		125DC62F1BD4FC17005C2F79 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6321BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC6311BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6331BD4FC8D005C2F79 /* EVEzKillBoardAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC6311BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m */; settings = {ASSET_TAGS = (); }; };
+		125DC62E1BD4FA90005C2F79 /* EVEzKillBoardAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC62D1BD4FA90005C2F79 /* EVEzKillBoardAPI.m */; };
+		125DC62F1BD4FC17005C2F79 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; };
+		125DC6321BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC6311BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m */; };
+		125DC6331BD4FC8D005C2F79 /* EVEzKillBoardAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC6311BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m */; };
 		125DC6341BD4FDB6005C2F79 /* EVEzKillBoardAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 122AC50D18BCCB92005F0F46 /* EVEzKillBoardAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		125DC6351BD4FDB6005C2F79 /* EVEzKillBoardSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 122AC50E18BCCBC7005F0F46 /* EVEzKillBoardSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		125DC6361BD4FDB6005C2F79 /* EVEzKillBoardAPISerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 125DC6301BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.h */; settings = {ASSET_TAGS = (); }; };
-		125DC64B1BD520EF005C2F79 /* EVEzKillBoardAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC62D1BD4FA90005C2F79 /* EVEzKillBoardAPI.m */; settings = {ASSET_TAGS = (); }; };
-		125DC64C1BD520EF005C2F79 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; settings = {ASSET_TAGS = (); }; };
-		125DC64F1BD52387005C2F79 /* RSS.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B172C12F4A95B009DDE48 /* RSS.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6501BD52394005C2F79 /* NSMutableString+RSSParser10.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324A9142224CA00DD0EF7 /* NSMutableString+RSSParser10.h */; settings = {ASSET_TAGS = (); }; };
-		125DC6511BD52394005C2F79 /* NSMutableString+RSSParser10.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AA142224CA00DD0EF7 /* NSMutableString+RSSParser10.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6521BD52394005C2F79 /* RSSParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AB142224CA00DD0EF7 /* RSSParser.h */; settings = {ASSET_TAGS = (); }; };
-		125DC6531BD52394005C2F79 /* RSSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AC142224CA00DD0EF7 /* RSSParser.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6541BD52394005C2F79 /* RSSParser10.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AD142224CA00DD0EF7 /* RSSParser10.h */; settings = {ASSET_TAGS = (); }; };
-		125DC6551BD52394005C2F79 /* RSSParser10.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AE142224CA00DD0EF7 /* RSSParser10.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6561BD52394005C2F79 /* RSSParser20.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AF142224CA00DD0EF7 /* RSSParser20.h */; settings = {ASSET_TAGS = (); }; };
-		125DC6571BD52394005C2F79 /* RSSParser20.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B0142224CA00DD0EF7 /* RSSParser20.m */; settings = {ASSET_TAGS = (); }; };
-		125DC6581BD52394005C2F79 /* RSSParserAtom.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B1142224CA00DD0EF7 /* RSSParserAtom.h */; settings = {ASSET_TAGS = (); }; };
-		125DC6591BD52394005C2F79 /* RSSParserAtom.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B2142224CA00DD0EF7 /* RSSParserAtom.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6361BD4FDB6005C2F79 /* EVEzKillBoardAPISerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 125DC6301BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.h */; };
+		125DC64B1BD520EF005C2F79 /* EVEzKillBoardAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 125DC62D1BD4FA90005C2F79 /* EVEzKillBoardAPI.m */; };
+		125DC64C1BD520EF005C2F79 /* EVEzKillBoardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */; };
+		125DC64F1BD52387005C2F79 /* RSS.m in Sources */ = {isa = PBXBuildFile; fileRef = 717B172C12F4A95B009DDE48 /* RSS.m */; };
+		125DC6501BD52394005C2F79 /* NSMutableString+RSSParser10.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324A9142224CA00DD0EF7 /* NSMutableString+RSSParser10.h */; };
+		125DC6511BD52394005C2F79 /* NSMutableString+RSSParser10.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AA142224CA00DD0EF7 /* NSMutableString+RSSParser10.m */; };
+		125DC6521BD52394005C2F79 /* RSSParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AB142224CA00DD0EF7 /* RSSParser.h */; };
+		125DC6531BD52394005C2F79 /* RSSParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AC142224CA00DD0EF7 /* RSSParser.m */; };
+		125DC6541BD52394005C2F79 /* RSSParser10.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AD142224CA00DD0EF7 /* RSSParser10.h */; };
+		125DC6551BD52394005C2F79 /* RSSParser10.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324AE142224CA00DD0EF7 /* RSSParser10.m */; };
+		125DC6561BD52394005C2F79 /* RSSParser20.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324AF142224CA00DD0EF7 /* RSSParser20.h */; };
+		125DC6571BD52394005C2F79 /* RSSParser20.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B0142224CA00DD0EF7 /* RSSParser20.m */; };
+		125DC6581BD52394005C2F79 /* RSSParserAtom.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B1142224CA00DD0EF7 /* RSSParserAtom.h */; };
+		125DC6591BD52394005C2F79 /* RSSParserAtom.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B2142224CA00DD0EF7 /* RSSParserAtom.m */; };
 		125DC65A1BD52394005C2F79 /* RSSEnclosure.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B3142224CA00DD0EF7 /* RSSEnclosure.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		125DC65B1BD52394005C2F79 /* RSSEnclosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B4142224CA00DD0EF7 /* RSSEnclosure.m */; settings = {ASSET_TAGS = (); }; };
+		125DC65B1BD52394005C2F79 /* RSSEnclosure.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B4142224CA00DD0EF7 /* RSSEnclosure.m */; };
 		125DC65C1BD52394005C2F79 /* RSSFeed.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B5142224CA00DD0EF7 /* RSSFeed.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		125DC65D1BD52394005C2F79 /* RSSFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B6142224CA00DD0EF7 /* RSSFeed.m */; settings = {ASSET_TAGS = (); }; };
+		125DC65D1BD52394005C2F79 /* RSSFeed.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B6142224CA00DD0EF7 /* RSSFeed.m */; };
 		125DC65E1BD52394005C2F79 /* RSSImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B7142224CA00DD0EF7 /* RSSImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		125DC65F1BD52394005C2F79 /* RSSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B8142224CA00DD0EF7 /* RSSImage.m */; settings = {ASSET_TAGS = (); }; };
+		125DC65F1BD52394005C2F79 /* RSSImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324B8142224CA00DD0EF7 /* RSSImage.m */; };
 		125DC6601BD52394005C2F79 /* RSSItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324B9142224CA00DD0EF7 /* RSSItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		125DC6611BD52394005C2F79 /* RSSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324BA142224CA00DD0EF7 /* RSSItem.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6611BD52394005C2F79 /* RSSItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324BA142224CA00DD0EF7 /* RSSItem.m */; };
 		125DC6621BD52394005C2F79 /* RSSSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 379324BB142224CA00DD0EF7 /* RSSSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		125DC6631BD52394005C2F79 /* RSSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324BC142224CA00DD0EF7 /* RSSSource.m */; settings = {ASSET_TAGS = (); }; };
+		125DC6631BD52394005C2F79 /* RSSSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 379324BC142224CA00DD0EF7 /* RSSSource.m */; };
 		125DC6641BD52394005C2F79 /* RSS.h in Headers */ = {isa = PBXBuildFile; fileRef = 717B172B12F4A95B009DDE48 /* RSS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1264135011B949B2001417FE /* EVEMailingLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264134F11B949B2001417FE /* EVEMailingLists.m */; };
 		1264136E11B94B48001417FE /* EVEMailMessages.m in Sources */ = {isa = PBXBuildFile; fileRef = 1264136D11B94B48001417FE /* EVEMailMessages.m */; };
@@ -226,36 +238,36 @@
 		126413B411B954C0001417FE /* EVECharMedals.m in Sources */ = {isa = PBXBuildFile; fileRef = 126413B311B954C0001417FE /* EVECharMedals.m */; };
 		12641E3C11B9641F001417FE /* EVENotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 12641E3B11B9641F001417FE /* EVENotifications.m */; };
 		12641E6C11B96621001417FE /* EVEResearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12641E6B11B96621001417FE /* EVEResearch.m */; };
-		126AACE11BB96A600068AA99 /* EVECentralAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE01BB96A600068AA99 /* EVECentralAPI.m */; settings = {ASSET_TAGS = (); }; };
-		126AACE21BB96B420068AA99 /* EVECentralAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE01BB96A600068AA99 /* EVECentralAPI.m */; settings = {ASSET_TAGS = (); }; };
+		126AACE11BB96A600068AA99 /* EVECentralAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE01BB96A600068AA99 /* EVECentralAPI.m */; };
+		126AACE21BB96B420068AA99 /* EVECentralAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE01BB96A600068AA99 /* EVECentralAPI.m */; };
 		126AACE31BB96BBD0068AA99 /* EVECentralAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 7182CCDD12DA349B00F8CD02 /* EVECentralAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		126AACE41BB96BC60068AA99 /* EVECentralMarketStat.h in Headers */ = {isa = PBXBuildFile; fileRef = 7182CCBA12D9E2C300F8CD02 /* EVECentralMarketStat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		126AACE51BB96BC60068AA99 /* EVECentralQuickLook.h in Headers */ = {isa = PBXBuildFile; fileRef = 717E897212DE36FA001A2ABD /* EVECentralQuickLook.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		126AACE81BB97DEF0068AA99 /* EVECentralSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */; settings = {ASSET_TAGS = (); }; };
+		126AACE81BB97DEF0068AA99 /* EVECentralSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */; };
 		126AACE91BB988CA0068AA99 /* EVECentralGlobals.h in Headers */ = {isa = PBXBuildFile; fileRef = 7182CCA212D9DCE900F8CD02 /* EVECentralGlobals.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		126AACEA1BB988D20068AA99 /* EVECentralSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 126AACE61BB97DEF0068AA99 /* EVECentralSerializer.h */; settings = {ASSET_TAGS = (); }; };
-		126AACEB1BB9890D0068AA99 /* EVECentralMarketStat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7182CCBB12D9E2C300F8CD02 /* EVECentralMarketStat.m */; settings = {ASSET_TAGS = (); }; };
-		126AACEC1BB9890D0068AA99 /* EVECentralQuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 717E897312DE36FA001A2ABD /* EVECentralQuickLook.m */; settings = {ASSET_TAGS = (); }; };
-		126AACED1BB989100068AA99 /* EVECentralSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */; settings = {ASSET_TAGS = (); }; };
+		126AACEA1BB988D20068AA99 /* EVECentralSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 126AACE61BB97DEF0068AA99 /* EVECentralSerializer.h */; };
+		126AACEB1BB9890D0068AA99 /* EVECentralMarketStat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7182CCBB12D9E2C300F8CD02 /* EVECentralMarketStat.m */; };
+		126AACEC1BB9890D0068AA99 /* EVECentralQuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 717E897312DE36FA001A2ABD /* EVECentralQuickLook.m */; };
+		126AACED1BB989100068AA99 /* EVECentralSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */; };
 		12774E171770347100E98F8C /* ASURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 12774E161770347100E98F8C /* ASURLConnection.m */; };
-		1282572A1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 128257291BCFCC4A00BC1F56 /* NeocomAPI.m */; settings = {ASSET_TAGS = (); }; };
-		1282572B1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 128257291BCFCC4A00BC1F56 /* NeocomAPI.m */; settings = {ASSET_TAGS = (); }; };
-		1282572E1BCFD11B00BC1F56 /* NAPISerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1282572C1BCFD11B00BC1F56 /* NAPISerializer.h */; settings = {ASSET_TAGS = (); }; };
-		1282572F1BCFD11B00BC1F56 /* NAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1282572D1BCFD11B00BC1F56 /* NAPISerializer.m */; settings = {ASSET_TAGS = (); }; };
-		128257301BCFD11B00BC1F56 /* NAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1282572D1BCFD11B00BC1F56 /* NAPISerializer.m */; settings = {ASSET_TAGS = (); }; };
-		128257311BCFE4C300BC1F56 /* NAPIUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BC17706AA50061D57C /* NAPIUpload.m */; settings = {ASSET_TAGS = (); }; };
-		128257321BCFE4C300BC1F56 /* NAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BF17706D010061D57C /* NAPISearch.m */; settings = {ASSET_TAGS = (); }; };
-		128257331BCFE4C300BC1F56 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; settings = {ASSET_TAGS = (); }; };
-		128257341BCFE4C400BC1F56 /* NAPIUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BC17706AA50061D57C /* NAPIUpload.m */; settings = {ASSET_TAGS = (); }; };
-		128257351BCFE4C400BC1F56 /* NAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BF17706D010061D57C /* NAPISearch.m */; settings = {ASSET_TAGS = (); }; };
-		128257361BCFE4C400BC1F56 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; settings = {ASSET_TAGS = (); }; };
+		1282572A1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 128257291BCFCC4A00BC1F56 /* NeocomAPI.m */; };
+		1282572B1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 128257291BCFCC4A00BC1F56 /* NeocomAPI.m */; };
+		1282572E1BCFD11B00BC1F56 /* NAPISerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1282572C1BCFD11B00BC1F56 /* NAPISerializer.h */; };
+		1282572F1BCFD11B00BC1F56 /* NAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1282572D1BCFD11B00BC1F56 /* NAPISerializer.m */; };
+		128257301BCFD11B00BC1F56 /* NAPISerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1282572D1BCFD11B00BC1F56 /* NAPISerializer.m */; };
+		128257311BCFE4C300BC1F56 /* NAPIUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BC17706AA50061D57C /* NAPIUpload.m */; };
+		128257321BCFE4C300BC1F56 /* NAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BF17706D010061D57C /* NAPISearch.m */; };
+		128257331BCFE4C300BC1F56 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
+		128257341BCFE4C400BC1F56 /* NAPIUpload.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BC17706AA50061D57C /* NAPIUpload.m */; };
+		128257351BCFE4C400BC1F56 /* NAPISearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D5F8BF17706D010061D57C /* NAPISearch.m */; };
+		128257361BCFE4C400BC1F56 /* NAPILookup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1248696A17717B0B0025C647 /* NAPILookup.m */; };
 		128257371BCFE87E00BC1F56 /* NeocomAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D5F8BA17706A710061D57C /* NeocomAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		128257381BCFE87E00BC1F56 /* NAPIUpload.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D5F8BB17706AA50061D57C /* NAPIUpload.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		128257391BCFE87E00BC1F56 /* NAPISearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D5F8BE17706D000061D57C /* NAPISearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1282573A1BCFE87E00BC1F56 /* NAPILookup.h in Headers */ = {isa = PBXBuildFile; fileRef = 1248696917717B0B0025C647 /* NAPILookup.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		128310211BBD7CBB0018C8AC /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186898413059CCC00C22AEC /* NSString+HTML.m */; settings = {ASSET_TAGS = (); }; };
+		128310211BBD7CBB0018C8AC /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186898413059CCC00C22AEC /* NSString+HTML.m */; };
 		128310221BBD7CC00018C8AC /* NSString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186898313059CCC00C22AEC /* NSString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		128310241BBD845F0018C8AC /* NSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186DAB513059D0700C22AEC /* NSMutableString+HTML.m */; settings = {ASSET_TAGS = (); }; };
+		128310241BBD845F0018C8AC /* NSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186DAB513059D0700C22AEC /* NSMutableString+HTML.m */; };
 		128310251BBD84690018C8AC /* NSMutableString+HTML.h in Headers */ = {isa = PBXBuildFile; fileRef = 7186DAB413059D0700C22AEC /* NSMutableString+HTML.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1292319718F7C18F00CE7A41 /* EVEDBInvTrait.m in Sources */ = {isa = PBXBuildFile; fileRef = 1292319618F7C18F00CE7A41 /* EVEDBInvTrait.m */; };
 		12AA3027140B991F00B33BE8 /* EVEAPIKeyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA3026140B991F00B33BE8 /* EVEAPIKeyInfo.m */; };
@@ -447,6 +459,14 @@
 		12436CB419458EF10090D4A6 /* EVEDBChrRace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBChrRace.m; sourceTree = "<group>"; };
 		1243770C18969D170078F526 /* EVEDBNpcGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBNpcGroup.h; sourceTree = "<group>"; };
 		1243770D18969D170078F526 /* EVEDBNpcGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBNpcGroup.m; sourceTree = "<group>"; };
+		1247B0F61BEB698B00608852 /* CRAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPI.h; sourceTree = "<group>"; };
+		1247B0F71BEB698B00608852 /* CRAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAPI.m; sourceTree = "<group>"; };
+		1247B0F91BEB7C8600608852 /* CRToken.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRToken.h; sourceTree = "<group>"; };
+		1247B0FA1BEB7C8600608852 /* CRToken.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRToken.m; sourceTree = "<group>"; };
+		1247B0FC1BEBA28F00608852 /* CRFitting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRFitting.h; sourceTree = "<group>"; };
+		1247B0FD1BEBA28F00608852 /* CRFitting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRFitting.m; sourceTree = "<group>"; };
+		1247B0FF1BEBA9B900608852 /* CRAPISerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRAPISerializer.h; sourceTree = "<group>"; };
+		1247B1001BEBA9B900608852 /* CRAPISerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRAPISerializer.m; sourceTree = "<group>"; };
 		1248696917717B0B0025C647 /* NAPILookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NAPILookup.h; sourceTree = "<group>"; };
 		1248696A17717B0B0025C647 /* NAPILookup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NAPILookup.m; sourceTree = "<group>"; };
 		1248CD751B7DD2E2000266BE /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
@@ -852,6 +872,7 @@
 				12FDCC5616390FEC0000709F /* EVEKillNetAPI */,
 				12F7A69017687D2000F39962 /* NeocomAPI */,
 				122AC50C18BCCB8B005F0F46 /* EVEzKillBoardAPI */,
+				1247B0F51BEB691000608852 /* CREST */,
 				1D3623240D0F684500981E51 /* EVEOnlineAPIAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EVEOnlineAPIAppDelegate.m */,
 			);
@@ -879,6 +900,22 @@
 			);
 			path = EVEzKillBoardAPI;
 			sourceTree = "<group>";
+		};
+		1247B0F51BEB691000608852 /* CREST */ = {
+			isa = PBXGroup;
+			children = (
+				1247B0F61BEB698B00608852 /* CRAPI.h */,
+				1247B0F71BEB698B00608852 /* CRAPI.m */,
+				1247B0F91BEB7C8600608852 /* CRToken.h */,
+				1247B0FA1BEB7C8600608852 /* CRToken.m */,
+				1247B0FC1BEBA28F00608852 /* CRFitting.h */,
+				1247B0FD1BEBA28F00608852 /* CRFitting.m */,
+				1247B0FF1BEBA9B900608852 /* CRAPISerializer.h */,
+				1247B1001BEBA9B900608852 /* CRAPISerializer.m */,
+			);
+			name = CREST;
+			path = Classes/CREST;
+			sourceTree = SOURCE_ROOT;
 		};
 		1248CD801B7DDA24000266BE /* EVEAPI */ = {
 			isa = PBXGroup;
@@ -1579,6 +1616,7 @@
 				1248CE251B7DDBB4000266BE /* EVEMemberSecurityLog.h in Headers */,
 				1248CE261B7DDBB4000266BE /* EVEMemberTracking.h in Headers */,
 				1248CE271B7DDBB4000266BE /* EVEOutpostList.h in Headers */,
+				1247B1021BECA60500608852 /* CRAPI.h in Headers */,
 				125DC6561BD52394005C2F79 /* RSSParser20.h in Headers */,
 				1248CE281B7DDBB4000266BE /* EVEOutpostServiceDetail.h in Headers */,
 				1248CE291B7DDBB4000266BE /* EVEShareholders.h in Headers */,
@@ -1617,6 +1655,7 @@
 				1248CE431B7DDBB5000266BE /* EVECallList.h in Headers */,
 				1248CE441B7DDBB5000266BE /* EVEOnlineAPI.h in Headers */,
 				126AACE91BB988CA0068AA99 /* EVECentralGlobals.h in Headers */,
+				1247B1041BECA60500608852 /* CRToken.h in Headers */,
 				1248CDFF1B7DDBA3000266BE /* EVECalendarEventAttendees.h in Headers */,
 				1248CE001B7DDBA3000266BE /* EVECharacterSheet.h in Headers */,
 				1248CE011B7DDBA3000266BE /* EVECharFacWarStats.h in Headers */,
@@ -1646,8 +1685,10 @@
 				1248CE131B7DDBA3000266BE /* EVENotifications.h in Headers */,
 				1248CE141B7DDBA3000266BE /* EVENotificationTexts.h in Headers */,
 				1248CE151B7DDBA3000266BE /* EVEPlanetaryColonies.h in Headers */,
+				1247B1061BECA60500608852 /* CRFitting.h in Headers */,
 				1248CE161B7DDBA3000266BE /* EVEPlanetaryLinks.h in Headers */,
 				1248CE171B7DDBA3000266BE /* EVEPlanetaryPins.h in Headers */,
+				1247B1081BECA60500608852 /* CRAPISerializer.h in Headers */,
 				1248CE181B7DDBA3000266BE /* EVEPlanetaryRoutes.h in Headers */,
 				125DC6601BD52394005C2F79 /* RSSItem.h in Headers */,
 				1248CE861B7DDE2A000266BE /* EVEGlobals.h in Headers */,
@@ -1852,6 +1893,7 @@
 				125DC64C1BD520EF005C2F79 /* EVEzKillBoardSearch.m in Sources */,
 				125DC6631BD52394005C2F79 /* RSSSource.m in Sources */,
 				1248CDCE1B7DDAEE000266BE /* EVEFacilities.m in Sources */,
+				1247B1091BECA60500608852 /* CRAPISerializer.m in Sources */,
 				1248CDC01B7DDAE9000266BE /* EVENotifications.m in Sources */,
 				1248CDCA1B7DDAEE000266BE /* EVEContainerLog.m in Sources */,
 				1248CDB01B7DDAE9000266BE /* EVECharStandings.m in Sources */,
@@ -1870,6 +1912,7 @@
 				1248CDE91B7DDAF5000266BE /* EVETypeName.m in Sources */,
 				1248CDE51B7DDAF5000266BE /* EVEFacWarTopStats.m in Sources */,
 				125DC6571BD52394005C2F79 /* RSSParser20.m in Sources */,
+				1247B1031BECA60500608852 /* CRAPI.m in Sources */,
 				1248CDB51B7DDAE9000266BE /* EVEContractBids.m in Sources */,
 				1248CDC51B7DDAE9000266BE /* EVEPlanetaryRoutes.m in Sources */,
 				1248CDD51B7DDAEE000266BE /* EVEOutpostServiceDetail.m in Sources */,
@@ -1894,8 +1937,10 @@
 				1248CDEF1B7DDB02000266BE /* EVEImage.m in Sources */,
 				1248CDE21B7DDAF5000266BE /* EVEConquerableStationList.m in Sources */,
 				1248CDDC1B7DDAEE000266BE /* EVECorpWalletTransactions.m in Sources */,
+				1247B1051BECA60500608852 /* CRToken.m in Sources */,
 				1248CDE01B7DDAF5000266BE /* EVECharacterInfo.m in Sources */,
 				1248CDA61B7DDAE6000266BE /* EVEAccountStatus.m in Sources */,
+				1247B1071BECA60500608852 /* CRFitting.m in Sources */,
 				128257361BCFE4C400BC1F56 /* NAPILookup.m in Sources */,
 				12564C471B872591000F68D8 /* NSURL+MD5.m in Sources */,
 				1248CDEC1B7DDAFA000266BE /* EVEKills.m in Sources */,
@@ -1959,6 +2004,7 @@
 				12F274CF1B74C19A00941A98 /* EVEOnlineAPI.m in Sources */,
 				126413AB11B95161001417FE /* EVEMarketOrders.m in Sources */,
 				126413B411B954C0001417FE /* EVECharMedals.m in Sources */,
+				1247B0F81BEB698B00608852 /* CRAPI.m in Sources */,
 				128257331BCFE4C300BC1F56 /* NAPILookup.m in Sources */,
 				12641E3C11B9641F001417FE /* EVENotifications.m in Sources */,
 				12641E6C11B96621001417FE /* EVEResearch.m in Sources */,
@@ -1979,6 +2025,7 @@
 				7189861A11FD99EC00A4ED9B /* EVEMemberMedals.m in Sources */,
 				126AACE11BB96A600068AA99 /* EVECentralAPI.m in Sources */,
 				7189862411FD9BDD00A4ED9B /* EVEMemberSecurity.m in Sources */,
+				1247B1011BEBA9B900608852 /* CRAPISerializer.m in Sources */,
 				7186FBDD11FDD1040042AFE8 /* EVEMemberTracking.m in Sources */,
 				71986B901200621A00A50906 /* EVEStarbaseDetail.m in Sources */,
 				71986BFB12006AA200A50906 /* EVEStarbaseList.m in Sources */,
@@ -2013,6 +2060,7 @@
 				7199F6BD12242B83004B1032 /* EVEDBInvMarketGroup.m in Sources */,
 				1292319718F7C18F00CE7A41 /* EVEDBInvTrait.m in Sources */,
 				7199F6FD122430EC004B1032 /* EVEDBDgmAttributeCategory.m in Sources */,
+				1247B0FB1BEB7C8600608852 /* CRToken.m in Sources */,
 				12F4F3311B78F8F5005A5244 /* EVEFacilities.m in Sources */,
 				7199F72712243484004B1032 /* EVEDBDgmAttributeType.m in Sources */,
 				7199F73C122436D9004B1032 /* EVEDBDgmTypeAttribute.m in Sources */,
@@ -2048,6 +2096,7 @@
 				71A6530F131DA7FA0082FFAC /* EVEDBInvControlTowerResourcePurpose.m in Sources */,
 				1282572A1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */,
 				7180B9B2136C763E001D8B90 /* EVEDBDgmEffect.m in Sources */,
+				1247B0FE1BEBA28F00608852 /* CRFitting.m in Sources */,
 				7180B9BD136C795D001D8B90 /* EVEDBDgmTypeEffect.m in Sources */,
 				1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */,
 				71997889137F0A770061BA4E /* BCRequest.m in Sources */,

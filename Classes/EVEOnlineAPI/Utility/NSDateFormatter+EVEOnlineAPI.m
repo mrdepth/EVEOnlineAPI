@@ -23,6 +23,19 @@
 	return dateFormatter;
 }
 
++ (NSDateFormatter*) crestDateFormatter {
+	static NSDateFormatter* dateFormatter;
+	if (!dateFormatter) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			dateFormatter = [NSDateFormatter new];
+			[dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSZ"];
+			[dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+			[dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+		});
+	}
+	return dateFormatter;
+}
 + (NSDateFormatter*) rfc822DateFormatter {
 	static NSDateFormatter* dateFormatter;
 	if (!dateFormatter) {
