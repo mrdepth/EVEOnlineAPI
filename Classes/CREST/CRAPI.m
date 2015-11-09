@@ -18,6 +18,7 @@ static NSPointerArray* gClients;
 @property (nonatomic, strong, readwrite) NSString* secretKey;
 @property (nonatomic, strong, readwrite) NSURL* callbackURL;
 @property (nonatomic, strong, readwrite) CRToken* token;
+@property (nonatomic, assign) BOOL publicAPI;
 
 @property (nonatomic, strong) NSString* state;
 @property (nonatomic, copy) void(^authenticationCompletionBlock) (CRToken* accessToken, NSError* error);
@@ -31,6 +32,10 @@ static NSPointerArray* gClients;
 
 + (instancetype) apiWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy clientID:(NSString*) clientID secretKey:(NSString*) secretKey token:(CRToken*) token callbackURL:(NSURL*) callbackURL {
 	return [[self alloc] initWithCachePolicy:cachePolicy clientID:clientID secretKey:secretKey token:token callbackURL:callbackURL];
+}
+
++ (instancetype) publicApiWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy {
+	return [[self alloc] initPublicAPIWithCachePolicy:cachePolicy];
 }
 
 + (void) handleOpenURL:(NSURL*) url {
@@ -75,15 +80,35 @@ static NSPointerArray* gClients;
 	return self;
 }
 
-- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
-	static AFHTTPRequestOperationManager* manager;
-	if (!manager) {
-		static dispatch_once_t onceToken;
-		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
-		});
+- (instancetype) initPublicAPIWithCachePolicy:(NSURLRequestCachePolicy)cachePolicy {
+	if (self = [super init]) {
+		self.cachePolicy = cachePolicy;
+		self.publicAPI = YES;
 	}
-	return manager;
+	return self;
+}
+
+- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
+	if (self.publicAPI) {
+		static AFHTTPRequestOperationManager* manager;
+		if (!manager) {
+			static dispatch_once_t onceToken;
+			dispatch_once(&onceToken, ^{
+				manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://public-crest.eveonline.com"]];
+			});
+		}
+		return manager;
+	}
+	else {
+		static AFHTTPRequestOperationManager* manager;
+		if (!manager) {
+			static dispatch_once_t onceToken;
+			dispatch_once(&onceToken, ^{
+				manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
+			});
+		}
+		return manager;
+	}
 }
 
 
@@ -173,7 +198,7 @@ static NSPointerArray* gClients;
 	post();
 }
 
--(void) deleteFittingWithID:(int64_t) fittingID completionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
+- (void) deleteFittingWithID:(int64_t) fittingID completionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
 	__block __weak void (^weakDelete)();
 	__block BOOL retry = NO;
 	void (^delete)() = ^{
@@ -222,6 +247,12 @@ static NSPointerArray* gClients;
 	};
 	weakDelete = delete;
 	delete();
+}
+
+- (void) loadKillMailWithID:(int64_t) killID hash:(NSString*) hash completionBlock:(void(^)(CRKillMail* killMail, NSError* error)) completionBlock {
+	[self GET:[NSString stringWithFormat:@"killmails/%qi/%@/", killID, hash] parameters:nil responseClass:[CRKillMail class] completionBlock:^(id result, NSError *error) {
+		completionBlock([result isKindOfClass:[CRKillMail class]] ? result : nil, error);
+	} progressBlock:nil];
 }
 
 #pragma mark - Private
@@ -393,7 +424,9 @@ static NSPointerArray* gClients;
 	__block BOOL retry = NO;
 	void (^get)() = ^{
 		AFHTTPRequestSerializer* serializer = [AFHTTPRequestSerializer serializer];
-		[serializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
+		if (!self.publicAPI)
+			[serializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
+		
 		serializer.cachePolicy = self.cachePolicy;
 		[serializer setValue:[responseClass contentType] forHTTPHeaderField:@"Accept"];
 		
@@ -449,7 +482,7 @@ static NSPointerArray* gClients;
 																		  }
 																	  }
 																	  failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
-																		  if (!retry && error.code == CRAPIErrorBadToken) {
+																		  if (!self.publicAPI && (!retry && error.code == CRAPIErrorBadToken)) {
 																			  retry = YES;
 																			  [self authenticateWithCompletionBlock:^(CRToken *accessToken, NSError *error) {
 																				  if (accessToken)
@@ -488,7 +521,7 @@ static NSPointerArray* gClients;
 		}
 	};
 	weakGet = get;
-	if (!self.token || [self.token isExpired]) {
+	if (!self.publicAPI && (!self.token || [self.token isExpired])) {
 		[self authenticateWithCompletionBlock:^(CRToken *accessToken, NSError *error) {
 			if (error) {
 				if (completionBlock)

@@ -67,7 +67,7 @@
 	/*[[EVEzKillBoardAPI new] searchWithFilter:@{@"losses":@"solo"} completionBlock:^(EVEzKillBoardSearch *result, NSError *error) {
 		NSLog(@"%@", result);
 	} progressBlock:nil];*/
-	dispatch_async(dispatch_get_main_queue(), ^{
+/*	dispatch_async(dispatch_get_main_queue(), ^{
 		NSString* file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"token.plist"];
 		CRToken* token = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
 		CRAPI* crapi = [[CRAPI alloc] initWithCachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -84,12 +84,15 @@
 			}];
 		else
 			[crapi loadFittingsWithCompletionBlock:^(NSArray<CRFitting *> *result, NSError *error) {
-				[crapi postFitting:result[0] WithCompletionBlock:^(BOOL completed, NSError *error) {
+				[crapi postFitting:result[0] withCompletionBlock:^(BOOL completed, NSError *error) {
 					NSLog(@"%d %@", completed, error);
 				}];
 				NSLog(@"%@", result);
 			} progressBlock:nil];
-	});
+	});*/
+	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadKillMailWithID:47987352 hash:@"e9e95594d41b66b6bd198adcdeb28651b405fbdc" completionBlock:^(CRKillMail *killMail, NSError *error) {
+		NSLog(@"%@", killMail);
+	}];
 
 	return YES;
 }

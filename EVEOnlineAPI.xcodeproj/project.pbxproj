@@ -249,6 +249,9 @@
 		126AACEB1BB9890D0068AA99 /* EVECentralMarketStat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7182CCBB12D9E2C300F8CD02 /* EVECentralMarketStat.m */; };
 		126AACEC1BB9890D0068AA99 /* EVECentralQuickLook.m in Sources */ = {isa = PBXBuildFile; fileRef = 717E897312DE36FA001A2ABD /* EVECentralQuickLook.m */; };
 		126AACED1BB989100068AA99 /* EVECentralSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */; };
+		12706BD61BF0E1A8000DBED1 /* CRKillMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 12706BD51BF0E1A8000DBED1 /* CRKillMail.m */; };
+		12706BD71BF0E591000DBED1 /* CRKillMail.h in Headers */ = {isa = PBXBuildFile; fileRef = 12706BD41BF0E1A8000DBED1 /* CRKillMail.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		12706BD81BF0E591000DBED1 /* CRKillMail.m in Sources */ = {isa = PBXBuildFile; fileRef = 12706BD51BF0E1A8000DBED1 /* CRKillMail.m */; };
 		12774E171770347100E98F8C /* ASURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 12774E161770347100E98F8C /* ASURLConnection.m */; };
 		1282572A1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 128257291BCFCC4A00BC1F56 /* NeocomAPI.m */; };
 		1282572B1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 128257291BCFCC4A00BC1F56 /* NeocomAPI.m */; };
@@ -493,6 +496,8 @@
 		126AACE01BB96A600068AA99 /* EVECentralAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECentralAPI.m; sourceTree = "<group>"; };
 		126AACE61BB97DEF0068AA99 /* EVECentralSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECentralSerializer.h; sourceTree = "<group>"; };
 		126AACE71BB97DEF0068AA99 /* EVECentralSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECentralSerializer.m; sourceTree = "<group>"; };
+		12706BD41BF0E1A8000DBED1 /* CRKillMail.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRKillMail.h; sourceTree = "<group>"; };
+		12706BD51BF0E1A8000DBED1 /* CRKillMail.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRKillMail.m; sourceTree = "<group>"; };
 		12774E151770347100E98F8C /* ASURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASURLConnection.h; sourceTree = "<group>"; };
 		12774E161770347100E98F8C /* ASURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASURLConnection.m; sourceTree = "<group>"; };
 		128257291BCFCC4A00BC1F56 /* NeocomAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NeocomAPI.m; sourceTree = "<group>"; };
@@ -910,6 +915,8 @@
 				1247B0FA1BEB7C8600608852 /* CRToken.m */,
 				1247B0FC1BEBA28F00608852 /* CRFitting.h */,
 				1247B0FD1BEBA28F00608852 /* CRFitting.m */,
+				12706BD41BF0E1A8000DBED1 /* CRKillMail.h */,
+				12706BD51BF0E1A8000DBED1 /* CRKillMail.m */,
 				1247B0FF1BEBA9B900608852 /* CRAPISerializer.h */,
 				1247B1001BEBA9B900608852 /* CRAPISerializer.m */,
 			);
@@ -1589,6 +1596,7 @@
 				1248CD841B7DDA24000266BE /* EVEAPI.h in Headers */,
 				1248CDF31B7DDB96000266BE /* EVEObject.h in Headers */,
 				1248CDF41B7DDB96000266BE /* EVEResult.h in Headers */,
+				12706BD71BF0E591000DBED1 /* CRKillMail.h in Headers */,
 				1248CDF51B7DDB96000266BE /* EVEAPIObject.h in Headers */,
 				1248CDF71B7DDB96000266BE /* NSDateFormatter+EVEOnlineAPI.h in Headers */,
 				128310251BBD84690018C8AC /* NSMutableString+HTML.h in Headers */,
@@ -1918,6 +1926,7 @@
 				1248CDD51B7DDAEE000266BE /* EVEOutpostServiceDetail.m in Sources */,
 				1248CDC21B7DDAE9000266BE /* EVEPlanetaryColonies.m in Sources */,
 				1248CDC71B7DDAE9000266BE /* EVESkillInTraining.m in Sources */,
+				12706BD81BF0E591000DBED1 /* CRKillMail.m in Sources */,
 				1248CDC31B7DDAE9000266BE /* EVEPlanetaryLinks.m in Sources */,
 				1248CDC41B7DDAE9000266BE /* EVEPlanetaryPins.m in Sources */,
 				1248CDA91B7DDAE9000266BE /* EVEAccountBalance.m in Sources */,
@@ -2116,6 +2125,7 @@
 				379324BF142224CA00DD0EF7 /* RSSParser10.m in Sources */,
 				379324C0142224CA00DD0EF7 /* RSSParser20.m in Sources */,
 				379324C1142224CA00DD0EF7 /* RSSParserAtom.m in Sources */,
+				12706BD61BF0E1A8000DBED1 /* CRKillMail.m in Sources */,
 				379324C2142224CA00DD0EF7 /* RSSEnclosure.m in Sources */,
 				379324C3142224CA00DD0EF7 /* RSSFeed.m in Sources */,
 				379324C4142224CA00DD0EF7 /* RSSImage.m in Sources */,
