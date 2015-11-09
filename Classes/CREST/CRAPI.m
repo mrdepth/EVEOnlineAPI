@@ -173,6 +173,57 @@ static NSPointerArray* gClients;
 	post();
 }
 
+-(void) deleteFittingWithID:(int64_t) fittingID completionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
+	__block __weak void (^weakDelete)();
+	__block BOOL retry = NO;
+	void (^delete)() = ^{
+		AFHTTPRequestSerializer* requestSerializer = [AFJSONRequestSerializer serializer];
+		[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
+		self.httpRequestOperationManager.requestSerializer = requestSerializer;
+		
+		AFHTTPResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
+		NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
+		[acceptableStatusCodes addIndex:401];
+		responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
+		responseSerializer.acceptableContentTypes = nil;
+		self.httpRequestOperationManager.responseSerializer = responseSerializer;
+		NSString* urlString = [NSString stringWithFormat:@"characters/%d/fittings/%qi/", self.token.characterID, fittingID];
+		void (^strongDelete)() = weakDelete;
+		[self.httpRequestOperationManager DELETE:[[NSURL URLWithString:urlString relativeToURL:self.httpRequestOperationManager.baseURL] absoluteString]
+									parameters:nil
+									   success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+										   NSError* error;
+										   if ([responseObject isKindOfClass:[NSDictionary class]]) {
+											   if (responseObject[@"error_description"])
+												   error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
+											   else if (responseObject[@"exceptionType"] && responseObject[@"message"]) {
+												   NSInteger code = 0;
+												   if ([responseObject[@"exceptionType"] isEqualToString:@"UnauthorizedError"])
+													   code = CRAPIErrorBadToken;
+												   error = [NSError errorWithDomain:CRAPIErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:responseObject[@"message"]}];
+											   }
+										   }
+										   if (!retry && error.code == CRAPIErrorBadToken) {
+											   retry = YES;
+											   [self authenticateWithCompletionBlock:^(CRToken *accessToken, NSError *error) {
+												   if (accessToken)
+													   strongDelete();
+												   else if (completionBlock)
+													   completionBlock(NO, error);
+											   }];
+										   }
+										   else if (completionBlock)
+											   completionBlock(error == nil, error);
+									   }
+									   failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+										   if (completionBlock)
+											   completionBlock(NO, error);
+									   }];
+	};
+	weakDelete = delete;
+	delete();
+}
+
 #pragma mark - Private
 
 - (void) verifyAuthorizationCode:(NSString*) code {
