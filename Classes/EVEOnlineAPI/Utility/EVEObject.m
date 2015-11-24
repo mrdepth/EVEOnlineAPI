@@ -105,8 +105,8 @@
 								
 							}
 							[self setValue:array forKey:key];
-							break;
 						}
+						break;
 					}
 					case EVEXMLSchemePropertyTypeDate:
 						if (value && [value isKindOfClass:[NSString class]])
