@@ -90,8 +90,11 @@
 				NSLog(@"%@", result);
 			} progressBlock:nil];
 	});*/
-	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadKillMailWithID:47987352 hash:@"e9e95594d41b66b6bd198adcdeb28651b405fbdc" completionBlock:^(CRKillMail *killMail, NSError *error) {
+	/*[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadKillMailWithID:47987352 hash:@"e9e95594d41b66b6bd198adcdeb28651b405fbdc" completionBlock:^(CRKillMail *killMail, NSError *error) {
 		NSLog(@"%@", killMail);
+	}];*/
+	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadSellOrdersWithTypeID:34 regionID:10000002 completionBlock:^(CRMarketOrderCollection *marketOrders, NSError *error) {
+		NSLog(@"%@", marketOrders);
 	}];
 
 	return YES;

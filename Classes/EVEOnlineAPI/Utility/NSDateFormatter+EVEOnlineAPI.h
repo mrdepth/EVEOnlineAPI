@@ -11,6 +11,7 @@
 @interface NSDateFormatter (EVEOnlineAPI)
 + (NSDateFormatter*) eveDateFormatter;
 + (NSDateFormatter*) crestDateFormatter;
++ (NSDateFormatter*) crestMarketDateFormatter;
 + (NSDateFormatter*) rfc822DateFormatter;
 
 @end

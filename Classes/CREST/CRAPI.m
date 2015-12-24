@@ -255,6 +255,19 @@ static NSPointerArray* gClients;
 	} progressBlock:nil];
 }
 
+- (void) loadSellOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock {
+	[self GET:[NSString stringWithFormat:@"market/%d/orders/sell/?type=https://public-crest.eveonline.com/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
+		completionBlock([result isKindOfClass:[CRMarketOrderCollection class]] ? result : nil, error);
+	} progressBlock:nil];
+}
+
+- (void) loadBuyOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock {
+	[self GET:[NSString stringWithFormat:@"market/%d/orders/buy/?type=https://public-crest.eveonline.com/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
+		completionBlock([result isKindOfClass:[CRMarketOrderCollection class]] ? result : nil, error);
+	} progressBlock:nil];
+}
+
+
 #pragma mark - Private
 
 - (void) verifyAuthorizationCode:(NSString*) code {

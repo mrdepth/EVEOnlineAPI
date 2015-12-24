@@ -324,6 +324,9 @@
 		12F274C91B74BF2700941A98 /* NSDateFormatter+EVEOnlineAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F274C81B74BF2700941A98 /* NSDateFormatter+EVEOnlineAPI.m */; };
 		12F274CD1B74BF8800941A98 /* NSArray+NSPredicate.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F274CC1B74BF8800941A98 /* NSArray+NSPredicate.m */; };
 		12F274CF1B74C19A00941A98 /* EVEOnlineAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F274CE1B74C19A00941A98 /* EVEOnlineAPI.m */; };
+		12F49A191C2BDA4A0004FAF5 /* CRMarketOrder.h in Headers */ = {isa = PBXBuildFile; fileRef = 12F49A171C2BDA4A0004FAF5 /* CRMarketOrder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		12F49A1A1C2BDA4A0004FAF5 /* CRMarketOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F49A181C2BDA4A0004FAF5 /* CRMarketOrder.m */; };
+		12F49A1B1C2BDA4A0004FAF5 /* CRMarketOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F49A181C2BDA4A0004FAF5 /* CRMarketOrder.m */; };
 		12F4F3251B789246005A5244 /* EVEBlueprints.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F4F3241B789246005A5244 /* EVEBlueprints.m */; };
 		12F4F3281B78941F005A5244 /* EVELocationIDTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F4F3271B78941F005A5244 /* EVELocationIDTransformer.m */; };
 		12F4F32B1B78B623005A5244 /* EVEIndustryJobsHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 12F4F32A1B78B623005A5244 /* EVEIndustryJobsHistory.m */; };
@@ -599,6 +602,8 @@
 		12F274D01B74C42C00941A98 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		12F274D21B74C43400941A98 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		12F274D41B74C44300941A98 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		12F49A171C2BDA4A0004FAF5 /* CRMarketOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMarketOrder.h; sourceTree = "<group>"; };
+		12F49A181C2BDA4A0004FAF5 /* CRMarketOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMarketOrder.m; sourceTree = "<group>"; };
 		12F4F3231B789246005A5244 /* EVEBlueprints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEBlueprints.h; sourceTree = "<group>"; };
 		12F4F3241B789246005A5244 /* EVEBlueprints.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEBlueprints.m; sourceTree = "<group>"; };
 		12F4F3261B78941F005A5244 /* EVELocationIDTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVELocationIDTransformer.h; sourceTree = "<group>"; };
@@ -917,6 +922,8 @@
 				1247B0FD1BEBA28F00608852 /* CRFitting.m */,
 				12706BD41BF0E1A8000DBED1 /* CRKillMail.h */,
 				12706BD51BF0E1A8000DBED1 /* CRKillMail.m */,
+				12F49A171C2BDA4A0004FAF5 /* CRMarketOrder.h */,
+				12F49A181C2BDA4A0004FAF5 /* CRMarketOrder.m */,
 				1247B0FF1BEBA9B900608852 /* CRAPISerializer.h */,
 				1247B1001BEBA9B900608852 /* CRAPISerializer.m */,
 			);
@@ -1663,6 +1670,7 @@
 				1248CE431B7DDBB5000266BE /* EVECallList.h in Headers */,
 				1248CE441B7DDBB5000266BE /* EVEOnlineAPI.h in Headers */,
 				126AACE91BB988CA0068AA99 /* EVECentralGlobals.h in Headers */,
+				12F49A191C2BDA4A0004FAF5 /* CRMarketOrder.h in Headers */,
 				1247B1041BECA60500608852 /* CRToken.h in Headers */,
 				1248CDFF1B7DDBA3000266BE /* EVECalendarEventAttendees.h in Headers */,
 				1248CE001B7DDBA3000266BE /* EVECharacterSheet.h in Headers */,
@@ -1967,6 +1975,7 @@
 				1248CDB21B7DDAE9000266BE /* EVECharWalletTransactions.m in Sources */,
 				1248CDD01B7DDAEE000266BE /* EVEMemberMedals.m in Sources */,
 				125DC64B1BD520EF005C2F79 /* EVEzKillBoardAPI.m in Sources */,
+				12F49A1B1C2BDA4A0004FAF5 /* CRMarketOrder.m in Sources */,
 				1248CDA01B7DDAE1000266BE /* EVEObject.m in Sources */,
 				1248CDE61B7DDAF5000266BE /* EVEOwnerID.m in Sources */,
 			);
@@ -2048,6 +2057,7 @@
 				12F4F32B1B78B623005A5244 /* EVEIndustryJobsHistory.m in Sources */,
 				718C3220121EB0FD00E4E065 /* EVECharacterName.m in Sources */,
 				718C3221121EB0FD00E4E065 /* EVEConquerableStationList.m in Sources */,
+				12F49A1A1C2BDA4A0004FAF5 /* CRMarketOrder.m in Sources */,
 				718C3222121EB0FD00E4E065 /* EVEErrorList.m in Sources */,
 				718C3223121EB0FD00E4E065 /* EVEFacWarStats.m in Sources */,
 				718C3224121EB0FD00E4E065 /* EVEFacWarTopStats.m in Sources */,

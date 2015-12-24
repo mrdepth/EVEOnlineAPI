@@ -111,6 +111,8 @@
 					case EVEXMLSchemePropertyTypeDate:
 						if (value && [value isKindOfClass:[NSString class]])
 							[self setValue:[[NSDateFormatter eveDateFormatter] dateFromString:value] forKey:key];
+						else if ([value isKindOfClass:[NSDate class]])
+							[self setValue:value forKey:key];
 						break;
 					case EVEXMLSchemePropertyTypeError: {
 						if (value && [value isKindOfClass:[NSDictionary class]]) {
