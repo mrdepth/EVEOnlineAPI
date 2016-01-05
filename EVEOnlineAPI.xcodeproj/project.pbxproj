@@ -12,6 +12,12 @@
 		1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */; };
 		1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */; };
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
+		1241B3CA1C3BEB5C009505BE /* CRIncursion.h in Headers */ = {isa = PBXBuildFile; fileRef = 1241B3C81C3BEB5C009505BE /* CRIncursion.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1241B3CB1C3BEB5C009505BE /* CRIncursion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1241B3C91C3BEB5C009505BE /* CRIncursion.m */; };
+		1241B3CC1C3BEB5C009505BE /* CRIncursion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1241B3C91C3BEB5C009505BE /* CRIncursion.m */; };
+		1241B3D41C3BF0EA009505BE /* CRSolarSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 1241B3D21C3BF0EA009505BE /* CRSolarSystem.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1241B3D51C3BF0EA009505BE /* CRSolarSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1241B3D31C3BF0EA009505BE /* CRSolarSystem.m */; };
+		1241B3D61C3BF0EA009505BE /* CRSolarSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1241B3D31C3BF0EA009505BE /* CRSolarSystem.m */; };
 		12436CB519458EF10090D4A6 /* EVEDBChrRace.m in Sources */ = {isa = PBXBuildFile; fileRef = 12436CB419458EF10090D4A6 /* EVEDBChrRace.m */; };
 		1243770E18969D170078F526 /* EVEDBNpcGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 1243770D18969D170078F526 /* EVEDBNpcGroup.m */; };
 		1247B0F81BEB698B00608852 /* CRAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 1247B0F71BEB698B00608852 /* CRAPI.m */; };
@@ -461,6 +467,10 @@
 		122AC50D18BCCB92005F0F46 /* EVEzKillBoardAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardAPI.h; sourceTree = "<group>"; };
 		122AC50E18BCCBC7005F0F46 /* EVEzKillBoardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardSearch.h; sourceTree = "<group>"; };
 		122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEzKillBoardSearch.m; sourceTree = "<group>"; };
+		1241B3C81C3BEB5C009505BE /* CRIncursion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRIncursion.h; sourceTree = "<group>"; };
+		1241B3C91C3BEB5C009505BE /* CRIncursion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRIncursion.m; sourceTree = "<group>"; };
+		1241B3D21C3BF0EA009505BE /* CRSolarSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRSolarSystem.h; sourceTree = "<group>"; };
+		1241B3D31C3BF0EA009505BE /* CRSolarSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRSolarSystem.m; sourceTree = "<group>"; };
 		12436CB319458EF10090D4A6 /* EVEDBChrRace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBChrRace.h; sourceTree = "<group>"; };
 		12436CB419458EF10090D4A6 /* EVEDBChrRace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBChrRace.m; sourceTree = "<group>"; };
 		1243770C18969D170078F526 /* EVEDBNpcGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBNpcGroup.h; sourceTree = "<group>"; };
@@ -924,6 +934,10 @@
 				12706BD51BF0E1A8000DBED1 /* CRKillMail.m */,
 				12F49A171C2BDA4A0004FAF5 /* CRMarketOrder.h */,
 				12F49A181C2BDA4A0004FAF5 /* CRMarketOrder.m */,
+				1241B3C81C3BEB5C009505BE /* CRIncursion.h */,
+				1241B3C91C3BEB5C009505BE /* CRIncursion.m */,
+				1241B3D21C3BF0EA009505BE /* CRSolarSystem.h */,
+				1241B3D31C3BF0EA009505BE /* CRSolarSystem.m */,
 				1247B0FF1BEBA9B900608852 /* CRAPISerializer.h */,
 				1247B1001BEBA9B900608852 /* CRAPISerializer.m */,
 			);
@@ -1616,6 +1630,7 @@
 				125DC65E1BD52394005C2F79 /* RSSImage.h in Headers */,
 				1248CDFA1B7DDBA2000266BE /* EVEAPIKeyInfo.h in Headers */,
 				1248CDFB1B7DDBA2000266BE /* EVECharacters.h in Headers */,
+				1241B3D41C3BF0EA009505BE /* CRSolarSystem.h in Headers */,
 				1248CDFC1B7DDBA2000266BE /* EVEAccountBalance.h in Headers */,
 				1248CDFD1B7DDBA3000266BE /* EVEAssetList.h in Headers */,
 				1248CDFE1B7DDBA3000266BE /* EVEBlueprints.h in Headers */,
@@ -1670,6 +1685,7 @@
 				1248CE431B7DDBB5000266BE /* EVECallList.h in Headers */,
 				1248CE441B7DDBB5000266BE /* EVEOnlineAPI.h in Headers */,
 				126AACE91BB988CA0068AA99 /* EVECentralGlobals.h in Headers */,
+				1241B3CA1C3BEB5C009505BE /* CRIncursion.h in Headers */,
 				12F49A191C2BDA4A0004FAF5 /* CRMarketOrder.h in Headers */,
 				1247B1041BECA60500608852 /* CRToken.h in Headers */,
 				1248CDFF1B7DDBA3000266BE /* EVECalendarEventAttendees.h in Headers */,
@@ -1873,6 +1889,7 @@
 				1248CDBF1B7DDAE9000266BE /* EVEMarketOrders.m in Sources */,
 				1248CDA31B7DDAE1000266BE /* EVEAPISerializer.m in Sources */,
 				1248CDDE1B7DDAF5000266BE /* EVECharacterAffiliation.m in Sources */,
+				1241B3D61C3BF0EA009505BE /* CRSolarSystem.m in Sources */,
 				1248CDBC1B7DDAE9000266BE /* EVEMailBodies.m in Sources */,
 				1248CDAC1B7DDAE9000266BE /* EVECalendarEventAttendees.m in Sources */,
 				1248CDBE1B7DDAE9000266BE /* EVEMailMessages.m in Sources */,
@@ -1969,6 +1986,7 @@
 				1248CDE11B7DDAF5000266BE /* EVECharacterName.m in Sources */,
 				1248CDC61B7DDAE9000266BE /* EVEResearch.m in Sources */,
 				1248CDEA1B7DDAFA000266BE /* EVEFacWarSystems.m in Sources */,
+				1241B3CC1C3BEB5C009505BE /* CRIncursion.m in Sources */,
 				1248CDDA1B7DDAEE000266BE /* EVETitles.m in Sources */,
 				1248CDD81B7DDAEE000266BE /* EVEStarbaseDetail.m in Sources */,
 				125DC6591BD52394005C2F79 /* RSSParserAtom.m in Sources */,
@@ -2085,6 +2103,7 @@
 				7199F73C122436D9004B1032 /* EVEDBDgmTypeAttribute.m in Sources */,
 				7183B4B812253960005CB8EE /* EVEDBMapRegion.m in Sources */,
 				7183B4CA12253AFF005CB8EE /* EVEDBMapConstellation.m in Sources */,
+				1241B3D51C3BF0EA009505BE /* CRSolarSystem.m in Sources */,
 				7183B4E012253CD9005CB8EE /* EVEDBMapSolarSystem.m in Sources */,
 				7183B4F112254506005CB8EE /* EVEDBStaStation.m in Sources */,
 				71B37E6112C2A87A00FBE2EF /* EVEAccountStatus.m in Sources */,
@@ -2152,6 +2171,7 @@
 				12F274C31B74BEDA00941A98 /* EVEAPIObject.m in Sources */,
 				37C5B9B614E552BB00380B9B /* EVENotificationTexts.m in Sources */,
 				37AF875914E991BC0047360D /* EVELocations.m in Sources */,
+				1241B3CB1C3BEB5C009505BE /* CRIncursion.m in Sources */,
 				12F274CD1B74BF8800941A98 /* NSArray+NSPredicate.m in Sources */,
 				37410508151A1F3F00BCED1B /* EVEDBRamAssemblyLineType.m in Sources */,
 				3741050C151A218F00BCED1B /* EVEDBRamInstallationTypeContent.m in Sources */,

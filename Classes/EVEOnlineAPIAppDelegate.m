@@ -93,8 +93,11 @@
 	/*[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadKillMailWithID:47987352 hash:@"e9e95594d41b66b6bd198adcdeb28651b405fbdc" completionBlock:^(CRKillMail *killMail, NSError *error) {
 		NSLog(@"%@", killMail);
 	}];*/
-	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadSellOrdersWithTypeID:34 regionID:10000002 completionBlock:^(CRMarketOrderCollection *marketOrders, NSError *error) {
+	/*[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadSellOrdersWithTypeID:34 regionID:10000002 completionBlock:^(CRMarketOrderCollection *marketOrders, NSError *error) {
 		NSLog(@"%@", marketOrders);
+	}]*/
+	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadSolarSystemWithSolarSystemID:30002966 completionBlock:^(CRSolarSystem *solarSystem, NSError *error) {
+		NSLog(@"%@", solarSystem);
 	}];
 
 	return YES;

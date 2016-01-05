@@ -12,6 +12,8 @@
 #import <EVEAPI/CRFitting.h>
 #import <EVEAPI/CRKillMail.h>
 #import <EVEAPI/CRMarketOrder.h>
+#import <EVEAPI/CRIncursion.h>
+#import <EVEAPI/CRSolarSystem.h>
 
 #define CRAPIErrorDomain @"CREST API"
 
@@ -46,4 +48,6 @@ typedef enum {
 - (void) loadKillMailWithID:(int64_t) killID hash:(NSString*) hash completionBlock:(void(^)(CRKillMail* killMail, NSError* error)) completionBlock;
 - (void) loadSellOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock;
 - (void) loadBuyOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock;
+- (void) loadIncursionsWithCompletionBlock:(void(^)(CRIncursionCollection* incursions, NSError* error)) completionBlock;
+- (void) loadSolarSystemWithSolarSystemID:(int32_t) solarSystemID completionBlock:(void(^)(CRSolarSystem* solarSystem, NSError* error)) completionBlock;
 @end

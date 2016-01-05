@@ -267,6 +267,19 @@ static NSPointerArray* gClients;
 	} progressBlock:nil];
 }
 
+- (void) loadIncursionsWithCompletionBlock:(void(^)(CRIncursionCollection* incursions, NSError* error)) completionBlock {
+	[self GET:@"incursions/" parameters:nil responseClass:[CRIncursionCollection class] completionBlock:^(id result, NSError *error) {
+		completionBlock([result isKindOfClass:[CRIncursionCollection class]] ? result : nil, error);
+	} progressBlock:nil];
+}
+
+- (void) loadSolarSystemWithSolarSystemID:(int32_t) solarSystemID completionBlock:(void(^)(CRSolarSystem* solarSystem, NSError* error)) completionBlock {
+	[self GET:[NSString stringWithFormat:@"solarsystems/%d/", solarSystemID] parameters:nil responseClass:[CRSolarSystem class] completionBlock:^(id result, NSError *error) {
+		completionBlock([result isKindOfClass:[CRSolarSystem class]] ? result : nil, error);
+	} progressBlock:nil];
+}
+
+
 
 #pragma mark - Private
 
