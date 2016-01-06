@@ -1,9 +1,6 @@
-[submodule "thirdparty/AFNetworking"]
-	path = thirdparty/AFNetworking
-	url = https://github.com/AFNetworking/AFNetworking.git
 [submodule "ThirdParty/AFNetworking"]
 	path = ThirdParty/AFNetworking
 	url = https://github.com/AFNetworking/AFNetworking.git
 [submodule "ThirdParty/tools"]
 	path = ThirdParty/tools
-	url = git@github.com:mrdepth/tools.git
+	url = https://github.com/mrdepth/tools.git
