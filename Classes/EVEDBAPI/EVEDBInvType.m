@@ -333,7 +333,7 @@
 		}
 		[database execSQLRequest:[NSString stringWithFormat:@"SELECT description FROM invTypes WHERE typeID=%d;", self.typeID]
 					 resultBlock:^(sqlite3_stmt *stmt, BOOL *needsMore) {
-						 self.description = [NSString stringWithCString:(const char*) sqlite3_column_text(stmt, 0) encoding:NSUTF8StringEncoding];
+						 self.description = [NSString stringWithCString:(const char*) sqlite3_column_text(stmt, 0) ?: "" encoding:NSUTF8StringEncoding];
 						 *needsMore = NO;
 					 }];
 	}
