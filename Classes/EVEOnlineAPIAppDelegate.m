@@ -99,6 +99,10 @@
 	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadSolarSystemWithSolarSystemID:30002966 completionBlock:^(CRSolarSystem *solarSystem, NSError *error) {
 		NSLog(@"%@", solarSystem);
 	}];
+	
+	[[CRAPI publicApiWithCachePolicy:NSURLRequestUseProtocolCachePolicy] loadMarketHistoryWithTypeID:645 regionID:10000002 completionBlock:^(CRMarketHistoryCollection *marketHistory, NSError *error) {
+		NSLog(@"%@", marketHistory);
+	}];
 
 	return YES;
 }

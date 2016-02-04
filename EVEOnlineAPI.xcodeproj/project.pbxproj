@@ -202,6 +202,9 @@
 		1248CE441B7DDBB5000266BE /* EVEOnlineAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12D30C4E11B6A8F200D772CF /* EVEOnlineAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1248CE861B7DDE2A000266BE /* EVEGlobals.h in Headers */ = {isa = PBXBuildFile; fileRef = 12CAF64E11B402BA008696F3 /* EVEGlobals.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		124D20CE11B7EF7A00D84307 /* EVEIndustryJobs.m in Sources */ = {isa = PBXBuildFile; fileRef = 124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */; };
+		12520D2A1C633A3B00FB6C81 /* CRMarketHistory.h in Headers */ = {isa = PBXBuildFile; fileRef = 12520D281C633A3B00FB6C81 /* CRMarketHistory.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		12520D2B1C633A3B00FB6C81 /* CRMarketHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 12520D291C633A3B00FB6C81 /* CRMarketHistory.m */; };
+		12520D2C1C633A3B00FB6C81 /* CRMarketHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 12520D291C633A3B00FB6C81 /* CRMarketHistory.m */; };
 		12564C0A1B85CE12000F68D8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		12564C0B1B85CE18000F68D8 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F274D01B74C42C00941A98 /* Security.framework */; };
 		12564C471B872591000F68D8 /* NSURL+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 718BB48E12DA64C600FF9D26 /* NSURL+MD5.m */; };
@@ -491,6 +494,8 @@
 		1248CD831B7DDA24000266BE /* EVEAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EVEAPI.h; sourceTree = "<group>"; };
 		124D20CC11B7EF7A00D84307 /* EVEIndustryJobs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEIndustryJobs.h; sourceTree = "<group>"; };
 		124D20CD11B7EF7A00D84307 /* EVEIndustryJobs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEIndustryJobs.m; sourceTree = "<group>"; };
+		12520D281C633A3B00FB6C81 /* CRMarketHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CRMarketHistory.h; sourceTree = "<group>"; };
+		12520D291C633A3B00FB6C81 /* CRMarketHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CRMarketHistory.m; sourceTree = "<group>"; };
 		125DC62D1BD4FA90005C2F79 /* EVEzKillBoardAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEzKillBoardAPI.m; sourceTree = "<group>"; };
 		125DC6301BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardAPISerializer.h; sourceTree = "<group>"; };
 		125DC6311BD4FC67005C2F79 /* EVEzKillBoardAPISerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEzKillBoardAPISerializer.m; sourceTree = "<group>"; };
@@ -934,6 +939,8 @@
 				12706BD51BF0E1A8000DBED1 /* CRKillMail.m */,
 				12F49A171C2BDA4A0004FAF5 /* CRMarketOrder.h */,
 				12F49A181C2BDA4A0004FAF5 /* CRMarketOrder.m */,
+				12520D281C633A3B00FB6C81 /* CRMarketHistory.h */,
+				12520D291C633A3B00FB6C81 /* CRMarketHistory.m */,
 				1241B3C81C3BEB5C009505BE /* CRIncursion.h */,
 				1241B3C91C3BEB5C009505BE /* CRIncursion.m */,
 				1241B3D21C3BF0EA009505BE /* CRSolarSystem.h */,
@@ -1614,6 +1621,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12520D2A1C633A3B00FB6C81 /* CRMarketHistory.h in Headers */,
 				1248CD841B7DDA24000266BE /* EVEAPI.h in Headers */,
 				1248CDF31B7DDB96000266BE /* EVEObject.h in Headers */,
 				1248CDF41B7DDB96000266BE /* EVEResult.h in Headers */,
@@ -1934,6 +1942,7 @@
 				126AACE21BB96B420068AA99 /* EVECentralAPI.m in Sources */,
 				1248CDAB1B7DDAE9000266BE /* EVEBlueprints.m in Sources */,
 				1248CDF21B7DDB1F000266BE /* NSDictionary+XML.m in Sources */,
+				12520D2C1C633A3B00FB6C81 /* CRMarketHistory.m in Sources */,
 				1248CDBD1B7DDAE9000266BE /* EVEMailingLists.m in Sources */,
 				1248CDE71B7DDAF5000266BE /* EVERefTypes.m in Sources */,
 				1248CDE41B7DDAF5000266BE /* EVEFacWarStats.m in Sources */,
@@ -2136,6 +2145,7 @@
 				7180B9B2136C763E001D8B90 /* EVEDBDgmEffect.m in Sources */,
 				1247B0FE1BEBA28F00608852 /* CRFitting.m in Sources */,
 				7180B9BD136C795D001D8B90 /* EVEDBDgmTypeEffect.m in Sources */,
+				12520D2B1C633A3B00FB6C81 /* CRMarketHistory.m in Sources */,
 				1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */,
 				71997889137F0A770061BA4E /* BCRequest.m in Sources */,
 				719978AD137F0EC90061BA4E /* NSData+MD5.m in Sources */,

@@ -279,6 +279,12 @@ static NSPointerArray* gClients;
 	} progressBlock:nil];
 }
 
+- (void) loadMarketHistoryWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketHistoryCollection* marketHistory, NSError* error)) completionBlock {
+	[self GET:[NSString stringWithFormat:@"market/%d/types/%d/history/", regionID, typeID] parameters:nil responseClass:[CRMarketHistoryCollection class] completionBlock:^(id result, NSError *error) {
+		completionBlock([result isKindOfClass:[CRMarketHistoryCollection class]] ? result : nil, error);
+	} progressBlock:nil];
+}
+
 
 
 #pragma mark - Private

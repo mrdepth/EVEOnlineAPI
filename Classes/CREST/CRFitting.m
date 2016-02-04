@@ -87,22 +87,3 @@
 }
 
 @end
-/*
-{
-	"name": "Name here...",
-	"description": "Description here...",
-	"items": [{
-		"type": {
-			"id": 518,
-			"name": "Basic Gyrostabilizer",
-			"href": "http://crest.regner.dev/types/518/"
-		},
-		"flag": 11,
-		"quantity": 1
-	}],
-	"ship": {
-		"id": 587,
-		"name": "Rifter",
-		"href": "http://crest.regner.dev/types/374/"
-	}
-}*/
