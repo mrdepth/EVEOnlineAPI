@@ -4,9 +4,9 @@ framework module AFNetworking {
 	export *
 	module * { export *	}
 	
-	link framework "MobileCoreServices"
+	//link framework "MobileCoreServices"
 	link framework "SystemConfiguration"
 	link framework "Foundation"
-	link framework "UIKit"
+	//link framework "UIKit"
 	link framework "Security"
 }
