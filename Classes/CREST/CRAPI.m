@@ -129,6 +129,7 @@ static NSPointerArray* gClients;
 		self.state = [[NSUUID UUID] UUIDString];
 		
 		NSString* urlString = [NSString stringWithFormat:@"https://login-tq.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=%@&client_id=%@&scope=characterFittingsRead+characterFittingsWrite&state=%@", self.callbackURL.absoluteString, self.clientID, self.state];
+#if TARGET_OS_IOS
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
 		__block id blockObserver;
 		__block id strongSelf = self;
@@ -137,6 +138,9 @@ static NSPointerArray* gClients;
 			strongSelf = nil;
 		}];
 		blockObserver = observer;
+#else
+		[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:urlString]];
+#endif
 	}
 }
 

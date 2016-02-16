@@ -64,7 +64,11 @@
 + (int32_t) imageDimensionWithSize:(EVEImageSize) size {
 	static int32_t scale = 0;
 	if (scale == 0)
+#if TARGET_OS_IOS
 		scale = [[UIScreen mainScreen] scale];
+#else
+		scale = [[NSScreen mainScreen] backingScaleFactor];
+#endif
 	
 	BOOL retina = (size & EVEImageSizeRetina) == EVEImageSizeRetina && scale == 2;
 	

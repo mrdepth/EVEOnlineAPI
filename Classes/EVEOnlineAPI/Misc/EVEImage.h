@@ -6,8 +6,12 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+#if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
-
+#else
+#import <Cocoa/Cocoa.h>
+#endif
 
 typedef NS_ENUM(int32_t, EVEImageSize) {
 	EVEImageSize32 = 32,
@@ -30,8 +34,11 @@ typedef NS_ENUM(int32_t, EVEImageSize) {
 	
 };
 
-@interface EVEImage : UIImage {
-}
+#if TARGET_OS_IOS
+@interface EVEImage : UIImage
+#else
+@interface EVEImage : NSImage
+#endif
 + (NSURL*) characterPortraitURLWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
 + (NSURL*) corporationLogoURLWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
 + (NSURL*) allianceLogoURLWithAllianceID: (int32_t) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr;
