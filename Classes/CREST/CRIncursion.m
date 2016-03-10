@@ -29,7 +29,10 @@
 				   @"solarSystemID":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"elementName":@"stagingSolarSystem.id"},
 				   @"solarSystemName":@{@"type":@(EVEXMLSchemePropertyTypeString), @"elementName":@"stagingSolarSystem.name"},
 				   @"constellationID":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"elementName":@"constellation.id"},
-				   @"constellationName":@{@"type":@(EVEXMLSchemePropertyTypeString), @"elementName":@"constellation.name"}};
+				   @"constellationName":@{@"type":@(EVEXMLSchemePropertyTypeString), @"elementName":@"constellation.name"},
+				   @"aggressorFactionID":@{@"type":@(EVEXMLSchemePropertyTypeScalar), @"elementName":@"aggressorFactionID.id"},
+				   @"aggressorFactionName":@{@"type":@(EVEXMLSchemePropertyTypeString), @"elementName":@"aggressorFactionID.name"},
+				   };
 	
 	return scheme;
 }

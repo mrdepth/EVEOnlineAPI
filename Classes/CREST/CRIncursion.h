@@ -23,6 +23,8 @@ typedef NS_ENUM(NSInteger, CRIncursionState) {
 @property (nonatomic, strong) NSString* solarSystemName;
 @property (nonatomic, assign) int32_t constellationID;
 @property (nonatomic, strong) NSString* constellationName;
+@property (nonatomic, assign) int32_t aggressorFactionID;
+@property (nonatomic, strong) NSString* aggressorFactionName;
 @end
 
 @interface CRIncursionCollection : EVEObject

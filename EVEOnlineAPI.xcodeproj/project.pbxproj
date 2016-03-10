@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		121064611C91A6F20032B3DB /* NSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186DAB513059D0700C22AEC /* NSMutableString+HTML.m */; };
+		121064621C91A6F20032B3DB /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186898413059CCC00C22AEC /* NSString+HTML.m */; };
+		121064631C91A6F20032B3DB /* NSMutableString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186DAB513059D0700C22AEC /* NSMutableString+HTML.m */; };
+		121064641C91A6F20032B3DB /* NSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = 7186898413059CCC00C22AEC /* NSString+HTML.m */; };
 		1222E162188F8890003C1361 /* murmurhash3.c in Sources */ = {isa = PBXBuildFile; fileRef = 1222E15E188F8890003C1361 /* murmurhash3.c */; };
 		1222E163188F8890003C1361 /* UIApplication+NetworkActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E161188F8890003C1361 /* UIApplication+NetworkActivity.m */; };
 		1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */; };
@@ -2395,6 +2399,7 @@
 				12350EF91C73A33D0015D140 /* EVEMailMessages.m in Sources */,
 				12350EFA1C73A33D0015D140 /* EVECharWalletJournal.m in Sources */,
 				12350EFB1C73A33D0015D140 /* EVECorpMedals.m in Sources */,
+				121064631C91A6F20032B3DB /* NSMutableString+HTML.m in Sources */,
 				12350EFC1C73A33D0015D140 /* EVECorporationSheet.m in Sources */,
 				12350EFD1C73A33D0015D140 /* EVEAllianceList.m in Sources */,
 				12350EFE1C73A33D0015D140 /* NeocomAPI.m in Sources */,
@@ -2477,6 +2482,7 @@
 				12350F4D1C73A33D0015D140 /* NAPILookup.m in Sources */,
 				12350F4E1C73A33D0015D140 /* NSURL+MD5.m in Sources */,
 				12350F4F1C73A33D0015D140 /* EVEKills.m in Sources */,
+				121064641C91A6F20032B3DB /* NSString+HTML.m in Sources */,
 				12350F501C73A33D0015D140 /* EVEContractItems.m in Sources */,
 				12350F511C73A33D0015D140 /* EVEMemberTracking.m in Sources */,
 				12350F521C73A33D0015D140 /* EVESovereignty.m in Sources */,
@@ -2537,6 +2543,7 @@
 				1248CDBE1B7DDAE9000266BE /* EVEMailMessages.m in Sources */,
 				1248CDB11B7DDAE9000266BE /* EVECharWalletJournal.m in Sources */,
 				1248CDCF1B7DDAEE000266BE /* EVECorpMedals.m in Sources */,
+				121064611C91A6F20032B3DB /* NSMutableString+HTML.m in Sources */,
 				1248CDCB1B7DDAEE000266BE /* EVECorporationSheet.m in Sources */,
 				1248CDDD1B7DDAF5000266BE /* EVEAllianceList.m in Sources */,
 				1282572B1BCFCC4A00BC1F56 /* NeocomAPI.m in Sources */,
@@ -2619,6 +2626,7 @@
 				128257361BCFE4C400BC1F56 /* NAPILookup.m in Sources */,
 				12564C471B872591000F68D8 /* NSURL+MD5.m in Sources */,
 				1248CDEC1B7DDAFA000266BE /* EVEKills.m in Sources */,
+				121064621C91A6F20032B3DB /* NSString+HTML.m in Sources */,
 				1248CDB61B7DDAE9000266BE /* EVEContractItems.m in Sources */,
 				1248CDD31B7DDAEE000266BE /* EVEMemberTracking.m in Sources */,
 				1248CDED1B7DDAFA000266BE /* EVESovereignty.m in Sources */,
