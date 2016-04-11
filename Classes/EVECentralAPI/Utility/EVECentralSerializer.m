@@ -29,7 +29,7 @@
 }
 
 - (nullable id) responseObjectForResponse:(nullable NSURLResponse *)response data:(nullable NSData *)data error:(NSError *__autoreleasing  __nullable * __nullable)error {
-	NSDictionary* dic = [NSDictionary dictionaryWithXMLData:data];
+	NSDictionary* dic = [NSDictionary dictionaryObjectWithXMLData:data];
 	NSDictionary* result = dic[@"evec_api"];
 	if (result && [result isKindOfClass:[NSDictionary class]]) {
 		__block id object;
