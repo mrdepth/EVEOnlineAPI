@@ -89,7 +89,7 @@ static NSPointerArray* gClients;
 }
 
 - (AFHTTPRequestOperationManager*) httpRequestOperationManager {
-	if (self.publicAPI) {
+/*	if (self.publicAPI) {
 		static AFHTTPRequestOperationManager* manager;
 		if (!manager) {
 			static dispatch_once_t onceToken;
@@ -108,7 +108,16 @@ static NSPointerArray* gClients;
 			});
 		}
 		return manager;
+	}*/
+	
+	static AFHTTPRequestOperationManager* manager;
+	if (!manager) {
+		static dispatch_once_t onceToken;
+		dispatch_once(&onceToken, ^{
+			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
+		});
 	}
+	return manager;
 }
 
 
