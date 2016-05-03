@@ -145,8 +145,12 @@
 - (void) encodeWithCoder:(NSCoder *)aCoder {
 	[self.class.scheme enumerateKeysAndObjectsUsingBlock:^(id key, NSDictionary* item, BOOL *stop) {
 		id value = [self valueForKey:key];
-		if (value)
-			[aCoder encodeObject:value forKey:key];
+		if (value) {
+			if ([value isKindOfClass:[NSArray class]])
+				[aCoder encodeObject:[value copy] forKey:key];
+			else
+				[aCoder encodeObject:value forKey:key];
+		}
 	}];
 }
 
