@@ -269,13 +269,13 @@ static NSPointerArray* gClients;
 }
 
 - (void) loadSellOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock {
-	[self GET:[NSString stringWithFormat:@"market/%d/orders/sell/?type=https://public-crest.eveonline.com/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
+	[self GET:[NSString stringWithFormat:@"market/%d/orders/sell/?type=https://crest-tq.eveonline.com/inventory/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRMarketOrderCollection class]] ? result : nil, error);
 	} progressBlock:nil];
 }
 
 - (void) loadBuyOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock {
-	[self GET:[NSString stringWithFormat:@"market/%d/orders/buy/?type=https://public-crest.eveonline.com/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
+	[self GET:[NSString stringWithFormat:@"market/%d/orders/buy/?type=https://crest-tq.eveonline.com/inventory/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRMarketOrderCollection class]] ? result : nil, error);
 	} progressBlock:nil];
 }
@@ -293,7 +293,7 @@ static NSPointerArray* gClients;
 }
 
 - (void) loadMarketHistoryWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketHistoryCollection* marketHistory, NSError* error)) completionBlock {
-	[self GET:[NSString stringWithFormat:@"market/%d/types/%d/history/", regionID, typeID] parameters:nil responseClass:[CRMarketHistoryCollection class] completionBlock:^(id result, NSError *error) {
+	[self GET:[NSString stringWithFormat:@"market/%d/types/history/?type=https://crest-tq.eveonline.com/inventory/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketHistoryCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRMarketHistoryCollection class]] ? result : nil, error);
 	} progressBlock:nil];
 }

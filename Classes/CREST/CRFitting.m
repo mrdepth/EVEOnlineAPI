@@ -22,7 +22,7 @@
 	NSMutableDictionary* dictionary = [NSMutableDictionary new];
 	dictionary[@"id"] = @(self.typeID);
 	dictionary[@"name"] = self.name ?: @"";
-	dictionary[@"href"] = [NSString stringWithFormat:@"https://crest-tq.eveonline.com/types/%d/", self.typeID];
+	dictionary[@"href"] = [NSString stringWithFormat:@"https://crest-tq.eveonline.com/inventory/types/%d/", self.typeID];
 	return dictionary;
 }
 
