@@ -16,20 +16,21 @@
 
 @implementation RSS
 
-+ (AFHTTPRequestOperation*) rssWithContentsOfURL:(NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy completionBlock:(void(^)(RSS* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	static AFHTTPRequestOperationManager* manager;
++ (NSURLSessionDataTask*) rssWithContentsOfURL:(NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy completionBlock:(void(^)(RSS* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+	static AFHTTPSessionManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:nil];
+			manager = [[AFHTTPSessionManager alloc] initWithBaseURL:nil];
 			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 			manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 //			manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"*/*"];
 		});
 	}
 	manager.requestSerializer.cachePolicy = cachePolicy;
-	
-	return [manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+#warning TODO
+	return nil;
+	/*return [manager GET:[url absoluteString] parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
 		RSSParser *parser = [[RSSParser alloc] init];
 		NSError *parserError = nil;
 		if ([parser parseXMLData:responseObject]) {
@@ -43,7 +44,7 @@
 		}
 	} failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
 		completionBlock(nil, error);
-	}];
+	}];*/
 }
 
 @end

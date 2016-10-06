@@ -15,6 +15,6 @@
 @interface RSS : NSObject
 @property (nonatomic, strong) RSSFeed *feed;
 
-+ (AFHTTPRequestOperation*) rssWithContentsOfURL:(NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy completionBlock:(void(^)(RSS* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
++ (NSURLSessionDataTask*) rssWithContentsOfURL:(NSURL*) url cachePolicy:(NSURLRequestCachePolicy) cachePolicy completionBlock:(void(^)(RSS* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 
 @end

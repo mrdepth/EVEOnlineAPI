@@ -29,7 +29,7 @@ typedef enum {
 
 @interface CRAPI : NSObject
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
 @property (nonatomic, strong, readonly) NSString* clientID;
 @property (nonatomic, strong, readonly) NSString* secretKey;
 @property (nonatomic, strong, readonly) NSURL* callbackURL;

@@ -31,6 +31,16 @@
 #define V_CODE @""
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+	EVEAPIKey* apiKey = [[EVEAPIKey alloc] initWithKeyID:KEY_ID vCode:V_CODE characterID:0 corporate:NO];
+	NSProgress *p = [NSProgress progressWithTotalUnitCount:1];
+	[p becomeCurrentWithPendingUnitCount:1];
+	[[EVEOnlineAPI apiWithAPIKey:apiKey cachePolicy:NSURLRequestUseProtocolCachePolicy] serverStatusWithCompletionBlock:^(EVEServerStatus *result, NSError *error) {
+		NSLog(@"%@", p);
+	}];
+	[p resignCurrent];
+	
+	self.window.rootViewController = [UIViewController new];
+	return YES;
 	NSDictionary* d = @{@"key":@{@"subkey":@"value"}};
 	NSLog(@"%@", d[@"key.subkey"]);
 	window.rootViewController = [UIViewController new];

@@ -41,11 +41,11 @@ typedef enum {
 
 @interface NeocomAPI : NSObject
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
 
 - (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy NS_DESIGNATED_INITIALIZER;
-- (AFHTTPRequestOperation*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (AFHTTPRequestOperation*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (AFHTTPRequestOperation*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 
 @end

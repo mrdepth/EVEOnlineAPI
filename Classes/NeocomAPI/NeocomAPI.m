@@ -12,7 +12,7 @@
 #import "NAPISerializer.h"
 
 @interface NeocomAPI()
-- (AFHTTPRequestOperation*) request:(NSString*) URLString method:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) request:(NSString*) URLString method:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 @end
 
 @implementation NeocomAPI
@@ -30,11 +30,11 @@
 	return self;
 }
 
-- (AFHTTPRequestOperation*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	return [self request:@"lookup" method:@"GET" parameters:criteria responseClass:[NAPILookup class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSMutableDictionary* parameters = [criteria mutableCopy] ?: [NSMutableDictionary new];
 	if (order)
 		parameters[@"order"] = order;
@@ -42,7 +42,7 @@
 	return [self request:@"search" method:@"GET"  parameters:parameters responseClass:[NAPISearch class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	if (cannonicalNames)
 		parameters[@"loadouts"] = cannonicalNames;
@@ -52,12 +52,12 @@
 	return [self request:@"upload" method:@"POST"  parameters:parameters responseClass:[NAPIUpload class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
-	static AFHTTPRequestOperationManager* manager;
+- (AFHTTPSessionManager*) httpRequestOperationManager {
+	static AFHTTPSessionManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://neocom.by/"]];
+			manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://neocom.by/"]];
 			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 		});
 	}
@@ -67,7 +67,7 @@
 
 #pragma mark - Private
 
-- (AFHTTPRequestOperation*) request:(NSString*) URLString method:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) request:(NSString*) URLString method:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSString* urlString = [@"api" stringByAppendingPathComponent:URLString];
 	
 	AFHTTPRequestSerializer* serializer;
@@ -115,7 +115,9 @@
 			completionBlock(context[@"result"], context[@"error"]);
 		});
 	}
-	
+#warning TODO
+	return nil;
+/*
 	if (load) {
 		AFHTTPRequestOperation *operation =
 		[self.httpRequestOperationManager HTTPRequestOperationWithRequest:[request copy]
@@ -177,7 +179,7 @@
 		@synchronized(operations) {
 			return operations[request];
 		}
-	}
+	}*/
 }
 
 @end

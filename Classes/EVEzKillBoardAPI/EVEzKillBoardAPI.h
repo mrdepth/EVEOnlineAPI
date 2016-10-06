@@ -19,10 +19,10 @@ typedef enum {
 
 @interface EVEzKillBoardAPI : NSObject
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
 
 - (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy NS_DESIGNATED_INITIALIZER;
 
-- (AFHTTPRequestOperation*) searchWithFilter:(NSDictionary*) filter completionBlock:(void(^)(EVEzKillBoardSearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) searchWithFilter:(NSDictionary*) filter completionBlock:(void(^)(EVEzKillBoardSearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 
 @end

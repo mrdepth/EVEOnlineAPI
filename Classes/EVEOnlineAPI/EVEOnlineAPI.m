@@ -10,10 +10,11 @@
 #import "EVEAPISerializer.h"
 #import "NSDateFormatter+EVEOnlineAPI.h"
 #import "NSURL+MD5.h"
+#import "NSDictionary+Hash.h"
 
 @interface EVEOnlineAPI()
 
-- (AFHTTPRequestOperation*) GET:(NSString*) method path:(NSString*) path parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (void) GET:(NSString*) method path:(NSString*) path parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock;
 
 @end
 
@@ -69,12 +70,12 @@
 	return self;
 }
 
-- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
-	static AFHTTPRequestOperationManager* manager;
+- (AFHTTPSessionManager*) httpRequestOperationManager {
+	static AFHTTPSessionManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.eveonline.com"]];
+			manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://api.eveonline.com"]];
 			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 		});
 	}
@@ -83,241 +84,241 @@
 
 #pragma mark - Account
 
-- (AFHTTPRequestOperation*) accountStatusWithCompletionBlock:(void(^)(EVEAccountStatus* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"AccountStatus" path:@"Account" parameters:nil responseClass:[EVEAccountStatus class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) accountStatusWithCompletionBlock:(void(^)(EVEAccountStatus* result, NSError* error)) completionBlock {
+	return [self GET:@"AccountStatus" path:@"Account" parameters:nil responseClass:[EVEAccountStatus class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) apiKeyInfoWithCompletionBlock:(void(^)(EVEAPIKeyInfo* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"APIKeyInfo" path:@"Account" parameters:nil responseClass:[EVEAPIKeyInfo class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) apiKeyInfoWithCompletionBlock:(void(^)(EVEAPIKeyInfo* result, NSError* error)) completionBlock {
+	return [self GET:@"APIKeyInfo" path:@"Account" parameters:nil responseClass:[EVEAPIKeyInfo class] completionBlock:completionBlock];
 }
 
 
-- (AFHTTPRequestOperation*) charactersWithCompletionBlock:(void(^)(EVECharacters* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Characters" path:@"Account" parameters:nil responseClass:[EVECharacters class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) charactersWithCompletionBlock:(void(^)(EVECharacters* result, NSError* error)) completionBlock {
+	return [self GET:@"Characters" path:@"Account" parameters:nil responseClass:[EVECharacters class] completionBlock:completionBlock];
 }
 
 #pragma mark - Character
 
 // Character
-- (AFHTTPRequestOperation*) accountBalanceWithCompletionBlock:(void(^)(EVEAccountBalance* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"AccountBalance" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEAccountBalance class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) accountBalanceWithCompletionBlock:(void(^)(EVEAccountBalance* result, NSError* error)) completionBlock {
+	return [self GET:@"AccountBalance" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEAccountBalance class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) assetListWithCompletionBlock:(void(^)(EVEAssetList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"AssetList" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEAssetList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) assetListWithCompletionBlock:(void(^)(EVEAssetList* result, NSError* error)) completionBlock {
+	return [self GET:@"AssetList" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEAssetList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) blueprintsWithCompletionBlock:(void(^)(EVEBlueprints* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Blueprints" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEBlueprints class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) blueprintsWithCompletionBlock:(void(^)(EVEBlueprints* result, NSError* error)) completionBlock {
+	return [self GET:@"Blueprints" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEBlueprints class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) calendarEventAttendeesWithCompletionBlock:(void(^)(EVECalendarEventAttendees* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CalendarEventAttendees" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVECalendarEventAttendees class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) calendarEventAttendeesWithCompletionBlock:(void(^)(EVECalendarEventAttendees* result, NSError* error)) completionBlock {
+	return [self GET:@"CalendarEventAttendees" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVECalendarEventAttendees class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) characterSheetWithCompletionBlock:(void(^)(EVECharacterSheet* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CharacterSheet" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVECharacterSheet class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) characterSheetWithCompletionBlock:(void(^)(EVECharacterSheet* result, NSError* error)) completionBlock {
+	return [self GET:@"CharacterSheet" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVECharacterSheet class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) charFacWarStatsWithCompletionBlock:(void(^)(EVECharFacWarStats* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"FacWarStats" path:@"Char" parameters:nil responseClass:[EVECharFacWarStats class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) charFacWarStatsWithCompletionBlock:(void(^)(EVECharFacWarStats* result, NSError* error)) completionBlock {
+	return [self GET:@"FacWarStats" path:@"Char" parameters:nil responseClass:[EVECharFacWarStats class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) charMedalsWithCompletionBlock:(void(^)(EVECharMedals* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Medals" path:@"Char" parameters:nil responseClass:[EVECharMedals class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) charMedalsWithCompletionBlock:(void(^)(EVECharMedals* result, NSError* error)) completionBlock {
+	return [self GET:@"Medals" path:@"Char" parameters:nil responseClass:[EVECharMedals class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) charStandingsWithCompletionBlock:(void(^)(EVECharStandings* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Standings" path:@"Char" parameters:nil responseClass:[EVECharStandings class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) charStandingsWithCompletionBlock:(void(^)(EVECharStandings* result, NSError* error)) completionBlock {
+	return [self GET:@"Standings" path:@"Char" parameters:nil responseClass:[EVECharStandings class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) charWalletJournalFromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECharWalletJournal* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) charWalletJournalFromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECharWalletJournal* result, NSError* error)) completionBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	if (fromID > 0)
 		parameters[@"fromID"] = @(fromID);
 	if (rowCount > 0)
 		parameters[@"rowCount"] = @(rowCount);
-	return [self GET:@"WalletJournal" path:@"Char" parameters:parameters responseClass:[EVECharWalletJournal class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self GET:@"WalletJournal" path:@"Char" parameters:parameters responseClass:[EVECharWalletJournal class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) charWalletTransactionsFromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECharWalletTransactions* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) charWalletTransactionsFromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECharWalletTransactions* result, NSError* error)) completionBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	if (fromID > 0)
 		parameters[@"fromID"] = @(fromID);
 	if (rowCount > 0)
 		parameters[@"rowCount"] = @(rowCount);
-	return [self GET:@"WalletTransactions" path:@"Char" parameters:parameters responseClass:[EVECharWalletTransactions class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self GET:@"WalletTransactions" path:@"Char" parameters:parameters responseClass:[EVECharWalletTransactions class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) contactListWithCompletionBlock:(void(^)(EVEContactList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContactList" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContactList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) contactListWithCompletionBlock:(void(^)(EVEContactList* result, NSError* error)) completionBlock {
+	return [self GET:@"ContactList" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContactList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) contactNotificationsWithCompletionBlock:(void(^)(EVEContactNotifications* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContactNotifications" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContactNotifications class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) contactNotificationsWithCompletionBlock:(void(^)(EVEContactNotifications* result, NSError* error)) completionBlock {
+	return [self GET:@"ContactNotifications" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContactNotifications class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) contractBidsWithCompletionBlock:(void(^)(EVEContractBids* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContractBids" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContractBids class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) contractBidsWithCompletionBlock:(void(^)(EVEContractBids* result, NSError* error)) completionBlock {
+	return [self GET:@"ContractBids" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEContractBids class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) contractItemsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContractItems* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContractItems" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:@{@"contractID":@(contractID)} responseClass:[EVEContractItems class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) contractItemsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContractItems* result, NSError* error)) completionBlock {
+	return [self GET:@"ContractItems" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:@{@"contractID":@(contractID)} responseClass:[EVEContractItems class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) contractsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContracts* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Contracts" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:contractID ? @{@"contractID":@(contractID)} : nil responseClass:[EVEContracts class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) contractsWithContractID:(int64_t) contractID completionBlock:(void(^)(EVEContracts* result, NSError* error)) completionBlock {
+	return [self GET:@"Contracts" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:contractID ? @{@"contractID":@(contractID)} : nil responseClass:[EVEContracts class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) industryJobsWithCompletionBlock:(void(^)(EVEIndustryJobs* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"IndustryJobs" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEIndustryJobs class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) industryJobsWithCompletionBlock:(void(^)(EVEIndustryJobs* result, NSError* error)) completionBlock {
+	return [self GET:@"IndustryJobs" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEIndustryJobs class] completionBlock:completionBlock];
 	
 }
 
-- (AFHTTPRequestOperation*) industryJobsHistoryWithCompletionBlock:(void(^)(EVEIndustryJobsHistory* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"IndustryJobsHistory" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEIndustryJobsHistory class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) industryJobsHistoryWithCompletionBlock:(void(^)(EVEIndustryJobsHistory* result, NSError* error)) completionBlock {
+	return [self GET:@"IndustryJobsHistory" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:nil responseClass:[EVEIndustryJobsHistory class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) killMailsFromID:(int32_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVEKillMails* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) killMailsFromID:(int32_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVEKillMails* result, NSError* error)) completionBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	if (fromID > 0)
 		parameters[@"fromID"] = @(fromID);
 	if (rowCount > 0)
 		parameters[@"rowCount"] = @(rowCount);
-	return [self GET:@"KillMails" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:parameters responseClass:[EVEKillMails class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self GET:@"KillMails" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:parameters responseClass:[EVEKillMails class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) locationsWithIDs:(NSArray*) ids completionBlock:(void(^)(EVELocations* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Locations" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:@{@"ids":[ids componentsJoinedByString:@","]} responseClass:[EVELocations class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) locationsWithIDs:(NSArray*) ids completionBlock:(void(^)(EVELocations* result, NSError* error)) completionBlock {
+	return [self GET:@"Locations" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:@{@"ids":[ids componentsJoinedByString:@","]} responseClass:[EVELocations class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) mailBodiesWithIDs:(NSArray*) ids completionBlock:(void(^)(EVEMailBodies* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MailBodies" path:@"Char" parameters:@{@"ids":[ids componentsJoinedByString:@","]} responseClass:[EVEMailBodies class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) mailBodiesWithIDs:(NSArray*) ids completionBlock:(void(^)(EVEMailBodies* result, NSError* error)) completionBlock {
+	return [self GET:@"MailBodies" path:@"Char" parameters:@{@"ids":[ids componentsJoinedByString:@","]} responseClass:[EVEMailBodies class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) mailingListsWithCompletionBlock:(void(^)(EVEMailingLists* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MailingLists" path:@"Char" parameters:nil responseClass:[EVEMailingLists class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) mailingListsWithCompletionBlock:(void(^)(EVEMailingLists* result, NSError* error)) completionBlock {
+	return [self GET:@"MailingLists" path:@"Char" parameters:nil responseClass:[EVEMailingLists class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) mailMessagesWithCompletionBlock:(void(^)(EVEMailMessages* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MailMessages" path:@"Char" parameters:nil responseClass:[EVEMailMessages class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) mailMessagesWithCompletionBlock:(void(^)(EVEMailMessages* result, NSError* error)) completionBlock {
+	return [self GET:@"MailMessages" path:@"Char" parameters:nil responseClass:[EVEMailMessages class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) marketOrdersWithOrderID:(int32_t) orderID completionBlock:(void(^)(EVEMarketOrders* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MarketOrders" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:orderID ? @{@"orderID":@(orderID)} : nil responseClass:[EVEMarketOrders class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) marketOrdersWithOrderID:(int32_t) orderID completionBlock:(void(^)(EVEMarketOrders* result, NSError* error)) completionBlock {
+	return [self GET:@"MarketOrders" path:self.apiKey.corporate ? @"Corp" : @"Char" parameters:orderID ? @{@"orderID":@(orderID)} : nil responseClass:[EVEMarketOrders class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) notificationsWithCompletionBlock:(void(^)(EVENotifications* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Notifications" path:@"Char" parameters:nil responseClass:[EVENotifications class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) notificationsWithCompletionBlock:(void(^)(EVENotifications* result, NSError* error)) completionBlock {
+	return [self GET:@"Notifications" path:@"Char" parameters:nil responseClass:[EVENotifications class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) notificationTextsWithIDs:(NSArray*) ids completionBlock:(void(^)(EVENotificationTexts* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"NotificationTexts" path:@"Char" parameters:@{@"ids":[ids componentsJoinedByString:@","]} responseClass:[EVENotificationTexts class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) notificationTextsWithIDs:(NSArray*) ids completionBlock:(void(^)(EVENotificationTexts* result, NSError* error)) completionBlock {
+	return [self GET:@"NotificationTexts" path:@"Char" parameters:@{@"ids":[ids componentsJoinedByString:@","]} responseClass:[EVENotificationTexts class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) planetaryColoniesWithCompletionBlock:(void(^)(EVEPlanetaryColonies* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"PlanetaryColonies" path:@"Char" parameters:nil responseClass:[EVEPlanetaryColonies class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) planetaryColoniesWithCompletionBlock:(void(^)(EVEPlanetaryColonies* result, NSError* error)) completionBlock {
+	return [self GET:@"PlanetaryColonies" path:@"Char" parameters:nil responseClass:[EVEPlanetaryColonies class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) planetaryLinksWithPlanetID:(int32_t) planetID completionBlock:(void(^)(EVEPlanetaryLinks* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"PlanetaryLinks" path:@"Char" parameters:@{@"planetID":@(planetID)} responseClass:[EVEPlanetaryLinks class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) planetaryLinksWithPlanetID:(int32_t) planetID completionBlock:(void(^)(EVEPlanetaryLinks* result, NSError* error)) completionBlock {
+	return [self GET:@"PlanetaryLinks" path:@"Char" parameters:@{@"planetID":@(planetID)} responseClass:[EVEPlanetaryLinks class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) planetaryPinsWithPlanetID:(int32_t) planetID completionBlock:(void(^)(EVEPlanetaryPins* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"PlanetaryPins" path:@"Char" parameters:@{@"planetID":@(planetID)} responseClass:[EVEPlanetaryPins class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) planetaryPinsWithPlanetID:(int32_t) planetID completionBlock:(void(^)(EVEPlanetaryPins* result, NSError* error)) completionBlock {
+	return [self GET:@"PlanetaryPins" path:@"Char" parameters:@{@"planetID":@(planetID)} responseClass:[EVEPlanetaryPins class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) planetaryRoutesWithPlanetID:(int32_t) planetID completionBlock:(void(^)(EVEPlanetaryRoutes* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"PlanetaryRoutes" path:@"Char" parameters:@{@"planetID":@(planetID)} responseClass:[EVEPlanetaryRoutes class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) planetaryRoutesWithPlanetID:(int32_t) planetID completionBlock:(void(^)(EVEPlanetaryRoutes* result, NSError* error)) completionBlock {
+	return [self GET:@"PlanetaryRoutes" path:@"Char" parameters:@{@"planetID":@(planetID)} responseClass:[EVEPlanetaryRoutes class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) researchWithCompletionBlock:(void(^)(EVEResearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Research" path:@"Char" parameters:nil responseClass:[EVEResearch class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) researchWithCompletionBlock:(void(^)(EVEResearch* result, NSError* error)) completionBlock {
+	return [self GET:@"Research" path:@"Char" parameters:nil responseClass:[EVEResearch class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) skillInTrainingWithCompletionBlock:(void(^)(EVESkillInTraining* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"SkillInTraining" path:@"Char" parameters:nil responseClass:[EVESkillInTraining class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) skillInTrainingWithCompletionBlock:(void(^)(EVESkillInTraining* result, NSError* error)) completionBlock {
+	return [self GET:@"SkillInTraining" path:@"Char" parameters:nil responseClass:[EVESkillInTraining class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) skillQueueWithCompletionBlock:(void(^)(EVESkillQueue* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"SkillQueue" path:@"Char" parameters:nil responseClass:[EVESkillQueue class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) skillQueueWithCompletionBlock:(void(^)(EVESkillQueue* result, NSError* error)) completionBlock {
+	return [self GET:@"SkillQueue" path:@"Char" parameters:nil responseClass:[EVESkillQueue class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) upcomingCalendarEventsWithCompletionBlock:(void(^)(EVEUpcomingCalendarEvents* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"UpcomingCalendarEvents" path:@"Char" parameters:nil responseClass:[EVEUpcomingCalendarEvents class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) upcomingCalendarEventsWithCompletionBlock:(void(^)(EVEUpcomingCalendarEvents* result, NSError* error)) completionBlock {
+	return [self GET:@"UpcomingCalendarEvents" path:@"Char" parameters:nil responseClass:[EVEUpcomingCalendarEvents class] completionBlock:completionBlock];
 }
 
 #pragma mark - Corporation
 
-- (AFHTTPRequestOperation*) containerLogWithCompletionBlock:(void(^)(EVEContainerLog* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ContainerLog" path:@"Corp" parameters:nil responseClass:[EVEContainerLog class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) containerLogWithCompletionBlock:(void(^)(EVEContainerLog* result, NSError* error)) completionBlock {
+	return [self GET:@"ContainerLog" path:@"Corp" parameters:nil responseClass:[EVEContainerLog class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) corporationSheetWithCorporationID:(int32_t) corporationID completionBlock:(void(^)(EVECorporationSheet* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CorporationSheet" path:@"Corp" parameters:corporationID ? @{@"corporationID":@(corporationID)} : nil responseClass:[EVECorporationSheet class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) corporationSheetWithCorporationID:(int32_t) corporationID completionBlock:(void(^)(EVECorporationSheet* result, NSError* error)) completionBlock {
+	return [self GET:@"CorporationSheet" path:@"Corp" parameters:corporationID ? @{@"corporationID":@(corporationID)} : nil responseClass:[EVECorporationSheet class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) corpFacWarStatsWithCompletionBlock:(void(^)(EVECorpFacWarStats* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"FacWarStats" path:@"Corp" parameters:nil responseClass:[EVECorpFacWarStats class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) corpFacWarStatsWithCompletionBlock:(void(^)(EVECorpFacWarStats* result, NSError* error)) completionBlock {
+	return [self GET:@"FacWarStats" path:@"Corp" parameters:nil responseClass:[EVECorpFacWarStats class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) customsOfficesWithCompletionBlock:(void(^)(EVECustomsOffices* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CustomsOffices" path:@"Corp" parameters:nil responseClass:[EVECustomsOffices class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) customsOfficesWithCompletionBlock:(void(^)(EVECustomsOffices* result, NSError* error)) completionBlock {
+	return [self GET:@"CustomsOffices" path:@"Corp" parameters:nil responseClass:[EVECustomsOffices class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) facilitiesWithCompletionBlock:(void(^)(EVEFacilities* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Facilities" path:@"Corp" parameters:nil responseClass:[EVEFacilities class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) facilitiesWithCompletionBlock:(void(^)(EVEFacilities* result, NSError* error)) completionBlock {
+	return [self GET:@"Facilities" path:@"Corp" parameters:nil responseClass:[EVEFacilities class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) corpMedalsWithCompletionBlock:(void(^)(EVECorpMedals* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Medals" path:@"Corp" parameters:nil responseClass:[EVECorpMedals class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) corpMedalsWithCompletionBlock:(void(^)(EVECorpMedals* result, NSError* error)) completionBlock {
+	return [self GET:@"Medals" path:@"Corp" parameters:nil responseClass:[EVECorpMedals class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) memberMedalsWithCompletionBlock:(void(^)(EVEMemberMedals* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MemberMedals" path:@"Corp" parameters:nil responseClass:[EVEMemberMedals class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) memberMedalsWithCompletionBlock:(void(^)(EVEMemberMedals* result, NSError* error)) completionBlock {
+	return [self GET:@"MemberMedals" path:@"Corp" parameters:nil responseClass:[EVEMemberMedals class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) memberSecurityWithCompletionBlock:(void(^)(EVEMemberSecurity* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MemberSecurity" path:@"Corp" parameters:nil responseClass:[EVEMemberSecurity class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) memberSecurityWithCompletionBlock:(void(^)(EVEMemberSecurity* result, NSError* error)) completionBlock {
+	return [self GET:@"MemberSecurity" path:@"Corp" parameters:nil responseClass:[EVEMemberSecurity class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) memberSecurityLogWithCompletionBlock:(void(^)(EVEMemberSecurityLog* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MemberSecurityLog" path:@"Corp" parameters:nil responseClass:[EVEMemberSecurityLog class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) memberSecurityLogWithCompletionBlock:(void(^)(EVEMemberSecurityLog* result, NSError* error)) completionBlock {
+	return [self GET:@"MemberSecurityLog" path:@"Corp" parameters:nil responseClass:[EVEMemberSecurityLog class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) memberTrackingWithExtendedInfo:(BOOL) extended completionBlock:(void(^)(EVEMemberTracking* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"MemberTracking" path:@"Corp" parameters:@{@"extended":@(extended)} responseClass:[EVEMemberTracking class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) memberTrackingWithExtendedInfo:(BOOL) extended completionBlock:(void(^)(EVEMemberTracking* result, NSError* error)) completionBlock {
+	return [self GET:@"MemberTracking" path:@"Corp" parameters:@{@"extended":@(extended)} responseClass:[EVEMemberTracking class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) outpostListWithCompletionBlock:(void(^)(EVEOutpostList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"OutpostList" path:@"Corp" parameters:nil responseClass:[EVEOutpostList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) outpostListWithCompletionBlock:(void(^)(EVEOutpostList* result, NSError* error)) completionBlock {
+	return [self GET:@"OutpostList" path:@"Corp" parameters:nil responseClass:[EVEOutpostList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) outpostServiceDetailWithItemID:(int32_t) itemID completionBlock:(void(^)(EVEOutpostServiceDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"OutpostServiceDetail" path:@"Corp" parameters:@{@"itemID":@(itemID)} responseClass:[EVEOutpostServiceDetail class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) outpostServiceDetailWithItemID:(int32_t) itemID completionBlock:(void(^)(EVEOutpostServiceDetail* result, NSError* error)) completionBlock {
+	return [self GET:@"OutpostServiceDetail" path:@"Corp" parameters:@{@"itemID":@(itemID)} responseClass:[EVEOutpostServiceDetail class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) shareholdersWithCompletionBlock:(void(^)(EVEShareholders* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Shareholders" path:@"Corp" parameters:nil responseClass:[EVEShareholders class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) shareholdersWithCompletionBlock:(void(^)(EVEShareholders* result, NSError* error)) completionBlock {
+	return [self GET:@"Shareholders" path:@"Corp" parameters:nil responseClass:[EVEShareholders class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) corpStandingsWithCompletionBlock:(void(^)(EVECorpStandings* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Standings" path:@"Corp" parameters:nil responseClass:[EVECorpStandings class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) corpStandingsWithCompletionBlock:(void(^)(EVECorpStandings* result, NSError* error)) completionBlock {
+	return [self GET:@"Standings" path:@"Corp" parameters:nil responseClass:[EVECorpStandings class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) starbaseDetailWithItemID:(int64_t) itemID completionBlock:(void(^)(EVEStarbaseDetail* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"StarbaseDetail" path:@"Corp" parameters:@{@"itemID":@(itemID)} responseClass:[EVEStarbaseDetail class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) starbaseDetailWithItemID:(int64_t) itemID completionBlock:(void(^)(EVEStarbaseDetail* result, NSError* error)) completionBlock {
+	return [self GET:@"StarbaseDetail" path:@"Corp" parameters:@{@"itemID":@(itemID)} responseClass:[EVEStarbaseDetail class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) starbaseListWithCompletionBlock:(void(^)(EVEStarbaseList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"StarbaseList" path:@"Corp" parameters:nil responseClass:[EVEStarbaseList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) starbaseListWithCompletionBlock:(void(^)(EVEStarbaseList* result, NSError* error)) completionBlock {
+	return [self GET:@"StarbaseList" path:@"Corp" parameters:nil responseClass:[EVEStarbaseList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) titlesWithCompletionBlock:(void(^)(EVETitles* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Titles" path:@"Corp" parameters:nil responseClass:[EVETitles class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) titlesWithCompletionBlock:(void(^)(EVETitles* result, NSError* error)) completionBlock {
+	return [self GET:@"Titles" path:@"Corp" parameters:nil responseClass:[EVETitles class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) corpWalletJournalWithAccountKey:(int32_t) accountKey fromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECorpWalletJournal* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) corpWalletJournalWithAccountKey:(int32_t) accountKey fromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECorpWalletJournal* result, NSError* error)) completionBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	if (fromID > 0)
 		parameters[@"fromID"] = @(fromID);
@@ -325,10 +326,10 @@
 		parameters[@"rowCount"] = @(rowCount);
 	if (accountKey)
 		parameters[@"accountKey"] = @(accountKey);
-	return [self GET:@"WalletJournal" path:@"Corp" parameters:parameters responseClass:[EVECorpWalletJournal class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self GET:@"WalletJournal" path:@"Corp" parameters:parameters responseClass:[EVECorpWalletJournal class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) corpWalletTransactionsWithAccountKey:(int32_t) accountKey fromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECorpWalletTransactions* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) corpWalletTransactionsWithAccountKey:(int32_t) accountKey fromID:(int64_t )fromID rowCount:(NSInteger) rowCount completionBlock:(void(^)(EVECorpWalletTransactions* result, NSError* error)) completionBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	if (fromID > 0)
 		parameters[@"fromID"] = @(fromID);
@@ -336,100 +337,100 @@
 		parameters[@"rowCount"] = @(rowCount);
 	if (accountKey)
 		parameters[@"accountKey"] = @(accountKey);
-	return [self GET:@"WalletTransactions" path:@"Corp" parameters:parameters responseClass:[EVECorpWalletTransactions class] completionBlock:completionBlock progressBlock:progressBlock];
+	return [self GET:@"WalletTransactions" path:@"Corp" parameters:parameters responseClass:[EVECorpWalletTransactions class] completionBlock:completionBlock];
 }
 
 #pragma mark - EVE
 
-- (AFHTTPRequestOperation*) allianceListWithCompletionBlock:(void(^)(EVEAllianceList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"AllianceList" path:@"Eve" parameters:nil responseClass:[EVEAllianceList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) allianceListWithCompletionBlock:(void(^)(EVEAllianceList* result, NSError* error)) completionBlock {
+	return [self GET:@"AllianceList" path:@"Eve" parameters:nil responseClass:[EVEAllianceList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) characterAffiliationWithIDs:(NSArray*) ids completionBlock:(void(^)(EVECharacterAffiliation* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CharacterAffiliation" path:@"Eve" parameters:@{@"ids": [ids componentsJoinedByString:@","]} responseClass:[EVECharacterAffiliation class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) characterAffiliationWithIDs:(NSArray*) ids completionBlock:(void(^)(EVECharacterAffiliation* result, NSError* error)) completionBlock {
+	return [self GET:@"CharacterAffiliation" path:@"Eve" parameters:@{@"ids": [ids componentsJoinedByString:@","]} responseClass:[EVECharacterAffiliation class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) characterIDWithNames:(NSArray*) names completionBlock:(void(^)(EVECharacterID* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CharacterID" path:@"Eve" parameters:@{@"names": [names componentsJoinedByString:@","]} responseClass:[EVECharacterID class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) characterIDWithNames:(NSArray*) names completionBlock:(void(^)(EVECharacterID* result, NSError* error)) completionBlock {
+	return [self GET:@"CharacterID" path:@"Eve" parameters:@{@"names": [names componentsJoinedByString:@","]} responseClass:[EVECharacterID class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) characterInfoWithCharacterID:(int32_t) characterID completionBlock:(void(^)(EVECharacterInfo* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) characterInfoWithCharacterID:(int32_t) characterID completionBlock:(void(^)(EVECharacterInfo* result, NSError* error)) completionBlock {
 	if (self.apiKey.characterID != characterID || self.apiKey.corporate)
-		return [self GET:@"CharacterInfo" path:@"Eve" parameters:@{@"characterID": @(characterID), @"keyID":@"", @"vCode":@""} responseClass:[EVECharacterInfo class] completionBlock:completionBlock progressBlock:progressBlock];
+		return [self GET:@"CharacterInfo" path:@"Eve" parameters:@{@"characterID": @(characterID), @"keyID":@"", @"vCode":@""} responseClass:[EVECharacterInfo class] completionBlock:completionBlock];
 	else
-		return [self GET:@"CharacterInfo" path:@"Eve" parameters:@{@"characterID": @(characterID)} responseClass:[EVECharacterInfo class] completionBlock:completionBlock progressBlock:progressBlock];
+		return [self GET:@"CharacterInfo" path:@"Eve" parameters:@{@"characterID": @(characterID)} responseClass:[EVECharacterInfo class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) characterNameWithIDs:(NSArray*) ids completionBlock:(void(^)(EVECharacterName* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CharacterName" path:@"Eve" parameters:@{@"ids": [ids componentsJoinedByString:@","]} responseClass:[EVECharacterName class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) characterNameWithIDs:(NSArray*) ids completionBlock:(void(^)(EVECharacterName* result, NSError* error)) completionBlock {
+	return [self GET:@"CharacterName" path:@"Eve" parameters:@{@"ids": [ids componentsJoinedByString:@","]} responseClass:[EVECharacterName class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) conquerableStationListWithCompletionBlock:(void(^)(EVEConquerableStationList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ConquerableStationList" path:@"Eve" parameters:nil responseClass:[EVEConquerableStationList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) conquerableStationListWithCompletionBlock:(void(^)(EVEConquerableStationList* result, NSError* error)) completionBlock {
+	return [self GET:@"ConquerableStationList" path:@"Eve" parameters:nil responseClass:[EVEConquerableStationList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) errorListWithCompletionBlock:(void(^)(EVEErrorList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ErrorList" path:@"Eve" parameters:nil responseClass:[EVEErrorList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) errorListWithCompletionBlock:(void(^)(EVEErrorList* result, NSError* error)) completionBlock {
+	return [self GET:@"ErrorList" path:@"Eve" parameters:nil responseClass:[EVEErrorList class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) facWarStatsWithCompletionBlock:(void(^)(EVEFacWarStats* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"FacWarStats" path:@"Eve" parameters:nil responseClass:[EVEFacWarStats class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) facWarStatsWithCompletionBlock:(void(^)(EVEFacWarStats* result, NSError* error)) completionBlock {
+	return [self GET:@"FacWarStats" path:@"Eve" parameters:nil responseClass:[EVEFacWarStats class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) facWarTopStatsWithCompletionBlock:(void(^)(EVEFacWarTopStats* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"FacWarTopStats" path:@"Eve" parameters:nil responseClass:[EVEFacWarTopStats class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) facWarTopStatsWithCompletionBlock:(void(^)(EVEFacWarTopStats* result, NSError* error)) completionBlock {
+	return [self GET:@"FacWarTopStats" path:@"Eve" parameters:nil responseClass:[EVEFacWarTopStats class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) ownerIDWithNames:(NSArray*) names completionBlock:(void(^)(EVEOwnerID* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"OwnerID" path:@"Eve" parameters:@{@"names": [names componentsJoinedByString:@","]} responseClass:[EVEOwnerID class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) ownerIDWithNames:(NSArray*) names completionBlock:(void(^)(EVEOwnerID* result, NSError* error)) completionBlock {
+	return [self GET:@"OwnerID" path:@"Eve" parameters:@{@"names": [names componentsJoinedByString:@","]} responseClass:[EVEOwnerID class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) refTypesWithCompletionBlock:(void(^)(EVERefTypes* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"RefTypes" path:@"Eve" parameters:nil responseClass:[EVERefTypes class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) refTypesWithCompletionBlock:(void(^)(EVERefTypes* result, NSError* error)) completionBlock {
+	return [self GET:@"RefTypes" path:@"Eve" parameters:nil responseClass:[EVERefTypes class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) skillTreeWithCompletionBlock:(void(^)(EVESkillTree* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"SkillTree" path:@"Eve" parameters:nil responseClass:[EVESkillTree class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) skillTreeWithCompletionBlock:(void(^)(EVESkillTree* result, NSError* error)) completionBlock {
+	return [self GET:@"SkillTree" path:@"Eve" parameters:nil responseClass:[EVESkillTree class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) typeNameWithIDs:(NSArray*) ids completionBlock:(void(^)(EVETypeName* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"TypeName" path:@"Eve" parameters:@{@"ids": [ids componentsJoinedByString:@","]} responseClass:[EVETypeName class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) typeNameWithIDs:(NSArray*) ids completionBlock:(void(^)(EVETypeName* result, NSError* error)) completionBlock {
+	return [self GET:@"TypeName" path:@"Eve" parameters:@{@"ids": [ids componentsJoinedByString:@","]} responseClass:[EVETypeName class] completionBlock:completionBlock];
 }
 
 #pragma mark - Map
 
-- (AFHTTPRequestOperation*) facWarSystemsWithCompletionBlock:(void(^)(EVEFacWarSystems* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"FacWarSystems" path:@"Map" parameters:nil responseClass:[EVEFacWarSystems class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) facWarSystemsWithCompletionBlock:(void(^)(EVEFacWarSystems* result, NSError* error)) completionBlock {
+	return [self GET:@"FacWarSystems" path:@"Map" parameters:nil responseClass:[EVEFacWarSystems class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) jumpsWithCompletionBlock:(void(^)(EVEJumps* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Jumps" path:@"Map" parameters:nil responseClass:[EVEJumps class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) jumpsWithCompletionBlock:(void(^)(EVEJumps* result, NSError* error)) completionBlock {
+	return [self GET:@"Jumps" path:@"Map" parameters:nil responseClass:[EVEJumps class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) killsWithCompletionBlock:(void(^)(EVEKills* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Kills" path:@"Map" parameters:nil responseClass:[EVEKills class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) killsWithCompletionBlock:(void(^)(EVEKills* result, NSError* error)) completionBlock {
+	return [self GET:@"Kills" path:@"Map" parameters:nil responseClass:[EVEKills class] completionBlock:completionBlock];
 }
 
-- (AFHTTPRequestOperation*) sovereigntyWithCompletionBlock:(void(^)(EVESovereignty* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"Sovereignty" path:@"Map" parameters:nil responseClass:[EVESovereignty class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) sovereigntyWithCompletionBlock:(void(^)(EVESovereignty* result, NSError* error)) completionBlock {
+	return [self GET:@"Sovereignty" path:@"Map" parameters:nil responseClass:[EVESovereignty class] completionBlock:completionBlock];
 }
 
 #pragma mark - Server
 
-- (AFHTTPRequestOperation*) serverStatusWithCompletionBlock:(void(^)(EVEServerStatus* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"ServerStatus" path:@"Server" parameters:nil responseClass:[EVEServerStatus class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) serverStatusWithCompletionBlock:(void(^)(EVEServerStatus* result, NSError* error)) completionBlock {
+	return [self GET:@"ServerStatus" path:@"Server" parameters:nil responseClass:[EVEServerStatus class] completionBlock:completionBlock];
 }
 
 #pragma mark - API
 
-- (AFHTTPRequestOperation*) callListWithCompletionBlock:(void(^)(EVECallList* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-	return [self GET:@"CallList" path:@"API" parameters:nil responseClass:[EVECallList class] completionBlock:completionBlock progressBlock:progressBlock];
+- (void) callListWithCompletionBlock:(void(^)(EVECallList* result, NSError* error)) completionBlock {
+	return [self GET:@"CallList" path:@"API" parameters:nil responseClass:[EVECallList class] completionBlock:completionBlock];
 }
 
 
 #pragma mark - Private
 
-- (AFHTTPRequestOperation*) GET:(NSString*) method path:(NSString*) path parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) GET:(NSString*) method path:(NSString*) path parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock {
 	NSString* urlString = [[path stringByAppendingPathComponent:method] stringByAppendingPathExtension:@"xml.aspx"];
 	
 	NSMutableDictionary* param = [self.apiKey ? @{@"keyID":@(self.apiKey.keyID), @"vCode":self.apiKey.vCode, @"characterID":@(self.apiKey.characterID)} : @{} mutableCopy];
@@ -440,31 +441,37 @@
 	serializer.cachePolicy = self.cachePolicy;
 	
 	static NSMutableDictionary* dispatchGroups = nil;
-	static NSMutableDictionary* operations = nil;
+	static NSMutableDictionary* progress = nil;
 	if (!dispatchGroups) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
 			dispatchGroups = [NSMutableDictionary new];
 		});
 	}
-	if (!operations) {
+	if (!progress) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			operations = [NSMutableDictionary new];
+			progress = [NSMutableDictionary new];
 		});
 	}
 	
-	NSURLRequest* request = [serializer requestWithMethod:@"GET"
-												URLString:[[NSURL URLWithString:urlString relativeToURL:self.httpRequestOperationManager.baseURL] absoluteString]
-											   parameters:param
-													error:nil];
-	
+
+	id requestKey = @([@{@"url":urlString, @"parameters":param ?: @""} fullHash]);
+
+	NSMutableArray* progressArray;
+	@synchronized (progress) {
+		progressArray = progress[requestKey];
+		if (!progressArray)
+			progress[requestKey] = progressArray = [NSMutableArray new];
+		[progressArray addObject:[NSProgress progressWithTotalUnitCount:100]];
+	}
+
 	BOOL load = NO;
 	dispatch_group_t dispatchGroup;
 	@synchronized(dispatchGroups) {
-		dispatchGroup = dispatchGroups[request];
+		dispatchGroup = dispatchGroups[requestKey];
 		if (!dispatchGroup) {
-			dispatchGroups[request] = dispatchGroup = dispatch_group_create();
+			dispatchGroups[requestKey] = dispatchGroup = dispatch_group_create();
 			dispatch_set_finalizer_f(dispatchGroup, (dispatch_function_t) &CFRelease);
 			dispatch_group_enter(dispatchGroup);
 			load = YES;
@@ -479,75 +486,82 @@
 	}
 	
 	if (load) {
-		AFHTTPRequestOperation *operation =
-		[self.httpRequestOperationManager HTTPRequestOperationWithRequest:[request copy]
-																  success:^void(AFHTTPRequestOperation * operation, id result) {
-																	  if (result)
-																		  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":result});
-																	  
-																	  NSMutableDictionary* headers = [[operation.response allHeaderFields] mutableCopy];
-																	  
-																	  NSString* md5 = [operation.request.URL md5];
-																	  NSString* etag = headers[@"Etag"];
-																	  EVEResult* eveResult = result;
-																	  
-																	  if (!etag || ![md5 isEqualToString:etag]) {
-																		  
-																		  if (!eveResult.eveapi.cacheDate)
-																			  eveResult.eveapi.cacheDate = [NSDate date];
-																		  
-																		  NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
-																		  NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
-																		  if (date && expired) {
-																			  headers[@"Date"] = date;
-																			  headers[@"Expires"] = expired;
-																			  headers[@"Etag"] = md5;
-																			  [headers removeObjectForKey:@"Vary"];
-																			  NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:operation.response.URL statusCode:operation.response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
-																			  NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:operation.responseData userInfo:@{@"cacheDate":eveResult.eveapi.cacheDate} storagePolicy:NSURLCacheStorageAllowed];
-																			  [[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:operation.request];
-																		  }
-																	  }
-																	  else {
-																		  NSCachedURLResponse* cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:operation.request];
-																		  eveResult.eveapi.cacheDate = cachedResponse.userInfo[@"cacheDate"];
-																	  }
-																	  
-																	  dispatch_group_leave(dispatchGroup);
-																	  @synchronized(dispatchGroups) {
-																		  [dispatchGroups removeObjectForKey:request];
-																	  }
-																	  @synchronized(operations) {
-																		  [operations removeObjectForKey:request];
-																	  }
-																  }
-																  failure:^void(AFHTTPRequestOperation * operation, NSError * error) {
-																	  if (error)
-																		  dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
-																	  dispatch_group_leave(dispatchGroup);
-																	  @synchronized(dispatchGroups) {
-																		  [dispatchGroups removeObjectForKey:request];
-																	  }
-																	  @synchronized(operations) {
-																		  [operations removeObjectForKey:request];
-																	  }
-																  }];
-		@synchronized(operations) {
-			operations[request] = operation;
-		}
-		
-		operation.responseSerializer = [EVEAPISerializer serializerWithRootClass:responseClass];
-		[operation setCacheResponseBlock:^NSCachedURLResponse* (NSURLConnection* connection, NSCachedURLResponse* response) {
-			return nil;
+		EVEAPISerializer* serializer = [EVEAPISerializer serializerWithRootClass:responseClass];
+		self.httpRequestOperationManager.responseSerializer = serializer;
+		[self.httpRequestOperationManager GET:urlString parameters:param progress:^(NSProgress * _Nonnull downloadProgress) {
+			for (NSProgress* progress in progressArray)
+				progress.completedUnitCount = downloadProgress.fractionCompleted * 100;
+			
+		} success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+			for (NSProgress* progress in progressArray)
+				progress.completedUnitCount = 100;
+			
+			if (responseObject)
+				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":responseObject});
+
+			NSHTTPURLResponse* response = (NSHTTPURLResponse*) task.response;
+
+			NSMutableDictionary* headers = [[response allHeaderFields] mutableCopy];
+			NSString* md5 = [task.currentRequest.URL md5];
+			NSString* etag = headers[@"Etag"];
+			EVEResult* eveResult = responseObject;
+			
+			NSData* responseData = serializer.data;
+			serializer.data = nil;
+
+			if (!etag || ![md5 isEqualToString:etag]) {
+				
+				if (!eveResult.eveapi.cacheDate)
+					eveResult.eveapi.cacheDate = [NSDate date];
+				
+				NSString* date = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.currentTime];
+				NSString* expired = [[NSDateFormatter rfc822DateFormatter] stringFromDate:eveResult.eveapi.cachedUntil];
+				if (date && expired) {
+					headers[@"Date"] = date;
+					headers[@"Expires"] = expired;
+					headers[@"Etag"] = md5;
+					[headers removeObjectForKey:@"Vary"];
+					NSHTTPURLResponse* response = [[NSHTTPURLResponse alloc] initWithURL:task.response.URL statusCode:response.statusCode HTTPVersion:@"HTTP/1.1" headerFields:headers];
+					NSCachedURLResponse* cachedResponse = [[NSCachedURLResponse alloc] initWithResponse:response data:responseData userInfo:@{@"cacheDate":eveResult.eveapi.cacheDate} storagePolicy:NSURLCacheStorageAllowed];
+					[[NSURLCache sharedURLCache] storeCachedResponse:cachedResponse forRequest:task.currentRequest];
+				}
+			}
+			else {
+				NSCachedURLResponse* cachedResponse = [[NSURLCache sharedURLCache] cachedResponseForRequest:task.currentRequest];
+				eveResult.eveapi.cacheDate = cachedResponse.userInfo[@"cacheDate"];
+			}
+			
+			dispatch_group_leave(dispatchGroup);
+			@synchronized(dispatchGroups) {
+				[dispatchGroups removeObjectForKey:requestKey];
+			}
+			@synchronized(progress) {
+				[progress removeObjectForKey:requestKey];
+			}
+		} failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+			if (error)
+				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
+			dispatch_group_leave(dispatchGroup);
+			@synchronized(dispatchGroups) {
+				[dispatchGroups removeObjectForKey:requestKey];
+			}
+			@synchronized(progress) {
+				[progress removeObjectForKey:requestKey];
+			}
 		}];
-//		if (self.startImmediately)
-			[self.httpRequestOperationManager.operationQueue addOperation:operation];
-		return operation;
+		
+		
+//		operation.responseSerializer = [EVEAPISerializer serializerWithRootClass:responseClass];
+//		[operation setCacheResponseBlock:^NSCachedURLResponse* (NSURLConnection* connection, NSCachedURLResponse* response) {
+//			return nil;
+//		}];
+////		if (self.startImmediately)
+//			[self.httpRequestOperationManager.operationQueue addOperation:operation];
 	}
 	else {
-		@synchronized(operations) {
-			return operations[request];
-		}
+//		@synchronized(operations) {
+//			return operations[request];
+//		}
 	}
 }
 

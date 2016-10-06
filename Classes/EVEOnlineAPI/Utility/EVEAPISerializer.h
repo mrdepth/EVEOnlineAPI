@@ -9,6 +9,7 @@
 #import <AFNetworking/AFNetworking.h>
 
 @interface EVEAPISerializer : AFHTTPResponseSerializer
+@property (nonatomic, strong) NSData* data;
 
 + (instancetype) serializerWithRootClass:(Class) aClass;
 - (instancetype) initWithRootClass:(Class) aClass;

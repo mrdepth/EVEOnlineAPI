@@ -88,7 +88,7 @@ static NSPointerArray* gClients;
 	return self;
 }
 
-- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
+- (AFHTTPSessionManager*) httpRequestOperationManager {
 /*	if (self.publicAPI) {
 		static AFHTTPRequestOperationManager* manager;
 		if (!manager) {
@@ -110,11 +110,11 @@ static NSPointerArray* gClients;
 		return manager;
 	}*/
 	
-	static AFHTTPRequestOperationManager* manager;
+	static AFHTTPSessionManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
+			manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
 		});
 	}
 	return manager;
@@ -160,6 +160,9 @@ static NSPointerArray* gClients;
 }
 
 - (void) postFitting:(CRFitting*) fitting withCompletionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
+#warning TODO
+	return;
+/*
 	__block __weak void (^weakPost)();
 	__block BOOL retry = NO;
 	void (^post)() = ^{
@@ -209,9 +212,13 @@ static NSPointerArray* gClients;
 	};
 	weakPost = post;
 	post();
+ */
 }
 
 - (void) deleteFittingWithID:(int64_t) fittingID completionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
+#warning TODO
+	return;
+/*
 	__block __weak void (^weakDelete)();
 	__block BOOL retry = NO;
 	void (^delete)() = ^{
@@ -260,6 +267,7 @@ static NSPointerArray* gClients;
 	};
 	weakDelete = delete;
 	delete();
+ */
 }
 
 - (void) loadKillMailWithID:(int64_t) killID hash:(NSString*) hash completionBlock:(void(^)(CRKillMail* killMail, NSError* error)) completionBlock {
@@ -303,6 +311,9 @@ static NSPointerArray* gClients;
 #pragma mark - Private
 
 - (void) verifyAuthorizationCode:(NSString*) code {
+#warning TODO
+	return;
+/*
 	NSString* basicAuth = [NSString stringWithFormat:@"%@:%@", self.clientID, self.secretKey];
 
 	AFHTTPRequestSerializer* requestSerializer = [AFJSONRequestSerializer serializer];
@@ -345,9 +356,13 @@ static NSPointerArray* gClients;
 			self.authenticationCompletionBlock = nil;
 		}
 	}];
+ */
 }
 
 - (void) verifyToken:(CRToken*) token {
+#warning TODO
+	return;
+/*
 	AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
 	[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", token.tokenType, token.accessToken] forHTTPHeaderField:@"Authorization"];
 	self.httpRequestOperationManager.requestSerializer = requestSerializer;
@@ -388,9 +403,13 @@ static NSPointerArray* gClients;
 			self.authenticationCompletionBlock = nil;
 		}
 	}];
+ */
 }
 
 - (void) refreshToken:(CRToken*) token {
+#warning TODO
+	return;
+/*
 	NSString* basicAuth = [NSString stringWithFormat:@"%@:%@", self.clientID, self.secretKey];
 	
 	AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -433,9 +452,13 @@ static NSPointerArray* gClients;
 			self.authenticationCompletionBlock = nil;
 		}
 	}];
+ */
 }
 
 - (void) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+#warning TODO
+	return;
+/*
 	NSString* urlString = method;
 
 	static NSMutableDictionary* dispatchGroups = nil;
@@ -578,6 +601,7 @@ static NSPointerArray* gClients;
 	}
 	else
 		get();
+ */
 }
 
 @end

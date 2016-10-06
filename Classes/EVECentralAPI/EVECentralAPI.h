@@ -14,12 +14,12 @@
 
 @interface EVECentralAPI : NSObject
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPRequestOperationManager* httpRequestOperationManager;
+@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
 
 - (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy NS_DESIGNATED_INITIALIZER;
 
-- (AFHTTPRequestOperation*) marketStatWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralMarketStat* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (AFHTTPRequestOperation*) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralQuickLook* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) marketStatWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralMarketStat* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralQuickLook* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 
 
 @end

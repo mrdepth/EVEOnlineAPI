@@ -12,7 +12,7 @@
 #import "NSURL+MD5.h"
 
 @interface EVECentralAPI()
-- (AFHTTPRequestOperation*) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (NSURLSessionDataTask*) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
 @end
 
 @implementation EVECentralAPI
@@ -31,7 +31,7 @@
 }
 
 
-- (AFHTTPRequestOperation*) marketStatWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralMarketStat* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) marketStatWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralMarketStat* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	parameters[@"typeid"] = @(typeID);
 	if (regionIDs.count > 0)
@@ -43,7 +43,7 @@
 	return [self GET:@"marketstat" parameters:parameters responseClass:[EVECentralMarketStat class] completionBlock:completionBlock progressBlock:progressBlock];
 }
 
-- (AFHTTPRequestOperation*) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralQuickLook* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) quickLookWithTypeID: (int32_t) typeID regionIDs: (NSArray*) regionIDs systemID: (int32_t) systemID hours: (int32_t) hours minQ: (int32_t) minQ completionBlock:(void(^)(EVECentralQuickLook* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSMutableDictionary* parameters = [NSMutableDictionary new];
 	
 	parameters[@"typeid"] = @(typeID);
@@ -59,12 +59,12 @@
 }
 
 
-- (AFHTTPRequestOperationManager*) httpRequestOperationManager {
-	static AFHTTPRequestOperationManager* manager;
+- (AFHTTPSessionManager*) httpRequestOperationManager {
+	static AFHTTPSessionManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://api.eve-central.com"]];
+			manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"http://api.eve-central.com"]];
 			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
 		});
 	}
@@ -74,7 +74,7 @@
 
 #pragma mark - Private
 
-- (AFHTTPRequestOperation*) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (NSURLSessionDataTask*) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
 	NSString* urlString = [@"api" stringByAppendingPathComponent:method];
 	
 	AFHTTPRequestSerializer* serializer = [AFHTTPRequestSerializer serializer];
@@ -118,7 +118,9 @@
 			completionBlock(context[@"result"], context[@"error"]);
 		});
 	}
-	
+#warning TODO
+	return nil;
+/*
 	if (load) {
 		AFHTTPRequestOperation *operation =
 		[self.httpRequestOperationManager HTTPRequestOperationWithRequest:[request copy]
@@ -181,6 +183,7 @@
 			return operations[request];
 		}
 	}
+ */
 }
 
 @end
