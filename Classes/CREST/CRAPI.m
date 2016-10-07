@@ -25,7 +25,7 @@ static NSPointerArray* gClients;
 - (void) verifyAuthorizationCode:(NSString*) code;
 - (void) verifyToken:(CRToken*) token;
 - (void) refreshToken:(CRToken*) token;
-- (void) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (void) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock;
 @end
 
 @implementation CRAPI
@@ -88,7 +88,7 @@ static NSPointerArray* gClients;
 	return self;
 }
 
-- (AFHTTPSessionManager*) httpRequestOperationManager {
+- (EVEHTTPSessionManager*) sessionManager {
 /*	if (self.publicAPI) {
 		static AFHTTPRequestOperationManager* manager;
 		if (!manager) {
@@ -110,11 +110,11 @@ static NSPointerArray* gClients;
 		return manager;
 	}*/
 	
-	static AFHTTPSessionManager* manager;
+	static EVEHTTPSessionManager* manager;
 	if (!manager) {
 		static dispatch_once_t onceToken;
 		dispatch_once(&onceToken, ^{
-			manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
+			manager = [[EVEHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:@"https://crest-tq.eveonline.com"]];
 		});
 	}
 	return manager;
@@ -153,15 +153,27 @@ static NSPointerArray* gClients;
 	}
 }
 
-- (void) loadFittingsWithCompletionBlock:(void(^)(NSArray<CRFitting*>* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
+- (void) loadFittingsWithCompletionBlock:(void(^)(NSArray<CRFitting*>* result, NSError* error)) completionBlock {
 	[self GET:[NSString stringWithFormat:@"characters/%d/fittings/", self.token.characterID] parameters:nil responseClass:[CRFittingCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRFittingCollection class]] ? [(CRFittingCollection*) result items] : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 - (void) postFitting:(CRFitting*) fitting withCompletionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
-#warning TODO
-	return;
+	[self POST:[NSString stringWithFormat:@"characters/%d/fittings/", self.token.characterID] parameters:[fitting dictionary] responseClass:nil completionBlock:^(id result, NSError *error) {
+		if ([result isKindOfClass:[NSDictionary class]]) {
+			if (result[@"error_description"])
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:result[@"error_description"]}];
+			else if (result[@"exceptionType"] && result[@"message"]) {
+				NSInteger code = 0;
+				if ([result[@"exceptionType"] isEqualToString:@"UnauthorizedError"])
+					code = CRAPIErrorBadToken;
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:result[@"message"]}];
+			}
+		}
+		
+		completionBlock(error == nil, error);
+	}];
 /*
 	__block __weak void (^weakPost)();
 	__block BOOL retry = NO;
@@ -216,8 +228,20 @@ static NSPointerArray* gClients;
 }
 
 - (void) deleteFittingWithID:(int64_t) fittingID completionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock {
-#warning TODO
-	return;
+	[self DELETE:[NSString stringWithFormat:@"characters/%d/fittings/%qi/", self.token.characterID, fittingID] parameters:nil responseClass:nil completionBlock:^(id result, NSError *error) {
+		if ([result isKindOfClass:[NSDictionary class]]) {
+			if (result[@"error_description"])
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:result[@"error_description"]}];
+			else if (result[@"exceptionType"] && result[@"message"]) {
+				NSInteger code = 0;
+				if ([result[@"exceptionType"] isEqualToString:@"UnauthorizedError"])
+					code = CRAPIErrorBadToken;
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:result[@"message"]}];
+			}
+		}
+		
+		completionBlock(error == nil, error);
+	}];
 /*
 	__block __weak void (^weakDelete)();
 	__block BOOL retry = NO;
@@ -273,37 +297,37 @@ static NSPointerArray* gClients;
 - (void) loadKillMailWithID:(int64_t) killID hash:(NSString*) hash completionBlock:(void(^)(CRKillMail* killMail, NSError* error)) completionBlock {
 	[self GET:[NSString stringWithFormat:@"killmails/%qi/%@/", killID, hash] parameters:nil responseClass:[CRKillMail class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRKillMail class]] ? result : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 - (void) loadSellOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock {
 	[self GET:[NSString stringWithFormat:@"market/%d/orders/sell/?type=https://crest-tq.eveonline.com/inventory/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRMarketOrderCollection class]] ? result : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 - (void) loadBuyOrdersWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketOrderCollection* marketOrders, NSError* error)) completionBlock {
 	[self GET:[NSString stringWithFormat:@"market/%d/orders/buy/?type=https://crest-tq.eveonline.com/inventory/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketOrderCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRMarketOrderCollection class]] ? result : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 - (void) loadIncursionsWithCompletionBlock:(void(^)(CRIncursionCollection* incursions, NSError* error)) completionBlock {
 	[self GET:@"incursions/" parameters:nil responseClass:[CRIncursionCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRIncursionCollection class]] ? result : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 - (void) loadSolarSystemWithSolarSystemID:(int32_t) solarSystemID completionBlock:(void(^)(CRSolarSystem* solarSystem, NSError* error)) completionBlock {
 	[self GET:[NSString stringWithFormat:@"solarsystems/%d/", solarSystemID] parameters:nil responseClass:[CRSolarSystem class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRSolarSystem class]] ? result : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 - (void) loadMarketHistoryWithTypeID:(int32_t) typeID regionID:(int32_t) regionID completionBlock:(void(^)(CRMarketHistoryCollection* marketHistory, NSError* error)) completionBlock {
 	[self GET:[NSString stringWithFormat:@"market/%d/types/history/?type=https://crest-tq.eveonline.com/inventory/types/%d/", regionID, typeID] parameters:nil responseClass:[CRMarketHistoryCollection class] completionBlock:^(id result, NSError *error) {
 		completionBlock([result isKindOfClass:[CRMarketHistoryCollection class]] ? result : nil, error);
-	} progressBlock:nil];
+	} ];
 }
 
 
@@ -311,153 +335,204 @@ static NSPointerArray* gClients;
 #pragma mark - Private
 
 - (void) verifyAuthorizationCode:(NSString*) code {
-#warning TODO
-	return;
-/*
 	NSString* basicAuth = [NSString stringWithFormat:@"%@:%@", self.clientID, self.secretKey];
 
 	AFHTTPRequestSerializer* requestSerializer = [AFJSONRequestSerializer serializer];
 	[requestSerializer setValue:[NSString stringWithFormat:@"Basic %@", [[basicAuth dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0]] forHTTPHeaderField:@"Authorization"];
-	self.httpRequestOperationManager.requestSerializer = requestSerializer;
+	self.sessionManager.requestSerializer = requestSerializer;
 	
 	AFHTTPResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:400];
 	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
-	self.httpRequestOperationManager.responseSerializer = responseSerializer;
 	
-	[self.httpRequestOperationManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"authorization_code", @"code":code} success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-		NSError* error;
-		CRToken* token = [CRToken new];
-		if ([responseObject isKindOfClass:[NSDictionary class]]) {
-			if (responseObject[@"error_description"]) {
-				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
-			}
-			else {
-				token.accessToken = responseObject[@"access_token"];
-				token.refreshToken = responseObject[@"refresh_token"];
-				token.tokenType = responseObject[@"token_type"];
-				token.expiresOn = [NSDate dateWithTimeIntervalSinceNow:[responseObject[@"expires_in"] doubleValue]];
-			}
-		}
-		if (!error & (!token.accessToken || !token.tokenType || !token.refreshToken))
-			error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Invalid server response", nil)}];
+	[self.sessionManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"authorization_code", @"code":code} responseSerializer:responseSerializer completionBlock:^(id responseObject, NSError *error) {
 		if (error) {
 			if (self.authenticationCompletionBlock) {
 				self.authenticationCompletionBlock(nil, error);
 				self.authenticationCompletionBlock = nil;
 			}
 		}
-		else
-			[self verifyToken:token];
-	} failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-		if (self.authenticationCompletionBlock) {
-			self.authenticationCompletionBlock(nil, error);
-			self.authenticationCompletionBlock = nil;
+		else {
+			NSError* error;
+			CRToken* token = [CRToken new];
+			if ([responseObject isKindOfClass:[NSDictionary class]]) {
+				if (responseObject[@"error_description"]) {
+					error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
+				}
+				else {
+					token.accessToken = responseObject[@"access_token"];
+					token.refreshToken = responseObject[@"refresh_token"];
+					token.tokenType = responseObject[@"token_type"];
+					token.expiresOn = [NSDate dateWithTimeIntervalSinceNow:[responseObject[@"expires_in"] doubleValue]];
+				}
+			}
+			if (!error & (!token.accessToken || !token.tokenType || !token.refreshToken))
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Invalid server response", nil)}];
+			if (error) {
+				if (self.authenticationCompletionBlock) {
+					self.authenticationCompletionBlock(nil, error);
+					self.authenticationCompletionBlock = nil;
+				}
+			}
+			else
+				[self verifyToken:token];
 		}
 	}];
- */
 }
 
 - (void) verifyToken:(CRToken*) token {
-#warning TODO
-	return;
-/*
 	AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
 	[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", token.tokenType, token.accessToken] forHTTPHeaderField:@"Authorization"];
-	self.httpRequestOperationManager.requestSerializer = requestSerializer;
+	self.sessionManager.requestSerializer = requestSerializer;
 	
 	AFHTTPResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:400];
 	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
-	self.httpRequestOperationManager.responseSerializer = responseSerializer;
 	
-	[self.httpRequestOperationManager GET:@"https://login-tq.eveonline.com/oauth/verify" parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-		NSError* error;
-		if ([responseObject isKindOfClass:[NSDictionary class]]) {
-			if (responseObject[@"error_description"]) {
-				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
-			}
-			else {
-				token.characterID = [responseObject[@"CharacterID"] intValue];
-				token.characterName = responseObject[@"CharacterName"];
-				NSDate* expiresOn = [[NSDateFormatter crestDateFormatter] dateFromString:responseObject[@"ExpiresOn"]];
-				if (expiresOn)
-					token.expiresOn = expiresOn;
+	[self.sessionManager GET:@"https://login-tq.eveonline.com/oauth/verify" parameters:nil responseSerializer:responseSerializer completionBlock:^(id responseObject, NSError *error) {
+		if (error) {
+			if (self.authenticationCompletionBlock) {
+				self.authenticationCompletionBlock(nil, error);
+				self.authenticationCompletionBlock = nil;
 			}
 		}
-
-		if (!token.characterID && !error)
-			error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Invalid server response", nil)}];
-		if (!error)
-			self.token = token;
-		
-		if (self.authenticationCompletionBlock) {
-			self.authenticationCompletionBlock(error ? nil : token, error);
-			self.authenticationCompletionBlock = nil;
-		}
-	} failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-		if (self.authenticationCompletionBlock) {
-			self.authenticationCompletionBlock(nil, error);
-			self.authenticationCompletionBlock = nil;
+		else {
+			NSError* error;
+			if ([responseObject isKindOfClass:[NSDictionary class]]) {
+				if (responseObject[@"error_description"]) {
+					error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
+				}
+				else {
+					token.characterID = [responseObject[@"CharacterID"] intValue];
+					token.characterName = responseObject[@"CharacterName"];
+					NSDate* expiresOn = [[NSDateFormatter crestDateFormatter] dateFromString:responseObject[@"ExpiresOn"]];
+					if (expiresOn)
+						token.expiresOn = expiresOn;
+				}
+			}
+			
+			if (!token.characterID && !error)
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Invalid server response", nil)}];
+			if (!error)
+				self.token = token;
+			
+			if (self.authenticationCompletionBlock) {
+				self.authenticationCompletionBlock(error ? nil : token, error);
+				self.authenticationCompletionBlock = nil;
+			}
 		}
 	}];
- */
 }
 
 - (void) refreshToken:(CRToken*) token {
-#warning TODO
-	return;
-/*
 	NSString* basicAuth = [NSString stringWithFormat:@"%@:%@", self.clientID, self.secretKey];
 	
 	AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
 	[requestSerializer setValue:[NSString stringWithFormat:@"Basic %@", [[basicAuth dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0]] forHTTPHeaderField:@"Authorization"];
-	self.httpRequestOperationManager.requestSerializer = requestSerializer;
+	self.sessionManager.requestSerializer = requestSerializer;
 	
 	AFHTTPResponseSerializer* responseSerializer = [AFJSONResponseSerializer serializer];
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:400];
 	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
-	self.httpRequestOperationManager.responseSerializer = responseSerializer;
 	
-	[self.httpRequestOperationManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"refresh_token", @"refresh_token":token.refreshToken} success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
-		NSError* error;
-		CRToken* token = [CRToken new];
-		if ([responseObject isKindOfClass:[NSDictionary class]]) {
-			if (responseObject[@"error_description"]) {
-				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
-			}
-			else {
-				token.accessToken = responseObject[@"access_token"];
-				token.refreshToken = responseObject[@"refresh_token"];
-				token.tokenType = responseObject[@"token_type"];
-				token.expiresOn = [NSDate dateWithTimeIntervalSinceNow:[responseObject[@"expires_in"] doubleValue]];
-			}
-		}
-		if (!error & (!token.accessToken || !token.tokenType || !token.refreshToken))
-			error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Invalid server response", nil)}];
+	[self.sessionManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"refresh_token", @"refresh_token":token.refreshToken} responseSerializer:responseSerializer completionBlock:^(id responseObject, NSError *error) {
 		if (error) {
 			if (self.authenticationCompletionBlock) {
 				self.authenticationCompletionBlock(nil, error);
 				self.authenticationCompletionBlock = nil;
 			}
 		}
-		else
-			[self verifyToken:token];
-	} failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
-		if (self.authenticationCompletionBlock) {
-			self.authenticationCompletionBlock(nil, error);
-			self.authenticationCompletionBlock = nil;
-		}
+		else {
+			NSError* error;
+			CRToken* token = [CRToken new];
+			if ([responseObject isKindOfClass:[NSDictionary class]]) {
+				if (responseObject[@"error_description"]) {
+					error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:responseObject[@"error_description"]}];
+				}
+				else {
+					token.accessToken = responseObject[@"access_token"];
+					token.refreshToken = responseObject[@"refresh_token"];
+					token.tokenType = responseObject[@"token_type"];
+					token.expiresOn = [NSDate dateWithTimeIntervalSinceNow:[responseObject[@"expires_in"] doubleValue]];
+				}
+			}
+			if (!error & (!token.accessToken || !token.tokenType || !token.refreshToken))
+				error = [NSError errorWithDomain:CRAPIErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey:NSLocalizedString(@"Invalid server response", nil)}];
+			if (error) {
+				if (self.authenticationCompletionBlock) {
+					self.authenticationCompletionBlock(nil, error);
+					self.authenticationCompletionBlock = nil;
+				}
+			}
+			else
+				[self verifyToken:token];		}
 	}];
- */
 }
 
-- (void) GET:(NSString*) method parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock {
-#warning TODO
-	return;
+- (void) dataTaskWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters responseClass:(Class) responseClass completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
+	AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
+	if (!self.publicAPI)
+		[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
+	requestSerializer.cachePolicy = self.cachePolicy;
+	[requestSerializer setValue:[responseClass contentType] forHTTPHeaderField:@"Accept"];
+	
+	
+	
+	AFHTTPResponseSerializer* responseSerializer;
+	if (responseClass) {
+		responseSerializer = [CRAPISerializer serializerWithRootClass:responseClass];
+		responseSerializer.acceptableContentTypes = [NSSet setWithObject:[responseClass contentType]];
+	}
+	else
+		responseSerializer = [AFJSONResponseSerializer serializer];
+	
+	self.sessionManager.requestSerializer = requestSerializer;
+	
+	void (^send)(void (^handler)(id, NSError*)) = ^(void (^handler)(id, NSError*)) {
+		if ([method isEqualToString:@"POST"])
+			[self.sessionManager POST:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
+		else if ([method isEqualToString:@"DELETE"])
+			[self.sessionManager DELETE:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
+		else
+			[self.sessionManager GET:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
+	};
+	
+	void (^handler)(id, NSError*) = ^(id responseObject, NSError *error) {
+		if (!self.publicAPI && (error.code == CRAPIErrorBadToken)) {
+			[self authenticateWithCompletionBlock:^(CRToken *accessToken, NSError *error) {
+				if (accessToken) {
+					self.sessionManager.requestSerializer = requestSerializer;
+					send(completionBlock);
+				}
+				else {
+					if (completionBlock)
+						completionBlock(responseObject, error);
+				}
+			}];
+		}
+		else {
+			if (completionBlock)
+				completionBlock(responseObject, error);
+		}
+	};
+
+	send(handler);
+}
+
+- (void) POST:(NSString*) URLString parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock {
+	[self dataTaskWithHTTPMethod:@"POST" URLString:URLString parameters:parameters responseClass:responseClass completionBlock:completionBlock];
+}
+
+- (void) DELETE:(NSString*) URLString parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock {
+	[self dataTaskWithHTTPMethod:@"DELETE" URLString:URLString parameters:parameters responseClass:responseClass completionBlock:completionBlock];
+}
+
+- (void) GET:(NSString*) URLString parameters:(NSDictionary*) parameters responseClass:(Class) responseClass completionBlock:(void(^)(id result, NSError* error)) completionBlock {
+	[self dataTaskWithHTTPMethod:@"GET" URLString:URLString parameters:parameters responseClass:responseClass completionBlock:completionBlock];
+	
 /*
 	NSString* urlString = method;
 

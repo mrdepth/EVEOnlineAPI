@@ -6,7 +6,7 @@
  *  Copyright 2010 __MyCompanyName__. All rights reserved.
  *
  */
-#import <AFNetworking/AFNetworking.h>
+#import <EVEAPI/EVEHTTPSessionManager.h>
 
 #import <EVEAPI/NSDateFormatter+EVEOnlineAPI.h>
 #import <EVEAPI/EVEGlobals.h>
@@ -103,7 +103,7 @@
 @interface EVEOnlineAPI : NSObject
 @property (nonatomic, strong) EVEAPIKey* apiKey;
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
+@property (nonatomic, readonly) EVEHTTPSessionManager* sessionManager;
 //@property (nonatomic, assign) BOOL startImmediately;
 
 

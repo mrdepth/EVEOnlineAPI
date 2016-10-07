@@ -22,4 +22,23 @@
 	[aCoder encodeObject:self.eveapi forKey:@"eveapi"];
 }
 
+#pragma mark - EVEHTTPCachedContent
+
+- (NSDate*) currentTime {
+	return self.eveapi.currentTime;
+}
+
+- (NSDate*) cachedUntil {
+	return self.eveapi.cachedUntil;
+}
+
+- (NSDate*) cacheDate {
+	return self.eveapi.cacheDate;
+}
+
+- (void) setCacheDate:(NSDate *)cacheDate {
+	self.eveapi.cacheDate = cacheDate;
+}
+
+
 @end

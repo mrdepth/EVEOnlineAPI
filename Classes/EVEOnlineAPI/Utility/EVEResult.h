@@ -9,7 +9,8 @@
 #import "EVEObject.h"
 #import "EVEAPIObject.h"
 #import "EVEGlobals.h"
+#import "EVEHTTPSessionManager.h"
 
-@interface EVEResult : EVEObject
+@interface EVEResult : EVEObject<EVEHTTPCachedContent>
 @property (nonatomic, strong) EVEAPIObject* eveapi;
 @end

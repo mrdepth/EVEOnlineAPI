@@ -16,6 +16,11 @@
 		1222E16B188F8941003C1361 /* EVEDBCertCertificate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16A188F8941003C1361 /* EVEDBCertCertificate.m */; };
 		1222E16E188F8BF6003C1361 /* EVEDBCertMastery.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */; };
 		1222E171188F8D82003C1361 /* EVEDBCertSkill.m in Sources */ = {isa = PBXBuildFile; fileRef = 1222E170188F8D82003C1361 /* EVEDBCertSkill.m */; };
+		122971821DA78C5000B0D5C8 /* EVEHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 122971801DA78C5000B0D5C8 /* EVEHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		122971831DA78C5000B0D5C8 /* EVEHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 122971801DA78C5000B0D5C8 /* EVEHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		122971841DA78C5000B0D5C8 /* EVEHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 122971811DA78C5000B0D5C8 /* EVEHTTPSessionManager.m */; };
+		122971851DA78C5000B0D5C8 /* EVEHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 122971811DA78C5000B0D5C8 /* EVEHTTPSessionManager.m */; };
+		122971861DA78C5000B0D5C8 /* EVEHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 122971811DA78C5000B0D5C8 /* EVEHTTPSessionManager.m */; };
 		12350EE91C73A33D0015D140 /* EVECharFacWarStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF9C0E11B7CD9100350938 /* EVECharFacWarStats.m */; };
 		12350EEA1C73A33D0015D140 /* EVECharacters.m in Sources */ = {isa = PBXBuildFile; fileRef = 12CAF64211B4015F008696F3 /* EVECharacters.m */; };
 		12350EEB1C73A33D0015D140 /* EVEErrorList.m in Sources */ = {isa = PBXBuildFile; fileRef = 718C3214121EB0FD00E4E065 /* EVEErrorList.m */; };
@@ -747,6 +752,8 @@
 		1222E16D188F8BF6003C1361 /* EVEDBCertMastery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertMastery.m; sourceTree = "<group>"; };
 		1222E16F188F8D82003C1361 /* EVEDBCertSkill.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBCertSkill.h; sourceTree = "<group>"; };
 		1222E170188F8D82003C1361 /* EVEDBCertSkill.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBCertSkill.m; sourceTree = "<group>"; };
+		122971801DA78C5000B0D5C8 /* EVEHTTPSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEHTTPSessionManager.h; sourceTree = "<group>"; };
+		122971811DA78C5000B0D5C8 /* EVEHTTPSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEHTTPSessionManager.m; sourceTree = "<group>"; };
 		122AC50D18BCCB92005F0F46 /* EVEzKillBoardAPI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardAPI.h; sourceTree = "<group>"; };
 		122AC50E18BCCBC7005F0F46 /* EVEzKillBoardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEzKillBoardSearch.h; sourceTree = "<group>"; };
 		122AC50F18BCCBC7005F0F46 /* EVEzKillBoardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEzKillBoardSearch.m; sourceTree = "<group>"; };
@@ -1173,6 +1180,15 @@
 				1222E15F188F8890003C1361 /* murmurhash3.h */,
 			);
 			path = MurmurHash3;
+			sourceTree = "<group>";
+		};
+		1229717F1DA78C2700B0D5C8 /* EVEHTTPSessionManager */ = {
+			isa = PBXGroup;
+			children = (
+				122971801DA78C5000B0D5C8 /* EVEHTTPSessionManager.h */,
+				122971811DA78C5000B0D5C8 /* EVEHTTPSessionManager.m */,
+			);
+			name = EVEHTTPSessionManager;
 			sourceTree = "<group>";
 		};
 		122AC50C18BCCB8B005F0F46 /* EVEzKillBoardAPI */ = {
@@ -1688,6 +1704,7 @@
 		718C3314121EC87B00E4E065 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				1229717F1DA78C2700B0D5C8 /* EVEHTTPSessionManager */,
 				7186DAB313059D0700C22AEC /* NSMutableString+HTML */,
 				7186898213059CCC00C22AEC /* NSString+HTML */,
 				1222E15D188F8890003C1361 /* MurmurHash3 */,
@@ -1906,6 +1923,7 @@
 				12350F821C73A33D0015D140 /* EVEMemberSecurityLog.h in Headers */,
 				12350F831C73A33D0015D140 /* EVEMemberTracking.h in Headers */,
 				12350F841C73A33D0015D140 /* EVEOutpostList.h in Headers */,
+				122971831DA78C5000B0D5C8 /* EVEHTTPSessionManager.h in Headers */,
 				12350F851C73A33D0015D140 /* CRAPI.h in Headers */,
 				12350F861C73A33D0015D140 /* RSSParser20.h in Headers */,
 				12350F871C73A33D0015D140 /* EVEOutpostServiceDetail.h in Headers */,
@@ -2033,6 +2051,7 @@
 				1248CE251B7DDBB4000266BE /* EVEMemberSecurityLog.h in Headers */,
 				1248CE261B7DDBB4000266BE /* EVEMemberTracking.h in Headers */,
 				1248CE271B7DDBB4000266BE /* EVEOutpostList.h in Headers */,
+				122971821DA78C5000B0D5C8 /* EVEHTTPSessionManager.h in Headers */,
 				1247B1021BECA60500608852 /* CRAPI.h in Headers */,
 				125DC6561BD52394005C2F79 /* RSSParser20.h in Headers */,
 				1248CE281B7DDBB4000266BE /* EVEOutpostServiceDetail.h in Headers */,
@@ -2414,6 +2433,7 @@
 				12350F541C73A33D0015D140 /* EVECorpWalletJournal.m in Sources */,
 				12350F551C73A33D0015D140 /* EVECharacterName.m in Sources */,
 				12350F561C73A33D0015D140 /* EVEResearch.m in Sources */,
+				122971861DA78C5000B0D5C8 /* EVEHTTPSessionManager.m in Sources */,
 				12350F571C73A33D0015D140 /* EVEFacWarSystems.m in Sources */,
 				12350F581C73A33D0015D140 /* CRIncursion.m in Sources */,
 				12350F591C73A33D0015D140 /* EVETitles.m in Sources */,
@@ -2543,6 +2563,7 @@
 				1248CDDB1B7DDAEE000266BE /* EVECorpWalletJournal.m in Sources */,
 				1248CDE11B7DDAF5000266BE /* EVECharacterName.m in Sources */,
 				1248CDC61B7DDAE9000266BE /* EVEResearch.m in Sources */,
+				122971851DA78C5000B0D5C8 /* EVEHTTPSessionManager.m in Sources */,
 				1248CDEA1B7DDAFA000266BE /* EVEFacWarSystems.m in Sources */,
 				1241B3CC1C3BEB5C009505BE /* CRIncursion.m in Sources */,
 				1248CDDA1B7DDAEE000266BE /* EVETitles.m in Sources */,
@@ -2726,6 +2747,7 @@
 				12D81B4115D8E7E2006AA4B2 /* EVEDBRamTypeRequirement.m in Sources */,
 				12F274C01B74BEC100941A98 /* EVEResult.m in Sources */,
 				12EBB729167EF30A002CDAB6 /* EVECharacterInfo.m in Sources */,
+				122971841DA78C5000B0D5C8 /* EVEHTTPSessionManager.m in Sources */,
 				12BA6FC6176AF1810090E12D /* EVEDBObject.m in Sources */,
 				12D6EDD4176F0DA600F45382 /* NSDictionary+EVEDBAPI.m in Sources */,
 				12D6EDDD176F193100F45382 /* EVEDBInvMetaGroup.m in Sources */,
@@ -2973,6 +2995,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = EVEOnlineAPI_Prefix.pch;
 				INFOPLIST_FILE = "EVEOnlineAPI-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = EVEOnlineAPI;
@@ -2989,6 +3012,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = EVEOnlineAPI_Prefix.pch;
 				INFOPLIST_FILE = "EVEOnlineAPI-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.yourcompany.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = EVEOnlineAPI;

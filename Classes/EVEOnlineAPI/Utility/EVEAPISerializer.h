@@ -6,10 +6,9 @@
 //
 //
 
-#import <AFNetworking/AFNetworking.h>
+#import "EVEHTTPSessionManager.h"
 
-@interface EVEAPISerializer : AFHTTPResponseSerializer
-@property (nonatomic, strong) NSData* data;
+@interface EVEAPISerializer : EVEHTTPResponseSerializer
 
 + (instancetype) serializerWithRootClass:(Class) aClass;
 - (instancetype) initWithRootClass:(Class) aClass;

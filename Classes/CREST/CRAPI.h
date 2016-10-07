@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <AFNetworking/AFNetworking.h>
+#import <EVEAPI/EVEHTTPSessionManager.h>
 #import <EVEAPI/CRToken.h>
 #import <EVEAPI/CRFitting.h>
 #import <EVEAPI/CRKillMail.h>
@@ -29,7 +29,7 @@ typedef enum {
 
 @interface CRAPI : NSObject
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
+@property (nonatomic, readonly) EVEHTTPSessionManager* sessionManager;
 @property (nonatomic, strong, readonly) NSString* clientID;
 @property (nonatomic, strong, readonly) NSString* secretKey;
 @property (nonatomic, strong, readonly) NSURL* callbackURL;
@@ -43,7 +43,7 @@ typedef enum {
 - (instancetype) initPublicAPIWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy;
 
 - (void) authenticateWithCompletionBlock:(void(^)(CRToken* token, NSError* error)) completionBlock;
-- (void) loadFittingsWithCompletionBlock:(void(^)(NSArray<CRFitting*>* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (void) loadFittingsWithCompletionBlock:(void(^)(NSArray<CRFitting*>* result, NSError* error)) completionBlock;
 - (void) postFitting:(CRFitting*) fitting withCompletionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock;
 - (void) deleteFittingWithID:(int64_t) fittingID completionBlock:(void(^)(BOOL completed, NSError* error)) completionBlock;
 - (void) loadKillMailWithID:(int64_t) killID hash:(NSString*) hash completionBlock:(void(^)(CRKillMail* killMail, NSError* error)) completionBlock;

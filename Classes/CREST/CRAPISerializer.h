@@ -6,9 +6,9 @@
 //
 //
 
-#import <AFNetworking/AFNetworking.h>
+#import "EVEHTTPSessionManager.h"
 
-@interface CRAPISerializer : AFHTTPResponseSerializer
+@interface CRAPISerializer : EVEHTTPResponseSerializer
 
 + (instancetype) serializerWithRootClass:(Class) aClass;
 - (instancetype) initWithRootClass:(Class) aClass;
