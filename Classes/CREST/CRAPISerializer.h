@@ -8,7 +8,7 @@
 
 #import "EVEHTTPSessionManager.h"
 
-@interface CRAPISerializer : EVEHTTPResponseSerializer
+@interface CRAPISerializer : AFHTTPResponseSerializer
 
 + (instancetype) serializerWithRootClass:(Class) aClass;
 - (instancetype) initWithRootClass:(Class) aClass;

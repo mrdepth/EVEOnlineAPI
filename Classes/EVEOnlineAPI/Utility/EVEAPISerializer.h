@@ -8,7 +8,7 @@
 
 #import "EVEHTTPSessionManager.h"
 
-@interface EVEAPISerializer : EVEHTTPResponseSerializer
+@interface EVEAPISerializer : AFHTTPResponseSerializer
 
 + (instancetype) serializerWithRootClass:(Class) aClass;
 - (instancetype) initWithRootClass:(Class) aClass;

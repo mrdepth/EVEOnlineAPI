@@ -28,7 +28,7 @@
 	return self;
 }
 
-- (nullable id) responseObjectForData:(nullable NSData *)data error:(NSError *__autoreleasing  __nullable * __nullable)error {
+- (nullable id) responseObjectForResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing  _Nullable *)error {
 	NSDictionary* dic = [NSDictionary dictionaryObjectWithXMLData:data];
 	EVEAPIObject* api = [[EVEAPIObject alloc] initWithDictionary:dic[@"eveapi"]];
 	NSDictionary* result = dic[@"eveapi"][@"result"];

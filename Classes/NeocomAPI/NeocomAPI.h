@@ -6,7 +6,7 @@
 //
 //
 
-#import <AFNetworking/AFNetworking.h>
+#import "EVEHTTPSessionManager.h"
 #import <EVEAPI/NAPISearch.h>
 #import <EVEAPI/NAPIUpload.h>
 #import <EVEAPI/NAPILookup.h>
@@ -41,11 +41,11 @@ typedef enum {
 
 @interface NeocomAPI : NSObject
 @property (nonatomic, assign) NSURLRequestCachePolicy cachePolicy;
-@property (nonatomic, readonly) AFHTTPSessionManager* httpRequestOperationManager;
+@property (nonatomic, readonly) EVEHTTPSessionManager* sessionManager;
 
 - (instancetype) initWithCachePolicy:(NSURLRequestCachePolicy) cachePolicy NS_DESIGNATED_INITIALIZER;
-- (NSURLSessionDataTask*) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (NSURLSessionDataTask*) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
-- (NSURLSessionDataTask*) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock progressBlock:(void(^)(float progress)) progressBlock;
+- (void) lookupWithCriteria:(NSDictionary*) criteria completionBlock:(void(^)(NAPILookup* result, NSError* error)) completionBlock;
+- (void) searchWithCriteria:(NSDictionary*) criteria order:(NSString*) order  completionBlock:(void(^)(NAPISearch* result, NSError* error)) completionBlock;
+- (void) uploadFitsWithCannonicalNames:(NSArray*) cannonicalNames userID:(NSString*) userID completionBlock:(void(^)(NAPIUpload* result, NSError* error)) completionBlock;
 
 @end

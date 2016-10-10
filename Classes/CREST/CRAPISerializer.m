@@ -26,7 +26,7 @@
 	return self;
 }
 
-- (nullable id) responseObjectForData:(nullable NSData *)data error:(NSError *__autoreleasing  __nullable * __nullable)error {
+- (nullable id) responseObjectForResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing  _Nullable *)error {
 	id result = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 	if (result) {
 		if ([result isKindOfClass:[NSDictionary class]]) {

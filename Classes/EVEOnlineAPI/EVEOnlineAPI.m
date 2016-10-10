@@ -442,7 +442,8 @@
 	
 	self.sessionManager.requestSerializer.cachePolicy = self.cachePolicy;
 	
-	[self.sessionManager GET:urlString parameters:param responseSerializer:[EVEAPISerializer serializerWithRootClass:responseClass] completionBlock:completionBlock];
+	self.sessionManager.responseSerializer = [EVEAPISerializer serializerWithRootClass:responseClass];
+	[self.sessionManager GET:urlString parameters:param completionBlock:completionBlock];
 }
 
 @end
