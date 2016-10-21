@@ -157,7 +157,6 @@
 			if (!error) {
 				NSURLSessionDataTask* task = note.object;
 				id responseObject = deserializedObject;
-				NSLog(@"====== %@ %@ =====", URLString, [responseObject class]);
 				NSData* responseData = note.userInfo[AFNetworkingTaskDidCompleteResponseDataKey];
 				
 				NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*) task.response;
