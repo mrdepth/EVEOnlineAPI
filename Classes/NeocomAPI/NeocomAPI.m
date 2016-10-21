@@ -77,9 +77,8 @@
 		serializer = [AFHTTPRequestSerializer serializer];
 	serializer.cachePolicy = self.cachePolicy;
 	self.sessionManager.requestSerializer = serializer;
-	self.sessionManager.responseSerializer = [NAPISerializer serializerWithRootClass:responseClass];
 	
-	[self.sessionManager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters completionBlock:completionBlock];
+	[self.sessionManager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters responseSerializer:[NAPISerializer serializerWithRootClass:responseClass] completionBlock:completionBlock];
 }
 
 @end

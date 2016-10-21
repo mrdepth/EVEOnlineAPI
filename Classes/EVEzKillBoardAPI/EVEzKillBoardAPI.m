@@ -62,8 +62,7 @@
 	NSString* urlString = [@"api" stringByAppendingPathComponent:method];
 	
 	self.sessionManager.requestSerializer.cachePolicy = self.cachePolicy;
-	self.sessionManager.responseSerializer = [EVEzKillBoardAPISerializer serializerWithRootClass:responseClass];;
-	[self.sessionManager GET:urlString parameters:parameters completionBlock:completionBlock];
+	[self.sessionManager GET:urlString parameters:parameters responseSerializer:[EVEzKillBoardAPISerializer serializerWithRootClass:responseClass] completionBlock:completionBlock];
 }
 
 @end

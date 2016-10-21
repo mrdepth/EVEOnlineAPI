@@ -23,12 +23,12 @@
 		dispatch_once(&onceToken, ^{
 			manager = [[EVEHTTPSessionManager alloc] initWithBaseURL:nil];
 			manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-			manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+			//manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 //			manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"*/*"];
 		});
 	}
 	manager.requestSerializer.cachePolicy = cachePolicy;
-	[manager GET:[url absoluteString] parameters:nil completionBlock:^(id responseObject, NSError *error) {
+	[manager GET:[url absoluteString] parameters:nil responseSerializer:[AFHTTPResponseSerializer serializer] completionBlock:^(id responseObject, NSError *error) {
 		if (completionBlock) {
 			if (!error) {
 				RSSParser *parser = [[RSSParser alloc] init];

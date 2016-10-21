@@ -345,9 +345,8 @@ static NSPointerArray* gClients;
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:400];
 	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
-	self.sessionManager.responseSerializer = responseSerializer;
 	
-	[self.sessionManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"authorization_code", @"code":code} completionBlock:^(id responseObject, NSError *error) {
+	[self.sessionManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"authorization_code", @"code":code} responseSerializer:responseSerializer completionBlock:^(id responseObject, NSError *error) {
 		if (error) {
 			if (self.authenticationCompletionBlock) {
 				self.authenticationCompletionBlock(nil, error);
@@ -391,9 +390,8 @@ static NSPointerArray* gClients;
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:400];
 	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
-	self.sessionManager.responseSerializer = responseSerializer;
 	
-	[self.sessionManager GET:@"https://login-tq.eveonline.com/oauth/verify" parameters:nil completionBlock:^(id responseObject, NSError *error) {
+	[self.sessionManager GET:@"https://login-tq.eveonline.com/oauth/verify" parameters:nil responseSerializer:responseSerializer completionBlock:^(id responseObject, NSError *error) {
 		if (error) {
 			if (self.authenticationCompletionBlock) {
 				self.authenticationCompletionBlock(nil, error);
@@ -439,9 +437,8 @@ static NSPointerArray* gClients;
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:400];
 	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
-	self.sessionManager.responseSerializer = responseSerializer;
 	
-	[self.sessionManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"refresh_token", @"refresh_token":token.refreshToken} completionBlock:^(id responseObject, NSError *error) {
+	[self.sessionManager POST:@"https://login-tq.eveonline.com/oauth/token" parameters:@{@"grant_type":@"refresh_token", @"refresh_token":token.refreshToken} responseSerializer:responseSerializer completionBlock:^(id responseObject, NSError *error) {
 		if (error) {
 			if (self.authenticationCompletionBlock) {
 				self.authenticationCompletionBlock(nil, error);
@@ -498,14 +495,13 @@ static NSPointerArray* gClients;
 			[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
 		requestSerializer.cachePolicy = self.cachePolicy;
 		[requestSerializer setValue:[responseClass contentType] forHTTPHeaderField:@"Accept"];
-		self.sessionManager.responseSerializer = responseSerializer;
 		
 		if ([method isEqualToString:@"POST"])
-			[self.sessionManager POST:URLString parameters:parameters completionBlock:handler];
+			[self.sessionManager POST:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
 		else if ([method isEqualToString:@"DELETE"])
-			[self.sessionManager DELETE:URLString parameters:parameters completionBlock:handler];
+			[self.sessionManager DELETE:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
 		else
-			[self.sessionManager GET:URLString parameters:parameters completionBlock:handler];
+			[self.sessionManager GET:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
 	};
 	
 	void (^handler)(id, NSError*) = ^(id responseObject, NSError *error) {

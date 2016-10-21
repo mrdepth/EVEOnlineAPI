@@ -13,20 +13,27 @@
 
 @implementation EVEHTTPSessionManager
 
-
-- (void) GET:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
-	[self dataTaskWithHTTPMethod:@"GET" URLString:URLString parameters:parameters completionBlock:completionBlock];
+- (instancetype)initWithBaseURL:(NSURL *)url
+		   sessionConfiguration:(NSURLSessionConfiguration *)configuration {
+	if (self = [super initWithBaseURL:url sessionConfiguration:configuration]) {
+		self.responseSerializer = [AFHTTPResponseSerializer serializer];
+	}
+	return self;
 }
 
-- (void) POST:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
-	[self dataTaskWithHTTPMethod:@"POST" URLString:URLString parameters:parameters completionBlock:completionBlock];
+- (void) GET:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
+	[self dataTaskWithHTTPMethod:@"GET" URLString:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:completionBlock];
 }
 
-- (void) DELETE:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
-	[self dataTaskWithHTTPMethod:@"DELETE" URLString:URLString parameters:parameters completionBlock:completionBlock];
+- (void) POST:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
+	[self dataTaskWithHTTPMethod:@"POST" URLString:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:completionBlock];
 }
 
-- (void) dataTaskWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
+- (void) DELETE:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
+	[self dataTaskWithHTTPMethod:@"DELETE" URLString:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:completionBlock];
+}
+
+- (void) dataTaskWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
 	static NSMutableDictionary* dispatchGroups = nil;
 	static NSMutableDictionary* progress = nil;
 	if (!dispatchGroups) {
@@ -73,31 +80,42 @@
 	}
 	
 	if (load) {
-		
+		__block id deserializedObject = nil;
 		void (^success)(NSURLSessionDataTask * task, id) = ^(NSURLSessionDataTask* task, id responseObject) {
-			for (NSProgress* progress in progressArray)
+			NSError* error = nil;
+			if ([responseObject isKindOfClass:[NSData class]] && self.responseSerializer)
+				responseObject = [responseSerializer responseObjectForResponse:task.response data:responseObject error:&error];
+			deserializedObject = responseObject;
+			
+			if (error) {
+				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
+			}
+			else {
+				for (NSProgress* progress in progressArray)
 				progress.completedUnitCount = 100;
-			
-			if (responseObject)
+				
+				if (responseObject)
 				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":responseObject});
-			
-			NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*) task.response;
-			
-			NSDictionary* headers = [urlResponse allHeaderFields];
-			NSString* md5 = [task.currentRequest.URL md5];
-			NSString* etag = headers[@"Etag"];
-			
-			id<EVEHTTPCachedContent> cachedContent = [responseObject conformsToProtocol:@protocol(EVEHTTPCachedContent)] ? responseObject : nil;
-			
-			if (cachedContent) {
-				BOOL hasCacheDate = [cachedContent respondsToSelector:@selector(cacheDate)];
-				if (hasCacheDate) {
-					if (etag && [md5 isEqualToString:etag])
+				
+				NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*) task.response;
+				
+				NSDictionary* headers = [urlResponse allHeaderFields];
+				NSString* md5 = [task.currentRequest.URL md5];
+				NSString* etag = headers[@"Etag"];
+				
+				id<EVEHTTPCachedContent> cachedContent = [responseObject conformsToProtocol:@protocol(EVEHTTPCachedContent)] ? responseObject : nil;
+				
+				if (cachedContent) {
+					BOOL hasCacheDate = [cachedContent respondsToSelector:@selector(cacheDate)];
+					if (hasCacheDate) {
+						if (etag && [md5 isEqualToString:etag])
 						cachedContent.cacheDate = [[NSDateFormatter rfc822DateFormatter] dateFromString:headers[@"Cache-Date"]];
-					else
+						else
 						cachedContent.cacheDate = [NSDate date];
+					}
 				}
 			}
+			
 			
 			dispatch_group_leave(dispatchGroup);
 			@synchronized(dispatchGroups) {
@@ -138,7 +156,8 @@
 			NSError* error = note.userInfo[AFNetworkingTaskDidCompleteErrorKey];
 			if (!error) {
 				NSURLSessionDataTask* task = note.object;
-				id responseObject = note.userInfo[AFNetworkingTaskDidCompleteSerializedResponseKey];
+				id responseObject = deserializedObject;
+				NSLog(@"====== %@ %@ =====", URLString, [responseObject class]);
 				NSData* responseData = note.userInfo[AFNetworkingTaskDidCompleteResponseDataKey];
 				
 				NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*) task.response;

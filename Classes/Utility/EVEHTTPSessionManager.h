@@ -19,10 +19,10 @@
 
 @interface EVEHTTPSessionManager : AFHTTPSessionManager
 
-- (void) GET:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
-- (void) POST:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
-- (void) DELETE:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
+- (void) GET:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
+- (void) POST:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
+- (void) DELETE:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
 
-- (void) dataTaskWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
+- (void) dataTaskWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters responseSerializer:(AFHTTPResponseSerializer*) responseSerializer completionBlock:(void (^)(id responseObject, NSError* error))completionBlock;
 
 @end
