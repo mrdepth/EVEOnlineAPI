@@ -129,6 +129,8 @@ static NSPointerArray* gClients;
 	}
 }
 
+
+
 - (void) authenticateWithCompletionBlock:(void(^)(CRToken* token, NSError* error)) completionBlock {
 	self.authenticationCompletionBlock = completionBlock;
 	if (self.token.refreshToken) {
@@ -136,8 +138,61 @@ static NSPointerArray* gClients;
 	}
 	else {
 		self.state = [[NSUUID UUID] UUIDString];
-		
-		NSString* urlString = [NSString stringWithFormat:@"https://login-tq.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=%@&client_id=%@&scope=characterFittingsRead+characterFittingsWrite&state=%@", self.callbackURL.absoluteString, self.clientID, self.state];
+		NSArray* scope = @[
+//						   @"characterAccountRead",
+//						   @"characterAssetsRead",
+//						   @"characterBookmarksRead",
+//						   @"characterCalendarRead",
+//						   @"characterChatChannelsRead",
+//						   @"characterClonesRead",
+//						   @"characterContactsRead",
+//						   @"characterContactsWrite",
+//						   @"characterContractsRead",
+//						   @"characterFactionalWarfareRead",
+						   @"characterFittingsRead",
+						   @"characterFittingsWrite",
+//						   @"characterIndustryJobsRead",
+						   @"characterKillsRead",
+//						   @"characterLocationRead",
+//						   @"characterLoyaltyPointsRead",
+//						   @"characterMailRead",
+//						   @"characterMarketOrdersRead",
+//						   @"characterMedalsRead",
+//						   @"characterNavigationWrite",
+//						   @"characterNotificationsRead",
+//						   @"characterOpportunitiesRead",
+//						   @"characterResearchRead",
+//						   @"characterSkillsRead",
+//						   @"characterStatsRead",
+//						   @"characterWalletRead",
+//						   @"corporationAssetsRead",
+//						   @"corporationBookmarksRead",
+//						   @"corporationContactsRead",
+//						   @"corporationContractsRead",
+//						   @"corporationFactionalWarfareRead",
+//						   @"corporationIndustryJobsRead",
+//						   @"corporationKillsRead",
+//						   @"corporationMarketOrdersRead",
+//						   @"corporationMedalsRead",
+//						   @"corporationMembersRead",
+//						   @"corporationShareholdersRead",
+//						   @"corporationStructuresRead",
+//						   @"corporationWalletRead",
+//						   @"fleetRead",
+//						   @"fleetWrite",
+//						   @"publicData",
+//						   @"read_calendar_events",
+//						   @"read_character_wallet",
+//						   @"read_clones",
+//						   @"read_contacts",
+//						   @"read_skillqueue",
+//						   @"read_skills",
+//						   @"read_structures",
+//						   @"remoteClientUI",
+//						   @"respond_calendar_events",
+//						   @"structureVulnUpdate"
+						   ];
+		NSString* urlString = [NSString stringWithFormat:@"https://login.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=%@&client_id=%@&scope=%@&state=%@&realm=ESI", self.callbackURL.absoluteString, self.clientID, [scope componentsJoinedByString:@"+"], self.state];
 #if TARGET_OS_IOS
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
 		__block id blockObserver;
