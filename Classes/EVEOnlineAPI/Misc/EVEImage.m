@@ -21,7 +21,7 @@
 		return nil;
 	}
 	else*/
-		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Character/%d_%d.jpg", characterID, [self imageDimensionWithSize:size]]];
+		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Character/%d_%d.jpg", characterID, size]];
 }
 
 + (NSURL*) corporationLogoURLWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr {
@@ -31,7 +31,7 @@
 		return nil;
 	}
 	else*/
-		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Corporation/%d_%d.png", corporationID, [self imageDimensionWithSize:size]]];
+		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Corporation/%d_%d.png", corporationID, size]];
 }
 
 + (NSURL*) allianceLogoURLWithAllianceID: (int32_t) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr {
@@ -41,7 +41,7 @@
 		return nil;
 	}
 	else*/
-		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Alliance/%d_%d.png", allianceID, [self imageDimensionWithSize:size]]];
+		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Alliance/%d_%d.png", allianceID, size]];
 }
 
 + (id) characterPortraitImageWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr {
@@ -59,21 +59,5 @@
 	return [[EVEImage alloc] initWithData:data];
 }
 
-#pragma mark - Private
-
-+ (int32_t) imageDimensionWithSize:(EVEImageSize) size {
-	static int32_t scale = 0;
-	if (scale == 0)
-#if TARGET_OS_IOS
-		scale = [[UIScreen mainScreen] scale];
-#else
-		scale = [[NSScreen mainScreen] backingScaleFactor];
-#endif
-	
-	BOOL retina = (size & EVEImageSizeRetina) == EVEImageSizeRetina && scale == 2;
-	
-	int32_t dimension = size & 0xfff;
-	return retina ? dimension * 2 : dimension;
-}
 
 @end
