@@ -21,7 +21,7 @@
 		return nil;
 	}
 	else*/
-		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Character/%d_%d.jpg", characterID, size]];
+		return [NSURL URLWithString:[NSString stringWithFormat:@"https://imageserver.eveonline.com/Character/%d_%d.jpg", characterID, size]];
 }
 
 + (NSURL*) corporationLogoURLWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr {
@@ -31,7 +31,7 @@
 		return nil;
 	}
 	else*/
-		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Corporation/%d_%d.png", corporationID, size]];
+		return [NSURL URLWithString:[NSString stringWithFormat:@"https://imageserver.eveonline.com/Corporation/%d_%d.png", corporationID, size]];
 }
 
 + (NSURL*) allianceLogoURLWithAllianceID: (int32_t) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr {
@@ -41,7 +41,7 @@
 		return nil;
 	}
 	else*/
-		return [NSURL URLWithString:[NSString stringWithFormat:@"http://image.eveonline.com/Alliance/%d_%d.png", allianceID, size]];
+		return [NSURL URLWithString:[NSString stringWithFormat:@"https://imageserver.eveonline.com/Alliance/%d_%d.png", allianceID, size]];
 }
 
 + (id) characterPortraitImageWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr {
