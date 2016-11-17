@@ -24,13 +24,13 @@ typedef NS_ENUM(int32_t, EVEImageSize) {
 	
 	EVEImageSizeRetina = 0x1000,
 	
-	EVEImageSizeRetina32 = EVEImageSize32 | EVEImageSizeRetina,
-	EVEImageSizeRetina64 = EVEImageSize64 | EVEImageSizeRetina,
-	EVEImageSizeRetina128 = EVEImageSize128 | EVEImageSizeRetina,
-	EVEImageSizeRetina200 = EVEImageSize200 | EVEImageSizeRetina,
-	EVEImageSizeRetina256 = EVEImageSize256 | EVEImageSizeRetina,
-	EVEImageSizeRetina512 = EVEImageSize512 | EVEImageSizeRetina,
-	EVEImageSizeRetina1024 = EVEImageSize1024 | EVEImageSizeRetina,
+	EVEImageSizeRetina32 = EVEImageSize64,
+	EVEImageSizeRetina64 = EVEImageSize128,
+	EVEImageSizeRetina128 = EVEImageSize256,
+	EVEImageSizeRetina200 =EVEImageSize512,
+	EVEImageSizeRetina256 = EVEImageSize512,
+	EVEImageSizeRetina512 = EVEImageSize1024,
+	EVEImageSizeRetina1024 = EVEImageSize1024
 	
 };
 

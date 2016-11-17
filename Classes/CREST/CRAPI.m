@@ -192,7 +192,8 @@ static NSPointerArray* gClients;
 //						   @"respond_calendar_events",
 //						   @"structureVulnUpdate"
 						   ];
-		NSString* urlString = [NSString stringWithFormat:@"https://login.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=%@&client_id=%@&scope=%@&state=%@&realm=ESI", self.callbackURL.absoluteString, self.clientID, [scope componentsJoinedByString:@"+"], self.state];
+		//NSString* urlString = [NSString stringWithFormat:@"https://login.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=%@&client_id=%@&scope=%@&state=%@&realm=ESI", self.callbackURL.absoluteString, self.clientID, [scope componentsJoinedByString:@"+"], self.state];
+		NSString* urlString = [NSString stringWithFormat:@"https://login-tq.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=%@&client_id=%@&scope=%@&state=%@", self.callbackURL.absoluteString, self.clientID, [scope componentsJoinedByString:@"+"], self.state];
 #if TARGET_OS_IOS
 		[[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
 		__block id blockObserver;
@@ -523,7 +524,8 @@ static NSPointerArray* gClients;
 				}
 			}
 			else
-				[self verifyToken:token];		}
+				[self verifyToken:token];
+		}
 	}];
 }
 
@@ -542,6 +544,11 @@ static NSPointerArray* gClients;
 	else
 		responseSerializer = [AFJSONResponseSerializer serializer];
 	
+	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
+	[acceptableStatusCodes addIndex:401];
+	responseSerializer.acceptableStatusCodes = acceptableStatusCodes;
+
+	
 	self.sessionManager.requestSerializer = requestSerializer;
 	
 	void (^send)(void (^handler)(id, NSError*)) = ^(void (^handler)(id, NSError*)) {
@@ -550,6 +557,7 @@ static NSPointerArray* gClients;
 			[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
 		requestSerializer.cachePolicy = self.cachePolicy;
 		[requestSerializer setValue:[responseClass contentType] forHTTPHeaderField:@"Accept"];
+		self.sessionManager.requestSerializer = requestSerializer;
 		
 		if ([method isEqualToString:@"POST"])
 			[self.sessionManager POST:URLString parameters:parameters responseSerializer:responseSerializer completionBlock:handler];
@@ -560,7 +568,8 @@ static NSPointerArray* gClients;
 	};
 	
 	void (^handler)(id, NSError*) = ^(id responseObject, NSError *error) {
-		if (!self.publicAPI && (error.code == CRAPIErrorBadToken)) {
+		NSHTTPURLResponse* response = error.userInfo[AFNetworkingOperationFailingURLResponseErrorKey];
+		if (!self.publicAPI && (error.code == CRAPIErrorBadToken || response.statusCode == 401)) {
 			[self authenticateWithCompletionBlock:^(CRToken *accessToken, NSError *error) {
 				if (accessToken) {
 					self.sessionManager.requestSerializer = requestSerializer;

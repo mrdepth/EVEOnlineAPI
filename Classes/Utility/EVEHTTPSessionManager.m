@@ -50,7 +50,7 @@
 	}
 	
 	
-	id requestKey = @([@{@"method":method, @"url":URLString, @"parameters":parameters ?: @""} fullHash]);
+	id requestKey = @([@{@"method":method, @"url":URLString, @"parameters":parameters ?: @"", @"headers":self.requestSerializer.HTTPRequestHeaders ?: @""} fullHash]);
 	
 	NSMutableArray* progressArray;
 	@synchronized (progress) {
