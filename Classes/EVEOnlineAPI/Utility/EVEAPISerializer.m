@@ -24,8 +24,15 @@
 - (id) initWithRootClass:(Class) aClass {
 	if (self = [super init]) {
 		self.rootClass = aClass;
+		NSMutableIndexSet* statusCodes = [self.acceptableStatusCodes mutableCopy];
+		[statusCodes addIndex:403];
+		self.acceptableStatusCodes = statusCodes;
 	}
 	return self;
+}
+
+- (void) setAcceptableStatusCodes:(NSIndexSet *)acceptableStatusCodes {
+	[super setAcceptableStatusCodes:acceptableStatusCodes];
 }
 
 - (nullable id) responseObjectForResponse:(NSURLResponse *)response data:(NSData *)data error:(NSError *__autoreleasing  _Nullable *)error {
@@ -40,7 +47,9 @@
 	else {
 		if (error)
 			*error = api.error;
-		return nil;
+		EVEResult* result = [EVEResult new];
+		result.eveapi = api;
+		return result;
 	}
 }
 

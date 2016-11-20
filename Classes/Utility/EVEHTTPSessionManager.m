@@ -86,36 +86,32 @@
 			if ([responseObject isKindOfClass:[NSData class]] && self.responseSerializer)
 				responseObject = [responseSerializer responseObjectForResponse:task.response data:responseObject error:&error];
 			deserializedObject = responseObject;
-			
-			if (error) {
-				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
-			}
-			else {
-				for (NSProgress* progress in progressArray)
+
+			for (NSProgress* progress in progressArray)
 				progress.completedUnitCount = 100;
-				
-				if (responseObject)
+
+			if (error)
+				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"error":error});
+			else if (responseObject)
 				dispatch_set_context(dispatchGroup, (__bridge_retained void*)@{@"result":responseObject});
-				
-				NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*) task.response;
-				
-				NSDictionary* headers = [urlResponse allHeaderFields];
-				NSString* md5 = [task.currentRequest.URL md5];
-				NSString* etag = headers[@"Etag"];
-				
-				id<EVEHTTPCachedContent> cachedContent = [responseObject conformsToProtocol:@protocol(EVEHTTPCachedContent)] ? responseObject : nil;
-				
-				if (cachedContent) {
-					BOOL hasCacheDate = [cachedContent respondsToSelector:@selector(cacheDate)];
-					if (hasCacheDate) {
-						if (etag && [md5 isEqualToString:etag])
+			
+			NSHTTPURLResponse* urlResponse = (NSHTTPURLResponse*) task.response;
+			
+			NSDictionary* headers = [urlResponse allHeaderFields];
+			NSString* md5 = [task.currentRequest.URL md5];
+			NSString* etag = headers[@"Etag"];
+			
+			id<EVEHTTPCachedContent> cachedContent = [responseObject conformsToProtocol:@protocol(EVEHTTPCachedContent)] ? responseObject : nil;
+			
+			if (cachedContent) {
+				BOOL hasCacheDate = [cachedContent respondsToSelector:@selector(cacheDate)];
+				if (hasCacheDate) {
+					if (etag && [md5 isEqualToString:etag])
 						cachedContent.cacheDate = [[NSDateFormatter rfc822DateFormatter] dateFromString:headers[@"Cache-Date"]];
-						else
+					else
 						cachedContent.cacheDate = [NSDate date];
-					}
 				}
 			}
-			
 			
 			dispatch_group_leave(dispatchGroup);
 			@synchronized(dispatchGroups) {
@@ -139,10 +135,11 @@
 		};
 		
 		void (^progress)(NSProgress*) = ^(NSProgress* progress) {
-			for (NSProgress* ite in progressArray)
-				ite.completedUnitCount = progress.fractionCompleted * 100;
+			for (NSProgress* item in progressArray)
+				item.completedUnitCount = progress.fractionCompleted * 100;
 		};
 		
+		self.responseSerializer.acceptableStatusCodes = responseSerializer.acceptableStatusCodes;
 		NSURLSessionDataTask* task;
 		if ([method isEqualToString:@"POST"])
 			task = [self POST:URLString parameters:parameters progress:progress success:success failure:failure];
