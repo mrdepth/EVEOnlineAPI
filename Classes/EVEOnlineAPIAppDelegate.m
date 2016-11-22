@@ -34,13 +34,13 @@
 	NSURLCache* cache = [[NSURLCache alloc] initWithMemoryCapacity:1024*1024 diskCapacity:1024*1024*50 diskPath:@"EVECache"];
 	[NSURLCache setSharedURLCache:cache];
 
-	EVEAPIKey* apiKey = [[EVEAPIKey alloc] initWithKeyID:KEY_ID vCode:V_CODE characterID:0 corporate:NO];
+	/*EVEAPIKey* apiKey = [[EVEAPIKey alloc] initWithKeyID:KEY_ID vCode:V_CODE characterID:0 corporate:NO];
 	NSProgress *p = [NSProgress progressWithTotalUnitCount:1];
 	[p becomeCurrentWithPendingUnitCount:1];
 	[[EVEOnlineAPI apiWithAPIKey:apiKey cachePolicy:NSURLRequestUseProtocolCachePolicy] accountStatusWithCompletionBlock:^(EVEAccountStatus *result, NSError *error) {
 		
 	}];
-	[p resignCurrent];
+	[p resignCurrent];*/
 	
 	/*self.window.rootViewController = [UIViewController new];
 	return YES;
@@ -80,7 +80,7 @@
 		NSLog(@"%@", result);
 	} progressBlock:nil];*/
 	dispatch_async(dispatch_get_main_queue(), ^{
-		/*NSString* file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"token.plist"];
+		NSString* file = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"token.plist"];
 		CRToken* token = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
 		token = nil;
 		CRAPI* crapi = [[CRAPI alloc] initWithCachePolicy:NSURLRequestUseProtocolCachePolicy
@@ -94,7 +94,7 @@
 				if (token)
 					[NSKeyedArchiver archiveRootObject:token toFile:file];
 				NSLog(@"%@", error);
-			}];*/
+			}];
 //		else
 //			[crapi loadFittingsWithCompletionBlock:^(NSArray<CRFitting *> *result, NSError *error) {
 //				[crapi postFitting:result[0] withCompletionBlock:^(BOOL completed, NSError *error) {
