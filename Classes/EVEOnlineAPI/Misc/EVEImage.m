@@ -44,6 +44,10 @@
 		return [NSURL URLWithString:[NSString stringWithFormat:@"https://imageserver.eveonline.com/Alliance/%d_%d.png", allianceID, size]];
 }
 
++ (NSURL*) renderImageURLWithTypeID: (int32_t) typeID size: (EVEImageSize) size error:(NSError **)errorPtr {
+	return [NSURL URLWithString:[NSString stringWithFormat:@"https://imageserver.eveonline.com/Render/%d_%d.png", typeID, size]];
+}
+
 + (id) characterPortraitImageWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr {
 	NSData *data = [NSData dataWithContentsOfURL:[self characterPortraitURLWithCharacterID:characterID size:size error:errorPtr]];
 	return [[EVEImage alloc] initWithData:data];

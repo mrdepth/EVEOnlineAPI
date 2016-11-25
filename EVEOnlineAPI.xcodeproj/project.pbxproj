@@ -530,6 +530,8 @@
 		12AA31BD140BC26700B33BE8 /* EVEContractBids.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA31BC140BC26700B33BE8 /* EVEContractBids.m */; };
 		12AA31C6140BC4A100B33BE8 /* EVEContractItems.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AA31C5140BC4A100B33BE8 /* EVEContractItems.m */; };
 		12BA6FC6176AF1810090E12D /* EVEDBObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 12BA6FC5176AF1810090E12D /* EVEDBObject.m */; };
+		12C2CEAB1DE812CD0081C273 /* NSArray+Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = 12C2CEA01DE812C00081C273 /* NSArray+Hash.h */; };
+		12C2CEAC1DE812CE0081C273 /* NSArray+Hash.h in Headers */ = {isa = PBXBuildFile; fileRef = 12C2CEA01DE812C00081C273 /* NSArray+Hash.h */; };
 		12CAF64311B4015F008696F3 /* EVECharacters.m in Sources */ = {isa = PBXBuildFile; fileRef = 12CAF64211B4015F008696F3 /* EVECharacters.m */; };
 		12CAF6EE11B40B9A008696F3 /* EVEAccountBalance.m in Sources */ = {isa = PBXBuildFile; fileRef = 12CAF6ED11B40B9A008696F3 /* EVEAccountBalance.m */; };
 		12D30A1C11B674B800D772CF /* EVECharacterSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 12D30A1B11B674B800D772CF /* EVECharacterSheet.m */; };
@@ -824,6 +826,8 @@
 		12AA31C5140BC4A100B33BE8 /* EVEContractItems.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEContractItems.m; sourceTree = "<group>"; };
 		12BA6FC4176AF1810090E12D /* EVEDBObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEDBObject.h; sourceTree = "<group>"; };
 		12BA6FC5176AF1810090E12D /* EVEDBObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVEDBObject.m; sourceTree = "<group>"; };
+		12C2CEA01DE812C00081C273 /* NSArray+Hash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Hash.h"; sourceTree = "<group>"; };
+		12C2CEA11DE812C00081C273 /* NSArray+Hash.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSArray+Hash.mm"; sourceTree = "<group>"; };
 		12CAF64111B4015F008696F3 /* EVECharacters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVECharacters.h; sourceTree = "<group>"; };
 		12CAF64211B4015F008696F3 /* EVECharacters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EVECharacters.m; sourceTree = "<group>"; };
 		12CAF64E11B402BA008696F3 /* EVEGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EVEGlobals.h; sourceTree = "<group>"; };
@@ -1464,6 +1468,8 @@
 			children = (
 				12FFE9F91DA6D088000E0C3F /* NSDictionary+Hash.h */,
 				12FFE9FA1DA6D088000E0C3F /* NSDictionary+Hash.mm */,
+				12C2CEA01DE812C00081C273 /* NSArray+Hash.h */,
+				12C2CEA11DE812C00081C273 /* NSArray+Hash.mm */,
 			);
 			path = Hash;
 			sourceTree = "<group>";
@@ -1935,6 +1941,7 @@
 				12350F8D1C73A33D0015D140 /* EVETitles.h in Headers */,
 				12350F8E1C73A33D0015D140 /* EVECorpWalletJournal.h in Headers */,
 				12350F8F1C73A33D0015D140 /* EVECorpWalletTransactions.h in Headers */,
+				12C2CEAC1DE812CE0081C273 /* NSArray+Hash.h in Headers */,
 				12350F901C73A33D0015D140 /* NAPIUpload.h in Headers */,
 				12350F911C73A33D0015D140 /* EVEAllianceList.h in Headers */,
 				12350F921C73A33D0015D140 /* EVECharacterAffiliation.h in Headers */,
@@ -2063,6 +2070,7 @@
 				1248CE2D1B7DDBB4000266BE /* EVETitles.h in Headers */,
 				1248CE2E1B7DDBB4000266BE /* EVECorpWalletJournal.h in Headers */,
 				1248CE2F1B7DDBB4000266BE /* EVECorpWalletTransactions.h in Headers */,
+				12C2CEAB1DE812CD0081C273 /* NSArray+Hash.h in Headers */,
 				128257381BCFE87E00BC1F56 /* NAPIUpload.h in Headers */,
 				1248CE301B7DDBB4000266BE /* EVEAllianceList.h in Headers */,
 				1248CE311B7DDBB4000266BE /* EVECharacterAffiliation.h in Headers */,

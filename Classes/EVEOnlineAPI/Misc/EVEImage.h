@@ -42,6 +42,7 @@ typedef NS_ENUM(int32_t, EVEImageSize) {
 + (NSURL*) characterPortraitURLWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
 + (NSURL*) corporationLogoURLWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
 + (NSURL*) allianceLogoURLWithAllianceID: (int32_t) allianceID size: (EVEImageSize) size error:(NSError **)errorPtr;
++ (NSURL*) renderImageURLWithTypeID: (int32_t) typeID size: (EVEImageSize) size error:(NSError **)errorPtr;
 
 + (id) characterPortraitImageWithCharacterID: (int32_t) characterID size: (EVEImageSize) size error:(NSError **)errorPtr;
 + (id) corporationLogoImageWithCorporationID: (int32_t) corporationID size: (EVEImageSize) size error:(NSError **)errorPtr;
