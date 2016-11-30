@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "CBD3C72D1EC244FEC895CDE83582355773BC1B4F" : 9223372036854775807,
+    "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "1C12097D-8610-48DC-8249-4B51FB26A11C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "CBD3C72D1EC244FEC895CDE83582355773BC1B4F" : "..",
+    "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0" : "EVEOnlineAPI\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "apidump",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "apidump\/apidump.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:mrdepth\/EVEOnlineAPI.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mrdepth\/Neocom.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CBD3C72D1EC244FEC895CDE83582355773BC1B4F"
+    }
+  ]
+}
