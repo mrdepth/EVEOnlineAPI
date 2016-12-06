@@ -18,10 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
-		var api = EVEOnlineAPI(apiKey:EVEAPIKey(keyID: 519, vCode: "IiEPrrQTAdQtvWA2Aj805d0XBMtOyWBCc0zE57SGuqinJLKGTNrlinxc6v407Vmf"))
+		let api = EVEOnlineAPI(apiKey:EVEAPIKey(keyID: 519, vCode: "IiEPrrQTAdQtvWA2Aj805d0XBMtOyWBCc0zE57SGuqinJLKGTNrlinxc6v407Vmf"))
 		api.accountStatus { (result, error) in
 			print("\(result)")
 		}
+		
+		CRAPI.authenticate(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", callbackURL: URL(string: "neocom://sso")!, scope: CRAPIScope.all, completionBlock: {(token, error) -> Void in
+			print("\(error)")
+		})
 		return true
 	}
 
@@ -45,6 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+	}
+	
+	func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+		return CRAPI.handleOpenURL(url)
 	}
 
 
