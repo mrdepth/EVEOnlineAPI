@@ -136,7 +136,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func locations(ids:[Int], completionBlock:((EVELocations?, Error?) -> Void)?) {
-		var s = ids.map {(i) in
+		let s = ids.map {(i) in
 			return String(i)
 		}.joined(separator: ",")
 		
@@ -144,7 +144,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func mailBodies(ids:[Int], completionBlock:((EVEMailBodies?, Error?) -> Void)?) {
-		var s = ids.map {(i) in
+		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
 		
@@ -176,7 +176,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func notificationTexts(ids:[Int], completionBlock:((EVENotificationTexts?, Error?) -> Void)?) {
-		var s = ids.map {(i) in
+		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
 
@@ -327,7 +327,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func characterAffiliation(ids:[Int], completionBlock:((EVECharacterAffiliation?, Error?) -> Void)?) {
-		var s = ids.map {(i) in
+		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
 
@@ -335,7 +335,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func characterID(names:[String], completionBlock:((EVECharacterID?, Error?) -> Void)?) {
-		var s = names.joined(separator: ",")
+		let s = names.joined(separator: ",")
 		
 		get("CharacterID", scope: "Eve", parameters: ["names":s], completionBlock: completionBlock)
 	}
@@ -345,7 +345,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func characterName(ids:[Int], completionBlock:((EVECharacterName?, Error?) -> Void)?) {
-		var s = ids.map {(i) in
+		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
 		
@@ -369,7 +369,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 
 	public func ownerID(names:[String], completionBlock:((EVEOwnerID?, Error?) -> Void)?) {
-		var s = names.joined(separator: ",")
+		let s = names.joined(separator: ",")
 
 		get("OwnerID", scope: "Eve", parameters: ["names":s], completionBlock: completionBlock)
 	}
@@ -383,7 +383,7 @@ public class EVEOnlineAPI: NSObject {
 	}
 	
 	public func typeName(ids:[Int], completionBlock:((EVETypeName?, Error?) -> Void)?) {
-		var s = ids.map {(i) in
+		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
 		

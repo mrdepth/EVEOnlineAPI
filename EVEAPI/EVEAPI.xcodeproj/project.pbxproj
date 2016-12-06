@@ -19,6 +19,7 @@
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		1288F01E1DEB8C8600FD7FBE /* EVEObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */; };
 		1288F0211DEB8D8B00FD7FBE /* EVEServerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */; };
+		1295ED3F1DF6E33A0048C895 /* CRAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED3E1DF6E33A0048C895 /* CRAPI.swift */; };
 		12A266941DED805E00DC8291 /* EVEBlueprints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266931DED805E00DC8291 /* EVEBlueprints.swift */; };
 		12A266961DED815300DC8291 /* EVEBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266951DED815300DC8291 /* EVEBookmarks.swift */; };
 		12A266981DED85F000DC8291 /* EVECalendarEventAttendees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */; };
@@ -115,6 +116,7 @@
 		1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParserExtension.swift; sourceTree = "<group>"; };
 		1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEObject.swift; sourceTree = "<group>"; };
 		1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEServerStatus.swift; sourceTree = "<group>"; };
+		1295ED3E1DF6E33A0048C895 /* CRAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRAPI.swift; sourceTree = "<group>"; };
 		12A266931DED805E00DC8291 /* EVEBlueprints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBlueprints.swift; sourceTree = "<group>"; };
 		12A266951DED815300DC8291 /* EVEBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBookmarks.swift; sourceTree = "<group>"; };
 		12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVECalendarEventAttendees.swift; sourceTree = "<group>"; };
@@ -319,6 +321,14 @@
 			name = Server;
 			sourceTree = "<group>";
 		};
+		1295ED3C1DF6E1B50048C895 /* CREST */ = {
+			isa = PBXGroup;
+			children = (
+				1295ED3E1DF6E33A0048C895 /* CRAPI.swift */,
+			);
+			name = CREST;
+			sourceTree = "<group>";
+		};
 		12A266DB1DEE1D8C00DC8291 /* Corp */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,6 +421,7 @@
 			children = (
 				1288F01A1DEB8C3E00FD7FBE /* Utility */,
 				1288F01B1DEB8C5300FD7FBE /* EVEAPI */,
+				1295ED3C1DF6E1B50048C895 /* CREST */,
 				12AB654F1DE9A994003AA683 /* EVEAPI.h */,
 				12AB65501DE9A994003AA683 /* Info.plist */,
 			);
@@ -554,6 +565,7 @@
 				1238256C1DECB6D90031A884 /* EVECharacters.swift in Sources */,
 				12A266CC1DEE07F300DC8291 /* EVESkillInTraining.swift in Sources */,
 				12AB65771DE9ABF3003AA683 /* EVEHTTPCachedContent.swift in Sources */,
+				1295ED3F1DF6E33A0048C895 /* CRAPI.swift in Sources */,
 				12A266D01DEE09CD00DC8291 /* EVESkills.swift in Sources */,
 				12AB65721DE9AAFF003AA683 /* EVEHTTPSessionManager.swift in Sources */,
 				12A267191DEEC1B700DC8291 /* EVEJumps.swift in Sources */,
@@ -621,6 +633,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -674,6 +687,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

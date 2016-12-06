@@ -8,12 +8,12 @@
       location = "group:ThirdParty/AFNetworking/AFNetworking.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:/Users/shimanski/work/tmp/EVEAPI/Playground.playground">
-   </FileRef>
-   <FileRef
       location = "group:apidump/apidump.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Develop/Develop.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Playground.playground">
    </FileRef>
 </Workspace>
