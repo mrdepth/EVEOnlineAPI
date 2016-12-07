@@ -9,19 +9,33 @@
 import Foundation
 
 extension DateFormatter {
-	class func rfc822DateFormatter() -> DateFormatter {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "EEE, d MMM yyyy HH:mm:ss zzz"
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-		return dateFormatter
+	class var rfc822DateFormatter: DateFormatter {
+		get {
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "EEE, d MMM yyyy HH:mm:ss zzz"
+			dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+			dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+			return dateFormatter
+		}
 	}
 	
-	class func eveDateFormatter() -> DateFormatter {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-		return dateFormatter
+	class var eveDateFormatter: DateFormatter {
+		get {
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+			dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+			dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+			return dateFormatter
+		}
+	}
+	
+	class var crestDateFormatter: DateFormatter {
+		get {
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
+			dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+			dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+			return dateFormatter
+		}
 	}
 }

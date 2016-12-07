@@ -20,6 +20,11 @@
 		1288F01E1DEB8C8600FD7FBE /* EVEObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */; };
 		1288F0211DEB8D8B00FD7FBE /* EVEServerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */; };
 		1295ED3F1DF6E33A0048C895 /* CRAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED3E1DF6E33A0048C895 /* CRAPI.swift */; };
+		1295ED491DF8169F0048C895 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth.swift */; };
+		1295ED4B1DF843740048C895 /* CRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4A1DF843740048C895 /* CRResult.swift */; };
+		1295ED4D1DF844780048C895 /* CRFittingCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4C1DF844780048C895 /* CRFittingCollection.swift */; };
+		1295ED4F1DF846130048C895 /* CRType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4E1DF846130048C895 /* CRType.swift */; };
+		1295ED521DF85CCA0048C895 /* ESAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED511DF85CCA0048C895 /* ESAPI.swift */; };
 		12A266941DED805E00DC8291 /* EVEBlueprints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266931DED805E00DC8291 /* EVEBlueprints.swift */; };
 		12A266961DED815300DC8291 /* EVEBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266951DED815300DC8291 /* EVEBookmarks.swift */; };
 		12A266981DED85F000DC8291 /* EVECalendarEventAttendees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */; };
@@ -117,6 +122,11 @@
 		1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEObject.swift; sourceTree = "<group>"; };
 		1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEServerStatus.swift; sourceTree = "<group>"; };
 		1295ED3E1DF6E33A0048C895 /* CRAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRAPI.swift; sourceTree = "<group>"; };
+		1295ED481DF8169F0048C895 /* OAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
+		1295ED4A1DF843740048C895 /* CRResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRResult.swift; sourceTree = "<group>"; };
+		1295ED4C1DF844780048C895 /* CRFittingCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRFittingCollection.swift; sourceTree = "<group>"; };
+		1295ED4E1DF846130048C895 /* CRType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRType.swift; sourceTree = "<group>"; };
+		1295ED511DF85CCA0048C895 /* ESAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAPI.swift; sourceTree = "<group>"; };
 		12A266931DED805E00DC8291 /* EVEBlueprints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBlueprints.swift; sourceTree = "<group>"; };
 		12A266951DED815300DC8291 /* EVEBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBookmarks.swift; sourceTree = "<group>"; };
 		12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVECalendarEventAttendees.swift; sourceTree = "<group>"; };
@@ -280,6 +290,7 @@
 				12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */,
 				12AB65711DE9AAFF003AA683 /* EVEHTTPSessionManager.swift */,
 				12AB65761DE9ABF3003AA683 /* EVEHTTPCachedContent.swift */,
+				1295ED481DF8169F0048C895 /* OAuth.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -325,8 +336,19 @@
 			isa = PBXGroup;
 			children = (
 				1295ED3E1DF6E33A0048C895 /* CRAPI.swift */,
+				1295ED4A1DF843740048C895 /* CRResult.swift */,
+				1295ED4C1DF844780048C895 /* CRFittingCollection.swift */,
+				1295ED4E1DF846130048C895 /* CRType.swift */,
 			);
 			name = CREST;
+			sourceTree = "<group>";
+		};
+		1295ED501DF85CAF0048C895 /* ESI */ = {
+			isa = PBXGroup;
+			children = (
+				1295ED511DF85CCA0048C895 /* ESAPI.swift */,
+			);
+			name = ESI;
 			sourceTree = "<group>";
 		};
 		12A266DB1DEE1D8C00DC8291 /* Corp */ = {
@@ -422,6 +444,7 @@
 				1288F01A1DEB8C3E00FD7FBE /* Utility */,
 				1288F01B1DEB8C5300FD7FBE /* EVEAPI */,
 				1295ED3C1DF6E1B50048C895 /* CREST */,
+				1295ED501DF85CAF0048C895 /* ESI */,
 				12AB654F1DE9A994003AA683 /* EVEAPI.h */,
 				12AB65501DE9A994003AA683 /* Info.plist */,
 			);
@@ -531,6 +554,7 @@
 				12A266AA1DEDC48000DC8291 /* EVEIndustryJobs.swift in Sources */,
 				123825611DEC199E0031A884 /* EVEAPIObject.swift in Sources */,
 				12A2671B1DEEC20D00DC8291 /* EVEKills.swift in Sources */,
+				1295ED4F1DF846130048C895 /* CRType.swift in Sources */,
 				12A266D61DEE0DFA00DC8291 /* EVEWalletJournal.swift in Sources */,
 				12A266BE1DEDFBF100DC8291 /* EVENotifications.swift in Sources */,
 				12A266A21DEDB8B300DC8291 /* EVEContactNotifications.swift in Sources */,
@@ -540,6 +564,7 @@
 				12A2670E1DEEB82000DC8291 /* EVEOwnerID.swift in Sources */,
 				12A266CE1DEE08DA00DC8291 /* EVESkillQueue.swift in Sources */,
 				12A266CA1DEE074C00DC8291 /* EVEResearch.swift in Sources */,
+				1295ED4D1DF844780048C895 /* CRFittingCollection.swift in Sources */,
 				12A266E51DEE2EA400DC8291 /* EVECorpMedals.swift in Sources */,
 				123825841DED7B440031A884 /* EVEAssetList.swift in Sources */,
 				12A266AC1DEDC94200DC8291 /* EVEIndustryJobsHistory.swift in Sources */,
@@ -557,6 +582,7 @@
 				12A266D21DEE0AD900DC8291 /* EVECharStandings.swift in Sources */,
 				12A266B01DEDCAC900DC8291 /* EVEKillMails.swift in Sources */,
 				12A266DF1DEE1FCB00DC8291 /* EVECorporationSheet.swift in Sources */,
+				1295ED4B1DF843740048C895 /* CRResult.swift in Sources */,
 				12A266E91DEE311400DC8291 /* EVEMemberSecurity.swift in Sources */,
 				12A2669A1DED8B7C00DC8291 /* EVECharacterSheet.swift in Sources */,
 				12A266FE1DEE433F00DC8291 /* EVEAllianceList.swift in Sources */,
@@ -571,6 +597,7 @@
 				12A267191DEEC1B700DC8291 /* EVEJumps.swift in Sources */,
 				12A2671D1DEEC2C800DC8291 /* EVESovereignty.swift in Sources */,
 				12A266B41DEDD06500DC8291 /* EVEMailBodies.swift in Sources */,
+				1295ED521DF85CCA0048C895 /* ESAPI.swift in Sources */,
 				12A267251DEEC7A900DC8291 /* EVEOnlineAPI.swift in Sources */,
 				12A2670C1DEEB20000DC8291 /* EVEFacWarTopStats.swift in Sources */,
 				12A2669E1DED9DD500DC8291 /* EVEClones.swift in Sources */,
@@ -601,6 +628,7 @@
 				12A266A61DEDBAAF00DC8291 /* EVEContractItems.swift in Sources */,
 				12A266A41DEDBA0B00DC8291 /* EVEContractBids.swift in Sources */,
 				123825861DED7BD60031A884 /* EVEConstants.swift in Sources */,
+				1295ED491DF8169F0048C895 /* OAuth.swift in Sources */,
 				12A266F11DEE37C300DC8291 /* EVEOutpostServiceDetail.swift in Sources */,
 				12A266DA1DEE1C4800DC8291 /* EVEFacWarStats.swift in Sources */,
 				12A266F31DEE384400DC8291 /* EVEShareholders.swift in Sources */,

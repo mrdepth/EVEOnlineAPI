@@ -9,64 +9,17 @@
 import Foundation
 import AFNetworking
 
-public class CRToken: NSObject, NSSecureCoding {
-	public var accessToken: String = ""
-	public var refreshToken: String = ""
-	public var tokenType: String = ""
-	public var expiresOn: Date?
-	public var characterID: Int = 0
-	public var characterName: String = ""
-	public var expired: Bool {
-		get {
-			if let expiresOn = expiresOn {
-				return expiresOn <= Date()
-			}
-			else {
-				return true
-			}
-		}
-	}
-	
-	public init() {
-		super.init()
-	}
-	
-	public func encode(with aCoder: NSCoder) {
-		aCoder.encode(accessToken, forKey:"accessToken")
-		aCoder.encode(refreshToken, forKey:"refreshToken")
-		aCoder.encode(tokenType, forKey:"tokenType")
-		aCoder.encode(expiresOn, forKey:"expiresOn")
-		aCoder.encode(characterID, forKey: "characterID")
-		aCoder.encode(characterName, forKey: "characterName")
-	}
-	
-	public required init?(coder aDecoder: NSCoder) {
-		guard let accessToken = aDecoder.decodeObject(forKey: "accessToken") as? String else {return nil}
-		guard let refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String else {return nil}
-		guard let tokenType = aDecoder.decodeObject(forKey: "tokenType") as? String else {return nil}
-		guard let expiresOn = aDecoder.decodeObject(forKey: "expiresOn") as? Date else {return nil}
-		characterID = aDecoder.decodeInteger(forKey: "characterID")
-		guard let characterName = aDecoder.decodeObject(forKey: "characterName") as? String else {return nil}
-		
-		self.accessToken = accessToken
-		self.refreshToken = refreshToken
-		self.tokenType = tokenType
-		self.expiresOn = expiresOn
-		self.characterName = characterName
-		super.init()
-	}
-	
-	public static var supportsSecureCoding: Bool {
-		get {
-			return true
-		}
-	}
+public enum CRAPIError: Error {
+	case Internal
+	case InvalidResponse
+	case Unauthorized(String?)
+	case Server(String?, String?)
 }
 
-public struct CRAPIScope {
-	public static let characterFittingsRead = CRAPIScope("characterFittingsRead")
-	public static let characterFittingsWrite = CRAPIScope("characterFittingsWrite")
-	public static let characterKillsRead = CRAPIScope("characterKillsRead")
+public struct CRScope {
+	public static let characterFittingsRead = CRScope("characterFittingsRead")
+	public static let characterFittingsWrite = CRScope("characterFittingsWrite")
+	public static let characterKillsRead = CRScope("characterKillsRead")
 	
 	let rawValue: String
 	
@@ -74,139 +27,194 @@ public struct CRAPIScope {
 		rawValue = value
 	}
 	
-	public static var all: [CRAPIScope]  {
+	public static var all: [CRScope]  {
 		get {
-			return [CRAPIScope.characterFittingsRead]
+			return [.characterFittingsRead, .characterFittingsWrite, .characterKillsRead]
 		}
 	}
 }
 
-private struct CRState {
-	let clientID: String
-	let secretKey: String
-	let uuid: String
-	let completionBlock: ((_ token: CRToken?, _ error: Error?) -> Void)?
-}
-
 public class CRAPI: NSObject {
-	public enum CRAPIError: Error {
-		case Internal
-		case AuthenticationTimeout
-		case InvalidServerResponse
-		case Server(String)
-	}
-	
+
+	public let cachePolicy: URLRequest.CachePolicy
+	public let token: OAToken?
+
 	public lazy var sessionManager: EVEHTTPSessionManager = {
-		let manager = EVEHTTPSessionManager(baseURL: URL(string: "https://crest-tq.eveonline.com")!, sessionConfiguration: nil)
+		let manager = EVEHTTPSessionManager(baseURL: URL(string: "https://crest.eveonline.com")!, sessionConfiguration: nil)
+		manager.responseSerializer = AFJSONResponseSerializer()
+		manager.requestSerializer = AFHTTPRequestSerializer()
+		manager.requestSerializer.cachePolicy = self.cachePolicy
+		if let token = self.token {
+			manager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
+		}
 		return manager
 	}()
-	
-	public let clientID: String?
-	public let secretKey: String?
-	public let token: CRToken?
-	public let callbackURL: URL?
-	public let cachePolicy: URLRequest.CachePolicy
-	
-	public init(clientID: String, secretKey: String, token: CRToken?, callbackURL: URL, cachePolicy: URLRequest.CachePolicy) {
-		self.clientID = clientID
-		self.secretKey = secretKey
-		self.token = token
-		self.callbackURL = callbackURL
+
+	public init(token: OAToken?, cachePolicy: URLRequest.CachePolicy) {
+		if token?.tokenType != nil && token?.accessToken != nil {
+			self.token = token
+		}
+		else {
+			self.token = nil
+		}
 		self.cachePolicy = cachePolicy
 		super.init()
 	}
 	
-	private static var state: CRState?
+	public class func oauth(clientID: String, secretKey: String, callbackURL: URL, scope: [CRScope]) -> OAuth {
+		let scope = scope.map {$0.rawValue}
+		return OAuth(clientID: clientID, secretKey: secretKey, callbackURL: callbackURL, scope: scope, realm: nil)
+	}
 	
-	public class func authenticate(clientID: String, secretKey: String, callbackURL: URL, scope: [CRAPIScope], completionBlock:((_ token: CRToken?, _ error: Error?) -> Void)?) {
-		let scope = scope.map {$0.rawValue}.joined(separator: ",")
-		
-		if let currentState = state, let completionBlock = currentState.completionBlock {
-			completionBlock(nil, CRAPIError.AuthenticationTimeout)
-		}
-		
-		let currentState = CRState(clientID: clientID, secretKey: secretKey, uuid: UUID().uuidString, completionBlock: completionBlock)
-		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
-		if let url = URL(string:"https://login-tq.eveonline.com/oauth/authorize/?response_type=code&redirect_uri=\(callback!)&client_id=\(clientID)&scope=\(scope)&state=\(currentState.uuid)") {
-			state = currentState
-			UIApplication.shared.open(url, options: [:], completionHandler: nil)
-			let center = NotificationCenter.default
-			var observer: NSObjectProtocol?
-			observer = center.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: nil, queue: OperationQueue.main, using: { (note) in
-				center.removeObserver(observer)
-			})
+	public func fittings(completionBlock:((CRFittingCollection?, Error?) -> Void)?) {
+		if let token = token {
+			get("characters/\(token.characterID)/fittings/", parameters: nil, completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(nil, CRAPIError.Internal)
+			completionBlock?(nil, CRAPIError.Unauthorized(nil))
+		}
+		//get("CalendarEventAttendees", scope: "Char", parameters: nil, completionBlock: completionBlock)
+	}
+	
+	
+	//MARK: Private
+	
+	private func validate<T:CRResult>(result: Any?) throws -> T {
+		if let result = result as? [String: Any] {
+			if let exceptionType = result["exceptionType"] as? String {
+				let message = result["message"] as? String
+				switch exceptionType {
+				case "UnauthorizedError":
+					throw CRAPIError.Unauthorized(message)
+				default:
+					throw CRAPIError.Server(exceptionType, message)
+				}
+			}
+			else if let obj = T.init(dictionary:result) {
+				return obj
+			}
+			else {
+				throw CRAPIError.InvalidResponse
+			}
+		}
+		else {
+			throw CRAPIError.Internal
 		}
 	}
 	
-	public class func handleOpenURL(_ url: URL) -> Bool {
-		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
-		guard let query = components.queryItems else {return false}
-		var code: String?
-		var uuid: String?
-		
-		for item in query {
-			if item.name == "code" {
-				code = item.value
+	private func get<T:CRResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((T?, Error?) -> Void)?) -> Void {
+		let contentType = "\(T.contentType); charset=utf-8"
+		self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")
+		self.sessionManager.responseSerializer.acceptableContentTypes = nil
+		self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
+			if let error = error {
+				completionBlock?(nil, error)
 			}
-			else if item.name == "state" {
-				uuid = item.value
-			}
-		}
-		
-		if let code = code, let uuid = uuid, let state = state, state.uuid == uuid {
-			CRAPI.state = nil
-			
-			let session = AFHTTPSessionManager(baseURL: URL(string:"https://login-tq.eveonline.com"))
-
-			let auth = "\(state.clientID):\(state.secretKey)".data(using: .utf8)?.base64EncodedString()
-			session.requestSerializer = AFJSONRequestSerializer()
-			session.requestSerializer.setValue("Basic \(auth!)", forHTTPHeaderField: "Authorization")
-			
-			session.responseSerializer = AFJSONResponseSerializer()
-			var acceptableStatusCodes = session.responseSerializer.acceptableStatusCodes
-			acceptableStatusCodes?.insert(400)
-			session.responseSerializer.acceptableStatusCodes = acceptableStatusCodes
-			
-			session.post("oauth/token", parameters: ["grant_type": "authorization_code", "code": code], progress: nil, success: { (task, result) in
+			else {
 				do {
-					if let result = result as? [String: Any] {
-						if let error = result["error_description"] as? String {
-							throw CRAPIError.Server(error)
-						}
-						else {
-							guard let accessToken = result["access_token"] as? String else {throw CRAPIError.InvalidServerResponse}
-							guard let refreshToken = result["refresh_token"] as? String else {throw CRAPIError.InvalidServerResponse}
-							guard let tokenType = result["token_type"] as? String else {throw CRAPIError.InvalidServerResponse}
-							guard let expiresIn = result["expires_in"] as? Double else {throw CRAPIError.InvalidServerResponse}
-							let expiresOn = Date.init(timeIntervalSinceNow: expiresIn)
-							
-							let token = CRToken()
-							token.accessToken = accessToken
-							token.refreshToken = refreshToken
-							token.tokenType = tokenType
-							token.expiresOn = expiresOn
-							verify
-						}
+					let obj: T = try self.validate(result: result)
+					completionBlock?(obj, nil)
+				}
+				catch CRAPIError.Unauthorized(let message) {
+					if let token = self.token {
+						token.refresh(completionBlock: { (error) in
+							if let error = error {
+								completionBlock?(nil, error)
+							}
+							else {
+								self.sessionManager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
+								self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")
+								self.sessionManager.responseSerializer.acceptableContentTypes = Set([T.contentType])
+								self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
+									if let error = error {
+										completionBlock?(nil, error)
+									}
+									else {
+										do {
+											let obj: T = try self.validate(result: result)
+											completionBlock?(obj, nil)
+										}
+										catch let error {
+											completionBlock?(nil, error)
+										}
+									}
+								})
+							}
+						})
 					}
 					else {
-						throw CRAPIError.InvalidServerResponse
+						completionBlock?(nil, CRAPIError.Unauthorized(message))
 					}
 				}
 				catch let error {
-					state.completionBlock?(nil, error)
+					completionBlock?(nil, error ?? CRAPIError.Internal)
 				}
-				
-			}, failure: { (task, error) in
-				state.completionBlock?(nil, error)
-			})
-			
-			return true
-		}
-		else {
-			return false
-		}
+			}
+		})
 	}
 }
+
+/*
+Requested Scopes List
+characterAccountRead: Read your account subscription status.
+characterAssetsRead: Read your asset list.
+characterBookmarksRead: List your bookmarks and their coordinates.
+characterCalendarRead: Read your calendar events and attendees.
+characterChatChannelsRead: List chat channels you own or operate.
+characterClonesRead: List your jump clones, implants, attributes, and jump fatigue timer.
+characterContactsRead: Allows access to reading your characters contacts.
+characterContactsWrite: Allows applications to add, modify, and delete contacts for your character.
+characterContractsRead: Read your contracts.
+characterFactionalWarfareRead: Read your factional warfare statistics.
+characterFittingsRead: Allows an application to view all of your character's saved fits.
+characterFittingsWrite: Allows an application to create and delete the saved fits for your character.
+characterIndustryJobsRead: List your industry jobs.
+characterKillsRead: Read your kill mails.
+characterLocationRead: Allows an application to read your characters real time location in EVE.
+characterLoyaltyPointsRead: List loyalty points your character has for the different corporations.
+characterMailRead: Read your EVE Mail.
+characterMarketOrdersRead: Read your market orders.
+characterMedalsRead: List your public and private medals.
+characterNavigationWrite: Allows an application to set your ships autopilot destination.
+characterNotificationsRead: Receive in-game notifications.
+characterOpportunitiesRead: List the opportunities your character has completed.
+characterResearchRead: List your research agents working for you and research progress.
+characterSkillsRead: Read your skills and skill queue.
+characterStatsRead: Yearly aggregated stats about your character.
+characterWalletRead: Read your wallet status, transaction, and journal history.
+corporationAssetsRead: Read your corporation's asset list.
+corporationBookmarksRead: List your corporation's bookmarks and their coordinates.
+corporationContactsRead: Read your corporation’s contact list and standings
+corporationContractsRead: List your corporation's contracts.
+corporationFactionalWarfareRead: Read your corporation's factional warfare statistics.
+corporationIndustryJobsRead: List your corporation's industry jobs.
+corporationKillsRead: Read your corporation's kill mails.
+corporationMarketOrdersRead: List your corporation's market orders.
+corporationMedalsRead: List your corporation's issued medals.
+corporationMembersRead: List your corporation's members, their titles, and roles.
+corporationShareholdersRead: List your corporation's shareholders and their shares.
+corporationStructuresRead: List your corporation's structures, outposts, and starbases.
+corporationWalletRead: Read your corporation's wallet status, transaction, and journal history.
+fleetRead: Allows real time reading of your fleet information (members, ship types, etc.) if you're the boss of the fleet.
+fleetWrite: Allows the ability to invite, kick, and update fleet information if you're the boss of the fleet.
+esi-planets.manage_planets.v1: Allows reading a list of a characters planetary colonies, and the details of those colonies
+publicData: Allows access to public data.
+esi-assets.read_assets.v1: Allows reading a list of assets that the character owns
+esi-calendar.read_calendar_events.v1: Allows reading a character's calendar, including corporation events
+esi-bookmarks.read_character_bookmarks.v1: Allows reading of a character's bookmarks and bookmark folders
+esi-wallet.read_character_wallet.v1: Allows reading of a character's wallet, journal and transaction history.
+esi-clones.read_clones.v1: Allows reading the locations of a character's jump clones and their implants.
+esi-characters.read_contacts.v1: Allows reading of a characters contacts list, and calculation of CSPA charges
+esi-corporations.read_corporation_membership.v1: Allows reading a list of the ID's and roles of a character's fellow corporation members
+esi-killmails.read_killmails.v1: Allows reading of a character's kills and losses
+esi-location.read_location.v1: Allows reading of a character's active ship location
+esi-location.read_ship_type.v1: Allows reading of a character's active ship class
+esi-skills.read_skillqueue.v1: Allows reading of a character's currently training skill queue.
+esi-skills.read_skills.v1: Allows reading of a character's currently known skills.
+esi-universe.read_structures.v1: Allows querying the location and type of structures that the character has docking access at.
+remoteClientUI: Allows applications to control the UI of your EVE Online client.
+esi-calendar.respond_calendar_events.v1: Allows updating of a character's calendar event responses
+esi-search.search_structures.v1: Allows searching over all structures that a character can see in the structure browser.
+structureVulnUpdate: Allows updating your structures' vulnerability timers.
+
+*/

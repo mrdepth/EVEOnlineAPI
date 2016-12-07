@@ -31,7 +31,7 @@ protocol EVEScheme {
 public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 	
 	public func scheme() -> [String:EVESchemeElementType] {
-		return [String:EVESchemeElementType]()
+		return [:]
 	}
 	
 	public static var supportsSecureCoding: Bool {
@@ -46,7 +46,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init()
-		let dateFormatter = DateFormatter.eveDateFormatter()
+		let dateFormatter = DateFormatter.eveDateFormatter
 		for (key, type) in scheme() {
 			let property: String
 			let parser: Transformer?

@@ -45,7 +45,7 @@ public class EVEHTTPSessionManager: AFHTTPSessionManager {
 	
 	lazy private var dispatchGroups = [Int:DispatchGroup]()
 	lazy private var progresses = [Int:[Progress]]()
-	lazy private var dateFormatter = DateFormatter.rfc822DateFormatter()
+	lazy private var dateFormatter = DateFormatter.rfc822DateFormatter
 	lazy private var results = [Int:ResultHolder]()
 	
 	public func dataTask(HTTPMethod method: String, URLString: String, parameters: [String:Any]?, responseSerializer:AFHTTPResponseSerializer?, completionBlock: ((Any?, Error?) -> Void)?) -> Void {

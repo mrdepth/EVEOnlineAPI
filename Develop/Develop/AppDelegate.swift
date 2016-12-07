@@ -18,14 +18,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
-		let api = EVEOnlineAPI(apiKey:EVEAPIKey(keyID: 519, vCode: "IiEPrrQTAdQtvWA2Aj805d0XBMtOyWBCc0zE57SGuqinJLKGTNrlinxc6v407Vmf"))
+		/*let api = EVEOnlineAPI(apiKey:EVEAPIKey(keyID: 519, vCode: "IiEPrrQTAdQtvWA2Aj805d0XBMtOyWBCc0zE57SGuqinJLKGTNrlinxc6v407Vmf"))
 		api.accountStatus { (result, error) in
 			print("\(result)")
 		}
 		
-		CRAPI.authenticate(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", callbackURL: URL(string: "neocom://sso")!, scope: CRAPIScope.all, completionBlock: {(token, error) -> Void in
-			print("\(error)")
-		})
+		let token = OAToken(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
+		token.refreshToken = "HuBp_J9nxaqmtpXXb9HLTR0pimVFp_na9EGi4KsQDIWraCHzNmywDFjBcKdYe6hI0"
+		token.refresh { (error) in
+			var api: CRAPI?
+			api = CRAPI(token: token, cachePolicy: .useProtocolCachePolicy)
+			api?.fittings(completionBlock: { (result, error) in
+				api = nil
+				print("\(error)")
+			})
+			print ("accessToken: \(token.accessToken!)")
+			print ("characterID: \(token.characterID)")
+		}
+		
+//		var oauth: OAuth?
+//		oauth = CRAPI.oauth(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", callbackURL: URL(string: "neocom://sso")!, scope: CRAPIScope.all)
+//		oauth?.authenticate { (token, error) in
+//		}*/
+		
+		
+		/*var oauth: OAuth?
+		oauth = ESAPI.oauth(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", callbackURL: URL(string: "neocom://sso")!, scope: ESScope.all)
+		oauth?.authenticate(completionBlock: { (token, error) in
+			print ("accessToken: \(token!.accessToken!)")
+			print ("characterID: \(token!.characterID)")
+			print ("refreshToken: \(token!.refreshToken!)")
+			print ("tokenType: \(token!.tokenType!)")
+			oauth = nil
+
+		})*/
+		
+		let token = OAToken(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
+		token.refreshToken = "ne0FFEggMPQi951Z7cWssyMmryocHBS609vgQCtVt-k1"
+		token.refresh { (error) in
+			var api: ESAPI?
+			api = ESAPI(token: token, cachePolicy: .useProtocolCachePolicy)
+			api?.character(completionBlock: { (result, error) in
+				api = nil
+				print("\(error)")
+			})
+			print ("accessToken: \(token.accessToken!)")
+			print ("characterID: \(token.characterID)")
+		}
+
 		return true
 	}
 
@@ -52,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-		return CRAPI.handleOpenURL(url)
+		return OAuth.handleOpenURL(url)
 	}
 
 
