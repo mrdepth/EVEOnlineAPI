@@ -9,324 +9,324 @@
 import Foundation
 
 @objc public enum EVEAPIKeyType: Int {
-	case Account
-	case Character
-	case Corporation
+	case account
+	case character
+	case corporation
 	
 	init(_ string:String) {
 		switch string {
 		case "Account":
-			self = .Account
+			self = .account
 		case "Character":
-			self = .Character
+			self = .character
 		case "Corporation":
-			self = .Corporation
+			self = .corporation
 		default:
-			self = .Character
+			self = .character
 		}
 	}
 }
 
 @objc public enum EVEInventoryFlag: Int {
-	case None = 0
-	case Wallet = 1
-	case Factory = 2
-	case Hangar = 4
-	case Cargo = 5
-	case Briefcase = 6
-	case Skill = 7
-	case Reward = 8
-	case Connected = 9
-	case Disconnected = 10
-	case LoSlot0 = 11
-	case LoSlot1 = 12
-	case LoSlot2 = 13
-	case LoSlot3 = 14
-	case LoSlot4 = 15
-	case LoSlot5 = 16
-	case LoSlot6 = 17
-	case LoSlot7 = 18
-	case MedSlot0 = 19
-	case MedSlot1 = 20
-	case MedSlot2 = 21
-	case MedSlot3 = 22
-	case MedSlot4 = 23
-	case MedSlot5 = 24
-	case MedSlot6 = 25
-	case MedSlot7 = 26
-	case HiSlot0 = 27
-	case HiSlot1 = 28
-	case HiSlot2 = 29
-	case HiSlot3 = 30
-	case HiSlot4 = 31
-	case HiSlot5 = 32
-	case HiSlot6 = 33
-	case HiSlot7 = 34
-	case FixedSlot = 35
-	case Capsule = 56
-	case Pilot = 57
-	case Passenger = 58
-	case BoardingGate = 59
-	case Crew = 60
-	case SkillInTraining = 61
-	case CorpMarket = 62
-	case Locked = 63
-	case Unlocked = 64
-	case OfficeSlot1 = 70
-	case OfficeSlot2 = 71
-	case OfficeSlot3 = 72
-	case OfficeSlot4 = 73
-	case OfficeSlot5 = 74
-	case OfficeSlot6 = 75
-	case OfficeSlot7 = 76
-	case OfficeSlot8 = 77
-	case OfficeSlot9 = 78
-	case OfficeSlot10 = 79
-	case OfficeSlot11 = 80
-	case OfficeSlot12 = 81
-	case OfficeSlot13 = 82
-	case OfficeSlot14 = 83
-	case OfficeSlot15 = 84
-	case OfficeSlot16 = 85
-	case Bonus = 86
-	case DroneBay = 87
-	case Booster = 88
-	case Implant = 89
-	case ShipHangar = 90
-	case ShipOffline = 91
-	case RigSlot0 = 92
-	case RigSlot1 = 93
-	case RigSlot2 = 94
-	case RigSlot3 = 95
-	case RigSlot4 = 96
-	case RigSlot5 = 97
-	case RigSlot6 = 98
-	case RigSlot7 = 99
-	case FactoryOperation = 100
-	case CorpSAG2 = 116
-	case CorpSAG3 = 117
-	case CorpSAG4 = 118
-	case CorpSAG5 = 119
-	case CorpSAG6 = 120
-	case CorpSAG7 = 121
-	case SecondaryStorage = 122
-	case CaptainsQuarters = 123
-	case WisPromenade = 124
-	case SubSystem0 = 125
-	case SubSystem1 = 126
-	case SubSystem2 = 127
-	case SubSystem3 = 128
-	case SubSystem4 = 129
-	case SubSystem5 = 130
-	case SubSystem6 = 131
-	case SubSystem7 = 132
-	case SpecializedFuelBay = 133
-	case SpecializedOreHold = 134
-	case SpecializedGasHold = 135
-	case SpecializedMineralHold = 136
-	case SpecializedSalvageHold = 137
-	case SpecializedShipHold = 138
-	case SpecializedSmallShipHold = 139
-	case SpecializedMediumShipHold = 140
-	case SpecializedLargeShipHold = 141
-	case SpecializedIndustrialShipHold = 142
-	case SpecializedAmmoHold = 143
-	case StructureActive = 144
-	case StructureInactive = 145
-	case JunkyardReprocessed = 146
-	case JunkyardTrashed = 147
+	case none = 0
+	case wallet = 1
+	case factory = 2
+	case hangar = 4
+	case cargo = 5
+	case briefcase = 6
+	case skill = 7
+	case reward = 8
+	case connected = 9
+	case disconnected = 10
+	case loSlot0 = 11
+	case loSlot1 = 12
+	case loSlot2 = 13
+	case loSlot3 = 14
+	case loSlot4 = 15
+	case loSlot5 = 16
+	case loSlot6 = 17
+	case loSlot7 = 18
+	case medSlot0 = 19
+	case medSlot1 = 20
+	case medSlot2 = 21
+	case medSlot3 = 22
+	case medSlot4 = 23
+	case medSlot5 = 24
+	case medSlot6 = 25
+	case medSlot7 = 26
+	case hiSlot0 = 27
+	case hiSlot1 = 28
+	case hiSlot2 = 29
+	case hiSlot3 = 30
+	case hiSlot4 = 31
+	case hiSlot5 = 32
+	case hiSlot6 = 33
+	case hiSlot7 = 34
+	case fixedSlot = 35
+	case capsule = 56
+	case pilot = 57
+	case passenger = 58
+	case boardingGate = 59
+	case crew = 60
+	case skillInTraining = 61
+	case corpMarket = 62
+	case locked = 63
+	case unlocked = 64
+	case officeSlot1 = 70
+	case officeSlot2 = 71
+	case officeSlot3 = 72
+	case officeSlot4 = 73
+	case officeSlot5 = 74
+	case officeSlot6 = 75
+	case officeSlot7 = 76
+	case officeSlot8 = 77
+	case officeSlot9 = 78
+	case officeSlot10 = 79
+	case officeSlot11 = 80
+	case officeSlot12 = 81
+	case officeSlot13 = 82
+	case officeSlot14 = 83
+	case officeSlot15 = 84
+	case officeSlot16 = 85
+	case bonus = 86
+	case droneBay = 87
+	case booster = 88
+	case implant = 89
+	case shipHangar = 90
+	case shipOffline = 91
+	case rigSlot0 = 92
+	case rigSlot1 = 93
+	case rigSlot2 = 94
+	case rigSlot3 = 95
+	case rigSlot4 = 96
+	case rigSlot5 = 97
+	case rigSlot6 = 98
+	case rigSlot7 = 99
+	case factoryOperation = 100
+	case corpSAG2 = 116
+	case corpSAG3 = 117
+	case corpSAG4 = 118
+	case corpSAG5 = 119
+	case corpSAG6 = 120
+	case corpSAG7 = 121
+	case secondaryStorage = 122
+	case captainsQuarters = 123
+	case wisPromenade = 124
+	case subSystem0 = 125
+	case subSystem1 = 126
+	case subSystem2 = 127
+	case subSystem3 = 128
+	case subSystem4 = 129
+	case subSystem5 = 130
+	case subSystem6 = 131
+	case subSystem7 = 132
+	case specializedFuelBay = 133
+	case specializedOreHold = 134
+	case specializedGasHold = 135
+	case specializedMineralHold = 136
+	case specializedSalvageHold = 137
+	case specializedShipHold = 138
+	case specializedSmallShipHold = 139
+	case specializedMediumShipHold = 140
+	case specializedLargeShipHold = 141
+	case specializedIndustrialShipHold = 142
+	case specializedAmmoHold = 143
+	case structureActive = 144
+	case structureInactive = 145
+	case junkyardReprocessed = 146
+	case junkyardTrashed = 147
 }
 
 @objc public enum EVECalendarEventAttendeeResponse: Int {
-	case Undecided
-	case Accepted
-	case Declined
-	case Tentative
+	case undecided
+	case accepted
+	case declined
+	case tentative
 	
 	init(_ string:String) {
 		switch string {
 		case "Undecided":
-			self = .Undecided
+			self = .undecided
 		case "Accepted":
-			self = .Accepted
+			self = .accepted
 		case "Declined":
-			self = .Declined
+			self = .declined
 		case "Tentative":
-			self = .Tentative
+			self = .tentative
 		default:
-			self = .Undecided
+			self = .undecided
 		}
 	}
 }
 
 @objc public enum EVECharacterGender: Int {
-	case Male
-	case Female
+	case male
+	case female
 	
 	init(_ string:String) {
 		switch string {
 		case "Male":
-			self = .Male
+			self = .male
 		default:
-			self = .Female
+			self = .female
 		}
 	}
 }
 
 @objc public enum EVEContractType: Int {
-	case Unknown
-	case ItemExchange
-	case Auction
-	case Loan
-	case Courier
+	case unknown
+	case itemExchange
+	case auction
+	case loan
+	case courier
 	
 	init(_ string:String) {
 		switch string {
 		case "ItemExchange":
-			self = .ItemExchange
+			self = .itemExchange
 		case "Auction":
-			self = .Auction
+			self = .auction
 		case "Loan":
-			self = .Loan
+			self = .loan
 		case "Courier":
-			self = .Courier
+			self = .courier
 		default:
-			self = .Unknown
+			self = .unknown
 		}
 	}
 }
 
 @objc public enum EVEContractStatus: Int {
-	case Unknown
-	case Completed
-	case CompletedByIssuer
-	case CompletedByContractor
-	case Outstanding
-	case InProgress
-	case Cancelled
-	case Reversed
-	case Rejected
-	case Failed
-	case Deleted
+	case unknown
+	case completed
+	case completedByIssuer
+	case completedByContractor
+	case outstanding
+	case inProgress
+	case cancelled
+	case reversed
+	case rejected
+	case failed
+	case deleted
 	
 	init(_ string:String) {
 		switch string {
 		case "Completed":
-			self = .Completed
+			self = .completed
 		case "CompletedByIssuer":
-			self = .CompletedByIssuer
+			self = .completedByIssuer
 		case "CompletedByContractor":
-			self = .CompletedByContractor
+			self = .completedByContractor
 		case "Outstanding":
-			self = .Outstanding
+			self = .outstanding
 		case "InProgress":
-			self = .InProgress
+			self = .inProgress
 		case "Cancelled":
-			self = .Cancelled
+			self = .cancelled
 		case "Reversed":
-			self = .Reversed
+			self = .reversed
 		case "Rejected":
-			self = .Rejected
+			self = .rejected
 		case "Failed":
-			self = .Failed
+			self = .failed
 		case "Deleted":
-			self = .Deleted
+			self = .deleted
 		default:
-			self = .Unknown
+			self = .unknown
 		}
 	}
 }
 
 @objc public enum EVEContractAvailability: Int {
-	case Public
-	case Private
+	case `public`
+	case `private`
 	
 	init(_ string:String) {
 		switch string {
 		case "Public":
-			self = .Public
+			self = .public
 		case "Private":
-			self = .Private
+			self = .private
 		default:
-			self = .Public
+			self = .public
 		}
 	}
 }
 
 @objc public enum EVEIndustryJobStatus: Int {
-	case Active = 1
-	case Paused = 2
-	case Ready = 3
-	case Delivered = 101
-	case Cancelled = 102
-	case Reverted = 103
+	case active = 1
+	case paused = 2
+	case ready = 3
+	case delivered = 101
+	case cancelled = 102
+	case reverted = 103
 }
 
 @objc public enum EVEOrderState: Int {
-	case Open = 0
-	case Closed = 1
-	case Expired = 2
-	case Cancelled = 3
-	case Pending = 4
-	case CharacterDeleted = 5
+	case open = 0
+	case closed = 1
+	case expired = 2
+	case cancelled = 3
+	case pending = 4
+	case characterDeleted = 5
 }
 
 @objc public enum EVEMedalStatus: Int {
-	case Private
-	case Public
+	case `private`
+	case `public`
 	
 	init(_ string:String) {
 		switch string {
 		case "public":
-			self = .Public
+			self = .public
 		case "private":
-			self = .Private
+			self = .private
 		default:
-			self = .Public
+			self = .public
 		}
 	}
 }
 
 @objc public enum EVEPOSState: Int {
-	case Unanchored = 0
-	case Offline = 1
-	case Onlining = 2
-	case Reinforced = 3
-	case Online = 4
+	case unanchored = 0
+	case offline = 1
+	case onlining = 2
+	case reinforced = 3
+	case online = 4
 }
 
 @objc public enum EVEOwnerGroup: Int {
-	case Character = 1
-	case Corporation = 2
-	case Faction = 19
-	case Alliance = 32
+	case character = 1
+	case corporation = 2
+	case faction = 19
+	case alliance = 32
 }
 
 @objc public enum EVECharacterAttribute: Int {
-	case Intelligence
-	case Memory
-	case Charisma
-	case Perception
-	case Willpower
+	case intelligence
+	case memory
+	case charisma
+	case perception
+	case willpower
 	init(_ string:String) {
 		switch string {
 		case "intelligence":
-			self = .Intelligence
+			self = .intelligence
 		case "memory":
-			self = .Memory
+			self = .memory
 		case "charisma":
-			self = .Charisma
+			self = .charisma
 		case "perception":
-			self = .Perception
+			self = .perception
 		case "willpower":
-			self = .Willpower
+			self = .willpower
 		default:
-			self = .Intelligence
+			self = .intelligence
 		}
 	}
 }
 
 @objc public enum EVECallType:Int {
-	case Character = 0
-	case Corporation
+	case character = 0
+	case corporation
 }

@@ -42,7 +42,7 @@ public class EVEAPIKeyInfoCharacter: EVEObject {
 
 public class EVEAPIKeyInfoKey: EVEObject {
 	public var accessMask: Int64 = 0
-	public var type: EVEAPIKeyType = .Character
+	public var type: EVEAPIKeyType = .character
 	public var expires: Date = Date.distantPast
 	public var characters: [EVEAPIKeyInfoCharacter] = []
 
@@ -66,7 +66,7 @@ public class EVEAPIKeyInfoKey: EVEObject {
 					return EVEAPIKeyType(s).rawValue
 				}
 				else {
-					return EVEAPIKeyType.Character.rawValue
+					return EVEAPIKeyType.character.rawValue
 				}
 			}),
 			"expires":EVESchemeElementType.Date(elementName:nil, transformer:nil),

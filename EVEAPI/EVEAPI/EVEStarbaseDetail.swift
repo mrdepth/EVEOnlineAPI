@@ -89,7 +89,7 @@ public class EVEStarbaseDetailFuelItem: EVEObject {
 }
 
 public class EVEStarbaseDetail: EVEResult {
-	public var state: EVEPOSState = .Offline
+	public var state: EVEPOSState = .offline
 	public var stateTimestamp: Date = Date.distantPast
 	public var onlineTimestamp: Date = Date.distantPast
 	public var generalSettings: EVEStarbaseDetailGeneralSettings = EVEStarbaseDetailGeneralSettings()

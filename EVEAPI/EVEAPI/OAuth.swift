@@ -10,12 +10,12 @@ import Foundation
 import AFNetworking
 
 public enum OAuthError: Error {
-	case Internal
-	case AuthenticationTimeout
-	case InvalidServerResponse
-	case Server(String)
-	case InvalidToken
-	case InvalidRefreshToken
+	case internalError
+	case authenticationTimeout
+	case invalidServerResponse
+	case server(String)
+	case invalidToken
+	case invalidRefreshToken
 }
 
 public class OAToken: NSObject, NSSecureCoding {
@@ -87,7 +87,7 @@ public class OAToken: NSObject, NSSecureCoding {
 			})
 		}
 		else {
-			completionBlock?(OAuthError.InvalidRefreshToken)
+			completionBlock?(OAuthError.invalidRefreshToken)
 		}
 	}
 	
@@ -115,13 +115,13 @@ public class OAToken: NSObject, NSSecureCoding {
 			do {
 				if let result = result as? [String: Any] {
 					if let error = result["error_description"] as? String {
-						throw OAuthError.Server(error)
+						throw OAuthError.server(error)
 					}
 					else {
-						guard let accessToken = result["access_token"] as? String else {throw OAuthError.InvalidServerResponse}
-						guard let refreshToken = result["refresh_token"] as? String else {throw OAuthError.InvalidServerResponse}
-						guard let tokenType = result["token_type"] as? String else {throw OAuthError.InvalidServerResponse}
-						guard let expiresIn = result["expires_in"] as? Double else {throw OAuthError.InvalidServerResponse}
+						guard let accessToken = result["access_token"] as? String else {throw OAuthError.invalidServerResponse}
+						guard let refreshToken = result["refresh_token"] as? String else {throw OAuthError.invalidServerResponse}
+						guard let tokenType = result["token_type"] as? String else {throw OAuthError.invalidServerResponse}
+						guard let expiresIn = result["expires_in"] as? Double else {throw OAuthError.invalidServerResponse}
 						let expiresOn = Date.init(timeIntervalSinceNow: expiresIn)
 						
 						self.accessToken = accessToken
@@ -139,7 +139,7 @@ public class OAToken: NSObject, NSSecureCoding {
 					}
 				}
 				else {
-					throw OAuthError.InvalidServerResponse
+					throw OAuthError.invalidServerResponse
 				}
 			}
 			catch let error {
@@ -153,7 +153,7 @@ public class OAToken: NSObject, NSSecureCoding {
 	
 	private func verify(session: AFHTTPSessionManager, completionBlock: @escaping (Error?) -> Void) {
 		guard let tokenType = self.tokenType, let accessToken = self.accessToken else {
-			completionBlock(OAuthError.InvalidToken)
+			completionBlock(OAuthError.invalidToken)
 			return
 		}
 		let auth = "\(tokenType) \(accessToken)"
@@ -164,11 +164,11 @@ public class OAToken: NSObject, NSSecureCoding {
 			do {
 				if let result = result as? [String: Any] {
 					if let error = result["error_description"] as? String {
-						throw OAuthError.Server(error)
+						throw OAuthError.server(error)
 					}
 					else {
-						guard let characterID = result["CharacterID"] as? Int else {throw OAuthError.InvalidServerResponse}
-						guard let characterName = result["CharacterName"] as? String else {throw OAuthError.InvalidServerResponse}
+						guard let characterID = result["CharacterID"] as? Int else {throw OAuthError.invalidServerResponse}
+						guard let characterName = result["CharacterName"] as? String else {throw OAuthError.invalidServerResponse}
 						
 						if let expiresOn = result["ExpiresOn"] as? String, let date = DateFormatter.crestDateFormatter.date(from: expiresOn) {
 							self.expiresOn = date
@@ -180,7 +180,7 @@ public class OAToken: NSObject, NSSecureCoding {
 					}
 				}
 				else {
-					throw OAuthError.InvalidServerResponse
+					throw OAuthError.invalidServerResponse
 				}
 			}
 			catch let error {
@@ -272,7 +272,7 @@ public class OAuth: NSObject {
 		components.queryItems = query
 		if let url = components.url {
 			self.completionBlock = completionBlock
-			UIApplication.shared.open(url, options: [:], completionHandler: nil)
+			UIApplication.shared.openURL(url)
 		}
 	}
 }

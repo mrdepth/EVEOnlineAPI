@@ -15,7 +15,7 @@ public class EVEMarketOrdersItem: EVEObject {
 	public var volEntered: Int = 0
 	public var volRemaining: Int = 0
 	public var minVolume: Int = 0
-	public var orderState: EVEOrderState = .Closed
+	public var orderState: EVEOrderState = .closed
 	public var typeID: Int = 0
 	public var range: Int = 0
 	public var accountKey: Int = 0

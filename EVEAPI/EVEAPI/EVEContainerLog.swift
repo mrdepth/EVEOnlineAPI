@@ -14,7 +14,7 @@ public class EVEContainerLogItem: EVEObject {
 	public var itemTypeID: Int = 0
 	public var actorID: Int64 = 0
 	public var actorName: String = ""
-	public var flag: EVEInventoryFlag = .None
+	public var flag: EVEInventoryFlag = .none
 	public var locationID: Int64 = 0
 	public var action: String = ""
 	public var passwordType: String = ""

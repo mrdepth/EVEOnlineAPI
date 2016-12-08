@@ -14,7 +14,7 @@ public class EVEAssetListItem: EVEObject {
 	public var typeID: Int = 0
 	public var quantity: Int64 = 0
 	public var rawQuantity: Int64 = 0
-	public var flag: EVEInventoryFlag = .None
+	public var flag: EVEInventoryFlag = .none
 	public var singleton: Bool = false
 	public var contents:[EVEAssetListItem] = []
 	public weak var parent:EVEAssetListItem? = nil

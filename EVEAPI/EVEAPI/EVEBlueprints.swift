@@ -13,7 +13,7 @@ public class EVEBlueprintsItem: EVEObject {
 	public var locationID: Int64 = 0
 	public var typeID: Int = 0
 	public var typeName: String = ""
-	public var flag: EVEInventoryFlag = .None
+	public var flag: EVEInventoryFlag = .none
 	public var quantity: Int = 0
 	public var timeEfficiency: Int = 0
 	public var materialEfficiency: Int = 0

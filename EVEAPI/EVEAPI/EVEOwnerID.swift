@@ -11,7 +11,7 @@ import UIKit
 public class EVEOwnerIDItem: EVEObject {
 	public var ownerID: Int64 = 0
 	public var ownerName: String = ""
-	public var ownerGroupID: EVEOwnerGroup = .Character
+	public var ownerGroupID: EVEOwnerGroup = .character
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)

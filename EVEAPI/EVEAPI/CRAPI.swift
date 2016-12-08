@@ -10,10 +10,10 @@ import Foundation
 import AFNetworking
 
 public enum CRAPIError: Error {
-	case Internal
-	case InvalidResponse
-	case Unauthorized(String?)
-	case Server(String?, String?)
+	case internalError
+	case invalidResponse
+	case unauthorized(String?)
+	case server(String?, String?)
 }
 
 public struct CRScope {
@@ -71,7 +71,7 @@ public class CRAPI: NSObject {
 			get("characters/\(token.characterID)/fittings/", parameters: nil, completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(nil, CRAPIError.Unauthorized(nil))
+			completionBlock?(nil, CRAPIError.unauthorized(nil))
 		}
 		//get("CalendarEventAttendees", scope: "Char", parameters: nil, completionBlock: completionBlock)
 	}
@@ -85,20 +85,20 @@ public class CRAPI: NSObject {
 				let message = result["message"] as? String
 				switch exceptionType {
 				case "UnauthorizedError":
-					throw CRAPIError.Unauthorized(message)
+					throw CRAPIError.unauthorized(message)
 				default:
-					throw CRAPIError.Server(exceptionType, message)
+					throw CRAPIError.server(exceptionType, message)
 				}
 			}
 			else if let obj = T.init(dictionary:result) {
 				return obj
 			}
 			else {
-				throw CRAPIError.InvalidResponse
+				throw CRAPIError.invalidResponse
 			}
 		}
 		else {
-			throw CRAPIError.Internal
+			throw CRAPIError.internalError
 		}
 	}
 	
@@ -115,7 +115,7 @@ public class CRAPI: NSObject {
 					let obj: T = try self.validate(result: result)
 					completionBlock?(obj, nil)
 				}
-				catch CRAPIError.Unauthorized(let message) {
+				catch CRAPIError.unauthorized(let message) {
 					if let token = self.token {
 						token.refresh(completionBlock: { (error) in
 							if let error = error {
@@ -143,11 +143,11 @@ public class CRAPI: NSObject {
 						})
 					}
 					else {
-						completionBlock?(nil, CRAPIError.Unauthorized(message))
+						completionBlock?(nil, CRAPIError.unauthorized(message))
 					}
 				}
 				catch let error {
-					completionBlock?(nil, error ?? CRAPIError.Internal)
+					completionBlock?(nil, error ?? CRAPIError.internalError)
 				}
 			}
 		})

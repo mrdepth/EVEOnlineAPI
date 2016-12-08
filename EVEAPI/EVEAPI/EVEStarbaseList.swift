@@ -13,7 +13,7 @@ public class EVEStarbaseListItem: EVEObject {
 	public var typeID: Int = 0
 	public var locationID: Int64 = 0
 	public var moonID: Int = 0
-	public var state: EVEPOSState = .Offline
+	public var state: EVEPOSState = .offline
 	public var stateTimestamp: Date = Date.distantPast
 	public var onlineTimestamp: Date = Date.distantPast
 	public var standingOwnerID: Int64 = 0

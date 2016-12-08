@@ -19,9 +19,9 @@ public class EVEContractsItem: EVEObject {
 	public var endStationID: Int = 0
 	public var numDays: Int = 0
 	public var title: String = ""
-	public var type: EVEContractType = .Unknown
-	public var status: EVEContractStatus = .Unknown
-	public var availability: EVEContractAvailability = .Public
+	public var type: EVEContractType = .unknown
+	public var status: EVEContractStatus = .unknown
+	public var availability: EVEContractAvailability = .public
 	public var dateIssued: Date = Date.distantPast
 	public var dateExpired: Date = Date.distantPast
 	public var dateAccepted: Date = Date.distantPast
@@ -57,7 +57,7 @@ public class EVEContractsItem: EVEObject {
 					return EVEContractType(s).rawValue
 				}
 				else {
-					return EVEContractType.Unknown.rawValue
+					return EVEContractType.unknown.rawValue
 				}
 			}),
 			"status": EVESchemeElementType.Int(elementName:nil, transformer: {(value:Any?) -> Any? in
@@ -65,7 +65,7 @@ public class EVEContractsItem: EVEObject {
 					return EVEContractStatus(s).rawValue
 				}
 				else {
-					return EVEContractStatus.Unknown.rawValue
+					return EVEContractStatus.unknown.rawValue
 				}
 			}),
 			"availability": EVESchemeElementType.Int(elementName:nil, transformer: {(value:Any?) -> Any? in
@@ -73,7 +73,7 @@ public class EVEContractsItem: EVEObject {
 					return EVEContractAvailability(s).rawValue
 				}
 				else {
-					return EVEContractAvailability.Public.rawValue
+					return EVEContractAvailability.public.rawValue
 				}
 			}),
 			"dateIssued":EVESchemeElementType.Date(elementName:nil, transformer:nil),

@@ -31,7 +31,7 @@ public class EVECallListCallGroup: EVEObject {
 
 public class EVECallListCallsItem: EVEObject {
 	public var accessMask: Int64 = 0
-	public var type: EVECallType = .Character
+	public var type: EVECallType = .character
 	public var name: String = ""
 	public var groupID: Int = 0
 	public var callDescription: String = ""

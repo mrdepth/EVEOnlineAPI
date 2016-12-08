@@ -36,7 +36,7 @@ public class EVEIndustryJobsItem: EVEObject {
 	public var solarSystemName: String = ""
 	public var blueprintTypeName: String = ""
 	public var productTypeName: String = ""
-	public var status: EVEIndustryJobStatus = .Delivered
+	public var status: EVEIndustryJobStatus = .delivered
 
 	
 	public required init?(dictionary:[String:Any]) {

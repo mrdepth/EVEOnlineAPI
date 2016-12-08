@@ -194,7 +194,7 @@ public class EVECharacterSheet: EVEResult {
 	public var bloodLine: String = ""
 	public var ancestryID: Int = 0
 	public var ancestry: String = ""
-	public var gender: EVECharacterGender = .Male
+	public var gender: EVECharacterGender = .male
 	public var corporationName: String = ""
 	public var corporationID: Int64 = 0
 	public var allianceName: String = ""
@@ -251,7 +251,7 @@ public class EVECharacterSheet: EVEResult {
 				return EVECharacterGender(s).rawValue
 			}
 			else {
-				return EVECharacterGender.Male.rawValue
+				return EVECharacterGender.male.rawValue
 			}
 		}),
 		"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),

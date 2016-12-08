@@ -87,7 +87,7 @@ public class EVEKillMailsAttacker: EVEObject {
 }
 
 public class EVEKillMailsItem: EVEObject {
-	public var flag: EVEInventoryFlag = .None
+	public var flag: EVEInventoryFlag = .none
 	public var qtyDropped: Int = 0
 	public var qtyDestroyed: Int = 0
 	public var typeID: Int = 0

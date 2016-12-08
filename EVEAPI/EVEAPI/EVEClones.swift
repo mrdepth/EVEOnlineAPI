@@ -15,7 +15,7 @@ public class EVEClones: EVEResult {
 	public var bloodLine: String = ""
 	public var ancestryID: Int = 0
 	public var ancestry: String = ""
-	public var gender: EVECharacterGender = .Male
+	public var gender: EVECharacterGender = .male
 	public var freeRespecs: Int = 0
 	public var cloneJumpDate: Date = Date.distantPast
 	public var lastRespecDate: Date = Date.distantPast
@@ -50,7 +50,7 @@ public class EVEClones: EVEResult {
 					return EVECharacterGender(s).rawValue
 				}
 				else {
-					return EVECharacterGender.Male.rawValue
+					return EVECharacterGender.male.rawValue
 				}
 			}),
 			"freeRespecs":EVESchemeElementType.Int(elementName:nil, transformer:nil),

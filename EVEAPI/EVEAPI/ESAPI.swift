@@ -12,10 +12,10 @@ import Foundation
 import AFNetworking
 
 public enum ESAPIError: Error {
-	case Internal
-	case InvalidResponse
-	case Unauthorized(String?)
-	case Server(String?, String?)
+	case internalError
+	case invalidResponse
+	case unauthorized(String?)
+	case server(String?, String?)
 }
 
 public struct ESScope {
@@ -70,8 +70,8 @@ public struct ESScope {
 }
 
 public enum ESServer: String {
-	case Tranquility = "tranquility"
-	case Singularity = "singularity"
+	case tranquility = "tranquility"
+	case singularity = "singularity"
 }
 
 public class ESAPI: NSObject {
@@ -91,7 +91,7 @@ public class ESAPI: NSObject {
 		return manager
 	}()
 	
-	public init(token: OAToken?, server: ESServer = .Tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+	public init(token: OAToken?, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		if token?.tokenType != nil && token?.accessToken != nil {
 			self.token = token
 		}
@@ -113,7 +113,7 @@ public class ESAPI: NSObject {
 			get("characters/\(token.characterID)/assets/", parameters: nil, completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(nil, CRAPIError.Unauthorized(nil))
+			completionBlock?(nil, ESAPIError.unauthorized(nil))
 		}
 		//get("CalendarEventAttendees", scope: "Char", parameters: nil, completionBlock: completionBlock)
 	}
@@ -127,20 +127,20 @@ public class ESAPI: NSObject {
 				let message = result["message"] as? String
 				switch exceptionType {
 				case "UnauthorizedError":
-					throw CRAPIError.Unauthorized(message)
+					throw ESAPIError.unauthorized(message)
 				default:
-					throw CRAPIError.Server(exceptionType, message)
+					throw ESAPIError.server(exceptionType, message)
 				}
 			}
 			else if let obj = T.init(dictionary:result) {
 				return obj
 			}
 			else {
-				throw CRAPIError.InvalidResponse
+				throw ESAPIError.invalidResponse
 			}
 		}
 		else {
-			throw CRAPIError.Internal
+			throw ESAPIError.internalError
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class ESAPI: NSObject {
 					let obj: T = try self.validate(result: result)
 					completionBlock?(obj, nil)
 				}
-				catch CRAPIError.Unauthorized(let message) {
+				catch ESAPIError.unauthorized(let message) {
 					if let token = self.token {
 						token.refresh(completionBlock: { (error) in
 							if let error = error {
@@ -191,11 +191,11 @@ public class ESAPI: NSObject {
 						})
 					}
 					else {
-						completionBlock?(nil, CRAPIError.Unauthorized(message))
+						completionBlock?(nil, ESAPIError.unauthorized(message))
 					}
 				}
 				catch let error {
-					completionBlock?(nil, error ?? CRAPIError.Internal)
+					completionBlock?(nil, error ?? ESAPIError.internalError)
 				}
 			}
 		})

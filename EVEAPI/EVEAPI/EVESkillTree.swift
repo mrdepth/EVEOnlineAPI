@@ -10,8 +10,8 @@ import UIKit
 
 
 public class EVESkillTreeRequiredAttributes: EVEObject {
-	public var primaryAttribute: EVECharacterAttribute = .Intelligence
-	public var secondaryAttribute: EVECharacterAttribute = .Intelligence
+	public var primaryAttribute: EVECharacterAttribute = .intelligence
+	public var secondaryAttribute: EVECharacterAttribute = .intelligence
 	
 	public override init() {
 		super.init()
@@ -32,7 +32,7 @@ public class EVESkillTreeRequiredAttributes: EVEObject {
 					return EVECharacterAttribute(s).rawValue
 				}
 				else {
-					return EVECharacterAttribute.Intelligence.rawValue
+					return EVECharacterAttribute.intelligence.rawValue
 				}
 			}),
 			"secondaryAttribute":EVESchemeElementType.Int(elementName:nil, transformer:{(value:Any?) -> Any? in
@@ -40,7 +40,7 @@ public class EVESkillTreeRequiredAttributes: EVEObject {
 					return EVECharacterAttribute(s).rawValue
 				}
 				else {
-					return EVECharacterAttribute.Intelligence.rawValue
+					return EVECharacterAttribute.intelligence.rawValue
 				}
 			}),
 		]

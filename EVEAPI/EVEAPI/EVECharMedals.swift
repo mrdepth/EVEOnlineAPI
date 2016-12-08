@@ -11,7 +11,7 @@ import UIKit
 public class EVECharMedalsItem: EVEObject {
 	public var medalID: Int = 0
 	public var reason: String = ""
-	public var status: EVEMedalStatus = .Public
+	public var status: EVEMedalStatus = .public
 	public var issuerID: Int64 = 0
 	public var issued: Date = Date.distantPast
 	public var corporationID: Int64 = 0
@@ -35,7 +35,7 @@ public class EVECharMedalsItem: EVEObject {
 					return EVEMedalStatus(s).rawValue
 				}
 				else {
-					return EVEMedalStatus.Public.rawValue
+					return EVEMedalStatus.public.rawValue
 				}
 			}),
 			"issuerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),

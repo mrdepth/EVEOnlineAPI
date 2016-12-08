@@ -11,7 +11,7 @@ import UIKit
 public class EVECalendarEventAttendeesItem: EVEObject {
 	public var characterID: Int64 = 0
 	public var characterName: String = ""
-	public var response: String = ""
+	public var response: EVECalendarEventAttendeeResponse = .undecided
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)
@@ -30,7 +30,7 @@ public class EVECalendarEventAttendeesItem: EVEObject {
 					return EVECalendarEventAttendeeResponse(s).rawValue
 				}
 				else {
-					return EVECalendarEventAttendeeResponse.Undecided.rawValue
+					return EVECalendarEventAttendeeResponse.undecided.rawValue
 				}
 			}),
 		]
