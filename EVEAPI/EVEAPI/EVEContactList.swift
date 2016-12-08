@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEContactListItem: EVEObject {
-	public var contactID: Int = 0
+	public var contactID: Int64 = 0
 	public var contactName: String = ""
 	public var standing: Int = 0
 	public var contactTypeID: Int = 0
@@ -26,7 +26,7 @@ public class EVEContactListItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"contactID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"contactID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"contactName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"standing":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"contactTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),

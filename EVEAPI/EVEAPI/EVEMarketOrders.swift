@@ -9,8 +9,8 @@
 import UIKit
 
 public class EVEMarketOrdersItem: EVEObject {
-	public var orderID: Int = 0
-	public var charID: Int = 0
+	public var orderID: Int64 = 0
+	public var charID: Int64 = 0
 	public var stationID: Int = 0
 	public var volEntered: Int = 0
 	public var volRemaining: Int = 0
@@ -35,8 +35,8 @@ public class EVEMarketOrdersItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"orderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"charID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"orderID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"charID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"stationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"volEntered":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"volRemaining":EVESchemeElementType.Int(elementName:nil, transformer:nil),

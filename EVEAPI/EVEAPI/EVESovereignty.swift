@@ -10,10 +10,10 @@ import UIKit
 
 public class EVESovereigntyItem: EVEObject {
 	public var solarSystemID: Int = 0
-	public var allianceID: Int = 0
-	public var factionID: Int = 0
+	public var allianceID: Int64 = 0
+	public var factionID: Int64 = 0
 	public var solarSystemName: String = ""
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)
@@ -26,10 +26,10 @@ public class EVESovereigntyItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"solarSystemID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"solarSystemName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		]
 	}
 }

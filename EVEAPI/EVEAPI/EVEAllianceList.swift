@@ -11,8 +11,8 @@ import UIKit
 public class EVEAllianceListItem: EVEObject {
 	public var name: String = ""
 	public var shortName: String = ""
-	public var allianceID: Int = 0
-	public var executorCorpID: Int = 0
+	public var allianceID: Int64 = 0
+	public var executorCorpID: Int64 = 0
 	public var memberCount: Int = 0
 	public var startDate: Date = Date.distantPast
 	public var memberCorporations: [EVEAllianceListMemberCorporation] = []
@@ -29,8 +29,8 @@ public class EVEAllianceListItem: EVEObject {
 		return [
 		"name":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"shortName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-		"executorCorpID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+		"executorCorpID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"memberCount":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"startDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"memberCorporations":EVESchemeElementType.Rowset(elementName: nil, type: EVEAllianceListMemberCorporation.self, transformer: nil)
@@ -40,7 +40,7 @@ public class EVEAllianceListItem: EVEObject {
 
 
 public class EVEAllianceListMemberCorporation: EVEObject {
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var startDate: Date = Date.distantPast
 	
 	public required init?(dictionary:[String:Any]) {
@@ -53,7 +53,7 @@ public class EVEAllianceListMemberCorporation: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"startDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		]
 	}

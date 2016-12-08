@@ -50,7 +50,7 @@ public class EVETitlesItem: EVEObject {
 }
 
 public class EVETitlesRoleItem: EVEObject {
-	public var roleID: Int = 0
+	public var roleID: Int64 = 0
 	public var roleName: String = ""
 	public var roleDescription: String = ""
 	
@@ -68,7 +68,7 @@ public class EVETitlesRoleItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"roleID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"roleID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"roleName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"roleDescription":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		]

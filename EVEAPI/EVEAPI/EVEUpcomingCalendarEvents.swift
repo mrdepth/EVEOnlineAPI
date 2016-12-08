@@ -9,8 +9,8 @@
 import UIKit
 
 public class EVEUpcomingCalendarEventsItem: EVEObject {
-	public var eventID: Int = 0
-	public var ownerID: Int = 0
+	public var eventID: Int64 = 0
+	public var ownerID: Int64 = 0
 	public var ownerName: String = ""
 	public var eventDate: Date = Date.distantPast
 	public var eventTitle: String = ""
@@ -30,8 +30,8 @@ public class EVEUpcomingCalendarEventsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"eventID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-		"ownerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"eventID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+		"ownerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"ownerName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"eventDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"eventTitle":EVESchemeElementType.String(elementName:nil, transformer:nil),

@@ -10,7 +10,7 @@ import UIKit
 
 public class EVEOutpostServiceDetailItem: EVEObject {
 	public var stationID: Int = 0
-	public var ownerID: Int = 0
+	public var ownerID: Int64 = 0
 	public var serviceName: String = ""
 	public var minStanding: Double = 0
 	public var surchargePerBadStanding: Double = 0
@@ -27,7 +27,7 @@ public class EVEOutpostServiceDetailItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"stationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"ownerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"ownerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"serviceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"minStanding":EVESchemeElementType.Double(elementName:nil, transformer:nil),
 			"surchargePerBadStanding":EVESchemeElementType.Double(elementName:nil, transformer:nil),

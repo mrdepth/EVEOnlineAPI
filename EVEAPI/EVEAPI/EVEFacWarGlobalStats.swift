@@ -40,7 +40,7 @@ public class EVEFacWarStatsKills: EVEObject {
 }
 
 public class EVEFacWarStatsFaction: EVEObject {
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	public var pilots: Int = 0
 	public var systemsControlled: Int = 0
@@ -56,7 +56,7 @@ public class EVEFacWarStatsFaction: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"pilots":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"systemsControlled":EVESchemeElementType.Int(elementName:nil, transformer:nil),
@@ -65,7 +65,7 @@ public class EVEFacWarStatsFaction: EVEObject {
 }
 
 public class EVEFacWarStatsFactionWar: EVEObject {
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	public var againstID: Int = 0
 	public var againstName: String = ""
@@ -81,7 +81,7 @@ public class EVEFacWarStatsFactionWar: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"againstID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"againstName":EVESchemeElementType.String(elementName:nil, transformer:nil),

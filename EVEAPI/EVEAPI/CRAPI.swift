@@ -154,6 +154,7 @@ public class CRAPI: NSObject {
 	}
 }
 
+
 /*
 Requested Scopes List
 characterAccountRead: Read your account subscription status.

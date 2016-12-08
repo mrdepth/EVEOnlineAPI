@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVECharacterIDItem: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var name: String = ""
 	
 	public required init?(dictionary:[String:Any]) {
@@ -22,7 +22,7 @@ public class EVECharacterIDItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"name":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		]
 	}

@@ -9,13 +9,13 @@
 import UIKit
 
 public class EVEKillMailsVictim: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
-	public var allianceID: Int = 0
+	public var allianceID: Int64 = 0
 	public var allianceName: String = ""
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	public var damageTaken: Int = 0
 	public var shipTypeID: Int = 0
@@ -30,13 +30,13 @@ public class EVEKillMailsVictim: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"allianceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"damageTaken":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"shipTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
@@ -45,13 +45,13 @@ public class EVEKillMailsVictim: EVEObject {
 }
 
 public class EVEKillMailsAttacker: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
-	public var allianceID: Int = 0
+	public var allianceID: Int64 = 0
 	public var allianceName: String = ""
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	public var securityStatus: Double = 0
 	public var damageDone: Double = 0
@@ -69,13 +69,13 @@ public class EVEKillMailsAttacker: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"allianceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"securityStatus":EVESchemeElementType.Double(elementName:nil, transformer:nil),
 			"damageDone":EVESchemeElementType.Double(elementName:nil, transformer:nil),
@@ -115,7 +115,7 @@ public class EVEKillMailsItem: EVEObject {
 }
 
 public class EVEKillMailsKill: EVEObject {
-	public var killID: Int = 0
+	public var killID: Int64 = 0
 	public var solarSystemID: Int = 0
 	public var killTime: Date = Date.distantPast
 	public var moonID: Int = 0
@@ -133,7 +133,7 @@ public class EVEKillMailsKill: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"killID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"killID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"solarSystemID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"killTime":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 			"moonID":EVESchemeElementType.Int(elementName:nil, transformer:nil),

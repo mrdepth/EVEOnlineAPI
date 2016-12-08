@@ -185,7 +185,7 @@ public class EVECharacterSheetJumpCloneImplant: EVEObject {
 }
 
 public class EVECharacterSheet: EVEResult {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
 	public var homeStationID: Int = 0
 	public var dateOfBirth: Date = Date.distantPast
@@ -196,11 +196,11 @@ public class EVECharacterSheet: EVEResult {
 	public var ancestry: String = ""
 	public var gender: EVECharacterGender = .Male
 	public var corporationName: String = ""
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var allianceName: String = ""
-	public var allianceID: Int = 0
+	public var allianceID: Int64 = 0
 	public var factionName: String = ""
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var cloneTypeID: Int = 0
 	public var cloneName: String = ""
 	public var cloneSkillPoints: Int = 0
@@ -237,7 +237,7 @@ public class EVECharacterSheet: EVEResult {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"characterName":EVESchemeElementType.String(elementName:"name", transformer:nil),
 		"homeStationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"dateOfBirth":EVESchemeElementType.Date(elementName:"DoB", transformer:nil),
@@ -255,11 +255,11 @@ public class EVECharacterSheet: EVEResult {
 			}
 		}),
 		"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"allianceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"cloneTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"cloneName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"cloneSkillPoints":EVESchemeElementType.Int(elementName:nil, transformer:nil),

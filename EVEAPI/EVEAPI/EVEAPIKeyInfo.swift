@@ -9,13 +9,13 @@
 import UIKit
 
 public class EVEAPIKeyInfoCharacter: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
-	public var allianceID: Int = 0
+	public var allianceID: Int64 = 0
 	public var allianceName: String = ""
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	
 	public required init?(dictionary:[String:Any]) {
@@ -28,20 +28,20 @@ public class EVEAPIKeyInfoCharacter: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"allianceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		]
 	}
 }
 
 public class EVEAPIKeyInfoKey: EVEObject {
-	public var accessMask: Int = 0
+	public var accessMask: Int64 = 0
 	public var type: EVEAPIKeyType = .Character
 	public var expires: Date = Date.distantPast
 	public var characters: [EVEAPIKeyInfoCharacter] = []
@@ -60,7 +60,7 @@ public class EVEAPIKeyInfoKey: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"accessMask":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"accessMask":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"type":EVESchemeElementType.Int(elementName:nil, transformer:{(value:Any?) -> Any? in
 				if let s = value as? String {
 					return EVEAPIKeyType(s).rawValue

@@ -9,14 +9,14 @@
 import UIKit
 
 public class EVEMailMessagesItem: EVEObject {
-	public var messageID: Int = 0
-	public var senderID: Int = 0
+	public var messageID: Int64 = 0
+	public var senderID: Int64 = 0
 	public var senderName: String = ""
 	public var sentDate: Date = Date.distantPast
 	public var title: String = ""
-	public var toCorpOrAllianceID: Int = 0
-	public var toCharacterIDs: [Int] = []
-	public var toListID: [Int] = []
+	public var toCorpOrAllianceID: Int64 = 0
+	public var toCharacterIDs: [Int64] = []
+	public var toListID: [Int64] = []
 	public var senderTypeID: Int = 0
 	
 	public required init?(dictionary:[String:Any]) {
@@ -29,14 +29,14 @@ public class EVEMailMessagesItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"messageID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"senderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"messageID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"senderID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"senderName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"sentDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 			"title":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"toCorpOrAllianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"toCharacterIDs":EVESchemeElementType.IntList(elementName:nil, transformer:nil),
-			"toListID":EVESchemeElementType.IntList(elementName:nil, transformer:nil),
+			"toCorpOrAllianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"toCharacterIDs":EVESchemeElementType.Int64List(elementName:nil, transformer:nil),
+			"toListID":EVESchemeElementType.Int64List(elementName:nil, transformer:nil),
 			"senderTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		]
 	}

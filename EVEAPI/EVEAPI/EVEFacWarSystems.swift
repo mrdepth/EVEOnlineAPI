@@ -11,9 +11,9 @@ import UIKit
 public class EVEFacWarSystemsItem: EVEObject {
 	public var solarSystemID: Int = 0
 	public var solarSystemName: String = ""
-	public var occupyingFactionID: Int = 0
+	public var occupyingFactionID: Int64 = 0
 	public var occupyingFactionName: String = ""
-	public var owningFactionID: Int = 0
+	public var owningFactionID: Int64 = 0
 	public var owningFactionName: String = ""
 	public var contested: Bool = false
 	public var victoryPoints: Int = 0
@@ -31,9 +31,9 @@ public class EVEFacWarSystemsItem: EVEObject {
 		return [
 		"solarSystemID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"solarSystemName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"occupyingFactionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"occupyingFactionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"occupyingFactionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"owningFactionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"owningFactionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"owningFactionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"contested":EVESchemeElementType.Bool(elementName:nil, transformer:nil),
 		"victoryPoints":EVESchemeElementType.Int(elementName:nil, transformer:nil),

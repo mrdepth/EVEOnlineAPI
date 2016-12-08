@@ -10,10 +10,10 @@ import UIKit
 
 public class EVEContractsItem: EVEObject {
 	public var contractID: Int64 = 0
-	public var issuerID: Int = 0
-	public var issuerCorpID: Int = 0
-	public var assigneeID: Int = 0
-	public var acceptorID: Int = 0
+	public var issuerID: Int64 = 0
+	public var issuerCorpID: Int64 = 0
+	public var assigneeID: Int64 = 0
+	public var acceptorID: Int64 = 0
 	public var forCorp: Bool = false
 	public var startStationID: Int = 0
 	public var endStationID: Int = 0
@@ -43,10 +43,10 @@ public class EVEContractsItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"contractID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
-			"issuerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"issuerCorpID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"assigneeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"acceptorID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"issuerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"issuerCorpID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"assigneeID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"acceptorID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"forCorp":EVESchemeElementType.Bool(elementName:nil, transformer:nil),
 			"startStationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"endStationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),

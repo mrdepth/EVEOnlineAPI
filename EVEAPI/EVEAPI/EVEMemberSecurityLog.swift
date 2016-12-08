@@ -10,9 +10,9 @@ import UIKit
 
 public class EVEMemberSecurityLogRoleHistoryItem: EVEObject {
 	public var changeTime: Date = Date.distantPast
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
-	public var issuerID: Int = 0
+	public var issuerID: Int64 = 0
 	public var issuerName: String = ""
 	public var roleLocationType: String = ""
 	public var oldRoles: [EVEMemberSecurityRole] = []
@@ -29,9 +29,9 @@ public class EVEMemberSecurityLogRoleHistoryItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 		"changeTime":EVESchemeElementType.Date(elementName:nil, transformer:nil),
-		"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"issuerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"issuerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"issuerName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"roleLocationType":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"oldRoles":EVESchemeElementType.Rowset(elementName: nil, type: EVEMemberSecurityRole.self, transformer: nil),

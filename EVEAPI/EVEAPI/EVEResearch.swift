@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEResearchItem: EVEObject {
-	public var agentID: Int = 0
+	public var agentID: Int64 = 0
 	public var skillTypeID: Int = 0
 	public var researchStartDate: Date = Date.distantPast
 	public var pointsPerDay: Double = 0
@@ -25,7 +25,7 @@ public class EVEResearchItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"agentID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"agentID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"skillTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"researchStartDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"pointsPerDay":EVESchemeElementType.Double(elementName:nil, transformer:nil),

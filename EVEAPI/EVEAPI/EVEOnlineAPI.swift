@@ -126,8 +126,8 @@ public class EVEOnlineAPI: NSObject {
 		get("IndustryJobsHistory", scope: self.corporate ? "Corp" : "Char", parameters: nil, completionBlock: completionBlock)
 	}
 
-	public func killMails(fromID:Int?, rowCount:Int?, completionBlock:((EVEKillMails?, Error?) -> Void)?) {
-		var parameters = [String: Int]()
+	public func killMails(fromID:Int64?, rowCount:Int?, completionBlock:((EVEKillMails?, Error?) -> Void)?) {
+		var parameters = [String: Any]()
 		if let fromID = fromID, let rowCount = rowCount {
 			parameters["fromID"] = fromID
 			parameters["rowCount"] = rowCount
@@ -135,7 +135,7 @@ public class EVEOnlineAPI: NSObject {
 		get("KillMails", scope: self.corporate ? "Corp" : "Char", parameters: parameters, completionBlock: completionBlock)
 	}
 
-	public func locations(ids:[Int], completionBlock:((EVELocations?, Error?) -> Void)?) {
+	public func locations(ids:[Int64], completionBlock:((EVELocations?, Error?) -> Void)?) {
 		let s = ids.map {(i) in
 			return String(i)
 		}.joined(separator: ",")
@@ -143,7 +143,7 @@ public class EVEOnlineAPI: NSObject {
 		get("Locations", scope: self.corporate ? "Corp" : "Char", parameters: ["ids":s], completionBlock: completionBlock)
 	}
 
-	public func mailBodies(ids:[Int], completionBlock:((EVEMailBodies?, Error?) -> Void)?) {
+	public func mailBodies(ids:[Int64], completionBlock:((EVEMailBodies?, Error?) -> Void)?) {
 		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
@@ -159,8 +159,8 @@ public class EVEOnlineAPI: NSObject {
 		get("MailMessages", scope: "Char", parameters: nil, completionBlock: completionBlock)
 	}
 	
-	public func marketOrders(orderID:Int?, completionBlock:((EVEMarketOrders?, Error?) -> Void)?) {
-		var parameters = [String: Int]()
+	public func marketOrders(orderID:Int64?, completionBlock:((EVEMarketOrders?, Error?) -> Void)?) {
+		var parameters = [String: Any]()
 		if let orderID = orderID {
 			parameters["orderID"] = orderID
 		}
@@ -223,8 +223,8 @@ public class EVEOnlineAPI: NSObject {
 		get("UpcomingCalendarEvents", scope: "Char", parameters: nil, completionBlock: completionBlock)
 	}
 	
-	public func walletJournal(fromID:Int?, rowCount:Int?, account:Int?, completionBlock:((EVEWalletJournal?, Error?) -> Void)?) {
-		var parameters = [String: Int]()
+	public func walletJournal(fromID:Int64?, rowCount:Int?, account:Int?, completionBlock:((EVEWalletJournal?, Error?) -> Void)?) {
+		var parameters = [String: Any]()
 		if let fromID = fromID, let rowCount = rowCount {
 			parameters["fromID"] = fromID
 			parameters["rowCount"] = rowCount
@@ -236,8 +236,8 @@ public class EVEOnlineAPI: NSObject {
 		get("WalletJournal", scope: self.corporate ? "Corp" : "Char", parameters: parameters, completionBlock: completionBlock)
 	}
 
-	public func walletTransactions(fromID:Int?, rowCount:Int?, account:Int?, completionBlock:((EVEWalletTransactions?, Error?) -> Void)?) {
-		var parameters = [String: Int]()
+	public func walletTransactions(fromID:Int64?, rowCount:Int?, account:Int?, completionBlock:((EVEWalletTransactions?, Error?) -> Void)?) {
+		var parameters = [String: Any]()
 		if let fromID = fromID, let rowCount = rowCount {
 			parameters["fromID"] = fromID
 			parameters["rowCount"] = rowCount
@@ -255,8 +255,8 @@ public class EVEOnlineAPI: NSObject {
 		get("ContainerLog", scope: "Corp", parameters: nil, completionBlock: completionBlock)
 	}
 
-	public func corporationSheet(corporationID:Int?, completionBlock:((EVECorporationSheet?, Error?) -> Void)?) {
-		var parameters = [String: Int]()
+	public func corporationSheet(corporationID:Int64?, completionBlock:((EVECorporationSheet?, Error?) -> Void)?) {
+		var parameters = [String: Int64]()
 		if let corporationID = corporationID {
 			parameters["corporationID"] = corporationID
 		}
@@ -326,7 +326,7 @@ public class EVEOnlineAPI: NSObject {
 		get("AllianceList", scope: "Eve", parameters: nil, completionBlock: completionBlock)
 	}
 
-	public func characterAffiliation(ids:[Int], completionBlock:((EVECharacterAffiliation?, Error?) -> Void)?) {
+	public func characterAffiliation(ids:[Int64], completionBlock:((EVECharacterAffiliation?, Error?) -> Void)?) {
 		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
@@ -340,11 +340,11 @@ public class EVEOnlineAPI: NSObject {
 		get("CharacterID", scope: "Eve", parameters: ["names":s], completionBlock: completionBlock)
 	}
 
-	public func characterInfo(characterID:Int, completionBlock:((EVECharacterInfo?, Error?) -> Void)?) {
+	public func characterInfo(characterID:Int64, completionBlock:((EVECharacterInfo?, Error?) -> Void)?) {
 		get("CharacterInfo", scope: "Eve", parameters: ["characterID":characterID], completionBlock: completionBlock)
 	}
 
-	public func characterName(ids:[Int], completionBlock:((EVECharacterName?, Error?) -> Void)?) {
+	public func characterName(ids:[Int64], completionBlock:((EVECharacterName?, Error?) -> Void)?) {
 		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")
@@ -382,7 +382,7 @@ public class EVEOnlineAPI: NSObject {
 		get("SkillTree", scope: "Eve", parameters: nil, completionBlock: completionBlock)
 	}
 	
-	public func typeName(ids:[Int], completionBlock:((EVETypeName?, Error?) -> Void)?) {
+	public func typeName(ids:[Int64], completionBlock:((EVETypeName?, Error?) -> Void)?) {
 		let s = ids.map {(i) in
 			return String(i)
 			}.joined(separator: ",")

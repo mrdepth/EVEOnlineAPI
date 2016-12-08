@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEMemberTrackingItem: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var name: String = ""
 	public var startDateTime: Date = Date.distantPast
 	public var baseID: Int = 0
@@ -34,7 +34,7 @@ public class EVEMemberTrackingItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"name":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"startDateTime":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"baseID":EVESchemeElementType.Int(elementName:nil, transformer:nil),

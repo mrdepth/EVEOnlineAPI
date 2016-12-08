@@ -15,7 +15,7 @@ public class EVEWalletTransactionsItem: EVEObject {
 	public var typeName: String = ""
 	public var typeID: Int = 0
 	public var price: Double = 0
-	public var clientID: Int = 0
+	public var clientID: Int64 = 0
 	public var clientName: String = ""
 	public var stationID: Int = 0
 	public var stationName: String = ""
@@ -23,7 +23,7 @@ public class EVEWalletTransactionsItem: EVEObject {
 	public var transactionFor: String = ""
 	public var journalTransactionID: Int64 = 0
 	public var clientTypeID: Int = 0
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
 
 	
@@ -43,7 +43,7 @@ public class EVEWalletTransactionsItem: EVEObject {
 		"typeName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"typeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"price":EVESchemeElementType.Double(elementName:nil, transformer:nil),
-		"clientID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"clientID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"clientName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"stationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"stationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
@@ -51,7 +51,7 @@ public class EVEWalletTransactionsItem: EVEObject {
 		"transactionFor":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"journalTransactionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"clientTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-		"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		]
 	}

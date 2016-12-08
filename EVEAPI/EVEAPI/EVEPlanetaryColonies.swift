@@ -15,7 +15,7 @@ public class EVEPlanetaryColoniesItem: EVEObject {
 	public var planetName: String = ""
 	public var planetTypeID: Int = 0
 	public var planetTypeName: String = ""
-	public var ownerID: Int = 0
+	public var ownerID: Int64 = 0
 	public var ownerName: String = ""
 	public var lastUpdate: Date = Date.distantPast
 	public var upgradeLevel: Int = 0
@@ -38,7 +38,7 @@ public class EVEPlanetaryColoniesItem: EVEObject {
 		"planetName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"planetTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"planetTypeName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"ownerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"ownerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"ownerName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"lastUpdate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"upgradeLevel":EVESchemeElementType.Int(elementName:nil, transformer:nil),

@@ -30,7 +30,7 @@ public class EVECallListCallGroup: EVEObject {
 }
 
 public class EVECallListCallsItem: EVEObject {
-	public var accessMask: Int = 0
+	public var accessMask: Int64 = 0
 	public var type: EVECallType = .Character
 	public var name: String = ""
 	public var groupID: Int = 0
@@ -46,7 +46,7 @@ public class EVECallListCallsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"accessMask":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"accessMask":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"type":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"name":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"groupID":EVESchemeElementType.Int(elementName:nil, transformer:nil),

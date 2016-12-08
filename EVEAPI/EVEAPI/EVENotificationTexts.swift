@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVENotificationTextsItem: EVEObject {
-	public var notificationID: Int = 0
+	public var notificationID: Int64 = 0
 	public var text: String = ""
 	
 	public required init?(dictionary:[String:Any]) {
@@ -22,7 +22,7 @@ public class EVENotificationTextsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"notificationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"notificationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"text":EVESchemeElementType.Int(elementName:"_", transformer:nil),
 		]
 	}

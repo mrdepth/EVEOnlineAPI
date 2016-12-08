@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEStandingsItem: EVEObject {
-	public var fromID: Int = 0
+	public var fromID: Int64 = 0
 	public var fromName: String = ""
 	public var standing: Double = 0
 	
@@ -23,7 +23,7 @@ public class EVEStandingsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"fromID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"fromID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"fromName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"standing":EVESchemeElementType.Double(elementName:nil, transformer:nil),
 		]

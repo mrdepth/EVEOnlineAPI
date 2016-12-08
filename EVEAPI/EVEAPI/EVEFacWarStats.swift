@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEFacWarStats: EVEResult {
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	public var enlisted: Date = Date.distantPast
 	public var currentRank: Int = 0
@@ -31,7 +31,7 @@ public class EVEFacWarStats: EVEResult {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"factionID":EVESchemeElementType.Int(elementName: nil, transformer: nil),
+		"factionID":EVESchemeElementType.Int64(elementName: nil, transformer: nil),
 		"factionName":EVESchemeElementType.String(elementName: nil, transformer: nil),
 		"enlisted":EVESchemeElementType.Date(elementName: nil, transformer: nil),
 		"currentRank":EVESchemeElementType.Int(elementName: nil, transformer: nil),

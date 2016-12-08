@@ -20,26 +20,65 @@ public enum ESAPIError: Error {
 
 public struct ESScope {
 	public static let assetsRead = ESScope("esi-assets.read_assets.v1")
-	public static let characterFittingsWrite = ESScope("characterFittingsWrite")
-	public static let characterKillsRead = ESScope("characterKillsRead")
+	public static let readCharacterBookmarks = ESScope("esi-bookmarks.read_character_bookmarks.v1")
+	public static let readCalendarEvents = ESScope("esi-calendar.read_calendar_events.v1")
+	public static let respondCalendarEvents = ESScope("esi-calendar.respond_calendar_events.v1")
+	public static let readContacts = ESScope("esi-characters.read_contacts.v1")
+	public static let readClones = ESScope("esi-clones.read_clones.v1")
+	public static let corporationMembership = ESScope("esi-corporations.read_corporation_membership.v1")
+	public static let readKillmails = ESScope("esi-killmails.read_killmails.v1")
+	public static let readLocation = ESScope("esi-location.read_location.v1")
+	public static let readShipType = ESScope("esi-location.read_ship_type.v1")
+	public static let organizeMail = ESScope("esi-mail.organize_mail.v1")
+	public static let readMail = ESScope("esi-mail.read_mail.v1")
+	public static let sendMail = ESScope("esi-mail.send_mail.v1")
+	public static let searchStructures = ESScope("esi-search.search_structures.v1")
+	public static let readSkillQueue = ESScope("esi-skills.read_skillqueue.v1")
+	public static let readSkills = ESScope("esi-skills.read_skills.v1")
+	public static let readStructures = ESScope("esi-universe.read_structures.v1")
+	public static let readCharacterWallet = ESScope("esi-wallet.read_character_wallet.v1")
 	
 	let rawValue: String
 	
 	init(_ value: String) {
 		rawValue = value
 	}
-	
+
 	public static var all: [ESScope]  {
 		get {
-			return [.assetsRead]
+			return [assetsRead,
+			        readCharacterBookmarks,
+			        readCalendarEvents,
+			        respondCalendarEvents,
+			        readContacts,
+			        readClones,
+			        corporationMembership,
+			        readKillmails,
+			        readLocation,
+			        readShipType,
+//			        organizeMail,
+//			        readMail,
+//			        sendMail,
+			        searchStructures,
+			        readSkillQueue,
+			        readSkills,
+			        readStructures,
+			        readCharacterWallet
+			]
 		}
 	}
+}
+
+public enum ESServer: String {
+	case Tranquility = "tranquility"
+	case Singularity = "singularity"
 }
 
 public class ESAPI: NSObject {
 	
 	public let cachePolicy: URLRequest.CachePolicy
 	public let token: OAToken?
+	public let server: ESServer
 	
 	public lazy var sessionManager: EVEHTTPSessionManager = {
 		let manager = EVEHTTPSessionManager(baseURL: URL(string: "https://esi.tech.ccp.is")!, sessionConfiguration: nil)
@@ -52,13 +91,14 @@ public class ESAPI: NSObject {
 		return manager
 	}()
 	
-	public init(token: OAToken?, cachePolicy: URLRequest.CachePolicy) {
+	public init(token: OAToken?, server: ESServer = .Tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		if token?.tokenType != nil && token?.accessToken != nil {
 			self.token = token
 		}
 		else {
 			self.token = nil
 		}
+		self.server = server
 		self.cachePolicy = cachePolicy
 		super.init()
 	}
@@ -105,9 +145,9 @@ public class ESAPI: NSObject {
 	}
 	
 	private func get<T:CRResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((T?, Error?) -> Void)?) -> Void {
-		let path = "/latest/" + path
+		let path = "/v1/" + path
 		var parameters = parameters ?? [:]
-		parameters["datasource"] = "tranquility"
+		parameters["datasource"] = self.server.rawValue
 
 		let contentType = "\(T.contentType); charset=utf-8"
 		self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")

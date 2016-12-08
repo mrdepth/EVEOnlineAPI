@@ -20,7 +20,7 @@ public class EVEIndustryJobsItem: EVEObject {
 	public var solarSystemID: Int = 0
 	public var teamID: Int = 0
 	public var successfulRuns: Int = 0
-	public var installerID: Int = 0
+	public var installerID: Int64 = 0
 	public var completedCharacterID: Int = 0
 	public var jobID: Int64 = 0
 	public var blueprintID: Int64 = 0
@@ -60,7 +60,7 @@ public class EVEIndustryJobsItem: EVEObject {
 			"solarSystemID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"teamID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"successfulRuns":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"installerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"installerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"completedCharacterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"jobID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"blueprintID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),

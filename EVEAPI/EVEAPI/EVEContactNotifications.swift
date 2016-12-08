@@ -10,7 +10,7 @@ import UIKit
 
 public class EVEContactNotificationsItem: EVEObject {
 	public var notificationID: Int = 0
-	public var senderID: Int = 0
+	public var senderID: Int64 = 0
 	public var senderName: String = ""
 	public var sentDate: Date = Date.distantPast
 	public var messageData: String = ""
@@ -26,7 +26,7 @@ public class EVEContactNotificationsItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"notificationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"senderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"senderID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"senderName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"sentDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 			"messageData":EVESchemeElementType.String(elementName:nil, transformer:nil),

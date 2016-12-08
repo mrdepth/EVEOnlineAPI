@@ -22,6 +22,7 @@ public enum EVESchemeElementType {
 	case Date(elementName:String?, transformer:Transformer?)
 	case Error(elementName:String?,  transformer:Transformer?)
 	case IntList(elementName:String?, transformer:Transformer?)
+	case Int64List(elementName:String?, transformer:Transformer?)
 }
 
 protocol EVEScheme {
@@ -205,8 +206,20 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 						return []
 					}
 				}
+			case let .Int64List(elementName, transformer):
+				property = elementName ?? key
+				parser = transformer ?? {(value:Any?) -> Any? in
+					if let s = value as? String {
+						return s.components(separatedBy: ",").map {(i) -> Int64 in
+							return (i as NSString).longLongValue
+						}
+					}
+					else {
+						return []
+					}
+				}
 			}
-			
+		
 			if let value = parser?(dictionary[property]) {
 				self.setValue(value, forKey: key)
 			}

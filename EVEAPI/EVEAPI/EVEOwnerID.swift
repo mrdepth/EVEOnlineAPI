@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEOwnerIDItem: EVEObject {
-	public var ownerID: Int = 0
+	public var ownerID: Int64 = 0
 	public var ownerName: String = ""
 	public var ownerGroupID: EVEOwnerGroup = .Character
 	
@@ -23,7 +23,7 @@ public class EVEOwnerIDItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"ownerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"ownerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"ownerName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"ownerGroupID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		]

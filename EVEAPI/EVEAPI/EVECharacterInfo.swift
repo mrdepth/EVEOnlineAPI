@@ -10,12 +10,9 @@ import UIKit
 
 public class EVECharacterInfoEmploymentHistoryItem: EVEObject {
 	public var recordID: Int = 0
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
 	public var startDate: Date = Date.distantPast
-	
-	public var characterID: Int = 0
-	public var name: String = ""
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)
@@ -28,7 +25,7 @@ public class EVECharacterInfoEmploymentHistoryItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"recordID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"startDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		]
@@ -36,7 +33,7 @@ public class EVECharacterInfoEmploymentHistoryItem: EVEObject {
 }
 
 public class EVECharacterInfo: EVEResult {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
 	public var race: String = ""
 	public var bloodLineID: Int = 0
@@ -49,11 +46,11 @@ public class EVECharacterInfo: EVEResult {
 	public var shipName: String = ""
 	public var shipTypeID: Int = 0
 	public var shipTypeName: String = ""
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
 	public var corporationDate: Date = Date.distantPast
 	public var allianceName: String = ""
-	public var allianceID: Int = 0
+	public var allianceID: Int64 = 0
 	public var allianceDate: Date = Date.distantPast
 	public var lastKnownLocation: String = ""
 	public var securityStatus: Double = 0
@@ -70,7 +67,7 @@ public class EVECharacterInfo: EVEResult {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"race":EVESchemeElementType.String(elementName:"bloodlineID", transformer:nil),
 		"bloodLineID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
@@ -83,11 +80,11 @@ public class EVECharacterInfo: EVEResult {
 		"shipName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"shipTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"shipTypeName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"corporationDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"allianceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"allianceDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"lastKnownLocation":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"securityStatus":EVESchemeElementType.Double(elementName:nil, transformer:nil),

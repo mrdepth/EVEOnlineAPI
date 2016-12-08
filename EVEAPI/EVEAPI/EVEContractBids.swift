@@ -10,8 +10,8 @@ import UIKit
 
 public class EVEContractBidsItem: EVEObject {
 	public var bidID: Int = 0
-	public var contractID: Int = 0
-	public var bidderID: Int = 0
+	public var contractID: Int64 = 0
+	public var bidderID: Int64 = 0
 	public var dateBid: Date = Date.distantPast
 	public var amount: Double = 0
 	
@@ -26,8 +26,8 @@ public class EVEContractBidsItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"bidID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"contractID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"bidderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"contractID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"bidderID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"dateBid":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"amount":EVESchemeElementType.Double(elementName:nil, transformer:nil),
 		]

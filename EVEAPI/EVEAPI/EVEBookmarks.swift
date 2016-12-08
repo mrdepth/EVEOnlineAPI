@@ -9,8 +9,8 @@
 import UIKit
 
 public class EVEBookmarksItem: EVEObject {
-	public var bookmarkID: Int = 0
-	public var creatorID: Int = 0
+	public var bookmarkID: Int64 = 0
+	public var creatorID: Int64 = 0
 	public var created:Date = Date.distantPast
 	public var itemID: Int64 = 0
 	public var typeID:Int = 0
@@ -31,8 +31,8 @@ public class EVEBookmarksItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"bookmarkID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-			"creatorID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"bookmarkID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
+			"creatorID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"created":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 			"itemID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"typeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
@@ -49,7 +49,7 @@ public class EVEBookmarksItem: EVEObject {
 public class EVEBookmarksFolder: EVEObject {
 	public var folderID: Int = 0
 	public var folderName: String = ""
-	public var creatorID: Int = 0
+	public var creatorID: Int64 = 0
 	public var bookmarks: [EVEBookmarksItem] = []
 	
 	public required init?(dictionary:[String:Any]) {
@@ -64,7 +64,7 @@ public class EVEBookmarksFolder: EVEObject {
 		return [
 			"folderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"folderName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-			"creatorID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"creatorID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"bookmarks":EVESchemeElementType.Rowset(elementName: nil, type: EVEBookmarksItem.self, transformer: nil)
 		]
 	}

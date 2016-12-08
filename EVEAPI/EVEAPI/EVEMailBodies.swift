@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEMailBodiesItem: EVEObject {
-	public var messageID: Int = 0
+	public var messageID: Int64 = 0
 	public var text: String = ""
 	
 	public required init?(dictionary:[String:Any]) {
@@ -22,7 +22,7 @@ public class EVEMailBodiesItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"messageID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"messageID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"text":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		]
 	}

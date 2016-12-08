@@ -9,9 +9,9 @@
 import UIKit
 
 public class EVENotificationsItem: EVEObject {
-	public var notificationID: Int = 0
+	public var notificationID: Int64 = 0
 	public var typeID: Int = 0
-	public var senderID: Int = 0
+	public var senderID: Int64 = 0
 	public var senderName: String = ""
 	public var sentDate: Date = Date.distantPast
 	public var read: Bool = false
@@ -26,9 +26,9 @@ public class EVENotificationsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"notificationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"notificationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"typeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-		"senderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"senderID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"senderName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"sentDate":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"read":EVESchemeElementType.Bool(elementName:nil, transformer:nil),

@@ -12,7 +12,7 @@ public class EVECorpMedalsItem: EVEObject {
 	public var medalID: Int = 0
 	public var title: String = ""
 	public var medalDescription: String = ""
-	public var creatorID: Int = 0
+	public var creatorID: Int64 = 0
 	public var created: Date = Date.distantPast
 	
 	public required init?(dictionary:[String:Any]) {
@@ -28,7 +28,7 @@ public class EVECorpMedalsItem: EVEObject {
 			"medalID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 			"title":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"medalDescription":EVESchemeElementType.String(elementName:"description", transformer:nil),
-			"creatorID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"creatorID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"created":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		]
 	}

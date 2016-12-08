@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVECalendarEventAttendeesItem: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
 	public var response: String = ""
 	
@@ -23,7 +23,7 @@ public class EVECalendarEventAttendeesItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"response":EVESchemeElementType.String(elementName:nil, transformer:{(value:Any?) -> Any? in
 				if let s = value as? String {

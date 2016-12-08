@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEShareholdersItem: EVEObject {
-	public var shareholderID: Int = 0
+	public var shareholderID: Int64 = 0
 	public var shareholderName: String = ""
 	public var shares: Int = 0
 	
@@ -23,7 +23,7 @@ public class EVEShareholdersItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"shareholderID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"shareholderID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"shareholderName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"shares":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		]

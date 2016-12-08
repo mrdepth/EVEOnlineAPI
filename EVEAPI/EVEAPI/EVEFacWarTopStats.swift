@@ -10,7 +10,7 @@ import UIKit
 
 
 public class EVEFacWarTopStatsCharactersItem: EVEObject {
-	public var characterID: Int = 0
+	public var characterID: Int64 = 0
 	public var characterName: String = ""
 	public var kills: Int = 0
 	
@@ -25,7 +25,7 @@ public class EVEFacWarTopStatsCharactersItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"characterID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"characterID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"characterName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"kills":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		]
@@ -33,7 +33,7 @@ public class EVEFacWarTopStatsCharactersItem: EVEObject {
 }
 
 public class EVEFacWarTopStatsCorporationsItem: EVEObject {
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
 	public var kills: Int = 0
 	
@@ -48,7 +48,7 @@ public class EVEFacWarTopStatsCorporationsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"kills":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		]
@@ -56,7 +56,7 @@ public class EVEFacWarTopStatsCorporationsItem: EVEObject {
 }
 
 public class EVEFacWarTopStatsFactionsItem: EVEObject {
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var factionName: String = ""
 	public var kills: Int = 0
 	
@@ -71,7 +71,7 @@ public class EVEFacWarTopStatsFactionsItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"factionName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"kills":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		]

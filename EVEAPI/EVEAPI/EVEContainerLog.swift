@@ -12,7 +12,7 @@ public class EVEContainerLogItem: EVEObject {
 	public var logTime: Date = Date.distantPast
 	public var itemID: Int64 = 0
 	public var itemTypeID: Int = 0
-	public var actorID: Int = 0
+	public var actorID: Int64 = 0
 	public var actorName: String = ""
 	public var flag: EVEInventoryFlag = .None
 	public var locationID: Int64 = 0
@@ -36,7 +36,7 @@ public class EVEContainerLogItem: EVEObject {
 		"logTime":EVESchemeElementType.Date(elementName:nil, transformer:nil),
 		"itemID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"itemTypeID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-		"actorID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"actorID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"actorName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"flag":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"locationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),

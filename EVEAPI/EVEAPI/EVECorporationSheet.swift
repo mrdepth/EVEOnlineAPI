@@ -63,18 +63,18 @@ public class EVECorporationSheetLogo: EVEObject {
 }
 
 public class EVECorporationSheet: EVEResult {
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var corporationName: String = ""
 	public var ticker: String = ""
-	public var ceoID: Int = 0
+	public var ceoID: Int64 = 0
 	public var ceoName: String = ""
 	public var stationID: Int = 0
 	public var stationName: String = ""
 	public var corporationDescription: String = ""
 	public var url: String = ""
-	public var allianceID: Int = 0
+	public var allianceID: Int64 = 0
 	public var allianceName: String = ""
-	public var factionID: Int = 0
+	public var factionID: Int64 = 0
 	public var taxRate: Double = 0
 	public var memberCount: Int = 0
 	public var memberLimit: Int = 0
@@ -96,18 +96,18 @@ public class EVECorporationSheet: EVEResult {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"corporationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"ticker":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"ceoID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"ceoID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"ceoName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"stationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"stationName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"corporationDescription":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"url":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"allianceID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"allianceID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"allianceName":EVESchemeElementType.String(elementName:nil, transformer:nil),
-		"factionID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"factionID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"taxRate":EVESchemeElementType.Double(elementName:nil, transformer:nil),
 		"memberCount":EVESchemeElementType.Int(elementName:nil, transformer:nil),
 		"memberLimit":EVESchemeElementType.Int(elementName:nil, transformer:nil),

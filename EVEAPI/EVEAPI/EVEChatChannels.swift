@@ -9,7 +9,7 @@
 import UIKit
 
 public class EVEChatChannelsAccessor: EVEObject {
-	public var accessorID: Int = 0
+	public var accessorID: Int64 = 0
 	public var accessorName: String = ""
 	
 	public required init?(dictionary:[String:Any]) {
@@ -22,7 +22,7 @@ public class EVEChatChannelsAccessor: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"accessorID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"accessorID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"accessorName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		]
 	}
@@ -50,7 +50,7 @@ public class EVEChatChannelsAccessorBlock: EVEChatChannelsAccessor {
 
 public class EVEChatChannelsItem: EVEObject {
 	public var channelID: Int = 0
-	public var ownerID: Int = 0
+	public var ownerID: Int64 = 0
 	public var ownerName: String = ""
 	public var displayName: String = ""
 	public var comparisonKey: String = ""
@@ -72,7 +72,7 @@ public class EVEChatChannelsItem: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 		"channelID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
-		"ownerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+		"ownerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 		"ownerName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"displayName":EVESchemeElementType.String(elementName:nil, transformer:nil),
 		"comparisonKey":EVESchemeElementType.String(elementName:nil, transformer:nil),

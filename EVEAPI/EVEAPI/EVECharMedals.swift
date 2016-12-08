@@ -12,9 +12,9 @@ public class EVECharMedalsItem: EVEObject {
 	public var medalID: Int = 0
 	public var reason: String = ""
 	public var status: EVEMedalStatus = .Public
-	public var issuerID: Int = 0
+	public var issuerID: Int64 = 0
 	public var issued: Date = Date.distantPast
-	public var corporationID: Int = 0
+	public var corporationID: Int64 = 0
 	public var title: String = ""
 	public var medalDescription: String = ""
 	
@@ -38,9 +38,9 @@ public class EVECharMedalsItem: EVEObject {
 					return EVEMedalStatus.Public.rawValue
 				}
 			}),
-			"issuerID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"issuerID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"issued":EVESchemeElementType.Date(elementName:nil, transformer:nil),
-			"corporationID":EVESchemeElementType.Int(elementName:nil, transformer:nil),
+			"corporationID":EVESchemeElementType.Int64(elementName:nil, transformer:nil),
 			"title":EVESchemeElementType.String(elementName:nil, transformer:nil),
 			"medalDescription":EVESchemeElementType.String(elementName:"description", transformer:nil),
 		]
