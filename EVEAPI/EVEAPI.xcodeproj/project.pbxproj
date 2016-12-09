@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1203DB301DFAE8D800BBFAD9 /* ESAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */; };
+		1203DB321DFAEBD200BBFAD9 /* ESAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */; };
+		1203DB341DFAEC2300BBFAD9 /* ESConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */; };
+		1203DB361DFAF17000BBFAD9 /* ESBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */; };
+		1203DB381DFAFA8C00BBFAD9 /* ESCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */; };
 		123825611DEC199E0031A884 /* EVEAPIObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123825601DEC199E0031A884 /* EVEAPIObject.swift */; };
 		123825631DEC1AD20031A884 /* EVEResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123825621DEC1AD20031A884 /* EVEResult.swift */; };
 		123825651DEC1E240031A884 /* EVEAPISerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123825641DEC1E240031A884 /* EVEAPISerializer.swift */; };
@@ -25,6 +30,8 @@
 		1295ED4D1DF844780048C895 /* CRFittingCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4C1DF844780048C895 /* CRFittingCollection.swift */; };
 		1295ED4F1DF846130048C895 /* CRType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4E1DF846130048C895 /* CRType.swift */; };
 		1295ED521DF85CCA0048C895 /* ESAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED511DF85CCA0048C895 /* ESAPI.swift */; };
+		1295ED851DFA98300048C895 /* ESMarket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED841DFA98300048C895 /* ESMarket.swift */; };
+		1295ED871DFA983C0048C895 /* ESResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED861DFA983C0048C895 /* ESResult.swift */; };
 		12A266941DED805E00DC8291 /* EVEBlueprints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266931DED805E00DC8291 /* EVEBlueprints.swift */; };
 		12A266961DED815300DC8291 /* EVEBookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266951DED815300DC8291 /* EVEBookmarks.swift */; };
 		12A266981DED85F000DC8291 /* EVECalendarEventAttendees.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */; };
@@ -109,6 +116,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAlliance.swift; sourceTree = "<group>"; };
+		1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAsset.swift; sourceTree = "<group>"; };
+		1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESConstants.swift; sourceTree = "<group>"; };
+		1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESBookmark.swift; sourceTree = "<group>"; };
+		1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCalendar.swift; sourceTree = "<group>"; };
 		123825601DEC199E0031A884 /* EVEAPIObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPIObject.swift; sourceTree = "<group>"; };
 		123825621DEC1AD20031A884 /* EVEResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEResult.swift; sourceTree = "<group>"; };
 		123825641DEC1E240031A884 /* EVEAPISerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPISerializer.swift; sourceTree = "<group>"; };
@@ -127,6 +139,8 @@
 		1295ED4C1DF844780048C895 /* CRFittingCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRFittingCollection.swift; sourceTree = "<group>"; };
 		1295ED4E1DF846130048C895 /* CRType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRType.swift; sourceTree = "<group>"; };
 		1295ED511DF85CCA0048C895 /* ESAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAPI.swift; sourceTree = "<group>"; };
+		1295ED841DFA98300048C895 /* ESMarket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESMarket.swift; sourceTree = "<group>"; };
+		1295ED861DFA983C0048C895 /* ESResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESResult.swift; sourceTree = "<group>"; };
 		12A266931DED805E00DC8291 /* EVEBlueprints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBlueprints.swift; sourceTree = "<group>"; };
 		12A266951DED815300DC8291 /* EVEBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBookmarks.swift; sourceTree = "<group>"; };
 		12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVECalendarEventAttendees.swift; sourceTree = "<group>"; };
@@ -347,6 +361,13 @@
 			isa = PBXGroup;
 			children = (
 				1295ED511DF85CCA0048C895 /* ESAPI.swift */,
+				1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */,
+				1295ED861DFA983C0048C895 /* ESResult.swift */,
+				1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */,
+				1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */,
+				1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */,
+				1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */,
+				1295ED841DFA98300048C895 /* ESMarket.swift */,
 			);
 			name = ESI;
 			sourceTree = "<group>";
@@ -554,6 +575,7 @@
 				12A266AA1DEDC48000DC8291 /* EVEIndustryJobs.swift in Sources */,
 				123825611DEC199E0031A884 /* EVEAPIObject.swift in Sources */,
 				12A2671B1DEEC20D00DC8291 /* EVEKills.swift in Sources */,
+				1203DB301DFAE8D800BBFAD9 /* ESAlliance.swift in Sources */,
 				1295ED4F1DF846130048C895 /* CRType.swift in Sources */,
 				12A266D61DEE0DFA00DC8291 /* EVEWalletJournal.swift in Sources */,
 				12A266BE1DEDFBF100DC8291 /* EVENotifications.swift in Sources */,
@@ -566,6 +588,8 @@
 				12A266CA1DEE074C00DC8291 /* EVEResearch.swift in Sources */,
 				1295ED4D1DF844780048C895 /* CRFittingCollection.swift in Sources */,
 				12A266E51DEE2EA400DC8291 /* EVECorpMedals.swift in Sources */,
+				1295ED851DFA98300048C895 /* ESMarket.swift in Sources */,
+				1203DB321DFAEBD200BBFAD9 /* ESAsset.swift in Sources */,
 				123825841DED7B440031A884 /* EVEAssetList.swift in Sources */,
 				12A266AC1DEDC94200DC8291 /* EVEIndustryJobsHistory.swift in Sources */,
 				12A267081DEE4A5B00DC8291 /* EVEConquerableStationList.swift in Sources */,
@@ -600,6 +624,7 @@
 				1295ED521DF85CCA0048C895 /* ESAPI.swift in Sources */,
 				12A267251DEEC7A900DC8291 /* EVEOnlineAPI.swift in Sources */,
 				12A2670C1DEEB20000DC8291 /* EVEFacWarTopStats.swift in Sources */,
+				1203DB341DFAEC2300BBFAD9 /* ESConstants.swift in Sources */,
 				12A2669E1DED9DD500DC8291 /* EVEClones.swift in Sources */,
 				1288F0211DEB8D8B00FD7FBE /* EVEServerStatus.swift in Sources */,
 				12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */,
@@ -610,8 +635,10 @@
 				1238256A1DEC90070031A884 /* EVEAPIKeyInfo.swift in Sources */,
 				12A267231DEEC55000DC8291 /* EVEImage.swift in Sources */,
 				12A267101DEEB89900DC8291 /* EVERefTypes.swift in Sources */,
+				1203DB361DFAF17000BBFAD9 /* ESBookmark.swift in Sources */,
 				12A266B61DEDD37F00DC8291 /* EVEMailingLists.swift in Sources */,
 				12A266EF1DEE368F00DC8291 /* EVEOutpostList.swift in Sources */,
+				1203DB381DFAFA8C00BBFAD9 /* ESCalendar.swift in Sources */,
 				12A267201DEEC39300DC8291 /* EVECallList.swift in Sources */,
 				12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */,
 				12A267121DEEB92C00DC8291 /* EVESkillTree.swift in Sources */,
@@ -636,6 +663,7 @@
 				12A266DD1DEE1D9B00DC8291 /* EVEContainerLog.swift in Sources */,
 				12A266BC1DEDDBE800DC8291 /* EVECharMedals.swift in Sources */,
 				12A266BA1DEDD96500DC8291 /* EVEMarketOrders.swift in Sources */,
+				1295ED871DFA983C0048C895 /* ESResult.swift in Sources */,
 				12A266EB1DEE32DF00DC8291 /* EVEMemberSecurityLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

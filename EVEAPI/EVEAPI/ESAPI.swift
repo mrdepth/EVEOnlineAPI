@@ -91,7 +91,7 @@ public class ESAPI: NSObject {
 		return manager
 	}()
 	
-	public init(token: OAToken?, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+	public init(token: OAToken? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		if token?.tokenType != nil && token?.accessToken != nil {
 			self.token = token
 		}
@@ -108,52 +108,144 @@ public class ESAPI: NSObject {
 		return OAuth(clientID: clientID, secretKey: secretKey, callbackURL: callbackURL, scope: scope, realm: "ESI")
 	}
 	
-	public func character(completionBlock:((CRFittingCollection?, Error?) -> Void)?) {
+	public func marketPrices(completionBlock:(([ESMarketPrice]?, Error?) -> Void)?) {
+		get("v1/markets/prices/", parameters: nil, completionBlock: completionBlock)
+	}
+
+	
+	public func alliances(completionBlock:(([Int64]?, Error?) -> Void)?) {
+		get("v1/alliances/", parameters: nil, completionBlock: completionBlock)
+	}
+
+	public func allianceNames(allianceIDs: [Int64], completionBlock:((ESAllianceNames?, Error?) -> Void)?) {
+		if allianceIDs.count > 0 {
+			let ids = allianceIDs.map {String($0)}
+			get("v1/alliances/names/", parameters: ["alliance_ids":ids.joined(separator: ",")], completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(ESAllianceNames(dictionary: [:]), nil)
+		}
+	}
+
+	public func alliance(allianceID: Int64, completionBlock:((ESAlliance?, Error?) -> Void)?) {
+		get("v2/alliances/\(allianceID)/", parameters: nil, completionBlock: completionBlock)
+	}
+
+	public func allianceCorporations(allianceID: Int64, completionBlock:(([Int64]?, Error?) -> Void)?) {
+		get("v1/alliances/\(allianceID)/corporations/", parameters: nil, completionBlock: completionBlock)
+	}
+
+	public func allianceIcons(allianceID: Int64, completionBlock:((ESAllianceIcons?, Error?) -> Void)?) {
+		get("v1/alliances/\(allianceID)/icons/", parameters: nil, completionBlock: completionBlock)
+	}
+
+	public func assets(completionBlock:(([ESAsset]?, Error?) -> Void)?) {
 		if let token = token {
-			get("characters/\(token.characterID)/assets/", parameters: nil, completionBlock: completionBlock)
+			get("v1/characters/\(token.characterID)/assets/", parameters: nil, completionBlock: completionBlock)
 		}
 		else {
 			completionBlock?(nil, ESAPIError.unauthorized(nil))
 		}
-		//get("CalendarEventAttendees", scope: "Char", parameters: nil, completionBlock: completionBlock)
+	}
+
+	public func bookmarks(completionBlock:(([ESBookmark]?, Error?) -> Void)?) {
+		if let token = token {
+			get("v1/characters/\(token.characterID)/bookmarks/", parameters: nil, completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(nil, ESAPIError.unauthorized(nil))
+		}
+	}
+
+	public func bookmarkFolders(completionBlock:(([ESBookmarkFolder]?, Error?) -> Void)?) {
+		if let token = token {
+			get("v1/characters/\(token.characterID)/bookmarks/folders/", parameters: nil, completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(nil, ESAPIError.unauthorized(nil))
+		}
+	}
+
+	public func calendarEvents(fromEvent: Int64?, completionBlock:(([ESCalendarEvent]?, Error?) -> Void)?) {
+		if let token = token {
+			let parameters: [String: Int64]?
+			if let fromEvent = fromEvent {
+				parameters = ["from_event": fromEvent]
+			}
+			else {
+				parameters = nil
+			}
+			get("v1/characters/\(token.characterID)/calendar/", parameters: parameters, completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(nil, ESAPIError.unauthorized(nil))
+		}
+	}
+
+	public func calendarEventDetails(eventID: Int64, completionBlock:((ESCalendarEventDetails?, Error?) -> Void)?) {
+		if let token = token {
+			get("v1/characters/\(token.characterID)/calendar/\(eventID)/", parameters: nil, completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(nil, ESAPIError.unauthorized(nil))
+		}
 	}
 	
 	
+	public func marketHistory(typeID: Int, regionID: Int, completionBlock:(([ESMarketHistory]?, Error?) -> Void)?) {
+		get("v1/markets/\(regionID)/history/", parameters: ["type_id": typeID], completionBlock: completionBlock)
+	}
+
+	
 	//MARK: Private
 	
-	private func validate<T:CRResult>(result: Any?) throws -> T {
-		if let result = result as? [String: Any] {
+	private func validate<T:ESResult>(result: Any?) throws -> T {
+		if let array = result as? [Any] {
+			let result = ["items": array]
+			if let obj = T.init(dictionary:result) {
+				return obj
+			}
+			else {
+				throw CRAPIError.invalidResponse
+			}
+		}
+		else if let result = result as? [String: Any] {
 			if let exceptionType = result["exceptionType"] as? String {
 				let message = result["message"] as? String
 				switch exceptionType {
 				case "UnauthorizedError":
-					throw ESAPIError.unauthorized(message)
+					throw CRAPIError.unauthorized(message)
 				default:
-					throw ESAPIError.server(exceptionType, message)
+					throw CRAPIError.server(exceptionType, message)
 				}
+			}
+			else if let error = result["error"] as? String {
+				throw CRAPIError.server("ServerError", error)
 			}
 			else if let obj = T.init(dictionary:result) {
 				return obj
 			}
 			else {
-				throw ESAPIError.invalidResponse
+				throw CRAPIError.invalidResponse
 			}
 		}
 		else {
-			throw ESAPIError.internalError
+			throw CRAPIError.internalError
 		}
 	}
 	
-	private func get<T:CRResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((T?, Error?) -> Void)?) -> Void {
-		let path = "/v1/" + path
+	private func get<T>(_ path: String, parameters: [String:Any]?, completionBlock: (([T]?, Error?) -> Void)?) -> Void {
+		
+		get(path, parameters: parameters, completionBlock: {(_ result: ESArray<T>?, _ error: Error?) -> Void in
+			completionBlock?(result?.array as? [T], error)
+		})
+	}
+
+	
+	private func get<T:ESResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((T?, Error?) -> Void)?) -> Void {
 		var parameters = parameters ?? [:]
 		parameters["datasource"] = self.server.rawValue
 
-		let contentType = "\(T.contentType); charset=utf-8"
-		self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")
-		self.sessionManager.responseSerializer.acceptableContentTypes = nil
-		
-		
 		self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
 			if let error = error {
 				completionBlock?(nil, error)
@@ -171,8 +263,6 @@ public class ESAPI: NSObject {
 							}
 							else {
 								self.sessionManager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
-								self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")
-								self.sessionManager.responseSerializer.acceptableContentTypes = Set([T.contentType])
 								self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
 									if let error = error {
 										completionBlock?(nil, error)

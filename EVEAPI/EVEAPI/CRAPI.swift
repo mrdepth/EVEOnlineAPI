@@ -14,6 +14,7 @@ public enum CRAPIError: Error {
 	case invalidResponse
 	case unauthorized(String?)
 	case server(String?, String?)
+	case serviceUnavailable(String?)
 }
 
 public struct CRScope {
@@ -80,12 +81,23 @@ public class CRAPI: NSObject {
 	//MARK: Private
 	
 	private func validate<T:CRResult>(result: Any?) throws -> T {
-		if let result = result as? [String: Any] {
+		if let array = result as? [Any] {
+			let result = ["items": array]
+			if let obj = T.init(dictionary:result) {
+				return obj
+			}
+			else {
+				throw CRAPIError.invalidResponse
+			}
+		}
+		else if let result = result as? [String: Any] {
 			if let exceptionType = result["exceptionType"] as? String {
 				let message = result["message"] as? String
 				switch exceptionType {
 				case "UnauthorizedError":
 					throw CRAPIError.unauthorized(message)
+				case "ServiceUnavailableError":
+					throw CRAPIError.serviceUnavailable(message)
 				default:
 					throw CRAPIError.server(exceptionType, message)
 				}

@@ -18,8 +18,10 @@ public enum EVESchemeElementType {
 	case String(elementName:String?, transformer:Transformer?)
 	case Object(elementName:String?, type:EVEObject.Type?, transformer:Transformer?)
 	case Rowset(elementName:String?, type:EVEObject.Type?, transformer:Transformer?)
-	case Array(elementName:String?, type:EVEObject.Type?, transformer:Transformer?)
+	case Array(elementName:String?, type:Any.Type, transformer:Transformer?)
+	case Dictionary(elementName:String?, key: String, value: String, transformer:Transformer?)
 	case Date(elementName:String?, transformer:Transformer?)
+	case ESIDate(elementName:String?, transformer:Transformer?)
 	case Error(elementName:String?,  transformer:Transformer?)
 	case IntList(elementName:String?, transformer:Transformer?)
 	case Int64List(elementName:String?, transformer:Transformer?)
@@ -48,6 +50,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 	public required init?(dictionary:[String:Any]) {
 		super.init()
 		let dateFormatter = DateFormatter.eveDateFormatter
+		let esiDateFormatter = DateFormatter.esiDateFormatter
 		for (key, type) in scheme() {
 			let property: String
 			let parser: Transformer?
@@ -155,7 +158,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 						return type!.init(dictionary: value)
 					}
 				}
-			case let .Array(elementName, type, transformer):
+			case let .Array(elementName, type, transformer) where type is EVEObject.Type:
 				property = elementName ?? key
 				parser = transformer ?? {(value:Any?) -> Any? in
 					let rows:[[String:Any]]?
@@ -168,15 +171,78 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 						rows = nil
 					}
 					
-					return rows?.map {(value) -> Any? in
-						return type!.init(dictionary: value)
+					return rows?.map {(value) -> Any in
+						return (type as! EVEObject.Type).init(dictionary: value)!
 					}
 				}
+			case let .Array(elementName, type, transformer) where type is Int.Type:
+				property = elementName ?? key
+				parser = transformer ?? {(value:Any?) -> Any? in
+					let rows:[Int]?
+					switch value {
+					case let value as Int:
+						rows = [value]
+					case let value as NSString:
+						rows = [value.integerValue]
+					case let value as [Int]:
+						rows = value
+					case let value as [NSString]:
+						rows = value.map {$0.integerValue}
+					default:
+						rows = nil
+					}
+					return rows
+				}
+			case let .Array(elementName, type, transformer) where type is Int64.Type:
+				property = elementName ?? key
+				parser = transformer ?? {(value:Any?) -> Any? in
+					let rows:[Int64]?
+					switch value {
+					case let value as Int64:
+						rows = [value]
+					case let value as NSString:
+						rows = [value.longLongValue]
+					case let value as [Int64]:
+						rows = value
+					case let value as [NSString]:
+						rows = value.map {$0.longLongValue}
+					default:
+						rows = nil
+					}
+					return rows
+				}
+			case let .Dictionary(elementName, key, valueName, transformer):
+				property = elementName ?? key
+				parser = transformer ?? {(value:Any?) -> Any? in
+					if let array = value as? [[AnyHashable:Any]] {
+						var dic: [AnyHashable: Any] = [:]
+						for item in array {
+							guard let k = item[key] as? AnyHashable else {continue}
+							guard let v = item[valueName] else {continue}
+							dic[k] = v
+						}
+						return dic
+					}
+					else {
+						return nil
+					}
+				}
+
 			case let .Date(elementName, transformer):
 				property = elementName ?? key
 				parser = transformer ?? {(value:Any?) -> Any? in
 					if let v = value as? String {
 						return dateFormatter.date(from: v)
+					}
+					else {
+						return nil
+					}
+				}
+			case let .ESIDate(elementName, transformer):
+				property = elementName ?? key
+				parser = transformer ?? {(value:Any?) -> Any? in
+					if let v = value as? String {
+						return esiDateFormatter.date(from: v)
 					}
 					else {
 						return nil
@@ -218,6 +284,11 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 						return []
 					}
 				}
+			default:
+				assert(false)
+				parser = nil
+				property = key
+				break
 			}
 		
 			if let value = parser?(dictionary[property]) {

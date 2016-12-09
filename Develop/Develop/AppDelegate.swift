@@ -51,7 +51,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		})*/
 		
 		let data = Data(base64Encoded:"YnBsaXN0MDDUAQIDBAUGMTJYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKsHCB0eHyAhIiYsLVUkbnVsbNoJCgsMDQ4PEBESExQVFhcYGRobHFYkY2xhc3NbY2hhcmFjdGVySURdY2hhcmFjdGVyTmFtZVxyZWZyZXNoVG9rZW5Zc2VjcmV0S2V5WXRva2VuVHlwZVthY2Nlc3NUb2tlbllleHBpcmVzT25YY2xpZW50SURVcmVhbG2AChJcqLnIgAmABYADgAaABIAHgAKAAF8QIGMyY2M5NzQ3OThkNDQ4NWQ5NjZmYmE3NzNhOGY3ZWY4XxAoR05oU0U5R0o2cTNRaXVQU1RJSjhRMUo2b240Q2xNNHY5enZjMFF6dV8QV3hwc0hFWWNzNVpnZE5hQkVZOVlyUlhwd0VubS03d04yamk4cXB5VWIzd0w5LUdVdjk5MlVtVEFnQTBvODZQNkl6aFlPellIMFUwUVNOQUxScEFKV0ZRMl8QgTdPV05kNkMxMEkzYVZ6OEo0MUR2Ync0ZW9OMlprQnhUMXBpeDZqb3BDT3hlOTJfOWFYSkdJbUlHMXhHYzFiWG1wQkNSeWZjWmhRX1cyZkJsdGZ3VFlZQWFHSWVSalVCS09BMkZxT3FhQ1hLY0J2R1JpTmZBa25uN3JrdnBGcV95MFZCZWFyZXLSIwkkJVdOUy50aW1lI0G9+VcBE3ajgAjSJygpKlokY2xhc3NuYW1lWCRjbGFzc2VzVk5TRGF0ZaIpK1hOU09iamVjdF1BcnRlbSBWYWxpYW500icoLi9eRVZFQVBJLk9BVG9rZW6iMCteRVZFQVBJLk9BVG9rZW5fEA9OU0tleWVkQXJjaGl2ZXLRMzRUcm9vdIABAAgAEQAaACMALQAyADcAQwBJAF4AZQBxAH8AjACWAKAArAC2AL8AxQDHAMwAzgDQANIA1ADWANgA2gDcAP8BKgGEAggCDwIUAhwCJQInAiwCNwJAAkcCSgJTAmECZgJ1AngChwKZApwCoQAAAAAAAAIBAAAAAAAAADUAAAAAAAAAAAAAAAAAAAKj")
-		let token = NSKeyedUnarchiver.unarchiveObject(with: data!)!
+		let token = NSKeyedUnarchiver.unarchiveObject(with: data!) as! OAToken
+		let api = ESAPI(token: token)
+		
+		api.allianceNames(allianceIDs: [99000002, 99000001], completionBlock: {(result, error) -> Void in
+			print ("\(result!.names)")
+			})
+		
+		api.marketHistory(typeID: 645, regionID: 10000002, completionBlock: { (prices, error) in
+			print("\(prices!)")
+		})
 		
 		/*let token = OAToken(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
 		token.refreshToken = "ne0FFEggMPQi951Z7cWssyMmryocHBS609vgQCtVt-k1"
