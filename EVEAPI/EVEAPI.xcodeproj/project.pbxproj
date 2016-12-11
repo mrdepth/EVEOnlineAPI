@@ -21,11 +21,12 @@
 		123825821DED7A780031A884 /* EVEAccountBalance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123825811DED7A780031A884 /* EVEAccountBalance.swift */; };
 		123825841DED7B440031A884 /* EVEAssetList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123825831DED7B440031A884 /* EVEAssetList.swift */; };
 		123825861DED7BD60031A884 /* EVEConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123825851DED7BD60031A884 /* EVEConstants.swift */; };
+		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		1288F01E1DEB8C8600FD7FBE /* EVEObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */; };
 		1288F0211DEB8D8B00FD7FBE /* EVEServerStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */; };
 		1295ED3F1DF6E33A0048C895 /* CRAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED3E1DF6E33A0048C895 /* CRAPI.swift */; };
-		1295ED491DF8169F0048C895 /* OAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth.swift */; };
+		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
 		1295ED4B1DF843740048C895 /* CRResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4A1DF843740048C895 /* CRResult.swift */; };
 		1295ED4D1DF844780048C895 /* CRFittingCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4C1DF844780048C895 /* CRFittingCollection.swift */; };
 		1295ED4F1DF846130048C895 /* CRType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED4E1DF846130048C895 /* CRType.swift */; };
@@ -130,11 +131,12 @@
 		123825811DED7A780031A884 /* EVEAccountBalance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAccountBalance.swift; sourceTree = "<group>"; };
 		123825831DED7B440031A884 /* EVEAssetList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAssetList.swift; sourceTree = "<group>"; };
 		123825851DED7BD60031A884 /* EVEConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEConstants.swift; sourceTree = "<group>"; };
+		126FA8031DFD761C005FFDD3 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../ThirdParty/Alamofire/build/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
 		1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParserExtension.swift; sourceTree = "<group>"; };
 		1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEObject.swift; sourceTree = "<group>"; };
 		1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEServerStatus.swift; sourceTree = "<group>"; };
 		1295ED3E1DF6E33A0048C895 /* CRAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRAPI.swift; sourceTree = "<group>"; };
-		1295ED481DF8169F0048C895 /* OAuth.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth.swift; sourceTree = "<group>"; };
+		1295ED481DF8169F0048C895 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
 		1295ED4A1DF843740048C895 /* CRResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRResult.swift; sourceTree = "<group>"; };
 		1295ED4C1DF844780048C895 /* CRFittingCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRFittingCollection.swift; sourceTree = "<group>"; };
 		1295ED4E1DF846130048C895 /* CRType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRType.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */,
 				12AB65751DE9AB22003AA683 /* AFNetworking.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -304,7 +307,7 @@
 				12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */,
 				12AB65711DE9AAFF003AA683 /* EVEHTTPSessionManager.swift */,
 				12AB65761DE9ABF3003AA683 /* EVEHTTPCachedContent.swift */,
-				1295ED481DF8169F0048C895 /* OAuth.swift */,
+				1295ED481DF8169F0048C895 /* OAuth2.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 		12AB65731DE9AB21003AA683 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				126FA8031DFD761C005FFDD3 /* Alamofire.framework */,
 				12AB65741DE9AB22003AA683 /* AFNetworking.framework */,
 			);
 			name = Frameworks;
@@ -655,7 +659,7 @@
 				12A266A61DEDBAAF00DC8291 /* EVEContractItems.swift in Sources */,
 				12A266A41DEDBA0B00DC8291 /* EVEContractBids.swift in Sources */,
 				123825861DED7BD60031A884 /* EVEConstants.swift in Sources */,
-				1295ED491DF8169F0048C895 /* OAuth.swift in Sources */,
+				1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */,
 				12A266F11DEE37C300DC8291 /* EVEOutpostServiceDetail.swift in Sources */,
 				12A266DA1DEE1C4800DC8291 /* EVEFacWarStats.swift in Sources */,
 				12A266F31DEE384400DC8291 /* EVEShareholders.swift in Sources */,

@@ -38,7 +38,7 @@ public struct CRScope {
 public class CRAPI: NSObject {
 
 	public let cachePolicy: URLRequest.CachePolicy
-	public let token: OAToken?
+	public let token: OAuth2Token?
 
 	public lazy var sessionManager: EVEHTTPSessionManager = {
 		let manager = EVEHTTPSessionManager(baseURL: URL(string: "https://crest.eveonline.com")!, sessionConfiguration: nil)
@@ -46,12 +46,12 @@ public class CRAPI: NSObject {
 		manager.requestSerializer = AFHTTPRequestSerializer()
 		manager.requestSerializer.cachePolicy = self.cachePolicy
 		if let token = self.token {
-			manager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
+			manager.requestSerializer.setValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
 		}
 		return manager
 	}()
 
-	public init(token: OAToken?, cachePolicy: URLRequest.CachePolicy) {
+	public init(token: OAuth2Token?, cachePolicy: URLRequest.CachePolicy) {
 		if token?.tokenType != nil && token?.accessToken != nil {
 			self.token = token
 		}
@@ -62,10 +62,10 @@ public class CRAPI: NSObject {
 		super.init()
 	}
 	
-	public class func oauth(clientID: String, secretKey: String, callbackURL: URL, scope: [CRScope]) -> OAuth {
-		let scope = scope.map {$0.rawValue}
-		return OAuth(clientID: clientID, secretKey: secretKey, callbackURL: callbackURL, scope: scope, realm: nil)
-	}
+//	public class func oauth(clientID: String, secretKey: String, callbackURL: URL, scope: [CRScope]) -> OAuth {
+//		let scope = scope.map {$0.rawValue}
+//		return OAuth(clientID: clientID, secretKey: secretKey, callbackURL: callbackURL, scope: scope, realm: nil)
+//	}
 	
 	public func fittings(completionBlock:((CRFittingCollection?, Error?) -> Void)?) {
 		if let token = token {
@@ -115,7 +115,7 @@ public class CRAPI: NSObject {
 	}
 	
 	private func get<T:CRResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((T?, Error?) -> Void)?) -> Void {
-		let contentType = "\(T.contentType); charset=utf-8"
+		/*let contentType = "\(T.contentType); charset=utf-8"
 		self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")
 		self.sessionManager.responseSerializer.acceptableContentTypes = nil
 		self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
@@ -134,7 +134,7 @@ public class CRAPI: NSObject {
 								completionBlock?(nil, error)
 							}
 							else {
-								self.sessionManager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
+								self.sessionManager.requestSerializer.setValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
 								self.sessionManager.requestSerializer.setValue(contentType, forHTTPHeaderField: "Accept")
 								self.sessionManager.responseSerializer.acceptableContentTypes = Set([T.contentType])
 								self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
@@ -163,6 +163,7 @@ public class CRAPI: NSObject {
 				}
 			}
 		})
+*/
 	}
 }
 

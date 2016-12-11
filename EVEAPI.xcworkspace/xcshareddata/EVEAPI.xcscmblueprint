@@ -4,15 +4,17 @@
 
   },
   "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
-    "CBD3C72D1EC244FEC895CDE83582355773BC1B4F" : 9223372036854775807,
     "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0" : 9223372036854775807,
-    "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8" : 9223372036854775807
+    "67620B5EFA902936DF04070AF595B76AB0333747" : 9223372036854775807,
+    "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8" : 9223372036854775807,
+    "CBD3C72D1EC244FEC895CDE83582355773BC1B4F" : 9223372036854775807
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "018D80C2-F921-4FA1-A62B-C15CB7671EE3",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "CBD3C72D1EC244FEC895CDE83582355773BC1B4F" : "..",
     "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0" : "EVEOnlineAPI\/",
-    "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8" : "EVEOnlineAPI\/ThirdParty\/AFNetworking\/"
+    "67620B5EFA902936DF04070AF595B76AB0333747" : "EVEOnlineAPI\/ThirdParty\/Alamofire\/",
+    "DD20A1A48C66B5213E0FEBB87A95EF51D6C6F3E8" : "EVEOnlineAPI\/ThirdParty\/AFNetworking\/",
+    "CBD3C72D1EC244FEC895CDE83582355773BC1B4F" : ".."
   },
   "DVTSourceControlWorkspaceBlueprintNameKey" : "EVEAPI",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
@@ -22,6 +24,11 @@
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/mrdepth\/EVEOnlineAPI.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0F0B6FB3121415B4BFE652B8CA72F270CA803FB0"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/Alamofire\/Alamofire.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "67620B5EFA902936DF04070AF595B76AB0333747"
     },
     {
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:mrdepth\/EVEUniverse.git",

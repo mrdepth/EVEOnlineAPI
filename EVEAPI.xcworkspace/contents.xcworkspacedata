@@ -16,4 +16,7 @@
    <FileRef
       location = "group:Playground.playground">
    </FileRef>
+   <FileRef
+      location = "group:ThirdParty/Alamofire/Alamofire.xcodeproj">
+   </FileRef>
 </Workspace>

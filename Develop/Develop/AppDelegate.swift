@@ -18,49 +18,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
-		/*let api = EVEOnlineAPI(apiKey:EVEAPIKey(keyID: 519, vCode: "IiEPrrQTAdQtvWA2Aj805d0XBMtOyWBCc0zE57SGuqinJLKGTNrlinxc6v407Vmf"))
-		api.accountStatus { (result, error) in
-			print("\(result)")
-		}
+//		let url = ESAPI.oauth2url(clientID: "c2cc974798d4485d966fba773a8f7ef8", callbackURL: URL(string: "neocom://sso")!, scope: ESScope.all)
+//		UIApplication.shared.openURL(url)
 		
-		let token = OAToken(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
-		token.refreshToken = "HuBp_J9nxaqmtpXXb9HLTR0pimVFp_na9EGi4KsQDIWraCHzNmywDFjBcKdYe6hI0"
-		token.refresh { (error) in
-			var api: CRAPI?
-			api = CRAPI(token: token, cachePolicy: .useProtocolCachePolicy)
-			api?.fittings(completionBlock: { (result, error) in
-				api = nil
+		let data = Data(base64Encoded:"YnBsaXN0MDDUAQIDBAUGLzBYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKsHCBscHR4fIykqK1UkbnVsbNkJCgsMDQ4PEBESExQVFhcYGRpWJGNsYXNzW2NoYXJhY3RlcklEXWNoYXJhY3Rlck5hbWVccmVmcmVzaFRva2VuWXRva2VuVHlwZVlleHBpcmVzT25bYWNjZXNzVG9rZW5VcmVhbG1YY2xpZW50SUSAChIFZb26gAiABIAFgAaAA4AJgAJfECBjMmNjOTc0Nzk4ZDQ0ODVkOTY2ZmJhNzczYThmN2VmOF8QV3ZJZDUtY0ZnTlp4bk4zQ2FHN182X1RoZXI3S2c2TXJ6MWJXTDBmYmlBYjhlVEN2a19NOWVlbkNDWksyV3BkYmpzcWlfTnZkQVZ6UU0xRnhTUGk3ck9RMl8QgTMwTEZ4QnFUYlNYMk9ibXZUSWRSYzlqeUZFT2k3MDhBeFNZWDBhZjlhOHRQbXUwcUxnd3Vla0RkejZzTVR2RlRMNEp2RlFiLTZacHFObkM2anQzY3d1SjMxRzk2eWJTVGNVUnlGYldrUnViTVAzeGZfODJEVEloS0VVeG0tOC1LMFZCZWFyZXLSIAkhIldOUy50aW1lI0G9/aozoQANgAfSJCUmJ1okY2xhc3NuYW1lWCRjbGFzc2VzVk5TRGF0ZaImKFhOU09iamVjdF8QFFBvJ2t1cGF0ZWwgQm9sb3NrYXJsU2VzadIkJSwtXxASRVZFQVBJLk9BdXRoMlRva2Vuoi4oXxASRVZFQVBJLk9BdXRoMlRva2VuXxAPTlNLZXllZEFyY2hpdmVy0TEyVHJvb3SAAQAIABEAGgAjAC0AMgA3AEMASQBcAGMAbwB9AIoAlACeAKoAsAC5ALsAwADCAMQAxgDIAMoAzADOAPEBSwHPAdYB2wHjAewB7gHzAf4CBwIOAhECGgIxAjUCOgJPAlICZwJ5AnwCgQAAAAAAAAIBAAAAAAAAADMAAAAAAAAAAAAAAAAAAAKD")
+		let token = NSKeyedUnarchiver.unarchiveObject(with: data!) as! OAuth2Token
+		
+		var handler: OAuth2Handler? = OAuth2Handler(token: token, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
+		
+//		handler?.refreshToken { (error) in
+//			print("\(error)")
+//			handler = nil
+//		}
+		
+		var api: ESAPI? = ESAPI(token: token, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
+		api?.alliances { (result) in
+			switch result {
+			case let .success(value):
+				print("\(value)")
+			case let .failure(error):
 				print("\(error)")
-			})
-			print ("accessToken: \(token.accessToken!)")
-			print ("characterID: \(token.characterID)")
+			}
+			api = nil
 		}
 		
-//		var oauth: OAuth?
-//		oauth = CRAPI.oauth(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", callbackURL: URL(string: "neocom://sso")!, scope: CRAPIScope.all)
-//		oauth?.authenticate { (token, error) in
-//		}*/
-		
-		
-		/*var oauth: OAuth?
-		oauth = ESAPI.oauth(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", callbackURL: URL(string: "neocom://sso")!, scope: ESScope.all)
-		oauth?.authenticate(completionBlock: { (token, error) in
-			print (NSKeyedArchiver.archivedData(withRootObject: token!).base64EncodedString())
-			oauth = nil
-
-		})*/
-		
-		let data = Data(base64Encoded:"YnBsaXN0MDDUAQIDBAUGMTJYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKsHCB0eHyAhIiYsLVUkbnVsbNoJCgsMDQ4PEBESExQVFhcYGRobHFYkY2xhc3NbY2hhcmFjdGVySURdY2hhcmFjdGVyTmFtZVxyZWZyZXNoVG9rZW5Zc2VjcmV0S2V5WXRva2VuVHlwZVthY2Nlc3NUb2tlbllleHBpcmVzT25YY2xpZW50SURVcmVhbG2AChJcqLnIgAmABYADgAaABIAHgAKAAF8QIGMyY2M5NzQ3OThkNDQ4NWQ5NjZmYmE3NzNhOGY3ZWY4XxAoR05oU0U5R0o2cTNRaXVQU1RJSjhRMUo2b240Q2xNNHY5enZjMFF6dV8QV3hwc0hFWWNzNVpnZE5hQkVZOVlyUlhwd0VubS03d04yamk4cXB5VWIzd0w5LUdVdjk5MlVtVEFnQTBvODZQNkl6aFlPellIMFUwUVNOQUxScEFKV0ZRMl8QgTdPV05kNkMxMEkzYVZ6OEo0MUR2Ync0ZW9OMlprQnhUMXBpeDZqb3BDT3hlOTJfOWFYSkdJbUlHMXhHYzFiWG1wQkNSeWZjWmhRX1cyZkJsdGZ3VFlZQWFHSWVSalVCS09BMkZxT3FhQ1hLY0J2R1JpTmZBa25uN3JrdnBGcV95MFZCZWFyZXLSIwkkJVdOUy50aW1lI0G9+VcBE3ajgAjSJygpKlokY2xhc3NuYW1lWCRjbGFzc2VzVk5TRGF0ZaIpK1hOU09iamVjdF1BcnRlbSBWYWxpYW500icoLi9eRVZFQVBJLk9BVG9rZW6iMCteRVZFQVBJLk9BVG9rZW5fEA9OU0tleWVkQXJjaGl2ZXLRMzRUcm9vdIABAAgAEQAaACMALQAyADcAQwBJAF4AZQBxAH8AjACWAKAArAC2AL8AxQDHAMwAzgDQANIA1ADWANgA2gDcAP8BKgGEAggCDwIUAhwCJQInAiwCNwJAAkcCSgJTAmECZgJ1AngChwKZApwCoQAAAAAAAAIBAAAAAAAAADUAAAAAAAAAAAAAAAAAAAKj")
-		let token = NSKeyedUnarchiver.unarchiveObject(with: data!) as! OAToken
-		let api = ESAPI(token: token)
-		
-		api.allianceNames(allianceIDs: [99000002, 99000001], completionBlock: {(result, error) -> Void in
-			print ("\(result!.names)")
-			})
-		
-		api.marketHistory(typeID: 645, regionID: 10000002, completionBlock: { (prices, error) in
-			print("\(prices!)")
-		})
+//		
+//		api.allianceNames(allianceIDs: [99000002, 99000001], completionBlock: {(result, error) -> Void in
+//			print ("\(result!.names)")
+//			})
+//		
+//		api.marketHistory(typeID: 645, regionID: 10000002, completionBlock: { (prices, error) in
+//			print("\(prices!)")
+//		})
 		
 		/*let token = OAToken(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
 		token.refreshToken = "ne0FFEggMPQi951Z7cWssyMmryocHBS609vgQCtVt-k1"
@@ -101,7 +90,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-		return OAuth.handleOpenURL(url)
+		return OAuth2Handler.handleOpenURL(url, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", completionHandler: {result in
+			guard case let .success(token) = result else {return}
+			let s = NSKeyedArchiver.archivedData(withRootObject: token).base64EncodedString()
+			print ("\(s)")
+		})
+		//return OAuth2Handler.handleOpenURL(url)
 	}
 
 

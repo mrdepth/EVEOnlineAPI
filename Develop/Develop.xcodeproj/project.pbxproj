@@ -14,6 +14,8 @@
 		1288F00D1DEB5FBD00FD7FBE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1288F00B1DEB5FBD00FD7FBE /* LaunchScreen.storyboard */; };
 		1288F0151DEB61FC00FD7FBE /* EVEAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */; };
 		1288F0161DEB61FC00FD7FBE /* EVEAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		12BC409A1DFDA13E00657D40 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BC40991DFDA13E00657D40 /* Alamofire.framework */; };
+		12BC409B1DFDA13E00657D40 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12BC40991DFDA13E00657D40 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,6 +26,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				1288F0161DEB61FC00FD7FBE /* EVEAPI.framework in Embed Frameworks */,
+				12BC409B1DFDA13E00657D40 /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,6 +42,7 @@
 		1288F00C1DEB5FBD00FD7FBE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1288F00E1DEB5FBD00FD7FBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EVEAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		12BC40991DFDA13E00657D40 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1288F0151DEB61FC00FD7FBE /* EVEAPI.framework in Frameworks */,
+				12BC409A1DFDA13E00657D40 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,6 +61,7 @@
 		1288EFF61DEB5FBD00FD7FBE = {
 			isa = PBXGroup;
 			children = (
+				12BC40991DFDA13E00657D40 /* Alamofire.framework */,
 				1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */,
 				1288F0011DEB5FBD00FD7FBE /* Develop */,
 				1288F0001DEB5FBD00FD7FBE /* Products */,
@@ -320,6 +326,7 @@
 				1288F0131DEB5FBD00FD7FBE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

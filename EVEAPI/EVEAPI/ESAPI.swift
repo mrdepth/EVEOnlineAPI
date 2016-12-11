@@ -10,12 +10,14 @@ import Foundation
 
 import Foundation
 import AFNetworking
+import Alamofire
 
-public enum ESAPIError: Error {
-	case internalError
-	case invalidResponse
-	case unauthorized(String?)
-	case server(String?, String?)
+public enum ESError: Error {
+	case network(error: Error)
+	case objectSerialization(reason: String)
+	case serialization(error: Error)
+	case unauthorized(reason: String?)
+	case server(exceptionType: String, reason: String?)
 }
 
 public struct ESScope {
@@ -74,99 +76,150 @@ public enum ESServer: String {
 	case singularity = "singularity"
 }
 
-public class ESAPI: NSObject {
-	
-	public let cachePolicy: URLRequest.CachePolicy
-	public let token: OAToken?
+public class ESRouter {
+	public let sessionManager: SessionManager
+	public let token: OAuth2Token?
 	public let server: ESServer
-	
-	public lazy var sessionManager: EVEHTTPSessionManager = {
-		let manager = EVEHTTPSessionManager(baseURL: URL(string: "https://esi.tech.ccp.is")!, sessionConfiguration: nil)
-		manager.responseSerializer = AFJSONResponseSerializer()
-		manager.requestSerializer = AFHTTPRequestSerializer()
-		manager.requestSerializer.cachePolicy = self.cachePolicy
-		if let token = self.token {
-			manager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
-		}
-		return manager
-	}()
-	
-	public init(token: OAToken? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
-		if token?.tokenType != nil && token?.accessToken != nil {
-			self.token = token
-		}
-		else {
-			self.token = nil
-		}
-		self.server = server
-		self.cachePolicy = cachePolicy
-		super.init()
-	}
-	
-	public class func oauth(clientID: String, secretKey: String, callbackURL: URL, scope: [ESScope]) -> OAuth {
-		let scope = scope.map {$0.rawValue}
-		return OAuth(clientID: clientID, secretKey: secretKey, callbackURL: callbackURL, scope: scope, realm: "ESI")
-	}
-	
-	public func marketPrices(completionBlock:(([ESMarketPrice]?, Error?) -> Void)?) {
-		get("v1/markets/prices/", parameters: nil, completionBlock: completionBlock)
-	}
 
+	let baseURL = "https://esi.tech.ccp.is/"
 	
-	public func alliances(completionBlock:(([Int64]?, Error?) -> Void)?) {
+	init(sessionManager: SessionManager, token: OAuth2Token?, server: ESServer) {
+		self.sessionManager = sessionManager
+		self.token = token
+		self.server = server
+	}
+	
+	func get<T>(_ path: String, parameters: [String:Any]?, completionBlock: ((Result<[T]>) -> Void)?) -> Void {
+		var parameters = parameters ?? [:]
+		parameters["datasource"] = server.rawValue
+		sessionManager.request(baseURL + path, parameters: parameters).responseESI { (response: DataResponse<[T]>) in
+			completionBlock?(response.result)
+		}
+	}
+	
+	func get<T:ESResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((Result<T>) -> Void)?) -> Void {
+		var parameters = parameters ?? [:]
+		parameters["datasource"] = server.rawValue
+		sessionManager.request(baseURL + path, parameters: parameters).responseESI { (response: DataResponse<T>) in
+			completionBlock?(response.result)
+		}
+	}
+}
+
+public class ESAPI: ESRouter {
+	
+	
+	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+		
+		
+		let configuration = URLSessionConfiguration.default
+		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+		configuration.requestCachePolicy = cachePolicy
+		let sessionManager = SessionManager(configuration: configuration)
+
+		if let token = token, let clientID = clientID, let secretKey = secretKey {
+			let handler = OAuth2Handler(token: token, clientID: clientID, secretKey: secretKey)
+			sessionManager.adapter = handler
+			sessionManager.retrier = handler
+		}
+		super.init(sessionManager: sessionManager, token: token, server: server)
+	}
+	
+	public class func oauth2url(clientID: String, callbackURL: URL, scope: [ESScope]) -> URL {
+		var query = [URLQueryItem] ()
+		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+
+		query.append(URLQueryItem(name: "response_type", value: "code"))
+		query.append(URLQueryItem(name: "redirect_uri", value: callback))
+		query.append(URLQueryItem(name: "client_id", value: clientID))
+		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)))
+		query.append(URLQueryItem(name: "state", value: "esi"))
+		query.append(URLQueryItem(name: "realm", value: "esi"))
+		
+		var components = URLComponents(string: "https://login.eveonline.com/oauth/authorize/")!
+		components.queryItems = query
+		return components.url!
+	}
+	
+	public private(set) lazy var alliances: ESAlliancesRouter = {
+		return ESAlliancesRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
+	}()
+
+	public func alliances(completionBlock:((Result<[Int64]>) -> Void)?) {
 		get("v1/alliances/", parameters: nil, completionBlock: completionBlock)
 	}
+	
+	public func alliance(allianceID: Int64, completionBlock:((Result<ESAlliance>) -> Void)?) {
+		get("v2/alliances/\(allianceID)/", parameters: nil, completionBlock: completionBlock)
+	}
 
-	public func allianceNames(allianceIDs: [Int64], completionBlock:((ESAllianceNames?, Error?) -> Void)?) {
+	public func assets(completionBlock:((Result<[ESAsset]>) -> Void)?) {
+		if let token = token {
+			get("v1/characters/\(token.characterID)/assets/", parameters: nil, completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
+		}
+	}
+
+	public private(set) lazy var bookmarks: ESBookmarksRouter = {
+		return ESBookmarksRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
+	}()
+
+	public func bookmarks(completionBlock:((Result<[ESBookmark]>) -> Void)?) {
+		if let token = token {
+			get("v1/characters/\(token.characterID)/bookmarks/", parameters: nil, completionBlock: completionBlock)
+		}
+		else {
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
+		}
+	}
+
+	public private(set) lazy var calendar: ESCalendarRouter = {
+		return ESCalendarRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
+	}()
+
+	public private(set) lazy var markets: ESMarketsRouter = {
+		return ESMarketsRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
+	}()
+
+}
+
+public class ESAlliancesRouter: ESRouter {
+
+	public func corporations(allianceID: Int64, completionBlock:((Result<[Int64]>) -> Void)?) {
+		get("v1/alliances/\(allianceID)/corporations/", parameters: nil, completionBlock: completionBlock)
+	}
+	
+	public func icons(allianceID: Int64, completionBlock:((Result<ESAllianceIcons>) -> Void)?) {
+		get("v1/alliances/\(allianceID)/icons/", parameters: nil, completionBlock: completionBlock)
+	}
+	
+	public func names(allianceIDs: [Int64], completionBlock:((Result<ESAllianceNames>) -> Void)?) {
 		if allianceIDs.count > 0 {
 			let ids = allianceIDs.map {String($0)}
 			get("v1/alliances/names/", parameters: ["alliance_ids":ids.joined(separator: ",")], completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(ESAllianceNames(dictionary: [:]), nil)
+			completionBlock?(.success(ESAllianceNames(dictionary: [:])!))
 		}
 	}
 
-	public func alliance(allianceID: Int64, completionBlock:((ESAlliance?, Error?) -> Void)?) {
-		get("v2/alliances/\(allianceID)/", parameters: nil, completionBlock: completionBlock)
-	}
+}
 
-	public func allianceCorporations(allianceID: Int64, completionBlock:(([Int64]?, Error?) -> Void)?) {
-		get("v1/alliances/\(allianceID)/corporations/", parameters: nil, completionBlock: completionBlock)
-	}
-
-	public func allianceIcons(allianceID: Int64, completionBlock:((ESAllianceIcons?, Error?) -> Void)?) {
-		get("v1/alliances/\(allianceID)/icons/", parameters: nil, completionBlock: completionBlock)
-	}
-
-	public func assets(completionBlock:(([ESAsset]?, Error?) -> Void)?) {
-		if let token = token {
-			get("v1/characters/\(token.characterID)/assets/", parameters: nil, completionBlock: completionBlock)
-		}
-		else {
-			completionBlock?(nil, ESAPIError.unauthorized(nil))
-		}
-	}
-
-	public func bookmarks(completionBlock:(([ESBookmark]?, Error?) -> Void)?) {
-		if let token = token {
-			get("v1/characters/\(token.characterID)/bookmarks/", parameters: nil, completionBlock: completionBlock)
-		}
-		else {
-			completionBlock?(nil, ESAPIError.unauthorized(nil))
-		}
-	}
-
-	public func bookmarkFolders(completionBlock:(([ESBookmarkFolder]?, Error?) -> Void)?) {
+public class ESBookmarksRouter: ESRouter {
+	public func folders(completionBlock:((Result<[ESBookmarkFolder]>) -> Void)?) {
 		if let token = token {
 			get("v1/characters/\(token.characterID)/bookmarks/folders/", parameters: nil, completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(nil, ESAPIError.unauthorized(nil))
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
 		}
 	}
+}
 
-	public func calendarEvents(fromEvent: Int64?, completionBlock:(([ESCalendarEvent]?, Error?) -> Void)?) {
+public class ESCalendarRouter: ESRouter {
+	public func events(fromEvent: Int64?, completionBlock:((Result<[ESCalendarEvent]>) -> Void)?) {
 		if let token = token {
 			let parameters: [String: Int64]?
 			if let fromEvent = fromEvent {
@@ -178,116 +231,145 @@ public class ESAPI: NSObject {
 			get("v1/characters/\(token.characterID)/calendar/", parameters: parameters, completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(nil, ESAPIError.unauthorized(nil))
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
 		}
 	}
-
-	public func calendarEventDetails(eventID: Int64, completionBlock:((ESCalendarEventDetails?, Error?) -> Void)?) {
+	
+	public func event(eventID: Int64, completionBlock:((Result<ESCalendarEventDetails>) -> Void)?) {
 		if let token = token {
 			get("v1/characters/\(token.characterID)/calendar/\(eventID)/", parameters: nil, completionBlock: completionBlock)
 		}
 		else {
-			completionBlock?(nil, ESAPIError.unauthorized(nil))
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
 		}
 	}
+}
+
+public class ESMarketsRouter: ESRouter {
+	public func prices(completionBlock:((Result<[ESMarketPrice]>) -> Void)?) {
+		get("v1/markets/prices/", parameters: nil, completionBlock: completionBlock)
+	}
 	
-	
-	public func marketHistory(typeID: Int, regionID: Int, completionBlock:(([ESMarketHistory]?, Error?) -> Void)?) {
+	public func history(typeID: Int, regionID: Int, completionBlock:((Result<[ESMarketHistory]>) -> Void)?) {
 		get("v1/markets/\(regionID)/history/", parameters: ["type_id": typeID], completionBlock: completionBlock)
 	}
+}
 
+extension DataRequest {
+
+	@discardableResult
 	
-	//MARK: Private
-	
-	private func validate<T:ESResult>(result: Any?) throws -> T {
-		if let array = result as? [Any] {
-			let result = ["items": array]
-			if let obj = T.init(dictionary:result) {
-				return obj
-			}
-			else {
-				throw CRAPIError.invalidResponse
-			}
-		}
-		else if let result = result as? [String: Any] {
-			if let exceptionType = result["exceptionType"] as? String {
-				let message = result["message"] as? String
-				switch exceptionType {
-				case "UnauthorizedError":
-					throw CRAPIError.unauthorized(message)
-				default:
-					throw CRAPIError.server(exceptionType, message)
+	static func esiResponseSerializer() -> DataResponseSerializer<Any> {
+		return DataResponseSerializer { request, response, data, error in
+			switch jsonResponseSerializer().serializeResponse(request, response, data, error) {
+			case let .success(value):
+				guard let result = value as? [String: Any] else {return .success(value)}
+				if let result = result as? [String: Any] {
+					if let exceptionType = result["exceptionType"] as? String {
+						let message = result["message"] as? String
+						switch exceptionType {
+						case "UnauthorizedError":
+							return .failure(ESError.unauthorized(reason: message))
+						default:
+							return .failure(ESError.server(exceptionType: exceptionType, reason: message))
+						}
+					}
+					else if let error = result["error"] as? String {
+						return .failure(ESError.server(exceptionType: "ServerError", reason: error))
+					}
+					else if let error = result["error_description"] as? String {
+						return .failure(ESError.server(exceptionType: "ServerError", reason: error))
+					}
 				}
+				
+				return .success(value)
+			case let .failure(error):
+				return .failure(error)
 			}
-			else if let error = result["error"] as? String {
-				throw CRAPIError.server("ServerError", error)
-			}
-			else if let obj = T.init(dictionary:result) {
-				return obj
-			}
-			else {
-				throw CRAPIError.invalidResponse
-			}
-		}
-		else {
-			throw CRAPIError.internalError
+			guard error == nil else {return .failure(error!)}
+			return Request.serializeResponseJSON(options: .allowFragments, response: response, data: data, error: error)
 		}
 	}
 	
-	private func get<T>(_ path: String, parameters: [String:Any]?, completionBlock: (([T]?, Error?) -> Void)?) -> Void {
+	public func responseESI<T:ESResult>(
+		queue: DispatchQueue? = nil,
+		options: JSONSerialization.ReadingOptions = .allowFragments,
+		completionHandler: @escaping (DataResponse<T>) -> Void)
+		-> Self {
+		let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
+			guard error == nil else { return .failure(ESError.network(error: error!)) }
+			
+			let responseSerializer = DataRequest.esiResponseSerializer()
+			let result = responseSerializer.serializeResponse(request, response, data, nil)
+			
+			guard case let .success(jsonObject) = result else {
+				return .failure(ESError.serialization(error: result.error!))
+			}
+			guard let dic = jsonObject as? [String: Any] else {
+				return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
+			}
+			guard let response = response, let responseObject = T(dictionary: dic) else {
+				return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
+			}
+			
+			return .success(responseObject)
+		}
 		
-		get(path, parameters: parameters, completionBlock: {(_ result: ESArray<T>?, _ error: Error?) -> Void in
-			completionBlock?(result?.array as? [T], error)
-		})
+		return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
 	}
-
 	
-	private func get<T:ESResult>(_ path: String, parameters: [String:Any]?, completionBlock: ((T?, Error?) -> Void)?) -> Void {
-		var parameters = parameters ?? [:]
-		parameters["datasource"] = self.server.rawValue
-
-		self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
-			if let error = error {
-				completionBlock?(nil, error)
-			}
-			else {
-				do {
-					let obj: T = try self.validate(result: result)
-					completionBlock?(obj, nil)
+	public func responseESI<T:EVEObject>(
+		queue: DispatchQueue? = nil,
+		options: JSONSerialization.ReadingOptions = .allowFragments,
+		completionHandler: @escaping (DataResponse<[T]>) -> Void)
+		-> Self {
+			let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
+				guard error == nil else { return .failure(ESError.network(error: error!)) }
+				
+				let responseSerializer = DataRequest.esiResponseSerializer()
+				let result = responseSerializer.serializeResponse(request, response, data, nil)
+				
+				guard case let .success(jsonObject) = result else {
+					return .failure(ESError.serialization(error: result.error!))
 				}
-				catch ESAPIError.unauthorized(let message) {
-					if let token = self.token {
-						token.refresh(completionBlock: { (error) in
-							if let error = error {
-								completionBlock?(nil, error)
-							}
-							else {
-								self.sessionManager.requestSerializer.setValue("\(token.tokenType!) \(token.accessToken!)", forHTTPHeaderField: "Authorization")
-								self.sessionManager.get(path, parameters: parameters, responseSerializer: nil, completionBlock: {(result, error) -> Void in
-									if let error = error {
-										completionBlock?(nil, error)
-									}
-									else {
-										do {
-											let obj: T = try self.validate(result: result)
-											completionBlock?(obj, nil)
-										}
-										catch let error {
-											completionBlock?(nil, error)
-										}
-									}
-								})
-							}
-						})
+				guard let array = jsonObject as? [[String: Any]] else {
+					return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
+				}
+				var objects = [T]()
+				for dic in array {
+					if let object = T(dictionary: dic) {
+						objects.append(object)
 					}
-					else {
-						completionBlock?(nil, ESAPIError.unauthorized(message))
-					}
+					
 				}
-				catch let error {
-					completionBlock?(nil, error ?? ESAPIError.internalError)
-				}
+				
+				return .success(objects)
 			}
-		})
+			
+			return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
 	}
+	
+	public func responseESI<T:Any>(
+		queue: DispatchQueue? = nil,
+		options: JSONSerialization.ReadingOptions = .allowFragments,
+		completionHandler: @escaping (DataResponse<[T]>) -> Void)
+		-> Self {
+			let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
+				guard error == nil else { return .failure(ESError.network(error: error!)) }
+				
+				let responseSerializer = DataRequest.esiResponseSerializer()
+				let result = responseSerializer.serializeResponse(request, response, data, nil)
+				
+				guard case let .success(jsonObject) = result else {
+					return .failure(ESError.serialization(error: result.error!))
+				}
+				guard let array = jsonObject as? [T] else {
+					return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
+				}
+				return .success(array)
+			}
+			
+			return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
+	}
+
 }
