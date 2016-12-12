@@ -241,6 +241,7 @@ import Foundation
 @objc public enum ESLocationType: Int {
 	case station
 	case solarSystem
+	case structure
 	case other
 	
 	init(_ string: String) {
@@ -249,6 +250,8 @@ import Foundation
 			self = .station
 		case "solar_system":
 			self = .solarSystem
+		case "structure":
+			self = .structure
 		case "other":
 			self = .other
 		default:
@@ -275,6 +278,343 @@ import Foundation
 			self = .tentative
 		default:
 			self = .notResponded
+		}
+	}
+}
+
+@objc public enum ESGender: Int {
+	case male
+	case female
+	
+	init(_ string: String) {
+		switch string {
+		case "male":
+			self = .male
+		case "female":
+			self = .female
+		default:
+			self = .male
+		}
+	}
+}
+
+@objc public enum ESRole: Int {
+	case none
+	case director
+	case personnelManager
+	case accountant
+	case securityOfficer
+	case factoryManager
+	case stationManager
+	case auditor
+	case hangarTake1
+	case hangarTake2
+	case hangarTake3
+	case hangarTake4
+	case hangarTake5
+	case hangarTake6
+	case hangarTake7
+	case hangarQuery1
+	case hangarQuery2
+	case hangarQuery3
+	case hangarQuery4
+	case hangarQuery5
+	case hangarQuery6
+	case hangarQuery7
+	case accountTake1
+	case accountTake2
+	case accountTake3
+	case accountTake4
+	case accountTake5
+	case accountTake6
+	case accountTake7
+	case diplomat
+	case configEquipment
+	case containerTake1
+	case containerTake2
+	case containerTake3
+	case containerTake4
+	case containerTake5
+	case containerTake6
+	case containerTake7
+	case rentOffice
+	case rentFactoryFacility
+	case rentResearchFacility
+	case juniorAccountant
+	case configStarbaseEquipment
+	case trader
+	case communicationsOfficer
+	case contractManager
+	case starbaseDefenseOperator
+	case starbaseFuelTechnician
+	case fittingManager
+	case terrestrialCombatOfficer
+	case terrestrialLogisticsOfficer
+	
+	init(_ string: String) {
+		switch string {
+		case "Director":
+			self = .director
+		case "Personnel_Manager":
+			self = .personnelManager
+		case "Accountant":
+			self = .accountant
+		case "Security_Officer":
+			self = .securityOfficer
+		case "Factory_Manager":
+			self = .factoryManager
+		case "Station_Manager":
+			self = .stationManager
+		case "Auditor":
+			self = .auditor
+		case "Hangar_Take_1":
+			self = .hangarTake1
+		case "Hangar_Take_2":
+			self = .hangarTake2
+		case "Hangar_Take_3":
+			self = .hangarTake3
+		case "Hangar_Take_4":
+			self = .hangarTake4
+		case "Hangar_Take_5":
+			self = .hangarTake5
+		case "Hangar_Take_6":
+			self = .hangarTake6
+		case "Hangar_Take_7":
+			self = .hangarTake7
+		case "Hangar_Query_1":
+			self = .hangarQuery1
+		case "Hangar_Query_2":
+			self = .hangarQuery2
+		case "Hangar_Query_3":
+			self = .hangarQuery3
+		case "Hangar_Query_4":
+			self = .hangarQuery4
+		case "Hangar_Query_5":
+			self = .hangarQuery5
+		case "Hangar_Query_6":
+			self = .hangarQuery6
+		case "Hangar_Query_7":
+			self = .hangarQuery7
+		case "Account_Take_1":
+			self = .accountTake1
+		case "Account_Take_2":
+			self = .accountTake2
+		case "Account_Take_3":
+			self = .accountTake3
+		case "Account_Take_4":
+			self = .accountTake4
+		case "Account_Take_5":
+			self = .accountTake5
+		case "Account_Take_6":
+			self = .accountTake6
+		case "Account_Take_7":
+			self = .accountTake7
+		case "Diplomat":
+			self = .diplomat
+		case "Config_Equipment":
+			self = .configEquipment
+		case "Container_Take_1":
+			self = .containerTake1
+		case "Container_Take_2":
+			self = .containerTake2
+		case "Container_Take_3":
+			self = .containerTake3
+		case "Container_Take_4":
+			self = .containerTake4
+		case "Container_Take_5":
+			self = .containerTake5
+		case "Container_Take_6":
+			self = .containerTake6
+		case "Container_Take_7":
+			self = .containerTake7
+		case "Rent_Office":
+			self = .rentOffice
+		case "Rent_Factory_Facility":
+			self = .rentFactoryFacility
+		case "Rent_Research_Facility":
+			self = .rentResearchFacility
+		case "Junior_Accountant":
+			self = .juniorAccountant
+		case "Config_Starbase_Equipment":
+			self = .configStarbaseEquipment
+		case "Trader":
+			self = .trader
+		case "Communications_Officer":
+			self = .communicationsOfficer
+		case "Contract_Manager":
+			self = .contractManager
+		case "Starbase_Defense_Operator":
+			self = .starbaseDefenseOperator
+		case "Starbase_Fuel_Technician":
+			self = .starbaseFuelTechnician
+		case "Fitting_Manager":
+			self = .fittingManager
+		case "Terrestrial_Combat_Officer":
+			self = .terrestrialCombatOfficer
+		case "Terrestrial_Logistics_Officer":
+			self = .terrestrialLogisticsOfficer
+		default:
+			self = .none
+		}
+	}
+}
+
+@objc public enum ESIncursionsState: Int {
+	case withdrawing
+	case mobilizing
+	case established
+	
+	init(_ string: String) {
+		switch string {
+		case "withdrawing":
+			self = .withdrawing
+		case "mobilizing":
+			self = .mobilizing
+		case "established":
+			self = .established
+		default:
+			self = .withdrawing
+		}
+	}
+}
+
+@objc public enum ESRecipientType: Int {
+	case alliance
+	case character
+	case corporation
+	case mailingList
+	
+	init(_ string: String) {
+		switch string {
+		case "alliance":
+			self = .alliance
+		case "character":
+			self = .character
+		case "corporation":
+			self = .corporation
+		case "mailing_list":
+			self = .mailingList
+		default:
+			self = .character
+		}
+	}
+}
+
+@objc public enum ESMarketOrderRange: Int {
+	case jumps1 = 1
+	case jumps2 = 2
+	case jumps3 = 3
+	case jumps4 = 4
+	case jumps5 = 5
+	case jumps10 = 10
+	case jumps20 = 20
+	case jumps30 = 30
+	case jumps40 = 40
+	case station = 1000
+	case region
+	case solarSystem
+	
+	init(_ string: String) {
+		switch string {
+		case "station":
+			self = .station
+		case "region":
+			self = .region
+		case "solarsystem":
+			self = .solarSystem
+		default:
+			let s = string as NSString
+			self = ESMarketOrderRange(rawValue: s.integerValue) ?? .jumps1
+		}
+	}
+}
+
+@objc public enum ESPlanetType: Int {
+	case temperate
+	case barren
+	case oceanic
+	case ice
+	case gas
+	case lava
+	case storm
+	case plasma
+	
+	init(_ string: String) {
+		switch string {
+		case "temperate":
+			self = .temperate
+		case "barren":
+			self = .barren
+		case "oceanic":
+			self = .oceanic
+		case "ice":
+			self = .ice
+		case "gas":
+			self = .gas
+		case "lava":
+			self = .lava
+		case "storm":
+			self = .storm
+		case "plasma":
+			self = .plasma
+		default:
+			self = .temperate
+		}
+	}
+}
+
+@objc public enum ESEventType: Int {
+	case none
+	case tcuDefense
+	case ihubDefense
+	case stationDefense
+	case stationFreeport
+	
+	init(_ string: String) {
+		switch string {
+		case "tcu_defense":
+			self = .tcuDefense
+		case "ihub_defense":
+			self = .ihubDefense
+		case "station_defense":
+			self = .stationDefense
+		case "station_freeport":
+			self = .stationFreeport
+		default:
+			self = .none
+		}
+	}
+}
+
+@objc public enum ESNameCategory: Int {
+	case none
+	case alliance
+	case character
+	case constellation
+	case corporation
+	case inventoryType
+	case region
+	case solarSystem
+	case station
+	
+	init(_ string: String) {
+		switch string {
+		case "alliance":
+			self = .alliance
+		case "character":
+			self = .character
+		case "constellation":
+			self = .corporation
+		case "inventory_type":
+			self = .inventoryType
+		case "region":
+			self = .region
+		case "solar_system":
+			self = .solarSystem
+		case "station":
+			self = .station
+		default:
+			self = .none
 		}
 	}
 }

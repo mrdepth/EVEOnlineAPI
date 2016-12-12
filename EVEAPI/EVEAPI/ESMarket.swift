@@ -58,3 +58,48 @@ public class ESMarketHistory: EVEObject {
 	}
 }
 
+public class ESMarketOrder: EVEObject {
+	public var duration: Int = 0
+	public var isBuyOrder: Bool = false
+	public var issued: Int64 = 0
+	public var locationID: Int64 = 0
+	public var minVolume: Int64 = 0
+	public var orderID: Int64 = 0
+	public var price: Double = 0
+	public var range: ESMarketOrderRange = .jumps1
+	public var typeID: Int = 0
+	public var volumeRemain: Int64 = 0
+	public var volumeTotal: Int64 = 0
+	
+	public required init?(dictionary:[String:Any]) {
+		super.init(dictionary: dictionary)
+	}
+	
+	public required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+	}
+	
+	override public func scheme() -> [String:EVESchemeElementType] {
+		return [
+		"duration": EVESchemeElementType.Int(elementName: nil, transformer: nil),
+		"isBuyOrder": EVESchemeElementType.Bool(elementName: "is_buy_order", transformer: nil),
+		"issued": EVESchemeElementType.Int64(elementName: nil, transformer: nil),
+		"locationID": EVESchemeElementType.Int64(elementName: "location_id", transformer: nil),
+		"minVolume": EVESchemeElementType.Int64(elementName: "min_volume", transformer: nil),
+		"orderID": EVESchemeElementType.Int64(elementName: "order_id", transformer: nil),
+		"price": EVESchemeElementType.Double(elementName: nil, transformer: nil),
+		"range":EVESchemeElementType.Int(elementName:"event_response", transformer:{(value:Any?) -> Any? in
+			if let s = value as? String {
+				return ESMarketOrderRange(s).rawValue
+			}
+			else {
+				return ESMarketOrderRange.jumps1.rawValue
+			}
+		}),
+		"typeID": EVESchemeElementType.Int(elementName: "type_id", transformer: nil),
+		"volumeRemain": EVESchemeElementType.Int64(elementName: "volume_remain", transformer: nil),
+		"volumeTotal": EVESchemeElementType.Int64(elementName: "volume_total", transformer: nil),
+		]
+	}
+}
+

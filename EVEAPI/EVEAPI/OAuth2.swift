@@ -20,7 +20,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 	public var refreshToken: String
 	public var tokenType: String
 	public var expiresOn: Date?
-	public let characterID: Int
+	public let characterID: Int64
 	public let characterName: String
 	public let realm: String
 	public var expired: Bool {
@@ -34,7 +34,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 		}
 	}
 	
-	public init(accessToken: String, refreshToken: String, tokenType: String, characterID: Int, characterName: String, realm: String) {
+	public init(accessToken: String, refreshToken: String, tokenType: String, characterID: Int64, characterName: String, realm: String) {
 		self.accessToken = accessToken
 		self.refreshToken = refreshToken
 		self.tokenType = tokenType
@@ -59,7 +59,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 		guard let refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String else {return nil}
 		guard let tokenType = aDecoder.decodeObject(forKey: "tokenType") as? String else {return nil}
 		expiresOn = aDecoder.decodeObject(forKey: "expiresOn") as? Date
-		characterID = aDecoder.decodeInteger(forKey: "characterID")
+		characterID = aDecoder.decodeInt64(forKey: "characterID")
 		guard let characterName = aDecoder.decodeObject(forKey: "characterName") as? String else {return nil}
 		guard let realm = aDecoder.decodeObject(forKey: "realm") as? String else {return nil}
 		
@@ -186,7 +186,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 			Alamofire.request("https://login.eveonline.com/oauth/token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
-			                  headers:["Authorization":"Basic \(auth!)"]).responseOAuth2 {response in
+			                  headers:["Authorization":"Basic \(auth!)"]).validate().responseOAuth2 {response in
 								switch(response.result) {
 								case let .success(value):
 									do {
@@ -196,12 +196,12 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 										guard let tokenType = result["token_type"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
 										guard let expiresIn = result["expires_in"] as? Double else {throw OAuth2Error.invalidServerResponse(response: response)}
 										let expiresOn = Date.init(timeIntervalSinceNow: expiresIn)
-										Alamofire.request("https://login.eveonline.com/oauth/verify", headers: ["Authorization":"\(tokenType) \(accessToken)"]).responseOAuth2 {response in
+										Alamofire.request("https://login.eveonline.com/oauth/verify", headers: ["Authorization":"\(tokenType) \(accessToken)"]).validate().responseOAuth2 {response in
 											switch(response.result) {
 											case let .success(value):
 												do {
 													guard let result = value as? [String: Any] else {throw OAuth2Error.invalidServerResponse(response: response)}
-													guard let characterID = result["CharacterID"] as? Int else {throw OAuth2Error.invalidServerResponse(response: response)}
+													guard let characterID = result["CharacterID"] as? Int64 else {throw OAuth2Error.invalidServerResponse(response: response)}
 													guard let characterName = result["CharacterName"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
 													
 													let token = OAuth2Token(accessToken: accessToken, refreshToken: refreshToken, tokenType: tokenType, characterID: characterID, characterName: characterName, realm: state)
@@ -262,7 +262,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 
 	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
 		synchronized(self) {
-			if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
+			if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 403 {
 				requestsToRetry.append(completion)
 				
 				if !isRefreshing {
@@ -289,7 +289,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 		Alamofire.request("https://login.eveonline.com/oauth/token",
 		                  method: .post,
 		                  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
-		                  headers:["Authorization":"Basic \(auth!)"]).responseOAuth2 {[weak self] response in
+		                  headers:["Authorization":"Basic \(auth!)"]).validate().responseOAuth2 {[weak self] response in
 							guard let strongSelf = self else { return }
 
 							switch(response.result) {

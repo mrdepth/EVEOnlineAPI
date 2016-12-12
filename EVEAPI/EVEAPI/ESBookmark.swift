@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class ESBookmarkCoordinates: EVEObject {
+public class ESCoordinates: EVEObject {
 	public var x: Double = 0
 	public var y: Double = 0
 	public var z: Double = 0
@@ -51,7 +51,7 @@ public class ESBookmarkItem: EVEObject {
 }
 
 public class ESBookmarkTarget: EVEObject {
-	public var coordinates: ESBookmarkCoordinates?
+	public var coordinates: ESCoordinates?
 	public var item: ESBookmarkItem?
 	public var locationID: Int64 = 0
 	
@@ -69,7 +69,7 @@ public class ESBookmarkTarget: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"coordinates": EVESchemeElementType.Object(elementName: nil, type: ESBookmarkCoordinates.self, transformer: nil),
+			"coordinates": EVESchemeElementType.Object(elementName: nil, type: ESCoordinates.self, transformer: nil),
 			"item": EVESchemeElementType.Object(elementName: nil, type: ESBookmarkItem.self, transformer: nil),
 			"locationID": EVESchemeElementType.Int64(elementName: "location_id", transformer: nil),
 		]

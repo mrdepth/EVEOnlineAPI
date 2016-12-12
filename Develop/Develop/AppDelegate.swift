@@ -32,15 +32,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		}
 		
 		var api: ESAPI? = ESAPI(token: token, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
-		api?.alliances { (result) in
-			switch result {
-			case let .success(value):
-				print("\(value)")
-			case let .failure(error):
-				print("\(error)")
+		
+		api?.character { result in
+			guard case let .success(character) = result else {return}
+			api?.corporation.members(corporationID: character.corporationID) { result in
+				guard case let .success(members) = result else {return}
+				print ("\(members)")
+				api = nil
 			}
-			api = nil
 		}
+		
+//		api?.assets { result in
+//			print ("\(result)")
+//			api = nil
+//		}
 		
 //		
 //		api.allianceNames(allianceIDs: [99000002, 99000001], completionBlock: {(result, error) -> Void in

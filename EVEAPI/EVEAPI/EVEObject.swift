@@ -65,7 +65,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 					case let value as NSNumber:
 						return value.intValue
 					default:
-						return 0
+						return nil
 					}
 				}
 			case let .Int64(elementName, transformer):
@@ -77,7 +77,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 					case let value as NSNumber:
 						return value.int64Value
 					default:
-						return 0.0
+						return nil
 					}
 				}
 			case let .Double(elementName, transformer):
@@ -89,7 +89,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 					case let value as NSNumber:
 						return value.doubleValue
 					default:
-						return 0.0
+						return nil
 					}
 				}
 			case let .Bool(elementName, transformer):
@@ -99,7 +99,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 						return NSString(string:s).boolValue
 					}
 					else {
-						return false
+						return nil
 					}
 				}
 			case let .String(elementName, transformer):

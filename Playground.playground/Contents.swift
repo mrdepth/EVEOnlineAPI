@@ -6,40 +6,25 @@ import EVEAPI
 //import AFNetworking
 import ObjectiveC
 
-PlaygroundPage.current.needsIndefiniteExecution = true
+//PlaygroundPage.current.needsIndefiniteExecution = true
 
 var str = "Hello, playground"
 
-let url = URL(string: "neocom://sso?code=4ZR17_Ti57jWfNRalzlvLBcear25s0T-ZXqTCByvQfbD2g091kRw4m95dWTcPy800&state=C0C9B7C1-5374-475D-9C96-7BFD728AB7FF")
+let s = "#FFFF7755"
 
-let components = URLComponents(url: url!, resolvingAgainstBaseURL: false)
-for item in components!.queryItems! {
-	print("\(item.name) = \(item.value)")
+if s[s.startIndex] == "#" {
+	let end = s.endIndex
+	var start = s.index(after: s.startIndex)
+	var rgba: [CGFloat] = [0, 0, 0, 1]
+	var i = 0
+	while start < end {
+		let end = min(s.index(start, offsetBy: 2), end)
+		let scanner = Scanner(string: s.substring(with: start..<end))
+		var n: UInt32 = 0
+		scanner.scanHexInt32(&n)
+		rgba[i] = CGFloat(n) / 255.0
+		start = end
+		i += 1
+	}
+	UIColor(red: rgba[0], green: rgba[1], blue: rgba[2], alpha: rgba[3])
 }
-
-let s = "2015-11-04T00:00:00Z"
-let formatter = DateFormatter()
-formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-formatter.date(from: s)
-
-
-public enum EVESchemeElementType1 {
-	case Array(elementName:String?, type:Any.Type)
-}
-
-let type = EVESchemeElementType1.Array(elementName: nil, type: EVECharacterSheet.self)
-//let type = EVESchemeElementType1.Array(elementName: nil, type: Int.self)
-
-switch type {
-case let .Array(str, type) where type is EVEObject.Type:
-	(type as! EVEObject.Type).init(dictionary: [:])
-	//type
-	//type(dictionary:[:])
-	//type(of: type)(dictionary:[:])
-	//type.init(dictionary: [:])
-case let .Array(str, type) where type is Int.Type:
-	type
-default:
-	break
-}
-
