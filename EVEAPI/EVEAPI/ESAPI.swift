@@ -9,7 +9,6 @@
 import Foundation
 
 import Foundation
-import AFNetworking
 import Alamofire
 
 public enum ESError: Error {
@@ -380,6 +379,17 @@ public class ESAPI: ESRouter {
 		return ESUniverseRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
 	}()
 
+	public func wars(completionBlock:((Result<[Int]>) -> Void)?) {
+		get("v1/wars/", parameters: nil, completionBlock: completionBlock)
+	}
+	
+	public func war(warID: Int, completionBlock:((Result<ESWar>) -> Void)?) {
+		get("v1/wars/\(warID)/", parameters: nil, completionBlock: completionBlock)
+	}
+
+	public private(set) lazy var war: ESWarRouter = {
+		return ESWarRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
+	}()
 }
 
 public class ESAlliancesRouter: ESRouter {
@@ -520,6 +530,15 @@ public class ESCharacterRouter: ESRouter {
 		}
 		get("v3/characters/\(characterID)/skills/", parameters: nil, completionBlock: completionBlock)
 	}
+	
+	public func wallets(completionBlock:((Result<[ESWallet]>) -> Void)?) {
+		guard let characterID = token?.characterID else {
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
+			return
+		}
+		get("v1/characters/\(characterID)/wallets/", parameters: nil, completionBlock: completionBlock)
+	}
+
 }
 
 public class ESCorporationRouter: ESRouter {
@@ -616,19 +635,19 @@ public class ESUniverseRouter: ESRouter {
 	}
 	
 	public func station(stationID: Int, completionBlock:((Result<ESStation>) -> Void)?) {
-		get("v1/universe/stations/\(stationID)", parameters: nil, completionBlock:completionBlock)
+		get("v1/universe/stations/\(stationID)/", parameters: nil, completionBlock:completionBlock)
 	}
 	
-	public func structures(stationID: Int, completionBlock:((Result<[Int64]>) -> Void)?) {
-		get("v1/universe/structures/\(stationID)", parameters: nil, completionBlock:completionBlock)
+	public func structures(completionBlock:((Result<[Int64]>) -> Void)?) {
+		get("v1/universe/structures/", parameters: nil, completionBlock:completionBlock)
 	}
 
 	public func structure(structureID: Int64, completionBlock:((Result<ESStructure>) -> Void)?) {
-		get("v1/universe/structures/\(structureID)", parameters: nil, completionBlock:completionBlock)
+		get("v1/universe/structures/\(structureID)/", parameters: nil, completionBlock:completionBlock)
 	}
 	
 	public func system(systemID: Int, completionBlock:((Result<String>) -> Void)?) {
-		get("v1/universe/systems/\(systemID)", parameters: nil) { (result: Result<[String: String]>) in
+		get("v1/universe/systems/\(systemID)/", parameters: nil) { (result: Result<[String: String]>) in
 			switch result {
 			case let .success(value):
 				if let name = value["solar_system_name"] {
@@ -642,6 +661,18 @@ public class ESUniverseRouter: ESRouter {
 			}
 		}
 	}
+	
+	public func type(typeID: Int, completionBlock:((Result<ESType>) -> Void)?) {
+		get("v1/universe/types/\(typeID)/", parameters: nil, completionBlock:completionBlock)
+	}
+}
+
+public class ESWarRouter: ESRouter {
+	
+	public func killMails(warID: Int, completionBlock:((Result<[ESKillMail]>) -> Void)?) {
+		get("v1/wars/\(warID)/killmails/", parameters: nil, completionBlock: completionBlock)
+	}
+	
 }
 
 extension DataRequest {

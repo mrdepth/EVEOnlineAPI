@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import AFNetworking
 import Alamofire
 
 public enum OAuth2Error: Error {
