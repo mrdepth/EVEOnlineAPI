@@ -390,6 +390,51 @@ public class ESAPI: ESRouter {
 	public private(set) lazy var war: ESWarRouter = {
 		return ESWarRouter(sessionManager: self.sessionManager, token: self.token, server: self.server)
 	}()
+	
+	public func image(characterID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128, 256, 512, 1024]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
+			completionBlock?(response.result)
+		}
+	}
+	
+	public func image(corporationID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128, 256]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png").validate().responseData { response in
+			completionBlock?(response.result)
+		}
+	}
+	
+	public func image(allianceID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png").validate().responseData { response in
+			completionBlock?(response.result)
+		}
+	}
 }
 
 public class ESAlliancesRouter: ESRouter {
@@ -673,54 +718,6 @@ public class ESWarRouter: ESRouter {
 		get("v1/wars/\(warID)/killmails/", parameters: nil, completionBlock: completionBlock)
 	}
 	
-}
-
-public class ESImageRouter: ESRouter {
-	
-	public func character(characterID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
-		let dimensions = [32, 64, 128, 256, 512, 1024]
-		var bestDimension = dimensions.last!
-		for d in dimensions {
-			if d >= dimension {
-				bestDimension = d
-				break
-			}
-		}
-		
-		sessionManager.download("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
-			completionBlock?(response.result)
-		}
-	}
-
-	public func corporation(corporationID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
-		let dimensions = [32, 64, 128, 256]
-		var bestDimension = dimensions.last!
-		for d in dimensions {
-			if d >= dimension {
-				bestDimension = d
-				break
-			}
-		}
-		
-		sessionManager.download("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).jpg").validate().responseData { response in
-			completionBlock?(response.result)
-		}
-	}
-
-	public func alliance(allianceID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
-		let dimensions = [32, 64, 128]
-		var bestDimension = dimensions.last!
-		for d in dimensions {
-			if d >= dimension {
-				bestDimension = d
-				break
-			}
-		}
-		
-		sessionManager.download("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).jpg").validate().responseData { response in
-			completionBlock?(response.result)
-		}
-	}
 }
 
 extension DataRequest {
