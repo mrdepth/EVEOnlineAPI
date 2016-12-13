@@ -9,8 +9,8 @@
 import Foundation
 
 public class ESWarAggressor: EVEObject {
-	public var allianceID: Int64? = 0
-	public var corporationID: Int64? = 0
+	public var allianceID: Int64 = 0
+	public var corporationID: Int64 = 0
 	public var iskDestroyed: Double = 0
 	public var shipsKilled: Int = 0
 	
@@ -39,8 +39,8 @@ public class ESWarAggressor: EVEObject {
 public typealias ESWarDefender = ESWarAggressor
 
 public class ESWarAlly: EVEObject {
-	public var allianceID: Int64? = 0
-	public var corporationID: Int64? = 0
+	public var allianceID: Int64 = 0
+	public var corporationID: Int64 = 0
 	
 	public override init() {
 		super.init()

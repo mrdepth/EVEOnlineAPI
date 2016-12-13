@@ -11,7 +11,7 @@ import Foundation
 public class ESCalendarEvent: EVEObject {
 	public var eventDate: Date = Date.distantPast
 	public var eventID: Int64 = 0
-	public var eventResponse: ESEventResponse = .notResponded
+	public var eventResponse: ESEventResponse?
 	public var importance: Int = 0
 	public var title: String = ""
 	
@@ -27,12 +27,12 @@ public class ESCalendarEvent: EVEObject {
 		return [
 			"eventDate": EVESchemeElementType.ESIDate(elementName: "event_date", transformer: nil),
 			"eventID": EVESchemeElementType.Int64(elementName: "event_id", transformer: nil),
-			"eventResponse":EVESchemeElementType.Int(elementName:"event_response", transformer:{(value:Any?) -> Any? in
+			"eventResponse":EVESchemeElementType.Int(elementName:"event_response", transformer:{ value in
 				if let s = value as? String {
 					return ESEventResponse(s).rawValue
 				}
 				else {
-					return ESEventResponse.notResponded.rawValue
+					return nil
 				}
 			}),
 			"importance": EVESchemeElementType.Int(elementName: nil, transformer: nil),
@@ -63,7 +63,7 @@ public class ESCalendarEventDetails: ESResult {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"date": EVESchemeElementType.ESIDate(elementName: "event_date", transformer: nil),
-			"duration": EVESchemeElementType.Double(elementName: nil, transformer:{(value:Any?) -> Any? in
+			"duration": EVESchemeElementType.Double(elementName: nil, transformer:{ value in
 				if let v = value as? NSString {
 					return v.doubleValue * 60
 				}

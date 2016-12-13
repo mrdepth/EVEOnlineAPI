@@ -51,8 +51,8 @@ public class ESAllianceNames: ESResult {
 }
 
 public class ESAllianceIcons: ESResult {
-	public var icon64: String = ""
-	public var icon128: String = ""
+	public var icon64: String?
+	public var icon128: String?
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)

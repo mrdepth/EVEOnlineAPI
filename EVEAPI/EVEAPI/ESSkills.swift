@@ -11,12 +11,12 @@ import Foundation
 public class ESSkillQueueItem: EVEObject {
 	public var finishDate: Date?
 	public var finishedLevel: Int = 0
-	public var levelEndSP: Int?
-	public var levelStartSP: Int?
+	public var levelEndSP: Int = 0
+	public var levelStartSP: Int = 0
 	public var queuePosition: Int = 0
 	public var skillID: Int = 0
 	public var startDate: Date?
-	public var trainingStartSP: Int?
+	public var trainingStartSP: Int = 0
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)
@@ -28,13 +28,13 @@ public class ESSkillQueueItem: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-		"finishDate": EVESchemeElementType.Date(elementName: "finish_date", transformer: nil),
+		"finishDate": EVESchemeElementType.ESIDate(elementName: "finish_date", transformer: nil),
 		"finishedLevel": EVESchemeElementType.Int(elementName: "finished_level", transformer: nil),
 		"levelEndSP": EVESchemeElementType.Int(elementName: "level_end_sp", transformer: nil),
 		"levelStartSP": EVESchemeElementType.Int(elementName: "level_start_sp", transformer: nil),
 		"queuePosition": EVESchemeElementType.Int(elementName: "queue_position", transformer: nil),
 		"skillID": EVESchemeElementType.Int(elementName: "skill_id", transformer: nil),
-		"startDate": EVESchemeElementType.Date(elementName: "start_date", transformer: nil),
+		"startDate": EVESchemeElementType.ESIDate(elementName: "start_date", transformer: nil),
 		"trainingStartSP": EVESchemeElementType.Int(elementName: "training_start_sp", transformer: nil),
 		]
 	}
@@ -43,7 +43,7 @@ public class ESSkillQueueItem: EVEObject {
 public class ESSkill: EVEObject {
 	public var currentSkillLevel: Int = 0
 	public var skillID: Int = 0
-	public var skillPointsInSkill: Int?
+	public var skillPointsInSkill: Int = 0
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)

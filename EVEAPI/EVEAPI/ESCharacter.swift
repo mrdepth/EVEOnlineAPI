@@ -52,12 +52,12 @@ public class ESCharacter: ESResult {
 		"bloodlineID": EVESchemeElementType.Int(elementName: "bloodline_id", transformer: nil),
 		"corporationID": EVESchemeElementType.Int64(elementName: "corporation_id", transformer: nil),
 		"userDescription": EVESchemeElementType.String(elementName: "description", transformer: nil),
-		"gender": EVESchemeElementType.Double(elementName: nil, transformer:{(value:Any?) -> Any? in
+		"gender": EVESchemeElementType.Double(elementName: nil, transformer:{ value in
 			if let s = value as? String {
 				return ESGender(s).rawValue
 			}
 			else {
-				return ESGender.male.rawValue
+				return nil
 			}
 		}),
 		"name": EVESchemeElementType.String(elementName: nil, transformer: nil),

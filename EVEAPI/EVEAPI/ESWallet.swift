@@ -22,7 +22,7 @@ public class ESWallet: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"balance": EVESchemeElementType.Double(elementName: nil, transformer: {value in
+			"balance": EVESchemeElementType.Double(elementName: nil, transformer: { value in
 				if let value = value as? Double {
 					return value / 100.0
 				}

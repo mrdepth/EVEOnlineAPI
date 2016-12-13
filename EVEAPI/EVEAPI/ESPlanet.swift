@@ -31,12 +31,12 @@ public class ESPlanet: EVEObject {
 		"numPins": EVESchemeElementType.Int(elementName: "num_pins", transformer: nil),
 		"ownerID": EVESchemeElementType.Int64(elementName: "owner_id", transformer: nil),
 		"planetID": EVESchemeElementType.Int(elementName: "planet_id", transformer: nil),
-		"planetType":EVESchemeElementType.Int(elementName:"planet_type", transformer:{(value:Any?) -> Any? in
+		"planetType":EVESchemeElementType.Int(elementName:"planet_type", transformer:{ value in
 			if let s = value as? String {
 				return ESPlanetType(s).rawValue
 			}
 			else {
-				return ESPlanetType.temperate.rawValue
+				return nil
 			}
 		}),
 		"solarSystemID": EVESchemeElementType.Int(elementName: "solar_system_id", transformer: nil),
@@ -163,8 +163,8 @@ public class ESPlanetPin: EVEObject {
 	public var latitude: Double = 0
 	public var longitude: Double = 0
 	public var pinID: Int64 = 0
-	public var schematicID: Int?
-	public var typeID: Int?
+	public var schematicID: Int = 0
+	public var typeID: Int = 0
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)

@@ -10,8 +10,8 @@ import Foundation
 
 public class ESCharacterLocation: ESResult {
 	public var solarSystemID: Int = 0
-	public var stationID: Int?
-	public var structureID: Int64?
+	public var stationID: Int = 0
+	public var structureID: Int64 = 0
 	
 	public required init?(dictionary:[String:Any]) {
 		super.init(dictionary: dictionary)

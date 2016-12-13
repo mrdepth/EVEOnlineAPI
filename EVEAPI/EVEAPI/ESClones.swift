@@ -27,12 +27,12 @@ public class ESLocation: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"locationID": EVESchemeElementType.Int64(elementName: "location_id", transformer: nil),
-			"locationType": EVESchemeElementType.Int(elementName: "location_type", transformer:{(value:Any?) -> Any? in
+			"locationType": EVESchemeElementType.Int(elementName: "location_type", transformer:{ value in
 				if let s = value as? String {
 					return ESLocationType(s).rawValue
 				}
 				else {
-					return ESLocationType.other.rawValue
+					return nil
 				}
 			}),
 		]

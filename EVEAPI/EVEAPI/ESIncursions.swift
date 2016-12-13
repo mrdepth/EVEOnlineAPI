@@ -35,12 +35,12 @@ public class ESIncursion: EVEObject {
 		"influence": EVESchemeElementType.Double(elementName: nil, transformer: nil),
 		"stagingSolarSystemID": EVESchemeElementType.Int(elementName: "staging_solar_system_id", transformer: nil),
 		"state": EVESchemeElementType.Int(elementName: nil, transformer: nil),
-		"type": EVESchemeElementType.Int(elementName: nil, transformer:{(value:Any?) -> Any? in
+		"type": EVESchemeElementType.Int(elementName: nil, transformer:{ value in
 			if let s = value as? String {
 				return ESLocationType(s).rawValue
 			}
 			else {
-				return ESLocationType.other.rawValue
+				return nil
 			}
 		}),
 		]

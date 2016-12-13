@@ -88,12 +88,12 @@ public class ESMarketOrder: EVEObject {
 		"minVolume": EVESchemeElementType.Int64(elementName: "min_volume", transformer: nil),
 		"orderID": EVESchemeElementType.Int64(elementName: "order_id", transformer: nil),
 		"price": EVESchemeElementType.Double(elementName: nil, transformer: nil),
-		"range":EVESchemeElementType.Int(elementName:"event_response", transformer:{(value:Any?) -> Any? in
+		"range":EVESchemeElementType.Int(elementName:"event_response", transformer:{ value in
 			if let s = value as? String {
 				return ESMarketOrderRange(s).rawValue
 			}
 			else {
-				return ESMarketOrderRange.jumps1.rawValue
+				return nil
 			}
 		}),
 		"typeID": EVESchemeElementType.Int(elementName: "type_id", transformer: nil),

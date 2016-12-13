@@ -23,12 +23,12 @@ public class ESName: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"category":EVESchemeElementType.Int(elementName:nil, transformer:{(value:Any?) -> Any? in
+			"category":EVESchemeElementType.Int(elementName:nil, transformer:{ value in
 				if let s = value as? String {
 					return ESNameCategory(s).rawValue
 				}
 				else {
-					return ESNameCategory.none.rawValue
+					return nil
 				}
 			}),
 			"id": EVESchemeElementType.Int(elementName: nil, transformer: nil),

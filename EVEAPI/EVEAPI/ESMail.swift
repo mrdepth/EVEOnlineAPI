@@ -23,12 +23,12 @@ public class ESMailRecipient: EVEObject {
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
 			"recipientID": EVESchemeElementType.Int64(elementName: "recipient_id", transformer: nil),
-			"recipientType": EVESchemeElementType.Int(elementName: "recipient_type", transformer:{(value:Any?) -> Any? in
+			"recipientType": EVESchemeElementType.Int(elementName: "recipient_type", transformer:{ value in
 				if let s = value as? String {
 					return ESRecipientType(s).rawValue
 				}
 				else {
-					return ESRecipientType.character.rawValue
+					return nil
 				}
 			}),
 		]
@@ -111,7 +111,7 @@ public class ESMailLabel: EVEObject {
 	
 	override public func scheme() -> [String:EVESchemeElementType] {
 		return [
-			"color": EVESchemeElementType.Object(elementName: nil, type: nil, transformer: {(value: Any?) -> Any? in
+			"color": EVESchemeElementType.Object(elementName: nil, type: nil, transformer:{ value in
 				guard let s = value as? String else {return nil}
 				if !s.isEmpty && s[s.startIndex] == "#" {
 					let end = s.endIndex

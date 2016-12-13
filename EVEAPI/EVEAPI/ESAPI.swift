@@ -675,6 +675,54 @@ public class ESWarRouter: ESRouter {
 	
 }
 
+public class ESImageRouter: ESRouter {
+	
+	public func character(characterID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128, 256, 512, 1024]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.download("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
+			completionBlock?(response.result)
+		}
+	}
+
+	public func corporation(corporationID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128, 256]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.download("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).jpg").validate().responseData { response in
+			completionBlock?(response.result)
+		}
+	}
+
+	public func alliance(allianceID: Int64, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.download("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).jpg").validate().responseData { response in
+			completionBlock?(response.result)
+		}
+	}
+}
+
 extension DataRequest {
 
 	@discardableResult

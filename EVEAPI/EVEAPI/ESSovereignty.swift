@@ -29,11 +29,11 @@ public class ESSovereigntyParticipant: EVEObject {
 }
 
 public class ESSovereigntyCampaign: EVEObject {
-	public var attackersScore: Double?
+	public var attackersScore: Double = 0
 	public var campaignID: Int = 0
 	public var constellationID: Int = 0
-	public var defenderID: Int64?
-	public var defenderScore: Double?
+	public var defenderID: Int64 = 0
+	public var defenderScore: Double = 0
 	public var eventType: ESEventType = .none
 	public var participants: [ESSovereigntyParticipant] = []
 	public var solarSystemID: Int = 0
@@ -55,12 +55,12 @@ public class ESSovereigntyCampaign: EVEObject {
 		"constellationID": EVESchemeElementType.Int(elementName: "constellation_id", transformer: nil),
 		"defenderID": EVESchemeElementType.Int64(elementName: "defender_id", transformer: nil),
 		"defenderScore": EVESchemeElementType.Double(elementName: "defender_score", transformer: nil),
-		"eventType":EVESchemeElementType.Int(elementName:"event_type", transformer:{(value:Any?) -> Any? in
+		"eventType":EVESchemeElementType.Int(elementName:"event_type", transformer:{ value in
 			if let s = value as? String {
 				return ESEventType(s).rawValue
 			}
 			else {
-				return ESEventType.none.rawValue
+				return nil
 			}
 		}),
 		"participants": EVESchemeElementType.Array(elementName: nil, type: ESSovereigntyParticipant.self, transformer: nil),
@@ -76,7 +76,7 @@ public class ESSovereigntyStructure: EVEObject {
 	public var solarSystemID: Int = 0
 	public var structureID: Int64 = 0
 	public var structureTypeID: Int = 0
-	public var vulnerabilityOccupancyLevel: Double?
+	public var vulnerabilityOccupancyLevel: Double = 0
 	public var vulnerableEndTime: Date?
 	public var vulnerableStartTime: Date?
 	
