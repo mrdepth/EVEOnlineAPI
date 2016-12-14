@@ -291,7 +291,7 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 				break
 			}
 		
-			if let value = parser?(dictionary[property]) {
+			if let value = parser?(property == "@self" ? dictionary : dictionary[property]) {
 				self.setValue(value, forKey: key)
 			}
 			
