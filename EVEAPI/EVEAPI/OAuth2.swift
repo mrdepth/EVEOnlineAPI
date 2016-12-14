@@ -12,6 +12,11 @@ import Alamofire
 public enum OAuth2Error: Error {
 	case invalidServerResponse(response: Any)
 	case server(message: String)
+	case tokenExpired
+}
+
+public extension Notification.Name {
+	public static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
 }
 
 public class OAuth2Token: NSObject, NSSecureCoding {
@@ -22,6 +27,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 	public let characterID: Int64
 	public let characterName: String
 	public let realm: String
+	public let scopes: [String]
 	public var expired: Bool {
 		get {
 			if let expiresOn = expiresOn {
@@ -33,10 +39,11 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 		}
 	}
 	
-	public init(accessToken: String, refreshToken: String, tokenType: String, characterID: Int64, characterName: String, realm: String) {
+	public init(accessToken: String, refreshToken: String, tokenType: String, scopes: [String], characterID: Int64, characterName: String, realm: String) {
 		self.accessToken = accessToken
 		self.refreshToken = refreshToken
 		self.tokenType = tokenType
+		self.scopes = scopes
 		self.characterID = characterID
 		self.characterName = characterName
 		self.realm = realm
@@ -47,6 +54,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 		aCoder.encode(accessToken, forKey:"accessToken")
 		aCoder.encode(refreshToken, forKey:"refreshToken")
 		aCoder.encode(tokenType, forKey:"tokenType")
+		aCoder.encode(scopes, forKey:"scopes")
 		aCoder.encode(expiresOn, forKey:"expiresOn")
 		aCoder.encode(characterID, forKey: "characterID")
 		aCoder.encode(characterName, forKey: "characterName")
@@ -57,6 +65,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 		guard let accessToken = aDecoder.decodeObject(forKey: "accessToken") as? String else {return nil}
 		guard let refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String else {return nil}
 		guard let tokenType = aDecoder.decodeObject(forKey: "tokenType") as? String else {return nil}
+		guard let scopes = aDecoder.decodeObject(forKey: "scopes") as? [String] else {return nil}
 		expiresOn = aDecoder.decodeObject(forKey: "expiresOn") as? Date
 		characterID = aDecoder.decodeInt64(forKey: "characterID")
 		guard let characterName = aDecoder.decodeObject(forKey: "characterName") as? String else {return nil}
@@ -65,6 +74,7 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 		self.accessToken = accessToken
 		self.refreshToken = refreshToken
 		self.tokenType = tokenType
+		self.scopes = scopes
 		self.characterName = characterName
 		self.realm = realm
 		super.init()
@@ -77,90 +87,6 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 	}
 	
 }
-
-/*
-public class OAuth: NSObject {
-	
-	@nonobjc private static var states: NSMapTable<NSString, OAuth> = NSMapTable<NSString, OAuth>.strongToWeakObjects()
-	
-	public let clientID: String
-	public let secretKey: String
-	public let callbackURL: URL
-	public let scope: [String]
-	public let realm: String?
-	public let state: String = UUID().uuidString
-	
-	init (clientID: String, secretKey: String, callbackURL: URL, scope: [String], realm: String?) {
-		self.clientID = clientID
-		self.secretKey = secretKey
-		self.callbackURL = callbackURL
-		self.scope = scope
-		self.realm = realm
-		super.init()
-		OAuth.states.setObject(self, forKey: self.state as NSString)
-	}
-	
-	deinit {
-		OAuth.states.removeObject(forKey: self.state as NSString)
-	}
-	
-	public class func handleOpenURL(_ url: URL) -> Bool {
-		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
-		guard let query = components.queryItems else {return false}
-		var code: String?
-		var state: String?
-		
-		for item in query {
-			if item.name == "code" {
-				code = item.value
-			}
-			else if item.name == "state" {
-				state = item.value
-			}
-		}
-		
-		if let code = code, let state = state, let oauth = OAuth.states.object(forKey: state as NSString) {
-			let token = OAToken(clientID: oauth.clientID, secretKey: oauth.secretKey)
-			token.obtain(authorizationCode: code, completionBlock: { (error) in
-				if let error = error {
-					oauth.completionBlock?(nil, error)
-				}
-				else {
-					oauth.completionBlock?(token, nil)
-				}
-			})
-			return true
-		}
-		else {
-			return false
-		}
-	}
-
-	private var completionBlock:((_ token: OAToken?, _ error: Error?) -> Void)?
-	
-	public func authenticate(completionBlock:((_ token: OAToken?, _ error: Error?) -> Void)?) {
-		var parameters = [String: String]()
-		
-		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
-		var query = [URLQueryItem] ()
-		query.append(URLQueryItem(name: "response_type", value: "code"))
-		query.append(URLQueryItem(name: "redirect_uri", value: callback))
-		query.append(URLQueryItem(name: "client_id", value: clientID))
-		query.append(URLQueryItem(name: "scope", value: scope.joined(separator: "+").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)))
-		query.append(URLQueryItem(name: "state", value: state))
-		if let realm = realm {
-			query.append(URLQueryItem(name: "realm", value: realm))
-		}
-			
-		var components = URLComponents(string: "https://login.eveonline.com/oauth/authorize/")!
-		components.queryItems = query
-		if let url = components.url {
-			self.completionBlock = completionBlock
-			UIApplication.shared.openURL(url)
-		}
-	}
-}
-*/
 
 public class OAuth2Handler: RequestAdapter, RequestRetrier {
 	
@@ -202,8 +128,9 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 													guard let result = value as? [String: Any] else {throw OAuth2Error.invalidServerResponse(response: response)}
 													guard let characterID = result["CharacterID"] as? Int64 else {throw OAuth2Error.invalidServerResponse(response: response)}
 													guard let characterName = result["CharacterName"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
+													guard let scopes = (result["Scopes"] as? String)?.components(separatedBy: CharacterSet.whitespaces) else {throw OAuth2Error.invalidServerResponse(response: response)}
 													
-													let token = OAuth2Token(accessToken: accessToken, refreshToken: refreshToken, tokenType: tokenType, characterID: characterID, characterName: characterName, realm: state)
+													let token = OAuth2Token(accessToken: accessToken, refreshToken: refreshToken, tokenType: tokenType, scopes: scopes, characterID: characterID, characterName: characterName, realm: state)
 													
 													if let expiresOn = result["ExpiresOn"] as? String, let date = DateFormatter.crestDateFormatter.date(from: expiresOn) {
 														token.expiresOn = date
@@ -251,6 +178,9 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 	}
 	
 	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+		if token.expired {
+			throw OAuth2Error.tokenExpired
+		}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
 		return request
@@ -261,7 +191,17 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 
 	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
 		synchronized(self) {
-			if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 403 {
+			let shouldRefresh: Bool
+			if case OAuth2Error.tokenExpired = error {
+				shouldRefresh = true
+			}
+			else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 403 {
+				shouldRefresh = true
+			}
+			else {
+				shouldRefresh = false
+			}
+			if shouldRefresh {
 				requestsToRetry.append(completion)
 				
 				if !isRefreshing {
@@ -306,6 +246,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 									token.refreshToken = refreshToken
 									token.tokenType = tokenType
 									token.expiresOn = expiresOn
+									NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
 									completion(nil)
 								}
 								catch {

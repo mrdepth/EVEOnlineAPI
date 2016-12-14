@@ -40,7 +40,7 @@ public class ESLocation: EVEObject {
 }
 
 public class ESJumpClone: EVEObject {
-	public var implants: [Int32] = []
+	public var implants: [Int] = []
 	public var location: ESLocation = ESLocation()
 	
 	public required init?(dictionary:[String:Any]) {

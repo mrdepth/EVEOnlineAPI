@@ -8,8 +8,11 @@
 
 import Foundation
 
+let salt = Int(truncatingBitPattern: 0x9e3779b9 as UInt64)
+
 func hashCombine(seed: inout Int, value: Int) {
-	seed ^= value &+ 0x9e3779b9 &+ (seed << 6) &+ (seed >> 2);
+	
+	seed ^= value &+ salt &+ (seed << 6) &+ (seed >> 2);
 }
 
 extension Dictionary: Hashable {

@@ -34,6 +34,7 @@ public struct ESScope {
 	public static let organizeMail = ESScope("esi-mail.organize_mail.v1")
 	public static let readMail = ESScope("esi-mail.read_mail.v1")
 	public static let sendMail = ESScope("esi-mail.send_mail.v1")
+	public static let managePlanets = ESScope("esi-planets.manage_planets.v1")
 	public static let searchStructures = ESScope("esi-search.search_structures.v1")
 	public static let readSkillQueue = ESScope("esi-skills.read_skillqueue.v1")
 	public static let readSkills = ESScope("esi-skills.read_skills.v1")
@@ -61,6 +62,7 @@ public struct ESScope {
 //			        organizeMail,
 //			        readMail,
 //			        sendMail,
+					managePlanets,
 			        searchStructures,
 			        readSkillQueue,
 			        readSkills,
@@ -155,7 +157,10 @@ public class ESRouter {
 	func get<T>(_ path: String, parameters: [String:Any]?, headers: [String: String]? = nil, completionBlock: ((Result<[T]>) -> Void)?) -> Void {
 		var parameters = parameters ?? [:]
 		parameters["datasource"] = server.rawValue
-		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).validate().responseESI { (response: DataResponse<[T]>) in
+		let progress = Progress(totalUnitCount: 100)
+		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validate().responseESI { (response: DataResponse<[T]>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -163,7 +168,10 @@ public class ESRouter {
 	func get<T>(_ path: String, parameters: [String:Any]?, headers: [String: String]? = nil, completionBlock: ((Result<T>) -> Void)?) -> Void {
 		var parameters = parameters ?? [:]
 		parameters["datasource"] = server.rawValue
-		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).validate().responseESI { (response: DataResponse<T>) in
+		let progress = Progress(totalUnitCount: 100)
+		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validate().responseESI { (response: DataResponse<T>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -171,7 +179,10 @@ public class ESRouter {
 	func get<T:EVEObject>(_ path: String, parameters: [String:Any]?, headers: [String: String]? = nil, completionBlock: ((Result<[T]>) -> Void)?) -> Void {
 		var parameters = parameters ?? [:]
 		parameters["datasource"] = server.rawValue
-		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).validate().responseESI { (response: DataResponse<[T]>) in
+		let progress = Progress(totalUnitCount: 100)
+		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validate().responseESI { (response: DataResponse<[T]>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -179,7 +190,10 @@ public class ESRouter {
 	func get<T:ESResult>(_ path: String, parameters: [String:Any]?, headers: [String: String]? = nil, completionBlock: ((Result<T>) -> Void)?) -> Void {
 		var parameters = parameters ?? [:]
 		parameters["datasource"] = server.rawValue
-		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).validate().responseESI { (response: DataResponse<T>) in
+		let progress = Progress(totalUnitCount: 100)
+		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validate().responseESI { (response: DataResponse<T>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -187,7 +201,10 @@ public class ESRouter {
 	func post<T:EVEObject>(_ path: String, parameters: [String:Any]?, headers: [String: String]? = nil, completionBlock: ((Result<[T]>) -> Void)?) -> Void {
 		var parameters = parameters ?? [:]
 		parameters["datasource"] = server.rawValue
-		sessionManager.request(baseURL + path, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).validate().responseESI { (response: DataResponse<[T]>) in
+		let progress = Progress(totalUnitCount: 100)
+		sessionManager.request(baseURL + path, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validate().responseESI { (response: DataResponse<[T]>) in
 			completionBlock?(response.result)
 		}
 	}
