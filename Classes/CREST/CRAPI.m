@@ -542,7 +542,8 @@ static NSPointerArray* gClients;
 }
 
 - (void) dataTaskWithHTTPMethod:(NSString *)method URLString:(NSString *)URLString parameters:(id)parameters responseClass:(Class) responseClass completionBlock:(void (^)(id responseObject, NSError* error))completionBlock {
-	AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
+	AFHTTPRequestSerializer* requestSerializer = [method isEqualToString:@"POST"] ? [AFJSONRequestSerializer serializer] : [AFHTTPRequestSerializer serializer];
+	//AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
 	if (!self.publicAPI)
 		[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
 	requestSerializer.cachePolicy = self.cachePolicy;
@@ -553,8 +554,10 @@ static NSPointerArray* gClients;
 		responseSerializer = [CRAPISerializer serializerWithRootClass:responseClass];
 		responseSerializer.acceptableContentTypes = [NSSet setWithObject:[responseClass contentType]];
 	}
-	else
+	else {
 		responseSerializer = [AFJSONResponseSerializer serializer];
+		responseSerializer.acceptableContentTypes = nil;
+	}
 	
 	NSMutableIndexSet* acceptableStatusCodes = [responseSerializer.acceptableStatusCodes mutableCopy];
 	[acceptableStatusCodes addIndex:401];
@@ -564,7 +567,9 @@ static NSPointerArray* gClients;
 	self.sessionManager.requestSerializer = requestSerializer;
 	
 	void (^send)(void (^handler)(id, NSError*)) = ^(void (^handler)(id, NSError*)) {
-		AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
+		//AFHTTPRequestSerializer* requestSerializer = [AFHTTPRequestSerializer serializer];
+		AFHTTPRequestSerializer* requestSerializer = [method isEqualToString:@"POST"] ? [AFJSONRequestSerializer serializer] : [AFHTTPRequestSerializer serializer];
+
 		if (!self.publicAPI)
 			[requestSerializer setValue:[NSString stringWithFormat:@"%@ %@", self.token.tokenType, self.token.accessToken] forHTTPHeaderField:@"Authorization"];
 		requestSerializer.cachePolicy = self.cachePolicy;
