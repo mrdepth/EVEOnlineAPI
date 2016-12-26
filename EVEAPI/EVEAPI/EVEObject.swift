@@ -95,10 +95,12 @@ public class EVEObject: NSObject, EVEScheme, NSSecureCoding {
 			case let .Bool(elementName, transformer):
 				property = elementName ?? key
 				parser = transformer ?? {(value:Any?) -> Any? in
-					if let s = value as? String {
-						return NSString(string:s).boolValue
-					}
-					else {
+					switch value {
+					case let value as NSString:
+						return value.boolValue
+					case let value as NSNumber:
+						return value.boolValue
+					default:
 						return nil
 					}
 				}
