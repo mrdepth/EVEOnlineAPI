@@ -18,6 +18,7 @@ public enum ESError: Error {
 	case unauthorized(reason: String)
 	case server(exceptionType: String, reason: String?)
 	case notFound
+	case forbidden
 }
 
 public struct ESScope {
@@ -160,7 +161,7 @@ public class ESRouter {
 		let progress = Progress(totalUnitCount: 100)
 		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validate().responseESI { (response: DataResponse<[T]>) in
+			}.validateESI().responseESI { (response: DataResponse<[T]>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -171,7 +172,7 @@ public class ESRouter {
 		let progress = Progress(totalUnitCount: 100)
 		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validate().responseESI { (response: DataResponse<T>) in
+			}.validateESI().responseESI { (response: DataResponse<T>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -182,7 +183,7 @@ public class ESRouter {
 		let progress = Progress(totalUnitCount: 100)
 		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validate().responseESI { (response: DataResponse<[T]>) in
+			}.validateESI().responseESI { (response: DataResponse<[T]>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -193,7 +194,7 @@ public class ESRouter {
 		let progress = Progress(totalUnitCount: 100)
 		sessionManager.request(baseURL + path, parameters: parameters, headers: headers).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validate().responseESI { (response: DataResponse<T>) in
+			}.validateESI().responseESI { (response: DataResponse<T>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -204,7 +205,7 @@ public class ESRouter {
 		let progress = Progress(totalUnitCount: 100)
 		sessionManager.request(baseURL + path, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validate().responseESI { (response: DataResponse<[T]>) in
+			}.validateESI().responseESI { (response: DataResponse<[T]>) in
 			completionBlock?(response.result)
 		}
 	}
@@ -212,7 +213,6 @@ public class ESRouter {
 }
 
 public class ESAPI: ESRouter {
-	
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		
@@ -705,7 +705,12 @@ public class ESUniverseRouter: ESRouter {
 	}
 
 	public func structure(structureID: Int64, completionBlock:((Result<ESStructure>) -> Void)?) {
-		get("v1/universe/structures/\(structureID)/", parameters: nil, completionBlock:completionBlock)
+		if let token = token {
+			get("v1/universe/structures/\(structureID)/", parameters: nil, completionBlock:completionBlock)
+		}
+		else {
+			completionBlock?(.failure(ESError.unauthorized(reason: "Access token required")))
+		}
 	}
 	
 	public func system(systemID: Int, completionBlock:((Result<String>) -> Void)?) {
@@ -739,7 +744,27 @@ public class ESWarRouter: ESRouter {
 
 extension DataRequest {
 
+	
 	@discardableResult
+	public func validateESI() -> Self {
+		var statusCode = IndexSet(200..<300)
+		statusCode.insert(403)
+		
+		return validate(statusCode: statusCode).validate() {(request, response, data) -> ValidationResult in
+			if response.statusCode == 403 {
+				guard let data = data else {return .success}
+				if let result = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] {
+					if let error = result["error"] as? String, error == "Forbidden" {
+						return .failure(ESError.forbidden)
+					}
+				}
+				return .failure(OAuth2Error.tokenExpired)
+			}
+			else {
+				return .success
+			}
+		}
+	}
 	
 	static func esiResponseSerializer() -> DataResponseSerializer<Any> {
 		return DataResponseSerializer { request, response, data, error in
@@ -779,9 +804,16 @@ extension DataRequest {
 		completionHandler: @escaping (DataResponse<T>) -> Void)
 		-> Self {
 		let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
-			guard error == nil else { return .failure(ESError.network(error: error!)) }
+			guard error == nil else {
+				if let error = error as? ESError {
+					return .failure(error)
+				}
+				else {
+					return .failure(ESError.network(error: error!))
+				}
+			}
 			
-			let responseSerializer = DataRequest.esiResponseSerializer()
+			let responseSerializer = DataRequest.jsonResponseSerializer()
 			let result = responseSerializer.serializeResponse(request, response, data, nil)
 			
 			guard case let .success(jsonObject) = result else {
@@ -806,9 +838,16 @@ extension DataRequest {
 		completionHandler: @escaping (DataResponse<[T]>) -> Void)
 		-> Self {
 			let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
-				guard error == nil else { return .failure(ESError.network(error: error!)) }
+				guard error == nil else {
+					if let error = error as? ESError {
+						return .failure(error)
+					}
+					else {
+						return .failure(ESError.network(error: error!))
+					}
+				}
 				
-				let responseSerializer = DataRequest.esiResponseSerializer()
+				let responseSerializer = DataRequest.jsonResponseSerializer()
 				let result = responseSerializer.serializeResponse(request, response, data, nil)
 				
 				guard case let .success(jsonObject) = result else {
@@ -837,9 +876,16 @@ extension DataRequest {
 		completionHandler: @escaping (DataResponse<[T]>) -> Void)
 		-> Self {
 			let responseSerializer = DataResponseSerializer<[T]> { request, response, data, error in
-				guard error == nil else { return .failure(ESError.network(error: error!)) }
+				guard error == nil else {
+					if let error = error as? ESError {
+						return .failure(error)
+					}
+					else {
+						return .failure(ESError.network(error: error!))
+					}
+				}
 				
-				let responseSerializer = DataRequest.esiResponseSerializer()
+				let responseSerializer = DataRequest.jsonResponseSerializer()
 				let result = responseSerializer.serializeResponse(request, response, data, nil)
 				
 				guard case let .success(jsonObject) = result else {
@@ -860,9 +906,16 @@ extension DataRequest {
 		completionHandler: @escaping (DataResponse<T>) -> Void)
 		-> Self {
 			let responseSerializer = DataResponseSerializer<T> { request, response, data, error in
-				guard error == nil else { return .failure(ESError.network(error: error!)) }
+				guard error == nil else {
+					if let error = error as? ESError {
+						return .failure(error)
+					}
+					else {
+						return .failure(ESError.network(error: error!))
+					}
+				}
 				
-				let responseSerializer = DataRequest.esiResponseSerializer()
+				let responseSerializer = DataRequest.jsonResponseSerializer()
 				let result = responseSerializer.serializeResponse(request, response, data, nil)
 				
 				guard case let .success(jsonObject) = result else {

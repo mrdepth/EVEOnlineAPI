@@ -178,9 +178,9 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 	}
 	
 	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-		if token.expired {
-			throw OAuth2Error.tokenExpired
-		}
+//		if token.expired {
+//			throw OAuth2Error.tokenExpired
+//		}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
 		return request
@@ -192,12 +192,13 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
 		synchronized(self) {
 			let shouldRefresh: Bool
-			if case OAuth2Error.tokenExpired = error {
+			if case OAuth2Error.tokenExpired = error, request.retryCount == 0 {
 				shouldRefresh = true
 			}
-			else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 403 {
-				shouldRefresh = true
-			}
+//			else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 403 && request.retryCount == 0 {
+//				//shouldRefresh = true
+//				shouldRefresh = false
+//			}
 			else {
 				shouldRefresh = false
 			}
