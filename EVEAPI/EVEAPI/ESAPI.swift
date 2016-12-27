@@ -452,6 +452,27 @@ public class ESAPI: ESRouter {
 			completionBlock?(response.result)
 		}
 	}
+	
+	public func image(typeID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+		let dimensions = [32, 64, 128, 256, 512]
+		var bestDimension = dimensions.last!
+		for d in dimensions {
+			if d >= dimension {
+				bestDimension = d
+				break
+			}
+		}
+		
+		sessionManager.request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png").validate().responseData { response in
+			if response.response?.url?.lastPathComponent != "\(typeID)_\(bestDimension).png" {
+				completionBlock?(.failure(ESError.notFound))
+			}
+			else {
+				completionBlock?(response.result)
+			}
+		}
+	}
+
 }
 
 public class ESAlliancesRouter: ESRouter {
