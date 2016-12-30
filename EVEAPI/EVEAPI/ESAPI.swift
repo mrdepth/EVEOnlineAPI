@@ -12,6 +12,7 @@ import Foundation
 import Alamofire
 
 public enum ESError: Error {
+	case internalError
 	case network(error: Error)
 	case objectSerialization(reason: String)
 	case serialization(error: Error)
