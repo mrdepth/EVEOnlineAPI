@@ -727,7 +727,7 @@ public class ESUniverseRouter: ESRouter {
 	}
 
 	public func structure(structureID: Int64, completionBlock:((Result<ESStructure>) -> Void)?) {
-		if let token = token {
+		if token != nil {
 			get("v1/universe/structures/\(structureID)/", parameters: nil, completionBlock:completionBlock)
 		}
 		else {
@@ -793,33 +793,32 @@ extension DataRequest {
 			switch jsonResponseSerializer().serializeResponse(request, response, data, error) {
 			case let .success(value):
 				guard let result = value as? [String: Any] else {return .success(value)}
-				if let result = result as? [String: Any] {
-					if let exceptionType = result["exceptionType"] as? String {
-						let message = result["message"] as? String
-						switch exceptionType {
-						case "UnauthorizedError":
-							return .failure(ESError.unauthorized(reason: message ?? "Authorization failed"))
-						default:
-							return .failure(ESError.server(exceptionType: exceptionType, reason: message))
-						}
+				if let exceptionType = result["exceptionType"] as? String {
+					let message = result["message"] as? String
+					switch exceptionType {
+					case "UnauthorizedError":
+						return .failure(ESError.unauthorized(reason: message ?? "Authorization failed"))
+					default:
+						return .failure(ESError.server(exceptionType: exceptionType, reason: message))
 					}
-					else if let error = result["error"] as? String {
-						return .failure(ESError.server(exceptionType: "ServerError", reason: error))
-					}
-					else if let error = result["error_description"] as? String {
-						return .failure(ESError.server(exceptionType: "ServerError", reason: error))
-					}
+				}
+				else if let error = result["error"] as? String {
+					return .failure(ESError.server(exceptionType: "ServerError", reason: error))
+				}
+				else if let error = result["error_description"] as? String {
+					return .failure(ESError.server(exceptionType: "ServerError", reason: error))
 				}
 				
 				return .success(value)
 			case let .failure(error):
 				return .failure(error)
 			}
-			guard error == nil else {return .failure(error!)}
-			return Request.serializeResponseJSON(options: .allowFragments, response: response, data: data, error: error)
+//			guard error == nil else {return .failure(error!)}
+//			return Request.serializeResponseJSON(options: .allowFragments, response: response, data: data, error: error)
 		}
 	}
 	
+	@discardableResult
 	public func responseESI<T:ESResult>(
 		queue: DispatchQueue? = nil,
 		options: JSONSerialization.ReadingOptions = .allowFragments,
@@ -844,7 +843,7 @@ extension DataRequest {
 			guard let dic = jsonObject as? [String: Any] else {
 				return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
 			}
-			guard let response = response, let responseObject = T(dictionary: dic) else {
+			guard let responseObject = T(dictionary: dic) else {
 				return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
 			}
 			
@@ -854,6 +853,7 @@ extension DataRequest {
 		return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
 	}
 	
+	@discardableResult
 	public func responseESI<T:EVEObject>(
 		queue: DispatchQueue? = nil,
 		options: JSONSerialization.ReadingOptions = .allowFragments,
@@ -892,6 +892,7 @@ extension DataRequest {
 			return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
 	}
 	
+	@discardableResult
 	public func responseESI<T:Any>(
 		queue: DispatchQueue? = nil,
 		options: JSONSerialization.ReadingOptions = .allowFragments,
@@ -922,6 +923,7 @@ extension DataRequest {
 			return response(queue: queue, responseSerializer: responseSerializer, completionHandler: completionHandler)
 	}
 
+	@discardableResult
 	public func responseESI<T:Any>(
 		queue: DispatchQueue? = nil,
 		options: JSONSerialization.ReadingOptions = .allowFragments,
@@ -943,7 +945,7 @@ extension DataRequest {
 				guard case let .success(jsonObject) = result else {
 					return .failure(ESError.serialization(error: result.error!))
 				}
-				guard let response = response, let responseObject = jsonObject as? T else {
+				guard let responseObject = jsonObject as? T else {
 					return .failure(ESError.objectSerialization(reason: "JSON could not be serialized: \(jsonObject)"))
 				}
 				

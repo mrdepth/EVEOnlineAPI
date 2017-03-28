@@ -277,8 +277,8 @@ extension DataRequest {
 			case let .failure(error):
 				return .failure(error)
 			}
-			guard error == nil else {return .failure(error!)}
-			return Request.serializeResponseJSON(options: .allowFragments, response: response, data: data, error: error)
+//			guard error == nil else {return .failure(error!)}
+//			return Request.serializeResponseJSON(options: .allowFragments, response: response, data: data, error: error)
 		}
 	}
 	
