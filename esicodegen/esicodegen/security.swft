@@ -1,0 +1,19 @@
+public struct Scope {
+
+{values}
+	
+	public let rawValue: String
+	
+	public init(_ value: String) {
+		rawValue = value
+	}
+	
+	public static var all: [Scope]  {
+		get {
+			return [
+{scopes}
+			]
+		}
+	}
+}
+	

@@ -1,0 +1,22 @@
+	public func {operation}({definitions}completionBlock:((Result<{result}>) -> Void)?) {
+		var session = sessionManager
+		guard session != nil else {return}
+		
+{security}
+		
+		var parameters = Parameters()
+		{headers}
+		parameters["datasource"] = session!.server.rawValue
+
+{parameters}
+		
+		let url = session!.baseURL + "latest{url}"
+		let progress = Progress(totalUnitCount: 100)
+		
+		session!.request(url, method: .{method}, parameters: parameters, encoding: {encoding}, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<{result}>) in
+				completionBlock?(response.result)
+				session = nil
+		}
+	}

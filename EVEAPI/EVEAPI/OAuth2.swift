@@ -1,13 +1,15 @@
 //
-//  OAuth.swift
-//  EVEAPI
+//  OAuth2.swift
+//  ESI
 //
-//  Created by Artem Shimanski on 07.12.16.
-//  Copyright © 2016 Artem Shimanski. All rights reserved.
+//  Created by Artem Shimanski on 09.04.17.
+//  Copyright © 2017 Artem Shimanski. All rights reserved.
 //
 
 import Foundation
 import Alamofire
+
+fileprivate let OAuthBaseURL: String = "https://login.eveonline.com/oauth/"
 
 public enum OAuth2Error: Error {
 	case invalidServerResponse(response: Any)
@@ -90,6 +92,31 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 
 public class OAuth2Handler: RequestAdapter, RequestRetrier {
 	
+	static let dateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+		return dateFormatter
+	}()
+	
+	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String, realm: String) -> URL {
+		var query = [URLQueryItem] ()
+		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+		
+		query.append(URLQueryItem(name: "response_type", value: "code"))
+		query.append(URLQueryItem(name: "redirect_uri", value: callback))
+		query.append(URLQueryItem(name: "client_id", value: clientID))
+		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)))
+		query.append(URLQueryItem(name: "state", value: state))
+		query.append(URLQueryItem(name: "realm", value: state))
+		
+		var components = URLComponents(string: OAuthBaseURL + "authorize/")!
+		components.queryItems = query
+		return components.url!
+	}
+
+	
 	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Result<OAuth2Token>) -> Void) -> Bool {
 		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
 		guard let query = components.queryItems else {return false}
@@ -107,8 +134,8 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 		
 		if let code = code, let state = state {
 			let auth = "\(clientID):\(secretKey)".data(using: .utf8)?.base64EncodedString()
-
-			Alamofire.request("https://login.eveonline.com/oauth/token",
+			
+			Alamofire.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
 			                  headers:["Authorization":"Basic \(auth!)"]).validate().responseOAuth2 {response in
@@ -121,7 +148,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 										guard let tokenType = result["token_type"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
 										guard let expiresIn = result["expires_in"] as? Double else {throw OAuth2Error.invalidServerResponse(response: response)}
 										let expiresOn = Date.init(timeIntervalSinceNow: expiresIn)
-										Alamofire.request("https://login.eveonline.com/oauth/verify", headers: ["Authorization":"\(tokenType) \(accessToken)"]).validate().responseOAuth2 {response in
+										Alamofire.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(tokenType) \(accessToken)"]).validate().responseOAuth2 {response in
 											switch(response.result) {
 											case let .success(value):
 												do {
@@ -132,7 +159,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 													
 													let token = OAuth2Token(accessToken: accessToken, refreshToken: refreshToken, tokenType: tokenType, scopes: scopes, characterID: characterID, characterName: characterName, realm: state)
 													
-													if let expiresOn = result["ExpiresOn"] as? String, let date = DateFormatter.crestDateFormatter.date(from: expiresOn) {
+													if let expiresOn = result["ExpiresOn"] as? String, let date = OAuth2Handler.dateFormatter.date(from: expiresOn) {
 														token.expiresOn = date
 													}
 													else {
@@ -178,47 +205,39 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 	}
 	
 	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-//		if token.expired {
-//			throw OAuth2Error.tokenExpired
-//		}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
 		return request
 	}
-
+	
 	private var isRefreshing = false
 	private var requestsToRetry: [RequestRetryCompletion] = []
-
+	private let lock = NSLock()
+	
 	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
-		synchronized(self) {
-			let shouldRefresh: Bool
-			if case OAuth2Error.tokenExpired = error, request.retryCount == 0 {
-				shouldRefresh = true
-			}
-//			else if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 403 && request.retryCount == 0 {
-//				//shouldRefresh = true
-//				shouldRefresh = false
-//			}
-			else {
-				shouldRefresh = false
-			}
-			if shouldRefresh {
-				requestsToRetry.append(completion)
-				
-				if !isRefreshing {
-					refreshToken { [weak self] error in
-						guard let strongSelf = self else { return }
-						
-						synchronized(strongSelf) {
-							let succeeded = error == nil
-							strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
-							strongSelf.requestsToRetry.removeAll()
-						}
-					}
+		lock.lock(); defer {lock.unlock()}
+		
+		let shouldRefresh: Bool
+		if case OAuth2Error.tokenExpired = error, request.retryCount == 0 {
+			shouldRefresh = true
+		}
+		else {
+			shouldRefresh = false
+		}
+		if shouldRefresh {
+			requestsToRetry.append(completion)
+			
+			if !isRefreshing {
+				refreshToken { [weak self] error in
+					guard let strongSelf = self else { return }
+					strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
+					let succeeded = error == nil
+					strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
+					strongSelf.requestsToRetry.removeAll()
 				}
-			} else {
-				completion(false, 0.0)
 			}
+		} else {
+			completion(false, 0.0)
 		}
 	}
 	
@@ -226,16 +245,16 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 		guard !isRefreshing else {return}
 		isRefreshing = true
 		let auth = "\(clientID):\(secretKey)".data(using: .utf8)?.base64EncodedString()
-		Alamofire.request("https://login.eveonline.com/oauth/token",
+		Alamofire.request(OAuthBaseURL + "token",
 		                  method: .post,
 		                  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
 		                  headers:["Authorization":"Basic \(auth!)"]).validate().responseOAuth2 {[weak self] response in
 							guard let strongSelf = self else { return }
-
+							
 							switch(response.result) {
 							case let .success(value):
 								do {
-
+									
 									guard let result = value as? [String: Any] else {throw OAuth2Error.invalidServerResponse(response: response)}
 									guard let accessToken = result["access_token"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
 									guard let refreshToken = result["refresh_token"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
@@ -256,9 +275,9 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 							case let .failure(error):
 								completion(error)
 							}
-							synchronized(strongSelf) {
-								strongSelf.isRefreshing = false
-							}
+							
+							strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
+							strongSelf.isRefreshing = false
 		}
 	}
 }
@@ -277,8 +296,6 @@ extension DataRequest {
 			case let .failure(error):
 				return .failure(error)
 			}
-//			guard error == nil else {return .failure(error!)}
-//			return Request.serializeResponseJSON(options: .allowFragments, response: response, data: data, error: error)
 		}
 	}
 	
@@ -295,5 +312,5 @@ extension DataRequest {
 			completionHandler: completionHandler
 		)
 	}
-
+	
 }

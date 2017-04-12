@@ -7,18 +7,42 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1203DB301DFAE8D800BBFAD9 /* ESAlliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */; };
-		1203DB321DFAEBD200BBFAD9 /* ESAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */; };
-		1203DB341DFAEC2300BBFAD9 /* ESConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */; };
-		1203DB361DFAF17000BBFAD9 /* ESBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */; };
-		1203DB381DFAFA8C00BBFAD9 /* ESCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */; };
+		1231C7E91E9EB39A00CA409A /* Alliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CB1E9EB39A00CA409A /* Alliance.swift */; };
+		1231C7EA1E9EB39A00CA409A /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CC1E9EB39A00CA409A /* Assets.swift */; };
+		1231C7EB1E9EB39A00CA409A /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CD1E9EB39A00CA409A /* Bookmarks.swift */; };
+		1231C7EC1E9EB39A00CA409A /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CE1E9EB39A00CA409A /* Calendar.swift */; };
+		1231C7ED1E9EB39A00CA409A /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CF1E9EB39A00CA409A /* Character.swift */; };
+		1231C7EE1E9EB39A00CA409A /* Clones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D01E9EB39A00CA409A /* Clones.swift */; };
+		1231C7EF1E9EB39A00CA409A /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D11E9EB39A00CA409A /* Contacts.swift */; };
+		1231C7F01E9EB39A00CA409A /* Corporation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D21E9EB39A00CA409A /* Corporation.swift */; };
+		1231C7F11E9EB39A00CA409A /* Dogma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D31E9EB39A00CA409A /* Dogma.swift */; };
+		1231C7F21E9EB39A00CA409A /* Fittings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D41E9EB39A00CA409A /* Fittings.swift */; };
+		1231C7F31E9EB39A00CA409A /* Fleets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D51E9EB39A00CA409A /* Fleets.swift */; };
+		1231C7F41E9EB39A00CA409A /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D61E9EB39A00CA409A /* Global.swift */; };
+		1231C7F51E9EB39A00CA409A /* Incursions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D71E9EB39A00CA409A /* Incursions.swift */; };
+		1231C7F61E9EB39A00CA409A /* Industry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D81E9EB39A00CA409A /* Industry.swift */; };
+		1231C7F71E9EB39A00CA409A /* Insurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D91E9EB39A00CA409A /* Insurance.swift */; };
+		1231C7F81E9EB39A00CA409A /* Killmails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DA1E9EB39A00CA409A /* Killmails.swift */; };
+		1231C7F91E9EB39A00CA409A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DB1E9EB39A00CA409A /* Location.swift */; };
+		1231C7FA1E9EB39A00CA409A /* Loyalty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DC1E9EB39A00CA409A /* Loyalty.swift */; };
+		1231C7FB1E9EB39A00CA409A /* Mail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DD1E9EB39A00CA409A /* Mail.swift */; };
+		1231C7FC1E9EB39A00CA409A /* Market.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DE1E9EB39A00CA409A /* Market.swift */; };
+		1231C7FD1E9EB39A00CA409A /* Opportunities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DF1E9EB39A00CA409A /* Opportunities.swift */; };
+		1231C7FE1E9EB39A00CA409A /* PlanetaryInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E01E9EB39A00CA409A /* PlanetaryInteraction.swift */; };
+		1231C7FF1E9EB39A00CA409A /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E11E9EB39A00CA409A /* Routes.swift */; };
+		1231C8001E9EB39A00CA409A /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E21E9EB39A00CA409A /* Search.swift */; };
+		1231C8011E9EB39A00CA409A /* Skills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E31E9EB39A00CA409A /* Skills.swift */; };
+		1231C8021E9EB39A00CA409A /* Sovereignty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E41E9EB39A00CA409A /* Sovereignty.swift */; };
+		1231C8031E9EB39A00CA409A /* Universe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E51E9EB39A00CA409A /* Universe.swift */; };
+		1231C8041E9EB39A00CA409A /* UserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E61E9EB39A00CA409A /* UserInterface.swift */; };
+		1231C8051E9EB39A00CA409A /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E71E9EB39A00CA409A /* Wallet.swift */; };
+		1231C8061E9EB39A00CA409A /* Wars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E81E9EB39A00CA409A /* Wars.swift */; };
+		1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C8081E9EB3D900CA409A /* Helper.swift */; };
+		1231C80C1E9EB42500CA409A /* ESI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C80B1E9EB42500CA409A /* ESI.swift */; };
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		1288F01E1DEB8C8600FD7FBE /* EVEObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */; };
 		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
-		1295ED521DF85CCA0048C895 /* ESAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED511DF85CCA0048C895 /* ESAPI.swift */; };
-		1295ED851DFA98300048C895 /* ESMarket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED841DFA98300048C895 /* ESMarket.swift */; };
-		1295ED871DFA983C0048C895 /* ESResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED861DFA983C0048C895 /* ESResult.swift */; };
 		12A267231DEEC55000DC8291 /* EVEImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A267221DEEC55000DC8291 /* EVEImage.swift */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB65781DEA0286003AA683 /* Synchronized.swift */; };
@@ -27,21 +51,6 @@
 		12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AB65891DEB3528003AA683 /* NSString+md5.m */; };
 		12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */; };
 		12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */; };
-		12BC409D1DFF172300657D40 /* ESWallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BC409C1DFF172300657D40 /* ESWallet.swift */; };
-		12BC409F1DFF19B200657D40 /* ESWar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BC409E1DFF19B200657D40 /* ESWar.swift */; };
-		12C1C9751DFE855F004E9026 /* ESCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9741DFE855F004E9026 /* ESCharacter.swift */; };
-		12C1C9771DFE8A4E004E9026 /* ESClones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9761DFE8A4E004E9026 /* ESClones.swift */; };
-		12C1C9791DFE8E32004E9026 /* ESCorporation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9781DFE8E32004E9026 /* ESCorporation.swift */; };
-		12C1C97B1DFEA0D2004E9026 /* ESIncursions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C97A1DFEA0D2004E9026 /* ESIncursions.swift */; };
-		12C1C97D1DFEA38A004E9026 /* ESInsurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C97C1DFEA38A004E9026 /* ESInsurance.swift */; };
-		12C1C9811DFEA583004E9026 /* ESKillMail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9801DFEA583004E9026 /* ESKillMail.swift */; };
-		12C1C9831DFEAE28004E9026 /* ESLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9821DFEAE28004E9026 /* ESLocation.swift */; };
-		12C1C9851DFEB501004E9026 /* ESMail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9841DFEB501004E9026 /* ESMail.swift */; };
-		12C1C98B1DFED92E004E9026 /* ESPlanet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C98A1DFED92E004E9026 /* ESPlanet.swift */; };
-		12C1C98D1DFEE32C004E9026 /* ESSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C98C1DFEE32C004E9026 /* ESSearch.swift */; };
-		12C1C98F1DFEE982004E9026 /* ESSkills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C98E1DFEE982004E9026 /* ESSkills.swift */; };
-		12C1C9911DFEEDDD004E9026 /* ESSovereignty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9901DFEEDDD004E9026 /* ESSovereignty.swift */; };
-		12C1C9931DFEF1DC004E9026 /* ESUniverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C1C9921DFEF1DC004E9026 /* ESUniverse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +59,38 @@
 		1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESConstants.swift; sourceTree = "<group>"; };
 		1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESBookmark.swift; sourceTree = "<group>"; };
 		1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCalendar.swift; sourceTree = "<group>"; };
+		1231C7CB1E9EB39A00CA409A /* Alliance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alliance.swift; sourceTree = "<group>"; };
+		1231C7CC1E9EB39A00CA409A /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		1231C7CD1E9EB39A00CA409A /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
+		1231C7CE1E9EB39A00CA409A /* Calendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
+		1231C7CF1E9EB39A00CA409A /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		1231C7D01E9EB39A00CA409A /* Clones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clones.swift; sourceTree = "<group>"; };
+		1231C7D11E9EB39A00CA409A /* Contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
+		1231C7D21E9EB39A00CA409A /* Corporation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Corporation.swift; sourceTree = "<group>"; };
+		1231C7D31E9EB39A00CA409A /* Dogma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dogma.swift; sourceTree = "<group>"; };
+		1231C7D41E9EB39A00CA409A /* Fittings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fittings.swift; sourceTree = "<group>"; };
+		1231C7D51E9EB39A00CA409A /* Fleets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fleets.swift; sourceTree = "<group>"; };
+		1231C7D61E9EB39A00CA409A /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		1231C7D71E9EB39A00CA409A /* Incursions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Incursions.swift; sourceTree = "<group>"; };
+		1231C7D81E9EB39A00CA409A /* Industry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Industry.swift; sourceTree = "<group>"; };
+		1231C7D91E9EB39A00CA409A /* Insurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Insurance.swift; sourceTree = "<group>"; };
+		1231C7DA1E9EB39A00CA409A /* Killmails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Killmails.swift; sourceTree = "<group>"; };
+		1231C7DB1E9EB39A00CA409A /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		1231C7DC1E9EB39A00CA409A /* Loyalty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loyalty.swift; sourceTree = "<group>"; };
+		1231C7DD1E9EB39A00CA409A /* Mail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mail.swift; sourceTree = "<group>"; };
+		1231C7DE1E9EB39A00CA409A /* Market.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Market.swift; sourceTree = "<group>"; };
+		1231C7DF1E9EB39A00CA409A /* Opportunities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Opportunities.swift; sourceTree = "<group>"; };
+		1231C7E01E9EB39A00CA409A /* PlanetaryInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetaryInteraction.swift; sourceTree = "<group>"; };
+		1231C7E11E9EB39A00CA409A /* Routes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
+		1231C7E21E9EB39A00CA409A /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		1231C7E31E9EB39A00CA409A /* Skills.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skills.swift; sourceTree = "<group>"; };
+		1231C7E41E9EB39A00CA409A /* Sovereignty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sovereignty.swift; sourceTree = "<group>"; };
+		1231C7E51E9EB39A00CA409A /* Universe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Universe.swift; sourceTree = "<group>"; };
+		1231C7E61E9EB39A00CA409A /* UserInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInterface.swift; sourceTree = "<group>"; };
+		1231C7E71E9EB39A00CA409A /* Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
+		1231C7E81E9EB39A00CA409A /* Wars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wars.swift; sourceTree = "<group>"; };
+		1231C8081E9EB3D900CA409A /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		1231C80B1E9EB42500CA409A /* ESI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESI.swift; sourceTree = "<group>"; };
 		123825601DEC199E0031A884 /* EVEAPIObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPIObject.swift; sourceTree = "<group>"; };
 		123825621DEC1AD20031A884 /* EVEResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEResult.swift; sourceTree = "<group>"; };
 		123825641DEC1E240031A884 /* EVEAPISerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPISerializer.swift; sourceTree = "<group>"; };
@@ -183,6 +224,73 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1231C7C91E9EB38200CA409A /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				1295ED511DF85CCA0048C895 /* ESAPI.swift */,
+				1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */,
+				1295ED861DFA983C0048C895 /* ESResult.swift */,
+				1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */,
+				1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */,
+				1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */,
+				1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */,
+				1295ED841DFA98300048C895 /* ESMarket.swift */,
+				12C1C9741DFE855F004E9026 /* ESCharacter.swift */,
+				12C1C9761DFE8A4E004E9026 /* ESClones.swift */,
+				12C1C9781DFE8E32004E9026 /* ESCorporation.swift */,
+				12C1C97A1DFEA0D2004E9026 /* ESIncursions.swift */,
+				12C1C97C1DFEA38A004E9026 /* ESInsurance.swift */,
+				12C1C9801DFEA583004E9026 /* ESKillMail.swift */,
+				12C1C9821DFEAE28004E9026 /* ESLocation.swift */,
+				12C1C9841DFEB501004E9026 /* ESMail.swift */,
+				12C1C98A1DFED92E004E9026 /* ESPlanet.swift */,
+				12C1C98C1DFEE32C004E9026 /* ESSearch.swift */,
+				12C1C98E1DFEE982004E9026 /* ESSkills.swift */,
+				12C1C9901DFEEDDD004E9026 /* ESSovereignty.swift */,
+				12C1C9921DFEF1DC004E9026 /* ESUniverse.swift */,
+				12BC409C1DFF172300657D40 /* ESWallet.swift */,
+				12BC409E1DFF19B200657D40 /* ESWar.swift */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
+		1231C7CA1E9EB39A00CA409A /* codegen */ = {
+			isa = PBXGroup;
+			children = (
+				1231C7CB1E9EB39A00CA409A /* Alliance.swift */,
+				1231C7CC1E9EB39A00CA409A /* Assets.swift */,
+				1231C7CD1E9EB39A00CA409A /* Bookmarks.swift */,
+				1231C7CE1E9EB39A00CA409A /* Calendar.swift */,
+				1231C7CF1E9EB39A00CA409A /* Character.swift */,
+				1231C7D01E9EB39A00CA409A /* Clones.swift */,
+				1231C7D11E9EB39A00CA409A /* Contacts.swift */,
+				1231C7D21E9EB39A00CA409A /* Corporation.swift */,
+				1231C7D31E9EB39A00CA409A /* Dogma.swift */,
+				1231C7D41E9EB39A00CA409A /* Fittings.swift */,
+				1231C7D51E9EB39A00CA409A /* Fleets.swift */,
+				1231C7D61E9EB39A00CA409A /* Global.swift */,
+				1231C7D71E9EB39A00CA409A /* Incursions.swift */,
+				1231C7D81E9EB39A00CA409A /* Industry.swift */,
+				1231C7D91E9EB39A00CA409A /* Insurance.swift */,
+				1231C7DA1E9EB39A00CA409A /* Killmails.swift */,
+				1231C7DB1E9EB39A00CA409A /* Location.swift */,
+				1231C7DC1E9EB39A00CA409A /* Loyalty.swift */,
+				1231C7DD1E9EB39A00CA409A /* Mail.swift */,
+				1231C7DE1E9EB39A00CA409A /* Market.swift */,
+				1231C7DF1E9EB39A00CA409A /* Opportunities.swift */,
+				1231C7E01E9EB39A00CA409A /* PlanetaryInteraction.swift */,
+				1231C7E11E9EB39A00CA409A /* Routes.swift */,
+				1231C7E21E9EB39A00CA409A /* Search.swift */,
+				1231C7E31E9EB39A00CA409A /* Skills.swift */,
+				1231C7E41E9EB39A00CA409A /* Sovereignty.swift */,
+				1231C7E51E9EB39A00CA409A /* Universe.swift */,
+				1231C7E61E9EB39A00CA409A /* UserInterface.swift */,
+				1231C7E71E9EB39A00CA409A /* Wallet.swift */,
+				1231C7E81E9EB39A00CA409A /* Wars.swift */,
+			);
+			path = codegen;
+			sourceTree = "<group>";
+		};
 		123825661DEC8BA30031A884 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,7 +357,6 @@
 				12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */,
 				12AB65711DE9AAFF003AA683 /* EVEHTTPSessionManager.swift */,
 				12AB65761DE9ABF3003AA683 /* EVEHTTPCachedContent.swift */,
-				1295ED481DF8169F0048C895 /* OAuth2.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -305,29 +412,11 @@
 		1295ED501DF85CAF0048C895 /* ESI */ = {
 			isa = PBXGroup;
 			children = (
-				1295ED511DF85CCA0048C895 /* ESAPI.swift */,
-				1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */,
-				1295ED861DFA983C0048C895 /* ESResult.swift */,
-				1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */,
-				1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */,
-				1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */,
-				1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */,
-				1295ED841DFA98300048C895 /* ESMarket.swift */,
-				12C1C9741DFE855F004E9026 /* ESCharacter.swift */,
-				12C1C9761DFE8A4E004E9026 /* ESClones.swift */,
-				12C1C9781DFE8E32004E9026 /* ESCorporation.swift */,
-				12C1C97A1DFEA0D2004E9026 /* ESIncursions.swift */,
-				12C1C97C1DFEA38A004E9026 /* ESInsurance.swift */,
-				12C1C9801DFEA583004E9026 /* ESKillMail.swift */,
-				12C1C9821DFEAE28004E9026 /* ESLocation.swift */,
-				12C1C9841DFEB501004E9026 /* ESMail.swift */,
-				12C1C98A1DFED92E004E9026 /* ESPlanet.swift */,
-				12C1C98C1DFEE32C004E9026 /* ESSearch.swift */,
-				12C1C98E1DFEE982004E9026 /* ESSkills.swift */,
-				12C1C9901DFEEDDD004E9026 /* ESSovereignty.swift */,
-				12C1C9921DFEF1DC004E9026 /* ESUniverse.swift */,
-				12BC409C1DFF172300657D40 /* ESWallet.swift */,
-				12BC409E1DFF19B200657D40 /* ESWar.swift */,
+				1231C7C91E9EB38200CA409A /* Deprecated */,
+				1231C7CA1E9EB39A00CA409A /* codegen */,
+				1231C8081E9EB3D900CA409A /* Helper.swift */,
+				1231C80B1E9EB42500CA409A /* ESI.swift */,
+				1295ED481DF8169F0048C895 /* OAuth2.swift */,
 			);
 			name = ESI;
 			sourceTree = "<group>";
@@ -523,38 +612,47 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1231C8001E9EB39A00CA409A /* Search.swift in Sources */,
+				1231C7E91E9EB39A00CA409A /* Alliance.swift in Sources */,
+				1231C7EE1E9EB39A00CA409A /* Clones.swift in Sources */,
+				1231C8011E9EB39A00CA409A /* Skills.swift in Sources */,
+				1231C7F71E9EB39A00CA409A /* Insurance.swift in Sources */,
+				1231C7F61E9EB39A00CA409A /* Industry.swift in Sources */,
+				1231C8051E9EB39A00CA409A /* Wallet.swift in Sources */,
+				1231C7FB1E9EB39A00CA409A /* Mail.swift in Sources */,
+				1231C7EA1E9EB39A00CA409A /* Assets.swift in Sources */,
+				1231C8061E9EB39A00CA409A /* Wars.swift in Sources */,
 				1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */,
+				1231C7F91E9EB39A00CA409A /* Location.swift in Sources */,
+				1231C7FC1E9EB39A00CA409A /* Market.swift in Sources */,
+				1231C7FF1E9EB39A00CA409A /* Routes.swift in Sources */,
+				1231C7FD1E9EB39A00CA409A /* Opportunities.swift in Sources */,
+				1231C8021E9EB39A00CA409A /* Sovereignty.swift in Sources */,
 				1288F01E1DEB8C8600FD7FBE /* EVEObject.swift in Sources */,
-				12C1C97D1DFEA38A004E9026 /* ESInsurance.swift in Sources */,
-				1203DB301DFAE8D800BBFAD9 /* ESAlliance.swift in Sources */,
-				12C1C97B1DFEA0D2004E9026 /* ESIncursions.swift in Sources */,
-				12C1C9751DFE855F004E9026 /* ESCharacter.swift in Sources */,
-				12C1C9911DFEEDDD004E9026 /* ESSovereignty.swift in Sources */,
-				12C1C9931DFEF1DC004E9026 /* ESUniverse.swift in Sources */,
-				12C1C98F1DFEE982004E9026 /* ESSkills.swift in Sources */,
-				1295ED851DFA98300048C895 /* ESMarket.swift in Sources */,
-				1203DB321DFAEBD200BBFAD9 /* ESAsset.swift in Sources */,
-				12C1C98B1DFED92E004E9026 /* ESPlanet.swift in Sources */,
-				12C1C9791DFE8E32004E9026 /* ESCorporation.swift in Sources */,
-				12C1C98D1DFEE32C004E9026 /* ESSearch.swift in Sources */,
-				1295ED521DF85CCA0048C895 /* ESAPI.swift in Sources */,
-				1203DB341DFAEC2300BBFAD9 /* ESConstants.swift in Sources */,
-				12C1C9811DFEA583004E9026 /* ESKillMail.swift in Sources */,
 				12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */,
-				12C1C9831DFEAE28004E9026 /* ESLocation.swift in Sources */,
+				1231C7FA1E9EB39A00CA409A /* Loyalty.swift in Sources */,
+				1231C7F51E9EB39A00CA409A /* Incursions.swift in Sources */,
+				1231C8041E9EB39A00CA409A /* UserInterface.swift in Sources */,
+				1231C8031E9EB39A00CA409A /* Universe.swift in Sources */,
 				12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */,
+				1231C7F81E9EB39A00CA409A /* Killmails.swift in Sources */,
+				1231C7F01E9EB39A00CA409A /* Corporation.swift in Sources */,
+				1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */,
 				12A267231DEEC55000DC8291 /* EVEImage.swift in Sources */,
-				1203DB361DFAF17000BBFAD9 /* ESBookmark.swift in Sources */,
-				1203DB381DFAFA8C00BBFAD9 /* ESCalendar.swift in Sources */,
+				1231C7EF1E9EB39A00CA409A /* Contacts.swift in Sources */,
 				12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */,
-				12C1C9771DFE8A4E004E9026 /* ESClones.swift in Sources */,
-				12BC409D1DFF172300657D40 /* ESWallet.swift in Sources */,
 				12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */,
+				1231C7ED1E9EB39A00CA409A /* Character.swift in Sources */,
+				1231C7FE1E9EB39A00CA409A /* PlanetaryInteraction.swift in Sources */,
+				1231C80C1E9EB42500CA409A /* ESI.swift in Sources */,
+				1231C7F21E9EB39A00CA409A /* Fittings.swift in Sources */,
+				1231C7EC1E9EB39A00CA409A /* Calendar.swift in Sources */,
+				1231C7F11E9EB39A00CA409A /* Dogma.swift in Sources */,
 				12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */,
-				12BC409F1DFF19B200657D40 /* ESWar.swift in Sources */,
 				1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */,
-				1295ED871DFA983C0048C895 /* ESResult.swift in Sources */,
-				12C1C9851DFEB501004E9026 /* ESMail.swift in Sources */,
+				1231C7F31E9EB39A00CA409A /* Fleets.swift in Sources */,
+				1231C7EB1E9EB39A00CA409A /* Bookmarks.swift in Sources */,
+				1231C7F41E9EB39A00CA409A /* Global.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

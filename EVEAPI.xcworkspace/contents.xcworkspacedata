@@ -19,4 +19,7 @@
    <FileRef
       location = "group:ThirdParty/Alamofire/Alamofire.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:esicodegen/esicodegen.xcodeproj">
+   </FileRef>
 </Workspace>
