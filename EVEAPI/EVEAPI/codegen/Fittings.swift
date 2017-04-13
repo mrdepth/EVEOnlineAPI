@@ -21,18 +21,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = fitting != nil ? (try? JSONSerialization.data(withJSONObject: fitting!.json, options: [])) : nil
 			
-			if let v = fitting {
-				parameters["fitting"] = v.json
-			}
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/fittings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Fittings.PostFittingResult>) in
 				completionBlock?(response.result)
@@ -47,16 +51,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.read_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/fittings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
 				completionBlock?(response.result)
@@ -71,16 +81,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/fittings/\(fittingID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .delete, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)

@@ -20,24 +20,30 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			if let v = avoid {
-				parameters["avoid"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = avoid?.httpQuery {
+				query.append(URLQueryItem(name: "avoid", value: v))
 			}
-			if let v = connections {
-				parameters["connections"] = v.json
+			if let v = connections?.httpQuery {
+				query.append(URLQueryItem(name: "connections", value: v))
 			}
-			if let v = flag {
-				parameters["flag"] = v.json
+			if let v = flag?.httpQuery {
+				query.append(URLQueryItem(name: "flag", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/route/\(origin)/\(destination)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
@@ -100,7 +106,7 @@ public extension ESI {
 		}
 		
 		
-		public enum Flag: String, JSONCoding {
+		public enum Flag: String, JSONCoding, HTTPQueryable {
 			case insecure = "insecure"
 			case secure = "secure"
 			case shortest = "shortest"
@@ -116,6 +122,10 @@ public extension ESI {
 			public init(json: Any) throws {
 				guard let s = json as? String, let v = Flag(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 				self = v
+			}
+			
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}

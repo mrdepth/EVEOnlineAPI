@@ -20,16 +20,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/incursions/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Incursions.Incursion]>) in
 				completionBlock?(response.result)
@@ -40,7 +46,7 @@ public extension ESI {
 		
 		public class Incursion: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetIncursionsState: String, JSONCoding {
+			public enum GetIncursionsState: String, JSONCoding, HTTPQueryable {
 				case established = "established"
 				case mobilizing = "mobilizing"
 				case withdrawing = "withdrawing"
@@ -56,6 +62,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetIncursionsState(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

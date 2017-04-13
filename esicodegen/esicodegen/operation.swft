@@ -4,16 +4,22 @@
 		
 {security}
 		
-		var parameters = Parameters()
-		{headers}
-		parameters["datasource"] = session!.server.rawValue
+		{body}
 
-{parameters}
-		
+		{headers}
+
+		var query = [URLQueryItem]()
+		query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+
+		{queries}
+
 		let url = session!.baseURL + "latest{url}"
+		let components = NSURLComponents(string: url)!
+		components.queryItems = query
+
 		let progress = Progress(totalUnitCount: 100)
-		
-		session!.request(url, method: .{method}, parameters: parameters, encoding: {encoding}, headers: headers).downloadProgress { p in
+
+		session!.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<{result}>) in
 				completionBlock?(response.result)

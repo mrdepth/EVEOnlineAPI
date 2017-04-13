@@ -21,23 +21,33 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-search.search_structures.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			parameters["categories"] = categories.json
-			if let v = language {
-				parameters["language"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = categories.httpQuery {
+				query.append(URLQueryItem(name: "categories", value: v))
 			}
-			parameters["search"] = search.json
-			if let v = strict {
-				parameters["strict"] = v.json
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			if let v = search.httpQuery {
+				query.append(URLQueryItem(name: "search", value: v))
+			}
+			if let v = strict?.httpQuery {
+				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/search/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Search.CharacterSearchResult>) in
 				completionBlock?(response.result)
@@ -45,29 +55,39 @@ public extension ESI {
 			}
 		}
 		
-		public func search(categories: [Search.Categories1], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
+		public func search(categories: [Search.SearchCategories], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			parameters["categories"] = categories.json
-			if let v = language {
-				parameters["language"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = categories.httpQuery {
+				query.append(URLQueryItem(name: "categories", value: v))
 			}
-			parameters["search"] = search.json
-			if let v = strict {
-				parameters["strict"] = v.json
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			if let v = search.httpQuery {
+				query.append(URLQueryItem(name: "search", value: v))
+			}
+			if let v = strict?.httpQuery {
+				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/search/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
 				completionBlock?(response.result)
@@ -556,7 +576,7 @@ public extension ESI {
 		}
 		
 		
-		public enum Categories: String, JSONCoding {
+		public enum Categories: String, JSONCoding, HTTPQueryable {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"
@@ -583,10 +603,14 @@ public extension ESI {
 				self = v
 			}
 			
+			public var httpQuery: String? {
+				return rawValue
+			}
+			
 		}
 		
 		
-		public enum Categories1: String, JSONCoding {
+		public enum SearchCategories: String, JSONCoding, HTTPQueryable {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"
@@ -608,8 +632,12 @@ public extension ESI {
 			}
 			
 			public init(json: Any) throws {
-				guard let s = json as? String, let v = Categories1(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let s = json as? String, let v = SearchCategories(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 				self = v
+			}
+			
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}

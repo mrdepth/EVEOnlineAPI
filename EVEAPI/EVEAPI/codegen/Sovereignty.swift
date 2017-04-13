@@ -20,16 +20,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/sovereignty/map/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
 				completionBlock?(response.result)
@@ -43,16 +49,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/sovereignty/campaigns/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
 				completionBlock?(response.result)
@@ -66,16 +78,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/sovereignty/structures/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
 				completionBlock?(response.result)
@@ -251,7 +269,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetSovereigntyCampaignsEventType: String, JSONCoding {
+			public enum GetSovereigntyCampaignsEventType: String, JSONCoding, HTTPQueryable {
 				case ihubDefense = "ihub_defense"
 				case stationDefense = "station_defense"
 				case stationFreeport = "station_freeport"
@@ -268,6 +286,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetSovereigntyCampaignsEventType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

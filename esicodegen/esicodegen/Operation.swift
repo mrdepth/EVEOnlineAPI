@@ -81,27 +81,33 @@ class Operation {
 		
 		var url = path!.path
 		var parameterStrings = [String]()
+		var headerStrings = [String]()
+		var queryStrings = [String]()
 		var definitions = [String]()
 		var security = [String]()
 		
 		let response = responses["200"] ?? responses.first {(Int($0.key) ?? 500) < 300}?.value
 		let result = response?.schema?.typeIdentifier ?? "String"
 		
-		var hasHeaders = false
 		for parameter in parameters {
 			guard !Skip.contains(parameter.name) else {continue}
 			
-			if case .path = parameter.location {
+			switch parameter.location {
+			case .body:
+				parameterStrings.append(parameter.parameterString)
+			case .header:
+				headerStrings.append(parameter.headerString)
+			case .query:
+				queryStrings.append(parameter.queryString)
+			case .path:
 				url = url.replacingOccurrences(of: "{\(parameter.name)}", with: "\\(\(parameter.parameterName + (parameter.isRequired ? "" : "!")))")
 			}
-			else if let s = parameter.parameterString {
-				parameterStrings.append(s)
-			}
-			if case .header = parameter.location {
-				hasHeaders = true
-			}
+			
 			definitions.append(parameter.definition)
 		}
+		
+//		parameterStrings.insert("\(parameterStrings.count > 0 ? "var" : "let") parameters = Parameters()", at: 0)
+		headerStrings.insert("\(headerStrings.count > 0 ? "var" : "let") headers = HTTPHeaders()", at: 0)
 		
 		for scope in self.security?.security ?? [] {
 			let s = "guard scopes.contains(\"\(scope)\") else {completionBlock?(.failure(ESIError.forbidden)); return}"
@@ -111,7 +117,9 @@ class Operation {
 		template = template.replacingOccurrences(of: "{operation}", with: name)
 		template = template.replacingOccurrences(of: "{definitions}", with: definitions.joined(separator: ", ") + (definitions.count > 0 ? ", " : ""))
 		template = template.replacingOccurrences(of: "{result}", with: result)
-		template = template.replacingOccurrences(of: "{parameters}", with: parameterStrings.joined(separator: "\n"))
+		template = template.replacingOccurrences(of: "{body}", with: parameterStrings.first ?? "let body: Data? = nil")
+		template = template.replacingOccurrences(of: "{headers}", with: headerStrings.joined(separator: "\n"))
+		template = template.replacingOccurrences(of: "{queries}", with: queryStrings.joined(separator: "\n"))
 		
 		if security.count > 0 {
 			var s = "let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []\n"
@@ -121,9 +129,8 @@ class Operation {
 		else {
 			template = template.replacingOccurrences(of: "{security}", with: "")
 		}
-		template = template.replacingOccurrences(of: "{headers}", with: hasHeaders ? "var headers = HTTPHeaders()" : "let headers = HTTPHeaders()")
 		template = template.replacingOccurrences(of: "{method}", with: method.rawValue)
-		template = template.replacingOccurrences(of: "{encoding}", with: method.encoding)
+//		template = template.replacingOccurrences(of: "{encoding}", with: method.encoding)
 		template = template.replacingOccurrences(of: "{url}", with: url)
 		
 		return template

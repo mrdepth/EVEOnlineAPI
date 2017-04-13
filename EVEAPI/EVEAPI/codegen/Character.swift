@@ -21,16 +21,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_medals.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/medals/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
 				completionBlock?(response.result)
@@ -45,16 +51,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_standings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/standings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
 				completionBlock?(response.result)
@@ -69,16 +81,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = try? JSONSerialization.data(withJSONObject: characters.json, options: [])
 			
-			parameters["characters"] = characters.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/cspa/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Character.CSPAChargeCost>) in
 				completionBlock?(response.result)
@@ -92,16 +110,24 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			parameters["character_ids"] = characterIds.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = characterIds.httpQuery {
+				query.append(URLQueryItem(name: "character_ids", value: v))
+			}
 			
 			let url = session!.baseURL + "latest/characters/names/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.Name]>) in
 				completionBlock?(response.result)
@@ -116,16 +142,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_agents_research.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/agents_research/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
 				completionBlock?(response.result)
@@ -139,16 +171,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = try? JSONSerialization.data(withJSONObject: characters.json, options: [])
 			
-			parameters["characters"] = characters.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/affiliation/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
 				completionBlock?(response.result)
@@ -163,16 +201,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_chat_channels.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/chat_channels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.ChatChannel]>) in
 				completionBlock?(response.result)
@@ -186,16 +230,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/portrait/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
 				completionBlock?(response.result)
@@ -209,16 +259,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/corporationhistory/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
 				completionBlock?(response.result)
@@ -232,16 +288,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Character.Information>) in
 				completionBlock?(response.result)
@@ -714,7 +776,7 @@ public extension ESI {
 		
 		public class Standing: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDStandingsFromType: String, JSONCoding {
+			public enum GetCharactersCharacterIDStandingsFromType: String, JSONCoding, HTTPQueryable {
 				case agent = "agent"
 				case faction = "faction"
 				case npcCorp = "npc_corp"
@@ -730,6 +792,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDStandingsFromType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -852,7 +918,7 @@ public extension ESI {
 		
 		public class ChatChannel: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding {
+			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
@@ -868,6 +934,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDChatChannelsAccessorType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -1303,7 +1373,7 @@ public extension ESI {
 		
 		public class Medal: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDMedalsStatus: String, JSONCoding {
+			public enum GetCharactersCharacterIDMedalsStatus: String, JSONCoding, HTTPQueryable {
 				case `private` = "private"
 				case `public` = "public"
 				
@@ -1318,6 +1388,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDMedalsStatus(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -1982,7 +2056,7 @@ public extension ESI {
 		
 		public class Information: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDGender: String, JSONCoding {
+			public enum GetCharactersCharacterIDGender: String, JSONCoding, HTTPQueryable {
 				case female = "female"
 				case male = "male"
 				
@@ -1997,6 +2071,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDGender(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

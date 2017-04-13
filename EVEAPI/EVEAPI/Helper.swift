@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 //fileprivate let salt = Int(truncatingBitPattern: 0x9e3779b9 as UInt64)
 //
@@ -23,6 +24,16 @@ extension DateFormatter {
 		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 		return dateFormatter
 	}
+}
+
+extension Data: ParameterEncoding {
+	
+	public func encode(_ urlRequest: URLRequestConvertible, with parameters: Parameters?) throws -> URLRequest {
+		var request = try urlRequest.asURLRequest()
+		request.httpBody = self
+		return request
+	}
+	
 }
 
 public enum ESIError: Error {
@@ -43,7 +54,11 @@ public protocol JSONCoding {
 	init(json: Any) throws
 }
 
-extension Int: JSONCoding {
+public protocol HTTPQueryable {
+	var httpQuery: String? {get}
+}
+
+extension Int: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -52,9 +67,14 @@ extension Int: JSONCoding {
 		guard let v = json as? Int else {throw ESIError.invalidFormat(type(of: self), json)}
 		self = v
 	}
+
+	public var httpQuery: String? {
+		return String(self)
+	}
+
 }
 
-extension Int64: JSONCoding {
+extension Int64: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -64,9 +84,13 @@ extension Int64: JSONCoding {
 		self = v
 	}
 
+	public var httpQuery: String? {
+		return String(self)
+	}
+
 }
 
-extension Double: JSONCoding {
+extension Double: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -76,9 +100,13 @@ extension Double: JSONCoding {
 		self = v
 	}
 
+	public var httpQuery: String? {
+		return String(self)
+	}
+
 }
 
-extension Float: JSONCoding {
+extension Float: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -88,9 +116,13 @@ extension Float: JSONCoding {
 		self = v
 	}
 
+	public var httpQuery: String? {
+		return String(self)
+	}
+
 }
 
-extension Bool: JSONCoding {
+extension Bool: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -100,9 +132,13 @@ extension Bool: JSONCoding {
 		self = v
 	}
 	
+	public var httpQuery: String? {
+		return String(self)
+	}
+	
 }
 
-extension Date: JSONCoding {
+extension Date: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -110,6 +146,10 @@ extension Date: JSONCoding {
 	public init(json: Any) throws {
 		guard let v = json as? Date else {throw ESIError.invalidFormat(type(of: self), json)}
 		self = v
+	}
+
+	public var httpQuery: String? {
+		return DateFormatter.esiDateFormatter.string(from: self)
 	}
 
 }
@@ -126,7 +166,7 @@ extension Data: JSONCoding {
 
 }
 
-extension String: JSONCoding {
+extension String: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return self
 	}
@@ -136,9 +176,13 @@ extension String: JSONCoding {
 		self = v
 	}
 
+	public var httpQuery: String? {
+		return self
+	}
+
 }
 
-extension Array: JSONCoding {
+extension Array: JSONCoding, HTTPQueryable {
 	public var json: Any {
 		return flatMap{($0 as? JSONCoding)?.json}
 	}
@@ -148,6 +192,11 @@ extension Array: JSONCoding {
 			let type = Element.self as? JSONCoding.Type else {throw ESIError.invalidFormat(type(of: self), json)}
 		
 		self = try v.flatMap{try type.init(json: $0) as? Element}
+	}
+
+	public var httpQuery: String? {
+		let a = flatMap{ ($0 as? HTTPQueryable)?.httpQuery }
+		return !a.isEmpty ? a.joined(separator: ",") : nil
 	}
 
 }

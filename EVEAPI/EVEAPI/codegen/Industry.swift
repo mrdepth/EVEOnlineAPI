@@ -20,16 +20,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/industry/facilities/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Industry.Facilities]>) in
 				completionBlock?(response.result)
@@ -43,16 +49,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/industry/systems/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Industry.SolarSystemCostIndices]>) in
 				completionBlock?(response.result)
@@ -262,7 +274,7 @@ public extension ESI {
 			
 			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum GetIndustrySystemsActivity: String, JSONCoding {
+				public enum GetIndustrySystemsActivity: String, JSONCoding, HTTPQueryable {
 					case copying = "copying"
 					case duplicating = "duplicating"
 					case invention = "invention"
@@ -284,6 +296,10 @@ public extension ESI {
 					public init(json: Any) throws {
 						guard let s = json as? String, let v = GetIndustrySystemsActivity(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
 					}
 					
 				}

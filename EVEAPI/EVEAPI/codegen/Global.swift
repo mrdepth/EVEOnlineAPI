@@ -3,7 +3,7 @@ import Alamofire
 
 public extension ESI {
 	
-	public enum Datasource: String, JSONCoding {
+	public enum Datasource: String, JSONCoding, HTTPQueryable {
 		case singularity = "singularity"
 		case tranquility = "tranquility"
 		
@@ -20,10 +20,14 @@ public extension ESI {
 			self = v
 		}
 		
+		public var httpQuery: String? {
+			return rawValue
+		}
+		
 	}
 	
 	
-	public enum Language: String, JSONCoding {
+	public enum Language: String, JSONCoding, HTTPQueryable {
 		case de = "de"
 		case enUS = "en-us"
 		case fr = "fr"
@@ -42,6 +46,10 @@ public extension ESI {
 		public init(json: Any) throws {
 			guard let s = json as? String, let v = Language(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 			self = v
+		}
+		
+		public var httpQuery: String? {
+			return rawValue
 		}
 		
 	}

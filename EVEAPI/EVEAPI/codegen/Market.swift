@@ -20,16 +20,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/markets/prices/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.Price]>) in
 				completionBlock?(response.result)
@@ -43,16 +49,24 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			parameters["type_id"] = typeID.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = typeID.httpQuery {
+				query.append(URLQueryItem(name: "type_id", value: v))
+			}
 			
 			let url = session!.baseURL + "latest/markets/\(regionID)/history/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.History]>) in
 				completionBlock?(response.result)
@@ -67,18 +81,24 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.structure_markets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			if let v = page {
-				parameters["page"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/markets/structures/\(structureID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.Structure]>) in
 				completionBlock?(response.result)
@@ -92,22 +112,30 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			parameters["order_type"] = orderType.json
-			if let v = page {
-				parameters["page"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = orderType.httpQuery {
+				query.append(URLQueryItem(name: "order_type", value: v))
 			}
-			if let v = typeID {
-				parameters["type_id"] = v.json
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			if let v = typeID?.httpQuery {
+				query.append(URLQueryItem(name: "type_id", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/markets/\(regionID)/orders/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.Order]>) in
 				completionBlock?(response.result)
@@ -121,18 +149,24 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			if let v = language {
-				parameters["language"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/markets/groups/\(marketGroupID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Market.ItemGroupInformation>) in
 				completionBlock?(response.result)
@@ -146,16 +180,22 @@ public extension ESI {
 			
 			
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/markets/groups/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
@@ -220,7 +260,7 @@ public extension ESI {
 		
 		public class Order: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetMarketsRegionIDOrdersRange: String, JSONCoding {
+			public enum GetMarketsRegionIDOrdersRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
 				case i10 = "10"
 				case i2 = "2"
@@ -245,6 +285,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetMarketsRegionIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -1037,7 +1081,7 @@ public extension ESI {
 		}
 		
 		
-		public enum OrderType: String, JSONCoding {
+		public enum OrderType: String, JSONCoding, HTTPQueryable {
 			case all = "all"
 			case buy = "buy"
 			case sell = "sell"
@@ -1053,6 +1097,10 @@ public extension ESI {
 			public init(json: Any) throws {
 				guard let s = json as? String, let v = OrderType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 				self = v
+			}
+			
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}
@@ -1114,7 +1162,7 @@ public extension ESI {
 		
 		public class Structure: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding {
+			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
 				case i10 = "10"
 				case i2 = "2"
@@ -1139,6 +1187,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetMarketsStructuresStructureIDRange(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

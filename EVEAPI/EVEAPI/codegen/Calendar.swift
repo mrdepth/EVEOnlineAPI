@@ -21,16 +21,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.respond_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = try? JSONSerialization.data(withJSONObject: response.json, options: [])
 			
-			parameters["response"] = response.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/calendar/\(eventID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
@@ -45,16 +51,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/calendar/\(eventID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Calendar.Event>) in
 				completionBlock?(response.result)
@@ -69,18 +81,24 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			if let v = fromEvent {
-				parameters["from_event"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = fromEvent?.httpQuery {
+				query.append(URLQueryItem(name: "from_event", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/calendar/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Calendar.Summary]>) in
 				completionBlock?(response.result)
@@ -91,7 +109,7 @@ public extension ESI {
 		
 		public class Summary: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDCalendarEventResponse: String, JSONCoding {
+			public enum GetCharactersCharacterIDCalendarEventResponse: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
 				case declined = "declined"
 				case notResponded = "not_responded"
@@ -108,6 +126,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDCalendarEventResponse(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -205,7 +227,7 @@ public extension ESI {
 		
 		public class Response: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum Response: String, JSONCoding {
+			public enum Response: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
 				case declined = "declined"
 				case tentative = "tentative"
@@ -221,6 +243,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = Response(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -329,7 +355,7 @@ public extension ESI {
 		
 		public class Event: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, JSONCoding {
+			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
@@ -347,6 +373,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDCalendarEventIDOwnerType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

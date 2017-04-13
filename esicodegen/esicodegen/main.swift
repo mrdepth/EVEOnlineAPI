@@ -91,8 +91,10 @@ for (_, schemes) in namespaces {
 			id = scheme.typeIdentifier + "\(i)"
 		}
 		if i > 0 {
-			scheme.title += "\(i)"
-			scheme.namespaceName = scheme.title
+			var title = scheme.title + "\(i)"
+			title = conflicts[title] ?? title
+			scheme.title = title
+			scheme.namespaceName = title
 		}
 		set.insert(scheme.typeIdentifier)
 	}

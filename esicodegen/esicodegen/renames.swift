@@ -178,3 +178,7 @@ let operationNames: [String: String] = [
 	"get_characters_character_id_search": "characterSearch",
 	"get_search": "search"
 ]
+
+let conflicts: [String: String] = [
+	"Categories1" : "SearchCategories"
+]

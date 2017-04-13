@@ -21,18 +21,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = label != nil ? (try? JSONSerialization.data(withJSONObject: label!.json, options: [])) : nil
 			
-			if let v = label {
-				parameters["label"] = v.json
-			}
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Int64>) in
 				completionBlock?(response.result)
@@ -47,16 +51,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
 				completionBlock?(response.result)
@@ -71,16 +81,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/\(mailID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .delete, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
@@ -95,16 +111,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = try? JSONSerialization.data(withJSONObject: contents.json, options: [])
 			
-			parameters["contents"] = contents.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/\(mailID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .put, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
@@ -119,16 +141,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/\(mailID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Mail.MailBody>) in
 				completionBlock?(response.result)
@@ -143,16 +171,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/labels/\(labelID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .delete, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
@@ -167,16 +201,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.send_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body = try? JSONSerialization.data(withJSONObject: mail.json, options: [])
 			
-			parameters["mail"] = mail.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Int>) in
 				completionBlock?(response.result)
@@ -191,21 +231,27 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
-			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			let body: Data? = nil
 			
-			if let v = labels {
-				parameters["labels"] = v.json
+			let headers = HTTPHeaders()
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = labels?.httpQuery {
+				query.append(URLQueryItem(name: "labels", value: v))
 			}
-			if let v = lastMailID {
-				parameters["last_mail_id"] = v.json
+			if let v = lastMailID?.httpQuery {
+				query.append(URLQueryItem(name: "last_mail_id", value: v))
 			}
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Mail.Header]>) in
 				completionBlock?(response.result)
@@ -220,16 +266,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/mail/lists/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
 				completionBlock?(response.result)
@@ -458,7 +510,7 @@ public extension ESI {
 			
 			public class GetCharactersCharacterIDMailRecipients: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum GetCharactersCharacterIDMailRecipientType: String, JSONCoding {
+				public enum GetCharactersCharacterIDMailRecipientType: String, JSONCoding, HTTPQueryable {
 					case alliance = "alliance"
 					case character = "character"
 					case corporation = "corporation"
@@ -475,6 +527,10 @@ public extension ESI {
 					public init(json: Any) throws {
 						guard let s = json as? String, let v = GetCharactersCharacterIDMailRecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
 					}
 					
 				}
@@ -972,7 +1028,7 @@ public extension ESI {
 			
 			public class GetCharactersCharacterIDMailLabelsLabels: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum GetCharactersCharacterIDMailLabelsColor: String, JSONCoding {
+				public enum GetCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 					case h0000fe = "#0000fe"
 					case h006634 = "#006634"
 					case h0099ff = "#0099ff"
@@ -1003,6 +1059,10 @@ public extension ESI {
 					public init(json: Any) throws {
 						guard let s = json as? String, let v = GetCharactersCharacterIDMailLabelsColor(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
 					}
 					
 				}
@@ -1318,7 +1378,7 @@ public extension ESI {
 			
 			public class GetCharactersCharacterIDMailMailIDRecipients: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum GetCharactersCharacterIDMailMailIDRecipientType: String, JSONCoding {
+				public enum GetCharactersCharacterIDMailMailIDRecipientType: String, JSONCoding, HTTPQueryable {
 					case alliance = "alliance"
 					case character = "character"
 					case corporation = "corporation"
@@ -1335,6 +1395,10 @@ public extension ESI {
 					public init(json: Any) throws {
 						guard let s = json as? String, let v = GetCharactersCharacterIDMailMailIDRecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
 					}
 					
 				}
@@ -1894,7 +1958,7 @@ public extension ESI {
 		
 		public class Label: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum PostCharactersCharacterIDMailLabelsColor: String, JSONCoding {
+			public enum PostCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 				case h0000fe = "#0000fe"
 				case h006634 = "#006634"
 				case h0099ff = "#0099ff"
@@ -1925,6 +1989,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = PostCharactersCharacterIDMailLabelsColor(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}
@@ -2099,7 +2167,7 @@ public extension ESI {
 			
 			public class PostCharactersCharacterIDMailRecipients: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum PostCharactersCharacterIDMailRecipientType: String, JSONCoding {
+				public enum PostCharactersCharacterIDMailRecipientType: String, JSONCoding, HTTPQueryable {
 					case alliance = "alliance"
 					case character = "character"
 					case corporation = "corporation"
@@ -2116,6 +2184,10 @@ public extension ESI {
 					public init(json: Any) throws {
 						guard let s = json as? String, let v = PostCharactersCharacterIDMailRecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
 					}
 					
 				}

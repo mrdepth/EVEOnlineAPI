@@ -21,16 +21,22 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Handler)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			var parameters = Parameters()
+			let body: Data? = nil
+			
 			let headers = HTTPHeaders()
-			parameters["datasource"] = session!.server.rawValue
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/assets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(url, method: .get, parameters: parameters, encoding: URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Assets.Asset]>) in
 				completionBlock?(response.result)
@@ -149,7 +155,7 @@ public extension ESI {
 		
 		public class Asset: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum GetCharactersCharacterIDAssetsLocationFlag: String, JSONCoding {
+			public enum GetCharactersCharacterIDAssetsLocationFlag: String, JSONCoding, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case cargo = "Cargo"
@@ -241,9 +247,13 @@ public extension ESI {
 					self = v
 				}
 				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
 			}
 			
-			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding {
+			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
 				case other = "other"
 				case solarSystem = "solar_system"
 				case station = "station"
@@ -259,6 +269,10 @@ public extension ESI {
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

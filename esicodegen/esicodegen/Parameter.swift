@@ -55,20 +55,39 @@ class Parameter {
 		return "\(parameterName): \(typeName)\(isRequired ? "" : "? = nil")"
 	}
 	
-	var parameterString: String? {
-		switch location {
-		case .body, .query:
-			return isRequired ?
-				"parameters[\"\(name)\"] = \(parameterName).json" :
-				"if let v = \(parameterName) {\n" +
-			"parameters[\"\(name)\"] = v.json\n}"
-		case .header:
-			return isRequired ?
-				"headers[\"\(name)\"] = String(\(parameterName))" :
-				"if let v = \(parameterName) {\n" +
-			"headers[\"\(name)\"] = String(v)\n}"
-		default:
-			return nil
-		}
+	var parameterString: String {
+		return isRequired ?
+		"let body = try? JSONSerialization.data(withJSONObject: \(parameterName).json, options: [])" :
+		"let body = \(parameterName) != nil ? (try? JSONSerialization.data(withJSONObject: \(parameterName)!.json, options: [])) : nil"
+//		return isRequired ?
+//			"parameters[\"\(name)\"] = \(parameterName).json" :
+//			"if let v = \(parameterName) {\n" +
+//		"parameters[\"\(name)\"] = v.json\n}"
+	}
+	
+	var headerString: String {
+		return isRequired ?
+			"headers[\"\(name)\"] = String(\(parameterName))" :
+			"if let v = \(parameterName) {\n" +
+		"headers[\"\(name)\"] = String(v)\n}"
+	}
+	
+	var queryString: String {
+		return "if let v = \(parameterName)\(isRequired ? "" : "?").httpQuery {\n" +
+		"query.append(URLQueryItem(name: \"\(name)\", value: v))\n}"
+
+		
+//		let value: String = ""
+//		switch type {
+//		case .array:
+//		case .enum:
+//			value = "String(\(parameterName))"
+//		default:
+//			<#code#>
+//		}
+//		return isRequired ?
+//			"query.append(URLQueryItem(name: \"\(name)\", value: \(value)))" :
+//			"if let v = \(parameterName) {\n" +
+//		"query.append(URLQueryItem(name: \"\(name)\", value: String(v)))\n}"
 	}
 }

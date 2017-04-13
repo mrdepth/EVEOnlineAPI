@@ -1,4 +1,4 @@
-public enum {enum}: String, JSONCoding {
+public enum {enum}: String, JSONCoding, HTTPQueryable {
 {cases}
 	
 	public init() {
@@ -12,6 +12,10 @@ public enum {enum}: String, JSONCoding {
 	public init(json: Any) throws {
 		guard let s = json as? String, let v = {enum}(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 		self = v
+	}
+
+	public var httpQuery: String? {
+		return rawValue
 	}
 
 }
