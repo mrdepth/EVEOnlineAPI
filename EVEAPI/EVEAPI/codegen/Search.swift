@@ -76,21 +76,25 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterSearchResult: NSObject, NSCoding , JSONCoding {
+		public class CharacterSearchResult: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var agent: [Int]?
-			public var alliance: [Int]?
-			public var character: [Int]?
-			public var constellation: [Int]?
-			public var corporation: [Int]?
-			public var faction: [Int]?
-			public var inventorytype: [Int]?
-			public var region: [Int]?
-			public var solarsystem: [Int]?
-			public var station: [Int]?
-			public var structure: [Int64]?
-			public var wormhole: [Int]?
+			public var agent: [Int]? = nil
+			public var alliance: [Int]? = nil
+			public var character: [Int]? = nil
+			public var constellation: [Int]? = nil
+			public var corporation: [Int]? = nil
+			public var faction: [Int]? = nil
+			public var inventorytype: [Int]? = nil
+			public var region: [Int]? = nil
+			public var solarsystem: [Int]? = nil
+			public var station: [Int]? = nil
+			public var structure: [Int64]? = nil
+			public var wormhole: [Int]? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -112,19 +116,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				agent = nil
-				alliance = nil
-				character = nil
-				constellation = nil
-				corporation = nil
-				faction = nil
-				inventorytype = nil
-				region = nil
-				solarsystem = nil
-				station = nil
-				structure = nil
-				wormhole = nil
-				
 				super.init()
 			}
 			
@@ -249,10 +240,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -263,8 +258,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -301,10 +294,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDSearchForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -315,8 +312,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -353,10 +348,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetSearchInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -367,8 +366,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -405,20 +402,24 @@ public extension ESI {
 		}
 		
 		
-		public class SearchResult: NSObject, NSCoding , JSONCoding {
+		public class SearchResult: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var agent: [Int]?
-			public var alliance: [Int]?
-			public var character: [Int]?
-			public var constellation: [Int]?
-			public var corporation: [Int]?
-			public var faction: [Int]?
-			public var inventorytype: [Int]?
-			public var region: [Int]?
-			public var solarsystem: [Int]?
-			public var station: [Int]?
-			public var wormhole: [Int]?
+			public var agent: [Int]? = nil
+			public var alliance: [Int]? = nil
+			public var character: [Int]? = nil
+			public var constellation: [Int]? = nil
+			public var corporation: [Int]? = nil
+			public var faction: [Int]? = nil
+			public var inventorytype: [Int]? = nil
+			public var region: [Int]? = nil
+			public var solarsystem: [Int]? = nil
+			public var station: [Int]? = nil
+			public var wormhole: [Int]? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -439,18 +440,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				agent = nil
-				alliance = nil
-				character = nil
-				constellation = nil
-				corporation = nil
-				faction = nil
-				inventorytype = nil
-				region = nil
-				solarsystem = nil
-				station = nil
-				wormhole = nil
-				
 				super.init()
 			}
 			

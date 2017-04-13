@@ -89,7 +89,7 @@ public extension ESI {
 		}
 		
 		
-		public class Summary: NSObject, NSCoding , JSONCoding {
+		public class Summary: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDCalendarEventResponse: String, JSONCoding {
 				case accepted = "accepted"
@@ -112,11 +112,15 @@ public extension ESI {
 				
 			}
 			
-			public var eventDate: Date?
-			public var eventID: Int?
-			public var eventResponse: Calendar.Summary.GetCharactersCharacterIDCalendarEventResponse?
-			public var importance: Int?
-			public var title: String?
+			public var eventDate: Date? = nil
+			public var eventID: Int? = nil
+			public var eventResponse: Calendar.Summary.GetCharactersCharacterIDCalendarEventResponse? = nil
+			public var importance: Int? = nil
+			public var title: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -131,12 +135,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				eventDate = nil
-				eventID = nil
-				eventResponse = nil
-				importance = nil
-				title = nil
-				
 				super.init()
 			}
 			
@@ -205,7 +203,7 @@ public extension ESI {
 		}
 		
 		
-		public class Response: NSObject, NSCoding , JSONCoding {
+		public class Response: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum Response: String, JSONCoding {
 				case accepted = "accepted"
@@ -227,7 +225,11 @@ public extension ESI {
 				
 			}
 			
-			public var response: Calendar.Response.Response
+			public var response: Calendar.Response.Response = Calendar.Response.Response()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -239,8 +241,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				response = Calendar.Response.Response()
-				
 				super.init()
 			}
 			
@@ -273,10 +273,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -287,8 +291,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -325,7 +327,7 @@ public extension ESI {
 		}
 		
 		
-		public class Event: NSObject, NSCoding , JSONCoding {
+		public class Event: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, JSONCoding {
 				case alliance = "alliance"
@@ -349,16 +351,20 @@ public extension ESI {
 				
 			}
 			
-			public var date: Date
-			public var duration: Int
-			public var eventID: Int
-			public var importance: Int
-			public var ownerID: Int
-			public var ownerName: String
-			public var ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType
-			public var response: String
-			public var text: String
-			public var title: String
+			public var date: Date = Date()
+			public var duration: Int = Int()
+			public var eventID: Int = Int()
+			public var importance: Int = Int()
+			public var ownerID: Int = Int()
+			public var ownerName: String = String()
+			public var ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType = Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType()
+			public var response: String = String()
+			public var text: String = String()
+			public var title: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -388,17 +394,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				date = Date()
-				duration = Int()
-				eventID = Int()
-				importance = Int()
-				ownerID = Int()
-				ownerName = String()
-				ownerType = Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType()
-				response = String()
-				text = String()
-				title = String()
-				
 				super.init()
 			}
 			
@@ -467,10 +462,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -481,8 +480,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -519,10 +516,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -533,8 +534,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -571,10 +570,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -585,8 +588,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -623,10 +624,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -637,8 +642,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -675,10 +678,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -689,8 +696,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

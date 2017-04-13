@@ -47,7 +47,7 @@ class Property: Schema {
 	}
 
 	var definition: String {
-		return "public var \(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "")"
+		return "public var \(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "") = \(isRequired ? defaultValue : "nil")"
 	}
 
 	var initialization: String {
@@ -79,9 +79,9 @@ class Property: Schema {
 		return ""
 	}
 	
-	var defaultInitialization: String {
-		return "\(propertyName) = \(isRequired ? defaultValue : "nil")"
-	}
+//	var defaultInitialization: String {
+//		return "\(propertyName) = \(isRequired ? defaultValue : "nil")"
+//	}
 	
 	var decoding: String {
 		switch type {
@@ -106,10 +106,18 @@ class Property: Schema {
 			return !isRequired ?
 				"\(propertyName) = aDecoder.containsValue(forKey: \"\(name)\") ? aDecoder.decodeBool(forKey: \"\(name)\") : nil" :
 			"\(propertyName) = aDecoder.decodeBool(forKey: \"\(name)\")"
-		case .array, .date, .base64Data, .octetsData, .string:
+		case .date, .base64Data, .octetsData, .string:
 			return "\(propertyName) = aDecoder.decodeObject(forKey: \"\(name)\") as? \(typeIdentifier)\(isRequired ? " ?? \(defaultValue)" : "")"
+		case .array:
+			var scheme = array
+			while scheme != nil && scheme!.type != .object {
+				scheme = scheme?.array
+			}
+			return scheme != nil ?
+				"\(propertyName) = aDecoder.decodeObject(of: [\(scheme!.typeIdentifier).self], forKey: \"\(name)\") as? \(typeIdentifier)\(isRequired ? " ?? \(defaultValue)" : "")" :
+				"\(propertyName) = aDecoder.decodeObject(forKey: \"\(name)\") as? \(typeIdentifier)\(isRequired ? " ?? \(defaultValue)" : "")"
 		case .object:
-			return "\(propertyName) = aDecoder.decodeObject(of: [\(typeIdentifier).self], forKey: \"\(name)\") as? \(typeIdentifier)\(isRequired ? " ?? \(defaultValue)" : "")"
+			return "\(propertyName) = aDecoder.decodeObject(of: \(typeIdentifier).self, forKey: \"\(name)\") \(isRequired ? " ?? \(defaultValue)" : "")"
 		case .enum:
 			return "\(propertyName) = \(typeIdentifier)(rawValue: aDecoder.decodeObject(forKey: \"\(name)\") as? String ?? \"\")\(isRequired ? " ?? \(defaultValue)" : "")"
 		}

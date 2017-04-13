@@ -89,14 +89,18 @@ public extension ESI {
 		}
 		
 		
-		public class Fitting: NSObject, NSCoding , JSONCoding {
+		public class Fitting: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDFittingsItems: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDFittingsItems: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var flag: Int
-				public var quantity: Int
-				public var typeID: Int
+				public var flag: Int = Int()
+				public var quantity: Int = Int()
+				public var typeID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -112,10 +116,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					flag = Int()
-					quantity = Int()
-					typeID = Int()
-					
 					super.init()
 				}
 				
@@ -155,11 +155,15 @@ public extension ESI {
 				
 			}
 			
-			public var localizedDescription: String
-			public var fittingID: Int
-			public var items: [Fittings.Fitting.GetCharactersCharacterIDFittingsItems]
-			public var name: String
-			public var shipTypeID: Int
+			public var localizedDescription: String = String()
+			public var fittingID: Int = Int()
+			public var items: [Fittings.Fitting.GetCharactersCharacterIDFittingsItems] = []
+			public var name: String = String()
+			public var shipTypeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -178,19 +182,13 @@ public extension ESI {
 			}
 			
 			override public init() {
-				localizedDescription = String()
-				fittingID = Int()
-				items = []
-				name = String()
-				shipTypeID = Int()
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
 				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
 				fittingID = aDecoder.decodeInteger(forKey: "fitting_id")
-				items = aDecoder.decodeObject(forKey: "items") as? [Fittings.Fitting.GetCharactersCharacterIDFittingsItems] ?? []
+				items = aDecoder.decodeObject(of: [Fittings.Fitting.GetCharactersCharacterIDFittingsItems.self], forKey: "items") as? [Fittings.Fitting.GetCharactersCharacterIDFittingsItems] ?? []
 				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
 				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
 				
@@ -232,10 +230,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDFittingsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDFittingsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -246,8 +248,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -284,10 +284,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDFittingsFittingIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDFittingsFittingIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -298,8 +302,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -336,14 +338,18 @@ public extension ESI {
 		}
 		
 		
-		public class PostFitting: NSObject, NSCoding , JSONCoding {
+		public class PostFitting: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class PostCharactersCharacterIDFittingsItems: NSObject, NSCoding , JSONCoding {
+			public class PostCharactersCharacterIDFittingsItems: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var flag: Int
-				public var quantity: Int
-				public var typeID: Int
+				public var flag: Int = Int()
+				public var quantity: Int = Int()
+				public var typeID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -359,10 +365,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					flag = Int()
-					quantity = Int()
-					typeID = Int()
-					
 					super.init()
 				}
 				
@@ -402,10 +404,14 @@ public extension ESI {
 				
 			}
 			
-			public var localizedDescription: String
-			public var items: [Fittings.PostFitting.PostCharactersCharacterIDFittingsItems]
-			public var name: String
-			public var shipTypeID: Int
+			public var localizedDescription: String = String()
+			public var items: [Fittings.PostFitting.PostCharactersCharacterIDFittingsItems] = []
+			public var name: String = String()
+			public var shipTypeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -422,17 +428,12 @@ public extension ESI {
 			}
 			
 			override public init() {
-				localizedDescription = String()
-				items = []
-				name = String()
-				shipTypeID = Int()
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
 				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
-				items = aDecoder.decodeObject(forKey: "items") as? [Fittings.PostFitting.PostCharactersCharacterIDFittingsItems] ?? []
+				items = aDecoder.decodeObject(of: [Fittings.PostFitting.PostCharactersCharacterIDFittingsItems.self], forKey: "items") as? [Fittings.PostFitting.PostCharactersCharacterIDFittingsItems] ?? []
 				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
 				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
 				
@@ -471,10 +472,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDFittingsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDFittingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -485,8 +490,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -523,10 +526,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDFittingsFittingIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDFittingsFittingIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -537,8 +544,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -575,10 +580,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDFittingsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDFittingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -589,8 +598,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -627,10 +634,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDFittingsForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDFittingsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -641,8 +652,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -679,10 +688,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostFittingResult: NSObject, NSCoding , JSONCoding {
+		public class PostFittingResult: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var fittingID: Int
+			public var fittingID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -694,8 +707,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				fittingID = Int()
-				
 				super.init()
 			}
 			

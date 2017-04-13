@@ -164,10 +164,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsGroupsMarketGroupIDNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsGroupsMarketGroupIDNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -178,8 +182,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -216,7 +218,7 @@ public extension ESI {
 		}
 		
 		
-		public class Order: NSObject, NSCoding , JSONCoding {
+		public class Order: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetMarketsRegionIDOrdersRange: String, JSONCoding {
 				case i1 = "1"
@@ -247,17 +249,21 @@ public extension ESI {
 				
 			}
 			
-			public var duration: Int
-			public var isBuyOrder: Bool
-			public var issued: Date
-			public var locationID: Int64
-			public var minVolume: Int
-			public var orderID: Int64
-			public var price: Float
-			public var range: Market.Order.GetMarketsRegionIDOrdersRange
-			public var typeID: Int
-			public var volumeRemain: Int
-			public var volumeTotal: Int
+			public var duration: Int = Int()
+			public var isBuyOrder: Bool = Bool()
+			public var issued: Date = Date()
+			public var locationID: Int64 = Int64()
+			public var minVolume: Int = Int()
+			public var orderID: Int64 = Int64()
+			public var price: Float = Float()
+			public var range: Market.Order.GetMarketsRegionIDOrdersRange = Market.Order.GetMarketsRegionIDOrdersRange()
+			public var typeID: Int = Int()
+			public var volumeRemain: Int = Int()
+			public var volumeTotal: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -289,18 +295,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				duration = Int()
-				isBuyOrder = Bool()
-				issued = Date()
-				locationID = Int64()
-				minVolume = Int()
-				orderID = Int64()
-				price = Float()
-				range = Market.Order.GetMarketsRegionIDOrdersRange()
-				typeID = Int()
-				volumeRemain = Int()
-				volumeTotal = Int()
-				
 				super.init()
 			}
 			
@@ -373,10 +367,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsStructuresStructureIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsStructuresStructureIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -387,8 +385,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -425,10 +421,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -439,8 +439,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -477,14 +475,18 @@ public extension ESI {
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSCoding , JSONCoding {
+		public class ItemGroupInformation: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var localizedDescription: String
-			public var marketGroupID: Int
-			public var name: String
-			public var parentGroupID: Int?
-			public var types: [Int]
+			public var localizedDescription: String = String()
+			public var marketGroupID: Int = Int()
+			public var name: String = String()
+			public var parentGroupID: Int? = nil
+			public var types: [Int] = []
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -502,12 +504,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				localizedDescription = String()
-				marketGroupID = Int()
-				name = String()
-				parentGroupID = nil
-				types = []
-				
 				super.init()
 			}
 			
@@ -560,10 +556,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsStructuresStructureIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsStructuresStructureIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -574,8 +574,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -612,15 +610,19 @@ public extension ESI {
 		}
 		
 		
-		public class History: NSObject, NSCoding , JSONCoding {
+		public class History: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var average: Float
-			public var date: Date
-			public var highest: Float
-			public var lowest: Float
-			public var orderCount: Int64
-			public var volume: Int64
+			public var average: Float = Float()
+			public var date: Date = Date()
+			public var highest: Float = Float()
+			public var lowest: Float = Float()
+			public var orderCount: Int64 = Int64()
+			public var volume: Int64 = Int64()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -642,13 +644,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				average = Float()
-				date = Date()
-				highest = Float()
-				lowest = Float()
-				orderCount = Int64()
-				volume = Int64()
-				
 				super.init()
 			}
 			
@@ -701,12 +696,16 @@ public extension ESI {
 		}
 		
 		
-		public class Price: NSObject, NSCoding , JSONCoding {
+		public class Price: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var adjustedPrice: Float?
-			public var averagePrice: Float?
-			public var typeID: Int
+			public var adjustedPrice: Float? = nil
+			public var averagePrice: Float? = nil
+			public var typeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -720,10 +719,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				adjustedPrice = nil
-				averagePrice = nil
-				typeID = Int()
-				
 				super.init()
 			}
 			
@@ -772,10 +767,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsGroupsMarketGroupIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsGroupsMarketGroupIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -786,8 +785,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -824,10 +821,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDOrdersInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsRegionIDOrdersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -838,8 +839,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -876,10 +875,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDHistoryInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsRegionIDHistoryInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -890,8 +893,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -928,10 +929,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsGroupsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsGroupsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -942,8 +947,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -980,10 +983,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsPricesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsPricesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -994,8 +1001,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1053,10 +1058,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1067,8 +1076,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1105,7 +1112,7 @@ public extension ESI {
 		}
 		
 		
-		public class Structure: NSObject, NSCoding , JSONCoding {
+		public class Structure: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding {
 				case i1 = "1"
@@ -1136,17 +1143,21 @@ public extension ESI {
 				
 			}
 			
-			public var duration: Int
-			public var isBuyOrder: Bool
-			public var issued: Date
-			public var locationID: Int64
-			public var minVolume: Int
-			public var orderID: Int64
-			public var price: Float
-			public var range: Market.Structure.GetMarketsStructuresStructureIDRange
-			public var typeID: Int
-			public var volumeRemain: Int
-			public var volumeTotal: Int
+			public var duration: Int = Int()
+			public var isBuyOrder: Bool = Bool()
+			public var issued: Date = Date()
+			public var locationID: Int64 = Int64()
+			public var minVolume: Int = Int()
+			public var orderID: Int64 = Int64()
+			public var price: Float = Float()
+			public var range: Market.Structure.GetMarketsStructuresStructureIDRange = Market.Structure.GetMarketsStructuresStructureIDRange()
+			public var typeID: Int = Int()
+			public var volumeRemain: Int = Int()
+			public var volumeTotal: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1178,18 +1189,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				duration = Int()
-				isBuyOrder = Bool()
-				issued = Date()
-				locationID = Int64()
-				minVolume = Int()
-				orderID = Int64()
-				price = Float()
-				range = Market.Structure.GetMarketsStructuresStructureIDRange()
-				typeID = Int()
-				volumeRemain = Int()
-				volumeTotal = Int()
-				
 				super.init()
 			}
 			

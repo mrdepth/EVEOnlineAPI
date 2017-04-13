@@ -46,10 +46,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetRouteOriginDestinationInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetRouteOriginDestinationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -60,8 +64,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -119,10 +121,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetRouteOriginDestinationNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetRouteOriginDestinationNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -133,8 +139,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

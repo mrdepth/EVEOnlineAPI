@@ -39,10 +39,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDClonesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDClonesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -53,8 +57,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -91,10 +93,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDClonesForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDClonesForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -105,8 +111,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -143,14 +147,18 @@ public extension ESI {
 		}
 		
 		
-		public class JumpClones: NSObject, NSCoding , JSONCoding {
+		public class JumpClones: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDClonesJumpClones: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDClonesJumpClones: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var implants: [Int]?
-				public var locationID: Int64?
-				public var locationType: Clones.JumpClones.GetCharactersCharacterIDClonesLocationType?
+				public var implants: [Int]? = nil
+				public var locationID: Int64? = nil
+				public var locationType: Clones.JumpClones.GetCharactersCharacterIDClonesLocationType? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -163,10 +171,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					implants = nil
-					locationID = nil
-					locationType = nil
-					
 					super.init()
 				}
 				
@@ -237,11 +241,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDClonesHomeLocation: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDClonesHomeLocation: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var locationID: Int64?
-				public var locationType: Clones.JumpClones.GetCharactersCharacterIDClonesLocationType?
+				public var locationID: Int64? = nil
+				public var locationType: Clones.JumpClones.GetCharactersCharacterIDClonesLocationType? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -253,9 +261,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					locationID = nil
-					locationType = nil
-					
 					super.init()
 				}
 				
@@ -299,9 +304,13 @@ public extension ESI {
 				
 			}
 			
-			public var homeLocation: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation?
-			public var jumpClones: [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones]
-			public var lastJumpDate: Date?
+			public var homeLocation: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation? = nil
+			public var jumpClones: [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones] = []
+			public var lastJumpDate: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -314,16 +323,12 @@ public extension ESI {
 			}
 			
 			override public init() {
-				homeLocation = nil
-				jumpClones = []
-				lastJumpDate = nil
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				homeLocation = aDecoder.decodeObject(of: [Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation.self], forKey: "home_location") as? Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation
-				jumpClones = aDecoder.decodeObject(forKey: "jump_clones") as? [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones] ?? []
+				homeLocation = aDecoder.decodeObject(of: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation.self, forKey: "home_location") 
+				jumpClones = aDecoder.decodeObject(of: [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones.self], forKey: "jump_clones") as? [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones] ?? []
 				lastJumpDate = aDecoder.decodeObject(forKey: "last_jump_date") as? Date
 				
 				super.init()

@@ -88,11 +88,15 @@ public extension ESI {
 		}
 		
 		
-		public class Kills: NSObject, NSCoding , JSONCoding {
+		public class Kills: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var killmailHash: String
-			public var killmailID: Int
+			public var killmailHash: String = String()
+			public var killmailID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -106,9 +110,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				killmailHash = String()
-				killmailID = Int()
-				
 				super.init()
 			}
 			
@@ -145,10 +146,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsWarIDUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class GetWarsWarIDUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -159,8 +164,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -197,10 +200,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsWarIDKillmailsUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class GetWarsWarIDKillmailsUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -211,8 +218,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -249,10 +254,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsWarIDKillmailsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetWarsWarIDKillmailsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -263,8 +272,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -301,15 +308,19 @@ public extension ESI {
 		}
 		
 		
-		public class WarInformation: NSObject, NSCoding , JSONCoding {
+		public class WarInformation: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetWarsWarIDAggressor: NSObject, NSCoding , JSONCoding {
+			public class GetWarsWarIDAggressor: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Float
-				public var shipsKilled: Int
+				public var allianceID: Int? = nil
+				public var corporationID: Int? = nil
+				public var iskDestroyed: Float = Float()
+				public var shipsKilled: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -325,11 +336,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = nil
-					corporationID = nil
-					iskDestroyed = Float()
-					shipsKilled = Int()
-					
 					super.init()
 				}
 				
@@ -381,11 +387,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetWarsWarIDAllies: NSObject, NSCoding , JSONCoding {
+			public class GetWarsWarIDAllies: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var allianceID: Int?
-				public var corporationID: Int?
+				public var allianceID: Int? = nil
+				public var corporationID: Int? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -397,9 +407,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = nil
-					corporationID = nil
-					
 					super.init()
 				}
 				
@@ -443,13 +450,17 @@ public extension ESI {
 				
 			}
 			
-			public class GetWarsWarIDDefender: NSObject, NSCoding , JSONCoding {
+			public class GetWarsWarIDDefender: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Float
-				public var shipsKilled: Int
+				public var allianceID: Int? = nil
+				public var corporationID: Int? = nil
+				public var iskDestroyed: Float = Float()
+				public var shipsKilled: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -465,11 +476,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = nil
-					corporationID = nil
-					iskDestroyed = Float()
-					shipsKilled = Int()
-					
 					super.init()
 				}
 				
@@ -521,16 +527,20 @@ public extension ESI {
 				
 			}
 			
-			public var aggressor: Wars.WarInformation.GetWarsWarIDAggressor
-			public var allies: [Wars.WarInformation.GetWarsWarIDAllies]?
-			public var declared: Date
-			public var defender: Wars.WarInformation.GetWarsWarIDDefender
-			public var finished: Date?
-			public var id: Int
-			public var mutual: Bool
-			public var openForAllies: Bool
-			public var retracted: Date?
-			public var started: Date?
+			public var aggressor: Wars.WarInformation.GetWarsWarIDAggressor = Wars.WarInformation.GetWarsWarIDAggressor()
+			public var allies: [Wars.WarInformation.GetWarsWarIDAllies]? = nil
+			public var declared: Date = Date()
+			public var defender: Wars.WarInformation.GetWarsWarIDDefender = Wars.WarInformation.GetWarsWarIDDefender()
+			public var finished: Date? = nil
+			public var id: Int = Int()
+			public var mutual: Bool = Bool()
+			public var openForAllies: Bool = Bool()
+			public var retracted: Date? = nil
+			public var started: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -554,25 +564,14 @@ public extension ESI {
 			}
 			
 			override public init() {
-				aggressor = Wars.WarInformation.GetWarsWarIDAggressor()
-				allies = nil
-				declared = Date()
-				defender = Wars.WarInformation.GetWarsWarIDDefender()
-				finished = nil
-				id = Int()
-				mutual = Bool()
-				openForAllies = Bool()
-				retracted = nil
-				started = nil
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				aggressor = aDecoder.decodeObject(of: [Wars.WarInformation.GetWarsWarIDAggressor.self], forKey: "aggressor") as? Wars.WarInformation.GetWarsWarIDAggressor ?? Wars.WarInformation.GetWarsWarIDAggressor()
-				allies = aDecoder.decodeObject(forKey: "allies") as? [Wars.WarInformation.GetWarsWarIDAllies]
+				aggressor = aDecoder.decodeObject(of: Wars.WarInformation.GetWarsWarIDAggressor.self, forKey: "aggressor")  ?? Wars.WarInformation.GetWarsWarIDAggressor()
+				allies = aDecoder.decodeObject(of: [Wars.WarInformation.GetWarsWarIDAllies.self], forKey: "allies") as? [Wars.WarInformation.GetWarsWarIDAllies]
 				declared = aDecoder.decodeObject(forKey: "declared") as? Date ?? Date()
-				defender = aDecoder.decodeObject(of: [Wars.WarInformation.GetWarsWarIDDefender.self], forKey: "defender") as? Wars.WarInformation.GetWarsWarIDDefender ?? Wars.WarInformation.GetWarsWarIDDefender()
+				defender = aDecoder.decodeObject(of: Wars.WarInformation.GetWarsWarIDDefender.self, forKey: "defender")  ?? Wars.WarInformation.GetWarsWarIDDefender()
 				finished = aDecoder.decodeObject(forKey: "finished") as? Date
 				id = aDecoder.decodeInteger(forKey: "id")
 				mutual = aDecoder.decodeBool(forKey: "mutual")
@@ -649,10 +648,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsWarIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetWarsWarIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -663,8 +666,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -701,10 +702,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetWarsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -715,8 +720,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

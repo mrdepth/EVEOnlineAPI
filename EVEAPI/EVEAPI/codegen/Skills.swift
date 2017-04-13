@@ -63,17 +63,21 @@ public extension ESI {
 		}
 		
 		
-		public class SkillQueueItem: NSObject, NSCoding , JSONCoding {
+		public class SkillQueueItem: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var finishDate: Date?
-			public var finishedLevel: Int
-			public var levelEndSP: Int?
-			public var levelStartSP: Int?
-			public var queuePosition: Int
-			public var skillID: Int
-			public var startDate: Date?
-			public var trainingStartSP: Int?
+			public var finishDate: Date? = nil
+			public var finishedLevel: Int = Int()
+			public var levelEndSP: Int? = nil
+			public var levelStartSP: Int? = nil
+			public var queuePosition: Int = Int()
+			public var skillID: Int = Int()
+			public var startDate: Date? = nil
+			public var trainingStartSP: Int? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -94,15 +98,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				finishDate = nil
-				finishedLevel = Int()
-				levelEndSP = nil
-				levelStartSP = nil
-				queuePosition = Int()
-				skillID = Int()
-				startDate = nil
-				trainingStartSP = nil
-				
 				super.init()
 			}
 			
@@ -183,10 +178,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillqueueForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillqueueForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -197,8 +196,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -235,10 +232,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillqueueInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillqueueInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -249,8 +250,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -287,10 +286,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -301,8 +304,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -339,10 +340,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -353,8 +358,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -391,14 +394,18 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterSkills: NSObject, NSCoding , JSONCoding {
+		public class CharacterSkills: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class Skill: NSObject, NSCoding , JSONCoding {
+			public class Skill: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var currentSkillLevel: Int?
-				public var skillID: Int?
-				public var skillpointsInSkill: Int64?
+				public var currentSkillLevel: Int? = nil
+				public var skillID: Int? = nil
+				public var skillpointsInSkill: Int64? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -411,10 +418,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					currentSkillLevel = nil
-					skillID = nil
-					skillpointsInSkill = nil
-					
 					super.init()
 				}
 				
@@ -466,8 +469,12 @@ public extension ESI {
 				
 			}
 			
-			public var skills: [Skills.CharacterSkills.Skill]?
-			public var totalSP: Int64?
+			public var skills: [Skills.CharacterSkills.Skill]? = nil
+			public var totalSP: Int64? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -479,14 +486,11 @@ public extension ESI {
 			}
 			
 			override public init() {
-				skills = nil
-				totalSP = nil
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				skills = aDecoder.decodeObject(forKey: "skills") as? [Skills.CharacterSkills.Skill]
+				skills = aDecoder.decodeObject(of: [Skills.CharacterSkills.Skill.self], forKey: "skills") as? [Skills.CharacterSkills.Skill]
 				totalSP = aDecoder.containsValue(forKey: "total_sp") ? aDecoder.decodeInt64(forKey: "total_sp") : nil
 				
 				super.init()

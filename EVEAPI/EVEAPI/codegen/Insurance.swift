@@ -40,14 +40,18 @@ public extension ESI {
 		}
 		
 		
-		public class Price: NSObject, NSCoding , JSONCoding {
+		public class Price: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetInsurancePricesLevels: NSObject, NSCoding , JSONCoding {
+			public class GetInsurancePricesLevels: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var cost: Float
-				public var name: String
-				public var payout: Float
+				public var cost: Float = Float()
+				public var name: String = String()
+				public var payout: Float = Float()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -63,10 +67,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					cost = Float()
-					name = String()
-					payout = Float()
-					
 					super.init()
 				}
 				
@@ -106,8 +106,12 @@ public extension ESI {
 				
 			}
 			
-			public var levels: [Insurance.Price.GetInsurancePricesLevels]
-			public var typeID: Int
+			public var levels: [Insurance.Price.GetInsurancePricesLevels] = []
+			public var typeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -120,14 +124,11 @@ public extension ESI {
 			}
 			
 			override public init() {
-				levels = []
-				typeID = Int()
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				levels = aDecoder.decodeObject(forKey: "levels") as? [Insurance.Price.GetInsurancePricesLevels] ?? []
+				levels = aDecoder.decodeObject(of: [Insurance.Price.GetInsurancePricesLevels.self], forKey: "levels") as? [Insurance.Price.GetInsurancePricesLevels] ?? []
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
@@ -159,10 +160,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetInsurancePricesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetInsurancePricesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -173,8 +178,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

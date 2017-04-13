@@ -38,7 +38,7 @@ public extension ESI {
 		}
 		
 		
-		public class Incursion: NSObject, NSCoding , JSONCoding {
+		public class Incursion: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetIncursionsState: String, JSONCoding {
 				case established = "established"
@@ -60,14 +60,18 @@ public extension ESI {
 				
 			}
 			
-			public var constellationID: Int
-			public var factionID: Int
-			public var hasBoss: Bool
-			public var infestedSolarSystems: [Int]
-			public var influence: Float
-			public var stagingSolarSystemID: Int
-			public var state: Incursions.Incursion.GetIncursionsState
-			public var type: String
+			public var constellationID: Int = Int()
+			public var factionID: Int = Int()
+			public var hasBoss: Bool = Bool()
+			public var infestedSolarSystems: [Int] = []
+			public var influence: Float = Float()
+			public var stagingSolarSystemID: Int = Int()
+			public var state: Incursions.Incursion.GetIncursionsState = Incursions.Incursion.GetIncursionsState()
+			public var type: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -92,15 +96,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				constellationID = Int()
-				factionID = Int()
-				hasBoss = Bool()
-				infestedSolarSystems = []
-				influence = Float()
-				stagingSolarSystemID = Int()
-				state = Incursions.Incursion.GetIncursionsState()
-				type = String()
-				
 				super.init()
 			}
 			
@@ -161,10 +156,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetIncursionsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetIncursionsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -175,8 +174,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

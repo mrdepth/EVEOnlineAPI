@@ -63,10 +63,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDShipForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDShipForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -77,8 +81,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -115,10 +117,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDLocationForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDLocationForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -129,8 +135,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -167,12 +171,16 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterLocation: NSObject, NSCoding , JSONCoding {
+		public class CharacterLocation: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var solarSystemID: Int
-			public var stationID: Int?
-			public var structureID: Int64?
+			public var solarSystemID: Int = Int()
+			public var stationID: Int? = nil
+			public var structureID: Int64? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -186,10 +194,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				solarSystemID = Int()
-				stationID = nil
-				structureID = nil
-				
 				super.init()
 			}
 			
@@ -238,12 +242,16 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterShip: NSObject, NSCoding , JSONCoding {
+		public class CharacterShip: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var shipItemID: Int64
-			public var shipName: String
-			public var shipTypeID: Int
+			public var shipItemID: Int64 = Int64()
+			public var shipName: String = String()
+			public var shipTypeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -259,10 +267,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				shipItemID = Int64()
-				shipName = String()
-				shipTypeID = Int()
-				
 				super.init()
 			}
 			
@@ -303,10 +307,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDLocationInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDLocationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -317,8 +325,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -355,10 +361,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDShipInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDShipInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -369,8 +379,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

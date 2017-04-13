@@ -39,10 +39,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDWalletsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDWalletsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -53,8 +57,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -91,11 +93,15 @@ public extension ESI {
 		}
 		
 		
-		public class Balance: NSObject, NSCoding , JSONCoding {
+		public class Balance: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var balance: Int64?
-			public var walletID: Int?
+			public var balance: Int64? = nil
+			public var walletID: Int? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -107,9 +113,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				balance = nil
-				walletID = nil
-				
 				super.init()
 			}
 			
@@ -154,10 +157,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDWalletsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDWalletsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -168,8 +175,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

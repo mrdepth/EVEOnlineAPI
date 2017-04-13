@@ -67,10 +67,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -81,8 +85,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -119,10 +121,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDKillmailsRecentInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDKillmailsRecentInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -133,8 +139,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -171,20 +175,24 @@ public extension ESI {
 		}
 		
 		
-		public class Killmail: NSObject, NSCoding , JSONCoding {
+		public class Killmail: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetKillmailsKillmailIDKillmailHashVictim: NSObject, NSCoding , JSONCoding {
+			public class GetKillmailsKillmailIDKillmailHashVictim: NSObject, NSSecureCoding , JSONCoding {
 				
-				public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSCoding , JSONCoding {
+				public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding , JSONCoding {
 					
-					public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSCoding , JSONCoding {
+					public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding , JSONCoding {
 						
 						
-						public var flag: Int
-						public var itemTypeID: Int
-						public var quantityDestroyed: Int64?
-						public var quantityDropped: Int64?
-						public var singleton: Int
+						public var flag: Int = Int()
+						public var itemTypeID: Int = Int()
+						public var quantityDestroyed: Int64? = nil
+						public var quantityDropped: Int64? = nil
+						public var singleton: Int = Int()
+						
+						public static var supportsSecureCoding: Bool {
+							return true
+						}
 						
 						public required init(json: Any) throws {
 							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -202,12 +210,6 @@ public extension ESI {
 						}
 						
 						override public init() {
-							flag = Int()
-							itemTypeID = Int()
-							quantityDestroyed = nil
-							quantityDropped = nil
-							singleton = Int()
-							
 							super.init()
 						}
 						
@@ -263,12 +265,16 @@ public extension ESI {
 						
 					}
 					
-					public var flag: Int
-					public var itemTypeID: Int
-					public var items: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems]?
-					public var quantityDestroyed: Int64?
-					public var quantityDropped: Int64?
-					public var singleton: Int
+					public var flag: Int = Int()
+					public var itemTypeID: Int = Int()
+					public var items: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems]? = nil
+					public var quantityDestroyed: Int64? = nil
+					public var quantityDropped: Int64? = nil
+					public var singleton: Int = Int()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
 					
 					public required init(json: Any) throws {
 						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -287,20 +293,13 @@ public extension ESI {
 					}
 					
 					override public init() {
-						flag = Int()
-						itemTypeID = Int()
-						items = nil
-						quantityDestroyed = nil
-						quantityDropped = nil
-						singleton = Int()
-						
 						super.init()
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
 						flag = aDecoder.decodeInteger(forKey: "flag")
 						itemTypeID = aDecoder.decodeInteger(forKey: "item_type_id")
-						items = aDecoder.decodeObject(forKey: "items") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems]
+						items = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems.self], forKey: "items") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems]
 						quantityDestroyed = aDecoder.containsValue(forKey: "quantity_destroyed") ? aDecoder.decodeInt64(forKey: "quantity_destroyed") : nil
 						quantityDropped = aDecoder.containsValue(forKey: "quantity_dropped") ? aDecoder.decodeInt64(forKey: "quantity_dropped") : nil
 						singleton = aDecoder.decodeInteger(forKey: "singleton")
@@ -357,12 +356,16 @@ public extension ESI {
 					
 				}
 				
-				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSCoding , JSONCoding {
+				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding , JSONCoding {
 					
 					
-					public var x: Float
-					public var y: Float
-					public var z: Float
+					public var x: Float = Float()
+					public var y: Float = Float()
+					public var z: Float = Float()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
 					
 					public required init(json: Any) throws {
 						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -378,10 +381,6 @@ public extension ESI {
 					}
 					
 					override public init() {
-						x = Float()
-						y = Float()
-						z = Float()
-						
 						super.init()
 					}
 					
@@ -421,14 +420,18 @@ public extension ESI {
 					
 				}
 				
-				public var allianceID: Int?
-				public var characterID: Int?
-				public var corporationID: Int?
-				public var damageTaken: Int
-				public var factionID: Int?
-				public var items: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems]?
-				public var position: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition?
-				public var shipTypeID: Int
+				public var allianceID: Int? = nil
+				public var characterID: Int? = nil
+				public var corporationID: Int? = nil
+				public var damageTaken: Int = Int()
+				public var factionID: Int? = nil
+				public var items: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems]? = nil
+				public var position: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition? = nil
+				public var shipTypeID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -448,15 +451,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = nil
-					characterID = nil
-					corporationID = nil
-					damageTaken = Int()
-					factionID = nil
-					items = nil
-					position = nil
-					shipTypeID = Int()
-					
 					super.init()
 				}
 				
@@ -466,8 +460,8 @@ public extension ESI {
 					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
 					damageTaken = aDecoder.decodeInteger(forKey: "damage_taken")
 					factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-					items = aDecoder.decodeObject(forKey: "items") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems]
-					position = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition.self], forKey: "position") as? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition
+					items = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.self], forKey: "items") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems]
+					position = aDecoder.decodeObject(of: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition.self, forKey: "position") 
 					shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
 					
 					super.init()
@@ -540,18 +534,22 @@ public extension ESI {
 				
 			}
 			
-			public class GetKillmailsKillmailIDKillmailHashAttackers: NSObject, NSCoding , JSONCoding {
+			public class GetKillmailsKillmailIDKillmailHashAttackers: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var allianceID: Int?
-				public var characterID: Int?
-				public var corporationID: Int?
-				public var damageDone: Int
-				public var factionID: Int?
-				public var finalBlow: Bool
-				public var securityStatus: Float
-				public var shipTypeID: Int?
-				public var weaponTypeID: Int?
+				public var allianceID: Int? = nil
+				public var characterID: Int? = nil
+				public var corporationID: Int? = nil
+				public var damageDone: Int = Int()
+				public var factionID: Int? = nil
+				public var finalBlow: Bool = Bool()
+				public var securityStatus: Float = Float()
+				public var shipTypeID: Int? = nil
+				public var weaponTypeID: Int? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -573,16 +571,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = nil
-					characterID = nil
-					corporationID = nil
-					damageDone = Int()
-					factionID = nil
-					finalBlow = Bool()
-					securityStatus = Float()
-					shipTypeID = nil
-					weaponTypeID = nil
-					
 					super.init()
 				}
 				
@@ -670,13 +658,17 @@ public extension ESI {
 				
 			}
 			
-			public var attackers: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers]
-			public var killmailID: Int
-			public var killmailTime: Date
-			public var moonID: Int?
-			public var solarSystemID: Int
-			public var victim: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim
-			public var warID: Int?
+			public var attackers: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers] = []
+			public var killmailID: Int = Int()
+			public var killmailTime: Date = Date()
+			public var moonID: Int? = nil
+			public var solarSystemID: Int = Int()
+			public var victim: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim = Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim()
+			public var warID: Int? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -696,24 +688,16 @@ public extension ESI {
 			}
 			
 			override public init() {
-				attackers = []
-				killmailID = Int()
-				killmailTime = Date()
-				moonID = nil
-				solarSystemID = Int()
-				victim = Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim()
-				warID = nil
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				attackers = aDecoder.decodeObject(forKey: "attackers") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers] ?? []
+				attackers = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers.self], forKey: "attackers") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers] ?? []
 				killmailID = aDecoder.decodeInteger(forKey: "killmail_id")
 				killmailTime = aDecoder.decodeObject(forKey: "killmail_time") as? Date ?? Date()
 				moonID = aDecoder.containsValue(forKey: "moon_id") ? aDecoder.decodeInteger(forKey: "moon_id") : nil
 				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				victim = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.self], forKey: "victim") as? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim ?? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim()
+				victim = aDecoder.decodeObject(of: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.self, forKey: "victim")  ?? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim()
 				warID = aDecoder.containsValue(forKey: "war_id") ? aDecoder.decodeInteger(forKey: "war_id") : nil
 				
 				super.init()
@@ -768,11 +752,15 @@ public extension ESI {
 		}
 		
 		
-		public class Recent: NSObject, NSCoding , JSONCoding {
+		public class Recent: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var killmailHash: String
-			public var killmailID: Int
+			public var killmailHash: String = String()
+			public var killmailID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -786,9 +774,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				killmailHash = String()
-				killmailID = Int()
-				
 				super.init()
 			}
 			
@@ -825,10 +810,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDKillmailsRecentForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDKillmailsRecentForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -839,8 +828,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -877,10 +864,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetKillmailsKillmailIDKillmailHashInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetKillmailsKillmailIDKillmailHashInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -891,8 +882,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

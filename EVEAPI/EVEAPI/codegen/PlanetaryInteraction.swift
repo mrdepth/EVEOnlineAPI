@@ -86,7 +86,7 @@ public extension ESI {
 		}
 		
 		
-		public class Colony: NSObject, NSCoding , JSONCoding {
+		public class Colony: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDPlanetsPlanetType: String, JSONCoding {
 				case barren = "barren"
@@ -113,13 +113,17 @@ public extension ESI {
 				
 			}
 			
-			public var lastUpdate: Date
-			public var numPins: Int
-			public var ownerID: Int
-			public var planetID: Int
-			public var planetType: PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType
-			public var solarSystemID: Int
-			public var upgradeLevel: Int
+			public var lastUpdate: Date = Date()
+			public var numPins: Int = Int()
+			public var ownerID: Int = Int()
+			public var planetID: Int = Int()
+			public var planetType: PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType = PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType()
+			public var solarSystemID: Int = Int()
+			public var upgradeLevel: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -143,14 +147,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				lastUpdate = Date()
-				numPins = Int()
-				ownerID = Int()
-				planetID = Int()
-				planetType = PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType()
-				solarSystemID = Int()
-				upgradeLevel = Int()
-				
 				super.init()
 			}
 			
@@ -207,10 +203,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -221,8 +221,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -259,10 +257,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -273,8 +275,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -311,10 +311,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseSchematicsSchematicIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetUniverseSchematicsSchematicIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -325,8 +329,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -363,10 +365,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -377,8 +383,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -415,10 +419,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -429,8 +437,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -467,15 +473,19 @@ public extension ESI {
 		}
 		
 		
-		public class ColonyLayout: NSObject, NSCoding , JSONCoding {
+		public class ColonyLayout: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDRoutes: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDPlanetsPlanetIDRoutes: NSObject, NSSecureCoding , JSONCoding {
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDWaypoints: NSObject, NSCoding , JSONCoding {
+				public class GetCharactersCharacterIDPlanetsPlanetIDWaypoints: NSObject, NSSecureCoding , JSONCoding {
 					
 					
-					public var order: Int
-					public var pinID: Int64
+					public var order: Int = Int()
+					public var pinID: Int64 = Int64()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
 					
 					public required init(json: Any) throws {
 						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -489,9 +499,6 @@ public extension ESI {
 					}
 					
 					override public init() {
-						order = Int()
-						pinID = Int64()
-						
 						super.init()
 					}
 					
@@ -527,12 +534,16 @@ public extension ESI {
 					
 				}
 				
-				public var contentTypeID: Int
-				public var destinationPinID: Int64
-				public var quantity: Float
-				public var routeID: Int64
-				public var sourcePinID: Int64
-				public var waypoints: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints]?
+				public var contentTypeID: Int = Int()
+				public var destinationPinID: Int64 = Int64()
+				public var quantity: Float = Float()
+				public var routeID: Int64 = Int64()
+				public var sourcePinID: Int64 = Int64()
+				public var waypoints: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints]? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -553,13 +564,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					contentTypeID = Int()
-					destinationPinID = Int64()
-					quantity = Float()
-					routeID = Int64()
-					sourcePinID = Int64()
-					waypoints = nil
-					
 					super.init()
 				}
 				
@@ -569,7 +573,7 @@ public extension ESI {
 					quantity = aDecoder.decodeFloat(forKey: "quantity")
 					routeID = aDecoder.decodeInt64(forKey: "route_id")
 					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
-					waypoints = aDecoder.decodeObject(forKey: "waypoints") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints]
+					waypoints = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints.self], forKey: "waypoints") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints]
 					
 					super.init()
 				}
@@ -615,16 +619,20 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDPins: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDPlanetsPlanetIDPins: NSObject, NSSecureCoding , JSONCoding {
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails: NSObject, NSCoding , JSONCoding {
+				public class GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails: NSObject, NSSecureCoding , JSONCoding {
 					
-					public class GetCharactersCharacterIDPlanetsPlanetIDHeads: NSObject, NSCoding , JSONCoding {
+					public class GetCharactersCharacterIDPlanetsPlanetIDHeads: NSObject, NSSecureCoding , JSONCoding {
 						
 						
-						public var headID: Int
-						public var latitude: Float
-						public var longitude: Float
+						public var headID: Int = Int()
+						public var latitude: Float = Float()
+						public var longitude: Float = Float()
+						
+						public static var supportsSecureCoding: Bool {
+							return true
+						}
 						
 						public required init(json: Any) throws {
 							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -640,10 +648,6 @@ public extension ESI {
 						}
 						
 						override public init() {
-							headID = Int()
-							latitude = Float()
-							longitude = Float()
-							
 							super.init()
 						}
 						
@@ -683,11 +687,15 @@ public extension ESI {
 						
 					}
 					
-					public var cycleTime: Int?
-					public var headRadius: Float?
-					public var heads: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads]
-					public var productTypeID: Int?
-					public var qtyPerCycle: Int?
+					public var cycleTime: Int? = nil
+					public var headRadius: Float? = nil
+					public var heads: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads] = []
+					public var productTypeID: Int? = nil
+					public var qtyPerCycle: Int? = nil
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
 					
 					public required init(json: Any) throws {
 						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -702,19 +710,13 @@ public extension ESI {
 					}
 					
 					override public init() {
-						cycleTime = nil
-						headRadius = nil
-						heads = []
-						productTypeID = nil
-						qtyPerCycle = nil
-						
 						super.init()
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
 						cycleTime = aDecoder.containsValue(forKey: "cycle_time") ? aDecoder.decodeInteger(forKey: "cycle_time") : nil
 						headRadius = aDecoder.containsValue(forKey: "head_radius") ? aDecoder.decodeFloat(forKey: "head_radius") : nil
-						heads = aDecoder.decodeObject(forKey: "heads") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads] ?? []
+						heads = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads.self], forKey: "heads") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads] ?? []
 						productTypeID = aDecoder.containsValue(forKey: "product_type_id") ? aDecoder.decodeInteger(forKey: "product_type_id") : nil
 						qtyPerCycle = aDecoder.containsValue(forKey: "qty_per_cycle") ? aDecoder.decodeInteger(forKey: "qty_per_cycle") : nil
 						
@@ -771,10 +773,14 @@ public extension ESI {
 					
 				}
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails: NSObject, NSCoding , JSONCoding {
+				public class GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails: NSObject, NSSecureCoding , JSONCoding {
 					
 					
-					public var schematicID: Int
+					public var schematicID: Int = Int()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
 					
 					public required init(json: Any) throws {
 						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -786,8 +792,6 @@ public extension ESI {
 					}
 					
 					override public init() {
-						schematicID = Int()
-						
 						super.init()
 					}
 					
@@ -819,16 +823,20 @@ public extension ESI {
 					
 				}
 				
-				public var expiryTime: Date?
-				public var extractorDetails: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails?
-				public var factoryDetails: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails?
-				public var installTime: Date?
-				public var lastCycleStart: Date?
-				public var latitude: Float
-				public var longitude: Float
-				public var pinID: Int64
-				public var schematicID: Int?
-				public var typeID: Int
+				public var expiryTime: Date? = nil
+				public var extractorDetails: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails? = nil
+				public var factoryDetails: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails? = nil
+				public var installTime: Date? = nil
+				public var lastCycleStart: Date? = nil
+				public var latitude: Float = Float()
+				public var longitude: Float = Float()
+				public var pinID: Int64 = Int64()
+				public var schematicID: Int? = nil
+				public var typeID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -852,24 +860,13 @@ public extension ESI {
 				}
 				
 				override public init() {
-					expiryTime = nil
-					extractorDetails = nil
-					factoryDetails = nil
-					installTime = nil
-					lastCycleStart = nil
-					latitude = Float()
-					longitude = Float()
-					pinID = Int64()
-					schematicID = nil
-					typeID = Int()
-					
 					super.init()
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
 					expiryTime = aDecoder.decodeObject(forKey: "expiry_time") as? Date
-					extractorDetails = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.self], forKey: "extractor_details") as? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails
-					factoryDetails = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails.self], forKey: "factory_details") as? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails
+					extractorDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.self, forKey: "extractor_details") 
+					factoryDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails.self, forKey: "factory_details") 
 					installTime = aDecoder.decodeObject(forKey: "install_time") as? Date
 					lastCycleStart = aDecoder.decodeObject(forKey: "last_cycle_start") as? Date
 					latitude = aDecoder.decodeFloat(forKey: "latitude")
@@ -954,12 +951,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var destinationPinID: Int64
-				public var linkLevel: Int
-				public var sourcePinID: Int64
+				public var destinationPinID: Int64 = Int64()
+				public var linkLevel: Int = Int()
+				public var sourcePinID: Int64 = Int64()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -975,10 +976,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					destinationPinID = Int64()
-					linkLevel = Int()
-					sourcePinID = Int64()
-					
 					super.init()
 				}
 				
@@ -1018,9 +1015,13 @@ public extension ESI {
 				
 			}
 			
-			public var links: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks]
-			public var pins: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins]
-			public var routes: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes]
+			public var links: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] = []
+			public var pins: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins] = []
+			public var routes: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes] = []
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1033,17 +1034,13 @@ public extension ESI {
 			}
 			
 			override public init() {
-				links = []
-				pins = []
-				routes = []
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				links = aDecoder.decodeObject(forKey: "links") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] ?? []
-				pins = aDecoder.decodeObject(forKey: "pins") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins] ?? []
-				routes = aDecoder.decodeObject(forKey: "routes") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes] ?? []
+				links = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks.self], forKey: "links") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] ?? []
+				pins = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.self], forKey: "pins") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins] ?? []
+				routes = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.self], forKey: "routes") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes] ?? []
 				
 				super.init()
 			}
@@ -1077,10 +1074,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1091,8 +1092,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1129,10 +1128,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsPlanetIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1143,8 +1146,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1181,11 +1182,15 @@ public extension ESI {
 		}
 		
 		
-		public class SchematicInformation: NSObject, NSCoding , JSONCoding {
+		public class SchematicInformation: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var cycleTime: Int
-			public var schematicName: String
+			public var cycleTime: Int = Int()
+			public var schematicName: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1199,9 +1204,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				cycleTime = Int()
-				schematicName = String()
-				
 				super.init()
 			}
 			

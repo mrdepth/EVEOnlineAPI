@@ -39,10 +39,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDAssetsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDAssetsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -53,8 +57,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -91,10 +93,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDAssetsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDAssetsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -105,8 +111,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -143,7 +147,7 @@ public extension ESI {
 		}
 		
 		
-		public class Asset: NSObject, NSCoding , JSONCoding {
+		public class Asset: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDAssetsLocationFlag: String, JSONCoding {
 				case assetSafety = "AssetSafety"
@@ -259,13 +263,17 @@ public extension ESI {
 				
 			}
 			
-			public var isSingleton: Bool
-			public var itemID: Int64
-			public var locationFlag: Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag
-			public var locationID: Int64
-			public var locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType
-			public var quantity: Int?
-			public var typeID: Int
+			public var isSingleton: Bool = Bool()
+			public var itemID: Int64 = Int64()
+			public var locationFlag: Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag = Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag()
+			public var locationID: Int64 = Int64()
+			public var locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
+			public var quantity: Int? = nil
+			public var typeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -288,14 +296,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				isSingleton = Bool()
-				itemID = Int64()
-				locationFlag = Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag()
-				locationID = Int64()
-				locationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
-				quantity = nil
-				typeID = Int()
-				
 				super.init()
 			}
 			

@@ -84,10 +84,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetSovereigntyCampaignsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetSovereigntyCampaignsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -98,8 +102,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -136,10 +138,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetSovereigntyStructuresInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetSovereigntyStructuresInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -150,8 +156,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -188,13 +192,17 @@ public extension ESI {
 		}
 		
 		
-		public class Campaign: NSObject, NSCoding , JSONCoding {
+		public class Campaign: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetSovereigntyCampaignsParticipants: NSObject, NSCoding , JSONCoding {
+			public class GetSovereigntyCampaignsParticipants: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var allianceID: Int
-				public var score: Float
+				public var allianceID: Int = Int()
+				public var score: Float = Float()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -208,9 +216,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = Int()
-					score = Float()
-					
 					super.init()
 				}
 				
@@ -267,16 +272,20 @@ public extension ESI {
 				
 			}
 			
-			public var attackersScore: Float?
-			public var campaignID: Int
-			public var constellationID: Int
-			public var defenderID: Int?
-			public var defenderScore: Float?
-			public var eventType: Sovereignty.Campaign.GetSovereigntyCampaignsEventType
-			public var participants: [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]?
-			public var solarSystemID: Int
-			public var startTime: Date
-			public var structureID: Int64
+			public var attackersScore: Float? = nil
+			public var campaignID: Int = Int()
+			public var constellationID: Int = Int()
+			public var defenderID: Int? = nil
+			public var defenderScore: Float? = nil
+			public var eventType: Sovereignty.Campaign.GetSovereigntyCampaignsEventType = Sovereignty.Campaign.GetSovereigntyCampaignsEventType()
+			public var participants: [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]? = nil
+			public var solarSystemID: Int = Int()
+			public var startTime: Date = Date()
+			public var structureID: Int64 = Int64()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -302,17 +311,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				attackersScore = nil
-				campaignID = Int()
-				constellationID = Int()
-				defenderID = nil
-				defenderScore = nil
-				eventType = Sovereignty.Campaign.GetSovereigntyCampaignsEventType()
-				participants = nil
-				solarSystemID = Int()
-				startTime = Date()
-				structureID = Int64()
-				
 				super.init()
 			}
 			
@@ -323,7 +321,7 @@ public extension ESI {
 				defenderID = aDecoder.containsValue(forKey: "defender_id") ? aDecoder.decodeInteger(forKey: "defender_id") : nil
 				defenderScore = aDecoder.containsValue(forKey: "defender_score") ? aDecoder.decodeFloat(forKey: "defender_score") : nil
 				eventType = Sovereignty.Campaign.GetSovereigntyCampaignsEventType(rawValue: aDecoder.decodeObject(forKey: "event_type") as? String ?? "") ?? Sovereignty.Campaign.GetSovereigntyCampaignsEventType()
-				participants = aDecoder.decodeObject(forKey: "participants") as? [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]
+				participants = aDecoder.decodeObject(of: [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants.self], forKey: "participants") as? [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]
 				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
 				startTime = aDecoder.decodeObject(forKey: "start_time") as? Date ?? Date()
 				structureID = aDecoder.decodeInt64(forKey: "structure_id")
@@ -397,13 +395,17 @@ public extension ESI {
 		}
 		
 		
-		public class System: NSObject, NSCoding , JSONCoding {
+		public class System: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var allianceID: Int?
-			public var corporationID: Int?
-			public var factionID: Int?
-			public var systemID: Int
+			public var allianceID: Int? = nil
+			public var corporationID: Int? = nil
+			public var factionID: Int? = nil
+			public var systemID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -418,11 +420,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				allianceID = nil
-				corporationID = nil
-				factionID = nil
-				systemID = Int()
-				
 				super.init()
 			}
 			
@@ -479,16 +476,20 @@ public extension ESI {
 		}
 		
 		
-		public class Structure: NSObject, NSCoding , JSONCoding {
+		public class Structure: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var allianceID: Int
-			public var solarSystemID: Int
-			public var structureID: Int64
-			public var structureTypeID: Int
-			public var vulnerabilityOccupancyLevel: Float?
-			public var vulnerableEndTime: Date?
-			public var vulnerableStartTime: Date?
+			public var allianceID: Int = Int()
+			public var solarSystemID: Int = Int()
+			public var structureID: Int64 = Int64()
+			public var structureTypeID: Int = Int()
+			public var vulnerabilityOccupancyLevel: Float? = nil
+			public var vulnerableEndTime: Date? = nil
+			public var vulnerableStartTime: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -509,14 +510,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				allianceID = Int()
-				solarSystemID = Int()
-				structureID = Int64()
-				structureTypeID = Int()
-				vulnerabilityOccupancyLevel = nil
-				vulnerableEndTime = nil
-				vulnerableStartTime = nil
-				
 				super.init()
 			}
 			
@@ -585,10 +578,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetSovereigntyMapInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetSovereigntyMapInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -599,8 +596,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

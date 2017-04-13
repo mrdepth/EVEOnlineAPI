@@ -133,10 +133,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetOpportunitiesGroupsGroupIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetOpportunitiesGroupsGroupIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -147,8 +151,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -185,15 +187,19 @@ public extension ESI {
 		}
 		
 		
-		public class Group: NSObject, NSCoding , JSONCoding {
+		public class Group: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var connectedGroups: [Int]
-			public var localizedDescription: String
-			public var groupID: Int
-			public var name: String
-			public var notification: String
-			public var requiredTasks: [Int]
+			public var connectedGroups: [Int] = []
+			public var localizedDescription: String = String()
+			public var groupID: Int = Int()
+			public var name: String = String()
+			public var notification: String = String()
+			public var requiredTasks: [Int] = []
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -213,13 +219,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				connectedGroups = []
-				localizedDescription = String()
-				groupID = Int()
-				name = String()
-				notification = String()
-				requiredTasks = []
-				
 				super.init()
 			}
 			
@@ -272,10 +271,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetOpportunitiesGroupsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetOpportunitiesGroupsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -286,8 +289,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -324,10 +325,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDOpportunitiesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDOpportunitiesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -338,8 +343,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -376,10 +379,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetOpportunitiesTasksInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetOpportunitiesTasksInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -390,8 +397,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -428,10 +433,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDOpportunitiesForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDOpportunitiesForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -442,8 +451,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -480,13 +487,17 @@ public extension ESI {
 		}
 		
 		
-		public class OpportunitiesTask: NSObject, NSCoding , JSONCoding {
+		public class OpportunitiesTask: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var localizedDescription: String
-			public var name: String
-			public var notification: String
-			public var taskID: Int
+			public var localizedDescription: String = String()
+			public var name: String = String()
+			public var notification: String = String()
+			public var taskID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -504,11 +515,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				localizedDescription = String()
-				name = String()
-				notification = String()
-				taskID = Int()
-				
 				super.init()
 			}
 			
@@ -553,11 +559,15 @@ public extension ESI {
 		}
 		
 		
-		public class CompletedTask: NSObject, NSCoding , JSONCoding {
+		public class CompletedTask: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var completedAt: Date
-			public var taskID: Int
+			public var completedAt: Date = Date()
+			public var taskID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -571,9 +581,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				completedAt = Date()
-				taskID = Int()
-				
 				super.init()
 			}
 			
@@ -610,10 +617,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetOpportunitiesTasksTaskIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetOpportunitiesTasksTaskIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -624,8 +635,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

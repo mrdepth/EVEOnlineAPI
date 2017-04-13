@@ -61,15 +61,19 @@ public extension ESI {
 		}
 		
 		
-		public class Facilities: NSObject, NSCoding , JSONCoding {
+		public class Facilities: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var facilityID: Int64
-			public var ownerID: Int
-			public var regionID: Int
-			public var solarSystemID: Int
-			public var tax: Float?
-			public var typeID: Int
+			public var facilityID: Int64 = Int64()
+			public var ownerID: Int = Int()
+			public var regionID: Int = Int()
+			public var solarSystemID: Int = Int()
+			public var tax: Float? = nil
+			public var typeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -90,13 +94,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				facilityID = Int64()
-				ownerID = Int()
-				regionID = Int()
-				solarSystemID = Int()
-				tax = nil
-				typeID = Int()
-				
 				super.init()
 			}
 			
@@ -153,10 +150,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetIndustrySystemsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetIndustrySystemsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -167,8 +168,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -205,10 +204,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetIndustryFacilitiesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetIndustryFacilitiesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -219,8 +222,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -257,9 +258,9 @@ public extension ESI {
 		}
 		
 		
-		public class SolarSystemCostIndices: NSObject, NSCoding , JSONCoding {
+		public class SolarSystemCostIndices: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetIndustrySystemsCostIndices: NSObject, NSCoding , JSONCoding {
+			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding , JSONCoding {
 				
 				public enum GetIndustrySystemsActivity: String, JSONCoding {
 					case copying = "copying"
@@ -287,8 +288,12 @@ public extension ESI {
 					
 				}
 				
-				public var activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity
-				public var costIndex: Float
+				public var activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
+				public var costIndex: Float = Float()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -302,9 +307,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
-					costIndex = Float()
-					
 					super.init()
 				}
 				
@@ -340,8 +342,12 @@ public extension ESI {
 				
 			}
 			
-			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices]
-			public var solarSystemID: Int
+			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] = []
+			public var solarSystemID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -354,14 +360,11 @@ public extension ESI {
 			}
 			
 			override public init() {
-				costIndices = []
-				solarSystemID = Int()
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				costIndices = aDecoder.decodeObject(forKey: "cost_indices") as? [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] ?? []
+				costIndices = aDecoder.decodeObject(of: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.self], forKey: "cost_indices") as? [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] ?? []
 				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
 				
 				super.init()

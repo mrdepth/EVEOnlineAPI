@@ -62,10 +62,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetLoyaltyStoresCorporationIDOffersInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetLoyaltyStoresCorporationIDOffersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -76,8 +80,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -114,10 +116,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDLoyaltyPointsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDLoyaltyPointsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -128,8 +134,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -166,13 +170,17 @@ public extension ESI {
 		}
 		
 		
-		public class Offer: NSObject, NSCoding , JSONCoding {
+		public class Offer: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSCoding , JSONCoding {
+			public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var quantity: Int
-				public var typeID: Int
+				public var quantity: Int = Int()
+				public var typeID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -186,9 +194,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					quantity = Int()
-					typeID = Int()
-					
 					super.init()
 				}
 				
@@ -224,12 +229,16 @@ public extension ESI {
 				
 			}
 			
-			public var iskCost: Int
-			public var lpCost: Int
-			public var offerID: Int
-			public var quantity: Int
-			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems]
-			public var typeID: Int
+			public var iskCost: Int = Int()
+			public var lpCost: Int = Int()
+			public var offerID: Int = Int()
+			public var quantity: Int = Int()
+			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems] = []
+			public var typeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -250,13 +259,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				iskCost = Int()
-				lpCost = Int()
-				offerID = Int()
-				quantity = Int()
-				requiredItems = []
-				typeID = Int()
-				
 				super.init()
 			}
 			
@@ -265,7 +267,7 @@ public extension ESI {
 				lpCost = aDecoder.decodeInteger(forKey: "lp_cost")
 				offerID = aDecoder.decodeInteger(forKey: "offer_id")
 				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				requiredItems = aDecoder.decodeObject(forKey: "required_items") as? [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems] ?? []
+				requiredItems = aDecoder.decodeObject(of: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems.self], forKey: "required_items") as? [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems] ?? []
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
@@ -309,11 +311,15 @@ public extension ESI {
 		}
 		
 		
-		public class Point: NSObject, NSCoding , JSONCoding {
+		public class Point: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var corporationID: Int
-			public var loyaltyPoints: Int
+			public var corporationID: Int = Int()
+			public var loyaltyPoints: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -327,9 +333,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				corporationID = Int()
-				loyaltyPoints = Int()
-				
 				super.init()
 			}
 			
@@ -366,10 +369,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDLoyaltyPointsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDLoyaltyPointsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -380,8 +387,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

@@ -100,7 +100,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 		return dateFormatter
 	}()
 	
-	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String, realm: String) -> URL {
+	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
 		var query = [URLQueryItem] ()
 		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
 		

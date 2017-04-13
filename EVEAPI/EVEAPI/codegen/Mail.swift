@@ -238,10 +238,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailLabelsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -252,8 +256,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -290,10 +292,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailMailIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -304,8 +310,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -342,10 +346,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -356,8 +364,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -394,10 +400,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailLabelsLabelIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -408,8 +418,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -446,9 +454,9 @@ public extension ESI {
 		}
 		
 		
-		public class Header: NSObject, NSCoding , JSONCoding {
+		public class Header: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDMailRecipients: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDMailRecipients: NSObject, NSSecureCoding , JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailRecipientType: String, JSONCoding {
 					case alliance = "alliance"
@@ -471,8 +479,12 @@ public extension ESI {
 					
 				}
 				
-				public var recipientID: Int
-				public var recipientType: Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType
+				public var recipientID: Int = Int()
+				public var recipientType: Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType = Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -486,9 +498,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					recipientID = Int()
-					recipientType = Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType()
-					
 					super.init()
 				}
 				
@@ -524,13 +533,17 @@ public extension ESI {
 				
 			}
 			
-			public var from: Int?
-			public var isRead: Bool?
-			public var labels: [Int64]?
-			public var mailID: Int64?
-			public var recipients: [Mail.Header.GetCharactersCharacterIDMailRecipients]?
-			public var subject: String?
-			public var timestamp: Date?
+			public var from: Int? = nil
+			public var isRead: Bool? = nil
+			public var labels: [Int64]? = nil
+			public var mailID: Int64? = nil
+			public var recipients: [Mail.Header.GetCharactersCharacterIDMailRecipients]? = nil
+			public var subject: String? = nil
+			public var timestamp: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -547,14 +560,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				from = nil
-				isRead = nil
-				labels = nil
-				mailID = nil
-				recipients = nil
-				subject = nil
-				timestamp = nil
-				
 				super.init()
 			}
 			
@@ -563,7 +568,7 @@ public extension ESI {
 				isRead = aDecoder.containsValue(forKey: "is_read") ? aDecoder.decodeBool(forKey: "is_read") : nil
 				labels = aDecoder.decodeObject(forKey: "labels") as? [Int64]
 				mailID = aDecoder.containsValue(forKey: "mail_id") ? aDecoder.decodeInt64(forKey: "mail_id") : nil
-				recipients = aDecoder.decodeObject(forKey: "recipients") as? [Mail.Header.GetCharactersCharacterIDMailRecipients]
+				recipients = aDecoder.decodeObject(of: [Mail.Header.GetCharactersCharacterIDMailRecipients.self], forKey: "recipients") as? [Mail.Header.GetCharactersCharacterIDMailRecipients]
 				subject = aDecoder.decodeObject(forKey: "subject") as? String
 				timestamp = aDecoder.decodeObject(forKey: "timestamp") as? Date
 				
@@ -639,10 +644,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailLabelsForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -653,8 +662,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -691,10 +698,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -705,8 +716,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -743,10 +752,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -757,8 +770,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -795,10 +806,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -809,8 +824,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -847,10 +860,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -861,8 +878,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -899,10 +914,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailListsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailListsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -913,8 +932,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -951,9 +968,9 @@ public extension ESI {
 		}
 		
 		
-		public class MailLabelsAndUnreadCounts: NSObject, NSCoding , JSONCoding {
+		public class MailLabelsAndUnreadCounts: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDMailLabelsLabels: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDMailLabelsLabels: NSObject, NSSecureCoding , JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailLabelsColor: String, JSONCoding {
 					case h0000fe = "#0000fe"
@@ -990,10 +1007,14 @@ public extension ESI {
 					
 				}
 				
-				public var color: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.GetCharactersCharacterIDMailLabelsColor?
-				public var labelID: Int?
-				public var name: String?
-				public var unreadCount: Int?
+				public var color: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.GetCharactersCharacterIDMailLabelsColor? = nil
+				public var labelID: Int? = nil
+				public var name: String? = nil
+				public var unreadCount: Int? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1007,11 +1028,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					color = nil
-					labelID = nil
-					name = nil
-					unreadCount = nil
-					
 					super.init()
 				}
 				
@@ -1071,8 +1087,12 @@ public extension ESI {
 				
 			}
 			
-			public var labels: [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]?
-			public var totalUnreadCount: Int?
+			public var labels: [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]? = nil
+			public var totalUnreadCount: Int? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1084,14 +1104,11 @@ public extension ESI {
 			}
 			
 			override public init() {
-				labels = nil
-				totalUnreadCount = nil
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				labels = aDecoder.decodeObject(forKey: "labels") as? [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]
+				labels = aDecoder.decodeObject(of: [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.self], forKey: "labels") as? [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]
 				totalUnreadCount = aDecoder.containsValue(forKey: "total_unread_count") ? aDecoder.decodeInteger(forKey: "total_unread_count") : nil
 				
 				super.init()
@@ -1131,11 +1148,15 @@ public extension ESI {
 		}
 		
 		
-		public class Subscription: NSObject, NSCoding , JSONCoding {
+		public class Subscription: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var mailingListID: Int
-			public var name: String
+			public var mailingListID: Int = Int()
+			public var name: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1149,9 +1170,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				mailingListID = Int()
-				name = String()
-				
 				super.init()
 			}
 			
@@ -1188,10 +1206,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1202,8 +1224,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1240,10 +1260,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1254,8 +1278,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1292,9 +1314,9 @@ public extension ESI {
 		}
 		
 		
-		public class MailBody: NSObject, NSCoding , JSONCoding {
+		public class MailBody: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDMailMailIDRecipients: NSObject, NSCoding , JSONCoding {
+			public class GetCharactersCharacterIDMailMailIDRecipients: NSObject, NSSecureCoding , JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailMailIDRecipientType: String, JSONCoding {
 					case alliance = "alliance"
@@ -1317,8 +1339,12 @@ public extension ESI {
 					
 				}
 				
-				public var recipientID: Int
-				public var recipientType: Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients.GetCharactersCharacterIDMailMailIDRecipientType
+				public var recipientID: Int = Int()
+				public var recipientType: Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients.GetCharactersCharacterIDMailMailIDRecipientType = Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients.GetCharactersCharacterIDMailMailIDRecipientType()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1332,9 +1358,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					recipientID = Int()
-					recipientType = Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients.GetCharactersCharacterIDMailMailIDRecipientType()
-					
 					super.init()
 				}
 				
@@ -1370,13 +1393,17 @@ public extension ESI {
 				
 			}
 			
-			public var body: String?
-			public var from: Int?
-			public var labels: [Int64]?
-			public var read: Bool?
-			public var recipients: [Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients]?
-			public var subject: String?
-			public var timestamp: Date?
+			public var body: String? = nil
+			public var from: Int? = nil
+			public var labels: [Int64]? = nil
+			public var read: Bool? = nil
+			public var recipients: [Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients]? = nil
+			public var subject: String? = nil
+			public var timestamp: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1393,14 +1420,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				body = nil
-				from = nil
-				labels = nil
-				read = nil
-				recipients = nil
-				subject = nil
-				timestamp = nil
-				
 				super.init()
 			}
 			
@@ -1409,7 +1428,7 @@ public extension ESI {
 				from = aDecoder.containsValue(forKey: "from") ? aDecoder.decodeInteger(forKey: "from") : nil
 				labels = aDecoder.decodeObject(forKey: "labels") as? [Int64]
 				read = aDecoder.containsValue(forKey: "read") ? aDecoder.decodeBool(forKey: "read") : nil
-				recipients = aDecoder.decodeObject(forKey: "recipients") as? [Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients]
+				recipients = aDecoder.decodeObject(of: [Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients.self], forKey: "recipients") as? [Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients]
 				subject = aDecoder.decodeObject(forKey: "subject") as? String
 				timestamp = aDecoder.decodeObject(forKey: "timestamp") as? Date
 				
@@ -1485,10 +1504,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1499,8 +1522,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1537,11 +1558,15 @@ public extension ESI {
 		}
 		
 		
-		public class UpdateContents: NSObject, NSCoding , JSONCoding {
+		public class UpdateContents: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var labels: [Int64]?
-			public var read: Bool?
+			public var labels: [Int64]? = nil
+			public var read: Bool? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1553,9 +1578,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				labels = nil
-				read = nil
-				
 				super.init()
 			}
 			
@@ -1600,10 +1622,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1614,8 +1640,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1652,10 +1676,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1666,8 +1694,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1704,10 +1730,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1718,8 +1748,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1756,10 +1784,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1770,8 +1802,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1808,10 +1838,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1822,8 +1856,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1860,7 +1892,7 @@ public extension ESI {
 		}
 		
 		
-		public class Label: NSObject, NSCoding , JSONCoding {
+		public class Label: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum PostCharactersCharacterIDMailLabelsColor: String, JSONCoding {
 				case h0000fe = "#0000fe"
@@ -1897,8 +1929,12 @@ public extension ESI {
 				
 			}
 			
-			public var color: Mail.Label.PostCharactersCharacterIDMailLabelsColor?
-			public var name: String
+			public var color: Mail.Label.PostCharactersCharacterIDMailLabelsColor? = nil
+			public var name: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1911,9 +1947,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				color = nil
-				name = String()
-				
 				super.init()
 			}
 			
@@ -1954,10 +1987,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1968,8 +2005,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -2006,10 +2041,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailListsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailListsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2020,8 +2059,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -2058,9 +2095,9 @@ public extension ESI {
 		}
 		
 		
-		public class NewMail: NSObject, NSCoding , JSONCoding {
+		public class NewMail: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class PostCharactersCharacterIDMailRecipients: NSObject, NSCoding , JSONCoding {
+			public class PostCharactersCharacterIDMailRecipients: NSObject, NSSecureCoding , JSONCoding {
 				
 				public enum PostCharactersCharacterIDMailRecipientType: String, JSONCoding {
 					case alliance = "alliance"
@@ -2083,8 +2120,12 @@ public extension ESI {
 					
 				}
 				
-				public var recipientID: Int
-				public var recipientType: Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType
+				public var recipientID: Int = Int()
+				public var recipientType: Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType = Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2098,9 +2139,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					recipientID = Int()
-					recipientType = Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType()
-					
 					super.init()
 				}
 				
@@ -2136,10 +2174,14 @@ public extension ESI {
 				
 			}
 			
-			public var approvedCost: Int64?
-			public var body: String
-			public var recipients: [Mail.NewMail.PostCharactersCharacterIDMailRecipients]
-			public var subject: String
+			public var approvedCost: Int64? = nil
+			public var body: String = String()
+			public var recipients: [Mail.NewMail.PostCharactersCharacterIDMailRecipients] = []
+			public var subject: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2155,18 +2197,13 @@ public extension ESI {
 			}
 			
 			override public init() {
-				approvedCost = nil
-				body = String()
-				recipients = []
-				subject = String()
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
 				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
 				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
-				recipients = aDecoder.decodeObject(forKey: "recipients") as? [Mail.NewMail.PostCharactersCharacterIDMailRecipients] ?? []
+				recipients = aDecoder.decodeObject(of: [Mail.NewMail.PostCharactersCharacterIDMailRecipients.self], forKey: "recipients") as? [Mail.NewMail.PostCharactersCharacterIDMailRecipients] ?? []
 				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
 				
 				super.init()
@@ -2208,10 +2245,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2222,8 +2263,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -2260,10 +2299,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2274,8 +2317,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

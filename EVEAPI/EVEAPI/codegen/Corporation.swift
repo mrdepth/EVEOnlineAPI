@@ -231,10 +231,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDStructuresInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDStructuresInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -245,8 +249,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -283,10 +285,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDIconsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDIconsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -297,8 +303,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -335,10 +339,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDRolesForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDRolesForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -349,8 +357,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -387,10 +393,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsNamesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -401,8 +411,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -439,10 +447,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -453,8 +465,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -491,12 +501,16 @@ public extension ESI {
 		}
 		
 		
-		public class Icon: NSObject, NSCoding , JSONCoding {
+		public class Icon: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var px128x128: String?
-			public var px256x256: String?
-			public var px64x64: String?
+			public var px128x128: String? = nil
+			public var px256x256: String? = nil
+			public var px64x64: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -509,10 +523,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				px128x128 = nil
-				px256x256 = nil
-				px64x64 = nil
-				
 				super.init()
 			}
 			
@@ -565,10 +575,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCorporationsCorporationIDStructuresStructureIDForbidden: NSObject, NSCoding , JSONCoding {
+		public class PutCorporationsCorporationIDStructuresStructureIDForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -579,8 +593,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -617,10 +629,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDAlliancehistoryInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDAlliancehistoryInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -631,8 +647,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -669,10 +683,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -683,8 +701,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -721,10 +737,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -735,8 +755,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -773,7 +791,7 @@ public extension ESI {
 		}
 		
 		
-		public class Information: NSObject, NSCoding , JSONCoding {
+		public class Information: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCorporationsCorporationIDFaction: String, JSONCoding {
 				case amarr = "Amarr"
@@ -796,17 +814,21 @@ public extension ESI {
 				
 			}
 			
-			public var allianceID: Int?
-			public var ceoID: Int
-			public var corporationDescription: String
-			public var corporationName: String
-			public var creationDate: Date?
-			public var creatorID: Int
-			public var faction: Corporation.Information.GetCorporationsCorporationIDFaction?
-			public var memberCount: Int
-			public var taxRate: Float
-			public var ticker: String
-			public var url: String
+			public var allianceID: Int? = nil
+			public var ceoID: Int = Int()
+			public var corporationDescription: String = String()
+			public var corporationName: String = String()
+			public var creationDate: Date? = nil
+			public var creatorID: Int = Int()
+			public var faction: Corporation.Information.GetCorporationsCorporationIDFaction? = nil
+			public var memberCount: Int = Int()
+			public var taxRate: Float = Float()
+			public var ticker: String = String()
+			public var url: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -835,18 +857,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				allianceID = nil
-				ceoID = Int()
-				corporationDescription = String()
-				corporationName = String()
-				creationDate = nil
-				creatorID = Int()
-				faction = nil
-				memberCount = Int()
-				taxRate = Float()
-				ticker = String()
-				url = String()
-				
 				super.init()
 			}
 			
@@ -931,10 +941,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDStructuresForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDStructuresForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -945,8 +959,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -983,10 +995,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDRolesInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDRolesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -997,8 +1013,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1035,10 +1049,14 @@ public extension ESI {
 		}
 		
 		
-		public class Member: NSObject, NSCoding , JSONCoding {
+		public class Member: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var characterID: Int
+			public var characterID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1050,8 +1068,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				characterID = Int()
-				
 				super.init()
 			}
 			
@@ -1084,10 +1100,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDMembersInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDMembersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1098,8 +1118,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1136,11 +1154,15 @@ public extension ESI {
 		}
 		
 		
-		public class Name: NSObject, NSCoding , JSONCoding {
+		public class Name: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var corporationID: Int
-			public var corporationName: String
+			public var corporationID: Int = Int()
+			public var corporationName: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1154,9 +1176,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				corporationID = Int()
-				corporationName = String()
-				
 				super.init()
 			}
 			
@@ -1193,10 +1212,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsNpccorpsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsNpccorpsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1207,8 +1230,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -1245,11 +1266,15 @@ public extension ESI {
 		}
 		
 		
-		public class VulnerabilitySchedule: NSObject, NSCoding , JSONCoding {
+		public class VulnerabilitySchedule: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var day: Int
-			public var hour: Int
+			public var day: Int = Int()
+			public var hour: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1263,9 +1288,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				day = Int()
-				hour = Int()
-				
 				super.init()
 			}
 			
@@ -1302,7 +1324,7 @@ public extension ESI {
 		}
 		
 		
-		public class Role: NSObject, NSCoding , JSONCoding {
+		public class Role: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCorporationsCorporationIDRolesRolesAtBase: String, JSONCoding {
 				case accountTake1 = "Account_Take_1"
@@ -1840,15 +1862,19 @@ public extension ESI {
 				
 			}
 			
-			public var characterID: Int
-			public var grantableRoles: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRoles]?
-			public var grantableRolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtBase]?
-			public var grantableRolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtHq]?
-			public var grantableRolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtOther]?
-			public var roles: [Corporation.Role.GetCorporationsCorporationIDRolesRoles]?
-			public var rolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtBase]?
-			public var rolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtHq]?
-			public var rolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtOther]?
+			public var characterID: Int = Int()
+			public var grantableRoles: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRoles]? = nil
+			public var grantableRolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtBase]? = nil
+			public var grantableRolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtHq]? = nil
+			public var grantableRolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtOther]? = nil
+			public var roles: [Corporation.Role.GetCorporationsCorporationIDRolesRoles]? = nil
+			public var rolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtBase]? = nil
+			public var rolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtHq]? = nil
+			public var rolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtOther]? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1868,16 +1894,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				characterID = Int()
-				grantableRoles = nil
-				grantableRolesAtBase = nil
-				grantableRolesAtHq = nil
-				grantableRolesAtOther = nil
-				roles = nil
-				rolesAtBase = nil
-				rolesAtHq = nil
-				rolesAtOther = nil
-				
 				super.init()
 			}
 			
@@ -1974,13 +1990,17 @@ public extension ESI {
 		}
 		
 		
-		public class History: NSObject, NSCoding , JSONCoding {
+		public class History: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSCoding , JSONCoding {
+			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var allianceID: Int
-				public var isDeleted: Bool
+				public var allianceID: Int = Int()
+				public var isDeleted: Bool = Bool()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -1994,9 +2014,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					allianceID = Int()
-					isDeleted = Bool()
-					
 					super.init()
 				}
 				
@@ -2032,9 +2049,13 @@ public extension ESI {
 				
 			}
 			
-			public var alliance: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance?
-			public var recordID: Int
-			public var startDate: Date
+			public var alliance: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance? = nil
+			public var recordID: Int = Int()
+			public var startDate: Date = Date()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2049,15 +2070,11 @@ public extension ESI {
 			}
 			
 			override public init() {
-				alliance = nil
-				recordID = Int()
-				startDate = Date()
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				alliance = aDecoder.decodeObject(of: [Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance.self], forKey: "alliance") as? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance
+				alliance = aDecoder.decodeObject(of: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance.self, forKey: "alliance") 
 				recordID = aDecoder.decodeInteger(forKey: "record_id")
 				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date ?? Date()
 				
@@ -2097,10 +2114,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCorporationsCorporationIDStructuresStructureIDInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PutCorporationsCorporationIDStructuresStructureIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2111,8 +2132,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -2149,10 +2168,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDMembersForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCorporationsCorporationIDMembersForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2163,8 +2186,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -2201,9 +2222,9 @@ public extension ESI {
 		}
 		
 		
-		public class Structure: NSObject, NSCoding , JSONCoding {
+		public class Structure: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCorporationsCorporationIDStructuresServices: NSObject, NSCoding , JSONCoding {
+			public class GetCorporationsCorporationIDStructuresServices: NSObject, NSSecureCoding , JSONCoding {
 				
 				public enum GetCorporationsCorporationIDStructuresState: String, JSONCoding {
 					case cleanup = "cleanup"
@@ -2225,8 +2246,12 @@ public extension ESI {
 					
 				}
 				
-				public var name: String
-				public var state: Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState
+				public var name: String = String()
+				public var state: Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState = Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2240,9 +2265,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					name = String()
-					state = Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState()
-					
 					super.init()
 				}
 				
@@ -2278,11 +2300,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetCorporationsCorporationIDStructuresCurrentVul: NSObject, NSCoding , JSONCoding {
+			public class GetCorporationsCorporationIDStructuresCurrentVul: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var day: Int
-				public var hour: Int
+				public var day: Int = Int()
+				public var hour: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2296,9 +2322,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					day = Int()
-					hour = Int()
-					
 					super.init()
 				}
 				
@@ -2334,11 +2357,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetCorporationsCorporationIDStructuresNextVul: NSObject, NSCoding , JSONCoding {
+			public class GetCorporationsCorporationIDStructuresNextVul: NSObject, NSSecureCoding , JSONCoding {
 				
 				
-				public var day: Int
-				public var hour: Int
+				public var day: Int = Int()
+				public var hour: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2352,9 +2379,6 @@ public extension ESI {
 				}
 				
 				override public init() {
-					day = Int()
-					hour = Int()
-					
 					super.init()
 				}
 				
@@ -2390,18 +2414,22 @@ public extension ESI {
 				
 			}
 			
-			public var corporationID: Int
-			public var currentVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul]
-			public var fuelExpires: Date?
-			public var nextVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul]
-			public var profileID: Int
-			public var services: [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]?
-			public var stateTimerEnd: Date?
-			public var stateTimerStart: Date?
-			public var structureID: Int64
-			public var systemID: Int
-			public var typeID: Int
-			public var unanchorsAt: Date?
+			public var corporationID: Int = Int()
+			public var currentVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul] = []
+			public var fuelExpires: Date? = nil
+			public var nextVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul] = []
+			public var profileID: Int = Int()
+			public var services: [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]? = nil
+			public var stateTimerEnd: Date? = nil
+			public var stateTimerStart: Date? = nil
+			public var structureID: Int64 = Int64()
+			public var systemID: Int = Int()
+			public var typeID: Int = Int()
+			public var unanchorsAt: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -2428,29 +2456,16 @@ public extension ESI {
 			}
 			
 			override public init() {
-				corporationID = Int()
-				currentVul = []
-				fuelExpires = nil
-				nextVul = []
-				profileID = Int()
-				services = nil
-				stateTimerEnd = nil
-				stateTimerStart = nil
-				structureID = Int64()
-				systemID = Int()
-				typeID = Int()
-				unanchorsAt = nil
-				
 				super.init()
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
 				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				currentVul = aDecoder.decodeObject(forKey: "current_vul") as? [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul] ?? []
+				currentVul = aDecoder.decodeObject(of: [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul.self], forKey: "current_vul") as? [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul] ?? []
 				fuelExpires = aDecoder.decodeObject(forKey: "fuel_expires") as? Date
-				nextVul = aDecoder.decodeObject(forKey: "next_vul") as? [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul] ?? []
+				nextVul = aDecoder.decodeObject(of: [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul.self], forKey: "next_vul") as? [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul] ?? []
 				profileID = aDecoder.decodeInteger(forKey: "profile_id")
-				services = aDecoder.decodeObject(forKey: "services") as? [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]
+				services = aDecoder.decodeObject(of: [Corporation.Structure.GetCorporationsCorporationIDStructuresServices.self], forKey: "services") as? [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]
 				stateTimerEnd = aDecoder.decodeObject(forKey: "state_timer_end") as? Date
 				stateTimerStart = aDecoder.decodeObject(forKey: "state_timer_start") as? Date
 				structureID = aDecoder.decodeInt64(forKey: "structure_id")

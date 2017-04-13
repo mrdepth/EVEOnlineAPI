@@ -173,7 +173,7 @@ class Schema: Namespace {
 		var encodings = [String]()
 		var decodings = [String]()
 		var json = [String]()
-		var defaults = [String]()
+//		var defaults = [String]()
 		var hashes = [String]()
 		var nested = [String]()
 		
@@ -183,7 +183,7 @@ class Schema: Namespace {
 			encodings.append(value.encoding)
 			decodings.append(value.decoding)
 			json.append(value.json)
-			defaults.append(value.defaultInitialization)
+//			defaults.append(value.defaultInitialization)
 			hashes.append(value.hash)
 		}
 		
@@ -197,7 +197,7 @@ class Schema: Namespace {
 		template = template.replacingOccurrences(of: "{class}", with: typeIdentifier)
 		template.replaceSubrange(template.range(of: "{definitions}")!, with: definitions.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{defaults}")!, with: defaults.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{defaults}")!, with: defaults.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))

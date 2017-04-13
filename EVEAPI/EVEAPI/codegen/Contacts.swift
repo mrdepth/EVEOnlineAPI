@@ -151,11 +151,15 @@ public extension ESI {
 		}
 		
 		
-		public class Label: NSObject, NSCoding , JSONCoding {
+		public class Label: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var labelID: Int64
-			public var labelName: String
+			public var labelID: Int64 = Int64()
+			public var labelName: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -169,9 +173,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				labelID = Int64()
-				labelName = String()
-				
 				super.init()
 			}
 			
@@ -208,10 +209,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDContactsForbidden: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -222,8 +227,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -260,10 +263,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDContactsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDContactsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -274,8 +281,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -312,10 +317,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDContactsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PutCharactersCharacterIDContactsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -326,8 +335,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -364,10 +371,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDContactsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDContactsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -378,8 +389,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -416,10 +425,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDContactsForbidden: NSObject, NSCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -430,8 +443,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -468,10 +479,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContactsLabelsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDContactsLabelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -482,8 +497,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -520,10 +533,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContactsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDContactsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -534,8 +551,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -572,10 +587,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContactsLabelsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDContactsLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -586,8 +605,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -624,7 +641,7 @@ public extension ESI {
 		}
 		
 		
-		public class Contact: NSObject, NSCoding , JSONCoding {
+		public class Contact: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDContactsContactType: String, JSONCoding {
 				case alliance = "alliance"
@@ -647,12 +664,16 @@ public extension ESI {
 				
 			}
 			
-			public var contactID: Int
-			public var contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType
-			public var isBlocked: Bool?
-			public var isWatched: Bool?
-			public var labelID: Int64?
-			public var standing: Float
+			public var contactID: Int = Int()
+			public var contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType = Contacts.Contact.GetCharactersCharacterIDContactsContactType()
+			public var isBlocked: Bool? = nil
+			public var isWatched: Bool? = nil
+			public var labelID: Int64? = nil
+			public var standing: Float = Float()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -671,13 +692,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				contactID = Int()
-				contactType = Contacts.Contact.GetCharactersCharacterIDContactsContactType()
-				isBlocked = nil
-				isWatched = nil
-				labelID = nil
-				standing = Float()
-				
 				super.init()
 			}
 			
@@ -742,10 +756,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContactsForbidden: NSObject, NSCoding , JSONCoding {
+		public class GetCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -756,8 +774,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -794,10 +810,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDContactsForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -808,8 +828,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

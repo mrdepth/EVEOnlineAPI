@@ -137,10 +137,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -151,8 +155,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -189,10 +191,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowContractForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowContractForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -203,8 +209,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -241,10 +245,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiAutopilotWaypointInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostUiAutopilotWaypointInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -255,8 +263,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -293,10 +299,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowMarketdetailsInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowMarketdetailsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -307,8 +317,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -345,14 +353,18 @@ public extension ESI {
 		}
 		
 		
-		public class NewMail: NSObject, NSCoding , JSONCoding {
+		public class NewMail: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var body: String
-			public var recipients: [Int]
-			public var subject: String
-			public var toCorpOrAllianceID: Int?
-			public var toMailingListID: Int?
+			public var body: String = String()
+			public var recipients: [Int] = []
+			public var subject: String = String()
+			public var toCorpOrAllianceID: Int? = nil
+			public var toMailingListID: Int? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -369,12 +381,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				body = String()
-				recipients = []
-				subject = String()
-				toCorpOrAllianceID = nil
-				toMailingListID = nil
-				
 				super.init()
 			}
 			
@@ -431,10 +437,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowNewmailForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowNewmailForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -445,8 +455,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -483,10 +491,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiAutopilotWaypointForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostUiAutopilotWaypointForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -497,8 +509,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -535,10 +545,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowContractInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowContractInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -549,8 +563,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -587,10 +599,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowInformationForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowInformationForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -601,8 +617,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -639,10 +653,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowNewmailInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowNewmailInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -653,8 +671,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -691,10 +707,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowInformationInternalServerError: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowInformationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -705,8 +725,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			
@@ -743,10 +761,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowMarketdetailsForbidden: NSObject, NSCoding , JSONCoding {
+		public class PostUiOpenwindowMarketdetailsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var error: String?
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
@@ -757,8 +779,6 @@ public extension ESI {
 			}
 			
 			override public init() {
-				error = nil
-				
 				super.init()
 			}
 			

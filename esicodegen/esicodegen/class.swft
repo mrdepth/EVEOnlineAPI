@@ -1,8 +1,12 @@
-public class {className}: NSObject, NSCoding , JSONCoding {
+public class {className}: NSObject, NSSecureCoding , JSONCoding {
 
 {nested}
 {definitions}
-	
+
+	public static var supportsSecureCoding: Bool {
+		return true
+	}
+
 	public required init(json: Any) throws {
 		guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 		
@@ -12,8 +16,6 @@ public class {className}: NSObject, NSCoding , JSONCoding {
 	}
 	
 	override public init() {
-{defaults}
-
 		super.init()
 	}
 	
