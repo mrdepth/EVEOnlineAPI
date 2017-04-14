@@ -103,7 +103,7 @@ public extension ESI {
 			get {
 				return [
 				.esiClonesReadClonesV1,
-				.esiCorporationsReadCorporationMembershipV1,
+//				.esiCorporationsReadCorporationMembershipV1,
 				.esiFittingsWriteFittingsV1,
 				.esiCharactersReadStandingsV1,
 				.esiUniverseReadStructuresV1,
@@ -117,9 +117,9 @@ public extension ESI {
 				.esiKillmailsReadKillmailsV1,
 				.esiMailSendMailV1,
 				.esiWalletReadCharacterWalletV1,
-				.esiCharactersReadOpportunitiesV1,
-				.esiFleetsWriteFleetV1,
-				.esiCharactersReadAgentsResearchV1,
+//				.esiCharactersReadOpportunitiesV1,
+//				.esiFleetsWriteFleetV1,
+//				.esiCharactersReadAgentsResearchV1,
 				.esiFittingsReadFittingsV1,
 				.esiCalendarReadCalendarEventsV1,
 				.esiSkillsReadSkillsV1,
@@ -127,16 +127,16 @@ public extension ESI {
 				.esiCharactersWriteContactsV1,
 				.esiCharactersReadContactsV1,
 				.esiPlanetsManagePlanetsV1,
-				.esiSearchSearchStructuresV1,
+//				.esiSearchSearchStructuresV1,
 				.esiLocationReadLocationV1,
-				.esiUiWriteWaypointV1,
-				.esiUiOpenWindowV1,
-				.esiFleetsReadFleetV1,
-				.esiCharactersReadChatChannelsV1,
-				.esiCorporationsWriteStructuresV1,
-				.esiBookmarksReadCharacterBookmarksV1,
-				.esiCharactersReadLoyaltyV1,
-				.esiCorporationsReadStructuresV1
+//				.esiUiWriteWaypointV1,
+//				.esiUiOpenWindowV1,
+//				.esiFleetsReadFleetV1,
+//				.esiCharactersReadChatChannelsV1,
+//				.esiCorporationsWriteStructuresV1,
+//				.esiBookmarksReadCharacterBookmarksV1,
+//				.esiCharactersReadLoyaltyV1,
+//				.esiCorporationsReadStructuresV1
 				]
 			}
 		}

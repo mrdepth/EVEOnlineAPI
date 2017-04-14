@@ -2109,6 +2109,160 @@ public extension ESI {
 		}
 		
 		
+		public class NewMail: NSObject, NSSecureCoding , JSONCoding {
+			
+			public class Recipient: NSObject, NSSecureCoding , JSONCoding {
+				
+				public enum RecipientType: String, JSONCoding, HTTPQueryable {
+					case alliance = "alliance"
+					case character = "character"
+					case corporation = "corporation"
+					case mailingList = "mailing_list"
+					
+					public init() {
+						self = .alliance
+					}
+					
+					public var json: Any {
+						return self.rawValue
+					}
+					
+					public init(json: Any) throws {
+						guard let s = json as? String, let v = RecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
+					}
+					
+				}
+				
+				public var recipientID: Int = Int()
+				public var recipientType: Mail.NewMail.Recipient.RecipientType = Mail.NewMail.Recipient.RecipientType()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let recipientID = dictionary["recipient_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.recipientID = recipientID
+					guard let recipientType = Mail.NewMail.Recipient.RecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.recipientType = recipientType
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					recipientID = aDecoder.decodeInteger(forKey: "recipient_id")
+					recipientType = Mail.NewMail.Recipient.RecipientType(rawValue: aDecoder.decodeObject(forKey: "recipient_type") as? String ?? "") ?? Mail.NewMail.Recipient.RecipientType()
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(recipientID, forKey: "recipient_id")
+					aCoder.encode(recipientType.rawValue, forKey: "recipient_type")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["recipient_id"] = recipientID.json
+					json["recipient_type"] = recipientType.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: recipientID.hashValue)
+					hashCombine(seed: &hash, value: recipientType.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Mail.NewMail.Recipient, rhs: Mail.NewMail.Recipient) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public var approvedCost: Int64? = nil
+			public var body: String = String()
+			public var recipients: [Mail.NewMail.Recipient] = []
+			public var subject: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				approvedCost = dictionary["approved_cost"] as? Int64
+				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.body = body
+				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.NewMail.Recipient(json: $0)} ?? []
+				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.subject = subject
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
+				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
+				recipients = aDecoder.decodeObject(of: [Mail.NewMail.Recipient.self], forKey: "recipients") as? [Mail.NewMail.Recipient] ?? []
+				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = approvedCost {
+					aCoder.encode(v, forKey: "approved_cost")
+				}
+				aCoder.encode(body, forKey: "body")
+				aCoder.encode(recipients, forKey: "recipients")
+				aCoder.encode(subject, forKey: "subject")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = approvedCost?.json {
+					json["approved_cost"] = v
+				}
+				json["body"] = body.json
+				json["recipients"] = recipients.json
+				json["subject"] = subject.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: approvedCost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: body.hashValue)
+				recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: subject.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
 		public class GetCharactersCharacterIDMailListsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -2157,160 +2311,6 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Mail.GetCharactersCharacterIDMailListsInternalServerError, rhs: Mail.GetCharactersCharacterIDMailListsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
-		public class NewMail: NSObject, NSSecureCoding , JSONCoding {
-			
-			public class PostCharactersCharacterIDMailRecipients: NSObject, NSSecureCoding , JSONCoding {
-				
-				public enum PostCharactersCharacterIDMailRecipientType: String, JSONCoding, HTTPQueryable {
-					case alliance = "alliance"
-					case character = "character"
-					case corporation = "corporation"
-					case mailingList = "mailing_list"
-					
-					public init() {
-						self = .alliance
-					}
-					
-					public var json: Any {
-						return self.rawValue
-					}
-					
-					public init(json: Any) throws {
-						guard let s = json as? String, let v = PostCharactersCharacterIDMailRecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-						self = v
-					}
-					
-					public var httpQuery: String? {
-						return rawValue
-					}
-					
-				}
-				
-				public var recipientID: Int = Int()
-				public var recipientType: Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType = Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let recipientID = dictionary["recipient_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.recipientID = recipientID
-					guard let recipientType = Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.recipientType = recipientType
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					recipientID = aDecoder.decodeInteger(forKey: "recipient_id")
-					recipientType = Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType(rawValue: aDecoder.decodeObject(forKey: "recipient_type") as? String ?? "") ?? Mail.NewMail.PostCharactersCharacterIDMailRecipients.PostCharactersCharacterIDMailRecipientType()
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(recipientID, forKey: "recipient_id")
-					aCoder.encode(recipientType.rawValue, forKey: "recipient_type")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["recipient_id"] = recipientID.json
-					json["recipient_type"] = recipientType.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: recipientID.hashValue)
-					hashCombine(seed: &hash, value: recipientType.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Mail.NewMail.PostCharactersCharacterIDMailRecipients, rhs: Mail.NewMail.PostCharactersCharacterIDMailRecipients) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public var approvedCost: Int64? = nil
-			public var body: String = String()
-			public var recipients: [Mail.NewMail.PostCharactersCharacterIDMailRecipients] = []
-			public var subject: String = String()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				approvedCost = dictionary["approved_cost"] as? Int64
-				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.body = body
-				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.NewMail.PostCharactersCharacterIDMailRecipients(json: $0)} ?? []
-				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.subject = subject
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
-				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
-				recipients = aDecoder.decodeObject(of: [Mail.NewMail.PostCharactersCharacterIDMailRecipients.self], forKey: "recipients") as? [Mail.NewMail.PostCharactersCharacterIDMailRecipients] ?? []
-				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = approvedCost {
-					aCoder.encode(v, forKey: "approved_cost")
-				}
-				aCoder.encode(body, forKey: "body")
-				aCoder.encode(recipients, forKey: "recipients")
-				aCoder.encode(subject, forKey: "subject")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = approvedCost?.json {
-					json["approved_cost"] = v
-				}
-				json["body"] = body.json
-				json["recipients"] = recipients.json
-				json["subject"] = subject.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: approvedCost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: body.hashValue)
-				recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: subject.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
