@@ -53,6 +53,10 @@ class Scope: Namespace {
 			template = template.replacingOccurrences(of: "{scopes}", with: scopes.joined(separator: ",\n"))
 			s += template
 			
+			s += "class func loadClassess() {\n"
+			s += classLoaders.joined(separator: "\n")
+			s += "\n}"
+			
 			s += "\n}"
 			return s
 		}

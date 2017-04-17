@@ -70,7 +70,7 @@ enum Type {
 			throw ESIParserError.format(type(of: self).self, dictionary)
 		}
 	}
-	
+		
 /*	public static func ==(lhs: Type, rhs: Type) -> Bool {
 		switch (lhs, rhs) {
 		case (.integer, .integer):

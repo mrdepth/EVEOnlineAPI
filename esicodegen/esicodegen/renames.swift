@@ -164,6 +164,7 @@ let typeNames: [String: String] = [
 	"GetUniverseSystemKillsOk"	: "SystemKills",
 	"GetUniverseStargatesStargateIDOk"	: "StargateInformation",
 	"GetUniverseBloodlinesOk"	: "Bloodline",
+	"PostUniverseNamesCategory"	: "Category",
 
 	//MARK: UserInterface
 	"PostUiOpenwindowNewmailNewMail"	: "NewMail",

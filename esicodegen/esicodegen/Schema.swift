@@ -206,4 +206,13 @@ class Schema: Namespace {
 		
 		return template
 	}
+	
+	public var classLoader: String? {
+		switch self.type {
+		case .object:
+			return "_ = \(typeIdentifier).classForCoder()"
+		default:
+			return nil
+		}
+	}
 }

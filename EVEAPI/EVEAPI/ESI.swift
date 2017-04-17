@@ -33,6 +33,10 @@ public class ESI: SessionManager {
 		}
 	}
 	
+	public class func initialize() {
+		loadClassess()
+	}
+
 	public func image(characterID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
 		let dimensions = [32, 64, 128, 256, 512, 1024]
 		var bestDimension = dimensions.last!

@@ -1367,7 +1367,7 @@ public extension ESI {
 		
 		public class Name: NSObject, NSSecureCoding , JSONCoding {
 			
-			public enum PostUniverseNamesCategory: String, JSONCoding, HTTPQueryable {
+			public enum Category: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case constellation = "constellation"
@@ -1386,7 +1386,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = PostUniverseNamesCategory(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Category(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -1396,7 +1396,7 @@ public extension ESI {
 				
 			}
 			
-			public var category: Universe.Name.PostUniverseNamesCategory = Universe.Name.PostUniverseNamesCategory()
+			public var category: Universe.Name.Category = Universe.Name.Category()
 			public var id: Int = Int()
 			public var name: String = String()
 			
@@ -1407,7 +1407,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				guard let category = Universe.Name.PostUniverseNamesCategory(rawValue: dictionary["category"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let category = Universe.Name.Category(rawValue: dictionary["category"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.category = category
 				guard let id = dictionary["id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.id = id
@@ -1422,7 +1422,7 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				category = Universe.Name.PostUniverseNamesCategory(rawValue: aDecoder.decodeObject(forKey: "category") as? String ?? "") ?? Universe.Name.PostUniverseNamesCategory()
+				category = Universe.Name.Category(rawValue: aDecoder.decodeObject(forKey: "category") as? String ?? "") ?? Universe.Name.Category()
 				id = aDecoder.decodeInteger(forKey: "id")
 				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
 				

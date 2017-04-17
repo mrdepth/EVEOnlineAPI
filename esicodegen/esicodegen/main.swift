@@ -81,6 +81,8 @@ for (title, map) in allSchemes {
 	}
 }
 
+var classLoaders = Set<String>()
+
 for (_, schemes) in namespaces {
 	var set = Set<String>()
 	for scheme in schemes {
@@ -97,6 +99,9 @@ for (_, schemes) in namespaces {
 			scheme.namespaceName = title
 		}
 		set.insert(scheme.typeIdentifier)
+		if let loader = scheme.classLoader {
+			classLoaders.insert(loader)
+		}
 	}
 }
 
