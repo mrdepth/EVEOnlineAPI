@@ -111,6 +111,8 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDMailListsOk"	: "Subscription",
 	"PostCharactersCharacterIDMailRecipients"	: "Recipient",
 	"PostCharactersCharacterIDMailRecipientType"	: "RecipientType",
+	"GetCharactersCharacterIDMailRecipients"	: "Recipient",
+	"GetCharactersCharacterIDMailRecipientType"	: "RecipientType",
 
 	//MARK: Market
 	"GetMarketsPricesOk"	: "Price",

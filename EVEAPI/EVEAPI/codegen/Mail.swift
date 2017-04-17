@@ -508,35 +508,11 @@ public extension ESI {
 		
 		public class Header: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetCharactersCharacterIDMailRecipients: NSObject, NSSecureCoding , JSONCoding {
+			public class Recipient: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum GetCharactersCharacterIDMailRecipientType: String, JSONCoding, HTTPQueryable {
-					case alliance = "alliance"
-					case character = "character"
-					case corporation = "corporation"
-					case mailingList = "mailing_list"
-					
-					public init() {
-						self = .alliance
-					}
-					
-					public var json: Any {
-						return self.rawValue
-					}
-					
-					public init(json: Any) throws {
-						guard let s = json as? String, let v = GetCharactersCharacterIDMailRecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-						self = v
-					}
-					
-					public var httpQuery: String? {
-						return rawValue
-					}
-					
-				}
 				
 				public var recipientID: Int = Int()
-				public var recipientType: Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType = Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType()
+				public var recipientType: Mail.RecipientType = Mail.RecipientType()
 				
 				public static var supportsSecureCoding: Bool {
 					return true
@@ -547,7 +523,7 @@ public extension ESI {
 					
 					guard let recipientID = dictionary["recipient_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 					self.recipientID = recipientID
-					guard let recipientType = Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let recipientType = Mail.RecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 					self.recipientType = recipientType
 					
 					super.init()
@@ -559,7 +535,7 @@ public extension ESI {
 				
 				public required init?(coder aDecoder: NSCoder) {
 					recipientID = aDecoder.decodeInteger(forKey: "recipient_id")
-					recipientType = Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType(rawValue: aDecoder.decodeObject(forKey: "recipient_type") as? String ?? "") ?? Mail.Header.GetCharactersCharacterIDMailRecipients.GetCharactersCharacterIDMailRecipientType()
+					recipientType = Mail.RecipientType(rawValue: aDecoder.decodeObject(forKey: "recipient_type") as? String ?? "") ?? Mail.RecipientType()
 					
 					super.init()
 				}
@@ -583,7 +559,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Mail.Header.GetCharactersCharacterIDMailRecipients, rhs: Mail.Header.GetCharactersCharacterIDMailRecipients) -> Bool {
+				public static func ==(lhs: Mail.Header.Recipient, rhs: Mail.Header.Recipient) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -593,7 +569,7 @@ public extension ESI {
 			public var isRead: Bool? = nil
 			public var labels: [Int64]? = nil
 			public var mailID: Int64? = nil
-			public var recipients: [Mail.Header.GetCharactersCharacterIDMailRecipients]? = nil
+			public var recipients: [Mail.Header.Recipient]? = nil
 			public var subject: String? = nil
 			public var timestamp: Date? = nil
 			
@@ -608,7 +584,7 @@ public extension ESI {
 				isRead = dictionary["is_read"] as? Bool
 				labels = try (dictionary["labels"] as? [Any])?.map {try Int64(json: $0)}
 				mailID = dictionary["mail_id"] as? Int64
-				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Header.GetCharactersCharacterIDMailRecipients(json: $0)}
+				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Header.Recipient(json: $0)}
 				subject = dictionary["subject"] as? String
 				timestamp = DateFormatter.esiDateFormatter.date(from: dictionary["timestamp"] as? String ?? "")
 				
@@ -624,7 +600,7 @@ public extension ESI {
 				isRead = aDecoder.containsValue(forKey: "is_read") ? aDecoder.decodeBool(forKey: "is_read") : nil
 				labels = aDecoder.decodeObject(forKey: "labels") as? [Int64]
 				mailID = aDecoder.containsValue(forKey: "mail_id") ? aDecoder.decodeInt64(forKey: "mail_id") : nil
-				recipients = aDecoder.decodeObject(of: [Mail.Header.GetCharactersCharacterIDMailRecipients.self], forKey: "recipients") as? [Mail.Header.GetCharactersCharacterIDMailRecipients]
+				recipients = aDecoder.decodeObject(of: [Mail.Header.Recipient.self], forKey: "recipients") as? [Mail.Header.Recipient]
 				subject = aDecoder.decodeObject(forKey: "subject") as? String
 				timestamp = aDecoder.decodeObject(forKey: "timestamp") as? Date
 				
@@ -911,6 +887,32 @@ public extension ESI {
 			
 			public static func ==(lhs: Mail.PostCharactersCharacterIDMailInternalServerError, rhs: Mail.PostCharactersCharacterIDMailInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public enum RecipientType: String, JSONCoding, HTTPQueryable {
+			case alliance = "alliance"
+			case character = "character"
+			case corporation = "corporation"
+			case mailingList = "mailing_list"
+			
+			public init() {
+				self = .alliance
+			}
+			
+			public var json: Any {
+				return self.rawValue
+			}
+			
+			public init(json: Any) throws {
+				guard let s = json as? String, let v = RecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				self = v
+			}
+			
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}
@@ -1686,60 +1688,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Mail.GetCharactersCharacterIDMailMailIDNotFound, rhs: Mail.GetCharactersCharacterIDMailMailIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class GetCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -1788,6 +1736,60 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Mail.GetCharactersCharacterIDMailLabelsInternalServerError, rhs: Mail.GetCharactersCharacterIDMailLabelsInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Mail.GetCharactersCharacterIDMailMailIDNotFound, rhs: Mail.GetCharactersCharacterIDMailMailIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -2113,33 +2115,9 @@ public extension ESI {
 			
 			public class Recipient: NSObject, NSSecureCoding , JSONCoding {
 				
-				public enum RecipientType: String, JSONCoding, HTTPQueryable {
-					case alliance = "alliance"
-					case character = "character"
-					case corporation = "corporation"
-					case mailingList = "mailing_list"
-					
-					public init() {
-						self = .alliance
-					}
-					
-					public var json: Any {
-						return self.rawValue
-					}
-					
-					public init(json: Any) throws {
-						guard let s = json as? String, let v = RecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-						self = v
-					}
-					
-					public var httpQuery: String? {
-						return rawValue
-					}
-					
-				}
 				
 				public var recipientID: Int = Int()
-				public var recipientType: Mail.NewMail.Recipient.RecipientType = Mail.NewMail.Recipient.RecipientType()
+				public var recipientType: Mail.RecipientType = Mail.RecipientType()
 				
 				public static var supportsSecureCoding: Bool {
 					return true
@@ -2150,7 +2128,7 @@ public extension ESI {
 					
 					guard let recipientID = dictionary["recipient_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 					self.recipientID = recipientID
-					guard let recipientType = Mail.NewMail.Recipient.RecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let recipientType = Mail.RecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 					self.recipientType = recipientType
 					
 					super.init()
@@ -2162,7 +2140,7 @@ public extension ESI {
 				
 				public required init?(coder aDecoder: NSCoder) {
 					recipientID = aDecoder.decodeInteger(forKey: "recipient_id")
-					recipientType = Mail.NewMail.Recipient.RecipientType(rawValue: aDecoder.decodeObject(forKey: "recipient_type") as? String ?? "") ?? Mail.NewMail.Recipient.RecipientType()
+					recipientType = Mail.RecipientType(rawValue: aDecoder.decodeObject(forKey: "recipient_type") as? String ?? "") ?? Mail.RecipientType()
 					
 					super.init()
 				}
