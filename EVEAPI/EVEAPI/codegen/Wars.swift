@@ -328,146 +328,6 @@ public extension ESI {
 		
 		public class WarInformation: NSObject, NSSecureCoding , JSONCoding {
 			
-			public class GetWarsWarIDAggressor: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var allianceID: Int? = nil
-				public var corporationID: Int? = nil
-				public var iskDestroyed: Float = Float()
-				public var shipsKilled: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					allianceID = dictionary["alliance_id"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					guard let iskDestroyed = dictionary["isk_destroyed"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.iskDestroyed = iskDestroyed
-					guard let shipsKilled = dictionary["ships_killed"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.shipsKilled = shipsKilled
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					iskDestroyed = aDecoder.decodeFloat(forKey: "isk_destroyed")
-					shipsKilled = aDecoder.decodeInteger(forKey: "ships_killed")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = allianceID {
-						aCoder.encode(v, forKey: "alliance_id")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-					aCoder.encode(iskDestroyed, forKey: "isk_destroyed")
-					aCoder.encode(shipsKilled, forKey: "ships_killed")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = allianceID?.json {
-						json["alliance_id"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					json["isk_destroyed"] = iskDestroyed.json
-					json["ships_killed"] = shipsKilled.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: iskDestroyed.hashValue)
-					hashCombine(seed: &hash, value: shipsKilled.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAggressor, rhs: Wars.WarInformation.GetWarsWarIDAggressor) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public class GetWarsWarIDAllies: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var allianceID: Int? = nil
-				public var corporationID: Int? = nil
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					allianceID = dictionary["alliance_id"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = allianceID {
-						aCoder.encode(v, forKey: "alliance_id")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = allianceID?.json {
-						json["alliance_id"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAllies, rhs: Wars.WarInformation.GetWarsWarIDAllies) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
 			public class GetWarsWarIDDefender: NSObject, NSSecureCoding , JSONCoding {
 				
 				
@@ -540,6 +400,146 @@ public extension ESI {
 				}
 				
 				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDDefender, rhs: Wars.WarInformation.GetWarsWarIDDefender) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public class GetWarsWarIDAllies: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var allianceID: Int? = nil
+				public var corporationID: Int? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					allianceID = dictionary["alliance_id"] as? Int
+					corporationID = dictionary["corporation_id"] as? Int
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
+					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = allianceID {
+						aCoder.encode(v, forKey: "alliance_id")
+					}
+					if let v = corporationID {
+						aCoder.encode(v, forKey: "corporation_id")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = allianceID?.json {
+						json["alliance_id"] = v
+					}
+					if let v = corporationID?.json {
+						json["corporation_id"] = v
+					}
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAllies, rhs: Wars.WarInformation.GetWarsWarIDAllies) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public class GetWarsWarIDAggressor: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var allianceID: Int? = nil
+				public var corporationID: Int? = nil
+				public var iskDestroyed: Float = Float()
+				public var shipsKilled: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					allianceID = dictionary["alliance_id"] as? Int
+					corporationID = dictionary["corporation_id"] as? Int
+					guard let iskDestroyed = dictionary["isk_destroyed"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.iskDestroyed = iskDestroyed
+					guard let shipsKilled = dictionary["ships_killed"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.shipsKilled = shipsKilled
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
+					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
+					iskDestroyed = aDecoder.decodeFloat(forKey: "isk_destroyed")
+					shipsKilled = aDecoder.decodeInteger(forKey: "ships_killed")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = allianceID {
+						aCoder.encode(v, forKey: "alliance_id")
+					}
+					if let v = corporationID {
+						aCoder.encode(v, forKey: "corporation_id")
+					}
+					aCoder.encode(iskDestroyed, forKey: "isk_destroyed")
+					aCoder.encode(shipsKilled, forKey: "ships_killed")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = allianceID?.json {
+						json["alliance_id"] = v
+					}
+					if let v = corporationID?.json {
+						json["corporation_id"] = v
+					}
+					json["isk_destroyed"] = iskDestroyed.json
+					json["ships_killed"] = shipsKilled.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: iskDestroyed.hashValue)
+					hashCombine(seed: &hash, value: shipsKilled.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAggressor, rhs: Wars.WarInformation.GetWarsWarIDAggressor) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				

@@ -183,11 +183,10 @@ public extension ESI {
 		}
 		
 		
-		public class Label: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
-			public var labelID: Int64 = Int64()
-			public var labelName: String = String()
+			public var error: String? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -196,10 +195,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				guard let labelID = dictionary["label_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.labelID = labelID
-				guard let labelName = dictionary["label_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.labelName = labelName
+				error = dictionary["error"] as? String
 				
 				super.init()
 			}
@@ -209,32 +205,32 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				labelID = aDecoder.decodeInt64(forKey: "label_id")
-				labelName = aDecoder.decodeObject(forKey: "label_name") as? String ?? String()
+				error = aDecoder.decodeObject(forKey: "error") as? String
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(labelID, forKey: "label_id")
-				aCoder.encode(labelName, forKey: "label_name")
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["label_id"] = labelID.json
-				json["label_name"] = labelName.json
+				if let v = error?.json {
+					json["error"] = v
+				}
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: labelID.hashValue)
-				hashCombine(seed: &hash, value: labelName.hashValue)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Contacts.Label, rhs: Contacts.Label) -> Bool {
+			public static func ==(lhs: Contacts.PostCharactersCharacterIDContactsForbidden, rhs: Contacts.PostCharactersCharacterIDContactsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -295,7 +291,7 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDContactsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -342,7 +338,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Contacts.DeleteCharactersCharacterIDContactsInternalServerError, rhs: Contacts.DeleteCharactersCharacterIDContactsInternalServerError) -> Bool {
+			public static func ==(lhs: Contacts.GetCharactersCharacterIDContactsForbidden, rhs: Contacts.GetCharactersCharacterIDContactsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -619,60 +615,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContactsLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Contacts.GetCharactersCharacterIDContactsLabelsForbidden, rhs: Contacts.GetCharactersCharacterIDContactsLabelsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class Contact: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDContactsContactType: String, JSONCoding, HTTPQueryable {
@@ -792,7 +734,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDContactsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -839,14 +781,14 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Contacts.GetCharactersCharacterIDContactsForbidden, rhs: Contacts.GetCharactersCharacterIDContactsForbidden) -> Bool {
+			public static func ==(lhs: Contacts.DeleteCharactersCharacterIDContactsInternalServerError, rhs: Contacts.DeleteCharactersCharacterIDContactsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 		}
 		
 		
-		public class PostCharactersCharacterIDContactsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDContactsLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -893,7 +835,65 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Contacts.PostCharactersCharacterIDContactsForbidden, rhs: Contacts.PostCharactersCharacterIDContactsForbidden) -> Bool {
+			public static func ==(lhs: Contacts.GetCharactersCharacterIDContactsLabelsForbidden, rhs: Contacts.GetCharactersCharacterIDContactsLabelsForbidden) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class Label: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var labelID: Int64 = Int64()
+			public var labelName: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let labelID = dictionary["label_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.labelID = labelID
+				guard let labelName = dictionary["label_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.labelName = labelName
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				labelID = aDecoder.decodeInt64(forKey: "label_id")
+				labelName = aDecoder.decodeObject(forKey: "label_name") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(labelID, forKey: "label_id")
+				aCoder.encode(labelName, forKey: "label_name")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["label_id"] = labelID.json
+				json["label_name"] = labelName.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: labelID.hashValue)
+				hashCombine(seed: &hash, value: labelName.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Contacts.Label, rhs: Contacts.Label) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

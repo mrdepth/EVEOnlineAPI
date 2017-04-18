@@ -366,90 +366,6 @@ public extension ESI {
 		}
 		
 		
-		public class Portrait: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var px128x128: String? = nil
-			public var px256x256: String? = nil
-			public var px512x512: String? = nil
-			public var px64x64: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				px128x128 = dictionary["px128x128"] as? String
-				px256x256 = dictionary["px256x256"] as? String
-				px512x512 = dictionary["px512x512"] as? String
-				px64x64 = dictionary["px64x64"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				px128x128 = aDecoder.decodeObject(forKey: "px128x128") as? String
-				px256x256 = aDecoder.decodeObject(forKey: "px256x256") as? String
-				px512x512 = aDecoder.decodeObject(forKey: "px512x512") as? String
-				px64x64 = aDecoder.decodeObject(forKey: "px64x64") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = px128x128 {
-					aCoder.encode(v, forKey: "px128x128")
-				}
-				if let v = px256x256 {
-					aCoder.encode(v, forKey: "px256x256")
-				}
-				if let v = px512x512 {
-					aCoder.encode(v, forKey: "px512x512")
-				}
-				if let v = px64x64 {
-					aCoder.encode(v, forKey: "px64x64")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = px128x128?.json {
-					json["px128x128"] = v
-				}
-				if let v = px256x256?.json {
-					json["px256x256"] = v
-				}
-				if let v = px512x512?.json {
-					json["px512x512"] = v
-				}
-				if let v = px64x64?.json {
-					json["px64x64"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px256x256?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px512x512?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Portrait, rhs: Character.Portrait) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class GetCharactersCharacterIDStandingsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -558,7 +474,91 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDChatChannelsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class Portrait: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var px128x128: String? = nil
+			public var px256x256: String? = nil
+			public var px512x512: String? = nil
+			public var px64x64: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				px128x128 = dictionary["px128x128"] as? String
+				px256x256 = dictionary["px256x256"] as? String
+				px512x512 = dictionary["px512x512"] as? String
+				px64x64 = dictionary["px64x64"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				px128x128 = aDecoder.decodeObject(forKey: "px128x128") as? String
+				px256x256 = aDecoder.decodeObject(forKey: "px256x256") as? String
+				px512x512 = aDecoder.decodeObject(forKey: "px512x512") as? String
+				px64x64 = aDecoder.decodeObject(forKey: "px64x64") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = px128x128 {
+					aCoder.encode(v, forKey: "px128x128")
+				}
+				if let v = px256x256 {
+					aCoder.encode(v, forKey: "px256x256")
+				}
+				if let v = px512x512 {
+					aCoder.encode(v, forKey: "px512x512")
+				}
+				if let v = px64x64 {
+					aCoder.encode(v, forKey: "px64x64")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = px128x128?.json {
+					json["px128x128"] = v
+				}
+				if let v = px256x256?.json {
+					json["px256x256"] = v
+				}
+				if let v = px512x512?.json {
+					json["px512x512"] = v
+				}
+				if let v = px64x64?.json {
+					json["px64x64"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px256x256?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px512x512?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Portrait, rhs: Character.Portrait) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDStandingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -605,7 +605,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Character.GetCharactersCharacterIDChatChannelsForbidden, rhs: Character.GetCharactersCharacterIDChatChannelsForbidden) -> Bool {
+			public static func ==(lhs: Character.GetCharactersCharacterIDStandingsInternalServerError, rhs: Character.GetCharactersCharacterIDStandingsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -720,10 +720,310 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class ChatChannel: NSObject, NSSecureCoding , JSONCoding {
 			
+			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				
+				public init() {
+					self = .character
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDChatChannelsAccessorType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
-			public var error: String? = nil
+			public class GetCharactersCharacterIDChatChannelsAllowed: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var accessorID: Int = Int()
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorID = accessorID
+					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorType = accessorType
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
+					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(accessorID, forKey: "accessor_id")
+					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["accessor_id"] = accessorID.json
+					json["accessor_type"] = accessorType.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public class GetCharactersCharacterIDChatChannelsMuted: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var accessorID: Int = Int()
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+				public var endAt: Date? = nil
+				public var reason: String? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorID = accessorID
+					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorType = accessorType
+					endAt = DateFormatter.esiDateFormatter.date(from: dictionary["end_at"] as? String ?? "")
+					reason = dictionary["reason"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
+					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+					endAt = aDecoder.decodeObject(forKey: "end_at") as? Date
+					reason = aDecoder.decodeObject(forKey: "reason") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(accessorID, forKey: "accessor_id")
+					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
+					if let v = endAt {
+						aCoder.encode(v, forKey: "end_at")
+					}
+					if let v = reason {
+						aCoder.encode(v, forKey: "reason")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["accessor_id"] = accessorID.json
+					json["accessor_type"] = accessorType.json
+					if let v = endAt?.json {
+						json["end_at"] = v
+					}
+					if let v = reason?.json {
+						json["reason"] = v
+					}
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
+					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public class GetCharactersCharacterIDChatChannelsOperators: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var accessorID: Int = Int()
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorID = accessorID
+					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorType = accessorType
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
+					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(accessorID, forKey: "accessor_id")
+					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["accessor_id"] = accessorID.json
+					json["accessor_type"] = accessorType.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public class GetCharactersCharacterIDChatChannelsBlocked: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var accessorID: Int = Int()
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+				public var endAt: Date? = nil
+				public var reason: String? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorID = accessorID
+					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.accessorType = accessorType
+					endAt = DateFormatter.esiDateFormatter.date(from: dictionary["end_at"] as? String ?? "")
+					reason = dictionary["reason"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
+					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+					endAt = aDecoder.decodeObject(forKey: "end_at") as? Date
+					reason = aDecoder.decodeObject(forKey: "reason") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(accessorID, forKey: "accessor_id")
+					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
+					if let v = endAt {
+						aCoder.encode(v, forKey: "end_at")
+					}
+					if let v = reason {
+						aCoder.encode(v, forKey: "reason")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["accessor_id"] = accessorID.json
+					json["accessor_type"] = accessorType.json
+					if let v = endAt?.json {
+						json["end_at"] = v
+					}
+					if let v = reason?.json {
+						json["reason"] = v
+					}
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
+					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public var allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed] = []
+			public var blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked] = []
+			public var channelID: Int = Int()
+			public var comparisonKey: String = String()
+			public var hasPassword: Bool = Bool()
+			public var motd: String = String()
+			public var muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted] = []
+			public var name: String = String()
+			public var operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators] = []
+			public var ownerID: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -732,7 +1032,22 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				allowed = try (dictionary["allowed"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed(json: $0)} ?? []
+				blocked = try (dictionary["blocked"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked(json: $0)} ?? []
+				guard let channelID = dictionary["channel_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.channelID = channelID
+				guard let comparisonKey = dictionary["comparison_key"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.comparisonKey = comparisonKey
+				guard let hasPassword = dictionary["has_password"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.hasPassword = hasPassword
+				guard let motd = dictionary["motd"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.motd = motd
+				muted = try (dictionary["muted"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted(json: $0)} ?? []
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.name = name
+				operators = try (dictionary["operators"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators(json: $0)} ?? []
+				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.ownerID = ownerID
 				
 				super.init()
 			}
@@ -742,32 +1057,64 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				allowed = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed.self], forKey: "allowed") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed] ?? []
+				blocked = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked.self], forKey: "blocked") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked] ?? []
+				channelID = aDecoder.decodeInteger(forKey: "channel_id")
+				comparisonKey = aDecoder.decodeObject(forKey: "comparison_key") as? String ?? String()
+				hasPassword = aDecoder.decodeBool(forKey: "has_password")
+				motd = aDecoder.decodeObject(forKey: "motd") as? String ?? String()
+				muted = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted.self], forKey: "muted") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted] ?? []
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				operators = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators.self], forKey: "operators") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators] ?? []
+				ownerID = aDecoder.decodeInteger(forKey: "owner_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(allowed, forKey: "allowed")
+				aCoder.encode(blocked, forKey: "blocked")
+				aCoder.encode(channelID, forKey: "channel_id")
+				aCoder.encode(comparisonKey, forKey: "comparison_key")
+				aCoder.encode(hasPassword, forKey: "has_password")
+				aCoder.encode(motd, forKey: "motd")
+				aCoder.encode(muted, forKey: "muted")
+				aCoder.encode(name, forKey: "name")
+				aCoder.encode(operators, forKey: "operators")
+				aCoder.encode(ownerID, forKey: "owner_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["allowed"] = allowed.json
+				json["blocked"] = blocked.json
+				json["channel_id"] = channelID.json
+				json["comparison_key"] = comparisonKey.json
+				json["has_password"] = hasPassword.json
+				json["motd"] = motd.json
+				json["muted"] = muted.json
+				json["name"] = name.json
+				json["operators"] = operators.json
+				json["owner_id"] = ownerID.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				allowed.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				blocked.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: channelID.hashValue)
+				hashCombine(seed: &hash, value: comparisonKey.hashValue)
+				hashCombine(seed: &hash, value: hasPassword.hashValue)
+				hashCombine(seed: &hash, value: motd.hashValue)
+				muted.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: name.hashValue)
+				operators.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: ownerID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
+			public static func ==(lhs: Character.ChatChannel, rhs: Character.ChatChannel) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -916,407 +1263,6 @@ public extension ESI {
 		}
 		
 		
-		public class ChatChannel: NSObject, NSSecureCoding , JSONCoding {
-			
-			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDChatChannelsAccessorType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public class GetCharactersCharacterIDChatChannelsOperators: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorType = accessorType
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public class GetCharactersCharacterIDChatChannelsBlocked: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-				public var endAt: Date? = nil
-				public var reason: String? = nil
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorType = accessorType
-					endAt = DateFormatter.esiDateFormatter.date(from: dictionary["end_at"] as? String ?? "")
-					reason = dictionary["reason"] as? String
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					endAt = aDecoder.decodeObject(forKey: "end_at") as? Date
-					reason = aDecoder.decodeObject(forKey: "reason") as? String
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-					if let v = endAt {
-						aCoder.encode(v, forKey: "end_at")
-					}
-					if let v = reason {
-						aCoder.encode(v, forKey: "reason")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					if let v = endAt?.json {
-						json["end_at"] = v
-					}
-					if let v = reason?.json {
-						json["reason"] = v
-					}
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public class GetCharactersCharacterIDChatChannelsAllowed: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorType = accessorType
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public class GetCharactersCharacterIDChatChannelsMuted: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-				public var endAt: Date? = nil
-				public var reason: String? = nil
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.accessorType = accessorType
-					endAt = DateFormatter.esiDateFormatter.date(from: dictionary["end_at"] as? String ?? "")
-					reason = dictionary["reason"] as? String
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					endAt = aDecoder.decodeObject(forKey: "end_at") as? Date
-					reason = aDecoder.decodeObject(forKey: "reason") as? String
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-					if let v = endAt {
-						aCoder.encode(v, forKey: "end_at")
-					}
-					if let v = reason {
-						aCoder.encode(v, forKey: "reason")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					if let v = endAt?.json {
-						json["end_at"] = v
-					}
-					if let v = reason?.json {
-						json["reason"] = v
-					}
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public var allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed] = []
-			public var blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked] = []
-			public var channelID: Int = Int()
-			public var comparisonKey: String = String()
-			public var hasPassword: Bool = Bool()
-			public var motd: String = String()
-			public var muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted] = []
-			public var name: String = String()
-			public var operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators] = []
-			public var ownerID: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				allowed = try (dictionary["allowed"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed(json: $0)} ?? []
-				blocked = try (dictionary["blocked"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked(json: $0)} ?? []
-				guard let channelID = dictionary["channel_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.channelID = channelID
-				guard let comparisonKey = dictionary["comparison_key"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.comparisonKey = comparisonKey
-				guard let hasPassword = dictionary["has_password"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.hasPassword = hasPassword
-				guard let motd = dictionary["motd"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.motd = motd
-				muted = try (dictionary["muted"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted(json: $0)} ?? []
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.name = name
-				operators = try (dictionary["operators"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators(json: $0)} ?? []
-				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.ownerID = ownerID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allowed = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed.self], forKey: "allowed") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed] ?? []
-				blocked = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked.self], forKey: "blocked") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked] ?? []
-				channelID = aDecoder.decodeInteger(forKey: "channel_id")
-				comparisonKey = aDecoder.decodeObject(forKey: "comparison_key") as? String ?? String()
-				hasPassword = aDecoder.decodeBool(forKey: "has_password")
-				motd = aDecoder.decodeObject(forKey: "motd") as? String ?? String()
-				muted = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted.self], forKey: "muted") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted] ?? []
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				operators = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators.self], forKey: "operators") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators] ?? []
-				ownerID = aDecoder.decodeInteger(forKey: "owner_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(allowed, forKey: "allowed")
-				aCoder.encode(blocked, forKey: "blocked")
-				aCoder.encode(channelID, forKey: "channel_id")
-				aCoder.encode(comparisonKey, forKey: "comparison_key")
-				aCoder.encode(hasPassword, forKey: "has_password")
-				aCoder.encode(motd, forKey: "motd")
-				aCoder.encode(muted, forKey: "muted")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(operators, forKey: "operators")
-				aCoder.encode(ownerID, forKey: "owner_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["allowed"] = allowed.json
-				json["blocked"] = blocked.json
-				json["channel_id"] = channelID.json
-				json["comparison_key"] = comparisonKey.json
-				json["has_password"] = hasPassword.json
-				json["motd"] = motd.json
-				json["muted"] = muted.json
-				json["name"] = name.json
-				json["operators"] = operators.json
-				json["owner_id"] = ownerID.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				allowed.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				blocked.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: channelID.hashValue)
-				hashCombine(seed: &hash, value: comparisonKey.hashValue)
-				hashCombine(seed: &hash, value: hasPassword.hashValue)
-				hashCombine(seed: &hash, value: motd.hashValue)
-				muted.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				operators.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.ChatChannel, rhs: Character.ChatChannel) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class GetCharactersCharacterIDChatChannelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -1365,6 +1311,60 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDChatChannelsInternalServerError, rhs: Character.GetCharactersCharacterIDChatChannelsInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -2340,60 +2340,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMedalsForbidden: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDMedalsForbidden, rhs: Character.GetCharactersCharacterIDMedalsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class PostCharactersCharacterIDCspaInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -2442,6 +2388,60 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Character.PostCharactersCharacterIDCspaInternalServerError, rhs: Character.PostCharactersCharacterIDCspaInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDMedalsForbidden: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDMedalsForbidden, rhs: Character.GetCharactersCharacterIDMedalsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -2556,7 +2556,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDStandingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDChatChannelsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2603,7 +2603,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Character.GetCharactersCharacterIDStandingsInternalServerError, rhs: Character.GetCharactersCharacterIDStandingsInternalServerError) -> Bool {
+			public static func ==(lhs: Character.GetCharactersCharacterIDChatChannelsForbidden, rhs: Character.GetCharactersCharacterIDChatChannelsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

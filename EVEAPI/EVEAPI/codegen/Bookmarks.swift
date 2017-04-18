@@ -187,6 +187,63 @@ public extension ESI {
 			
 			public class GetCharactersCharacterIDBookmarksTarget: NSObject, NSSecureCoding , JSONCoding {
 				
+				public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding , JSONCoding {
+					
+					
+					public var itemID: Int64 = Int64()
+					public var typeID: Int = Int()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
+					
+					public required init(json: Any) throws {
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						
+						guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.itemID = itemID
+						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.typeID = typeID
+						
+						super.init()
+					}
+					
+					override public init() {
+						super.init()
+					}
+					
+					public required init?(coder aDecoder: NSCoder) {
+						itemID = aDecoder.decodeInt64(forKey: "item_id")
+						typeID = aDecoder.decodeInteger(forKey: "type_id")
+						
+						super.init()
+					}
+					
+					public func encode(with aCoder: NSCoder) {
+						aCoder.encode(itemID, forKey: "item_id")
+						aCoder.encode(typeID, forKey: "type_id")
+					}
+					
+					public var json: Any {
+						var json = [String: Any]()
+						json["item_id"] = itemID.json
+						json["type_id"] = typeID.json
+						return json
+					}
+					
+					override public var hashValue: Int {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: itemID.hashValue)
+						hashCombine(seed: &hash, value: typeID.hashValue)
+						return hash
+					}
+					
+					public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+				}
+				
 				public class GetCharactersCharacterIDBookmarksCoordinates: NSObject, NSSecureCoding , JSONCoding {
 					
 					
@@ -246,63 +303,6 @@ public extension ESI {
 					}
 					
 					public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-				}
-				
-				public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding , JSONCoding {
-					
-					
-					public var itemID: Int64 = Int64()
-					public var typeID: Int = Int()
-					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
-					
-					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-						
-						guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.itemID = itemID
-						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.typeID = typeID
-						
-						super.init()
-					}
-					
-					override public init() {
-						super.init()
-					}
-					
-					public required init?(coder aDecoder: NSCoder) {
-						itemID = aDecoder.decodeInt64(forKey: "item_id")
-						typeID = aDecoder.decodeInteger(forKey: "type_id")
-						
-						super.init()
-					}
-					
-					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(itemID, forKey: "item_id")
-						aCoder.encode(typeID, forKey: "type_id")
-					}
-					
-					public var json: Any {
-						var json = [String: Any]()
-						json["item_id"] = itemID.json
-						json["type_id"] = typeID.json
-						return json
-					}
-					
-					override public var hashValue: Int {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: itemID.hashValue)
-						hashCombine(seed: &hash, value: typeID.hashValue)
-						return hash
-					}
-					
-					public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem) -> Bool {
 						return lhs.hashValue == rhs.hashValue
 					}
 					

@@ -654,60 +654,6 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden, rhs: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class GetCharactersCharacterIDCalendarForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -756,6 +702,60 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Calendar.GetCharactersCharacterIDCalendarForbidden, rhs: Calendar.GetCharactersCharacterIDCalendarForbidden) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class PutCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden, rhs: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

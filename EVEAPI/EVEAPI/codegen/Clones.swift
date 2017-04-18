@@ -155,6 +155,29 @@ public extension ESI {
 		
 		public class JumpClones: NSObject, NSSecureCoding , JSONCoding {
 			
+			public enum GetCharactersCharacterIDClonesLocationType: String, JSONCoding, HTTPQueryable {
+				case station = "station"
+				case structure = "structure"
+				
+				public init() {
+					self = .station
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDClonesLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
 			public class GetCharactersCharacterIDClonesJumpClones: NSObject, NSSecureCoding , JSONCoding {
 				
 				
@@ -224,29 +247,6 @@ public extension ESI {
 				
 				public static func ==(lhs: Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones, rhs: Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones) -> Bool {
 					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDClonesLocationType: String, JSONCoding, HTTPQueryable {
-				case station = "station"
-				case structure = "structure"
-				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDClonesLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
 				}
 				
 			}

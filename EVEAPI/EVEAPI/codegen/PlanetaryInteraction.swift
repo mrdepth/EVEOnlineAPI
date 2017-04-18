@@ -104,6 +104,114 @@ public extension ESI {
 		}
 		
 		
+		public class GetCharactersCharacterIDPlanetsPlanetIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDForbidden, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDForbidden) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
 		public class Colony: NSObject, NSSecureCoding , JSONCoding {
 			
 			public enum GetCharactersCharacterIDPlanetsPlanetType: String, JSONCoding, HTTPQueryable {
@@ -225,114 +333,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDPlanetsForbidden: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsForbidden, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class GetUniverseSchematicsSchematicIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -387,60 +387,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-		}
-		
-		
 		public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
@@ -489,6 +435,60 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDPlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -636,6 +636,70 @@ public extension ESI {
 				}
 				
 				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+			}
+			
+			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSSecureCoding , JSONCoding {
+				
+				
+				public var destinationPinID: Int64 = Int64()
+				public var linkLevel: Int = Int()
+				public var sourcePinID: Int64 = Int64()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.destinationPinID = destinationPinID
+					guard let linkLevel = dictionary["link_level"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.linkLevel = linkLevel
+					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.sourcePinID = sourcePinID
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					destinationPinID = aDecoder.decodeInt64(forKey: "destination_pin_id")
+					linkLevel = aDecoder.decodeInteger(forKey: "link_level")
+					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(destinationPinID, forKey: "destination_pin_id")
+					aCoder.encode(linkLevel, forKey: "link_level")
+					aCoder.encode(sourcePinID, forKey: "source_pin_id")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["destination_pin_id"] = destinationPinID.json
+					json["link_level"] = linkLevel.json
+					json["source_pin_id"] = sourcePinID.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: linkLevel.hashValue)
+					hashCombine(seed: &hash, value: sourcePinID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -973,70 +1037,6 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSSecureCoding , JSONCoding {
-				
-				
-				public var destinationPinID: Int64 = Int64()
-				public var linkLevel: Int = Int()
-				public var sourcePinID: Int64 = Int64()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.destinationPinID = destinationPinID
-					guard let linkLevel = dictionary["link_level"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.linkLevel = linkLevel
-					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.sourcePinID = sourcePinID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					destinationPinID = aDecoder.decodeInt64(forKey: "destination_pin_id")
-					linkLevel = aDecoder.decodeInteger(forKey: "link_level")
-					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(destinationPinID, forKey: "destination_pin_id")
-					aCoder.encode(linkLevel, forKey: "link_level")
-					aCoder.encode(sourcePinID, forKey: "source_pin_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["destination_pin_id"] = destinationPinID.json
-					json["link_level"] = linkLevel.json
-					json["source_pin_id"] = sourcePinID.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: linkLevel.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-			}
-			
 			public var links: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] = []
 			public var pins: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins] = []
 			public var routes: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes] = []
@@ -1150,7 +1150,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsForbidden: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1197,7 +1197,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDForbidden, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDForbidden) -> Bool {
+			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsForbidden, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

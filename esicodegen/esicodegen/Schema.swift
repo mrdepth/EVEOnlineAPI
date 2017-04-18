@@ -81,7 +81,7 @@ class Schema: Namespace {
 	
 	override var hashValue: Int {
 		var h = [AnyHashable]()
-		h.append(title)
+		h.append(typeName)
 		h.append(type)
 		
 		if let properties = properties {

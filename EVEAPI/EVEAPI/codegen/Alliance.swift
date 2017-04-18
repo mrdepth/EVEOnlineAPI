@@ -162,7 +162,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -209,7 +209,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesNamesInternalServerError, rhs: Alliance.GetAlliancesNamesInternalServerError) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsNotFound, rhs: Alliance.GetAlliancesAllianceIDIconsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -328,7 +328,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -375,7 +375,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -436,7 +436,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -483,7 +483,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -608,7 +608,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -655,7 +655,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsNotFound, rhs: Alliance.GetAlliancesAllianceIDIconsNotFound) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesNamesInternalServerError, rhs: Alliance.GetAlliancesNamesInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

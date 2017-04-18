@@ -260,7 +260,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -307,7 +307,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Search.GetCharactersCharacterIDSearchInternalServerError, rhs: Search.GetCharactersCharacterIDSearchInternalServerError) -> Bool {
+			public static func ==(lhs: Search.GetSearchInternalServerError, rhs: Search.GetSearchInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -368,7 +368,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -415,7 +415,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Search.GetSearchInternalServerError, rhs: Search.GetSearchInternalServerError) -> Bool {
+			public static func ==(lhs: Search.GetCharactersCharacterIDSearchInternalServerError, rhs: Search.GetCharactersCharacterIDSearchInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
