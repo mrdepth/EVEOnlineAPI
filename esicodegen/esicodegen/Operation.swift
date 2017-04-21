@@ -107,7 +107,10 @@ class Operation {
 		}
 		
 //		parameterStrings.insert("\(parameterStrings.count > 0 ? "var" : "let") parameters = Parameters()", at: 0)
-		headerStrings.insert("\(headerStrings.count > 0 ? "var" : "let") headers = HTTPHeaders()", at: 0)
+		if method != .get {
+			headerStrings.append("headers[\"Content-Type\"] = \"application/json\"")
+		}
+//		headerStrings.insert("\(headerStrings.count > 0 ? "var" : "let") headers = HTTPHeaders()", at: 0)
 		
 		for scope in self.security?.security ?? [] {
 			let s = "guard scopes.contains(\"\(scope)\") else {completionBlock?(.failure(ESIError.forbidden)); return}"

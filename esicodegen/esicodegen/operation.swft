@@ -6,6 +6,9 @@
 		
 		{body}
 
+		var headers = HTTPHeaders()
+		headers["Accept"] = "application/json"
+
 		{headers}
 
 		var query = [URLQueryItem]()

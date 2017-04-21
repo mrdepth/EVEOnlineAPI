@@ -23,7 +23,10 @@ public extension ESI {
 			
 			let body: Data? = nil
 			
-			let headers = HTTPHeaders()
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -53,7 +56,10 @@ public extension ESI {
 			
 			let body: Data? = nil
 			
-			let headers = HTTPHeaders()
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

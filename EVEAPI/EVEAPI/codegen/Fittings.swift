@@ -23,7 +23,10 @@ public extension ESI {
 			
 			let body = fitting != nil ? (try? JSONSerialization.data(withJSONObject: fitting!.json, options: [])) : nil
 			
-			let headers = HTTPHeaders()
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -53,7 +56,10 @@ public extension ESI {
 			
 			let body: Data? = nil
 			
-			let headers = HTTPHeaders()
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -83,7 +89,10 @@ public extension ESI {
 			
 			let body: Data? = nil
 			
-			let headers = HTTPHeaders()
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
