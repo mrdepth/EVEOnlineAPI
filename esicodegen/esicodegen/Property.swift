@@ -160,5 +160,9 @@ class Property: Schema {
 			"hashCombine(seed: &hash, value: \(propertyName)?.hashValue ?? 0)"
 		}
 	}
+	
+	var copy: String {
+		return "\(propertyName) = \(copy(from: "other." + propertyName, isRequired: isRequired))"
+	}
 
 }

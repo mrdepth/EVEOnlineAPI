@@ -143,9 +143,9 @@ public extension ESI {
 		}
 		
 		
-		public class Effect: NSObject, NSSecureCoding , JSONCoding {
+		public class Effect: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetDogmaEffectsEffectIDModifiers: NSObject, NSSecureCoding , JSONCoding {
+			public class GetDogmaEffectsEffectIDModifiers: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var domain: String = String()
@@ -219,6 +219,23 @@ public extension ESI {
 				
 				public static func ==(lhs: Dogma.Effect.GetDogmaEffectsEffectIDModifiers, rhs: Dogma.Effect.GetDogmaEffectsEffectIDModifiers) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Dogma.Effect.GetDogmaEffectsEffectIDModifiers) {
+					domain = other.domain
+					`func` = other.`func`
+					modifiedAttributeID = other.modifiedAttributeID
+					modifyingAttributeID = other.modifyingAttributeID
+					`operator` = other.`operator`
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Dogma.Effect.GetDogmaEffectsEffectIDModifiers(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetDogmaEffectsEffectIDModifiers)?.hashValue == hashValue
 				}
 				
 			}
@@ -468,10 +485,43 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.Effect) {
+				localizedDescription = other.localizedDescription
+				disallowAutoRepeat = other.disallowAutoRepeat
+				dischargeAttributeID = other.dischargeAttributeID
+				displayName = other.displayName
+				durationAttributeID = other.durationAttributeID
+				effectCategory = other.effectCategory
+				effectID = other.effectID
+				electronicChance = other.electronicChance
+				falloffAttributeID = other.falloffAttributeID
+				iconID = other.iconID
+				isAssistance = other.isAssistance
+				isOffensive = other.isOffensive
+				isWarpSafe = other.isWarpSafe
+				modifiers = other.modifiers?.flatMap { Dogma.Effect.GetDogmaEffectsEffectIDModifiers($0) }
+				name = other.name
+				postExpression = other.postExpression
+				preExpression = other.preExpression
+				published = other.published
+				rangeAttributeID = other.rangeAttributeID
+				rangeChance = other.rangeChance
+				trackingSpeedAttributeID = other.trackingSpeedAttributeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.Effect(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Effect)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetDogmaEffectsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetDogmaEffectsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -522,10 +572,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.GetDogmaEffectsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.GetDogmaEffectsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetDogmaEffectsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetDogmaEffectsEffectIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetDogmaEffectsEffectIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -576,10 +639,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.GetDogmaEffectsEffectIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.GetDogmaEffectsEffectIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetDogmaEffectsEffectIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetDogmaEffectsEffectIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetDogmaEffectsEffectIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -630,10 +706,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.GetDogmaEffectsEffectIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.GetDogmaEffectsEffectIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetDogmaEffectsEffectIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetDogmaAttributesAttributeIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetDogmaAttributesAttributeIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -684,10 +773,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.GetDogmaAttributesAttributeIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.GetDogmaAttributesAttributeIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetDogmaAttributesAttributeIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetDogmaAttributesAttributeIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetDogmaAttributesAttributeIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -738,10 +840,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.GetDogmaAttributesAttributeIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.GetDogmaAttributesAttributeIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetDogmaAttributesAttributeIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Attribute: NSObject, NSSecureCoding , JSONCoding {
+		public class Attribute: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var attributeID: Int = Int()
@@ -879,10 +994,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Dogma.Attribute) {
+				attributeID = other.attributeID
+				defaultValue = other.defaultValue
+				localizedDescription = other.localizedDescription
+				displayName = other.displayName
+				highIsGood = other.highIsGood
+				iconID = other.iconID
+				name = other.name
+				published = other.published
+				stackable = other.stackable
+				unitID = other.unitID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.Attribute(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Attribute)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetDogmaAttributesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetDogmaAttributesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -931,6 +1068,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Dogma.GetDogmaAttributesInternalServerError, rhs: Dogma.GetDogmaAttributesInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Dogma.GetDogmaAttributesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Dogma.GetDogmaAttributesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetDogmaAttributesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

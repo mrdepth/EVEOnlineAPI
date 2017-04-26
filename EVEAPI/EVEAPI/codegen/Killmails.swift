@@ -85,7 +85,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -136,12 +136,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetKillmailsKillmailIDKillmailHashUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Killmail: NSObject, NSSecureCoding , JSONCoding {
+		public class Killmail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetKillmailsKillmailIDKillmailHashAttackers: NSObject, NSSecureCoding , JSONCoding {
+			public class GetKillmailsKillmailIDKillmailHashAttackers: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int? = nil
@@ -263,11 +276,32 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers) {
+					allianceID = other.allianceID
+					characterID = other.characterID
+					corporationID = other.corporationID
+					damageDone = other.damageDone
+					factionID = other.factionID
+					finalBlow = other.finalBlow
+					securityStatus = other.securityStatus
+					shipTypeID = other.shipTypeID
+					weaponTypeID = other.weaponTypeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetKillmailsKillmailIDKillmailHashAttackers)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetKillmailsKillmailIDKillmailHashVictim: NSObject, NSSecureCoding , JSONCoding {
+			public class GetKillmailsKillmailIDKillmailHashVictim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding , JSONCoding {
+				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var x: Float = Float()
@@ -329,11 +363,26 @@ public extension ESI {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
+					init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition) {
+						x = other.x
+						y = other.y
+						z = other.z
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetKillmailsKillmailIDKillmailHashPosition)?.hashValue == hashValue
+					}
+					
 				}
 				
-				public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding , JSONCoding {
+				public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
-					public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding , JSONCoding {
+					public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 						
 						
 						public var flag: Int = Int()
@@ -413,6 +462,23 @@ public extension ESI {
 						
 						public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems) -> Bool {
 							return lhs.hashValue == rhs.hashValue
+						}
+						
+						init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems) {
+							flag = other.flag
+							itemTypeID = other.itemTypeID
+							quantityDestroyed = other.quantityDestroyed
+							quantityDropped = other.quantityDropped
+							singleton = other.singleton
+						}
+						
+						public func copy(with zone: NSZone? = nil) -> Any {
+							return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems(self)
+						}
+						
+						
+						public override func isEqual(_ object: Any?) -> Bool {
+							return (object as? GetKillmailsKillmailIDKillmailHashItems)?.hashValue == hashValue
 						}
 						
 					}
@@ -504,6 +570,24 @@ public extension ESI {
 					
 					public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems) -> Bool {
 						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems) {
+						flag = other.flag
+						itemTypeID = other.itemTypeID
+						items = other.items?.flatMap { Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems($0) }
+						quantityDestroyed = other.quantityDestroyed
+						quantityDropped = other.quantityDropped
+						singleton = other.singleton
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetKillmailsKillmailIDKillmailHashItems)?.hashValue == hashValue
 					}
 					
 				}
@@ -620,6 +704,26 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim) {
+					allianceID = other.allianceID
+					characterID = other.characterID
+					corporationID = other.corporationID
+					damageTaken = other.damageTaken
+					factionID = other.factionID
+					items = other.items?.flatMap { Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems($0) }
+					position = other.position != nil ? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition(other.position!) : nil
+					shipTypeID = other.shipTypeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetKillmailsKillmailIDKillmailHashVictim)?.hashValue == hashValue
+				}
+				
 			}
 			
 			public var attackers: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers] = []
@@ -713,10 +817,29 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Killmails.Killmail) {
+				attackers = other.attackers.flatMap { Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers($0) }
+				killmailID = other.killmailID
+				killmailTime = other.killmailTime
+				moonID = other.moonID
+				solarSystemID = other.solarSystemID
+				victim = Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim(other.victim)
+				warID = other.warID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.Killmail(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Killmail)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDKillmailsRecentForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDKillmailsRecentForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -767,10 +890,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Killmails.GetCharactersCharacterIDKillmailsRecentForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.GetCharactersCharacterIDKillmailsRecentForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDKillmailsRecentForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Recent: NSObject, NSSecureCoding , JSONCoding {
+		public class Recent: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var killmailHash: String = String()
@@ -825,10 +961,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Killmails.Recent) {
+				killmailHash = other.killmailHash
+				killmailID = other.killmailID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.Recent(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Recent)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDKillmailsRecentInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDKillmailsRecentInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -879,10 +1029,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Killmails.GetCharactersCharacterIDKillmailsRecentInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.GetCharactersCharacterIDKillmailsRecentInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDKillmailsRecentInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetKillmailsKillmailIDKillmailHashInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetKillmailsKillmailIDKillmailHashInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -931,6 +1094,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError, rhs: Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetKillmailsKillmailIDKillmailHashInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

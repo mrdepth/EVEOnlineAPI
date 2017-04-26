@@ -194,7 +194,7 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowContractForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowContractForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -245,10 +245,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowContractForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowContractForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowContractForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -299,10 +312,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowNewmailUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowNewmailUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowNewmailUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowNewmailForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowNewmailForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -353,10 +379,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowNewmailForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowNewmailForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowNewmailForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiAutopilotWaypointInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiAutopilotWaypointInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -407,10 +446,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiAutopilotWaypointInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiAutopilotWaypointInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiAutopilotWaypointInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class NewMail: NSObject, NSSecureCoding , JSONCoding {
+		public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var body: String = String()
@@ -491,10 +543,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.NewMail) {
+				body = other.body
+				recipients = other.recipients.flatMap { $0 }
+				subject = other.subject
+				toCorpOrAllianceID = other.toCorpOrAllianceID
+				toMailingListID = other.toMailingListID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.NewMail(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? NewMail)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowMarketdetailsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowMarketdetailsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -545,10 +614,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowMarketdetailsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowMarketdetailsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowMarketdetailsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiAutopilotWaypointForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiAutopilotWaypointForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -599,10 +681,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiAutopilotWaypointForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiAutopilotWaypointForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiAutopilotWaypointForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowContractInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowContractInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -653,10 +748,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowContractInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowContractInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowContractInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowInformationForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowInformationForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -707,10 +815,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowInformationForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowInformationForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowInformationForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowNewmailInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowNewmailInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -761,10 +882,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowNewmailInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowNewmailInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowNewmailInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowInformationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowInformationInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -815,10 +949,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: UserInterface.PostUiOpenwindowInformationInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowInformationInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowInformationInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUiOpenwindowMarketdetailsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUiOpenwindowMarketdetailsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -867,6 +1014,19 @@ public extension ESI {
 			
 			public static func ==(lhs: UserInterface.PostUiOpenwindowMarketdetailsForbidden, rhs: UserInterface.PostUiOpenwindowMarketdetailsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: UserInterface.PostUiOpenwindowMarketdetailsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return UserInterface.PostUiOpenwindowMarketdetailsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUiOpenwindowMarketdetailsForbidden)?.hashValue == hashValue
 			}
 			
 		}

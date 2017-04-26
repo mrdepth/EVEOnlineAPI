@@ -81,7 +81,7 @@ public extension ESI {
 		}
 		
 		
-		public class SkillQueueItem: NSObject, NSSecureCoding , JSONCoding {
+		public class SkillQueueItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var finishDate: Date? = nil
@@ -193,10 +193,30 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Skills.SkillQueueItem) {
+				finishDate = other.finishDate
+				finishedLevel = other.finishedLevel
+				levelEndSP = other.levelEndSP
+				levelStartSP = other.levelStartSP
+				queuePosition = other.queuePosition
+				skillID = other.skillID
+				startDate = other.startDate
+				trainingStartSP = other.trainingStartSP
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.SkillQueueItem(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SkillQueueItem)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillqueueForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillqueueForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -247,12 +267,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Skills.GetCharactersCharacterIDSkillqueueForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.GetCharactersCharacterIDSkillqueueForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSkillqueueForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class CharacterSkills: NSObject, NSSecureCoding , JSONCoding {
+		public class CharacterSkills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class Skill: NSObject, NSSecureCoding , JSONCoding {
+			public class Skill: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var currentSkillLevel: Int? = nil
@@ -323,6 +356,21 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Skills.CharacterSkills.Skill) {
+					currentSkillLevel = other.currentSkillLevel
+					skillID = other.skillID
+					skillpointsInSkill = other.skillpointsInSkill
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Skills.CharacterSkills.Skill(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? Skill)?.hashValue == hashValue
+				}
+				
 			}
 			
 			public var skills: [Skills.CharacterSkills.Skill]? = nil
@@ -383,10 +431,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Skills.CharacterSkills) {
+				skills = other.skills?.flatMap { Skills.CharacterSkills.Skill($0) }
+				totalSP = other.totalSP
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.CharacterSkills(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CharacterSkills)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -437,10 +499,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Skills.GetCharactersCharacterIDSkillsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.GetCharactersCharacterIDSkillsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSkillsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillqueueInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillqueueInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -491,10 +566,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Skills.GetCharactersCharacterIDSkillqueueInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.GetCharactersCharacterIDSkillqueueInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSkillqueueInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDSkillsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSkillsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -543,6 +631,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Skills.GetCharactersCharacterIDSkillsInternalServerError, rhs: Skills.GetCharactersCharacterIDSkillsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Skills.GetCharactersCharacterIDSkillsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.GetCharactersCharacterIDSkillsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSkillsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

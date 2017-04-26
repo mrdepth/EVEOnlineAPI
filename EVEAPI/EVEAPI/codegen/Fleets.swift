@@ -448,7 +448,7 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDSquadsSquadIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDSquadsSquadIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -499,10 +499,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDSquadsSquadIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDSquadsSquadIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDSquadsSquadIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Invitation: NSObject, NSSecureCoding , JSONCoding {
+		public class Invitation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PostFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
@@ -601,10 +614,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.Invitation) {
+				characterID = other.characterID
+				role = other.role
+				squadID = other.squadID
+				wingID = other.wingID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.Invitation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Invitation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDMembersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDMembersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -655,10 +684,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDMembersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDMembersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDMembersInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDWingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDWingsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -709,10 +751,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDWingsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDMembersMemberIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDMembersMemberIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -763,10 +818,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDMembersMemberIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDMembersMemberIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDMembersMemberIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -817,10 +885,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDMembersMemberIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDMembersMemberIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDMembersMemberIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDSquadsSquadIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDSquadsSquadIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -871,10 +952,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDSquadsSquadIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDSquadsSquadIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDSquadsSquadIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDBadRequest: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -925,10 +1019,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDBadRequest) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDBadRequest(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDBadRequest)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDMembersForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDMembersForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -979,10 +1086,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDMembersForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDMembersForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDMembersForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDWingsWingIDSquadsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDWingsWingIDSquadsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1033,10 +1153,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDWingsWingIDSquadsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsWingIDSquadsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsWingIDSquadsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Naming: NSObject, NSSecureCoding , JSONCoding {
+		public class Naming: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var name: String = String()
@@ -1084,10 +1217,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.Naming) {
+				name = other.name
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.Naming(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Naming)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1138,10 +1284,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDWingsNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDMembersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDMembersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1192,10 +1351,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDMembersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDMembersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDMembersInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1246,10 +1418,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDMembersMemberIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDMembersMemberIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1300,10 +1485,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDMembersMemberIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDMembersMemberIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDMembersMemberIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1354,10 +1552,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1408,10 +1619,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1462,12 +1686,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDSquadsSquadIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDSquadsSquadIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDWingsOk: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDWingsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetFleetsFleetIDWingsSquads: NSObject, NSSecureCoding , JSONCoding {
+			public class GetFleetsFleetIDWingsSquads: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var id: Int64 = Int64()
@@ -1520,6 +1757,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads, rhs: Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetFleetsFleetIDWingsSquads)?.hashValue == hashValue
 				}
 				
 			}
@@ -1582,10 +1833,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDWingsOk) {
+				id = other.id
+				name = other.name
+				squads = other.squads.flatMap { Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads($0) }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDWingsOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDWingsOk)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1636,10 +1902,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDSquadsSquadIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1690,10 +1969,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDWingsWingIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDWingsWingIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDWingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDWingsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1744,10 +2036,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDWingsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDWingsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDWingsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDWingsWingIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDWingsWingIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1798,10 +2103,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDWingsWingIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDWingsWingIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDWingsWingIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDMembersUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDMembersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1852,10 +2170,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDMembersUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDMembersUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDMembersUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDWingsWingIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDWingsWingIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1906,10 +2237,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDWingsWingIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDWingsWingIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDWingsWingIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDMembersMemberIDUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDMembersMemberIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1960,10 +2304,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDMembersMemberIDUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class WingCreated: NSObject, NSSecureCoding , JSONCoding {
+		public class WingCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var wingID: Int64 = Int64()
@@ -2011,10 +2368,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.WingCreated) {
+				wingID = other.wingID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.WingCreated(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? WingCreated)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2065,10 +2435,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDMembersMemberIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDMembersMemberIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDMembersMemberIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDSquadsSquadIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDSquadsSquadIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2119,10 +2502,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDSquadsSquadIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDSquadsSquadIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDSquadsSquadIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2173,10 +2569,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDMembersMemberIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDMembersMemberIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2227,10 +2636,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDMembersMemberIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDMembersMemberIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDWingsWingIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDWingsWingIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2281,10 +2703,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDWingsWingIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDWingsWingIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDWingsWingIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class SquadCreated: NSObject, NSSecureCoding , JSONCoding {
+		public class SquadCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var squadID: Int64 = Int64()
@@ -2332,10 +2767,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.SquadCreated) {
+				squadID = other.squadID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.SquadCreated(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SquadCreated)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class FleetUpdate: NSObject, NSSecureCoding , JSONCoding {
+		public class FleetUpdate: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var isFreeMove: Bool? = nil
@@ -2396,10 +2844,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.FleetUpdate) {
+				isFreeMove = other.isFreeMove
+				motd = other.motd
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.FleetUpdate(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? FleetUpdate)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2450,10 +2912,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDMembersMemberIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2504,10 +2979,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Movement: NSObject, NSSecureCoding , JSONCoding {
+		public class Movement: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PutFleetsFleetIDMembersMemberIDRole: String, JSONCoding, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
@@ -2599,10 +3087,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.Movement) {
+				role = other.role
+				squadID = other.squadID
+				wingID = other.wingID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.Movement(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Movement)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDWingsWingIDSquadsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDWingsWingIDSquadsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2653,10 +3156,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDWingsWingIDSquadsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsWingIDSquadsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsWingIDSquadsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDWingsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDWingsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2707,10 +3223,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDWingsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDWingsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDWingsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Information: NSObject, NSSecureCoding , JSONCoding {
+		public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var isFreeMove: Bool = Bool()
@@ -2779,10 +3308,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.Information) {
+				isFreeMove = other.isFreeMove
+				isRegistered = other.isRegistered
+				isVoiceEnabled = other.isVoiceEnabled
+				motd = other.motd
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.Information(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Information)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2833,10 +3378,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDWingsNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDWingsNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDWingsNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2887,10 +3445,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDWingsWingIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDWingsWingIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDWingsWingIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Member: NSObject, NSSecureCoding , JSONCoding {
+		public class Member: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
@@ -3028,10 +3599,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.Member) {
+				characterID = other.characterID
+				joinTime = other.joinTime
+				role = other.role
+				roleName = other.roleName
+				shipTypeID = other.shipTypeID
+				solarSystemID = other.solarSystemID
+				squadID = other.squadID
+				stationID = other.stationID
+				takesFleetWarp = other.takesFleetWarp
+				wingID = other.wingID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.Member(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Member)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3082,10 +3675,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3136,10 +3742,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDMembersNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDMembersNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDMembersNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDWingsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDWingsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3190,10 +3809,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDWingsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutFleetsFleetIDWingsWingIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutFleetsFleetIDWingsWingIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3244,10 +3876,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PutFleetsFleetIDWingsWingIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PutFleetsFleetIDWingsWingIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutFleetsFleetIDWingsWingIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteFleetsFleetIDSquadsSquadIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteFleetsFleetIDSquadsSquadIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3298,10 +3943,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.DeleteFleetsFleetIDSquadsSquadIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDSquadsSquadIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDSquadsSquadIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3352,10 +4010,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsWingIDSquadsNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetFleetsFleetIDMembersForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetFleetsFleetIDMembersForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3406,10 +4077,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fleets.GetFleetsFleetIDMembersForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDMembersForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDMembersForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3458,6 +4142,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersNotFound, rhs: Fleets.PostFleetsFleetIDMembersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fleets.PostFleetsFleetIDMembersNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDMembersNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDMembersNotFound)?.hashValue == hashValue
 			}
 			
 		}

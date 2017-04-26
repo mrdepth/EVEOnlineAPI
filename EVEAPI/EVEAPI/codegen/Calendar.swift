@@ -116,7 +116,7 @@ public extension ESI {
 		}
 		
 		
-		public class Summary: NSObject, NSSecureCoding , JSONCoding {
+		public class Summary: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDCalendarEventResponse: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
@@ -231,10 +231,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.Summary) {
+				eventDate = other.eventDate
+				eventID = other.eventID
+				eventResponse = other.eventResponse
+				importance = other.importance
+				title = other.title
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.Summary(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Summary)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Response: NSObject, NSSecureCoding , JSONCoding {
+		public class Response: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Response: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
@@ -305,10 +322,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.Response) {
+				response = other.response
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.Response(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Response)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -359,10 +389,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.GetCharactersCharacterIDCalendarEventIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.GetCharactersCharacterIDCalendarEventIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDCalendarEventIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Event: NSObject, NSSecureCoding , JSONCoding {
+		public class Event: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -498,10 +541,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.Event) {
+				date = other.date
+				duration = other.duration
+				eventID = other.eventID
+				importance = other.importance
+				ownerID = other.ownerID
+				ownerName = other.ownerName
+				ownerType = other.ownerType
+				response = other.response
+				text = other.text
+				title = other.title
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.Event(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Event)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -552,10 +617,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.GetCharactersCharacterIDCalendarEventIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.GetCharactersCharacterIDCalendarEventIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDCalendarEventIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -606,10 +684,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.GetCharactersCharacterIDCalendarInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.GetCharactersCharacterIDCalendarInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDCalendarInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCharactersCharacterIDCalendarEventIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -660,10 +751,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.PutCharactersCharacterIDCalendarEventIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.PutCharactersCharacterIDCalendarEventIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCharactersCharacterIDCalendarEventIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDCalendarForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDCalendarForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -714,10 +818,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Calendar.GetCharactersCharacterIDCalendarForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.GetCharactersCharacterIDCalendarForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDCalendarForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCharactersCharacterIDCalendarEventIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -766,6 +883,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden, rhs: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Calendar.PutCharactersCharacterIDCalendarEventIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.PutCharactersCharacterIDCalendarEventIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCharactersCharacterIDCalendarEventIDForbidden)?.hashValue == hashValue
 			}
 			
 		}

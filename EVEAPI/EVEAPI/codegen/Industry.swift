@@ -79,7 +79,7 @@ public extension ESI {
 		}
 		
 		
-		public class Facilities: NSObject, NSSecureCoding , JSONCoding {
+		public class Facilities: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var facilityID: Int64 = Int64()
@@ -165,10 +165,28 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Industry.Facilities) {
+				facilityID = other.facilityID
+				ownerID = other.ownerID
+				regionID = other.regionID
+				solarSystemID = other.solarSystemID
+				tax = other.tax
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Industry.Facilities(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Facilities)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetIndustrySystemsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetIndustrySystemsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -219,10 +237,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Industry.GetIndustrySystemsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Industry.GetIndustrySystemsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetIndustrySystemsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetIndustryFacilitiesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetIndustryFacilitiesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -273,12 +304,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Industry.GetIndustryFacilitiesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Industry.GetIndustryFacilitiesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetIndustryFacilitiesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class SolarSystemCostIndices: NSObject, NSSecureCoding , JSONCoding {
+		public class SolarSystemCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding , JSONCoding {
+			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetIndustrySystemsActivity: String, JSONCoding, HTTPQueryable {
 					case copying = "copying"
@@ -362,6 +406,20 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices) {
+					activity = other.activity
+					costIndex = other.costIndex
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetIndustrySystemsCostIndices)?.hashValue == hashValue
+				}
+				
 			}
 			
 			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] = []
@@ -413,6 +471,20 @@ public extension ESI {
 			
 			public static func ==(lhs: Industry.SolarSystemCostIndices, rhs: Industry.SolarSystemCostIndices) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Industry.SolarSystemCostIndices) {
+				costIndices = other.costIndices.flatMap { Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices($0) }
+				solarSystemID = other.solarSystemID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Industry.SolarSystemCostIndices(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SolarSystemCostIndices)?.hashValue == hashValue
 			}
 			
 		}

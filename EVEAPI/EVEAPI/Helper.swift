@@ -172,8 +172,13 @@ extension String: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? String else {throw ESIError.invalidFormat(type(of: self), json)}
-		self = v
+		if json is NSNull {
+			self = ""
+		}
+		else {
+			guard let v = json as? String else {throw ESIError.invalidFormat(type(of: self), json)}
+			self = v
+		}
 	}
 
 	public var httpQuery: String? {

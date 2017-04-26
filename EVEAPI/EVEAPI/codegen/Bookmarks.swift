@@ -81,7 +81,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDBookmarksFoldersForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDBookmarksFoldersForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -132,10 +132,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Bookmarks.GetCharactersCharacterIDBookmarksFoldersForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Bookmarks.GetCharactersCharacterIDBookmarksFoldersForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDBookmarksFoldersForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDBookmarksFoldersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDBookmarksFoldersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -186,14 +199,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Bookmarks.GetCharactersCharacterIDBookmarksFoldersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Bookmarks.GetCharactersCharacterIDBookmarksFoldersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDBookmarksFoldersInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Bookmark: NSObject, NSSecureCoding , JSONCoding {
+		public class Bookmark: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDBookmarksTarget: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDBookmarksTarget: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding , JSONCoding {
+				public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var itemID: Int64 = Int64()
@@ -248,9 +274,23 @@ public extension ESI {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
+					init(_ other: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem) {
+						itemID = other.itemID
+						typeID = other.typeID
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetCharactersCharacterIDBookmarksItem)?.hashValue == hashValue
+					}
+					
 				}
 				
-				public class GetCharactersCharacterIDBookmarksCoordinates: NSObject, NSSecureCoding , JSONCoding {
+				public class GetCharactersCharacterIDBookmarksCoordinates: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var x: Double = Double()
@@ -310,6 +350,21 @@ public extension ESI {
 					
 					public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates) -> Bool {
 						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates) {
+						x = other.x
+						y = other.y
+						z = other.z
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetCharactersCharacterIDBookmarksCoordinates)?.hashValue == hashValue
 					}
 					
 				}
@@ -377,6 +432,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget) {
+					coordinates = other.coordinates != nil ? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates(other.coordinates!) : nil
+					item = other.item != nil ? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem(other.item!) : nil
+					locationID = other.locationID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDBookmarksTarget)?.hashValue == hashValue
 				}
 				
 			}
@@ -477,10 +547,30 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Bookmarks.Bookmark) {
+				bookmarkID = other.bookmarkID
+				createDate = other.createDate
+				creatorID = other.creatorID
+				folderID = other.folderID
+				memo = other.memo
+				note = other.note
+				ownerID = other.ownerID
+				target = Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget(other.target)
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Bookmarks.Bookmark(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Bookmark)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Folder: NSObject, NSSecureCoding , JSONCoding {
+		public class Folder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var folderID: Int? = nil
@@ -551,10 +641,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Bookmarks.Folder) {
+				folderID = other.folderID
+				name = other.name
+				ownerID = other.ownerID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Bookmarks.Folder(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Folder)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDBookmarksInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDBookmarksInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -605,10 +710,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Bookmarks.GetCharactersCharacterIDBookmarksInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Bookmarks.GetCharactersCharacterIDBookmarksInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDBookmarksInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDBookmarksForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDBookmarksForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -657,6 +775,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Bookmarks.GetCharactersCharacterIDBookmarksForbidden, rhs: Bookmarks.GetCharactersCharacterIDBookmarksForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Bookmarks.GetCharactersCharacterIDBookmarksForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Bookmarks.GetCharactersCharacterIDBookmarksForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDBookmarksForbidden)?.hashValue == hashValue
 			}
 			
 		}

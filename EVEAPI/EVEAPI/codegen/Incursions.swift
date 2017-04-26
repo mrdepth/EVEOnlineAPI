@@ -47,7 +47,7 @@ public extension ESI {
 		}
 		
 		
-		public class Incursion: NSObject, NSSecureCoding , JSONCoding {
+		public class Incursion: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetIncursionsState: String, JSONCoding, HTTPQueryable {
 				case established = "established"
@@ -166,10 +166,30 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Incursions.Incursion) {
+				constellationID = other.constellationID
+				factionID = other.factionID
+				hasBoss = other.hasBoss
+				infestedSolarSystems = other.infestedSolarSystems.flatMap { $0 }
+				influence = other.influence
+				stagingSolarSystemID = other.stagingSolarSystemID
+				state = other.state
+				type = other.type
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Incursions.Incursion(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Incursion)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetIncursionsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetIncursionsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -218,6 +238,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Incursions.GetIncursionsInternalServerError, rhs: Incursions.GetIncursionsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Incursions.GetIncursionsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Incursions.GetIncursionsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetIncursionsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

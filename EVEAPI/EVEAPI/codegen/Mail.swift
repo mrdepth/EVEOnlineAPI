@@ -317,7 +317,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailLabelsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -368,10 +368,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailLabelsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailLabelsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailLabelsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -422,10 +435,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.DeleteCharactersCharacterIDMailMailIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.DeleteCharactersCharacterIDMailMailIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDMailMailIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -476,10 +502,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailLabelsLabelIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -530,10 +569,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.DeleteCharactersCharacterIDMailLabelsLabelIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDMailLabelsLabelIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Header: NSObject, NSSecureCoding , JSONCoding {
+		public class Header: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var from: Int? = nil
@@ -644,10 +696,29 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.Header) {
+				from = other.from
+				isRead = other.isRead
+				labels = other.labels?.flatMap { $0 }
+				mailID = other.mailID
+				recipients = other.recipients?.flatMap { Mail.Recipient($0) }
+				subject = other.subject
+				timestamp = other.timestamp
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.Header(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Header)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDMailLabelsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailLabelsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -698,10 +769,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PostCharactersCharacterIDMailLabelsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailLabelsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailLabelsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -752,10 +836,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDMailLabelsLabelIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Recipient: NSObject, NSSecureCoding , JSONCoding {
+		public class Recipient: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum RecipientType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -834,10 +931,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.Recipient) {
+				recipientID = other.recipientID
+				recipientType = other.recipientType
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.Recipient(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Recipient)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -888,10 +999,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PutCharactersCharacterIDMailMailIDBadRequest) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PutCharactersCharacterIDMailMailIDBadRequest(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCharactersCharacterIDMailMailIDBadRequest)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDMailInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -942,10 +1066,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PostCharactersCharacterIDMailInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -996,10 +1133,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.DeleteCharactersCharacterIDMailMailIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.DeleteCharactersCharacterIDMailMailIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDMailMailIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailListsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailListsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1050,12 +1200,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailListsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailListsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailListsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class MailLabelsAndUnreadCounts: NSObject, NSSecureCoding , JSONCoding {
+		public class MailLabelsAndUnreadCounts: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDMailLabelsLabels: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDMailLabelsLabels: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 					case h0000fe = "#0000fe"
@@ -1174,6 +1337,22 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels) {
+					color = other.color
+					labelID = other.labelID
+					name = other.name
+					unreadCount = other.unreadCount
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDMailLabelsLabels)?.hashValue == hashValue
+				}
+				
 			}
 			
 			public var labels: [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]? = nil
@@ -1234,10 +1413,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.MailLabelsAndUnreadCounts) {
+				labels = other.labels?.flatMap { Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels($0) }
+				totalUnreadCount = other.totalUnreadCount
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.MailLabelsAndUnreadCounts(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? MailLabelsAndUnreadCounts)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Subscription: NSObject, NSSecureCoding , JSONCoding {
+		public class Subscription: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var mailingListID: Int = Int()
@@ -1292,12 +1485,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.Subscription) {
+				mailingListID = other.mailingListID
+				name = other.name
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.Subscription(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Subscription)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class MailBody: NSObject, NSSecureCoding , JSONCoding {
+		public class MailBody: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDMailMailIDRecipients: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDMailMailIDRecipients: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailMailIDRecipientType: String, JSONCoding, HTTPQueryable {
 					case alliance = "alliance"
@@ -1374,6 +1581,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients, rhs: Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients) {
+					recipientID = other.recipientID
+					recipientType = other.recipientType
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDMailMailIDRecipients)?.hashValue == hashValue
 				}
 				
 			}
@@ -1486,10 +1707,29 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.MailBody) {
+				body = other.body
+				from = other.from
+				labels = other.labels?.flatMap { $0 }
+				read = other.read
+				recipients = other.recipients?.flatMap { Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients($0) }
+				subject = other.subject
+				timestamp = other.timestamp
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.MailBody(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? MailBody)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1540,10 +1780,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PutCharactersCharacterIDMailMailIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PutCharactersCharacterIDMailMailIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCharactersCharacterIDMailMailIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1594,10 +1847,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PutCharactersCharacterIDMailMailIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PutCharactersCharacterIDMailMailIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCharactersCharacterIDMailMailIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1648,10 +1914,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PostCharactersCharacterIDMailLabelsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailLabelsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailLabelsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1702,10 +1981,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailMailIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailMailIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailMailIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailMailIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1756,10 +2048,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailMailIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailMailIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailMailIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class UpdateContents: NSObject, NSSecureCoding , JSONCoding {
+		public class UpdateContents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var labels: [Int64]? = nil
@@ -1820,10 +2125,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.UpdateContents) {
+				labels = other.labels?.flatMap { $0 }
+				read = other.read
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.UpdateContents(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? UpdateContents)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDMailForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1874,10 +2193,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PostCharactersCharacterIDMailForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailMailIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1928,10 +2260,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailMailIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailMailIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailMailIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailLabelsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1982,10 +2327,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailLabelsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailLabelsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailLabelsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Label: NSObject, NSSecureCoding , JSONCoding {
+		public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PostCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 				case h0000fe = "#0000fe"
@@ -2081,10 +2439,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.Label) {
+				color = other.color
+				name = other.name
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.Label(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Label)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2135,10 +2507,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.PostCharactersCharacterIDMailBadRequest) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailBadRequest(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailBadRequest)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class NewMail: NSObject, NSSecureCoding , JSONCoding {
+		public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var approvedCost: Int64? = nil
@@ -2209,10 +2594,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.NewMail) {
+				approvedCost = other.approvedCost
+				body = other.body
+				recipients = other.recipients.flatMap { Mail.Recipient($0) }
+				subject = other.subject
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.NewMail(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? NewMail)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailListsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailListsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2263,10 +2664,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailListsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailListsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailListsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2317,10 +2731,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Mail.GetCharactersCharacterIDMailInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMailForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMailForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2369,6 +2796,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Mail.GetCharactersCharacterIDMailForbidden, rhs: Mail.GetCharactersCharacterIDMailForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Mail.GetCharactersCharacterIDMailForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.GetCharactersCharacterIDMailForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMailForbidden)?.hashValue == hashValue
 			}
 			
 		}

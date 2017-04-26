@@ -80,7 +80,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDLoyaltyPointsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDLoyaltyPointsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -131,10 +131,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Loyalty.GetCharactersCharacterIDLoyaltyPointsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Loyalty.GetCharactersCharacterIDLoyaltyPointsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDLoyaltyPointsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetLoyaltyStoresCorporationIDOffersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetLoyaltyStoresCorporationIDOffersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -185,12 +198,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Loyalty.GetLoyaltyStoresCorporationIDOffersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Loyalty.GetLoyaltyStoresCorporationIDOffersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetLoyaltyStoresCorporationIDOffersInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Offer: NSObject, NSSecureCoding , JSONCoding {
+		public class Offer: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSSecureCoding , JSONCoding {
+			public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var quantity: Int = Int()
@@ -243,6 +269,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems, rhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) {
+					quantity = other.quantity
+					typeID = other.typeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetLoyaltyStoresCorporationIDOffersRequiredItems)?.hashValue == hashValue
 				}
 				
 			}
@@ -326,10 +366,28 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Loyalty.Offer) {
+				iskCost = other.iskCost
+				lpCost = other.lpCost
+				offerID = other.offerID
+				quantity = other.quantity
+				requiredItems = other.requiredItems.flatMap { Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems($0) }
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Loyalty.Offer(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Offer)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Point: NSObject, NSSecureCoding , JSONCoding {
+		public class Point: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var corporationID: Int = Int()
@@ -384,10 +442,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Loyalty.Point) {
+				corporationID = other.corporationID
+				loyaltyPoints = other.loyaltyPoints
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Loyalty.Point(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Point)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDLoyaltyPointsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDLoyaltyPointsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -436,6 +508,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError, rhs: Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDLoyaltyPointsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

@@ -102,7 +102,7 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterSearchResult: NSObject, NSSecureCoding , JSONCoding {
+		public class CharacterSearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var agent: [Int]? = nil
@@ -263,10 +263,34 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Search.CharacterSearchResult) {
+				agent = other.agent?.flatMap { $0 }
+				alliance = other.alliance?.flatMap { $0 }
+				character = other.character?.flatMap { $0 }
+				constellation = other.constellation?.flatMap { $0 }
+				corporation = other.corporation?.flatMap { $0 }
+				faction = other.faction?.flatMap { $0 }
+				inventorytype = other.inventorytype?.flatMap { $0 }
+				region = other.region?.flatMap { $0 }
+				solarsystem = other.solarsystem?.flatMap { $0 }
+				station = other.station?.flatMap { $0 }
+				structure = other.structure?.flatMap { $0 }
+				wormhole = other.wormhole?.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Search.CharacterSearchResult(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CharacterSearchResult)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -317,10 +341,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Search.GetSearchInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Search.GetSearchInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetSearchInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSearchForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -371,10 +408,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Search.GetCharactersCharacterIDSearchForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Search.GetCharactersCharacterIDSearchForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSearchForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -425,10 +475,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Search.GetCharactersCharacterIDSearchInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Search.GetCharactersCharacterIDSearchInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSearchInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class SearchResult: NSObject, NSSecureCoding , JSONCoding {
+		public class SearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var agent: [Int]? = nil
@@ -577,6 +640,29 @@ public extension ESI {
 			
 			public static func ==(lhs: Search.SearchResult, rhs: Search.SearchResult) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Search.SearchResult) {
+				agent = other.agent?.flatMap { $0 }
+				alliance = other.alliance?.flatMap { $0 }
+				character = other.character?.flatMap { $0 }
+				constellation = other.constellation?.flatMap { $0 }
+				corporation = other.corporation?.flatMap { $0 }
+				faction = other.faction?.flatMap { $0 }
+				inventorytype = other.inventorytype?.flatMap { $0 }
+				region = other.region?.flatMap { $0 }
+				solarsystem = other.solarsystem?.flatMap { $0 }
+				station = other.station?.flatMap { $0 }
+				wormhole = other.wormhole?.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Search.SearchResult(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SearchResult)?.hashValue == hashValue
 			}
 			
 		}

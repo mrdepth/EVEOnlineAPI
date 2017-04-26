@@ -81,7 +81,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDShipForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDShipForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -132,10 +132,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Location.GetCharactersCharacterIDShipForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.GetCharactersCharacterIDShipForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDShipForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDLocationForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDLocationForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -186,10 +199,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Location.GetCharactersCharacterIDLocationForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.GetCharactersCharacterIDLocationForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDLocationForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class CharacterLocation: NSObject, NSSecureCoding , JSONCoding {
+		public class CharacterLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var solarSystemID: Int = Int()
@@ -257,10 +283,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Location.CharacterLocation) {
+				solarSystemID = other.solarSystemID
+				stationID = other.stationID
+				structureID = other.structureID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.CharacterLocation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CharacterLocation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class CharacterShip: NSObject, NSSecureCoding , JSONCoding {
+		public class CharacterShip: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var shipItemID: Int64 = Int64()
@@ -322,10 +363,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Location.CharacterShip) {
+				shipItemID = other.shipItemID
+				shipName = other.shipName
+				shipTypeID = other.shipTypeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.CharacterShip(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CharacterShip)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDLocationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDLocationInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -376,10 +432,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Location.GetCharactersCharacterIDLocationInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.GetCharactersCharacterIDLocationInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDLocationInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDShipInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDShipInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -428,6 +497,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Location.GetCharactersCharacterIDShipInternalServerError, rhs: Location.GetCharactersCharacterIDShipInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Location.GetCharactersCharacterIDShipInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.GetCharactersCharacterIDShipInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDShipInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

@@ -115,7 +115,7 @@ public extension ESI {
 		}
 		
 		
-		public class Kills: NSObject, NSSecureCoding , JSONCoding {
+		public class Kills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var killmailHash: String = String()
@@ -170,10 +170,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wars.Kills) {
+				killmailHash = other.killmailHash
+				killmailID = other.killmailID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.Kills(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Kills)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetWarsWarIDUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class GetWarsWarIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -224,10 +238,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wars.GetWarsWarIDUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.GetWarsWarIDUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetWarsWarIDUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetWarsWarIDKillmailsUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class GetWarsWarIDKillmailsUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -278,10 +305,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wars.GetWarsWarIDKillmailsUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.GetWarsWarIDKillmailsUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetWarsWarIDKillmailsUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetWarsWarIDKillmailsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetWarsWarIDKillmailsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -332,12 +372,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wars.GetWarsWarIDKillmailsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.GetWarsWarIDKillmailsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetWarsWarIDKillmailsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class WarInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class WarInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetWarsWarIDDefender: NSObject, NSSecureCoding , JSONCoding {
+			public class GetWarsWarIDDefender: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int? = nil
@@ -412,9 +465,25 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Wars.WarInformation.GetWarsWarIDDefender) {
+					allianceID = other.allianceID
+					corporationID = other.corporationID
+					iskDestroyed = other.iskDestroyed
+					shipsKilled = other.shipsKilled
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Wars.WarInformation.GetWarsWarIDDefender(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetWarsWarIDDefender)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetWarsWarIDAllies: NSObject, NSSecureCoding , JSONCoding {
+			public class GetWarsWarIDAllies: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int? = nil
@@ -475,9 +544,23 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Wars.WarInformation.GetWarsWarIDAllies) {
+					allianceID = other.allianceID
+					corporationID = other.corporationID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Wars.WarInformation.GetWarsWarIDAllies(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetWarsWarIDAllies)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetWarsWarIDAggressor: NSObject, NSSecureCoding , JSONCoding {
+			public class GetWarsWarIDAggressor: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int? = nil
@@ -550,6 +633,22 @@ public extension ESI {
 				
 				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAggressor, rhs: Wars.WarInformation.GetWarsWarIDAggressor) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Wars.WarInformation.GetWarsWarIDAggressor) {
+					allianceID = other.allianceID
+					corporationID = other.corporationID
+					iskDestroyed = other.iskDestroyed
+					shipsKilled = other.shipsKilled
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Wars.WarInformation.GetWarsWarIDAggressor(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetWarsWarIDAggressor)?.hashValue == hashValue
 				}
 				
 			}
@@ -672,10 +771,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wars.WarInformation) {
+				aggressor = Wars.WarInformation.GetWarsWarIDAggressor(other.aggressor)
+				allies = other.allies?.flatMap { Wars.WarInformation.GetWarsWarIDAllies($0) }
+				declared = other.declared
+				defender = Wars.WarInformation.GetWarsWarIDDefender(other.defender)
+				finished = other.finished
+				id = other.id
+				mutual = other.mutual
+				openForAllies = other.openForAllies
+				retracted = other.retracted
+				started = other.started
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.WarInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? WarInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetWarsWarIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetWarsWarIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -726,10 +847,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wars.GetWarsWarIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.GetWarsWarIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetWarsWarIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetWarsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetWarsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -778,6 +912,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Wars.GetWarsInternalServerError, rhs: Wars.GetWarsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Wars.GetWarsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wars.GetWarsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetWarsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

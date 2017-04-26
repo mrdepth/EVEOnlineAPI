@@ -222,7 +222,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsGroupsMarketGroupIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsGroupsMarketGroupIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -273,10 +273,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsGroupsMarketGroupIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsGroupsMarketGroupIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsGroupsMarketGroupIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Order: NSObject, NSSecureCoding , JSONCoding {
+		public class Order: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetMarketsRegionIDOrdersRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
@@ -426,10 +439,33 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.Order) {
+				duration = other.duration
+				isBuyOrder = other.isBuyOrder
+				issued = other.issued
+				locationID = other.locationID
+				minVolume = other.minVolume
+				orderID = other.orderID
+				price = other.price
+				range = other.range
+				typeID = other.typeID
+				volumeRemain = other.volumeRemain
+				volumeTotal = other.volumeTotal
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.Order(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Order)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsStructuresStructureIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsStructuresStructureIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -480,10 +516,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsStructuresStructureIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsStructuresStructureIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsStructuresStructureIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsRegionIDHistoryInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsRegionIDHistoryInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -534,10 +583,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsRegionIDHistoryInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsRegionIDHistoryInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsRegionIDHistoryInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -588,10 +650,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsRegionIDOrdersUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsRegionIDOrdersUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsRegionIDOrdersUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsStructuresStructureIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsStructuresStructureIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -642,10 +717,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsStructuresStructureIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsStructuresStructureIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsStructuresStructureIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var localizedDescription: String = String()
@@ -723,10 +811,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.ItemGroupInformation) {
+				localizedDescription = other.localizedDescription
+				marketGroupID = other.marketGroupID
+				name = other.name
+				parentGroupID = other.parentGroupID
+				types = other.types.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.ItemGroupInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ItemGroupInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class History: NSObject, NSSecureCoding , JSONCoding {
+		public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var average: Float = Float()
@@ -809,10 +914,28 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.History) {
+				average = other.average
+				date = other.date
+				highest = other.highest
+				lowest = other.lowest
+				orderCount = other.orderCount
+				volume = other.volume
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.History(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? History)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsRegionIDOrdersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsRegionIDOrdersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -863,10 +986,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsRegionIDOrdersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsRegionIDOrdersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsRegionIDOrdersInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsGroupsMarketGroupIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsGroupsMarketGroupIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -917,10 +1053,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsGroupsMarketGroupIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsGroupsMarketGroupIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsGroupsMarketGroupIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Price: NSObject, NSSecureCoding , JSONCoding {
+		public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var adjustedPrice: Float? = nil
@@ -988,10 +1137,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.Price) {
+				adjustedPrice = other.adjustedPrice
+				averagePrice = other.averagePrice
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.Price(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Price)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsGroupsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsGroupsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1042,10 +1206,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsGroupsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsGroupsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsGroupsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetMarketsPricesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsPricesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1096,6 +1273,19 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsPricesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsPricesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsPricesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
@@ -1124,7 +1314,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1175,10 +1365,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Market.GetMarketsRegionIDHistoryUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsRegionIDHistoryUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsRegionIDHistoryUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Structure: NSObject, NSSecureCoding , JSONCoding {
+		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
@@ -1326,6 +1529,29 @@ public extension ESI {
 			
 			public static func ==(lhs: Market.Structure, rhs: Market.Structure) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Market.Structure) {
+				duration = other.duration
+				isBuyOrder = other.isBuyOrder
+				issued = other.issued
+				locationID = other.locationID
+				minVolume = other.minVolume
+				orderID = other.orderID
+				price = other.price
+				range = other.range
+				typeID = other.typeID
+				volumeRemain = other.volumeRemain
+				volumeTotal = other.volumeTotal
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.Structure(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Structure)?.hashValue == hashValue
 			}
 			
 		}

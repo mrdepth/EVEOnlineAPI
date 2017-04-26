@@ -870,7 +870,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseStargatesStargateIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStargatesStargateIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -921,10 +921,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStargatesStargateIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStargatesStargateIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStargatesStargateIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Bloodline: NSObject, NSSecureCoding , JSONCoding {
+		public class Bloodline: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var bloodlineID: Int = Int()
@@ -1042,10 +1055,33 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.Bloodline) {
+				bloodlineID = other.bloodlineID
+				charisma = other.charisma
+				corporationID = other.corporationID
+				localizedDescription = other.localizedDescription
+				intelligence = other.intelligence
+				memory = other.memory
+				name = other.name
+				perception = other.perception
+				raceID = other.raceID
+				shipTypeID = other.shipTypeID
+				willpower = other.willpower
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.Bloodline(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Bloodline)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseRegionsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseRegionsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1096,10 +1132,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseRegionsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseRegionsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseRegionsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class RegionInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class RegionInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var constellations: [Int] = []
@@ -1170,10 +1219,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.RegionInformation) {
+				constellations = other.constellations.flatMap { $0 }
+				localizedDescription = other.localizedDescription
+				name = other.name
+				regionID = other.regionID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.RegionInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? RegionInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseFactionsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseFactionsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1224,10 +1289,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseFactionsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseFactionsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseFactionsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Name: NSObject, NSSecureCoding , JSONCoding {
+		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Category: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -1317,10 +1395,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.Name) {
+				category = other.category
+				id = other.id
+				name = other.name
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.Name(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Name)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStargatesStargateIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStargatesStargateIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1371,10 +1464,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStargatesStargateIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStargatesStargateIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStargatesStargateIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseGraphicsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseGraphicsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1425,10 +1531,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseGraphicsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGraphicsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGraphicsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSystemsSystemIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSystemsSystemIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1479,10 +1598,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseSystemsSystemIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseSystemsSystemIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSystemsSystemIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStationsStationIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStationsStationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1533,10 +1665,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStationsStationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStationsStationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStationsStationIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseGroupsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseGroupsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1587,10 +1732,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseGroupsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGroupsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGroupsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseGraphicsGraphicIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseGraphicsGraphicIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1641,10 +1799,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseGraphicsGraphicIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGraphicsGraphicIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGraphicsGraphicIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseGroupsGroupIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseGroupsGroupIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1695,10 +1866,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseGroupsGroupIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGroupsGroupIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGroupsGroupIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseGraphicsGraphicIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseGraphicsGraphicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1749,10 +1933,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseGraphicsGraphicIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGraphicsGraphicIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGraphicsGraphicIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseCategoriesCategoryIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseCategoriesCategoryIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1803,12 +2000,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseCategoriesCategoryIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseCategoriesCategoryIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseCategoriesCategoryIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class SolarSystemInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -1870,9 +2080,24 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseSystemsSystemIDPosition)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var moons: [Int]? = nil
@@ -1928,6 +2153,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) {
+					moons = other.moons?.flatMap { $0 }
+					planetID = other.planetID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseSystemsSystemIDPlanets)?.hashValue == hashValue
 				}
 				
 			}
@@ -2026,10 +2265,30 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.SolarSystemInformation) {
+				constellationID = other.constellationID
+				name = other.name
+				planets = other.planets.flatMap { Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets($0) }
+				position = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(other.position)
+				securityClass = other.securityClass
+				securityStatus = other.securityStatus
+				stargates = other.stargates.flatMap { $0 }
+				systemID = other.systemID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.SolarSystemInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SolarSystemInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2080,10 +2339,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseMoonsMoonIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseMoonsMoonIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseMoonsMoonIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var categoryID: Float = Float()
@@ -2158,10 +2430,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.ItemGroupInformation) {
+				categoryID = other.categoryID
+				groupID = other.groupID
+				name = other.name
+				published = other.published
+				types = other.types.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.ItemGroupInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ItemGroupInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniversePlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniversePlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2212,10 +2501,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniversePlanetsPlanetIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniversePlanetsPlanetIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniversePlanetsPlanetIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseMoonsMoonIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseMoonsMoonIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2266,10 +2568,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseMoonsMoonIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseMoonsMoonIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseMoonsMoonIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseConstellationsConstellationIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseConstellationsConstellationIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2320,10 +2635,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseConstellationsConstellationIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseConstellationsConstellationIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseConstellationsConstellationIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseBloodlinesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseBloodlinesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2374,10 +2702,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseBloodlinesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseBloodlinesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseBloodlinesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseConstellationsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseConstellationsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2428,10 +2769,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseConstellationsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseConstellationsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseConstellationsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUniverseNamesNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUniverseNamesNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2482,10 +2836,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.PostUniverseNamesNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.PostUniverseNamesNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUniverseNamesNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSystemJumpsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSystemJumpsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2536,10 +2903,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseSystemJumpsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseSystemJumpsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSystemJumpsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseGroupsGroupIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseGroupsGroupIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2590,10 +2970,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseGroupsGroupIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGroupsGroupIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGroupsGroupIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class SystemKills: NSObject, NSSecureCoding , JSONCoding {
+		public class SystemKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var npcKills: Int = Int()
@@ -2662,10 +3055,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.SystemKills) {
+				npcKills = other.npcKills
+				podKills = other.podKills
+				shipKills = other.shipKills
+				systemID = other.systemID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.SystemKills(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SystemKills)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Race: NSObject, NSSecureCoding , JSONCoding {
+		public class Race: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int = Int()
@@ -2734,10 +3143,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.Race) {
+				allianceID = other.allianceID
+				localizedDescription = other.localizedDescription
+				name = other.name
+				raceID = other.raceID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.Race(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Race)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStructuresStructureIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStructuresStructureIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2788,10 +3213,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStructuresStructureIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStructuresStructureIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStructuresStructureIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseTypesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseTypesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2842,10 +3280,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseTypesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseTypesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseTypesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStationsStationIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStationsStationIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2896,10 +3347,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStationsStationIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStationsStationIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStationsStationIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseCategoriesCategoryIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseCategoriesCategoryIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2950,10 +3414,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseCategoriesCategoryIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseCategoriesCategoryIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseCategoriesCategoryIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniversePlanetsPlanetIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniversePlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3004,10 +3481,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniversePlanetsPlanetIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniversePlanetsPlanetIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniversePlanetsPlanetIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseTypesTypeIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseTypesTypeIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3058,10 +3548,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseTypesTypeIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseTypesTypeIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseTypesTypeIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSystemKillsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSystemKillsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3112,12 +3615,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseSystemKillsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseSystemKillsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSystemKillsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class TypeInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class TypeInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseTypesTypeIDDogmaEffects: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseTypesTypeIDDogmaEffects: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var effectID: Int = Int()
@@ -3172,9 +3688,23 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects) {
+					effectID = other.effectID
+					isDefault = other.isDefault
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseTypesTypeIDDogmaEffects)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetUniverseTypesTypeIDDogmaAttributes: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseTypesTypeIDDogmaAttributes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var attributeID: Int = Int()
@@ -3227,6 +3757,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes, rhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes) {
+					attributeID = other.attributeID
+					value = other.value
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseTypesTypeIDDogmaAttributes)?.hashValue == hashValue
 				}
 				
 			}
@@ -3394,10 +3938,36 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.TypeInformation) {
+				capacity = other.capacity
+				localizedDescription = other.localizedDescription
+				dogmaAttributes = other.dogmaAttributes?.flatMap { Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes($0) }
+				dogmaEffects = other.dogmaEffects?.flatMap { Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects($0) }
+				graphicID = other.graphicID
+				groupID = other.groupID
+				iconID = other.iconID
+				mass = other.mass
+				name = other.name
+				portionSize = other.portionSize
+				published = other.published
+				radius = other.radius
+				typeID = other.typeID
+				volume = other.volume
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.TypeInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? TypeInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostUniverseNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostUniverseNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3448,10 +4018,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.PostUniverseNamesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.PostUniverseNamesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUniverseNamesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSystemsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSystemsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3502,10 +4085,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseSystemsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseSystemsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSystemsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStructuresInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStructuresInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3556,10 +4152,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStructuresInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStructuresInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStructuresInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseRacesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseRacesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3610,12 +4219,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseRacesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseRacesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseRacesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class StargateInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class StargateInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -3677,9 +4299,24 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.StargateInformation.GetUniverseStargatesStargateIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseStargatesStargateIDPosition)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var stargateID: Int = Int()
@@ -3732,6 +4369,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) {
+					stargateID = other.stargateID
+					systemID = other.systemID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.StargateInformation.GetUniverseStargatesStargateIDDestination(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseStargatesStargateIDDestination)?.hashValue == hashValue
 				}
 				
 			}
@@ -3814,10 +4465,28 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.StargateInformation) {
+				destination = Universe.StargateInformation.GetUniverseStargatesStargateIDDestination(other.destination)
+				name = other.name
+				position = Universe.StargateInformation.GetUniverseStargatesStargateIDPosition(other.position)
+				stargateID = other.stargateID
+				systemID = other.systemID
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.StargateInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? StargateInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class ItemCategoryInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class ItemCategoryInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var categoryID: Int = Int()
@@ -3885,10 +4554,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.ItemCategoryInformation) {
+				categoryID = other.categoryID
+				groups = other.groups.flatMap { $0 }
+				name = other.name
+				published = other.published
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.ItemCategoryInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ItemCategoryInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GraphicInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class GraphicInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var collisionFile: String? = nil
@@ -4006,10 +4691,30 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GraphicInformation) {
+				collisionFile = other.collisionFile
+				graphicFile = other.graphicFile
+				graphicID = other.graphicID
+				iconFolder = other.iconFolder
+				sofDna = other.sofDna
+				sofFationName = other.sofFationName
+				sofHullName = other.sofHullName
+				sofRaceName = other.sofRaceName
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GraphicInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GraphicInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStructuresStructureIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStructuresStructureIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4060,10 +4765,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStructuresStructureIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStructuresStructureIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStructuresStructureIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Jump: NSObject, NSSecureCoding , JSONCoding {
+		public class Jump: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var shipJumps: Int = Int()
@@ -4118,10 +4836,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.Jump) {
+				shipJumps = other.shipJumps
+				systemID = other.systemID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.Jump(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Jump)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseRegionsRegionIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseRegionsRegionIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4172,10 +4904,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseRegionsRegionIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseRegionsRegionIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseRegionsRegionIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseRegionsRegionIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseRegionsRegionIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4226,12 +4971,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseRegionsRegionIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseRegionsRegionIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseRegionsRegionIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class ConstellationInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class ConstellationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseConstellationsConstellationIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseConstellationsConstellationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -4291,6 +5049,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition, rhs: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseConstellationsConstellationIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -4366,10 +5139,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.ConstellationInformation) {
+				constellationID = other.constellationID
+				name = other.name
+				position = Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition(other.position)
+				regionID = other.regionID
+				systems = other.systems.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.ConstellationInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ConstellationInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseStructuresStructureIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseStructuresStructureIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4420,12 +5210,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseStructuresStructureIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStructuresStructureIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStructuresStructureIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class MoonInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class MoonInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseMoonsMoonIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseMoonsMoonIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -4485,6 +5288,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, rhs: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.MoonInformation.GetUniverseMoonsMoonIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseMoonsMoonIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -4554,12 +5372,28 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.MoonInformation) {
+				moonID = other.moonID
+				name = other.name
+				position = Universe.MoonInformation.GetUniverseMoonsMoonIDPosition(other.position)
+				systemID = other.systemID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.MoonInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? MoonInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class StructureInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class StructureInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseStructuresStructureIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseStructuresStructureIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -4619,6 +5453,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition, rhs: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.StructureInformation.GetUniverseStructuresStructureIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseStructuresStructureIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -4695,10 +5544,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.StructureInformation) {
+				name = other.name
+				position = other.position != nil ? Universe.StructureInformation.GetUniverseStructuresStructureIDPosition(other.position!) : nil
+				solarSystemID = other.solarSystemID
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.StructureInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? StructureInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseTypesTypeIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseTypesTypeIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4749,12 +5614,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseTypesTypeIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseTypesTypeIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseTypesTypeIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PlanetInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class PlanetInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniversePlanetsPlanetIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniversePlanetsPlanetIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -4814,6 +5692,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition, rhs: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniversePlanetsPlanetIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -4890,10 +5783,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.PlanetInformation) {
+				name = other.name
+				planetID = other.planetID
+				position = Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition(other.position)
+				systemID = other.systemID
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.PlanetInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PlanetInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseCategoriesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseCategoriesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4944,10 +5854,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseCategoriesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseCategoriesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseCategoriesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -4998,10 +5921,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseConstellationsConstellationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseConstellationsConstellationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseConstellationsConstellationIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class StationInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class StationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetUniverseStationsStationIDServices: String, JSONCoding, HTTPQueryable {
 				case assasinationMissions = "assasination-missions"
@@ -5051,7 +5987,7 @@ public extension ESI {
 				
 			}
 			
-			public class GetUniverseStationsStationIDPosition: NSObject, NSSecureCoding , JSONCoding {
+			public class GetUniverseStationsStationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
@@ -5111,6 +6047,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Universe.StationInformation.GetUniverseStationsStationIDPosition, rhs: Universe.StationInformation.GetUniverseStationsStationIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.StationInformation.GetUniverseStationsStationIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.StationInformation.GetUniverseStationsStationIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseStationsStationIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -5241,10 +6192,34 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.StationInformation) {
+				maxDockableShipVolume = other.maxDockableShipVolume
+				name = other.name
+				officeRentalCost = other.officeRentalCost
+				owner = other.owner
+				position = Universe.StationInformation.GetUniverseStationsStationIDPosition(other.position)
+				raceID = other.raceID
+				reprocessingEfficiency = other.reprocessingEfficiency
+				reprocessingStationsTake = other.reprocessingStationsTake
+				services = other.services.flatMap { $0 }
+				stationID = other.stationID
+				systemID = other.systemID
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.StationInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? StationInformation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSystemsSystemIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSystemsSystemIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -5295,10 +6270,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Universe.GetUniverseSystemsSystemIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseSystemsSystemIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSystemsSystemIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Faction: NSObject, NSSecureCoding , JSONCoding {
+		public class Faction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var corporationID: Int = Int()
@@ -5410,6 +6398,28 @@ public extension ESI {
 			
 			public static func ==(lhs: Universe.Faction, rhs: Universe.Faction) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.Faction) {
+				corporationID = other.corporationID
+				localizedDescription = other.localizedDescription
+				factionID = other.factionID
+				isUnique = other.isUnique
+				militiaCorporationID = other.militiaCorporationID
+				name = other.name
+				sizeFactor = other.sizeFactor
+				solarSystemID = other.solarSystemID
+				stationCount = other.stationCount
+				stationSystemCount = other.stationSystemCount
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.Faction(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Faction)?.hashValue == hashValue
 			}
 			
 		}

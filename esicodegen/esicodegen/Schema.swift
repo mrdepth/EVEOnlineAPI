@@ -176,6 +176,7 @@ class Schema: Namespace {
 //		var defaults = [String]()
 		var hashes = [String]()
 		var nested = [String]()
+		var copy = [String]()
 		
 		for value in properties ?? [] {
 			definitions.append(value.definition)
@@ -185,6 +186,7 @@ class Schema: Namespace {
 			json.append(value.json)
 //			defaults.append(value.defaultInitialization)
 			hashes.append(value.hash)
+			copy.append(value.copy)
 		}
 		
 		for subSchema in namespaces[self] ?? [] {
@@ -194,6 +196,7 @@ class Schema: Namespace {
 
 		
 		template = template.replacingOccurrences(of: "{className}", with: typeName)
+		template = template.replacingOccurrences(of: "{classIdentifier}", with: typeIdentifier)
 		template = template.replacingOccurrences(of: "{class}", with: typeIdentifier)
 		template.replaceSubrange(template.range(of: "{definitions}")!, with: definitions.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
@@ -203,6 +206,7 @@ class Schema: Namespace {
 		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{hash}")!, with: hashes.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{nested}")!, with: nested.joined(separator: "\n"))
+		template.replaceSubrange(template.range(of: "{copy}")!, with: copy.joined(separator: "\n"))
 		
 		return template
 	}
@@ -213,6 +217,18 @@ class Schema: Namespace {
 			return "_ = \(typeIdentifier).classForCoder()"
 		default:
 			return nil
+		}
+	}
+	
+	public func copy(from: String, isRequired: Bool) -> String {
+		switch type {
+		case .array:
+			return "\(from)\(isRequired ? "" : "?").flatMap { \(array!.copy(from: "$0", isRequired: true)) }"
+		case .object:
+			return isRequired ? "\(typeIdentifier)(\(from))" :
+				"\(from) != nil ? \(typeIdentifier)(\(from)!) : nil"
+		default:
+			return from
 		}
 	}
 }

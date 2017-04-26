@@ -48,7 +48,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDClonesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDClonesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -99,10 +99,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Clones.GetCharactersCharacterIDClonesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Clones.GetCharactersCharacterIDClonesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDClonesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDClonesForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDClonesForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -153,10 +166,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Clones.GetCharactersCharacterIDClonesForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Clones.GetCharactersCharacterIDClonesForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDClonesForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class JumpClones: NSObject, NSSecureCoding , JSONCoding {
+		public class JumpClones: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDClonesLocationType: String, JSONCoding, HTTPQueryable {
 				case station = "station"
@@ -181,7 +207,7 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDClonesJumpClones: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDClonesJumpClones: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var implants: [Int]? = nil
@@ -252,9 +278,24 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones) {
+					implants = other.implants?.flatMap { $0 }
+					locationID = other.locationID
+					locationType = other.locationType
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDClonesJumpClones)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCharactersCharacterIDClonesHomeLocation: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDClonesHomeLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var locationID: Int64? = nil
@@ -313,6 +354,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation, rhs: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation) {
+					locationID = other.locationID
+					locationType = other.locationType
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDClonesHomeLocation)?.hashValue == hashValue
 				}
 				
 			}
@@ -379,6 +434,21 @@ public extension ESI {
 			
 			public static func ==(lhs: Clones.JumpClones, rhs: Clones.JumpClones) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Clones.JumpClones) {
+				homeLocation = other.homeLocation != nil ? Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation(other.homeLocation!) : nil
+				jumpClones = other.jumpClones.flatMap { Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones($0) }
+				lastJumpDate = other.lastJumpDate
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Clones.JumpClones(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? JumpClones)?.hashValue == hashValue
 			}
 			
 		}

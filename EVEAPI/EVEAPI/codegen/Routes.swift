@@ -55,7 +55,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetRouteOriginDestinationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetRouteOriginDestinationInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -106,6 +106,19 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Routes.GetRouteOriginDestinationInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Routes.GetRouteOriginDestinationInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetRouteOriginDestinationInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
@@ -134,7 +147,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetRouteOriginDestinationNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetRouteOriginDestinationNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -183,6 +196,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Routes.GetRouteOriginDestinationNotFound, rhs: Routes.GetRouteOriginDestinationNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Routes.GetRouteOriginDestinationNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Routes.GetRouteOriginDestinationNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetRouteOriginDestinationNotFound)?.hashValue == hashValue
 			}
 			
 		}

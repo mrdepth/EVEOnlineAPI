@@ -177,7 +177,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -228,10 +228,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesAllianceIDIconsNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesAllianceIDIconsNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesAllianceIDIconsNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetAlliancesAllianceIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -282,10 +295,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesAllianceIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesAllianceIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesAllianceIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Name: NSObject, NSSecureCoding , JSONCoding {
+		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int = Int()
@@ -340,10 +366,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.Name) {
+				allianceID = other.allianceID
+				allianceName = other.allianceName
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.Name(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Name)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -394,10 +434,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesAllianceIDCorporationsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesAllianceIDCorporationsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetAlliancesAllianceIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -448,10 +501,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesAllianceIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesAllianceIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesAllianceIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -502,10 +568,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesAllianceIDIconsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesAllianceIDIconsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesAllianceIDIconsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetAlliancesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -556,10 +635,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Icon: NSObject, NSSecureCoding , JSONCoding {
+		public class Icon: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var px128x128: String? = nil
@@ -620,10 +712,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.Icon) {
+				px128x128 = other.px128x128
+				px64x64 = other.px64x64
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.Icon(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Icon)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -674,10 +780,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Alliance.GetAlliancesNamesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.GetAlliancesNamesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesNamesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Information: NSObject, NSSecureCoding , JSONCoding {
+		public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceName: String = String()
@@ -747,6 +866,22 @@ public extension ESI {
 			
 			public static func ==(lhs: Alliance.Information, rhs: Alliance.Information) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Alliance.Information) {
+				allianceName = other.allianceName
+				dateFounded = other.dateFounded
+				executorCorp = other.executorCorp
+				ticker = other.ticker
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.Information(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Information)?.hashValue == hashValue
 			}
 			
 		}

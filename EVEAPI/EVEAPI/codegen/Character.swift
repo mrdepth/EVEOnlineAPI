@@ -342,7 +342,7 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersAffiliationUnprocessableEntity: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersAffiliationUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -393,10 +393,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.PostCharactersAffiliationUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.PostCharactersAffiliationUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersAffiliationUnprocessableEntity)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDStandingsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDStandingsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -447,10 +460,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDStandingsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDStandingsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDStandingsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDAgentsResearchForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDAgentsResearchForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -501,10 +527,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDAgentsResearchForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDAgentsResearchForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDAgentsResearchForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Portrait: NSObject, NSSecureCoding , JSONCoding {
+		public class Portrait: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var px128x128: String? = nil
@@ -585,10 +624,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Portrait) {
+				px128x128 = other.px128x128
+				px256x256 = other.px256x256
+				px512x512 = other.px512x512
+				px64x64 = other.px64x64
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Portrait(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Portrait)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDStandingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDStandingsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -639,10 +694,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDStandingsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDStandingsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDStandingsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -693,10 +761,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersNamesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersNamesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersNamesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDCorporationhistoryInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDCorporationhistoryInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -747,10 +828,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDCorporationhistoryInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDCorporationhistoryInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDCorporationhistoryInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class ChatChannel: NSObject, NSSecureCoding , JSONCoding {
+		public class ChatChannel: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -776,7 +870,7 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDChatChannelsAllowed: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDChatChannelsAllowed: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var accessorID: Int = Int()
@@ -831,9 +925,23 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) {
+					accessorID = other.accessorID
+					accessorType = other.accessorType
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDChatChannelsAllowed)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCharactersCharacterIDChatChannelsMuted: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDChatChannelsMuted: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var accessorID: Int = Int()
@@ -908,9 +1016,25 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) {
+					accessorID = other.accessorID
+					accessorType = other.accessorType
+					endAt = other.endAt
+					reason = other.reason
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDChatChannelsMuted)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCharactersCharacterIDChatChannelsOperators: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDChatChannelsOperators: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var accessorID: Int = Int()
@@ -965,9 +1089,23 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) {
+					accessorID = other.accessorID
+					accessorType = other.accessorType
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDChatChannelsOperators)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCharactersCharacterIDChatChannelsBlocked: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDChatChannelsBlocked: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var accessorID: Int = Int()
@@ -1040,6 +1178,22 @@ public extension ESI {
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) {
+					accessorID = other.accessorID
+					accessorType = other.accessorType
+					endAt = other.endAt
+					reason = other.reason
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDChatChannelsBlocked)?.hashValue == hashValue
 				}
 				
 			}
@@ -1148,10 +1302,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.ChatChannel) {
+				allowed = other.allowed.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed($0) }
+				blocked = other.blocked.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked($0) }
+				channelID = other.channelID
+				comparisonKey = other.comparisonKey
+				hasPassword = other.hasPassword
+				motd = other.motd
+				muted = other.muted.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted($0) }
+				name = other.name
+				operators = other.operators.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators($0) }
+				ownerID = other.ownerID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.ChatChannel(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ChatChannel)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Standing: NSObject, NSSecureCoding , JSONCoding {
+		public class Standing: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDStandingsFromType: String, JSONCoding, HTTPQueryable {
 				case agent = "agent"
@@ -1236,10 +1412,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Standing) {
+				fromID = other.fromID
+				fromType = other.fromType
+				standing = other.standing
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Standing(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Standing)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMedalsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMedalsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1290,10 +1481,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDMedalsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDMedalsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMedalsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDChatChannelsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDChatChannelsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1344,10 +1548,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDChatChannelsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDChatChannelsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDChatChannelsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1398,10 +1615,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Medal: NSObject, NSSecureCoding , JSONCoding {
+		public class Medal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDMedalsStatus: String, JSONCoding, HTTPQueryable {
 				case `private` = "private"
@@ -1426,7 +1656,7 @@ public extension ESI {
 				
 			}
 			
-			public class GetCharactersCharacterIDMedalsGraphics: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDMedalsGraphics: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var color: Int? = nil
@@ -1496,6 +1726,22 @@ public extension ESI {
 				
 				public static func ==(lhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics, rhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Character.Medal.GetCharactersCharacterIDMedalsGraphics) {
+					color = other.color
+					graphic = other.graphic
+					layer = other.layer
+					part = other.part
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Character.Medal.GetCharactersCharacterIDMedalsGraphics(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDMedalsGraphics)?.hashValue == hashValue
 				}
 				
 			}
@@ -1600,10 +1846,31 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Medal) {
+				corporationID = other.corporationID
+				date = other.date
+				localizedDescription = other.localizedDescription
+				graphics = other.graphics.flatMap { Character.Medal.GetCharactersCharacterIDMedalsGraphics($0) }
+				issuerID = other.issuerID
+				medalID = other.medalID
+				reason = other.reason
+				status = other.status
+				title = other.title
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Medal(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Medal)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Research: NSObject, NSSecureCoding , JSONCoding {
+		public class Research: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var agentID: Int = Int()
@@ -1679,10 +1946,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Research) {
+				agentID = other.agentID
+				pointsPerDay = other.pointsPerDay
+				remainderPoints = other.remainderPoints
+				skillTypeID = other.skillTypeID
+				startedAt = other.startedAt
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Research(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Research)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Name: NSObject, NSSecureCoding , JSONCoding {
+		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var characterID: Int64 = Int64()
@@ -1737,10 +2021,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Name) {
+				characterID = other.characterID
+				characterName = other.characterName
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Name(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Name)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDCspaForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDCspaForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1791,10 +2089,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.PostCharactersCharacterIDCspaForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.PostCharactersCharacterIDCspaForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDCspaForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDPortraitInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPortraitInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1845,10 +2156,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDPortraitInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDPortraitInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPortraitInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Affiliation: NSObject, NSSecureCoding , JSONCoding {
+		public class Affiliation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int? = nil
@@ -1923,10 +2247,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Affiliation) {
+				allianceID = other.allianceID
+				characterID = other.characterID
+				corporationID = other.corporationID
+				factionID = other.factionID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Affiliation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Affiliation)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class CSPAChargeCost: NSObject, NSSecureCoding , JSONCoding {
+		public class CSPAChargeCost: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var cost: Int64? = nil
@@ -1977,10 +2317,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.CSPAChargeCost) {
+				cost = other.cost
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.CSPAChargeCost(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CSPAChargeCost)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Characters: NSObject, NSSecureCoding , JSONCoding {
+		public class Characters: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var characters: [Int] = []
@@ -2027,10 +2380,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Characters) {
+				characters = other.characters.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Characters(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Characters)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2081,10 +2447,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Information: NSObject, NSSecureCoding , JSONCoding {
+		public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDGender: String, JSONCoding, HTTPQueryable {
 				case female = "female"
@@ -2229,10 +2608,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.Information) {
+				allianceID = other.allianceID
+				ancestryID = other.ancestryID
+				birthday = other.birthday
+				bloodlineID = other.bloodlineID
+				corporationID = other.corporationID
+				localizedDescription = other.localizedDescription
+				gender = other.gender
+				name = other.name
+				raceID = other.raceID
+				securityStatus = other.securityStatus
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Information(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Information)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDPortraitNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPortraitNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2283,10 +2684,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDPortraitNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDPortraitNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPortraitNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class CorporationHistory: NSObject, NSSecureCoding , JSONCoding {
+		public class CorporationHistory: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var corporationID: Int? = nil
@@ -2367,10 +2781,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.CorporationHistory) {
+				corporationID = other.corporationID
+				isDeleted = other.isDeleted
+				recordID = other.recordID
+				startDate = other.startDate
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.CorporationHistory(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CorporationHistory)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDCspaInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDCspaInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2421,10 +2851,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.PostCharactersCharacterIDCspaInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.PostCharactersCharacterIDCspaInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDCspaInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDMedalsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDMedalsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2475,10 +2918,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDMedalsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDMedalsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDMedalsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersAffiliationInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersAffiliationInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2529,10 +2985,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.PostCharactersAffiliationInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.PostCharactersAffiliationInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersAffiliationInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDAgentsResearchInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDAgentsResearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2583,10 +3052,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Character.GetCharactersCharacterIDAgentsResearchInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDAgentsResearchInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDAgentsResearchInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDChatChannelsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDChatChannelsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2635,6 +3117,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDChatChannelsForbidden, rhs: Character.GetCharactersCharacterIDChatChannelsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.GetCharactersCharacterIDChatChannelsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDChatChannelsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDChatChannelsForbidden)?.hashValue == hashValue
 			}
 			
 		}

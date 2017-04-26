@@ -49,9 +49,9 @@ public extension ESI {
 		}
 		
 		
-		public class Price: NSObject, NSSecureCoding , JSONCoding {
+		public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetInsurancePricesLevels: NSObject, NSSecureCoding , JSONCoding {
+			public class GetInsurancePricesLevels: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var cost: Float = Float()
@@ -113,6 +113,21 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Insurance.Price.GetInsurancePricesLevels) {
+					cost = other.cost
+					name = other.name
+					payout = other.payout
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Insurance.Price.GetInsurancePricesLevels(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetInsurancePricesLevels)?.hashValue == hashValue
+				}
+				
 			}
 			
 			public var levels: [Insurance.Price.GetInsurancePricesLevels] = []
@@ -166,10 +181,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Insurance.Price) {
+				levels = other.levels.flatMap { Insurance.Price.GetInsurancePricesLevels($0) }
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Insurance.Price(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Price)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetInsurancePricesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetInsurancePricesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -218,6 +247,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Insurance.GetInsurancePricesInternalServerError, rhs: Insurance.GetInsurancePricesInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Insurance.GetInsurancePricesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Insurance.GetInsurancePricesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetInsurancePricesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

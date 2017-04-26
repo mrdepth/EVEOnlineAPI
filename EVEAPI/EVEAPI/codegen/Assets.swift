@@ -48,7 +48,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDAssetsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDAssetsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -99,10 +99,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Assets.GetCharactersCharacterIDAssetsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Assets.GetCharactersCharacterIDAssetsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDAssetsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Asset: NSObject, NSSecureCoding , JSONCoding {
+		public class Asset: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDAssetsLocationFlag: String, JSONCoding, HTTPQueryable {
 				case assetSafety = "AssetSafety"
@@ -316,10 +329,29 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Assets.Asset) {
+				isSingleton = other.isSingleton
+				itemID = other.itemID
+				locationFlag = other.locationFlag
+				locationID = other.locationID
+				locationType = other.locationType
+				quantity = other.quantity
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Assets.Asset(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Asset)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDAssetsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDAssetsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -368,6 +400,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Assets.GetCharactersCharacterIDAssetsForbidden, rhs: Assets.GetCharactersCharacterIDAssetsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Assets.GetCharactersCharacterIDAssetsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Assets.GetCharactersCharacterIDAssetsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDAssetsForbidden)?.hashValue == hashValue
 			}
 			
 		}

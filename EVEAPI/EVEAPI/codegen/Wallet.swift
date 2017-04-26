@@ -48,7 +48,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDWalletsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDWalletsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -99,10 +99,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wallet.GetCharactersCharacterIDWalletsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wallet.GetCharactersCharacterIDWalletsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDWalletsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Balance: NSObject, NSSecureCoding , JSONCoding {
+		public class Balance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var balance: Int64? = nil
@@ -163,10 +176,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Wallet.Balance) {
+				balance = other.balance
+				walletID = other.walletID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wallet.Balance(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Balance)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDWalletsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDWalletsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -215,6 +242,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Wallet.GetCharactersCharacterIDWalletsForbidden, rhs: Wallet.GetCharactersCharacterIDWalletsForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Wallet.GetCharactersCharacterIDWalletsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wallet.GetCharactersCharacterIDWalletsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDWalletsForbidden)?.hashValue == hashValue
 			}
 			
 		}

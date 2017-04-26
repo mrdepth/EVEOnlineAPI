@@ -113,7 +113,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsPlanetIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -164,10 +164,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPlanetsPlanetIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -218,10 +231,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSchematicsSchematicIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Colony: NSObject, NSSecureCoding , JSONCoding {
+		public class Colony: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDPlanetsPlanetType: String, JSONCoding, HTTPQueryable {
 				case barren = "barren"
@@ -339,10 +365,29 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.Colony) {
+				lastUpdate = other.lastUpdate
+				numPins = other.numPins
+				ownerID = other.ownerID
+				planetID = other.planetID
+				planetType = other.planetType
+				solarSystemID = other.solarSystemID
+				upgradeLevel = other.upgradeLevel
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.Colony(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Colony)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetUniverseSchematicsSchematicIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetUniverseSchematicsSchematicIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -393,10 +438,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetUniverseSchematicsSchematicIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetUniverseSchematicsSchematicIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSchematicsSchematicIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -447,10 +505,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPlanetsPlanetIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -501,14 +572,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPlanetsPlanetIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class ColonyLayout: NSObject, NSSecureCoding , JSONCoding {
+		public class ColonyLayout: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDRoutes: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDPlanetsPlanetIDRoutes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDWaypoints: NSObject, NSSecureCoding , JSONCoding {
+				public class GetCharactersCharacterIDPlanetsPlanetIDWaypoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var order: Int = Int()
@@ -561,6 +645,20 @@ public extension ESI {
 					
 					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints) -> Bool {
 						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints) {
+						order = other.order
+						pinID = other.pinID
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetCharactersCharacterIDPlanetsPlanetIDWaypoints)?.hashValue == hashValue
 					}
 					
 				}
@@ -648,9 +746,27 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes) {
+					contentTypeID = other.contentTypeID
+					destinationPinID = other.destinationPinID
+					quantity = other.quantity
+					routeID = other.routeID
+					sourcePinID = other.sourcePinID
+					waypoints = other.waypoints?.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints($0) }
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDPlanetsPlanetIDRoutes)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var destinationPinID: Int64 = Int64()
@@ -712,13 +828,28 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks) {
+					destinationPinID = other.destinationPinID
+					linkLevel = other.linkLevel
+					sourcePinID = other.sourcePinID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDPlanetsPlanetIDLinks)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDPins: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDPlanetsPlanetIDPins: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails: NSObject, NSSecureCoding , JSONCoding {
+				public class GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
-					public class GetCharactersCharacterIDPlanetsPlanetIDHeads: NSObject, NSSecureCoding , JSONCoding {
+					public class GetCharactersCharacterIDPlanetsPlanetIDHeads: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 						
 						
 						public var headID: Int = Int()
@@ -778,6 +909,21 @@ public extension ESI {
 						
 						public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads) -> Bool {
 							return lhs.hashValue == rhs.hashValue
+						}
+						
+						init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads) {
+							headID = other.headID
+							latitude = other.latitude
+							longitude = other.longitude
+						}
+						
+						public func copy(with zone: NSZone? = nil) -> Any {
+							return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads(self)
+						}
+						
+						
+						public override func isEqual(_ object: Any?) -> Bool {
+							return (object as? GetCharactersCharacterIDPlanetsPlanetIDHeads)?.hashValue == hashValue
 						}
 						
 					}
@@ -866,9 +1012,26 @@ public extension ESI {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
+					init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails) {
+						cycleTime = other.cycleTime
+						headRadius = other.headRadius
+						heads = other.heads.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads($0) }
+						productTypeID = other.productTypeID
+						qtyPerCycle = other.qtyPerCycle
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails)?.hashValue == hashValue
+					}
+					
 				}
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails: NSObject, NSSecureCoding , JSONCoding {
+				public class GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var schematicID: Int = Int()
@@ -914,6 +1077,19 @@ public extension ESI {
 					
 					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails) -> Bool {
 						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails) {
+						schematicID = other.schematicID
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails)?.hashValue == hashValue
 					}
 					
 				}
@@ -1044,6 +1220,28 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins) {
+					expiryTime = other.expiryTime
+					extractorDetails = other.extractorDetails != nil ? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails(other.extractorDetails!) : nil
+					factoryDetails = other.factoryDetails != nil ? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails(other.factoryDetails!) : nil
+					installTime = other.installTime
+					lastCycleStart = other.lastCycleStart
+					latitude = other.latitude
+					longitude = other.longitude
+					pinID = other.pinID
+					schematicID = other.schematicID
+					typeID = other.typeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDPlanetsPlanetIDPins)?.hashValue == hashValue
+				}
+				
 			}
 			
 			public var links: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] = []
@@ -1102,10 +1300,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.ColonyLayout) {
+				links = other.links.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks($0) }
+				pins = other.pins.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins($0) }
+				routes = other.routes.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes($0) }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.ColonyLayout(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ColonyLayout)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1156,10 +1369,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPlanetsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDPlanetsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1210,10 +1436,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPlanetsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class SchematicInformation: NSObject, NSSecureCoding , JSONCoding {
+		public class SchematicInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var cycleTime: Int = Int()
@@ -1266,6 +1505,20 @@ public extension ESI {
 			
 			public static func ==(lhs: PlanetaryInteraction.SchematicInformation, rhs: PlanetaryInteraction.SchematicInformation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: PlanetaryInteraction.SchematicInformation) {
+				cycleTime = other.cycleTime
+				schematicName = other.schematicName
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.SchematicInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? SchematicInformation)?.hashValue == hashValue
 			}
 			
 		}

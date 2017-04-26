@@ -314,7 +314,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDStructuresInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDStructuresInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -365,10 +365,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDStructuresInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDStructuresInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDStructuresInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDIconsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDIconsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -419,10 +432,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDIconsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDIconsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDIconsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDRolesForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDRolesForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -473,10 +499,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDRolesForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDRolesForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDRolesForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -527,10 +566,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsNamesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -581,10 +633,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsNamesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsNamesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsNamesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Icon: NSObject, NSSecureCoding , JSONCoding {
+		public class Icon: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var px128x128: String? = nil
@@ -655,10 +720,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.Icon) {
+				px128x128 = other.px128x128
+				px256x256 = other.px256x256
+				px64x64 = other.px64x64
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Icon(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Icon)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCorporationsCorporationIDStructuresStructureIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCorporationsCorporationIDStructuresStructureIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -709,10 +789,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.PutCorporationsCorporationIDStructuresStructureIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.PutCorporationsCorporationIDStructuresStructureIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCorporationsCorporationIDStructuresStructureIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDAlliancehistoryInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDAlliancehistoryInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -763,10 +856,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDAlliancehistoryInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDAlliancehistoryInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDAlliancehistoryInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -817,10 +923,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDIconsNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDIconsNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDIconsNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Information: NSObject, NSSecureCoding , JSONCoding {
+		public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCorporationsCorporationIDFaction: String, JSONCoding, HTTPQueryable {
 				case amarr = "Amarr"
@@ -971,10 +1090,33 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.Information) {
+				allianceID = other.allianceID
+				ceoID = other.ceoID
+				corporationDescription = other.corporationDescription
+				corporationName = other.corporationName
+				creationDate = other.creationDate
+				creatorID = other.creatorID
+				faction = other.faction
+				memberCount = other.memberCount
+				taxRate = other.taxRate
+				ticker = other.ticker
+				url = other.url
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Information(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Information)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDRolesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDRolesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1025,10 +1167,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDRolesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDRolesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDRolesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDStructuresForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDStructuresForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1079,10 +1234,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDStructuresForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDStructuresForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDStructuresForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDMembersInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDMembersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1133,10 +1301,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDMembersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDMembersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDMembersInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Member: NSObject, NSSecureCoding , JSONCoding {
+		public class Member: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var characterID: Int = Int()
@@ -1184,10 +1365,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.Member) {
+				characterID = other.characterID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Member(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Member)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1238,10 +1432,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsNpccorpsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsNpccorpsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1292,10 +1499,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsNpccorpsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsNpccorpsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsNpccorpsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Name: NSObject, NSSecureCoding , JSONCoding {
+		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var corporationID: Int = Int()
@@ -1350,12 +1570,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.Name) {
+				corporationID = other.corporationID
+				corporationName = other.corporationName
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Name(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Name)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class History: NSObject, NSSecureCoding , JSONCoding {
+		public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int = Int()
@@ -1408,6 +1642,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance, rhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) {
+					allianceID = other.allianceID
+					isDeleted = other.isDeleted
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDAlliancehistoryAlliance)?.hashValue == hashValue
 				}
 				
 			}
@@ -1474,10 +1722,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.History) {
+				alliance = other.alliance != nil ? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(other.alliance!) : nil
+				recordID = other.recordID
+				startDate = other.startDate
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.History(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? History)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Role: NSObject, NSSecureCoding , JSONCoding {
+		public class Role: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCorporationsCorporationIDRolesRolesAtBase: String, JSONCoding, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
@@ -2172,10 +2435,31 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.Role) {
+				characterID = other.characterID
+				grantableRoles = other.grantableRoles?.flatMap { $0 }
+				grantableRolesAtBase = other.grantableRolesAtBase?.flatMap { $0 }
+				grantableRolesAtHq = other.grantableRolesAtHq?.flatMap { $0 }
+				grantableRolesAtOther = other.grantableRolesAtOther?.flatMap { $0 }
+				roles = other.roles?.flatMap { $0 }
+				rolesAtBase = other.rolesAtBase?.flatMap { $0 }
+				rolesAtHq = other.rolesAtHq?.flatMap { $0 }
+				rolesAtOther = other.rolesAtOther?.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Role(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Role)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class VulnerabilitySchedule: NSObject, NSSecureCoding , JSONCoding {
+		public class VulnerabilitySchedule: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var day: Int = Int()
@@ -2230,10 +2514,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.VulnerabilitySchedule) {
+				day = other.day
+				hour = other.hour
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.VulnerabilitySchedule(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? VulnerabilitySchedule)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PutCorporationsCorporationIDStructuresStructureIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PutCorporationsCorporationIDStructuresStructureIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2284,10 +2582,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.PutCorporationsCorporationIDStructuresStructureIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.PutCorporationsCorporationIDStructuresStructureIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PutCorporationsCorporationIDStructuresStructureIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCorporationsCorporationIDMembersForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCorporationsCorporationIDMembersForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -2338,12 +2649,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Corporation.GetCorporationsCorporationIDMembersForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDMembersForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDMembersForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Structure: NSObject, NSSecureCoding , JSONCoding {
+		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCorporationsCorporationIDStructuresCurrentVul: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCorporationsCorporationIDStructuresCurrentVul: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var day: Int = Int()
@@ -2398,9 +2722,23 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul) {
+					day = other.day
+					hour = other.hour
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDStructuresCurrentVul)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCorporationsCorporationIDStructuresNextVul: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCorporationsCorporationIDStructuresNextVul: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var day: Int = Int()
@@ -2455,9 +2793,23 @@ public extension ESI {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
+				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul) {
+					day = other.day
+					hour = other.hour
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDStructuresNextVul)?.hashValue == hashValue
+				}
+				
 			}
 			
-			public class GetCorporationsCorporationIDStructuresServices: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCorporationsCorporationIDStructuresServices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetCorporationsCorporationIDStructuresState: String, JSONCoding, HTTPQueryable {
 					case cleanup = "cleanup"
@@ -2533,6 +2885,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Corporation.Structure.GetCorporationsCorporationIDStructuresServices, rhs: Corporation.Structure.GetCorporationsCorporationIDStructuresServices) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresServices) {
+					name = other.name
+					state = other.state
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.Structure.GetCorporationsCorporationIDStructuresServices(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDStructuresServices)?.hashValue == hashValue
 				}
 				
 			}
@@ -2670,6 +3036,30 @@ public extension ESI {
 			
 			public static func ==(lhs: Corporation.Structure, rhs: Corporation.Structure) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.Structure) {
+				corporationID = other.corporationID
+				currentVul = other.currentVul.flatMap { Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul($0) }
+				fuelExpires = other.fuelExpires
+				nextVul = other.nextVul.flatMap { Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul($0) }
+				profileID = other.profileID
+				services = other.services?.flatMap { Corporation.Structure.GetCorporationsCorporationIDStructuresServices($0) }
+				stateTimerEnd = other.stateTimerEnd
+				stateTimerStart = other.stateTimerStart
+				structureID = other.structureID
+				systemID = other.systemID
+				typeID = other.typeID
+				unanchorsAt = other.unanchorsAt
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Structure(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Structure)?.hashValue == hashValue
 			}
 			
 		}

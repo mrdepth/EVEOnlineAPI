@@ -178,7 +178,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetOpportunitiesGroupsGroupIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetOpportunitiesGroupsGroupIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -229,10 +229,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.GetOpportunitiesGroupsGroupIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetOpportunitiesGroupsGroupIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetOpportunitiesGroupsGroupIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDOpportunitiesForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDOpportunitiesForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -283,10 +296,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.GetCharactersCharacterIDOpportunitiesForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetCharactersCharacterIDOpportunitiesForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDOpportunitiesForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Group: NSObject, NSSecureCoding , JSONCoding {
+		public class Group: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var connectedGroups: [Int] = []
@@ -367,10 +393,28 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.Group) {
+				connectedGroups = other.connectedGroups.flatMap { $0 }
+				localizedDescription = other.localizedDescription
+				groupID = other.groupID
+				name = other.name
+				notification = other.notification
+				requiredTasks = other.requiredTasks.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.Group(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Group)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetOpportunitiesTasksInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetOpportunitiesTasksInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -421,10 +465,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.GetOpportunitiesTasksInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetOpportunitiesTasksInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetOpportunitiesTasksInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetOpportunitiesGroupsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetOpportunitiesGroupsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -475,10 +532,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.GetOpportunitiesGroupsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetOpportunitiesGroupsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetOpportunitiesGroupsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDOpportunitiesInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDOpportunitiesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -529,10 +599,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDOpportunitiesInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class CompletedTask: NSObject, NSSecureCoding , JSONCoding {
+		public class CompletedTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var completedAt: Date = Date()
@@ -587,10 +670,24 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.CompletedTask) {
+				completedAt = other.completedAt
+				taskID = other.taskID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.CompletedTask(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CompletedTask)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class OpportunitiesTask: NSObject, NSSecureCoding , JSONCoding {
+		public class OpportunitiesTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var localizedDescription: String = String()
@@ -659,10 +756,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Opportunities.OpportunitiesTask) {
+				localizedDescription = other.localizedDescription
+				name = other.name
+				notification = other.notification
+				taskID = other.taskID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.OpportunitiesTask(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? OpportunitiesTask)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetOpportunitiesTasksTaskIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetOpportunitiesTasksTaskIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -711,6 +824,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Opportunities.GetOpportunitiesTasksTaskIDInternalServerError, rhs: Opportunities.GetOpportunitiesTasksTaskIDInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Opportunities.GetOpportunitiesTasksTaskIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetOpportunitiesTasksTaskIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetOpportunitiesTasksTaskIDInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

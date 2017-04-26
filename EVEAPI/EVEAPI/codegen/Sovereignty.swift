@@ -111,7 +111,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetSovereigntyCampaignsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetSovereigntyCampaignsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -162,10 +162,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Sovereignty.GetSovereigntyCampaignsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Sovereignty.GetSovereigntyCampaignsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetSovereigntyCampaignsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetSovereigntyStructuresInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetSovereigntyStructuresInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -216,12 +229,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Sovereignty.GetSovereigntyStructuresInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Sovereignty.GetSovereigntyStructuresInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetSovereigntyStructuresInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Campaign: NSObject, NSSecureCoding , JSONCoding {
+		public class Campaign: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetSovereigntyCampaignsParticipants: NSObject, NSSecureCoding , JSONCoding {
+			public class GetSovereigntyCampaignsParticipants: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int = Int()
@@ -274,6 +300,20 @@ public extension ESI {
 				
 				public static func ==(lhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants, rhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants) {
+					allianceID = other.allianceID
+					score = other.score
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Sovereignty.Campaign.GetSovereigntyCampaignsParticipants(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetSovereigntyCampaignsParticipants)?.hashValue == hashValue
 				}
 				
 			}
@@ -423,10 +463,32 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Sovereignty.Campaign) {
+				attackersScore = other.attackersScore
+				campaignID = other.campaignID
+				constellationID = other.constellationID
+				defenderID = other.defenderID
+				defenderScore = other.defenderScore
+				eventType = other.eventType
+				participants = other.participants?.flatMap { Sovereignty.Campaign.GetSovereigntyCampaignsParticipants($0) }
+				solarSystemID = other.solarSystemID
+				startTime = other.startTime
+				structureID = other.structureID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Sovereignty.Campaign(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Campaign)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class System: NSObject, NSSecureCoding , JSONCoding {
+		public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int? = nil
@@ -504,10 +566,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Sovereignty.System) {
+				allianceID = other.allianceID
+				corporationID = other.corporationID
+				factionID = other.factionID
+				systemID = other.systemID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Sovereignty.System(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? System)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class Structure: NSObject, NSSecureCoding , JSONCoding {
+		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int = Int()
@@ -606,10 +684,29 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Sovereignty.Structure) {
+				allianceID = other.allianceID
+				solarSystemID = other.solarSystemID
+				structureID = other.structureID
+				structureTypeID = other.structureTypeID
+				vulnerabilityOccupancyLevel = other.vulnerabilityOccupancyLevel
+				vulnerableEndTime = other.vulnerableEndTime
+				vulnerableStartTime = other.vulnerableStartTime
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Sovereignty.Structure(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Structure)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetSovereigntyMapInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetSovereigntyMapInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -658,6 +755,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Sovereignty.GetSovereigntyMapInternalServerError, rhs: Sovereignty.GetSovereigntyMapInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Sovereignty.GetSovereigntyMapInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Sovereignty.GetSovereigntyMapInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetSovereigntyMapInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

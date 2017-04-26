@@ -1,4 +1,4 @@
-public class {className}: NSObject, NSSecureCoding , JSONCoding {
+public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 
 {nested}
 {definitions}
@@ -43,6 +43,19 @@ public class {className}: NSObject, NSSecureCoding , JSONCoding {
 
 	public static func ==(lhs: {class}, rhs: {class}) -> Bool {
 		return lhs.hashValue == rhs.hashValue
+	}
+
+	init(_ other: {classIdentifier}) {
+{copy}
+	}
+
+	public func copy(with zone: NSZone? = nil) -> Any {
+		return {classIdentifier}(self)
+	}
+
+
+	public override func isEqual(_ object: Any?) -> Bool {
+		return (object as? {className})?.hashValue == hashValue
 	}
 
 }

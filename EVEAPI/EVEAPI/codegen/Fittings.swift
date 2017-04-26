@@ -114,9 +114,9 @@ public extension ESI {
 		}
 		
 		
-		public class Fitting: NSObject, NSSecureCoding , JSONCoding {
+		public class Fitting: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDFittingsItems: NSObject, NSSecureCoding , JSONCoding {
+			public class GetCharactersCharacterIDFittingsItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var flag: Int = Int()
@@ -176,6 +176,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Fittings.Fitting.GetCharactersCharacterIDFittingsItems, rhs: Fittings.Fitting.GetCharactersCharacterIDFittingsItems) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Fittings.Fitting.GetCharactersCharacterIDFittingsItems) {
+					flag = other.flag
+					quantity = other.quantity
+					typeID = other.typeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Fittings.Fitting.GetCharactersCharacterIDFittingsItems(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCharactersCharacterIDFittingsItems)?.hashValue == hashValue
 				}
 				
 			}
@@ -252,10 +267,27 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.Fitting) {
+				localizedDescription = other.localizedDescription
+				fittingID = other.fittingID
+				items = other.items.flatMap { Fittings.Fitting.GetCharactersCharacterIDFittingsItems($0) }
+				name = other.name
+				shipTypeID = other.shipTypeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.Fitting(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Fitting)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDFittingsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDFittingsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -306,10 +338,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.GetCharactersCharacterIDFittingsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.GetCharactersCharacterIDFittingsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDFittingsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDFittingsFittingIDInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDFittingsFittingIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -360,12 +405,25 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.DeleteCharactersCharacterIDFittingsFittingIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.DeleteCharactersCharacterIDFittingsFittingIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDFittingsFittingIDInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFitting: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFitting: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class PostCharactersCharacterIDFittingsItems: NSObject, NSSecureCoding , JSONCoding {
+			public class PostCharactersCharacterIDFittingsItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var flag: Int = Int()
@@ -425,6 +483,21 @@ public extension ESI {
 				
 				public static func ==(lhs: Fittings.PostFitting.PostCharactersCharacterIDFittingsItems, rhs: Fittings.PostFitting.PostCharactersCharacterIDFittingsItems) -> Bool {
 					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Fittings.PostFitting.PostCharactersCharacterIDFittingsItems) {
+					flag = other.flag
+					quantity = other.quantity
+					typeID = other.typeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Fittings.PostFitting.PostCharactersCharacterIDFittingsItems(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostCharactersCharacterIDFittingsItems)?.hashValue == hashValue
 				}
 				
 			}
@@ -494,10 +567,26 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.PostFitting) {
+				localizedDescription = other.localizedDescription
+				items = other.items.flatMap { Fittings.PostFitting.PostCharactersCharacterIDFittingsItems($0) }
+				name = other.name
+				shipTypeID = other.shipTypeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.PostFitting(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFitting)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class GetCharactersCharacterIDFittingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class GetCharactersCharacterIDFittingsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -548,10 +637,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.GetCharactersCharacterIDFittingsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.GetCharactersCharacterIDFittingsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDFittingsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class DeleteCharactersCharacterIDFittingsFittingIDForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class DeleteCharactersCharacterIDFittingsFittingIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -602,10 +704,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.DeleteCharactersCharacterIDFittingsFittingIDForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.DeleteCharactersCharacterIDFittingsFittingIDForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDFittingsFittingIDForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDFittingsInternalServerError: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDFittingsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -656,10 +771,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.PostCharactersCharacterIDFittingsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.PostCharactersCharacterIDFittingsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDFittingsInternalServerError)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostCharactersCharacterIDFittingsForbidden: NSObject, NSSecureCoding , JSONCoding {
+		public class PostCharactersCharacterIDFittingsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -710,10 +838,23 @@ public extension ESI {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
+			init(_ other: Fittings.PostCharactersCharacterIDFittingsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.PostCharactersCharacterIDFittingsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDFittingsForbidden)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
-		public class PostFittingResult: NSObject, NSSecureCoding , JSONCoding {
+		public class PostFittingResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var fittingID: Int = Int()
@@ -759,6 +900,19 @@ public extension ESI {
 			
 			public static func ==(lhs: Fittings.PostFittingResult, rhs: Fittings.PostFittingResult) -> Bool {
 				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fittings.PostFittingResult) {
+				fittingID = other.fittingID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fittings.PostFittingResult(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFittingResult)?.hashValue == hashValue
 			}
 			
 		}
