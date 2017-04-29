@@ -22,4 +22,7 @@
    <FileRef
       location = "group:esicodegen/esicodegen.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:evecodegen/evecodegen.xcodeproj">
+   </FileRef>
 </Workspace>

@@ -1,14 +1,8 @@
-public struct Scope {
+public extension ESI.Scope {
 
 {values}
 	
-	public let rawValue: String
-	
-	public init(_ value: String) {
-		rawValue = value
-	}
-	
-	public static var all: [Scope]  {
+	public static var all: [ESI.Scope]  {
 		get {
 			return [
 {scopes}

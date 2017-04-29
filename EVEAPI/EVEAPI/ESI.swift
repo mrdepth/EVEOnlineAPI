@@ -102,6 +102,13 @@ public class ESI: SessionManager {
 		}
 	}
 
+	public struct Scope {
+		public let rawValue: String
+		
+		public init(_ value: String) {
+			rawValue = value
+		}
+	}
 }
 
 
@@ -156,5 +163,91 @@ extension DataRequest {
 			responseSerializer: serializer,
 			completionHandler: completionHandler
 		)
+	}
+}
+
+public extension ESI.Scope {
+	public static let characterAccountRead = ESI.Scope("characterAccountRead")
+	public static let characterAssetsRead = ESI.Scope("characterAssetsRead")
+	public static let characterBookmarksRead = ESI.Scope("characterBookmarksRead")
+	public static let characterCalendarRead = ESI.Scope("characterCalendarRead")
+	public static let characterChatChannelsRead = ESI.Scope("characterChatChannelsRead")
+	public static let characterClonesRead = ESI.Scope("characterClonesRead")
+	public static let characterContactsRead = ESI.Scope("characterContactsRead")
+	public static let characterContactsWrite = ESI.Scope("characterContactsWrite")
+	public static let characterContractsRead = ESI.Scope("characterContractsRead")
+	public static let characterFactionalWarfareRead = ESI.Scope("characterFactionalWarfareRead")
+	public static let characterFittingsRead = ESI.Scope("characterFittingsRead")
+	public static let characterFittingsWrite = ESI.Scope("characterFittingsWrite")
+	public static let characterIndustryJobsRead = ESI.Scope("characterIndustryJobsRead")
+	public static let characterKillsRead = ESI.Scope("characterKillsRead")
+	public static let characterLocationRead = ESI.Scope("characterLocationRead")
+	public static let characterLoyaltyPointsRead = ESI.Scope("characterLoyaltyPointsRead")
+	public static let characterMailRead = ESI.Scope("characterMailRead")
+	public static let characterMarketOrdersRead = ESI.Scope("characterMarketOrdersRead")
+	public static let characterMedalsRead = ESI.Scope("characterMedalsRead")
+	public static let characterNavigationWrite = ESI.Scope("characterNavigationWrite")
+	public static let characterNotificationsRead = ESI.Scope("characterNotificationsRead")
+	public static let characterOpportunitiesRead = ESI.Scope("characterOpportunitiesRead")
+	public static let characterResearchRead = ESI.Scope("characterResearchRead")
+	public static let characterSkillsRead = ESI.Scope("characterSkillsRead")
+	public static let characterStatsRead = ESI.Scope("characterStatsRead")
+	public static let characterWalletRead = ESI.Scope("characterWalletRead")
+	public static let corporationAssetsRead = ESI.Scope("corporationAssetsRead")
+	public static let corporationBookmarksRead = ESI.Scope("corporationBookmarksRead")
+	public static let corporationContactsRead = ESI.Scope("corporationContactsRead")
+	public static let corporationContractsRead = ESI.Scope("corporationContractsRead")
+	public static let corporationFactionalWarfareRead = ESI.Scope("corporationFactionalWarfareRead")
+	public static let corporationIndustryJobsRead = ESI.Scope("corporationIndustryJobsRead")
+	public static let corporationKillsRead = ESI.Scope("corporationKillsRead")
+	public static let corporationMarketOrdersRead = ESI.Scope("corporationMarketOrdersRead")
+	public static let corporationMedalsRead = ESI.Scope("corporationMedalsRead")
+	public static let corporationMembersRead = ESI.Scope("corporationMembersRead")
+	public static let corporationShareholdersRead = ESI.Scope("corporationShareholdersRead")
+	public static let corporationStructuresRead = ESI.Scope("corporationStructuresRead")
+	public static let corporationWalletRead = ESI.Scope("corporationWalletRead")
+	public static let fleetRead = ESI.Scope("fleetRead")
+	public static let fleetWrite = ESI.Scope("fleetWrite")
+	public static let publicData = ESI.Scope("publicData")
+	public static let remoteClientUI = ESI.Scope("remoteClientUI")
+	public static let structureVulnUpdate = ESI.Scope("structureVulnUpdate")
+	
+	public static var `default`: [ESI.Scope]  {
+		get {
+			return [
+				.characterAccountRead,
+				.characterClonesRead,
+				.characterIndustryJobsRead,
+				.characterMarketOrdersRead,
+				.characterSkillsRead,
+				.characterStatsRead,
+				.characterWalletRead,
+				.esiClonesReadClonesV1,
+				.esiFittingsWriteFittingsV1,
+				.esiCharactersReadStandingsV1,
+				.esiUniverseReadStructuresV1,
+				.esiMarketsStructureMarketsV1,
+				.esiMailReadMailV1,
+				.esiSkillsReadSkillqueueV1,
+				.esiAssetsReadAssetsV1,
+				.esiCalendarRespondCalendarEventsV1,
+				.esiMailOrganizeMailV1,
+				.esiKillmailsReadKillmailsV1,
+				.esiMailSendMailV1,
+				.esiWalletReadCharacterWalletV1,
+				.esiCharactersReadAgentsResearchV1,
+				.esiFittingsReadFittingsV1,
+				.esiCalendarReadCalendarEventsV1,
+				.esiSkillsReadSkillsV1,
+				.esiLocationReadShipTypeV1,
+				.esiCharactersWriteContactsV1,
+				.esiCharactersReadContactsV1,
+				.esiPlanetsManagePlanetsV1,
+				.esiSearchSearchStructuresV1,
+				.esiLocationReadLocationV1,
+				.esiBookmarksReadCharacterBookmarksV1,
+				.esiCharactersReadLoyaltyV1,
+			]
+		}
 	}
 }

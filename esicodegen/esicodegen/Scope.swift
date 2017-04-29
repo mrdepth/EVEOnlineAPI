@@ -44,20 +44,22 @@ class Scope: Namespace {
 			
 			for (_, array) in security {
 				for scope in array {
-					values.append("public static let \(scope.camelBack) = Scope(\"\(scope)\")")
+					values.append("public static let \(scope.camelBack) = ESI.Scope(\"\(scope)\")")
 					scopes.append(".\(scope.camelBack)")
 				}
 			}
 			
 			template = template.replacingOccurrences(of: "{values}", with: values.joined(separator: "\n"))
 			template = template.replacingOccurrences(of: "{scopes}", with: scopes.joined(separator: ",\n"))
-			s += template
 			
 			s += "class func loadClassess() {\n"
 			s += classLoaders.joined(separator: "\n")
 			s += "\n}"
 			
-			s += "\n}"
+			s += "\n}\n\n"
+			
+			s += template
+
 			return s
 		}
 		else {

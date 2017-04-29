@@ -55,93 +55,6 @@ public extension ESI {
 	}
 	
 	
-	public struct Scope {
-		
-		public static let esiClonesReadClonesV1 = Scope("esi-clones.read_clones.v1")
-		public static let esiCorporationsReadCorporationMembershipV1 = Scope("esi-corporations.read_corporation_membership.v1")
-		public static let esiFittingsWriteFittingsV1 = Scope("esi-fittings.write_fittings.v1")
-		public static let esiCharactersReadStandingsV1 = Scope("esi-characters.read_standings.v1")
-		public static let esiUniverseReadStructuresV1 = Scope("esi-universe.read_structures.v1")
-		public static let esiMarketsStructureMarketsV1 = Scope("esi-markets.structure_markets.v1")
-		public static let esiCharactersReadMedalsV1 = Scope("esi-characters.read_medals.v1")
-		public static let esiMailReadMailV1 = Scope("esi-mail.read_mail.v1")
-		public static let esiSkillsReadSkillqueueV1 = Scope("esi-skills.read_skillqueue.v1")
-		public static let esiAssetsReadAssetsV1 = Scope("esi-assets.read_assets.v1")
-		public static let esiCalendarRespondCalendarEventsV1 = Scope("esi-calendar.respond_calendar_events.v1")
-		public static let esiMailOrganizeMailV1 = Scope("esi-mail.organize_mail.v1")
-		public static let esiKillmailsReadKillmailsV1 = Scope("esi-killmails.read_killmails.v1")
-		public static let esiMailSendMailV1 = Scope("esi-mail.send_mail.v1")
-		public static let esiWalletReadCharacterWalletV1 = Scope("esi-wallet.read_character_wallet.v1")
-		public static let esiCharactersReadOpportunitiesV1 = Scope("esi-characters.read_opportunities.v1")
-		public static let esiFleetsWriteFleetV1 = Scope("esi-fleets.write_fleet.v1")
-		public static let esiCharactersReadAgentsResearchV1 = Scope("esi-characters.read_agents_research.v1")
-		public static let esiFittingsReadFittingsV1 = Scope("esi-fittings.read_fittings.v1")
-		public static let esiCalendarReadCalendarEventsV1 = Scope("esi-calendar.read_calendar_events.v1")
-		public static let esiSkillsReadSkillsV1 = Scope("esi-skills.read_skills.v1")
-		public static let esiLocationReadShipTypeV1 = Scope("esi-location.read_ship_type.v1")
-		public static let esiCharactersWriteContactsV1 = Scope("esi-characters.write_contacts.v1")
-		public static let esiCharactersReadContactsV1 = Scope("esi-characters.read_contacts.v1")
-		public static let esiPlanetsManagePlanetsV1 = Scope("esi-planets.manage_planets.v1")
-		public static let esiSearchSearchStructuresV1 = Scope("esi-search.search_structures.v1")
-		public static let esiLocationReadLocationV1 = Scope("esi-location.read_location.v1")
-		public static let esiUiWriteWaypointV1 = Scope("esi-ui.write_waypoint.v1")
-		public static let esiUiOpenWindowV1 = Scope("esi-ui.open_window.v1")
-		public static let esiFleetsReadFleetV1 = Scope("esi-fleets.read_fleet.v1")
-		public static let esiCharactersReadChatChannelsV1 = Scope("esi-characters.read_chat_channels.v1")
-		public static let esiCorporationsWriteStructuresV1 = Scope("esi-corporations.write_structures.v1")
-		public static let esiBookmarksReadCharacterBookmarksV1 = Scope("esi-bookmarks.read_character_bookmarks.v1")
-		public static let esiCharactersReadLoyaltyV1 = Scope("esi-characters.read_loyalty.v1")
-		public static let esiCorporationsReadStructuresV1 = Scope("esi-corporations.read_structures.v1")
-		
-		public let rawValue: String
-		
-		public init(_ value: String) {
-			rawValue = value
-		}
-		
-		public static var all: [Scope]  {
-			get {
-				return [
-				.esiClonesReadClonesV1,
-				.esiCorporationsReadCorporationMembershipV1,
-				.esiFittingsWriteFittingsV1,
-				.esiCharactersReadStandingsV1,
-				.esiUniverseReadStructuresV1,
-				.esiMarketsStructureMarketsV1,
-				.esiCharactersReadMedalsV1,
-				.esiMailReadMailV1,
-				.esiSkillsReadSkillqueueV1,
-				.esiAssetsReadAssetsV1,
-				.esiCalendarRespondCalendarEventsV1,
-				.esiMailOrganizeMailV1,
-				.esiKillmailsReadKillmailsV1,
-				.esiMailSendMailV1,
-				.esiWalletReadCharacterWalletV1,
-				.esiCharactersReadOpportunitiesV1,
-				.esiFleetsWriteFleetV1,
-				.esiCharactersReadAgentsResearchV1,
-				.esiFittingsReadFittingsV1,
-				.esiCalendarReadCalendarEventsV1,
-				.esiSkillsReadSkillsV1,
-				.esiLocationReadShipTypeV1,
-				.esiCharactersWriteContactsV1,
-				.esiCharactersReadContactsV1,
-				.esiPlanetsManagePlanetsV1,
-				.esiSearchSearchStructuresV1,
-				.esiLocationReadLocationV1,
-				.esiUiWriteWaypointV1,
-				.esiUiOpenWindowV1,
-				.esiFleetsReadFleetV1,
-				.esiCharactersReadChatChannelsV1,
-				.esiCorporationsWriteStructuresV1,
-				.esiBookmarksReadCharacterBookmarksV1,
-				.esiCharactersReadLoyaltyV1,
-				.esiCorporationsReadStructuresV1
-				]
-			}
-		}
-	}
-	
 	class func loadClassess() {
 		_ = Routes.GetRouteOriginDestinationNotFound.classForCoder()
 		_ = Wars.Kills.classForCoder()
@@ -547,3 +460,85 @@ public extension ESI {
 		_ = Sovereignty.GetSovereigntyMapInternalServerError.classForCoder()
 	}
 }
+
+public extension ESI.Scope {
+	
+	public static let esiClonesReadClonesV1 = ESI.Scope("esi-clones.read_clones.v1")
+	public static let esiCorporationsReadCorporationMembershipV1 = ESI.Scope("esi-corporations.read_corporation_membership.v1")
+	public static let esiFittingsWriteFittingsV1 = ESI.Scope("esi-fittings.write_fittings.v1")
+	public static let esiCharactersReadStandingsV1 = ESI.Scope("esi-characters.read_standings.v1")
+	public static let esiUniverseReadStructuresV1 = ESI.Scope("esi-universe.read_structures.v1")
+	public static let esiMarketsStructureMarketsV1 = ESI.Scope("esi-markets.structure_markets.v1")
+	public static let esiCharactersReadMedalsV1 = ESI.Scope("esi-characters.read_medals.v1")
+	public static let esiMailReadMailV1 = ESI.Scope("esi-mail.read_mail.v1")
+	public static let esiSkillsReadSkillqueueV1 = ESI.Scope("esi-skills.read_skillqueue.v1")
+	public static let esiAssetsReadAssetsV1 = ESI.Scope("esi-assets.read_assets.v1")
+	public static let esiCalendarRespondCalendarEventsV1 = ESI.Scope("esi-calendar.respond_calendar_events.v1")
+	public static let esiMailOrganizeMailV1 = ESI.Scope("esi-mail.organize_mail.v1")
+	public static let esiKillmailsReadKillmailsV1 = ESI.Scope("esi-killmails.read_killmails.v1")
+	public static let esiMailSendMailV1 = ESI.Scope("esi-mail.send_mail.v1")
+	public static let esiWalletReadCharacterWalletV1 = ESI.Scope("esi-wallet.read_character_wallet.v1")
+	public static let esiCharactersReadOpportunitiesV1 = ESI.Scope("esi-characters.read_opportunities.v1")
+	public static let esiFleetsWriteFleetV1 = ESI.Scope("esi-fleets.write_fleet.v1")
+	public static let esiCharactersReadAgentsResearchV1 = ESI.Scope("esi-characters.read_agents_research.v1")
+	public static let esiFittingsReadFittingsV1 = ESI.Scope("esi-fittings.read_fittings.v1")
+	public static let esiCalendarReadCalendarEventsV1 = ESI.Scope("esi-calendar.read_calendar_events.v1")
+	public static let esiSkillsReadSkillsV1 = ESI.Scope("esi-skills.read_skills.v1")
+	public static let esiLocationReadShipTypeV1 = ESI.Scope("esi-location.read_ship_type.v1")
+	public static let esiCharactersWriteContactsV1 = ESI.Scope("esi-characters.write_contacts.v1")
+	public static let esiCharactersReadContactsV1 = ESI.Scope("esi-characters.read_contacts.v1")
+	public static let esiPlanetsManagePlanetsV1 = ESI.Scope("esi-planets.manage_planets.v1")
+	public static let esiSearchSearchStructuresV1 = ESI.Scope("esi-search.search_structures.v1")
+	public static let esiLocationReadLocationV1 = ESI.Scope("esi-location.read_location.v1")
+	public static let esiUiWriteWaypointV1 = ESI.Scope("esi-ui.write_waypoint.v1")
+	public static let esiUiOpenWindowV1 = ESI.Scope("esi-ui.open_window.v1")
+	public static let esiFleetsReadFleetV1 = ESI.Scope("esi-fleets.read_fleet.v1")
+	public static let esiCharactersReadChatChannelsV1 = ESI.Scope("esi-characters.read_chat_channels.v1")
+	public static let esiCorporationsWriteStructuresV1 = ESI.Scope("esi-corporations.write_structures.v1")
+	public static let esiBookmarksReadCharacterBookmarksV1 = ESI.Scope("esi-bookmarks.read_character_bookmarks.v1")
+	public static let esiCharactersReadLoyaltyV1 = ESI.Scope("esi-characters.read_loyalty.v1")
+	public static let esiCorporationsReadStructuresV1 = ESI.Scope("esi-corporations.read_structures.v1")
+	
+	public static var all: [ESI.Scope]  {
+		get {
+			return [
+			.esiClonesReadClonesV1,
+			.esiCorporationsReadCorporationMembershipV1,
+			.esiFittingsWriteFittingsV1,
+			.esiCharactersReadStandingsV1,
+			.esiUniverseReadStructuresV1,
+			.esiMarketsStructureMarketsV1,
+			.esiCharactersReadMedalsV1,
+			.esiMailReadMailV1,
+			.esiSkillsReadSkillqueueV1,
+			.esiAssetsReadAssetsV1,
+			.esiCalendarRespondCalendarEventsV1,
+			.esiMailOrganizeMailV1,
+			.esiKillmailsReadKillmailsV1,
+			.esiMailSendMailV1,
+			.esiWalletReadCharacterWalletV1,
+			.esiCharactersReadOpportunitiesV1,
+			.esiFleetsWriteFleetV1,
+			.esiCharactersReadAgentsResearchV1,
+			.esiFittingsReadFittingsV1,
+			.esiCalendarReadCalendarEventsV1,
+			.esiSkillsReadSkillsV1,
+			.esiLocationReadShipTypeV1,
+			.esiCharactersWriteContactsV1,
+			.esiCharactersReadContactsV1,
+			.esiPlanetsManagePlanetsV1,
+			.esiSearchSearchStructuresV1,
+			.esiLocationReadLocationV1,
+			.esiUiWriteWaypointV1,
+			.esiUiOpenWindowV1,
+			.esiFleetsReadFleetV1,
+			.esiCharactersReadChatChannelsV1,
+			.esiCorporationsWriteStructuresV1,
+			.esiBookmarksReadCharacterBookmarksV1,
+			.esiCharactersReadLoyaltyV1,
+			.esiCorporationsReadStructuresV1
+			]
+		}
+	}
+}
+
