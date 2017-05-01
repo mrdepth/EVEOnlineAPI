@@ -8,7 +8,6 @@
 
 import UIKit
 import EVEAPI
-import AFNetworking
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,56 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
-//		let url = ESAPI.oauth2url(clientID: "c2cc974798d4485d966fba773a8f7ef8", callbackURL: URL(string: "neocom://sso")!, scope: ESScope.all)
-//		UIApplication.shared.openURL(url)
-		
-		let data = Data(base64Encoded:"YnBsaXN0MDDUAQIDBAUGLzBYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKsHCBscHR4fIykqK1UkbnVsbNkJCgsMDQ4PEBESExQVFhcYGRpWJGNsYXNzW2NoYXJhY3RlcklEXWNoYXJhY3Rlck5hbWVccmVmcmVzaFRva2VuWXRva2VuVHlwZVlleHBpcmVzT25bYWNjZXNzVG9rZW5VcmVhbG1YY2xpZW50SUSAChIFZb26gAiABIAFgAaAA4AJgAJfECBjMmNjOTc0Nzk4ZDQ0ODVkOTY2ZmJhNzczYThmN2VmOF8QV3ZJZDUtY0ZnTlp4bk4zQ2FHN182X1RoZXI3S2c2TXJ6MWJXTDBmYmlBYjhlVEN2a19NOWVlbkNDWksyV3BkYmpzcWlfTnZkQVZ6UU0xRnhTUGk3ck9RMl8QgTMwTEZ4QnFUYlNYMk9ibXZUSWRSYzlqeUZFT2k3MDhBeFNZWDBhZjlhOHRQbXUwcUxnd3Vla0RkejZzTVR2RlRMNEp2RlFiLTZacHFObkM2anQzY3d1SjMxRzk2eWJTVGNVUnlGYldrUnViTVAzeGZfODJEVEloS0VVeG0tOC1LMFZCZWFyZXLSIAkhIldOUy50aW1lI0G9/aozoQANgAfSJCUmJ1okY2xhc3NuYW1lWCRjbGFzc2VzVk5TRGF0ZaImKFhOU09iamVjdF8QFFBvJ2t1cGF0ZWwgQm9sb3NrYXJsU2VzadIkJSwtXxASRVZFQVBJLk9BdXRoMlRva2Vuoi4oXxASRVZFQVBJLk9BdXRoMlRva2VuXxAPTlNLZXllZEFyY2hpdmVy0TEyVHJvb3SAAQAIABEAGgAjAC0AMgA3AEMASQBcAGMAbwB9AIoAlACeAKoAsAC5ALsAwADCAMQAxgDIAMoAzADOAPEBSwHPAdYB2wHjAewB7gHzAf4CBwIOAhECGgIxAjUCOgJPAlICZwJ5AnwCgQAAAAAAAAIBAAAAAAAAADMAAAAAAAAAAAAAAAAAAAKD")
-		let token = NSKeyedUnarchiver.unarchiveObject(with: data!) as! OAuth2Token
-		
-		var handler: OAuth2Handler? = OAuth2Handler(token: token, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
-		
-//		handler?.refreshToken { (error) in
-//			print("\(error)")
-//			handler = nil
-//		}
-		
-		var api: ESAPI? = ESAPI(token: token, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
-		
-		api?.character { result in
-			guard case let .success(character) = result else {return}
-			api?.corporation.members(corporationID: character.corporationID) { result in
-				guard case let .success(members) = result else {return}
-				print ("\(members)")
-				api = nil
-			}
-		}
-		
-//		api?.assets { result in
-//			print ("\(result)")
-//			api = nil
-//		}
-		
-//		
-//		api.allianceNames(allianceIDs: [99000002, 99000001], completionBlock: {(result, error) -> Void in
-//			print ("\(result!.names)")
-//			})
-//		
-//		api.marketHistory(typeID: 645, regionID: 10000002, completionBlock: { (prices, error) in
-//			print("\(prices!)")
-//		})
-		
-		/*let token = OAToken(clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu")
-		token.refreshToken = "ne0FFEggMPQi951Z7cWssyMmryocHBS609vgQCtVt-k1"
-		token.refresh { (error) in
-			var api: ESAPI?
-			api = ESAPI(token: token, cachePolicy: .useProtocolCachePolicy)
-			api?.character(completionBlock: { (result, error) in
-				api = nil
-				print("\(error)")
-			})
-			print ("accessToken: \(token.accessToken!)")
-			print ("characterID: \(token.characterID)")
-		}*/
 
 		return true
 	}

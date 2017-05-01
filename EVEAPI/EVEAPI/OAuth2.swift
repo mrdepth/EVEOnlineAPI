@@ -87,19 +87,23 @@ public class OAuth2Token: NSObject, NSSecureCoding {
 			return true
 		}
 	}
-	
 }
 
-public class OAuth2Handler: RequestAdapter, RequestRetrier {
+public class OAuth2Adapter: RequestAdapter {
+	public let token: OAuth2Token
 	
-	static let dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-		return dateFormatter
-	}()
+	public init(token: OAuth2Token) {
+		self.token = token
+	}
 	
+	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+		var request = urlRequest
+		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
+		return request
+	}
+}
+
+public class OAuth2 {
 	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
 		var query = [URLQueryItem] ()
 		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
@@ -115,7 +119,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 		components.queryItems = query
 		return components.url!
 	}
-
+	
 	
 	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Result<OAuth2Token>) -> Void) -> Bool {
 		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
@@ -159,7 +163,7 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 													
 													let token = OAuth2Token(accessToken: accessToken, refreshToken: refreshToken, tokenType: tokenType, scopes: scopes, characterID: characterID, characterName: characterName, realm: state)
 													
-													if let expiresOn = result["ExpiresOn"] as? String, let date = OAuth2Handler.dateFormatter.date(from: expiresOn) {
+													if let expiresOn = result["ExpiresOn"] as? String, let date = OAuth2Retrier.dateFormatter.date(from: expiresOn) {
 														token.expiresOn = date
 													}
 													else {
@@ -193,6 +197,17 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 			return false
 		}
 	}
+}
+
+public class OAuth2Retrier: RequestRetrier {
+	
+	static let dateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+		return dateFormatter
+	}()
 	
 	public let token: OAuth2Token
 	public let clientID: String
@@ -202,12 +217,6 @@ public class OAuth2Handler: RequestAdapter, RequestRetrier {
 		self.token = token
 		self.clientID = clientID
 		self.secretKey = secretKey
-	}
-	
-	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-		var request = urlRequest
-		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
-		return request
 	}
 	
 	private var isRefreshing = false

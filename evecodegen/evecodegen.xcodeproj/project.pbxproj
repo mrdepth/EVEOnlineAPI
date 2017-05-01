@@ -7,33 +7,48 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		122B54F31EB5C7C600E46536 /* Namespace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B54F21EB5C7C600E46536 /* Namespace.swift */; };
+		122B554D1EB6400000E46536 /* class.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 122B55481EB624B200E46536 /* class.swft */; };
+		122B554E1EB6400000E46536 /* enum.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 122B55491EB624B200E46536 /* enum.swft */; };
+		122B554F1EB6400000E46536 /* operation.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 122B554A1EB624B200E46536 /* operation.swft */; };
+		122B55501EB6400000E46536 /* scope.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 122B554B1EB624B200E46536 /* scope.swft */; };
+		122B55511EB6400000E46536 /* security.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 122B554C1EB624B200E46536 /* security.swft */; };
 		12478F231EB4E2AC006D9F75 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F221EB4E2AC006D9F75 /* main.swift */; };
 		12478F2A1EB4E3B1006D9F75 /* Scope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F291EB4E3B1006D9F75 /* Scope.swift */; };
 		12478F2C1EB4E3BA006D9F75 /* Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F2B1EB4E3BA006D9F75 /* Operation.swift */; };
-		12478F2E1EB4E3C2006D9F75 /* Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F2D1EB4E3C2006D9F75 /* Class.swift */; };
-		12478F301EB4E5FA006D9F75 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F2F1EB4E5FA006D9F75 /* Enum.swift */; };
+		12478F2E1EB4E3C2006D9F75 /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F2D1EB4E3C2006D9F75 /* Schema.swift */; };
 		12478F321EB4E674006D9F75 /* Type.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12478F311EB4E674006D9F75 /* Type.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		12478F1D1EB4E2AC006D9F75 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
+				122B554D1EB6400000E46536 /* class.swft in CopyFiles */,
+				122B554E1EB6400000E46536 /* enum.swft in CopyFiles */,
+				122B554F1EB6400000E46536 /* operation.swft in CopyFiles */,
+				122B55501EB6400000E46536 /* scope.swft in CopyFiles */,
+				122B55511EB6400000E46536 /* security.swft in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		122B54F21EB5C7C600E46536 /* Namespace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Namespace.swift; sourceTree = "<group>"; };
+		122B55481EB624B200E46536 /* class.swft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = class.swft; sourceTree = "<group>"; };
+		122B55491EB624B200E46536 /* enum.swft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = enum.swft; sourceTree = "<group>"; };
+		122B554A1EB624B200E46536 /* operation.swft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = operation.swft; sourceTree = "<group>"; };
+		122B554B1EB624B200E46536 /* scope.swft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scope.swft; sourceTree = "<group>"; };
+		122B554C1EB624B200E46536 /* security.swft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = security.swft; sourceTree = "<group>"; };
 		12478F1F1EB4E2AC006D9F75 /* evecodegen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = evecodegen; sourceTree = BUILT_PRODUCTS_DIR; };
 		12478F221EB4E2AC006D9F75 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		12478F291EB4E3B1006D9F75 /* Scope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scope.swift; sourceTree = "<group>"; };
 		12478F2B1EB4E3BA006D9F75 /* Operation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operation.swift; sourceTree = "<group>"; };
-		12478F2D1EB4E3C2006D9F75 /* Class.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Class.swift; sourceTree = "<group>"; };
-		12478F2F1EB4E5FA006D9F75 /* Enum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
+		12478F2D1EB4E3C2006D9F75 /* Schema.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		12478F311EB4E674006D9F75 /* Type.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Type.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,11 +82,16 @@
 		12478F211EB4E2AC006D9F75 /* evecodegen */ = {
 			isa = PBXGroup;
 			children = (
+				122B55481EB624B200E46536 /* class.swft */,
+				122B55491EB624B200E46536 /* enum.swft */,
+				122B554A1EB624B200E46536 /* operation.swft */,
+				122B554B1EB624B200E46536 /* scope.swft */,
+				122B554C1EB624B200E46536 /* security.swft */,
 				12478F221EB4E2AC006D9F75 /* main.swift */,
 				12478F291EB4E3B1006D9F75 /* Scope.swift */,
+				122B54F21EB5C7C600E46536 /* Namespace.swift */,
 				12478F2B1EB4E3BA006D9F75 /* Operation.swift */,
-				12478F2D1EB4E3C2006D9F75 /* Class.swift */,
-				12478F2F1EB4E5FA006D9F75 /* Enum.swift */,
+				12478F2D1EB4E3C2006D9F75 /* Schema.swift */,
 				12478F311EB4E674006D9F75 /* Type.swift */,
 			);
 			path = evecodegen;
@@ -135,10 +155,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12478F2E1EB4E3C2006D9F75 /* Class.swift in Sources */,
+				12478F2E1EB4E3C2006D9F75 /* Schema.swift in Sources */,
+				122B54F31EB5C7C600E46536 /* Namespace.swift in Sources */,
 				12478F2A1EB4E3B1006D9F75 /* Scope.swift in Sources */,
 				12478F231EB4E2AC006D9F75 /* main.swift in Sources */,
-				12478F301EB4E5FA006D9F75 /* Enum.swift in Sources */,
 				12478F2C1EB4E3BA006D9F75 /* Operation.swift in Sources */,
 				12478F321EB4E674006D9F75 /* Type.swift in Sources */,
 			);
@@ -272,6 +292,7 @@
 				12478F281EB4E2AC006D9F75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -1,0 +1,23 @@
+import Foundation
+import Alamofire
+
+
+public extension EVE {
+	public var {variable}: {scope} {
+		return {scope}(sessionManager: self)
+	}
+
+	class {scope} {
+		weak var sessionManager: EVE?
+	
+		init(sessionManager: EVE) {
+			self.sessionManager = sessionManager
+		}
+
+{operations}
+
+{classes}
+
+	}
+
+}

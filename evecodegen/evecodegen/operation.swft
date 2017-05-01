@@ -1,0 +1,19 @@
+	public func {operation}({definitions}completionBlock:((Result<{result}>) -> Void)?) {
+		var session = sessionManager
+		guard session != nil else {return}
+		
+{security}
+
+{parameters}
+
+		let url = session!.baseURL + "{url}"
+
+		let progress = Progress(totalUnitCount: 100)
+
+		session!.request(url, method: .get, parameters:parameters).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateEVE().responseEVE { (response: DataResponse<{result}>) in
+				completionBlock?(response.result)
+				session = nil
+		}
+	}

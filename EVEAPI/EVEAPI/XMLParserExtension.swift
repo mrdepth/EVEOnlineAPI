@@ -39,7 +39,14 @@ private class ASXMLElement: NSObject, XMLParserDelegate {
 		get {
 			
 			if children.isEmpty {
-				return string
+				var decimal: Decimal = 0
+				let scanner = Scanner(string: string)
+				if scanner.scanDecimal(&decimal) && scanner.isAtEnd {
+					return decimal as NSNumber
+				}
+				else {
+					return string
+				}
 			}
 			else {
 				var dictionary = [String: Any]()

@@ -18,7 +18,7 @@ public class ESI: SessionManager {
 	let baseURL = "https://esi.tech.ccp.is/"
 	let server: ESServer
 	
-	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Adapter? = nil, retrier: OAuth2Retrier? = nil) {
 		self.server = server
 		let configuration = URLSessionConfiguration.default
 		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
@@ -27,9 +27,8 @@ public class ESI: SessionManager {
 		super.init(configuration: configuration)
 		
 		if let token = token, let clientID = clientID, let secretKey = secretKey {
-			let handler = OAuth2Handler(token: token, clientID: clientID, secretKey: secretKey)
-			self.adapter = handler
-			self.retrier = handler
+			self.adapter = adapter ?? OAuth2Adapter(token: token)
+			self.retrier = retrier ?? OAuth2Retrier(token: token, clientID: clientID, secretKey: secretKey)
 		}
 	}
 	
@@ -219,7 +218,7 @@ public extension ESI.Scope {
 				.characterClonesRead,
 				.characterIndustryJobsRead,
 				.characterMarketOrdersRead,
-				.characterSkillsRead,
+//				.characterSkillsRead,
 				.characterStatsRead,
 				.characterWalletRead,
 				.esiClonesReadClonesV1,
@@ -235,7 +234,7 @@ public extension ESI.Scope {
 				.esiKillmailsReadKillmailsV1,
 				.esiMailSendMailV1,
 				.esiWalletReadCharacterWalletV1,
-				.esiCharactersReadAgentsResearchV1,
+//				.esiCharactersReadAgentsResearchV1,
 				.esiFittingsReadFittingsV1,
 				.esiCalendarReadCalendarEventsV1,
 				.esiSkillsReadSkillsV1,
@@ -245,7 +244,7 @@ public extension ESI.Scope {
 				.esiPlanetsManagePlanetsV1,
 				.esiSearchSearchStructuresV1,
 				.esiLocationReadLocationV1,
-				.esiBookmarksReadCharacterBookmarksV1,
+//				.esiBookmarksReadCharacterBookmarksV1,
 				.esiCharactersReadLoyaltyV1,
 			]
 		}
