@@ -118,7 +118,7 @@ public extension ESI {
 		
 		public class Summary: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDCalendarEventResponse: String, JSONCoding, HTTPQueryable {
+			public enum Response: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
 				case declined = "declined"
 				case notResponded = "not_responded"
@@ -133,7 +133,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDCalendarEventResponse(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Response(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -145,7 +145,7 @@ public extension ESI {
 			
 			public var eventDate: Date? = nil
 			public var eventID: Int? = nil
-			public var eventResponse: Calendar.Summary.GetCharactersCharacterIDCalendarEventResponse? = nil
+			public var eventResponse: Calendar.Summary.Response? = nil
 			public var importance: Int? = nil
 			public var title: String? = nil
 			
@@ -158,7 +158,7 @@ public extension ESI {
 				
 				eventDate = DateFormatter.esiDateFormatter.date(from: dictionary["event_date"] as? String ?? "")
 				eventID = dictionary["event_id"] as? Int
-				eventResponse = Calendar.Summary.GetCharactersCharacterIDCalendarEventResponse(rawValue: dictionary["event_response"] as? String ?? "")
+				eventResponse = Calendar.Summary.Response(rawValue: dictionary["event_response"] as? String ?? "")
 				importance = dictionary["importance"] as? Int
 				title = dictionary["title"] as? String
 				
@@ -172,7 +172,7 @@ public extension ESI {
 			public required init?(coder aDecoder: NSCoder) {
 				eventDate = aDecoder.decodeObject(forKey: "event_date") as? Date
 				eventID = aDecoder.containsValue(forKey: "event_id") ? aDecoder.decodeInteger(forKey: "event_id") : nil
-				eventResponse = Calendar.Summary.GetCharactersCharacterIDCalendarEventResponse(rawValue: aDecoder.decodeObject(forKey: "event_response") as? String ?? "")
+				eventResponse = Calendar.Summary.Response(rawValue: aDecoder.decodeObject(forKey: "event_response") as? String ?? "")
 				importance = aDecoder.containsValue(forKey: "importance") ? aDecoder.decodeInteger(forKey: "importance") : nil
 				title = aDecoder.decodeObject(forKey: "title") as? String
 				

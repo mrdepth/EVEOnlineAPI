@@ -23,6 +23,7 @@ let typeNames: [String: String] = [
 
 	//MARK: Calendar
 	"PutCharactersCharacterIDCalendarEventIDResponse"	: "Response",
+	"GetCharactersCharacterIDCalendarEventResponse"	: "Response",
 	"GetCharactersCharacterIDCalendarEventIDOk"	: "Event",
 	"GetCharactersCharacterIDCalendarOk"	: "Summary",
 	
