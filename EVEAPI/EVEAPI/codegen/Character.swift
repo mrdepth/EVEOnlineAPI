@@ -80,6 +80,39 @@ public extension ESI {
 			}
 		}
 		
+		public func getBlueprints(characterID: Int, completionBlock:((Result<[Character.Blueprint]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_blueprints.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/characters/\(characterID)/blueprints/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Character.Blueprint]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func calculateCSPAChargeCost(characterID: Int, characters: Character.Characters, completionBlock:((Result<Character.CSPAChargeCost>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -175,6 +208,39 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCharacterCorporationRoles(characterID: Int, completionBlock:((Result<[Character.GetCharactersCharacterIDRolesOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_corporation_roles.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/characters/\(characterID)/roles/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDRolesOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -844,6 +910,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetCharactersCharacterIDRolesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDRolesInternalServerError, rhs: Character.GetCharactersCharacterIDRolesInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.GetCharactersCharacterIDRolesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDRolesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDRolesInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class ChatChannel: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding, HTTPQueryable {
@@ -1497,6 +1630,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetCharactersCharacterIDRolesForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDRolesForbidden, rhs: Character.GetCharactersCharacterIDRolesForbidden) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.GetCharactersCharacterIDRolesForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDRolesForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDRolesForbidden)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class GetCharactersCharacterIDChatChannelsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -1559,73 +1759,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetCharactersCharacterIDChatChannelsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Character.GetCharactersCharacterIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -1870,6 +2003,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.GetCharactersCharacterIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class Research: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2033,6 +2233,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Name)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDBlueprintsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDBlueprintsForbidden, rhs: Character.GetCharactersCharacterIDBlueprintsForbidden) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.GetCharactersCharacterIDBlueprintsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDBlueprintsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDBlueprintsForbidden)?.hashValue == hashValue
 			}
 			
 		}
@@ -2266,6 +2533,289 @@ public extension ESI {
 		}
 		
 		
+		public class GetCharactersCharacterIDBlueprintsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDBlueprintsInternalServerError, rhs: Character.GetCharactersCharacterIDBlueprintsInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.GetCharactersCharacterIDBlueprintsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.GetCharactersCharacterIDBlueprintsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDBlueprintsInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class Blueprint: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCharactersCharacterIDBlueprintsLocationFlag: String, JSONCoding, HTTPQueryable {
+				case assetSafety = "AssetSafety"
+				case autoFit = "AutoFit"
+				case cargo = "Cargo"
+				case corpseBay = "CorpseBay"
+				case deliveries = "Deliveries"
+				case droneBay = "DroneBay"
+				case fighterBay = "FighterBay"
+				case fighterTube0 = "FighterTube0"
+				case fighterTube1 = "FighterTube1"
+				case fighterTube2 = "FighterTube2"
+				case fighterTube3 = "FighterTube3"
+				case fighterTube4 = "FighterTube4"
+				case fleetHangar = "FleetHangar"
+				case hangar = "Hangar"
+				case hangarAll = "HangarAll"
+				case hiSlot0 = "HiSlot0"
+				case hiSlot1 = "HiSlot1"
+				case hiSlot2 = "HiSlot2"
+				case hiSlot3 = "HiSlot3"
+				case hiSlot4 = "HiSlot4"
+				case hiSlot5 = "HiSlot5"
+				case hiSlot6 = "HiSlot6"
+				case hiSlot7 = "HiSlot7"
+				case hiddenModifiers = "HiddenModifiers"
+				case implant = "Implant"
+				case loSlot0 = "LoSlot0"
+				case loSlot1 = "LoSlot1"
+				case loSlot2 = "LoSlot2"
+				case loSlot3 = "LoSlot3"
+				case loSlot4 = "LoSlot4"
+				case loSlot5 = "LoSlot5"
+				case loSlot6 = "LoSlot6"
+				case loSlot7 = "LoSlot7"
+				case locked = "Locked"
+				case medSlot0 = "MedSlot0"
+				case medSlot1 = "MedSlot1"
+				case medSlot2 = "MedSlot2"
+				case medSlot3 = "MedSlot3"
+				case medSlot4 = "MedSlot4"
+				case medSlot5 = "MedSlot5"
+				case medSlot6 = "MedSlot6"
+				case medSlot7 = "MedSlot7"
+				case module = "Module"
+				case quafeBay = "QuafeBay"
+				case rigSlot0 = "RigSlot0"
+				case rigSlot1 = "RigSlot1"
+				case rigSlot2 = "RigSlot2"
+				case rigSlot3 = "RigSlot3"
+				case rigSlot4 = "RigSlot4"
+				case rigSlot5 = "RigSlot5"
+				case rigSlot6 = "RigSlot6"
+				case rigSlot7 = "RigSlot7"
+				case shipHangar = "ShipHangar"
+				case specializedAmmoHold = "SpecializedAmmoHold"
+				case specializedCommandCenterHold = "SpecializedCommandCenterHold"
+				case specializedFuelBay = "SpecializedFuelBay"
+				case specializedGasHold = "SpecializedGasHold"
+				case specializedIndustrialShipHold = "SpecializedIndustrialShipHold"
+				case specializedLargeShipHold = "SpecializedLargeShipHold"
+				case specializedMaterialBay = "SpecializedMaterialBay"
+				case specializedMediumShipHold = "SpecializedMediumShipHold"
+				case specializedMineralHold = "SpecializedMineralHold"
+				case specializedOreHold = "SpecializedOreHold"
+				case specializedPlanetaryCommoditiesHold = "SpecializedPlanetaryCommoditiesHold"
+				case specializedSalvageHold = "SpecializedSalvageHold"
+				case specializedShipHold = "SpecializedShipHold"
+				case specializedSmallShipHold = "SpecializedSmallShipHold"
+				case subSystemSlot0 = "SubSystemSlot0"
+				case subSystemSlot1 = "SubSystemSlot1"
+				case subSystemSlot2 = "SubSystemSlot2"
+				case subSystemSlot3 = "SubSystemSlot3"
+				case subSystemSlot4 = "SubSystemSlot4"
+				case subSystemSlot5 = "SubSystemSlot5"
+				case subSystemSlot6 = "SubSystemSlot6"
+				case subSystemSlot7 = "SubSystemSlot7"
+				case unlocked = "Unlocked"
+				
+				public init() {
+					self = .autoFit
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDBlueprintsLocationFlag(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var itemID: Int64 = Int64()
+			public var locationFlag: Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag = Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag()
+			public var locationID: Int64 = Int64()
+			public var materialEfficiency: Int = Int()
+			public var quantity: Int = Int()
+			public var runs: Int = Int()
+			public var timeEfficiency: Int = Int()
+			public var typeID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.itemID = itemID
+				guard let locationFlag = Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.locationFlag = locationFlag
+				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.locationID = locationID
+				guard let materialEfficiency = dictionary["material_efficiency"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.materialEfficiency = materialEfficiency
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.quantity = quantity
+				guard let runs = dictionary["runs"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.runs = runs
+				guard let timeEfficiency = dictionary["time_efficiency"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.timeEfficiency = timeEfficiency
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.typeID = typeID
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				itemID = aDecoder.decodeInt64(forKey: "item_id")
+				locationFlag = Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag()
+				locationID = aDecoder.decodeInt64(forKey: "location_id")
+				materialEfficiency = aDecoder.decodeInteger(forKey: "material_efficiency")
+				quantity = aDecoder.decodeInteger(forKey: "quantity")
+				runs = aDecoder.decodeInteger(forKey: "runs")
+				timeEfficiency = aDecoder.decodeInteger(forKey: "time_efficiency")
+				typeID = aDecoder.decodeInteger(forKey: "type_id")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(itemID, forKey: "item_id")
+				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
+				aCoder.encode(locationID, forKey: "location_id")
+				aCoder.encode(materialEfficiency, forKey: "material_efficiency")
+				aCoder.encode(quantity, forKey: "quantity")
+				aCoder.encode(runs, forKey: "runs")
+				aCoder.encode(timeEfficiency, forKey: "time_efficiency")
+				aCoder.encode(typeID, forKey: "type_id")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["item_id"] = itemID.json
+				json["location_flag"] = locationFlag.json
+				json["location_id"] = locationID.json
+				json["material_efficiency"] = materialEfficiency.json
+				json["quantity"] = quantity.json
+				json["runs"] = runs.json
+				json["time_efficiency"] = timeEfficiency.json
+				json["type_id"] = typeID.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: locationFlag.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: materialEfficiency.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: runs.hashValue)
+				hashCombine(seed: &hash, value: timeEfficiency.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Blueprint, rhs: Character.Blueprint) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.Blueprint) {
+				itemID = other.itemID
+				locationFlag = other.locationFlag
+				locationID = other.locationID
+				materialEfficiency = other.materialEfficiency
+				quantity = other.quantity
+				runs = other.runs
+				timeEfficiency = other.timeEfficiency
+				typeID = other.typeID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Blueprint(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Blueprint)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class CSPAChargeCost: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2391,6 +2941,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Characters)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public enum GetCharactersCharacterIDRolesOk: String, JSONCoding, HTTPQueryable {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+			case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+			case trader = "Trader"
+			
+			public init() {
+				self = .director
+			}
+			
+			public var json: Any {
+				return self.rawValue
+			}
+			
+			public init(json: Any) throws {
+				guard let s = json as? String, let v = GetCharactersCharacterIDRolesOk(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				self = v
+			}
+			
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}

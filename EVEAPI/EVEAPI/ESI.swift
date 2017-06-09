@@ -233,6 +233,7 @@ public extension ESI.Scope {
 				.esiMailOrganizeMailV1,
 				.esiKillmailsReadKillmailsV1,
 				.esiMailSendMailV1,
+				.esiCharactersReadBlueprintsV1,
 				.esiWalletReadCharacterWalletV1,
 //				.esiCharactersReadAgentsResearchV1,
 				.esiFittingsReadFittingsV1,

@@ -12,38 +12,39 @@
 		122B55581EB7154F00E46536 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55541EB7154F00E46536 /* Api.swift */; };
 		122B55591EB7154F00E46536 /* Char.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55551EB7154F00E46536 /* Char.swift */; };
 		122B555A1EB7154F00E46536 /* Corp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55561EB7154F00E46536 /* Corp.swift */; };
-		1231C7E91E9EB39A00CA409A /* Alliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CB1E9EB39A00CA409A /* Alliance.swift */; };
-		1231C7EA1E9EB39A00CA409A /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CC1E9EB39A00CA409A /* Assets.swift */; };
-		1231C7EB1E9EB39A00CA409A /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CD1E9EB39A00CA409A /* Bookmarks.swift */; };
-		1231C7EC1E9EB39A00CA409A /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CE1E9EB39A00CA409A /* Calendar.swift */; };
-		1231C7ED1E9EB39A00CA409A /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7CF1E9EB39A00CA409A /* Character.swift */; };
-		1231C7EE1E9EB39A00CA409A /* Clones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D01E9EB39A00CA409A /* Clones.swift */; };
-		1231C7EF1E9EB39A00CA409A /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D11E9EB39A00CA409A /* Contacts.swift */; };
-		1231C7F01E9EB39A00CA409A /* Corporation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D21E9EB39A00CA409A /* Corporation.swift */; };
-		1231C7F11E9EB39A00CA409A /* Dogma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D31E9EB39A00CA409A /* Dogma.swift */; };
-		1231C7F21E9EB39A00CA409A /* Fittings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D41E9EB39A00CA409A /* Fittings.swift */; };
-		1231C7F31E9EB39A00CA409A /* Fleets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D51E9EB39A00CA409A /* Fleets.swift */; };
-		1231C7F41E9EB39A00CA409A /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D61E9EB39A00CA409A /* Global.swift */; };
-		1231C7F51E9EB39A00CA409A /* Incursions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D71E9EB39A00CA409A /* Incursions.swift */; };
-		1231C7F61E9EB39A00CA409A /* Industry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D81E9EB39A00CA409A /* Industry.swift */; };
-		1231C7F71E9EB39A00CA409A /* Insurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7D91E9EB39A00CA409A /* Insurance.swift */; };
-		1231C7F81E9EB39A00CA409A /* Killmails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DA1E9EB39A00CA409A /* Killmails.swift */; };
-		1231C7F91E9EB39A00CA409A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DB1E9EB39A00CA409A /* Location.swift */; };
-		1231C7FA1E9EB39A00CA409A /* Loyalty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DC1E9EB39A00CA409A /* Loyalty.swift */; };
-		1231C7FB1E9EB39A00CA409A /* Mail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DD1E9EB39A00CA409A /* Mail.swift */; };
-		1231C7FC1E9EB39A00CA409A /* Market.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DE1E9EB39A00CA409A /* Market.swift */; };
-		1231C7FD1E9EB39A00CA409A /* Opportunities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7DF1E9EB39A00CA409A /* Opportunities.swift */; };
-		1231C7FE1E9EB39A00CA409A /* PlanetaryInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E01E9EB39A00CA409A /* PlanetaryInteraction.swift */; };
-		1231C7FF1E9EB39A00CA409A /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E11E9EB39A00CA409A /* Routes.swift */; };
-		1231C8001E9EB39A00CA409A /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E21E9EB39A00CA409A /* Search.swift */; };
-		1231C8011E9EB39A00CA409A /* Skills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E31E9EB39A00CA409A /* Skills.swift */; };
-		1231C8021E9EB39A00CA409A /* Sovereignty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E41E9EB39A00CA409A /* Sovereignty.swift */; };
-		1231C8031E9EB39A00CA409A /* Universe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E51E9EB39A00CA409A /* Universe.swift */; };
-		1231C8041E9EB39A00CA409A /* UserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E61E9EB39A00CA409A /* UserInterface.swift */; };
-		1231C8051E9EB39A00CA409A /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E71E9EB39A00CA409A /* Wallet.swift */; };
-		1231C8061E9EB39A00CA409A /* Wars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C7E81E9EB39A00CA409A /* Wars.swift */; };
 		1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C8081E9EB3D900CA409A /* Helper.swift */; };
 		1231C80C1E9EB42500CA409A /* ESI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C80B1E9EB42500CA409A /* ESI.swift */; };
+		126295FA1EEAD16C00796B27 /* Alliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DB1EEAD16C00796B27 /* Alliance.swift */; };
+		126295FB1EEAD16C00796B27 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DC1EEAD16C00796B27 /* Assets.swift */; };
+		126295FC1EEAD16C00796B27 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DD1EEAD16C00796B27 /* Bookmarks.swift */; };
+		126295FD1EEAD16C00796B27 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DE1EEAD16C00796B27 /* Calendar.swift */; };
+		126295FE1EEAD16C00796B27 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DF1EEAD16C00796B27 /* Character.swift */; };
+		126295FF1EEAD16C00796B27 /* Clones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E01EEAD16C00796B27 /* Clones.swift */; };
+		126296001EEAD16C00796B27 /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E11EEAD16C00796B27 /* Contacts.swift */; };
+		126296011EEAD16C00796B27 /* Corporation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E21EEAD16C00796B27 /* Corporation.swift */; };
+		126296021EEAD16C00796B27 /* Dogma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E31EEAD16C00796B27 /* Dogma.swift */; };
+		126296031EEAD16C00796B27 /* Fittings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E41EEAD16C00796B27 /* Fittings.swift */; };
+		126296041EEAD16C00796B27 /* Fleets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E51EEAD16C00796B27 /* Fleets.swift */; };
+		126296051EEAD16C00796B27 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E61EEAD16C00796B27 /* Global.swift */; };
+		126296061EEAD16C00796B27 /* Incursions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E71EEAD16C00796B27 /* Incursions.swift */; };
+		126296071EEAD16C00796B27 /* Industry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E81EEAD16C00796B27 /* Industry.swift */; };
+		126296081EEAD16C00796B27 /* Insurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E91EEAD16C00796B27 /* Insurance.swift */; };
+		126296091EEAD16C00796B27 /* Killmails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EA1EEAD16C00796B27 /* Killmails.swift */; };
+		1262960A1EEAD16C00796B27 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EB1EEAD16C00796B27 /* Location.swift */; };
+		1262960B1EEAD16C00796B27 /* Loyalty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EC1EEAD16C00796B27 /* Loyalty.swift */; };
+		1262960C1EEAD16C00796B27 /* Mail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295ED1EEAD16C00796B27 /* Mail.swift */; };
+		1262960D1EEAD16C00796B27 /* Market.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EE1EEAD16C00796B27 /* Market.swift */; };
+		1262960E1EEAD16C00796B27 /* Opportunities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EF1EEAD16C00796B27 /* Opportunities.swift */; };
+		1262960F1EEAD16C00796B27 /* PlanetaryInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F01EEAD16C00796B27 /* PlanetaryInteraction.swift */; };
+		126296101EEAD16C00796B27 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F11EEAD16C00796B27 /* Routes.swift */; };
+		126296111EEAD16C00796B27 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F21EEAD16C00796B27 /* Search.swift */; };
+		126296121EEAD16C00796B27 /* Skills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F31EEAD16C00796B27 /* Skills.swift */; };
+		126296131EEAD16C00796B27 /* Sovereignty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F41EEAD16C00796B27 /* Sovereignty.swift */; };
+		126296141EEAD16C00796B27 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F51EEAD16C00796B27 /* Status.swift */; };
+		126296151EEAD16C00796B27 /* Universe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F61EEAD16C00796B27 /* Universe.swift */; };
+		126296161EEAD16C00796B27 /* UserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F71EEAD16C00796B27 /* UserInterface.swift */; };
+		126296171EEAD16C00796B27 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F81EEAD16C00796B27 /* Wallet.swift */; };
+		126296181EEAD16C00796B27 /* Wars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F91EEAD16C00796B27 /* Wars.swift */; };
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
@@ -67,36 +68,6 @@
 		122B55541EB7154F00E46536 /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		122B55551EB7154F00E46536 /* Char.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Char.swift; sourceTree = "<group>"; };
 		122B55561EB7154F00E46536 /* Corp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Corp.swift; sourceTree = "<group>"; };
-		1231C7CB1E9EB39A00CA409A /* Alliance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alliance.swift; sourceTree = "<group>"; };
-		1231C7CC1E9EB39A00CA409A /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
-		1231C7CD1E9EB39A00CA409A /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
-		1231C7CE1E9EB39A00CA409A /* Calendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
-		1231C7CF1E9EB39A00CA409A /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
-		1231C7D01E9EB39A00CA409A /* Clones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clones.swift; sourceTree = "<group>"; };
-		1231C7D11E9EB39A00CA409A /* Contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
-		1231C7D21E9EB39A00CA409A /* Corporation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Corporation.swift; sourceTree = "<group>"; };
-		1231C7D31E9EB39A00CA409A /* Dogma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dogma.swift; sourceTree = "<group>"; };
-		1231C7D41E9EB39A00CA409A /* Fittings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fittings.swift; sourceTree = "<group>"; };
-		1231C7D51E9EB39A00CA409A /* Fleets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fleets.swift; sourceTree = "<group>"; };
-		1231C7D61E9EB39A00CA409A /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
-		1231C7D71E9EB39A00CA409A /* Incursions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Incursions.swift; sourceTree = "<group>"; };
-		1231C7D81E9EB39A00CA409A /* Industry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Industry.swift; sourceTree = "<group>"; };
-		1231C7D91E9EB39A00CA409A /* Insurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Insurance.swift; sourceTree = "<group>"; };
-		1231C7DA1E9EB39A00CA409A /* Killmails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Killmails.swift; sourceTree = "<group>"; };
-		1231C7DB1E9EB39A00CA409A /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		1231C7DC1E9EB39A00CA409A /* Loyalty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loyalty.swift; sourceTree = "<group>"; };
-		1231C7DD1E9EB39A00CA409A /* Mail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mail.swift; sourceTree = "<group>"; };
-		1231C7DE1E9EB39A00CA409A /* Market.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Market.swift; sourceTree = "<group>"; };
-		1231C7DF1E9EB39A00CA409A /* Opportunities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Opportunities.swift; sourceTree = "<group>"; };
-		1231C7E01E9EB39A00CA409A /* PlanetaryInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetaryInteraction.swift; sourceTree = "<group>"; };
-		1231C7E11E9EB39A00CA409A /* Routes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
-		1231C7E21E9EB39A00CA409A /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
-		1231C7E31E9EB39A00CA409A /* Skills.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skills.swift; sourceTree = "<group>"; };
-		1231C7E41E9EB39A00CA409A /* Sovereignty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sovereignty.swift; sourceTree = "<group>"; };
-		1231C7E51E9EB39A00CA409A /* Universe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Universe.swift; sourceTree = "<group>"; };
-		1231C7E61E9EB39A00CA409A /* UserInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInterface.swift; sourceTree = "<group>"; };
-		1231C7E71E9EB39A00CA409A /* Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
-		1231C7E81E9EB39A00CA409A /* Wars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wars.swift; sourceTree = "<group>"; };
 		1231C8081E9EB3D900CA409A /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		1231C80B1E9EB42500CA409A /* ESI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESI.swift; sourceTree = "<group>"; };
 		123825601DEC199E0031A884 /* EVEAPIObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPIObject.swift; sourceTree = "<group>"; };
@@ -108,6 +79,37 @@
 		123825811DED7A780031A884 /* EVEAccountBalance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAccountBalance.swift; sourceTree = "<group>"; };
 		123825831DED7B440031A884 /* EVEAssetList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAssetList.swift; sourceTree = "<group>"; };
 		123825851DED7BD60031A884 /* EVEConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEConstants.swift; sourceTree = "<group>"; };
+		126295DB1EEAD16C00796B27 /* Alliance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alliance.swift; sourceTree = "<group>"; };
+		126295DC1EEAD16C00796B27 /* Assets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
+		126295DD1EEAD16C00796B27 /* Bookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmarks.swift; sourceTree = "<group>"; };
+		126295DE1EEAD16C00796B27 /* Calendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calendar.swift; sourceTree = "<group>"; };
+		126295DF1EEAD16C00796B27 /* Character.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
+		126295E01EEAD16C00796B27 /* Clones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clones.swift; sourceTree = "<group>"; };
+		126295E11EEAD16C00796B27 /* Contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
+		126295E21EEAD16C00796B27 /* Corporation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Corporation.swift; sourceTree = "<group>"; };
+		126295E31EEAD16C00796B27 /* Dogma.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dogma.swift; sourceTree = "<group>"; };
+		126295E41EEAD16C00796B27 /* Fittings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fittings.swift; sourceTree = "<group>"; };
+		126295E51EEAD16C00796B27 /* Fleets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fleets.swift; sourceTree = "<group>"; };
+		126295E61EEAD16C00796B27 /* Global.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		126295E71EEAD16C00796B27 /* Incursions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Incursions.swift; sourceTree = "<group>"; };
+		126295E81EEAD16C00796B27 /* Industry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Industry.swift; sourceTree = "<group>"; };
+		126295E91EEAD16C00796B27 /* Insurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Insurance.swift; sourceTree = "<group>"; };
+		126295EA1EEAD16C00796B27 /* Killmails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Killmails.swift; sourceTree = "<group>"; };
+		126295EB1EEAD16C00796B27 /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		126295EC1EEAD16C00796B27 /* Loyalty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Loyalty.swift; sourceTree = "<group>"; };
+		126295ED1EEAD16C00796B27 /* Mail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mail.swift; sourceTree = "<group>"; };
+		126295EE1EEAD16C00796B27 /* Market.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Market.swift; sourceTree = "<group>"; };
+		126295EF1EEAD16C00796B27 /* Opportunities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Opportunities.swift; sourceTree = "<group>"; };
+		126295F01EEAD16C00796B27 /* PlanetaryInteraction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetaryInteraction.swift; sourceTree = "<group>"; };
+		126295F11EEAD16C00796B27 /* Routes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routes.swift; sourceTree = "<group>"; };
+		126295F21EEAD16C00796B27 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		126295F31EEAD16C00796B27 /* Skills.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Skills.swift; sourceTree = "<group>"; };
+		126295F41EEAD16C00796B27 /* Sovereignty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sovereignty.swift; sourceTree = "<group>"; };
+		126295F51EEAD16C00796B27 /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		126295F61EEAD16C00796B27 /* Universe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Universe.swift; sourceTree = "<group>"; };
+		126295F71EEAD16C00796B27 /* UserInterface.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInterface.swift; sourceTree = "<group>"; };
+		126295F81EEAD16C00796B27 /* Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
+		126295F91EEAD16C00796B27 /* Wars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wars.swift; sourceTree = "<group>"; };
 		126FA8031DFD761C005FFDD3 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../ThirdParty/Alamofire/build/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
 		1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParserExtension.swift; sourceTree = "<group>"; };
 		1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEObject.swift; sourceTree = "<group>"; };
@@ -290,43 +292,6 @@
 			name = Deprecated;
 			sourceTree = "<group>";
 		};
-		1231C7CA1E9EB39A00CA409A /* codegen */ = {
-			isa = PBXGroup;
-			children = (
-				1231C7CB1E9EB39A00CA409A /* Alliance.swift */,
-				1231C7CC1E9EB39A00CA409A /* Assets.swift */,
-				1231C7CD1E9EB39A00CA409A /* Bookmarks.swift */,
-				1231C7CE1E9EB39A00CA409A /* Calendar.swift */,
-				1231C7CF1E9EB39A00CA409A /* Character.swift */,
-				1231C7D01E9EB39A00CA409A /* Clones.swift */,
-				1231C7D11E9EB39A00CA409A /* Contacts.swift */,
-				1231C7D21E9EB39A00CA409A /* Corporation.swift */,
-				1231C7D31E9EB39A00CA409A /* Dogma.swift */,
-				1231C7D41E9EB39A00CA409A /* Fittings.swift */,
-				1231C7D51E9EB39A00CA409A /* Fleets.swift */,
-				1231C7D61E9EB39A00CA409A /* Global.swift */,
-				1231C7D71E9EB39A00CA409A /* Incursions.swift */,
-				1231C7D81E9EB39A00CA409A /* Industry.swift */,
-				1231C7D91E9EB39A00CA409A /* Insurance.swift */,
-				1231C7DA1E9EB39A00CA409A /* Killmails.swift */,
-				1231C7DB1E9EB39A00CA409A /* Location.swift */,
-				1231C7DC1E9EB39A00CA409A /* Loyalty.swift */,
-				1231C7DD1E9EB39A00CA409A /* Mail.swift */,
-				1231C7DE1E9EB39A00CA409A /* Market.swift */,
-				1231C7DF1E9EB39A00CA409A /* Opportunities.swift */,
-				1231C7E01E9EB39A00CA409A /* PlanetaryInteraction.swift */,
-				1231C7E11E9EB39A00CA409A /* Routes.swift */,
-				1231C7E21E9EB39A00CA409A /* Search.swift */,
-				1231C7E31E9EB39A00CA409A /* Skills.swift */,
-				1231C7E41E9EB39A00CA409A /* Sovereignty.swift */,
-				1231C7E51E9EB39A00CA409A /* Universe.swift */,
-				1231C7E61E9EB39A00CA409A /* UserInterface.swift */,
-				1231C7E71E9EB39A00CA409A /* Wallet.swift */,
-				1231C7E81E9EB39A00CA409A /* Wars.swift */,
-			);
-			path = codegen;
-			sourceTree = "<group>";
-		};
 		123825661DEC8BA30031A884 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -379,6 +344,44 @@
 				12A266D71DEE189100DC8291 /* EVEWalletTransactions.swift */,
 			);
 			name = Char;
+			sourceTree = "<group>";
+		};
+		126295DA1EEAD16C00796B27 /* codegen */ = {
+			isa = PBXGroup;
+			children = (
+				126295DB1EEAD16C00796B27 /* Alliance.swift */,
+				126295DC1EEAD16C00796B27 /* Assets.swift */,
+				126295DD1EEAD16C00796B27 /* Bookmarks.swift */,
+				126295DE1EEAD16C00796B27 /* Calendar.swift */,
+				126295DF1EEAD16C00796B27 /* Character.swift */,
+				126295E01EEAD16C00796B27 /* Clones.swift */,
+				126295E11EEAD16C00796B27 /* Contacts.swift */,
+				126295E21EEAD16C00796B27 /* Corporation.swift */,
+				126295E31EEAD16C00796B27 /* Dogma.swift */,
+				126295E41EEAD16C00796B27 /* Fittings.swift */,
+				126295E51EEAD16C00796B27 /* Fleets.swift */,
+				126295E61EEAD16C00796B27 /* Global.swift */,
+				126295E71EEAD16C00796B27 /* Incursions.swift */,
+				126295E81EEAD16C00796B27 /* Industry.swift */,
+				126295E91EEAD16C00796B27 /* Insurance.swift */,
+				126295EA1EEAD16C00796B27 /* Killmails.swift */,
+				126295EB1EEAD16C00796B27 /* Location.swift */,
+				126295EC1EEAD16C00796B27 /* Loyalty.swift */,
+				126295ED1EEAD16C00796B27 /* Mail.swift */,
+				126295EE1EEAD16C00796B27 /* Market.swift */,
+				126295EF1EEAD16C00796B27 /* Opportunities.swift */,
+				126295F01EEAD16C00796B27 /* PlanetaryInteraction.swift */,
+				126295F11EEAD16C00796B27 /* Routes.swift */,
+				126295F21EEAD16C00796B27 /* Search.swift */,
+				126295F31EEAD16C00796B27 /* Skills.swift */,
+				126295F41EEAD16C00796B27 /* Sovereignty.swift */,
+				126295F51EEAD16C00796B27 /* Status.swift */,
+				126295F61EEAD16C00796B27 /* Universe.swift */,
+				126295F71EEAD16C00796B27 /* UserInterface.swift */,
+				126295F81EEAD16C00796B27 /* Wallet.swift */,
+				126295F91EEAD16C00796B27 /* Wars.swift */,
+			);
+			path = codegen;
 			sourceTree = "<group>";
 		};
 		1288F01A1DEB8C3E00FD7FBE /* Utility */ = {
@@ -441,8 +444,8 @@
 		1295ED501DF85CAF0048C895 /* ESI */ = {
 			isa = PBXGroup;
 			children = (
+				126295DA1EEAD16C00796B27 /* codegen */,
 				1231C7C91E9EB38200CA409A /* Deprecated */,
-				1231C7CA1E9EB39A00CA409A /* codegen */,
 				1231C8081E9EB3D900CA409A /* Helper.swift */,
 				1231C80B1E9EB42500CA409A /* ESI.swift */,
 				1295ED481DF8169F0048C895 /* OAuth2.swift */,
@@ -641,50 +644,51 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1231C8001E9EB39A00CA409A /* Search.swift in Sources */,
-				1231C7E91E9EB39A00CA409A /* Alliance.swift in Sources */,
-				1231C7EE1E9EB39A00CA409A /* Clones.swift in Sources */,
-				1231C8011E9EB39A00CA409A /* Skills.swift in Sources */,
-				1231C7F71E9EB39A00CA409A /* Insurance.swift in Sources */,
-				1231C7F61E9EB39A00CA409A /* Industry.swift in Sources */,
-				1231C8051E9EB39A00CA409A /* Wallet.swift in Sources */,
-				1231C7FB1E9EB39A00CA409A /* Mail.swift in Sources */,
-				1231C7EA1E9EB39A00CA409A /* Assets.swift in Sources */,
-				1231C8061E9EB39A00CA409A /* Wars.swift in Sources */,
+				1262960C1EEAD16C00796B27 /* Mail.swift in Sources */,
+				126296141EEAD16C00796B27 /* Status.swift in Sources */,
+				126296091EEAD16C00796B27 /* Killmails.swift in Sources */,
 				1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */,
-				1231C7F91E9EB39A00CA409A /* Location.swift in Sources */,
+				126296131EEAD16C00796B27 /* Sovereignty.swift in Sources */,
+				126295FD1EEAD16C00796B27 /* Calendar.swift in Sources */,
+				126296021EEAD16C00796B27 /* Dogma.swift in Sources */,
+				1262960D1EEAD16C00796B27 /* Market.swift in Sources */,
 				122B55581EB7154F00E46536 /* Api.swift in Sources */,
-				1231C7FC1E9EB39A00CA409A /* Market.swift in Sources */,
 				122B55571EB7154F00E46536 /* Account.swift in Sources */,
-				1231C7FF1E9EB39A00CA409A /* Routes.swift in Sources */,
-				1231C7FD1E9EB39A00CA409A /* Opportunities.swift in Sources */,
-				1231C8021E9EB39A00CA409A /* Sovereignty.swift in Sources */,
 				12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */,
-				1231C7FA1E9EB39A00CA409A /* Loyalty.swift in Sources */,
-				1231C7F51E9EB39A00CA409A /* Incursions.swift in Sources */,
-				1231C8041E9EB39A00CA409A /* UserInterface.swift in Sources */,
-				1231C8031E9EB39A00CA409A /* Universe.swift in Sources */,
+				1262960F1EEAD16C00796B27 /* PlanetaryInteraction.swift in Sources */,
+				126296121EEAD16C00796B27 /* Skills.swift in Sources */,
 				12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */,
-				1231C7F81E9EB39A00CA409A /* Killmails.swift in Sources */,
+				126296011EEAD16C00796B27 /* Corporation.swift in Sources */,
 				122B555A1EB7154F00E46536 /* Corp.swift in Sources */,
-				1231C7F01E9EB39A00CA409A /* Corporation.swift in Sources */,
+				126296031EEAD16C00796B27 /* Fittings.swift in Sources */,
 				1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */,
-				1231C7EF1E9EB39A00CA409A /* Contacts.swift in Sources */,
+				126296071EEAD16C00796B27 /* Industry.swift in Sources */,
 				12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */,
+				126295FC1EEAD16C00796B27 /* Bookmarks.swift in Sources */,
+				126296181EEAD16C00796B27 /* Wars.swift in Sources */,
+				126296101EEAD16C00796B27 /* Routes.swift in Sources */,
+				126296081EEAD16C00796B27 /* Insurance.swift in Sources */,
+				126296161EEAD16C00796B27 /* UserInterface.swift in Sources */,
 				12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */,
-				1231C7ED1E9EB39A00CA409A /* Character.swift in Sources */,
-				1231C7FE1E9EB39A00CA409A /* PlanetaryInteraction.swift in Sources */,
+				1262960E1EEAD16C00796B27 /* Opportunities.swift in Sources */,
+				126295FF1EEAD16C00796B27 /* Clones.swift in Sources */,
+				126296061EEAD16C00796B27 /* Incursions.swift in Sources */,
 				1231C80C1E9EB42500CA409A /* ESI.swift in Sources */,
+				126295FB1EEAD16C00796B27 /* Assets.swift in Sources */,
+				126295FA1EEAD16C00796B27 /* Alliance.swift in Sources */,
+				1262960B1EEAD16C00796B27 /* Loyalty.swift in Sources */,
+				126296051EEAD16C00796B27 /* Global.swift in Sources */,
 				122B55591EB7154F00E46536 /* Char.swift in Sources */,
-				1231C7F21E9EB39A00CA409A /* Fittings.swift in Sources */,
-				1231C7EC1E9EB39A00CA409A /* Calendar.swift in Sources */,
-				1231C7F11E9EB39A00CA409A /* Dogma.swift in Sources */,
 				12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */,
+				126296111EEAD16C00796B27 /* Search.swift in Sources */,
+				126296171EEAD16C00796B27 /* Wallet.swift in Sources */,
 				1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */,
+				126296151EEAD16C00796B27 /* Universe.swift in Sources */,
 				122B55471EB601A000E46536 /* EVE.swift in Sources */,
-				1231C7F31E9EB39A00CA409A /* Fleets.swift in Sources */,
-				1231C7EB1E9EB39A00CA409A /* Bookmarks.swift in Sources */,
-				1231C7F41E9EB39A00CA409A /* Global.swift in Sources */,
+				126295FE1EEAD16C00796B27 /* Character.swift in Sources */,
+				1262960A1EEAD16C00796B27 /* Location.swift in Sources */,
+				126296041EEAD16C00796B27 /* Fleets.swift in Sources */,
+				126296001EEAD16C00796B27 /* Contacts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -34,6 +34,8 @@ enum Type {
 		switch (dictionary["type"] as? String, dictionary["format"] as? String) {
 		case ("integer"?, "int32"?):
 			self = .integer
+        case ("integer"?, nil):
+            self = .integer
 		case ("integer"?, "int64"?):
 			self = .long
 		case ("number"?, "float"?):
@@ -67,7 +69,12 @@ enum Type {
 		case ("array"?, _):
 			self = .array
 		default:
-			throw ESIParserError.format(type(of: self).self, dictionary)
+            if dictionary["properties"] != nil {
+                self = .object
+            }
+            else {
+                throw ESIParserError.format(type(of: self).self, dictionary)
+            }
 		}
 	}
 		

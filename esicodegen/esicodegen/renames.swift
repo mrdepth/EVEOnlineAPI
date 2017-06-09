@@ -39,6 +39,7 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDPortraitOk"	: "Portrait",
 	"GetCharactersCharacterIDCorporationhistoryOk"	: "CorporationHistory",
 	"GetCharactersCharacterIDOk"	: "Information",
+	"GetCharactersCharacterIDBlueprintsOk"  : "Blueprint",
 
 	//MARK: Clones
 	"GetCharactersCharacterIDClonesOk"	: "JumpClones",

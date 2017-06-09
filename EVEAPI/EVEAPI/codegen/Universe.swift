@@ -312,38 +312,6 @@ public extension ESI {
 			}
 		}
 		
-		public func getGraphics(completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/graphics/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
 		public func getItemCategories(completionBlock:((Result<[Int]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -363,6 +331,38 @@ public extension ESI {
 			
 			
 			let url = session!.baseURL + "latest/universe/categories/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getGraphics(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/universe/graphics/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -2355,101 +2355,6 @@ public extension ESI {
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var categoryID: Float = Float()
-			public var groupID: Int = Int()
-			public var name: String = String()
-			public var published: Bool = Bool()
-			public var types: [Int] = []
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let categoryID = dictionary["category_id"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.categoryID = categoryID
-				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.groupID = groupID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.name = name
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.published = published
-				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				categoryID = aDecoder.decodeFloat(forKey: "category_id")
-				groupID = aDecoder.decodeInteger(forKey: "group_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				published = aDecoder.decodeBool(forKey: "published")
-				types = aDecoder.decodeObject(forKey: "types") as? [Int] ?? []
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(categoryID, forKey: "category_id")
-				aCoder.encode(groupID, forKey: "group_id")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(published, forKey: "published")
-				aCoder.encode(types, forKey: "types")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["category_id"] = categoryID.json
-				json["group_id"] = groupID.json
-				json["name"] = name.json
-				json["published"] = published.json
-				json["types"] = types.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: categoryID.hashValue)
-				hashCombine(seed: &hash, value: groupID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: published.hashValue)
-				types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.ItemGroupInformation) {
-				categoryID = other.categoryID
-				groupID = other.groupID
-				name = other.name
-				published = other.published
-				types = other.types.flatMap { $0 }
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.ItemGroupInformation(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? ItemGroupInformation)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class GetUniversePlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2512,6 +2417,101 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetUniversePlanetsPlanetIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var categoryID: Int = Int()
+			public var groupID: Int = Int()
+			public var name: String = String()
+			public var published: Bool = Bool()
+			public var types: [Int] = []
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.categoryID = categoryID
+				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.groupID = groupID
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.name = name
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.published = published
+				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				categoryID = aDecoder.decodeInteger(forKey: "category_id")
+				groupID = aDecoder.decodeInteger(forKey: "group_id")
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				published = aDecoder.decodeBool(forKey: "published")
+				types = aDecoder.decodeObject(forKey: "types") as? [Int] ?? []
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(categoryID, forKey: "category_id")
+				aCoder.encode(groupID, forKey: "group_id")
+				aCoder.encode(name, forKey: "name")
+				aCoder.encode(published, forKey: "published")
+				aCoder.encode(types, forKey: "types")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["category_id"] = categoryID.json
+				json["group_id"] = groupID.json
+				json["name"] = name.json
+				json["published"] = published.json
+				json["types"] = types.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: categoryID.hashValue)
+				hashCombine(seed: &hash, value: groupID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: published.hashValue)
+				types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.ItemGroupInformation) {
+				categoryID = other.categoryID
+				groupID = other.groupID
+				name = other.name
+				published = other.published
+				types = other.types.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.ItemGroupInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ItemGroupInformation)?.hashValue == hashValue
 			}
 			
 		}
