@@ -214,10 +214,10 @@ public extension ESI.Scope {
 	public static var `default`: [ESI.Scope]  {
 		get {
 			return [
-				.characterAccountRead,
+//				.characterAccountRead,
 				.characterClonesRead,
-				.characterIndustryJobsRead,
-				.characterMarketOrdersRead,
+//				.characterIndustryJobsRead,
+//				.characterMarketOrdersRead,
 //				.characterSkillsRead,
 				.characterStatsRead,
 				.characterWalletRead,
@@ -233,7 +233,6 @@ public extension ESI.Scope {
 				.esiMailOrganizeMailV1,
 				.esiKillmailsReadKillmailsV1,
 				.esiMailSendMailV1,
-				.esiCharactersReadBlueprintsV1,
 				.esiWalletReadCharacterWalletV1,
 //				.esiCharactersReadAgentsResearchV1,
 				.esiFittingsReadFittingsV1,
@@ -247,6 +246,9 @@ public extension ESI.Scope {
 				.esiLocationReadLocationV1,
 //				.esiBookmarksReadCharacterBookmarksV1,
 				.esiCharactersReadLoyaltyV1,
+//				.esiMarketsReadCharacterOrdersV1,
+//				.esiIndustryReadCharacterJobsV1,
+				.esiCharactersReadBlueprintsV1,
 			]
 		}
 	}

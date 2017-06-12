@@ -87,6 +87,7 @@ let typeNames: [String: String] = [
 	//MARK: Industry
 	"GetIndustryFacilitiesOk"	: "Facilities",
 	"GetIndustrySystemsOk"	: "SolarSystemCostIndices",
+	"GetCharactersCharacterIDIndustryJobsOk"    : "Job",
 
 	//MARK: Insurance
 	"GetInsurancePricesOk"	: "Price",
@@ -122,6 +123,7 @@ let typeNames: [String: String] = [
 	"GetMarketsStructuresStructureIDOk"	: "Structure",
 	"GetMarketsRegionIDOrdersOk"	: "Order",
 	"GetMarketsGroupsMarketGroupIDOk"	: "ItemGroupInformation",
+	"GetCharactersCharacterIDOrdersOk"  : "CharacterOrder",
 
 	//MARK: Opportunities
 	"GetOpportunitiesGroupsGroupIDOk"	: "Group",
