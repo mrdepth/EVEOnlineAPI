@@ -177,7 +177,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -224,21 +224,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsNotFound, rhs: Alliance.GetAlliancesAllianceIDIconsNotFound) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesNamesInternalServerError, rhs: Alliance.GetAlliancesNamesInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Alliance.GetAlliancesAllianceIDIconsNotFound) {
+			init(_ other: Alliance.GetAlliancesNamesInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesAllianceIDIconsNotFound(self)
+				return Alliance.GetAlliancesNamesInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDIconsNotFound)?.hashValue == hashValue
+				return (object as? GetAlliancesNamesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -383,7 +383,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -430,21 +430,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) {
+			init(_ other: Alliance.GetAlliancesAllianceIDIconsInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesAllianceIDCorporationsInternalServerError(self)
+				return Alliance.GetAlliancesAllianceIDIconsInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDCorporationsInternalServerError)?.hashValue == hashValue
+				return (object as? GetAlliancesAllianceIDIconsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -517,7 +517,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -564,21 +564,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Alliance.GetAlliancesAllianceIDIconsInternalServerError) {
+			init(_ other: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesAllianceIDIconsInternalServerError(self)
+				return Alliance.GetAlliancesAllianceIDCorporationsInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDIconsInternalServerError)?.hashValue == hashValue
+				return (object as? GetAlliancesAllianceIDCorporationsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -729,7 +729,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -776,21 +776,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Alliance.GetAlliancesNamesInternalServerError, rhs: Alliance.GetAlliancesNamesInternalServerError) -> Bool {
+			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsNotFound, rhs: Alliance.GetAlliancesAllianceIDIconsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Alliance.GetAlliancesNamesInternalServerError) {
+			init(_ other: Alliance.GetAlliancesAllianceIDIconsNotFound) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesNamesInternalServerError(self)
+				return Alliance.GetAlliancesAllianceIDIconsNotFound(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesNamesInternalServerError)?.hashValue == hashValue
+				return (object as? GetAlliancesAllianceIDIconsNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -813,7 +813,7 @@ public extension ESI {
 				
 				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.allianceName = allianceName
-				guard let dateFounded = DateFormatter.esiDateFormatter.date(from: dictionary["date_founded"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let dateFounded = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_founded"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.dateFounded = dateFounded
 				executorCorp = dictionary["executor_corp"] as? Int
 				guard let ticker = dictionary["ticker"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}

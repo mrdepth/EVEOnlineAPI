@@ -25,6 +25,7 @@ enum Type {
 	case octetsData
 	case boolean
 	case date
+	case dateTime
 	case object
 	case array
 //	case `enum`([String], String)
@@ -53,7 +54,7 @@ enum Type {
 		case ("string"?, "date"?):
 			self = .date
 		case ("string"?, "date-time"?):
-			self = .date
+			self = .dateTime
 		case ("string"?, _):
 			if dictionary["enum"] as? [String] != nil {
 				self = .enum
@@ -123,7 +124,7 @@ enum Type {
 			return "Data"
 		case .boolean:
 			return "Bool"
-		case .date:
+		case .date, .dateTime:
 			return "Date"
 		case .object, .array, .enum:
 			return nil

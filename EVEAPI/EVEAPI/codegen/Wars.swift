@@ -673,18 +673,18 @@ public extension ESI {
 				
 				aggressor = try Wars.WarInformation.GetWarsWarIDAggressor(json: dictionary["aggressor"] as? [String: Any] ?? [:])
 				allies = try (dictionary["allies"] as? [Any])?.map {try Wars.WarInformation.GetWarsWarIDAllies(json: $0)}
-				guard let declared = DateFormatter.esiDateFormatter.date(from: dictionary["declared"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let declared = DateFormatter.esiDateTimeFormatter.date(from: dictionary["declared"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.declared = declared
 				defender = try Wars.WarInformation.GetWarsWarIDDefender(json: dictionary["defender"] as? [String: Any] ?? [:])
-				finished = DateFormatter.esiDateFormatter.date(from: dictionary["finished"] as? String ?? "")
+				finished = DateFormatter.esiDateTimeFormatter.date(from: dictionary["finished"] as? String ?? "")
 				guard let id = dictionary["id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.id = id
 				guard let mutual = dictionary["mutual"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.mutual = mutual
 				guard let openForAllies = dictionary["open_for_allies"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.openForAllies = openForAllies
-				retracted = DateFormatter.esiDateFormatter.date(from: dictionary["retracted"] as? String ?? "")
-				started = DateFormatter.esiDateFormatter.date(from: dictionary["started"] as? String ?? "")
+				retracted = DateFormatter.esiDateTimeFormatter.date(from: dictionary["retracted"] as? String ?? "")
+				started = DateFormatter.esiDateTimeFormatter.date(from: dictionary["started"] as? String ?? "")
 				
 				super.init()
 			}

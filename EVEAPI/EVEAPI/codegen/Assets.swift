@@ -117,6 +117,30 @@ public extension ESI {
 		
 		public class Asset: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
+				case other = "other"
+				case solarSystem = "solar_system"
+				case station = "station"
+				
+				public init() {
+					self = .station
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
 			public enum GetCharactersCharacterIDAssetsLocationFlag: String, JSONCoding, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
@@ -206,30 +230,6 @@ public extension ESI {
 				
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationFlag(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
-				case other = "other"
-				case solarSystem = "solar_system"
-				case station = "station"
-				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				

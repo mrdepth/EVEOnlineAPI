@@ -592,73 +592,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDIndustryJobsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.GetCharactersCharacterIDIndustryJobsForbidden, rhs: Industry.GetCharactersCharacterIDIndustryJobsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Industry.GetCharactersCharacterIDIndustryJobsForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Industry.GetCharactersCharacterIDIndustryJobsForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDIndustryJobsForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class Job: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDIndustryJobsStatus: String, JSONCoding, HTTPQueryable {
@@ -727,11 +660,11 @@ public extension ESI {
 				guard let blueprintTypeID = dictionary["blueprint_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.blueprintTypeID = blueprintTypeID
 				completedCharacterID = dictionary["completed_character_id"] as? Int
-				completedDate = DateFormatter.esiDateFormatter.date(from: dictionary["completed_date"] as? String ?? "")
+				completedDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["completed_date"] as? String ?? "")
 				cost = dictionary["cost"] as? Float
 				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.duration = duration
-				guard let endDate = DateFormatter.esiDateFormatter.date(from: dictionary["end_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let endDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["end_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.endDate = endDate
 				guard let facilityID = dictionary["facility_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.facilityID = facilityID
@@ -742,12 +675,12 @@ public extension ESI {
 				licensedRuns = dictionary["licensed_runs"] as? Int
 				guard let outputLocationID = dictionary["output_location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.outputLocationID = outputLocationID
-				pauseDate = DateFormatter.esiDateFormatter.date(from: dictionary["pause_date"] as? String ?? "")
+				pauseDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["pause_date"] as? String ?? "")
 				probability = dictionary["probability"] as? Float
 				productTypeID = dictionary["product_type_id"] as? Int
 				guard let runs = dictionary["runs"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.runs = runs
-				guard let startDate = DateFormatter.esiDateFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.startDate = startDate
 				guard let stationID = dictionary["station_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.stationID = stationID
@@ -936,6 +869,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Job)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDIndustryJobsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Industry.GetCharactersCharacterIDIndustryJobsForbidden, rhs: Industry.GetCharactersCharacterIDIndustryJobsForbidden) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Industry.GetCharactersCharacterIDIndustryJobsForbidden) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Industry.GetCharactersCharacterIDIndustryJobsForbidden(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDIndustryJobsForbidden)?.hashValue == hashValue
 			}
 			
 		}

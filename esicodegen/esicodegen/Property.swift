@@ -65,6 +65,11 @@ class Property: Schema {
 				"guard let \(propertyName) = DateFormatter.esiDateFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)" :
 			"\(propertyName) = DateFormatter.esiDateFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\")"
+		case .dateTime:
+			return isRequired ?
+				"guard let \(propertyName) = DateFormatter.esiDateTimeFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+				"self.\(propertyName) = \(propertyName)" :
+			"\(propertyName) = DateFormatter.esiDateTimeFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\")"
 		case .enum:
 			return isRequired ?
 				"guard let \(propertyName) = \(typeIdentifier)(rawValue: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
@@ -106,7 +111,7 @@ class Property: Schema {
 			return !isRequired ?
 				"\(propertyName) = aDecoder.containsValue(forKey: \"\(name)\") ? aDecoder.decodeBool(forKey: \"\(name)\") : nil" :
 			"\(propertyName) = aDecoder.decodeBool(forKey: \"\(name)\")"
-		case .date, .base64Data, .octetsData, .string:
+		case .date, .dateTime, .base64Data, .octetsData, .string:
 			return "\(propertyName) = aDecoder.decodeObject(forKey: \"\(name)\") as? \(typeIdentifier)\(isRequired ? " ?? \(defaultValue)" : "")"
 		case .array:
 			var scheme = array

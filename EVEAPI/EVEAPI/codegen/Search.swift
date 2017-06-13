@@ -290,7 +290,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -337,21 +337,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Search.GetSearchInternalServerError, rhs: Search.GetSearchInternalServerError) -> Bool {
+			public static func ==(lhs: Search.GetCharactersCharacterIDSearchInternalServerError, rhs: Search.GetCharactersCharacterIDSearchInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Search.GetSearchInternalServerError) {
+			init(_ other: Search.GetCharactersCharacterIDSearchInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.GetSearchInternalServerError(self)
+				return Search.GetCharactersCharacterIDSearchInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetSearchInternalServerError)?.hashValue == hashValue
+				return (object as? GetCharactersCharacterIDSearchInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -424,7 +424,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -471,21 +471,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Search.GetCharactersCharacterIDSearchInternalServerError, rhs: Search.GetCharactersCharacterIDSearchInternalServerError) -> Bool {
+			public static func ==(lhs: Search.GetSearchInternalServerError, rhs: Search.GetSearchInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Search.GetCharactersCharacterIDSearchInternalServerError) {
+			init(_ other: Search.GetSearchInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.GetCharactersCharacterIDSearchInternalServerError(self)
+				return Search.GetSearchInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDSearchInternalServerError)?.hashValue == hashValue
+				return (object as? GetSearchInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

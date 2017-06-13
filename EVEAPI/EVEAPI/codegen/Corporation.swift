@@ -515,73 +515,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDNotFound, rhs: Corporation.GetCorporationsCorporationIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsCorporationIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class GetCorporationsNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -644,6 +577,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetCorporationsNamesInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDNotFound, rhs: Corporation.GetCorporationsCorporationIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -872,7 +872,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetCorporationsCorporationIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -919,21 +919,88 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDIconsNotFound, rhs: Corporation.GetCorporationsCorporationIDIconsNotFound) -> Bool {
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDInternalServerError, rhs: Corporation.GetCorporationsCorporationIDInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Corporation.GetCorporationsCorporationIDIconsNotFound) {
+			init(_ other: Corporation.GetCorporationsCorporationIDInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsCorporationIDIconsNotFound(self)
+				return Corporation.GetCorporationsCorporationIDInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDIconsNotFound)?.hashValue == hashValue
+				return (object as? GetCorporationsCorporationIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetCorporationsCorporationIDRolesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDRolesInternalServerError, rhs: Corporation.GetCorporationsCorporationIDRolesInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.GetCorporationsCorporationIDRolesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDRolesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDRolesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -992,7 +1059,7 @@ public extension ESI {
 				self.corporationDescription = corporationDescription
 				guard let corporationName = dictionary["corporation_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.corporationName = corporationName
-				creationDate = DateFormatter.esiDateFormatter.date(from: dictionary["creation_date"] as? String ?? "")
+				creationDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["creation_date"] as? String ?? "")
 				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.creatorID = creatorID
 				faction = Corporation.Information.GetCorporationsCorporationIDFaction(rawValue: dictionary["faction"] as? String ?? "")
@@ -1111,73 +1178,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Information)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCorporationsCorporationIDRolesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDRolesInternalServerError, rhs: Corporation.GetCorporationsCorporationIDRolesInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Corporation.GetCorporationsCorporationIDRolesInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsCorporationIDRolesInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDRolesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -1381,7 +1381,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetCorporationsCorporationIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1428,88 +1428,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDInternalServerError, rhs: Corporation.GetCorporationsCorporationIDInternalServerError) -> Bool {
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDIconsNotFound, rhs: Corporation.GetCorporationsCorporationIDIconsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Corporation.GetCorporationsCorporationIDInternalServerError) {
+			init(_ other: Corporation.GetCorporationsCorporationIDIconsNotFound) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsCorporationIDInternalServerError(self)
+				return Corporation.GetCorporationsCorporationIDIconsNotFound(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCorporationsNpccorpsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsNpccorpsInternalServerError, rhs: Corporation.GetCorporationsNpccorpsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Corporation.GetCorporationsNpccorpsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsNpccorpsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsNpccorpsInternalServerError)?.hashValue == hashValue
+				return (object as? GetCorporationsCorporationIDIconsNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -1587,82 +1520,10 @@ public extension ESI {
 		}
 		
 		
-		public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetCorporationsNpccorpsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var allianceID: Int = Int()
-				public var isDeleted: Bool = Bool()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.allianceID = allianceID
-					guard let isDeleted = dictionary["is_deleted"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.isDeleted = isDeleted
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
-					isDeleted = aDecoder.decodeBool(forKey: "is_deleted")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(allianceID, forKey: "alliance_id")
-					aCoder.encode(isDeleted, forKey: "is_deleted")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["alliance_id"] = allianceID.json
-					json["is_deleted"] = isDeleted.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID.hashValue)
-					hashCombine(seed: &hash, value: isDeleted.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance, rhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) {
-					allianceID = other.allianceID
-					isDeleted = other.isDeleted
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDAlliancehistoryAlliance)?.hashValue == hashValue
-				}
-				
-			}
 			
-			public var alliance: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance? = nil
-			public var recordID: Int = Int()
-			public var startDate: Date = Date()
+			public var error: String? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -1671,11 +1532,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				alliance = try? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(json: dictionary["alliance"] as? [String: Any] ?? [:])
-				guard let recordID = dictionary["record_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.recordID = recordID
-				guard let startDate = DateFormatter.esiDateFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.startDate = startDate
+				error = dictionary["error"] as? String
 				
 				super.init()
 			}
@@ -1685,62 +1542,337 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				alliance = aDecoder.decodeObject(of: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance.self, forKey: "alliance") 
-				recordID = aDecoder.decodeInteger(forKey: "record_id")
-				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date ?? Date()
+				error = aDecoder.decodeObject(forKey: "error") as? String
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = alliance {
-					aCoder.encode(v, forKey: "alliance")
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
 				}
-				aCoder.encode(recordID, forKey: "record_id")
-				aCoder.encode(startDate, forKey: "start_date")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = alliance?.json {
-					json["alliance"] = v
+				if let v = error?.json {
+					json["error"] = v
 				}
-				json["record_id"] = recordID.json
-				json["start_date"] = startDate.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: alliance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: recordID.hashValue)
-				hashCombine(seed: &hash, value: startDate.hashValue)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Corporation.History, rhs: Corporation.History) -> Bool {
+			public static func ==(lhs: Corporation.GetCorporationsNpccorpsInternalServerError, rhs: Corporation.GetCorporationsNpccorpsInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Corporation.History) {
-				alliance = other.alliance != nil ? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(other.alliance!) : nil
-				recordID = other.recordID
-				startDate = other.startDate
+			init(_ other: Corporation.GetCorporationsNpccorpsInternalServerError) {
+				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.History(self)
+				return Corporation.GetCorporationsNpccorpsInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? History)?.hashValue == hashValue
+				return (object as? GetCorporationsNpccorpsInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class VulnerabilitySchedule: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var day: Int = Int()
+			public var hour: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let day = dictionary["day"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.day = day
+				guard let hour = dictionary["hour"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.hour = hour
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				day = aDecoder.decodeInteger(forKey: "day")
+				hour = aDecoder.decodeInteger(forKey: "hour")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(day, forKey: "day")
+				aCoder.encode(hour, forKey: "hour")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["day"] = day.json
+				json["hour"] = hour.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: day.hashValue)
+				hashCombine(seed: &hash, value: hour.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Corporation.VulnerabilitySchedule, rhs: Corporation.VulnerabilitySchedule) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.VulnerabilitySchedule) {
+				day = other.day
+				hour = other.hour
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.VulnerabilitySchedule(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? VulnerabilitySchedule)?.hashValue == hashValue
 			}
 			
 		}
 		
 		
 		public class Role: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCorporationsCorporationIDRolesGrantableRolesAtOther: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .director
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDRolesGrantableRolesAtBase: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .director
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDRolesRolesAtOther: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .director
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
 			public enum GetCorporationsCorporationIDRolesRolesAtBase: String, JSONCoding, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
@@ -1884,6 +2016,77 @@ public extension ESI {
 				
 			}
 			
+			public enum GetCorporationsCorporationIDRolesGrantableRoles: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .director
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRoles(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
 			public enum GetCorporationsCorporationIDRolesRolesAtHq: String, JSONCoding, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
@@ -2017,290 +2220,6 @@ public extension ESI {
 				
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtHq(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesRolesAtOther: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesGrantableRoles: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRoles(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesGrantableRolesAtBase: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesGrantableRolesAtOther: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -2459,11 +2378,82 @@ public extension ESI {
 		}
 		
 		
-		public class VulnerabilitySchedule: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var allianceID: Int = Int()
+				public var isDeleted: Bool = Bool()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.allianceID = allianceID
+					guard let isDeleted = dictionary["is_deleted"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.isDeleted = isDeleted
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
+					isDeleted = aDecoder.decodeBool(forKey: "is_deleted")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(allianceID, forKey: "alliance_id")
+					aCoder.encode(isDeleted, forKey: "is_deleted")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["alliance_id"] = allianceID.json
+					json["is_deleted"] = isDeleted.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: allianceID.hashValue)
+					hashCombine(seed: &hash, value: isDeleted.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance, rhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) {
+					allianceID = other.allianceID
+					isDeleted = other.isDeleted
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDAlliancehistoryAlliance)?.hashValue == hashValue
+				}
+				
+			}
 			
-			public var day: Int = Int()
-			public var hour: Int = Int()
+			public var alliance: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance? = nil
+			public var recordID: Int = Int()
+			public var startDate: Date = Date()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -2472,10 +2462,11 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				guard let day = dictionary["day"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.day = day
-				guard let hour = dictionary["hour"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.hour = hour
+				alliance = try? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(json: dictionary["alliance"] as? [String: Any] ?? [:])
+				guard let recordID = dictionary["record_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.recordID = recordID
+				guard let startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.startDate = startDate
 				
 				super.init()
 			}
@@ -2485,47 +2476,56 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				day = aDecoder.decodeInteger(forKey: "day")
-				hour = aDecoder.decodeInteger(forKey: "hour")
+				alliance = aDecoder.decodeObject(of: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance.self, forKey: "alliance") 
+				recordID = aDecoder.decodeInteger(forKey: "record_id")
+				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date ?? Date()
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(day, forKey: "day")
-				aCoder.encode(hour, forKey: "hour")
+				if let v = alliance {
+					aCoder.encode(v, forKey: "alliance")
+				}
+				aCoder.encode(recordID, forKey: "record_id")
+				aCoder.encode(startDate, forKey: "start_date")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["day"] = day.json
-				json["hour"] = hour.json
+				if let v = alliance?.json {
+					json["alliance"] = v
+				}
+				json["record_id"] = recordID.json
+				json["start_date"] = startDate.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: day.hashValue)
-				hashCombine(seed: &hash, value: hour.hashValue)
+				hashCombine(seed: &hash, value: alliance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: recordID.hashValue)
+				hashCombine(seed: &hash, value: startDate.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Corporation.VulnerabilitySchedule, rhs: Corporation.VulnerabilitySchedule) -> Bool {
+			public static func ==(lhs: Corporation.History, rhs: Corporation.History) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Corporation.VulnerabilitySchedule) {
-				day = other.day
-				hour = other.hour
+			init(_ other: Corporation.History) {
+				alliance = other.alliance != nil ? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(other.alliance!) : nil
+				recordID = other.recordID
+				startDate = other.startDate
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.VulnerabilitySchedule(self)
+				return Corporation.History(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? VulnerabilitySchedule)?.hashValue == hashValue
+				return (object as? History)?.hashValue == hashValue
 			}
 			
 		}
@@ -2667,148 +2667,6 @@ public extension ESI {
 		
 		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCorporationsCorporationIDStructuresCurrentVul: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var day: Int = Int()
-				public var hour: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let day = dictionary["day"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.day = day
-					guard let hour = dictionary["hour"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.hour = hour
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					day = aDecoder.decodeInteger(forKey: "day")
-					hour = aDecoder.decodeInteger(forKey: "hour")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(day, forKey: "day")
-					aCoder.encode(hour, forKey: "hour")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["day"] = day.json
-					json["hour"] = hour.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: day.hashValue)
-					hashCombine(seed: &hash, value: hour.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul, rhs: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul) {
-					day = other.day
-					hour = other.hour
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDStructuresCurrentVul)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public class GetCorporationsCorporationIDStructuresNextVul: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var day: Int = Int()
-				public var hour: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let day = dictionary["day"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.day = day
-					guard let hour = dictionary["hour"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.hour = hour
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					day = aDecoder.decodeInteger(forKey: "day")
-					hour = aDecoder.decodeInteger(forKey: "hour")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(day, forKey: "day")
-					aCoder.encode(hour, forKey: "hour")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["day"] = day.json
-					json["hour"] = hour.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: day.hashValue)
-					hashCombine(seed: &hash, value: hour.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul, rhs: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul) {
-					day = other.day
-					hour = other.hour
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDStructuresNextVul)?.hashValue == hashValue
-				}
-				
-			}
-			
 			public class GetCorporationsCorporationIDStructuresServices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetCorporationsCorporationIDStructuresState: String, JSONCoding, HTTPQueryable {
@@ -2899,6 +2757,148 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetCorporationsCorporationIDStructuresServices)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public class GetCorporationsCorporationIDStructuresNextVul: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var day: Int = Int()
+				public var hour: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let day = dictionary["day"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.day = day
+					guard let hour = dictionary["hour"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.hour = hour
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					day = aDecoder.decodeInteger(forKey: "day")
+					hour = aDecoder.decodeInteger(forKey: "hour")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(day, forKey: "day")
+					aCoder.encode(hour, forKey: "hour")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["day"] = day.json
+					json["hour"] = hour.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: day.hashValue)
+					hashCombine(seed: &hash, value: hour.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul, rhs: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul) {
+					day = other.day
+					hour = other.hour
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDStructuresNextVul)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public class GetCorporationsCorporationIDStructuresCurrentVul: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var day: Int = Int()
+				public var hour: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let day = dictionary["day"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.day = day
+					guard let hour = dictionary["hour"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.hour = hour
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					day = aDecoder.decodeInteger(forKey: "day")
+					hour = aDecoder.decodeInteger(forKey: "hour")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(day, forKey: "day")
+					aCoder.encode(hour, forKey: "hour")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["day"] = day.json
+					json["hour"] = hour.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: day.hashValue)
+					hashCombine(seed: &hash, value: hour.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul, rhs: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul) {
+					day = other.day
+					hour = other.hour
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetCorporationsCorporationIDStructuresCurrentVul)?.hashValue == hashValue
 				}
 				
 			}

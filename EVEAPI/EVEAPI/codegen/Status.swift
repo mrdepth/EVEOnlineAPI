@@ -133,7 +133,7 @@ public extension ESI {
 				self.players = players
 				guard let serverVersion = dictionary["server_version"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.serverVersion = serverVersion
-				guard let startTime = DateFormatter.esiDateFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let startTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.startTime = startTime
 				vip = dictionary["vip"] as? Bool
 				

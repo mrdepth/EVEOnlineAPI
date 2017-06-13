@@ -469,7 +469,7 @@ public extension ESI {
 				
 				guard let bookmarkID = dictionary["bookmark_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.bookmarkID = bookmarkID
-				guard let createDate = DateFormatter.esiDateFormatter.date(from: dictionary["create_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let createDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["create_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.createDate = createDate
 				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.creatorID = creatorID

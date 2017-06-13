@@ -515,6 +515,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetFleetsFleetIDMembersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Fleets.GetFleetsFleetIDMembersInternalServerError, rhs: Fleets.GetFleetsFleetIDMembersInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fleets.GetFleetsFleetIDMembersInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDMembersInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDMembersInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class Invitation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PostFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
@@ -633,7 +700,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetFleetsFleetIDMembersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class DeleteFleetsFleetIDMembersMemberIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -680,21 +747,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Fleets.GetFleetsFleetIDMembersInternalServerError, rhs: Fleets.GetFleetsFleetIDMembersInternalServerError) -> Bool {
+			public static func ==(lhs: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError, rhs: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetFleetsFleetIDMembersInternalServerError) {
+			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetFleetsFleetIDMembersInternalServerError(self)
+				return Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetFleetsFleetIDMembersInternalServerError)?.hashValue == hashValue
+				return (object as? DeleteFleetsFleetIDMembersMemberIDInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -762,73 +829,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? PostFleetsFleetIDWingsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class DeleteFleetsFleetIDMembersMemberIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError, rhs: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.DeleteFleetsFleetIDMembersMemberIDInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? DeleteFleetsFleetIDMembersMemberIDInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -1501,73 +1501,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetFleetsFleetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Fleets.GetFleetsFleetIDInternalServerError, rhs: Fleets.GetFleetsFleetIDInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Fleets.GetFleetsFleetIDInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetFleetsFleetIDInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetFleetsFleetIDInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class PutFleetsFleetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -1630,6 +1563,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? PutFleetsFleetIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetFleetsFleetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Fleets.GetFleetsFleetIDInternalServerError, rhs: Fleets.GetFleetsFleetIDInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fleets.GetFleetsFleetIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetFleetsFleetIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetFleetsFleetIDInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -2783,6 +2783,73 @@ public extension ESI {
 		}
 		
 		
+		public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteFleetsFleetIDMembersMemberIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class FleetUpdate: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2856,73 +2923,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? FleetUpdate)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? DeleteFleetsFleetIDMembersMemberIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -3508,7 +3508,7 @@ public extension ESI {
 				
 				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.characterID = characterID
-				guard let joinTime = DateFormatter.esiDateFormatter.date(from: dictionary["join_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let joinTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["join_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.joinTime = joinTime
 				guard let role = Fleets.Member.GetFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.role = role
@@ -3624,7 +3624,7 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class PutFleetsFleetIDWingsWingIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3671,21 +3671,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDNotFound, rhs: Fleets.PutFleetsFleetIDNotFound) -> Bool {
+			public static func ==(lhs: Fleets.PutFleetsFleetIDWingsWingIDForbidden, rhs: Fleets.PutFleetsFleetIDWingsWingIDForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDNotFound) {
+			init(_ other: Fleets.PutFleetsFleetIDWingsWingIDForbidden) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDNotFound(self)
+				return Fleets.PutFleetsFleetIDWingsWingIDForbidden(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDNotFound)?.hashValue == hashValue
+				return (object as? PutFleetsFleetIDWingsWingIDForbidden)?.hashValue == hashValue
 			}
 			
 		}
@@ -3825,7 +3825,7 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDWingsWingIDForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3872,21 +3872,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDWingsWingIDForbidden, rhs: Fleets.PutFleetsFleetIDWingsWingIDForbidden) -> Bool {
+			public static func ==(lhs: Fleets.PutFleetsFleetIDNotFound, rhs: Fleets.PutFleetsFleetIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDWingsWingIDForbidden) {
+			init(_ other: Fleets.PutFleetsFleetIDNotFound) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDWingsWingIDForbidden(self)
+				return Fleets.PutFleetsFleetIDNotFound(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDWingsWingIDForbidden)?.hashValue == hashValue
+				return (object as? PutFleetsFleetIDNotFound)?.hashValue == hashValue
 			}
 			
 		}

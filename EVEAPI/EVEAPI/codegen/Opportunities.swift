@@ -414,6 +414,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetCharactersCharacterIDOpportunitiesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError, rhs: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDOpportunitiesInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class GetOpportunitiesTasksInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -548,145 +615,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDOpportunitiesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError, rhs: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Opportunities.GetCharactersCharacterIDOpportunitiesInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDOpportunitiesInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class CompletedTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var completedAt: Date = Date()
-			public var taskID: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let completedAt = DateFormatter.esiDateFormatter.date(from: dictionary["completed_at"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.completedAt = completedAt
-				guard let taskID = dictionary["task_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.taskID = taskID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				completedAt = aDecoder.decodeObject(forKey: "completed_at") as? Date ?? Date()
-				taskID = aDecoder.decodeInteger(forKey: "task_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(completedAt, forKey: "completed_at")
-				aCoder.encode(taskID, forKey: "task_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["completed_at"] = completedAt.json
-				json["task_id"] = taskID.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: completedAt.hashValue)
-				hashCombine(seed: &hash, value: taskID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Opportunities.CompletedTask, rhs: Opportunities.CompletedTask) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Opportunities.CompletedTask) {
-				completedAt = other.completedAt
-				taskID = other.taskID
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Opportunities.CompletedTask(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CompletedTask)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class OpportunitiesTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -770,6 +698,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? OpportunitiesTask)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class CompletedTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var completedAt: Date = Date()
+			public var taskID: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let completedAt = DateFormatter.esiDateTimeFormatter.date(from: dictionary["completed_at"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.completedAt = completedAt
+				guard let taskID = dictionary["task_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.taskID = taskID
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				completedAt = aDecoder.decodeObject(forKey: "completed_at") as? Date ?? Date()
+				taskID = aDecoder.decodeInteger(forKey: "task_id")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(completedAt, forKey: "completed_at")
+				aCoder.encode(taskID, forKey: "task_id")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["completed_at"] = completedAt.json
+				json["task_id"] = taskID.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: completedAt.hashValue)
+				hashCombine(seed: &hash, value: taskID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Opportunities.CompletedTask, rhs: Opportunities.CompletedTask) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Opportunities.CompletedTask) {
+				completedAt = other.completedAt
+				taskID = other.taskID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Opportunities.CompletedTask(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CompletedTask)?.hashValue == hashValue
 			}
 			
 		}

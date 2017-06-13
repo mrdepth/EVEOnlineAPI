@@ -1413,7 +1413,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseStargatesStargateIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetUniverseStationsStationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -1460,21 +1460,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseStargatesStargateIDNotFound, rhs: Universe.GetUniverseStargatesStargateIDNotFound) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseStationsStationIDNotFound, rhs: Universe.GetUniverseStationsStationIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Universe.GetUniverseStargatesStargateIDNotFound) {
+			init(_ other: Universe.GetUniverseStationsStationIDNotFound) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseStargatesStargateIDNotFound(self)
+				return Universe.GetUniverseStationsStationIDNotFound(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseStargatesStargateIDNotFound)?.hashValue == hashValue
+				return (object as? GetUniverseStationsStationIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -1547,6 +1547,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetUniverseStargatesStargateIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseStargatesStargateIDNotFound, rhs: Universe.GetUniverseStargatesStargateIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseStargatesStargateIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseStargatesStargateIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseStargatesStargateIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class GetUniverseSystemsSystemIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -1609,73 +1676,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetUniverseSystemsSystemIDInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetUniverseStationsStationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseStationsStationIDNotFound, rhs: Universe.GetUniverseStationsStationIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseStationsStationIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseStationsStationIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseStationsStationIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -2018,6 +2018,80 @@ public extension ESI {
 		
 		public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var moons: [Int]? = nil
+				public var planetID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					moons = try (dictionary["moons"] as? [Any])?.map {try Int(json: $0)}
+					guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.planetID = planetID
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					moons = aDecoder.decodeObject(forKey: "moons") as? [Int]
+					planetID = aDecoder.decodeInteger(forKey: "planet_id")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = moons {
+						aCoder.encode(v, forKey: "moons")
+					}
+					aCoder.encode(planetID, forKey: "planet_id")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = moons?.json {
+						json["moons"] = v
+					}
+					json["planet_id"] = planetID.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: planetID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) {
+					moons = other.moons?.flatMap { $0 }
+					planetID = other.planetID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseSystemsSystemIDPlanets)?.hashValue == hashValue
+				}
+				
+			}
+			
 			public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
@@ -2093,80 +2167,6 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetUniverseSystemsSystemIDPosition)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var moons: [Int]? = nil
-				public var planetID: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					moons = try (dictionary["moons"] as? [Any])?.map {try Int(json: $0)}
-					guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.planetID = planetID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					moons = aDecoder.decodeObject(forKey: "moons") as? [Int]
-					planetID = aDecoder.decodeInteger(forKey: "planet_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = moons {
-						aCoder.encode(v, forKey: "moons")
-					}
-					aCoder.encode(planetID, forKey: "planet_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = moons?.json {
-						json["moons"] = v
-					}
-					json["planet_id"] = planetID.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: planetID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) {
-					moons = other.moons?.flatMap { $0 }
-					planetID = other.planetID
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetUniverseSystemsSystemIDPlanets)?.hashValue == hashValue
 				}
 				
 			}
@@ -2288,73 +2288,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseMoonsMoonIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseMoonsMoonIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseMoonsMoonIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class GetUniversePlanetsPlanetIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2417,6 +2350,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetUniversePlanetsPlanetIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseMoonsMoonIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseMoonsMoonIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseMoonsMoonIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -2852,140 +2852,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseSystemJumpsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseSystemJumpsInternalServerError, rhs: Universe.GetUniverseSystemJumpsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseSystemJumpsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseSystemJumpsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseSystemJumpsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetUniverseGroupsGroupIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseGroupsGroupIDInternalServerError, rhs: Universe.GetUniverseGroupsGroupIDInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseGroupsGroupIDInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseGroupsGroupIDInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseGroupsGroupIDInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class SystemKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -3069,6 +2935,140 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? SystemKills)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetUniverseGroupsGroupIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseGroupsGroupIDInternalServerError, rhs: Universe.GetUniverseGroupsGroupIDInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseGroupsGroupIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseGroupsGroupIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseGroupsGroupIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetUniverseSystemJumpsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseSystemJumpsInternalServerError, rhs: Universe.GetUniverseSystemJumpsInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseSystemJumpsInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseSystemJumpsInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSystemJumpsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -3229,7 +3229,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseTypesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetUniverseCategoriesCategoryIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3276,21 +3276,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseTypesInternalServerError, rhs: Universe.GetUniverseTypesInternalServerError) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseCategoriesCategoryIDInternalServerError, rhs: Universe.GetUniverseCategoriesCategoryIDInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Universe.GetUniverseTypesInternalServerError) {
+			init(_ other: Universe.GetUniverseCategoriesCategoryIDInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseTypesInternalServerError(self)
+				return Universe.GetUniverseCategoriesCategoryIDInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseTypesInternalServerError)?.hashValue == hashValue
+				return (object as? GetUniverseCategoriesCategoryIDInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -3363,7 +3363,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseCategoriesCategoryIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetUniverseTypesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -3410,21 +3410,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseCategoriesCategoryIDInternalServerError, rhs: Universe.GetUniverseCategoriesCategoryIDInternalServerError) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseTypesInternalServerError, rhs: Universe.GetUniverseTypesInternalServerError) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Universe.GetUniverseCategoriesCategoryIDInternalServerError) {
+			init(_ other: Universe.GetUniverseTypesInternalServerError) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseCategoriesCategoryIDInternalServerError(self)
+				return Universe.GetUniverseTypesInternalServerError(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseCategoriesCategoryIDInternalServerError)?.hashValue == hashValue
+				return (object as? GetUniverseTypesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -4168,74 +4168,78 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseRacesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseRacesInternalServerError, rhs: Universe.GetUniverseRacesInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseRacesInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseRacesInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseRacesInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class StargateInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var stargateID: Int = Int()
+				public var systemID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let stargateID = dictionary["stargate_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.stargateID = stargateID
+					guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.systemID = systemID
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					stargateID = aDecoder.decodeInteger(forKey: "stargate_id")
+					systemID = aDecoder.decodeInteger(forKey: "system_id")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(stargateID, forKey: "stargate_id")
+					aCoder.encode(systemID, forKey: "system_id")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["stargate_id"] = stargateID.json
+					json["system_id"] = systemID.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: stargateID.hashValue)
+					hashCombine(seed: &hash, value: systemID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) {
+					stargateID = other.stargateID
+					systemID = other.systemID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.StargateInformation.GetUniverseStargatesStargateIDDestination(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseStargatesStargateIDDestination)?.hashValue == hashValue
+				}
+				
+			}
 			
 			public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
@@ -4312,77 +4316,6 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetUniverseStargatesStargateIDPosition)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var stargateID: Int = Int()
-				public var systemID: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let stargateID = dictionary["stargate_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.stargateID = stargateID
-					guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.systemID = systemID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					stargateID = aDecoder.decodeInteger(forKey: "stargate_id")
-					systemID = aDecoder.decodeInteger(forKey: "system_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(stargateID, forKey: "stargate_id")
-					aCoder.encode(systemID, forKey: "system_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["stargate_id"] = stargateID.json
-					json["system_id"] = systemID.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: stargateID.hashValue)
-					hashCombine(seed: &hash, value: systemID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) {
-					stargateID = other.stargateID
-					systemID = other.systemID
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Universe.StargateInformation.GetUniverseStargatesStargateIDDestination(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetUniverseStargatesStargateIDDestination)?.hashValue == hashValue
 				}
 				
 			}
@@ -4481,93 +4414,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? StargateInformation)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class ItemCategoryInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var categoryID: Int = Int()
-			public var groups: [Int] = []
-			public var name: String = String()
-			public var published: Bool = Bool()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.categoryID = categoryID
-				groups = try (dictionary["groups"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.name = name
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.published = published
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				categoryID = aDecoder.decodeInteger(forKey: "category_id")
-				groups = aDecoder.decodeObject(forKey: "groups") as? [Int] ?? []
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				published = aDecoder.decodeBool(forKey: "published")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(categoryID, forKey: "category_id")
-				aCoder.encode(groups, forKey: "groups")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(published, forKey: "published")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["category_id"] = categoryID.json
-				json["groups"] = groups.json
-				json["name"] = name.json
-				json["published"] = published.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: categoryID.hashValue)
-				groups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: published.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.ItemCategoryInformation, rhs: Universe.ItemCategoryInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.ItemCategoryInformation) {
-				categoryID = other.categoryID
-				groups = other.groups.flatMap { $0 }
-				name = other.name
-				published = other.published
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.ItemCategoryInformation(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? ItemCategoryInformation)?.hashValue == hashValue
 			}
 			
 		}
@@ -4714,6 +4560,93 @@ public extension ESI {
 		}
 		
 		
+		public class ItemCategoryInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var categoryID: Int = Int()
+			public var groups: [Int] = []
+			public var name: String = String()
+			public var published: Bool = Bool()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.categoryID = categoryID
+				groups = try (dictionary["groups"] as? [Any])?.map {try Int(json: $0)} ?? []
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.name = name
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.published = published
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				categoryID = aDecoder.decodeInteger(forKey: "category_id")
+				groups = aDecoder.decodeObject(forKey: "groups") as? [Int] ?? []
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				published = aDecoder.decodeBool(forKey: "published")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(categoryID, forKey: "category_id")
+				aCoder.encode(groups, forKey: "groups")
+				aCoder.encode(name, forKey: "name")
+				aCoder.encode(published, forKey: "published")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["category_id"] = categoryID.json
+				json["groups"] = groups.json
+				json["name"] = name.json
+				json["published"] = published.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: categoryID.hashValue)
+				groups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: published.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.ItemCategoryInformation, rhs: Universe.ItemCategoryInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.ItemCategoryInformation) {
+				categoryID = other.categoryID
+				groups = other.groups.flatMap { $0 }
+				name = other.name
+				published = other.published
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.ItemCategoryInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ItemCategoryInformation)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class GetUniverseStructuresStructureIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -4776,6 +4709,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetUniverseStructuresStructureIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetUniverseRacesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseRacesInternalServerError, rhs: Universe.GetUniverseRacesInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseRacesInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseRacesInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseRacesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -5391,6 +5391,73 @@ public extension ESI {
 		}
 		
 		
+		public class GetUniverseTypesTypeIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseTypesTypeIDInternalServerError, rhs: Universe.GetUniverseTypesTypeIDInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseTypesTypeIDInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseTypesTypeIDInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseTypesTypeIDInternalServerError)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class StructureInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public class GetUniverseStructuresStructureIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
@@ -5558,73 +5625,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? StructureInformation)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetUniverseTypesTypeIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseTypesTypeIDInternalServerError, rhs: Universe.GetUniverseTypesTypeIDInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseTypesTypeIDInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseTypesTypeIDInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseTypesTypeIDInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -5939,54 +5939,6 @@ public extension ESI {
 		
 		public class StationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetUniverseStationsStationIDServices: String, JSONCoding, HTTPQueryable {
-				case assasinationMissions = "assasination-missions"
-				case blackMarket = "black-market"
-				case bountyMissions = "bounty-missions"
-				case cloning = "cloning"
-				case courierMissions = "courier-missions"
-				case dnaTherapy = "dna-therapy"
-				case docking = "docking"
-				case factory = "factory"
-				case fitting = "fitting"
-				case gambling = "gambling"
-				case insurance = "insurance"
-				case interbus = "interbus"
-				case jumpCloneFacility = "jump-clone-facility"
-				case labratory = "labratory"
-				case loyaltyPointStore = "loyalty-point-store"
-				case market = "market"
-				case navyOffices = "navy-offices"
-				case news = "news"
-				case officeRental = "office-rental"
-				case paintshop = "paintshop"
-				case refinery = "refinery"
-				case repairFacilities = "repair-facilities"
-				case reprocessingPlant = "reprocessing-plant"
-				case securityOffices = "security-offices"
-				case stockExchange = "stock-exchange"
-				case storage = "storage"
-				case surgery = "surgery"
-				
-				public init() {
-					self = .bountyMissions
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetUniverseStationsStationIDServices(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public class GetUniverseStationsStationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
@@ -6062,6 +6014,54 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetUniverseStationsStationIDPosition)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public enum GetUniverseStationsStationIDServices: String, JSONCoding, HTTPQueryable {
+				case assasinationMissions = "assasination-missions"
+				case blackMarket = "black-market"
+				case bountyMissions = "bounty-missions"
+				case cloning = "cloning"
+				case courierMissions = "courier-missions"
+				case dnaTherapy = "dna-therapy"
+				case docking = "docking"
+				case factory = "factory"
+				case fitting = "fitting"
+				case gambling = "gambling"
+				case insurance = "insurance"
+				case interbus = "interbus"
+				case jumpCloneFacility = "jump-clone-facility"
+				case labratory = "labratory"
+				case loyaltyPointStore = "loyalty-point-store"
+				case market = "market"
+				case navyOffices = "navy-offices"
+				case news = "news"
+				case officeRental = "office-rental"
+				case paintshop = "paintshop"
+				case refinery = "refinery"
+				case repairFacilities = "repair-facilities"
+				case reprocessingPlant = "reprocessing-plant"
+				case securityOffices = "security-offices"
+				case stockExchange = "stock-exchange"
+				case storage = "storage"
+				case surgery = "surgery"
+				
+				public init() {
+					self = .bountyMissions
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetUniverseStationsStationIDServices(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
 				}
 				
 			}

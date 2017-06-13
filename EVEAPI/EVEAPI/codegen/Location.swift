@@ -449,10 +449,12 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDOnlineForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class CharacterLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var solarSystemID: Int = Int()
+			public var stationID: Int? = nil
+			public var structureID: Int64? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -461,7 +463,10 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.solarSystemID = solarSystemID
+				stationID = dictionary["station_id"] as? Int
+				structureID = dictionary["structure_id"] as? Int64
 				
 				super.init()
 			}
@@ -471,46 +476,60 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
+				stationID = aDecoder.containsValue(forKey: "station_id") ? aDecoder.decodeInteger(forKey: "station_id") : nil
+				structureID = aDecoder.containsValue(forKey: "structure_id") ? aDecoder.decodeInt64(forKey: "structure_id") : nil
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
+				aCoder.encode(solarSystemID, forKey: "solar_system_id")
+				if let v = stationID {
+					aCoder.encode(v, forKey: "station_id")
+				}
+				if let v = structureID {
+					aCoder.encode(v, forKey: "structure_id")
 				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
+				json["solar_system_id"] = solarSystemID.json
+				if let v = stationID?.json {
+					json["station_id"] = v
+				}
+				if let v = structureID?.json {
+					json["structure_id"] = v
 				}
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: stationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: structureID?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineForbidden, rhs: Location.GetCharactersCharacterIDOnlineForbidden) -> Bool {
+			public static func ==(lhs: Location.CharacterLocation, rhs: Location.CharacterLocation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Location.GetCharactersCharacterIDOnlineForbidden) {
-				error = other.error
+			init(_ other: Location.CharacterLocation) {
+				solarSystemID = other.solarSystemID
+				stationID = other.stationID
+				structureID = other.structureID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDOnlineForbidden(self)
+				return Location.CharacterLocation(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDOnlineForbidden)?.hashValue == hashValue
+				return (object as? CharacterLocation)?.hashValue == hashValue
 			}
 			
 		}
@@ -596,12 +615,10 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetCharactersCharacterIDOnlineForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var solarSystemID: Int = Int()
-			public var stationID: Int? = nil
-			public var structureID: Int64? = nil
+			public var error: String? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -610,10 +627,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.solarSystemID = solarSystemID
-				stationID = dictionary["station_id"] as? Int
-				structureID = dictionary["structure_id"] as? Int64
+				error = dictionary["error"] as? String
 				
 				super.init()
 			}
@@ -623,60 +637,46 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				stationID = aDecoder.containsValue(forKey: "station_id") ? aDecoder.decodeInteger(forKey: "station_id") : nil
-				structureID = aDecoder.containsValue(forKey: "structure_id") ? aDecoder.decodeInt64(forKey: "structure_id") : nil
+				error = aDecoder.decodeObject(forKey: "error") as? String
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(solarSystemID, forKey: "solar_system_id")
-				if let v = stationID {
-					aCoder.encode(v, forKey: "station_id")
-				}
-				if let v = structureID {
-					aCoder.encode(v, forKey: "structure_id")
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
 				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["solar_system_id"] = solarSystemID.json
-				if let v = stationID?.json {
-					json["station_id"] = v
-				}
-				if let v = structureID?.json {
-					json["structure_id"] = v
+				if let v = error?.json {
+					json["error"] = v
 				}
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: stationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: structureID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Location.CharacterLocation, rhs: Location.CharacterLocation) -> Bool {
+			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineForbidden, rhs: Location.GetCharactersCharacterIDOnlineForbidden) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Location.CharacterLocation) {
-				solarSystemID = other.solarSystemID
-				stationID = other.stationID
-				structureID = other.structureID
+			init(_ other: Location.GetCharactersCharacterIDOnlineForbidden) {
+				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.CharacterLocation(self)
+				return Location.GetCharactersCharacterIDOnlineForbidden(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CharacterLocation)?.hashValue == hashValue
+				return (object as? GetCharactersCharacterIDOnlineForbidden)?.hashValue == hashValue
 			}
 			
 		}

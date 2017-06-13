@@ -385,7 +385,7 @@ public extension ESI {
 				
 				homeLocation = try? Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation(json: dictionary["home_location"] as? [String: Any] ?? [:])
 				jumpClones = try (dictionary["jump_clones"] as? [Any])?.map {try Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones(json: $0)} ?? []
-				lastJumpDate = DateFormatter.esiDateFormatter.date(from: dictionary["last_jump_date"] as? String ?? "")
+				lastJumpDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_jump_date"] as? String ?? "")
 				
 				super.init()
 			}

@@ -247,6 +247,31 @@ public extension ESI {
 		
 		public class Campaign: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public enum GetSovereigntyCampaignsEventType: String, JSONCoding, HTTPQueryable {
+				case ihubDefense = "ihub_defense"
+				case stationDefense = "station_defense"
+				case stationFreeport = "station_freeport"
+				case tcuDefense = "tcu_defense"
+				
+				public init() {
+					self = .tcuDefense
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetSovereigntyCampaignsEventType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
 			public class GetSovereigntyCampaignsParticipants: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
@@ -318,31 +343,6 @@ public extension ESI {
 				
 			}
 			
-			public enum GetSovereigntyCampaignsEventType: String, JSONCoding, HTTPQueryable {
-				case ihubDefense = "ihub_defense"
-				case stationDefense = "station_defense"
-				case stationFreeport = "station_freeport"
-				case tcuDefense = "tcu_defense"
-				
-				public init() {
-					self = .tcuDefense
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetSovereigntyCampaignsEventType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public var attackersScore: Float? = nil
 			public var campaignID: Int = Int()
 			public var constellationID: Int = Int()
@@ -373,7 +373,7 @@ public extension ESI {
 				participants = try (dictionary["participants"] as? [Any])?.map {try Sovereignty.Campaign.GetSovereigntyCampaignsParticipants(json: $0)}
 				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let startTime = DateFormatter.esiDateFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let startTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.startTime = startTime
 				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.structureID = structureID
@@ -612,8 +612,8 @@ public extension ESI {
 				guard let structureTypeID = dictionary["structure_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.structureTypeID = structureTypeID
 				vulnerabilityOccupancyLevel = dictionary["vulnerability_occupancy_level"] as? Float
-				vulnerableEndTime = DateFormatter.esiDateFormatter.date(from: dictionary["vulnerable_end_time"] as? String ?? "")
-				vulnerableStartTime = DateFormatter.esiDateFormatter.date(from: dictionary["vulnerable_start_time"] as? String ?? "")
+				vulnerableEndTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_end_time"] as? String ?? "")
+				vulnerableStartTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_start_time"] as? String ?? "")
 				
 				super.init()
 			}

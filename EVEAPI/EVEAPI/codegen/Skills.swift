@@ -100,7 +100,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				finishDate = DateFormatter.esiDateFormatter.date(from: dictionary["finish_date"] as? String ?? "")
+				finishDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["finish_date"] as? String ?? "")
 				guard let finishedLevel = dictionary["finished_level"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.finishedLevel = finishedLevel
 				levelEndSP = dictionary["level_end_sp"] as? Int
@@ -109,7 +109,7 @@ public extension ESI {
 				self.queuePosition = queuePosition
 				guard let skillID = dictionary["skill_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.skillID = skillID
-				startDate = DateFormatter.esiDateFormatter.date(from: dictionary["start_date"] as? String ?? "")
+				startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "")
 				trainingStartSP = dictionary["training_start_sp"] as? Int
 				
 				super.init()
@@ -278,6 +278,73 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetCharactersCharacterIDSkillqueueForbidden)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetCharactersCharacterIDSkillqueueInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Skills.GetCharactersCharacterIDSkillqueueInternalServerError, rhs: Skills.GetCharactersCharacterIDSkillqueueInternalServerError) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Skills.GetCharactersCharacterIDSkillqueueInternalServerError) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.GetCharactersCharacterIDSkillqueueInternalServerError(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDSkillqueueInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -510,73 +577,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetCharactersCharacterIDSkillsForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDSkillqueueInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Skills.GetCharactersCharacterIDSkillqueueInternalServerError, rhs: Skills.GetCharactersCharacterIDSkillqueueInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Skills.GetCharactersCharacterIDSkillqueueInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Skills.GetCharactersCharacterIDSkillqueueInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDSkillqueueInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
