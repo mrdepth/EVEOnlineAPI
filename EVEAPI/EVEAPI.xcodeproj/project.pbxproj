@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		122071A41EF4188A007D86CE /* EVEGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122071A31EF4188A007D86CE /* EVEGlobal.swift */; };
 		122B55471EB601A000E46536 /* EVE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55461EB601A000E46536 /* EVE.swift */; };
 		122B55571EB7154F00E46536 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55531EB7154F00E46536 /* Account.swift */; };
 		122B55581EB7154F00E46536 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55541EB7154F00E46536 /* Api.swift */; };
@@ -63,6 +64,7 @@
 		1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESConstants.swift; sourceTree = "<group>"; };
 		1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESBookmark.swift; sourceTree = "<group>"; };
 		1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCalendar.swift; sourceTree = "<group>"; };
+		122071A31EF4188A007D86CE /* EVEGlobal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEGlobal.swift; sourceTree = "<group>"; };
 		122B55461EB601A000E46536 /* EVE.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVE.swift; sourceTree = "<group>"; };
 		122B55531EB7154F00E46536 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		122B55541EB7154F00E46536 /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				122B55541EB7154F00E46536 /* Api.swift */,
 				122B55551EB7154F00E46536 /* Char.swift */,
 				122B55561EB7154F00E46536 /* Corp.swift */,
+				122071A31EF4188A007D86CE /* EVEGlobal.swift */,
 			);
 			path = evecodegen;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				1262960C1EEAD16C00796B27 /* Mail.swift in Sources */,
 				126296141EEAD16C00796B27 /* Status.swift in Sources */,
 				126296091EEAD16C00796B27 /* Killmails.swift in Sources */,
+				122071A41EF4188A007D86CE /* EVEGlobal.swift in Sources */,
 				1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */,
 				126296131EEAD16C00796B27 /* Sovereignty.swift in Sources */,
 				126295FD1EEAD16C00796B27 /* Calendar.swift in Sources */,

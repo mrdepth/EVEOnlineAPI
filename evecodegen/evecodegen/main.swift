@@ -118,6 +118,7 @@ guard let data = try? Data.init(contentsOf: URL(fileURLWithPath: CommandLine.arg
 guard let schema = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {exit(1)}
 
 var scopes = [Scope]()
+var classLoaders = Set<String>()
 
 do {
 	for (key, value) in schema {
@@ -142,4 +143,22 @@ for scope in scopes {
 	catch {
 		print("\(error)")
 	}
+}
+
+do {
+	let name = "EVEGlobal.swift"
+	let url = outURL.appendingPathComponent(name)
+
+	var s = "import Foundation\n"
+	s += "import Alamofire\n\n"
+	s += "public extension EVE {\n\n"
+	s += "class func loadClassess() {\n"
+	s += classLoaders.joined(separator: "\n")
+	s += "\n}"
+	
+	s += "\n}\n\n"
+	try s.indented.write(to: url, atomically: true, encoding: .utf8)
+}
+catch {
+	print("\(error)")
 }

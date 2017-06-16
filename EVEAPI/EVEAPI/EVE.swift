@@ -63,9 +63,9 @@ public class EVE: SessionManager {
 	}
 	
 	
-//	public class func initialize() {
-//		loadClassess()
-//	}
+	public class func initialize() {
+		loadClassess()
+	}
 	
 }
 

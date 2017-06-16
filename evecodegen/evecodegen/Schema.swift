@@ -310,6 +310,7 @@ class Class: Schema {
 		properties.sort {$0.name < $1.name}
 		self.properties = properties
 		self.children = children
+		classLoaders.insert(classLoader)
 	}
 	
 	override var hashValue: Int {
@@ -368,6 +369,10 @@ class Class: Schema {
 		template.replaceSubrange(template.range(of: "{copy}")!, with: copy.joined(separator: "\n"))
 		
 		return template
+	}
+
+	var classLoader: String {
+		return "_ = \(namespaceIdentifier).classForCoder()"
 	}
 
 }
