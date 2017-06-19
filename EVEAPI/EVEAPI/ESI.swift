@@ -219,6 +219,7 @@ public extension ESI.Scope {
 //				.characterIndustryJobsRead,
 //				.characterMarketOrdersRead,
 //				.characterSkillsRead,
+//				.characterContractsRead,
 				.characterStatsRead,
 				.characterWalletRead,
 				.esiClonesReadClonesV1,
@@ -246,8 +247,8 @@ public extension ESI.Scope {
 				.esiLocationReadLocationV1,
 //				.esiBookmarksReadCharacterBookmarksV1,
 				.esiCharactersReadLoyaltyV1,
-//				.esiMarketsReadCharacterOrdersV1,
-//				.esiIndustryReadCharacterJobsV1,
+				.esiMarketsReadCharacterOrdersV1,
+				.esiIndustryReadCharacterJobsV1,
 				.esiCharactersReadBlueprintsV1,
 			]
 		}
