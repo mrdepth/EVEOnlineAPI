@@ -231,7 +231,7 @@ public extension ESI.Scope {
 				.esiSkillsReadSkillqueueV1,
 				.esiAssetsReadAssetsV1,
 				.esiCalendarRespondCalendarEventsV1,
-				.esiMailOrganizeMailV1,
+//				.esiMailOrganizeMailV1,
 				.esiKillmailsReadKillmailsV1,
 				.esiMailSendMailV1,
 				.esiWalletReadCharacterWalletV1,
@@ -240,8 +240,8 @@ public extension ESI.Scope {
 				.esiCalendarReadCalendarEventsV1,
 				.esiSkillsReadSkillsV1,
 				.esiLocationReadShipTypeV1,
-				.esiCharactersWriteContactsV1,
-				.esiCharactersReadContactsV1,
+//				.esiCharactersWriteContactsV1,
+//				.esiCharactersReadContactsV1,
 				.esiPlanetsManagePlanetsV1,
 				.esiSearchSearchStructuresV1,
 				.esiLocationReadLocationV1,
@@ -250,6 +250,7 @@ public extension ESI.Scope {
 				.esiMarketsReadCharacterOrdersV1,
 				.esiIndustryReadCharacterJobsV1,
 				.esiCharactersReadBlueprintsV1,
+				.esiContractsReadCharacterContractsV1,
 			]
 		}
 	}

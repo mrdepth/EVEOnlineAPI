@@ -60,9 +60,10 @@ public extension ESI {
 		_ = Wars.Kills.classForCoder()
 		_ = Universe.Name.classForCoder()
 		_ = Insurance.Price.classForCoder()
+		_ = Contracts.Contract.classForCoder()
 		_ = Corporation.Information.classForCoder()
-		_ = Character.Medal.classForCoder()
 		_ = Character.GetCharactersCharacterIDNotFound.classForCoder()
+		_ = Character.Medal.classForCoder()
 		_ = Market.GetMarketsRegionIDHistoryUnprocessableEntity.classForCoder()
 		_ = Market.GetCharactersCharacterIDOrdersInternalServerError.classForCoder()
 		_ = Fittings.PostFitting.PostCharactersCharacterIDFittingsItems.classForCoder()
@@ -111,6 +112,7 @@ public extension ESI {
 		_ = Fleets.PostFleetsFleetIDMembersNotFound.classForCoder()
 		_ = Mail.DeleteCharactersCharacterIDMailLabelsLabelIDForbidden.classForCoder()
 		_ = Assets.GetCharactersCharacterIDAssetsInternalServerError.classForCoder()
+		_ = Contracts.GetCharactersCharacterIDContractsContractIDItemsForbidden.classForCoder()
 		_ = Contacts.PostCharactersCharacterIDContactsForbidden.classForCoder()
 		_ = Dogma.GetDogmaAttributesAttributeIDInternalServerError.classForCoder()
 		_ = Universe.PostUniverseNamesNotFound.classForCoder()
@@ -185,6 +187,7 @@ public extension ESI {
 		_ = Location.GetCharactersCharacterIDShipForbidden.classForCoder()
 		_ = Wars.WarInformation.classForCoder()
 		_ = Character.GetCharactersCharacterIDStandingsInternalServerError.classForCoder()
+		_ = Contracts.GetCharactersCharacterIDContractsContractIDBidsInternalServerError.classForCoder()
 		_ = Character.Medal.GetCharactersCharacterIDMedalsGraphics.classForCoder()
 		_ = Sovereignty.Structure.classForCoder()
 		_ = Fleets.GetFleetsFleetIDWingsForbidden.classForCoder()
@@ -241,8 +244,10 @@ public extension ESI {
 		_ = Location.GetCharactersCharacterIDShipInternalServerError.classForCoder()
 		_ = Fleets.PutFleetsFleetIDBadRequest.classForCoder()
 		_ = Universe.GetUniverseRegionsRegionIDInternalServerError.classForCoder()
+		_ = Contracts.GetCharactersCharacterIDContractsContractIDItemsInternalServerError.classForCoder()
 		_ = Calendar.PutCharactersCharacterIDCalendarEventIDForbidden.classForCoder()
 		_ = Alliance.Name.classForCoder()
+		_ = Contracts.Item.classForCoder()
 		_ = Wars.WarInformation.GetWarsWarIDAggressor.classForCoder()
 		_ = Fleets.PutFleetsFleetIDSquadsSquadIDForbidden.classForCoder()
 		_ = Mail.MailLabelsAndUnreadCounts.classForCoder()
@@ -272,6 +277,7 @@ public extension ESI {
 		_ = Dogma.GetDogmaAttributesInternalServerError.classForCoder()
 		_ = Fleets.GetFleetsFleetIDMembersNotFound.classForCoder()
 		_ = PlanetaryInteraction.GetUniverseSchematicsSchematicIDInternalServerError.classForCoder()
+		_ = Contracts.Bid.classForCoder()
 		_ = Industry.GetIndustryFacilitiesInternalServerError.classForCoder()
 		_ = Market.ItemGroupInformation.classForCoder()
 		_ = Location.GetCharactersCharacterIDOnlineForbidden.classForCoder()
@@ -291,9 +297,10 @@ public extension ESI {
 		_ = Fleets.PostFleetsFleetIDWingsForbidden.classForCoder()
 		_ = Clones.GetCharactersCharacterIDClonesForbidden.classForCoder()
 		_ = Bookmarks.GetCharactersCharacterIDBookmarksForbidden.classForCoder()
-		_ = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition.classForCoder()
+		_ = Contracts.GetCharactersCharacterIDContractsForbidden.classForCoder()
 		_ = Universe.Race.classForCoder()
 		_ = Opportunities.Group.classForCoder()
+		_ = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition.classForCoder()
 		_ = Corporation.PutCorporationsCorporationIDStructuresStructureIDInternalServerError.classForCoder()
 		_ = Corporation.GetCorporationsCorporationIDMembersInternalServerError.classForCoder()
 		_ = Fleets.SquadCreated.classForCoder()
@@ -313,9 +320,9 @@ public extension ESI {
 		_ = Search.GetSearchInternalServerError.classForCoder()
 		_ = Calendar.Response.classForCoder()
 		_ = Universe.GetUniverseRegionsRegionIDNotFound.classForCoder()
-		_ = Mail.MailBody.GetCharactersCharacterIDMailMailIDRecipients.classForCoder()
 		_ = Character.GetCharactersCharacterIDBlueprintsForbidden.classForCoder()
 		_ = Contacts.Contact.classForCoder()
+		_ = Contracts.GetCharactersCharacterIDContractsContractIDBidsForbidden.classForCoder()
 		_ = Contacts.GetCharactersCharacterIDContactsForbidden.classForCoder()
 		_ = Fleets.PutFleetsFleetIDInternalServerError.classForCoder()
 		_ = PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDInternalServerError.classForCoder()
@@ -346,6 +353,7 @@ public extension ESI {
 		_ = PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks.classForCoder()
 		_ = Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.classForCoder()
 		_ = Opportunities.GetOpportunitiesGroupsInternalServerError.classForCoder()
+		_ = Contracts.GetCharactersCharacterIDContractsInternalServerError.classForCoder()
 		_ = Universe.PostUniverseNamesInternalServerError.classForCoder()
 		_ = Assets.Asset.classForCoder()
 		_ = Market.GetMarketsGroupsMarketGroupIDInternalServerError.classForCoder()
@@ -517,6 +525,7 @@ public extension ESI.Scope {
 	public static let esiCorporationsWriteStructuresV1 = ESI.Scope("esi-corporations.write_structures.v1")
 	public static let esiBookmarksReadCharacterBookmarksV1 = ESI.Scope("esi-bookmarks.read_character_bookmarks.v1")
 	public static let esiCharactersReadLoyaltyV1 = ESI.Scope("esi-characters.read_loyalty.v1")
+	public static let esiContractsReadCharacterContractsV1 = ESI.Scope("esi-contracts.read_character_contracts.v1")
 	public static let esiCorporationsReadStructuresV1 = ESI.Scope("esi-corporations.read_structures.v1")
 	
 	public static var all: [ESI.Scope]  {
@@ -561,6 +570,7 @@ public extension ESI.Scope {
 			.esiCorporationsWriteStructuresV1,
 			.esiBookmarksReadCharacterBookmarksV1,
 			.esiCharactersReadLoyaltyV1,
+			.esiContractsReadCharacterContractsV1,
 			.esiCorporationsReadStructuresV1
 			]
 		}

@@ -4072,17 +4072,17 @@ public extension EVE {
 				
 				
 				public var amount: Double = Double()
-				public var argID1: Int = Int()
-				public var argName1: String = String()
+				public var argID1: Int? = nil
+				public var argName1: String? = nil
 				public var balance: Double = Double()
 				public var date: Date = Date()
-				public var owner1TypeID: Int = Int()
-				public var owner2TypeID: Int = Int()
-				public var ownerID1: Int64 = Int64()
-				public var ownerID2: Int64 = Int64()
-				public var ownerName1: String = String()
-				public var ownerName2: String = String()
-				public var reason: String = String()
+				public var owner1TypeID: Int? = nil
+				public var owner2TypeID: Int? = nil
+				public var ownerID1: Int64? = nil
+				public var ownerID2: Int64? = nil
+				public var ownerName1: String? = nil
+				public var ownerName2: String? = nil
+				public var reason: String? = nil
 				public var refID: Int64 = Int64()
 				public var refTypeID: Int = Int()
 				
@@ -4095,28 +4095,19 @@ public extension EVE {
 					
 					guard let amount = dictionary["amount"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
 					self.amount = amount
-					guard let argID1 = dictionary["argID1"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.argID1 = argID1
-					guard let argName1 = dictionary["argName1"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.argName1 = argName1
+					argID1 = dictionary["argID1"] as? Int
+					argName1 = dictionary["argName1"] as? String
 					guard let balance = dictionary["balance"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
 					self.balance = balance
 					guard let date = DateFormatter.eveDateFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 					self.date = date
-					guard let owner1TypeID = dictionary["owner1TypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.owner1TypeID = owner1TypeID
-					guard let owner2TypeID = dictionary["owner2TypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.owner2TypeID = owner2TypeID
-					guard let ownerID1 = dictionary["ownerID1"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.ownerID1 = ownerID1
-					guard let ownerID2 = dictionary["ownerID2"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.ownerID2 = ownerID2
-					guard let ownerName1 = dictionary["ownerName1"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.ownerName1 = ownerName1
-					guard let ownerName2 = dictionary["ownerName2"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.ownerName2 = ownerName2
-					guard let reason = dictionary["reason"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
-					self.reason = reason
+					owner1TypeID = dictionary["owner1TypeID"] as? Int
+					owner2TypeID = dictionary["owner2TypeID"] as? Int
+					ownerID1 = dictionary["ownerID1"] as? Int64
+					ownerID2 = dictionary["ownerID2"] as? Int64
+					ownerName1 = dictionary["ownerName1"] as? String
+					ownerName2 = dictionary["ownerName2"] as? String
+					reason = dictionary["reason"] as? String
 					guard let refID = dictionary["refID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
 					self.refID = refID
 					guard let refTypeID = dictionary["refTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
@@ -4131,17 +4122,17 @@ public extension EVE {
 				
 				public required init?(coder aDecoder: NSCoder) {
 					amount = aDecoder.decodeDouble(forKey: "amount")
-					argID1 = aDecoder.decodeInteger(forKey: "argID1")
-					argName1 = aDecoder.decodeObject(forKey: "argName1") as? String ?? String()
+					argID1 = aDecoder.containsValue(forKey: "argID1") ? aDecoder.decodeInteger(forKey: "argID1") : nil
+					argName1 = aDecoder.decodeObject(forKey: "argName1") as? String
 					balance = aDecoder.decodeDouble(forKey: "balance")
 					date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-					owner1TypeID = aDecoder.decodeInteger(forKey: "owner1TypeID")
-					owner2TypeID = aDecoder.decodeInteger(forKey: "owner2TypeID")
-					ownerID1 = aDecoder.decodeInt64(forKey: "ownerID1")
-					ownerID2 = aDecoder.decodeInt64(forKey: "ownerID2")
-					ownerName1 = aDecoder.decodeObject(forKey: "ownerName1") as? String ?? String()
-					ownerName2 = aDecoder.decodeObject(forKey: "ownerName2") as? String ?? String()
-					reason = aDecoder.decodeObject(forKey: "reason") as? String ?? String()
+					owner1TypeID = aDecoder.containsValue(forKey: "owner1TypeID") ? aDecoder.decodeInteger(forKey: "owner1TypeID") : nil
+					owner2TypeID = aDecoder.containsValue(forKey: "owner2TypeID") ? aDecoder.decodeInteger(forKey: "owner2TypeID") : nil
+					ownerID1 = aDecoder.containsValue(forKey: "ownerID1") ? aDecoder.decodeInt64(forKey: "ownerID1") : nil
+					ownerID2 = aDecoder.containsValue(forKey: "ownerID2") ? aDecoder.decodeInt64(forKey: "ownerID2") : nil
+					ownerName1 = aDecoder.decodeObject(forKey: "ownerName1") as? String
+					ownerName2 = aDecoder.decodeObject(forKey: "ownerName2") as? String
+					reason = aDecoder.decodeObject(forKey: "reason") as? String
 					refID = aDecoder.decodeInt64(forKey: "refID")
 					refTypeID = aDecoder.decodeInteger(forKey: "refTypeID")
 					
@@ -4150,17 +4141,35 @@ public extension EVE {
 				
 				public func encode(with aCoder: NSCoder) {
 					aCoder.encode(amount, forKey: "amount")
-					aCoder.encode(argID1, forKey: "argID1")
-					aCoder.encode(argName1, forKey: "argName1")
+					if let v = argID1 {
+						aCoder.encode(v, forKey: "argID1")
+					}
+					if let v = argName1 {
+						aCoder.encode(v, forKey: "argName1")
+					}
 					aCoder.encode(balance, forKey: "balance")
 					aCoder.encode(date, forKey: "date")
-					aCoder.encode(owner1TypeID, forKey: "owner1TypeID")
-					aCoder.encode(owner2TypeID, forKey: "owner2TypeID")
-					aCoder.encode(ownerID1, forKey: "ownerID1")
-					aCoder.encode(ownerID2, forKey: "ownerID2")
-					aCoder.encode(ownerName1, forKey: "ownerName1")
-					aCoder.encode(ownerName2, forKey: "ownerName2")
-					aCoder.encode(reason, forKey: "reason")
+					if let v = owner1TypeID {
+						aCoder.encode(v, forKey: "owner1TypeID")
+					}
+					if let v = owner2TypeID {
+						aCoder.encode(v, forKey: "owner2TypeID")
+					}
+					if let v = ownerID1 {
+						aCoder.encode(v, forKey: "ownerID1")
+					}
+					if let v = ownerID2 {
+						aCoder.encode(v, forKey: "ownerID2")
+					}
+					if let v = ownerName1 {
+						aCoder.encode(v, forKey: "ownerName1")
+					}
+					if let v = ownerName2 {
+						aCoder.encode(v, forKey: "ownerName2")
+					}
+					if let v = reason {
+						aCoder.encode(v, forKey: "reason")
+					}
 					aCoder.encode(refID, forKey: "refID")
 					aCoder.encode(refTypeID, forKey: "refTypeID")
 				}
@@ -4168,17 +4177,35 @@ public extension EVE {
 				public var json: Any {
 					var json = [String: Any]()
 					json["amount"] = amount.json
-					json["argID1"] = argID1.json
-					json["argName1"] = argName1.json
+					if let v = argID1?.json {
+						json["argID1"] = v
+					}
+					if let v = argName1?.json {
+						json["argName1"] = v
+					}
 					json["balance"] = balance.json
 					json["date"] = date.json
-					json["owner1TypeID"] = owner1TypeID.json
-					json["owner2TypeID"] = owner2TypeID.json
-					json["ownerID1"] = ownerID1.json
-					json["ownerID2"] = ownerID2.json
-					json["ownerName1"] = ownerName1.json
-					json["ownerName2"] = ownerName2.json
-					json["reason"] = reason.json
+					if let v = owner1TypeID?.json {
+						json["owner1TypeID"] = v
+					}
+					if let v = owner2TypeID?.json {
+						json["owner2TypeID"] = v
+					}
+					if let v = ownerID1?.json {
+						json["ownerID1"] = v
+					}
+					if let v = ownerID2?.json {
+						json["ownerID2"] = v
+					}
+					if let v = ownerName1?.json {
+						json["ownerName1"] = v
+					}
+					if let v = ownerName2?.json {
+						json["ownerName2"] = v
+					}
+					if let v = reason?.json {
+						json["reason"] = v
+					}
 					json["refID"] = refID.json
 					json["refTypeID"] = refTypeID.json
 					return json
@@ -4187,17 +4214,17 @@ public extension EVE {
 				override public var hashValue: Int {
 					var hash: Int = 0
 					hashCombine(seed: &hash, value: amount.hashValue)
-					hashCombine(seed: &hash, value: argID1.hashValue)
-					hashCombine(seed: &hash, value: argName1.hashValue)
+					hashCombine(seed: &hash, value: argID1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: argName1?.hashValue ?? 0)
 					hashCombine(seed: &hash, value: balance.hashValue)
 					hashCombine(seed: &hash, value: date.hashValue)
-					hashCombine(seed: &hash, value: owner1TypeID.hashValue)
-					hashCombine(seed: &hash, value: owner2TypeID.hashValue)
-					hashCombine(seed: &hash, value: ownerID1.hashValue)
-					hashCombine(seed: &hash, value: ownerID2.hashValue)
-					hashCombine(seed: &hash, value: ownerName1.hashValue)
-					hashCombine(seed: &hash, value: ownerName2.hashValue)
-					hashCombine(seed: &hash, value: reason.hashValue)
+					hashCombine(seed: &hash, value: owner1TypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: owner2TypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: ownerID1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: ownerID2?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: ownerName1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: ownerName2?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
 					hashCombine(seed: &hash, value: refID.hashValue)
 					hashCombine(seed: &hash, value: refTypeID.hashValue)
 					return hash

@@ -115,7 +115,14 @@ guard let data = try? Data.init(contentsOf: URL(fileURLWithPath: CommandLine.arg
 	exit(1)
 }
 
-guard let schema = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {exit(1)}
+let schema: [String: Any]
+do {
+	schema = (try JSONSerialization.jsonObject(with: data, options: [])) as! [String: Any]
+}
+catch {
+	print("Error: \(error)")
+	exit(1)
+}
 
 var scopes = [Scope]()
 var classLoaders = Set<String>()
@@ -127,7 +134,6 @@ do {
 	}
 }
 catch {
-	print("Error: \(error)")
 }
 
 

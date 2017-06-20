@@ -996,17 +996,20 @@
             "date": "Date",
             "refID": "Int64",
             "refTypeID": "Int",
-            "ownerName1": "String",
-            "ownerID1": "Int64",
-            "ownerName2": "String",
-            "ownerID2": "Int64",
-            "argName1": "String",
-            "argID1": "Int",
+            "ownerName1": "String?",
+            "ownerID1": "Int64?",
+            "ownerName2": "String?",
+            "ownerID2": "Int64?",
+            "argName1": "String?",
+            "argID1": "Int?",
             "amount": "Double",
             "balance": "Double",
-            "reason": "String",
-            "taxReceiverID": "Int64",
-            "taxAmount": "Double"
+            "reason": "String?",
+            "taxReceiverID": "Int64?",
+            "taxAmount": "Double?",
+            "owner1TypeID": "Int?",
+            "owner2TypeID": "Int?"
+
           }
         }
       }
@@ -1482,17 +1485,17 @@
             "date": "Date",
             "refID": "Int64",
             "refTypeID": "Int",
-            "ownerName1": "String",
-            "ownerID1": "Int64",
-            "ownerName2": "String",
-            "ownerID2": "Int64",
-            "argName1": "String",
-            "argID1": "Int",
+            "ownerName1": "String?",
+            "ownerID1": "Int64?",
+            "ownerName2": "String?",
+            "ownerID2": "Int64?",
+            "argName1": "String?",
+            "argID1": "Int?",
             "amount": "Double",
             "balance": "Double",
-            "reason": "String",
-            "owner1TypeID": "Int",
-            "owner2TypeID": "Int"
+            "reason": "String?",
+            "owner1TypeID": "Int?",
+            "owner2TypeID": "Int?"
           }
         }
       }
@@ -1532,6 +1535,21 @@
             ],
             "journalTransactionID": "Int64",
             "clientTypeID": "Int"
+          }
+        }
+      }
+    }
+  },
+  "eve": {
+    "RefTypes": {
+      "method": "get",
+      "accessMask": 0,
+      "result": {
+        "RefTypes": {
+          "refTypes": "[RefType]",
+          "RefType": {
+            "refTypeID": "Int",
+            "refTypeName": "String"
           }
         }
       }

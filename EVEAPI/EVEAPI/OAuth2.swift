@@ -111,7 +111,7 @@ public class OAuth2 {
 		query.append(URLQueryItem(name: "response_type", value: "code"))
 		query.append(URLQueryItem(name: "redirect_uri", value: callback))
 		query.append(URLQueryItem(name: "client_id", value: clientID))
-		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+").addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)))
+		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+")))
 		query.append(URLQueryItem(name: "state", value: state))
 		query.append(URLQueryItem(name: "realm", value: state))
 		

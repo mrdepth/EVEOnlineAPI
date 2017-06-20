@@ -47,6 +47,12 @@ let typeNames: [String: String] = [
 	//MARK: Contacts
 	"GetCharactersCharacterIDContactsLabelsOk"	: "Label",
 	"GetCharactersCharacterIDContactsOk"	: "Contact",
+	
+	//MARK: Contracts
+	
+	"GetCharactersCharacterIDContractsOk"	: "Contract",
+	"GetCharactersCharacterIDContractsContractIDBidsOk"	: "Bid",
+	"GetCharactersCharacterIDContractsContractIDItemsOk"	: "Item",
 
 	//MARK: Corporation
 	"GetCorporationsNamesOk"	: "Name",
@@ -116,6 +122,8 @@ let typeNames: [String: String] = [
 	"PostCharactersCharacterIDMailRecipientType"	: "RecipientType",
 	"GetCharactersCharacterIDMailRecipients"	: "Recipient",
 	"GetCharactersCharacterIDMailRecipientType"	: "RecipientType",
+	"GetCharactersCharacterIDMailMailIDRecipients"	: "Recipient",
+	"GetCharactersCharacterIDMailMailIDRecipientType"	: "RecipientType",
 
 	//MARK: Market
 	"GetMarketsPricesOk"	: "Price",
