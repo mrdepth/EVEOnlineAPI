@@ -183,7 +183,58 @@ public extension ESI {
 		
 		public class Contract: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDContractsStatus: String, JSONCoding, HTTPQueryable {
+			public enum Availability: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case corporation = "corporation"
+				case personal = "personal"
+				case `public` = "public"
+				
+				public init() {
+					self = .`public`
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = Availability(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum ContractType: String, JSONCoding, HTTPQueryable {
+				case auction = "auction"
+				case courier = "courier"
+				case itemExchange = "item_exchange"
+				case loan = "loan"
+				case unknown = "unknown"
+				
+				public init() {
+					self = .unknown
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = ContractType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum Status: String, JSONCoding, HTTPQueryable {
 				case cancelled = "cancelled"
 				case deleted = "deleted"
 				case failed = "failed"
@@ -204,58 +255,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDContractsStatus(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDContractsType: String, JSONCoding, HTTPQueryable {
-				case auction = "auction"
-				case courier = "courier"
-				case itemExchange = "item_exchange"
-				case loan = "loan"
-				case unknown = "unknown"
-				
-				public init() {
-					self = .unknown
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDContractsType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDContractsAvailability: String, JSONCoding, HTTPQueryable {
-				case alliance = "alliance"
-				case corporation = "corporation"
-				case personal = "personal"
-				case `public` = "public"
-				
-				public init() {
-					self = .`public`
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDContractsAvailability(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Status(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -267,7 +267,7 @@ public extension ESI {
 			
 			public var acceptorID: Int = Int()
 			public var assigneeID: Int = Int()
-			public var availability: Contracts.Contract.GetCharactersCharacterIDContractsAvailability = Contracts.Contract.GetCharactersCharacterIDContractsAvailability()
+			public var availability: Contracts.Contract.Availability = Contracts.Contract.Availability()
 			public var buyout: Float? = nil
 			public var collateral: Float? = nil
 			public var contractID: Int = Int()
@@ -283,9 +283,9 @@ public extension ESI {
 			public var price: Float? = nil
 			public var reward: Float? = nil
 			public var startLocationID: Int64? = nil
-			public var status: Contracts.Contract.GetCharactersCharacterIDContractsStatus = Contracts.Contract.GetCharactersCharacterIDContractsStatus()
+			public var status: Contracts.Contract.Status = Contracts.Contract.Status()
 			public var title: String? = nil
-			public var type: Contracts.Contract.GetCharactersCharacterIDContractsType = Contracts.Contract.GetCharactersCharacterIDContractsType()
+			public var type: Contracts.Contract.ContractType = Contracts.Contract.ContractType()
 			public var volume: Float? = nil
 			
 			public static var supportsSecureCoding: Bool {
@@ -299,7 +299,7 @@ public extension ESI {
 				self.acceptorID = acceptorID
 				guard let assigneeID = dictionary["assignee_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.assigneeID = assigneeID
-				guard let availability = Contracts.Contract.GetCharactersCharacterIDContractsAvailability(rawValue: dictionary["availability"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let availability = Contracts.Contract.Availability(rawValue: dictionary["availability"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.availability = availability
 				buyout = dictionary["buyout"] as? Float
 				collateral = dictionary["collateral"] as? Float
@@ -322,10 +322,10 @@ public extension ESI {
 				price = dictionary["price"] as? Float
 				reward = dictionary["reward"] as? Float
 				startLocationID = dictionary["start_location_id"] as? Int64
-				guard let status = Contracts.Contract.GetCharactersCharacterIDContractsStatus(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let status = Contracts.Contract.Status(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.status = status
 				title = dictionary["title"] as? String
-				guard let type = Contracts.Contract.GetCharactersCharacterIDContractsType(rawValue: dictionary["type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let type = Contracts.Contract.ContractType(rawValue: dictionary["type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.type = type
 				volume = dictionary["volume"] as? Float
 				
@@ -339,7 +339,7 @@ public extension ESI {
 			public required init?(coder aDecoder: NSCoder) {
 				acceptorID = aDecoder.decodeInteger(forKey: "acceptor_id")
 				assigneeID = aDecoder.decodeInteger(forKey: "assignee_id")
-				availability = Contracts.Contract.GetCharactersCharacterIDContractsAvailability(rawValue: aDecoder.decodeObject(forKey: "availability") as? String ?? "") ?? Contracts.Contract.GetCharactersCharacterIDContractsAvailability()
+				availability = Contracts.Contract.Availability(rawValue: aDecoder.decodeObject(forKey: "availability") as? String ?? "") ?? Contracts.Contract.Availability()
 				buyout = aDecoder.containsValue(forKey: "buyout") ? aDecoder.decodeFloat(forKey: "buyout") : nil
 				collateral = aDecoder.containsValue(forKey: "collateral") ? aDecoder.decodeFloat(forKey: "collateral") : nil
 				contractID = aDecoder.decodeInteger(forKey: "contract_id")
@@ -355,9 +355,9 @@ public extension ESI {
 				price = aDecoder.containsValue(forKey: "price") ? aDecoder.decodeFloat(forKey: "price") : nil
 				reward = aDecoder.containsValue(forKey: "reward") ? aDecoder.decodeFloat(forKey: "reward") : nil
 				startLocationID = aDecoder.containsValue(forKey: "start_location_id") ? aDecoder.decodeInt64(forKey: "start_location_id") : nil
-				status = Contracts.Contract.GetCharactersCharacterIDContractsStatus(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? "") ?? Contracts.Contract.GetCharactersCharacterIDContractsStatus()
+				status = Contracts.Contract.Status(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? "") ?? Contracts.Contract.Status()
 				title = aDecoder.decodeObject(forKey: "title") as? String
-				type = Contracts.Contract.GetCharactersCharacterIDContractsType(rawValue: aDecoder.decodeObject(forKey: "type") as? String ?? "") ?? Contracts.Contract.GetCharactersCharacterIDContractsType()
+				type = Contracts.Contract.ContractType(rawValue: aDecoder.decodeObject(forKey: "type") as? String ?? "") ?? Contracts.Contract.ContractType()
 				volume = aDecoder.containsValue(forKey: "volume") ? aDecoder.decodeFloat(forKey: "volume") : nil
 				
 				super.init()

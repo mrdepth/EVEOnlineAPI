@@ -53,6 +53,9 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDContractsOk"	: "Contract",
 	"GetCharactersCharacterIDContractsContractIDBidsOk"	: "Bid",
 	"GetCharactersCharacterIDContractsContractIDItemsOk"	: "Item",
+	"GetCharactersCharacterIDContractsStatus"	: "Status",
+	"GetCharactersCharacterIDContractsType"	: "ContractType",
+	"GetCharactersCharacterIDContractsAvailability"	: "Availability",
 
 	//MARK: Corporation
 	"GetCorporationsNamesOk"	: "Name",
