@@ -92,6 +92,7 @@ let typeNames: [String: String] = [
 	
 	//MARK: Incursions
 	"GetIncursionsOk"	: "Incursion",
+	"GetIncursionsState"	: "State",
 
 	//MARK: Industry
 	"GetIndustryFacilitiesOk"	: "Facilities",

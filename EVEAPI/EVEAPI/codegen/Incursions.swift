@@ -49,7 +49,7 @@ public extension ESI {
 		
 		public class Incursion: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetIncursionsState: String, JSONCoding, HTTPQueryable {
+			public enum State: String, JSONCoding, HTTPQueryable {
 				case established = "established"
 				case mobilizing = "mobilizing"
 				case withdrawing = "withdrawing"
@@ -63,7 +63,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetIncursionsState(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = State(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -79,7 +79,7 @@ public extension ESI {
 			public var infestedSolarSystems: [Int] = []
 			public var influence: Float = Float()
 			public var stagingSolarSystemID: Int = Int()
-			public var state: Incursions.Incursion.GetIncursionsState = Incursions.Incursion.GetIncursionsState()
+			public var state: Incursions.Incursion.State = Incursions.Incursion.State()
 			public var type: String = String()
 			
 			public static var supportsSecureCoding: Bool {
@@ -100,7 +100,7 @@ public extension ESI {
 				self.influence = influence
 				guard let stagingSolarSystemID = dictionary["staging_solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.stagingSolarSystemID = stagingSolarSystemID
-				guard let state = Incursions.Incursion.GetIncursionsState(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let state = Incursions.Incursion.State(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.state = state
 				guard let type = dictionary["type"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.type = type
@@ -119,7 +119,7 @@ public extension ESI {
 				infestedSolarSystems = aDecoder.decodeObject(forKey: "infested_solar_systems") as? [Int] ?? []
 				influence = aDecoder.decodeFloat(forKey: "influence")
 				stagingSolarSystemID = aDecoder.decodeInteger(forKey: "staging_solar_system_id")
-				state = Incursions.Incursion.GetIncursionsState(rawValue: aDecoder.decodeObject(forKey: "state") as? String ?? "") ?? Incursions.Incursion.GetIncursionsState()
+				state = Incursions.Incursion.State(rawValue: aDecoder.decodeObject(forKey: "state") as? String ?? "") ?? Incursions.Incursion.State()
 				type = aDecoder.decodeObject(forKey: "type") as? String ?? String()
 				
 				super.init()

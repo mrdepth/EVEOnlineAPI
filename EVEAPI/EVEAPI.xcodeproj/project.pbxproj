@@ -357,7 +357,6 @@
 		126295DA1EEAD16C00796B27 /* codegen */ = {
 			isa = PBXGroup;
 			children = (
-				12D39D111EF949500077BD17 /* Contracts.swift */,
 				126295DB1EEAD16C00796B27 /* Alliance.swift */,
 				126295DC1EEAD16C00796B27 /* Assets.swift */,
 				126295DD1EEAD16C00796B27 /* Bookmarks.swift */,
@@ -365,6 +364,7 @@
 				126295DF1EEAD16C00796B27 /* Character.swift */,
 				126295E01EEAD16C00796B27 /* Clones.swift */,
 				126295E11EEAD16C00796B27 /* Contacts.swift */,
+				12D39D111EF949500077BD17 /* Contracts.swift */,
 				126295E21EEAD16C00796B27 /* Corporation.swift */,
 				126295E31EEAD16C00796B27 /* Dogma.swift */,
 				126295E41EEAD16C00796B27 /* Fittings.swift */,
