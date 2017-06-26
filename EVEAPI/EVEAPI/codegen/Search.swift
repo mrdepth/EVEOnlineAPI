@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func characterSearch(categories: [Search.Categories], characterID: Int, language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.CharacterSearchResult>) -> Void)?) {
+		public func characterSearch(categories: [Search.SearchCategories], characterID: Int, language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.CharacterSearchResult>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -58,7 +58,7 @@ public extension ESI {
 			}
 		}
 		
-		public func search(categories: [Search.SearchCategories], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
+		public func search(categories: [Search.Categories], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -290,202 +290,35 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public enum SearchCategories: String, JSONCoding, HTTPQueryable {
+			case agent = "agent"
+			case alliance = "alliance"
+			case character = "character"
+			case constellation = "constellation"
+			case corporation = "corporation"
+			case faction = "faction"
+			case inventorytype = "inventorytype"
+			case region = "region"
+			case solarsystem = "solarsystem"
+			case station = "station"
+			case structure = "structure"
+			case wormhole = "wormhole"
 			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+			public init() {
+				self = .agent
 			}
 			
 			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
+				return self.rawValue
 			}
 			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
+			public init(json: Any) throws {
+				guard let s = json as? String, let v = SearchCategories(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				self = v
 			}
 			
-			public static func ==(lhs: Search.GetCharactersCharacterIDSearchInternalServerError, rhs: Search.GetCharactersCharacterIDSearchInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Search.GetCharactersCharacterIDSearchInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.GetCharactersCharacterIDSearchInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDSearchInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDSearchForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Search.GetCharactersCharacterIDSearchForbidden, rhs: Search.GetCharactersCharacterIDSearchForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Search.GetCharactersCharacterIDSearchForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.GetCharactersCharacterIDSearchForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDSearchForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetSearchInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Search.GetSearchInternalServerError, rhs: Search.GetSearchInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Search.GetSearchInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.GetSearchInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetSearchInternalServerError)?.hashValue == hashValue
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}
@@ -679,7 +512,6 @@ public extension ESI {
 			case region = "region"
 			case solarsystem = "solarsystem"
 			case station = "station"
-			case structure = "structure"
 			case wormhole = "wormhole"
 			
 			public init() {
@@ -692,39 +524,6 @@ public extension ESI {
 			
 			public init(json: Any) throws {
 				guard let s = json as? String, let v = Categories(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-				self = v
-			}
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
-		}
-		
-		
-		public enum SearchCategories: String, JSONCoding, HTTPQueryable {
-			case agent = "agent"
-			case alliance = "alliance"
-			case character = "character"
-			case constellation = "constellation"
-			case corporation = "corporation"
-			case faction = "faction"
-			case inventorytype = "inventorytype"
-			case region = "region"
-			case solarsystem = "solarsystem"
-			case station = "station"
-			case wormhole = "wormhole"
-			
-			public init() {
-				self = .agent
-			}
-			
-			public var json: Any {
-				return self.rawValue
-			}
-			
-			public init(json: Any) throws {
-				guard let s = json as? String, let v = SearchCategories(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 				self = v
 			}
 			

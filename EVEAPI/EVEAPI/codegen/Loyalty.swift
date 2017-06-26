@@ -80,10 +80,11 @@ public extension ESI {
 		}
 		
 		
-		public class GetLoyaltyStoresCorporationIDOffersInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Point: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var corporationID: Int = Int()
+			public var loyaltyPoints: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -92,7 +93,10 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.corporationID = corporationID
+				guard let loyaltyPoints = dictionary["loyalty_points"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.loyaltyPoints = loyaltyPoints
 				
 				super.init()
 			}
@@ -102,113 +106,47 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
+				loyaltyPoints = aDecoder.decodeInteger(forKey: "loyalty_points")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(corporationID, forKey: "corporation_id")
+				aCoder.encode(loyaltyPoints, forKey: "loyalty_points")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["corporation_id"] = corporationID.json
+				json["loyalty_points"] = loyaltyPoints.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersInternalServerError, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersInternalServerError) -> Bool {
+			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Loyalty.GetLoyaltyStoresCorporationIDOffersInternalServerError) {
-				error = other.error
+			init(_ other: Loyalty.Point) {
+				corporationID = other.corporationID
+				loyaltyPoints = other.loyaltyPoints
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Loyalty.GetLoyaltyStoresCorporationIDOffersInternalServerError(self)
+				return Loyalty.Point(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetLoyaltyStoresCorporationIDOffersInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDLoyaltyPointsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Loyalty.GetCharactersCharacterIDLoyaltyPointsForbidden, rhs: Loyalty.GetCharactersCharacterIDLoyaltyPointsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Loyalty.GetCharactersCharacterIDLoyaltyPointsForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Loyalty.GetCharactersCharacterIDLoyaltyPointsForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDLoyaltyPointsForbidden)?.hashValue == hashValue
+				return (object as? Point)?.hashValue == hashValue
 			}
 			
 		}
@@ -382,145 +320,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Offer)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class Point: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var corporationID: Int = Int()
-			public var loyaltyPoints: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.corporationID = corporationID
-				guard let loyaltyPoints = dictionary["loyalty_points"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.loyaltyPoints = loyaltyPoints
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				loyaltyPoints = aDecoder.decodeInteger(forKey: "loyalty_points")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(corporationID, forKey: "corporation_id")
-				aCoder.encode(loyaltyPoints, forKey: "loyalty_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["corporation_id"] = corporationID.json
-				json["loyalty_points"] = loyaltyPoints.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Loyalty.Point) {
-				corporationID = other.corporationID
-				loyaltyPoints = other.loyaltyPoints
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Loyalty.Point(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Point)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDLoyaltyPointsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError, rhs: Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Loyalty.GetCharactersCharacterIDLoyaltyPointsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDLoyaltyPointsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

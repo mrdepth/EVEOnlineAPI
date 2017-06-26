@@ -13,7 +13,12 @@ class Response {
 	
 	init(_ dictionary: [String: Any], parent: Namespace?) throws {
 		if let dic = dictionary["schema"] as? [String: Any] {
-			schema = try? Schema(dic, title: dic["title"] as? String, parent: parent)
+			if let refName = (dic["$ref"] as? String)?.components(separatedBy: "/").last?.camelCaps, let ref = definitions.first(where:{$0.title == refName})  {
+				schema = ref
+			}
+			else {
+				schema = try? Schema(dic, title: dic["title"] as? String, parent: parent)
+			}
 		}
 		else {
 			schema = nil

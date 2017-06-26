@@ -48,100 +48,9 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDAssetsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Assets.GetCharactersCharacterIDAssetsInternalServerError, rhs: Assets.GetCharactersCharacterIDAssetsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Assets.GetCharactersCharacterIDAssetsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.GetCharactersCharacterIDAssetsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDAssetsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class Asset: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
-				case other = "other"
-				case solarSystem = "solar_system"
-				case station = "station"
-				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDAssetsLocationFlag: String, JSONCoding, HTTPQueryable {
+			public enum Flag: String, JSONCoding, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case cargo = "Cargo"
@@ -229,7 +138,31 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationFlag(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Flag(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
+				case other = "other"
+				case solarSystem = "solar_system"
+				case station = "station"
+				
+				public init() {
+					self = .station
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -241,7 +174,7 @@ public extension ESI {
 			
 			public var isSingleton: Bool = Bool()
 			public var itemID: Int64 = Int64()
-			public var locationFlag: Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag = Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag()
+			public var locationFlag: Assets.Asset.Flag = Assets.Asset.Flag()
 			public var locationID: Int64 = Int64()
 			public var locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
 			public var quantity: Int? = nil
@@ -258,7 +191,7 @@ public extension ESI {
 				self.isSingleton = isSingleton
 				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.itemID = itemID
-				guard let locationFlag = Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let locationFlag = Assets.Asset.Flag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.locationFlag = locationFlag
 				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.locationID = locationID
@@ -278,7 +211,7 @@ public extension ESI {
 			public required init?(coder aDecoder: NSCoder) {
 				isSingleton = aDecoder.decodeBool(forKey: "is_singleton")
 				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				locationFlag = Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Assets.Asset.GetCharactersCharacterIDAssetsLocationFlag()
+				locationFlag = Assets.Asset.Flag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Assets.Asset.Flag()
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				locationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "") ?? Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
 				quantity = aDecoder.containsValue(forKey: "quantity") ? aDecoder.decodeInteger(forKey: "quantity") : nil
@@ -346,73 +279,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Asset)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDAssetsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Assets.GetCharactersCharacterIDAssetsForbidden, rhs: Assets.GetCharactersCharacterIDAssetsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Assets.GetCharactersCharacterIDAssetsForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.GetCharactersCharacterIDAssetsForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDAssetsForbidden)?.hashValue == hashValue
 			}
 			
 		}

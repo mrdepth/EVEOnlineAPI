@@ -114,10 +114,12 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDShipForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class CharacterShip: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var shipItemID: Int64 = Int64()
+			public var shipName: String = String()
+			public var shipTypeID: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -126,7 +128,12 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let shipItemID = dictionary["ship_item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.shipItemID = shipItemID
+				guard let shipName = dictionary["ship_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.shipName = shipName
+				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.shipTypeID = shipTypeID
 				
 				super.init()
 			}
@@ -136,314 +143,52 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				shipItemID = aDecoder.decodeInt64(forKey: "ship_item_id")
+				shipName = aDecoder.decodeObject(forKey: "ship_name") as? String ?? String()
+				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(shipItemID, forKey: "ship_item_id")
+				aCoder.encode(shipName, forKey: "ship_name")
+				aCoder.encode(shipTypeID, forKey: "ship_type_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["ship_item_id"] = shipItemID.json
+				json["ship_name"] = shipName.json
+				json["ship_type_id"] = shipTypeID.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: shipItemID.hashValue)
+				hashCombine(seed: &hash, value: shipName.hashValue)
+				hashCombine(seed: &hash, value: shipTypeID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Location.GetCharactersCharacterIDShipForbidden, rhs: Location.GetCharactersCharacterIDShipForbidden) -> Bool {
+			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Location.GetCharactersCharacterIDShipForbidden) {
-				error = other.error
+			init(_ other: Location.CharacterShip) {
+				shipItemID = other.shipItemID
+				shipName = other.shipName
+				shipTypeID = other.shipTypeID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDShipForbidden(self)
+				return Location.CharacterShip(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDShipForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDOnlineInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineInternalServerError, rhs: Location.GetCharactersCharacterIDOnlineInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Location.GetCharactersCharacterIDOnlineInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDOnlineInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDOnlineInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDLocationInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.GetCharactersCharacterIDLocationInternalServerError, rhs: Location.GetCharactersCharacterIDLocationInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Location.GetCharactersCharacterIDLocationInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDLocationInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDLocationInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDShipInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.GetCharactersCharacterIDShipInternalServerError, rhs: Location.GetCharactersCharacterIDShipInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Location.GetCharactersCharacterIDShipInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDShipInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDShipInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDLocationForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.GetCharactersCharacterIDLocationForbidden, rhs: Location.GetCharactersCharacterIDLocationForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Location.GetCharactersCharacterIDLocationForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDLocationForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDLocationForbidden)?.hashValue == hashValue
+				return (object as? CharacterShip)?.hashValue == hashValue
 			}
 			
 		}
@@ -530,153 +275,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? CharacterLocation)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class CharacterShip: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var shipItemID: Int64 = Int64()
-			public var shipName: String = String()
-			public var shipTypeID: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let shipItemID = dictionary["ship_item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.shipItemID = shipItemID
-				guard let shipName = dictionary["ship_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.shipName = shipName
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.shipTypeID = shipTypeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				shipItemID = aDecoder.decodeInt64(forKey: "ship_item_id")
-				shipName = aDecoder.decodeObject(forKey: "ship_name") as? String ?? String()
-				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(shipItemID, forKey: "ship_item_id")
-				aCoder.encode(shipName, forKey: "ship_name")
-				aCoder.encode(shipTypeID, forKey: "ship_type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["ship_item_id"] = shipItemID.json
-				json["ship_name"] = shipName.json
-				json["ship_type_id"] = shipTypeID.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: shipItemID.hashValue)
-				hashCombine(seed: &hash, value: shipName.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Location.CharacterShip) {
-				shipItemID = other.shipItemID
-				shipName = other.shipName
-				shipTypeID = other.shipTypeID
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.CharacterShip(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CharacterShip)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDOnlineForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineForbidden, rhs: Location.GetCharactersCharacterIDOnlineForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Location.GetCharactersCharacterIDOnlineForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Location.GetCharactersCharacterIDOnlineForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDOnlineForbidden)?.hashValue == hashValue
 			}
 			
 		}

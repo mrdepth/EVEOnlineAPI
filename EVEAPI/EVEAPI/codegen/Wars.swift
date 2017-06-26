@@ -187,207 +187,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsWarIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Wars.GetWarsWarIDUnprocessableEntity, rhs: Wars.GetWarsWarIDUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Wars.GetWarsWarIDUnprocessableEntity) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wars.GetWarsWarIDUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetWarsWarIDUnprocessableEntity)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetWarsWarIDKillmailsUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity, rhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Wars.GetWarsWarIDKillmailsUnprocessableEntity) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wars.GetWarsWarIDKillmailsUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetWarsWarIDKillmailsUnprocessableEntity)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetWarsWarIDKillmailsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Wars.GetWarsWarIDKillmailsInternalServerError, rhs: Wars.GetWarsWarIDKillmailsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Wars.GetWarsWarIDKillmailsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wars.GetWarsWarIDKillmailsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetWarsWarIDKillmailsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class WarInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public class GetWarsWarIDDefender: NSObject, NSSecureCoding, NSCopying, JSONCoding {
@@ -796,7 +595,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetWarsWarIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetWarsWarIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -843,27 +642,27 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Wars.GetWarsWarIDInternalServerError, rhs: Wars.GetWarsWarIDInternalServerError) -> Bool {
+			public static func ==(lhs: Wars.GetWarsWarIDUnprocessableEntity, rhs: Wars.GetWarsWarIDUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wars.GetWarsWarIDInternalServerError) {
+			init(_ other: Wars.GetWarsWarIDUnprocessableEntity) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wars.GetWarsWarIDInternalServerError(self)
+				return Wars.GetWarsWarIDUnprocessableEntity(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetWarsWarIDInternalServerError)?.hashValue == hashValue
+				return (object as? GetWarsWarIDUnprocessableEntity)?.hashValue == hashValue
 			}
 			
 		}
 		
 		
-		public class GetWarsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetWarsWarIDKillmailsUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
@@ -910,21 +709,21 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Wars.GetWarsInternalServerError, rhs: Wars.GetWarsInternalServerError) -> Bool {
+			public static func ==(lhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity, rhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wars.GetWarsInternalServerError) {
+			init(_ other: Wars.GetWarsWarIDKillmailsUnprocessableEntity) {
 				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wars.GetWarsInternalServerError(self)
+				return Wars.GetWarsWarIDKillmailsUnprocessableEntity(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetWarsInternalServerError)?.hashValue == hashValue
+				return (object as? GetWarsWarIDKillmailsUnprocessableEntity)?.hashValue == hashValue
 			}
 			
 		}

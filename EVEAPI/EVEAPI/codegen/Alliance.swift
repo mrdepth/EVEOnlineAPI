@@ -177,279 +177,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesNamesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Alliance.GetAlliancesNamesInternalServerError, rhs: Alliance.GetAlliancesNamesInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Alliance.GetAlliancesNamesInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesNamesInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesNamesInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetAlliancesAllianceIDInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDInternalServerError, rhs: Alliance.GetAlliancesAllianceIDInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Alliance.GetAlliancesAllianceIDInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesAllianceIDInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var allianceID: Int = Int()
-			public var allianceName: String = String()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.allianceID = allianceID
-				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.allianceName = allianceName
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
-				allianceName = aDecoder.decodeObject(forKey: "alliance_name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(allianceID, forKey: "alliance_id")
-				aCoder.encode(allianceName, forKey: "alliance_name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["alliance_id"] = allianceID.json
-				json["alliance_name"] = allianceName.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: allianceName.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Alliance.Name, rhs: Alliance.Name) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Alliance.Name) {
-				allianceID = other.allianceID
-				allianceName = other.allianceName
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.Name(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Name)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetAlliancesAllianceIDIconsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDIconsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Alliance.GetAlliancesAllianceIDIconsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesAllianceIDIconsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDIconsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class GetAlliancesAllianceIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -512,140 +239,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetAlliancesAllianceIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetAlliancesAllianceIDCorporationsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError, rhs: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Alliance.GetAlliancesAllianceIDCorporationsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesAllianceIDCorporationsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDCorporationsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetAlliancesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Alliance.GetAlliancesInternalServerError, rhs: Alliance.GetAlliancesInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Alliance.GetAlliancesInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Alliance.GetAlliancesInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
@@ -724,6 +317,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Icon)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var allianceID: Int = Int()
+			public var allianceName: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.allianceID = allianceID
+				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.allianceName = allianceName
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
+				allianceName = aDecoder.decodeObject(forKey: "alliance_name") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(allianceID, forKey: "alliance_id")
+				aCoder.encode(allianceName, forKey: "alliance_name")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["alliance_id"] = allianceID.json
+				json["alliance_name"] = allianceName.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: allianceID.hashValue)
+				hashCombine(seed: &hash, value: allianceName.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Alliance.Name, rhs: Alliance.Name) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Alliance.Name) {
+				allianceID = other.allianceID
+				allianceName = other.allianceName
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Alliance.Name(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Name)?.hashValue == hashValue
 			}
 			
 		}

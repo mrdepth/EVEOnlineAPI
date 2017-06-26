@@ -114,10 +114,15 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContractsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var isIncluded: Bool = Bool()
+			public var isSingleton: Bool = Bool()
+			public var quantity: Int = Int()
+			public var rawQuantity: Int? = nil
+			public var recordID: Int64 = Int64()
+			public var typeID: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -126,7 +131,17 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let isIncluded = dictionary["is_included"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.isIncluded = isIncluded
+				guard let isSingleton = dictionary["is_singleton"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.isSingleton = isSingleton
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.quantity = quantity
+				rawQuantity = dictionary["raw_quantity"] as? Int
+				guard let recordID = dictionary["record_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.recordID = recordID
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.typeID = typeID
 				
 				super.init()
 			}
@@ -136,46 +151,71 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				isIncluded = aDecoder.decodeBool(forKey: "is_included")
+				isSingleton = aDecoder.decodeBool(forKey: "is_singleton")
+				quantity = aDecoder.decodeInteger(forKey: "quantity")
+				rawQuantity = aDecoder.containsValue(forKey: "raw_quantity") ? aDecoder.decodeInteger(forKey: "raw_quantity") : nil
+				recordID = aDecoder.decodeInt64(forKey: "record_id")
+				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
+				aCoder.encode(isIncluded, forKey: "is_included")
+				aCoder.encode(isSingleton, forKey: "is_singleton")
+				aCoder.encode(quantity, forKey: "quantity")
+				if let v = rawQuantity {
+					aCoder.encode(v, forKey: "raw_quantity")
 				}
+				aCoder.encode(recordID, forKey: "record_id")
+				aCoder.encode(typeID, forKey: "type_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
+				json["is_included"] = isIncluded.json
+				json["is_singleton"] = isSingleton.json
+				json["quantity"] = quantity.json
+				if let v = rawQuantity?.json {
+					json["raw_quantity"] = v
 				}
+				json["record_id"] = recordID.json
+				json["type_id"] = typeID.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isIncluded.hashValue)
+				hashCombine(seed: &hash, value: isSingleton.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: rawQuantity?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: recordID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Contracts.GetCharactersCharacterIDContractsForbidden, rhs: Contracts.GetCharactersCharacterIDContractsForbidden) -> Bool {
+			public static func ==(lhs: Contracts.Item, rhs: Contracts.Item) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Contracts.GetCharactersCharacterIDContractsForbidden) {
-				error = other.error
+			init(_ other: Contracts.Item) {
+				isIncluded = other.isIncluded
+				isSingleton = other.isSingleton
+				quantity = other.quantity
+				rawQuantity = other.rawQuantity
+				recordID = other.recordID
+				typeID = other.typeID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.GetCharactersCharacterIDContractsForbidden(self)
+				return Contracts.Item(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDContractsForbidden)?.hashValue == hashValue
+				return (object as? Item)?.hashValue == hashValue
 			}
 			
 		}
@@ -527,140 +567,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDContractsContractIDBidsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Contracts.GetCharactersCharacterIDContractsContractIDBidsInternalServerError, rhs: Contracts.GetCharactersCharacterIDContractsContractIDBidsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Contracts.GetCharactersCharacterIDContractsContractIDBidsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.GetCharactersCharacterIDContractsContractIDBidsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDContractsContractIDBidsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDContractsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Contracts.GetCharactersCharacterIDContractsInternalServerError, rhs: Contracts.GetCharactersCharacterIDContractsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Contracts.GetCharactersCharacterIDContractsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.GetCharactersCharacterIDContractsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDContractsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class Bid: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -744,314 +650,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Bid)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDContractsContractIDBidsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Contracts.GetCharactersCharacterIDContractsContractIDBidsForbidden, rhs: Contracts.GetCharactersCharacterIDContractsContractIDBidsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Contracts.GetCharactersCharacterIDContractsContractIDBidsForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.GetCharactersCharacterIDContractsContractIDBidsForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDContractsContractIDBidsForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDContractsContractIDItemsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Contracts.GetCharactersCharacterIDContractsContractIDItemsForbidden, rhs: Contracts.GetCharactersCharacterIDContractsContractIDItemsForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Contracts.GetCharactersCharacterIDContractsContractIDItemsForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.GetCharactersCharacterIDContractsContractIDItemsForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDContractsContractIDItemsForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var isIncluded: Bool = Bool()
-			public var isSingleton: Bool = Bool()
-			public var quantity: Int = Int()
-			public var rawQuantity: Int? = nil
-			public var recordID: Int64 = Int64()
-			public var typeID: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let isIncluded = dictionary["is_included"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.isIncluded = isIncluded
-				guard let isSingleton = dictionary["is_singleton"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.isSingleton = isSingleton
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.quantity = quantity
-				rawQuantity = dictionary["raw_quantity"] as? Int
-				guard let recordID = dictionary["record_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.recordID = recordID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.typeID = typeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				isIncluded = aDecoder.decodeBool(forKey: "is_included")
-				isSingleton = aDecoder.decodeBool(forKey: "is_singleton")
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				rawQuantity = aDecoder.containsValue(forKey: "raw_quantity") ? aDecoder.decodeInteger(forKey: "raw_quantity") : nil
-				recordID = aDecoder.decodeInt64(forKey: "record_id")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(isIncluded, forKey: "is_included")
-				aCoder.encode(isSingleton, forKey: "is_singleton")
-				aCoder.encode(quantity, forKey: "quantity")
-				if let v = rawQuantity {
-					aCoder.encode(v, forKey: "raw_quantity")
-				}
-				aCoder.encode(recordID, forKey: "record_id")
-				aCoder.encode(typeID, forKey: "type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["is_included"] = isIncluded.json
-				json["is_singleton"] = isSingleton.json
-				json["quantity"] = quantity.json
-				if let v = rawQuantity?.json {
-					json["raw_quantity"] = v
-				}
-				json["record_id"] = recordID.json
-				json["type_id"] = typeID.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: isIncluded.hashValue)
-				hashCombine(seed: &hash, value: isSingleton.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: rawQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: recordID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Contracts.Item, rhs: Contracts.Item) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Contracts.Item) {
-				isIncluded = other.isIncluded
-				isSingleton = other.isSingleton
-				quantity = other.quantity
-				rawQuantity = other.rawQuantity
-				recordID = other.recordID
-				typeID = other.typeID
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.Item(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Item)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDContractsContractIDItemsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Contracts.GetCharactersCharacterIDContractsContractIDItemsInternalServerError, rhs: Contracts.GetCharactersCharacterIDContractsContractIDItemsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Contracts.GetCharactersCharacterIDContractsContractIDItemsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contracts.GetCharactersCharacterIDContractsContractIDItemsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDContractsContractIDItemsInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

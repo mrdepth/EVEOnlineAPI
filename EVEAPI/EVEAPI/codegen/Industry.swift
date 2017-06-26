@@ -114,377 +114,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDIndustryJobsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.GetCharactersCharacterIDIndustryJobsInternalServerError, rhs: Industry.GetCharactersCharacterIDIndustryJobsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Industry.GetCharactersCharacterIDIndustryJobsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Industry.GetCharactersCharacterIDIndustryJobsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDIndustryJobsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetIndustrySystemsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.GetIndustrySystemsInternalServerError, rhs: Industry.GetIndustrySystemsInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Industry.GetIndustrySystemsInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Industry.GetIndustrySystemsInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetIndustrySystemsInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetIndustryFacilitiesInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.GetIndustryFacilitiesInternalServerError, rhs: Industry.GetIndustryFacilitiesInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Industry.GetIndustryFacilitiesInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Industry.GetIndustryFacilitiesInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetIndustryFacilitiesInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class SolarSystemCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				public enum GetIndustrySystemsActivity: String, JSONCoding, HTTPQueryable {
-					case copying = "copying"
-					case duplicating = "duplicating"
-					case invention = "invention"
-					case manufacturing = "manufacturing"
-					case none = "none"
-					case researchingMaterialEfficiency = "researching_material_efficiency"
-					case researchingTechnology = "researching_technology"
-					case researchingTimeEfficiency = "researching_time_efficiency"
-					case reverseEngineering = "reverse_engineering"
-					
-					public init() {
-						self = .none
-					}
-					
-					public var json: Any {
-						return self.rawValue
-					}
-					
-					public init(json: Any) throws {
-						guard let s = json as? String, let v = GetIndustrySystemsActivity(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-						self = v
-					}
-					
-					public var httpQuery: String? {
-						return rawValue
-					}
-					
-				}
-				
-				public var activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
-				public var costIndex: Float = Float()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity(rawValue: dictionary["activity"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.activity = activity
-					guard let costIndex = dictionary["cost_index"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.costIndex = costIndex
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity(rawValue: aDecoder.decodeObject(forKey: "activity") as? String ?? "") ?? Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
-					costIndex = aDecoder.decodeFloat(forKey: "cost_index")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activity.rawValue, forKey: "activity")
-					aCoder.encode(costIndex, forKey: "cost_index")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["activity"] = activity.json
-					json["cost_index"] = costIndex.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: activity.hashValue)
-					hashCombine(seed: &hash, value: costIndex.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices, rhs: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices) {
-					activity = other.activity
-					costIndex = other.costIndex
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetIndustrySystemsCostIndices)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] = []
-			public var solarSystemID: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				costIndices = try (dictionary["cost_indices"] as? [Any])?.map {try Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices(json: $0)} ?? []
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.solarSystemID = solarSystemID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				costIndices = aDecoder.decodeObject(of: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.self], forKey: "cost_indices") as? [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] ?? []
-				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(costIndices, forKey: "cost_indices")
-				aCoder.encode(solarSystemID, forKey: "solar_system_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["cost_indices"] = costIndices.json
-				json["solar_system_id"] = solarSystemID.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				costIndices.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.SolarSystemCostIndices, rhs: Industry.SolarSystemCostIndices) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Industry.SolarSystemCostIndices) {
-				costIndices = other.costIndices.flatMap { Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices($0) }
-				solarSystemID = other.solarSystemID
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Industry.SolarSystemCostIndices(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? SolarSystemCostIndices)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class Facilities: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -874,10 +503,110 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDIndustryJobsForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class SolarSystemCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				public enum GetIndustrySystemsActivity: String, JSONCoding, HTTPQueryable {
+					case copying = "copying"
+					case duplicating = "duplicating"
+					case invention = "invention"
+					case manufacturing = "manufacturing"
+					case none = "none"
+					case researchingMaterialEfficiency = "researching_material_efficiency"
+					case researchingTechnology = "researching_technology"
+					case researchingTimeEfficiency = "researching_time_efficiency"
+					case reverseEngineering = "reverse_engineering"
+					
+					public init() {
+						self = .none
+					}
+					
+					public var json: Any {
+						return self.rawValue
+					}
+					
+					public init(json: Any) throws {
+						guard let s = json as? String, let v = GetIndustrySystemsActivity(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+						self = v
+					}
+					
+					public var httpQuery: String? {
+						return rawValue
+					}
+					
+				}
+				
+				public var activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
+				public var costIndex: Float = Float()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity(rawValue: dictionary["activity"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.activity = activity
+					guard let costIndex = dictionary["cost_index"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.costIndex = costIndex
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity(rawValue: aDecoder.decodeObject(forKey: "activity") as? String ?? "") ?? Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
+					costIndex = aDecoder.decodeFloat(forKey: "cost_index")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(activity.rawValue, forKey: "activity")
+					aCoder.encode(costIndex, forKey: "cost_index")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["activity"] = activity.json
+					json["cost_index"] = costIndex.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: activity.hashValue)
+					hashCombine(seed: &hash, value: costIndex.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices, rhs: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices) {
+					activity = other.activity
+					costIndex = other.costIndex
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetIndustrySystemsCostIndices)?.hashValue == hashValue
+				}
+				
+			}
 			
-			public var error: String? = nil
+			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] = []
+			public var solarSystemID: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -886,7 +615,9 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				costIndices = try (dictionary["cost_indices"] as? [Any])?.map {try Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices(json: $0)} ?? []
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.solarSystemID = solarSystemID
 				
 				super.init()
 			}
@@ -896,46 +627,47 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				costIndices = aDecoder.decodeObject(of: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.self], forKey: "cost_indices") as? [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] ?? []
+				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(costIndices, forKey: "cost_indices")
+				aCoder.encode(solarSystemID, forKey: "solar_system_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["cost_indices"] = costIndices.json
+				json["solar_system_id"] = solarSystemID.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				costIndices.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Industry.GetCharactersCharacterIDIndustryJobsForbidden, rhs: Industry.GetCharactersCharacterIDIndustryJobsForbidden) -> Bool {
+			public static func ==(lhs: Industry.SolarSystemCostIndices, rhs: Industry.SolarSystemCostIndices) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Industry.GetCharactersCharacterIDIndustryJobsForbidden) {
-				error = other.error
+			init(_ other: Industry.SolarSystemCostIndices) {
+				costIndices = other.costIndices.flatMap { Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices($0) }
+				solarSystemID = other.solarSystemID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Industry.GetCharactersCharacterIDIndustryJobsForbidden(self)
+				return Industry.SolarSystemCostIndices(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDIndustryJobsForbidden)?.hashValue == hashValue
+				return (object as? SolarSystemCostIndices)?.hashValue == hashValue
 			}
 			
 		}

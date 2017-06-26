@@ -16,6 +16,7 @@ let typeNames: [String: String] = [
 	
 	//MARK: Assets
 	"GetCharactersCharacterIDAssetsOk"	: "Asset",
+	"GetCharactersCharacterIDAssetsLocationFlag"	: "Flag",
 
 	//MARK: Bookmarks
 	"GetCharactersCharacterIDBookmarksFoldersOk"	: "Folder",
@@ -105,6 +106,9 @@ let typeNames: [String: String] = [
 	//MARK: Killmails
 	"GetKillmailsKillmailIDKillmailHashOk"	: "Killmail",
 	"GetCharactersCharacterIDKillmailsRecentOk"	: "Recent",
+	"GetKillmailsKillmailIDKillmailHashVictim"	: "Victim",
+	"GetKillmailsKillmailIDKillmailHashAttackers"	: "Attacker",
+	"GetKillmailsKillmailIDKillmailHashItems"	: "Item",
 
 	//MARK: Location
 	"GetCharactersCharacterIDLocationOk"	: "CharacterLocation",

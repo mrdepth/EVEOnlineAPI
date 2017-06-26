@@ -111,10 +111,13 @@ public extension ESI {
 		}
 		
 		
-		public class GetSovereigntyCampaignsInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var allianceID: Int? = nil
+			public var corporationID: Int? = nil
+			public var factionID: Int? = nil
+			public var systemID: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -123,7 +126,11 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				allianceID = dictionary["alliance_id"] as? Int
+				corporationID = dictionary["corporation_id"] as? Int
+				factionID = dictionary["faction_id"] as? Int
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.systemID = systemID
 				
 				super.init()
 			}
@@ -133,55 +140,84 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
+				corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
+				factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
+				systemID = aDecoder.decodeInteger(forKey: "system_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
+				if let v = allianceID {
+					aCoder.encode(v, forKey: "alliance_id")
 				}
+				if let v = corporationID {
+					aCoder.encode(v, forKey: "corporation_id")
+				}
+				if let v = factionID {
+					aCoder.encode(v, forKey: "faction_id")
+				}
+				aCoder.encode(systemID, forKey: "system_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
+				if let v = allianceID?.json {
+					json["alliance_id"] = v
 				}
+				if let v = corporationID?.json {
+					json["corporation_id"] = v
+				}
+				if let v = factionID?.json {
+					json["faction_id"] = v
+				}
+				json["system_id"] = systemID.json
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: systemID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Sovereignty.GetSovereigntyCampaignsInternalServerError, rhs: Sovereignty.GetSovereigntyCampaignsInternalServerError) -> Bool {
+			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Sovereignty.GetSovereigntyCampaignsInternalServerError) {
-				error = other.error
+			init(_ other: Sovereignty.System) {
+				allianceID = other.allianceID
+				corporationID = other.corporationID
+				factionID = other.factionID
+				systemID = other.systemID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Sovereignty.GetSovereigntyCampaignsInternalServerError(self)
+				return Sovereignty.System(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetSovereigntyCampaignsInternalServerError)?.hashValue == hashValue
+				return (object as? System)?.hashValue == hashValue
 			}
 			
 		}
 		
 		
-		public class GetSovereigntyStructuresInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var allianceID: Int = Int()
+			public var solarSystemID: Int = Int()
+			public var structureID: Int64 = Int64()
+			public var structureTypeID: Int = Int()
+			public var vulnerabilityOccupancyLevel: Float? = nil
+			public var vulnerableEndTime: Date? = nil
+			public var vulnerableStartTime: Date? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -190,7 +226,17 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.allianceID = allianceID
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.solarSystemID = solarSystemID
+				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.structureID = structureID
+				guard let structureTypeID = dictionary["structure_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.structureTypeID = structureTypeID
+				vulnerabilityOccupancyLevel = dictionary["vulnerability_occupancy_level"] as? Float
+				vulnerableEndTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_end_time"] as? String ?? "")
+				vulnerableStartTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_start_time"] as? String ?? "")
 				
 				super.init()
 			}
@@ -200,46 +246,84 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
+				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
+				structureID = aDecoder.decodeInt64(forKey: "structure_id")
+				structureTypeID = aDecoder.decodeInteger(forKey: "structure_type_id")
+				vulnerabilityOccupancyLevel = aDecoder.containsValue(forKey: "vulnerability_occupancy_level") ? aDecoder.decodeFloat(forKey: "vulnerability_occupancy_level") : nil
+				vulnerableEndTime = aDecoder.decodeObject(forKey: "vulnerable_end_time") as? Date
+				vulnerableStartTime = aDecoder.decodeObject(forKey: "vulnerable_start_time") as? Date
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
+				aCoder.encode(allianceID, forKey: "alliance_id")
+				aCoder.encode(solarSystemID, forKey: "solar_system_id")
+				aCoder.encode(structureID, forKey: "structure_id")
+				aCoder.encode(structureTypeID, forKey: "structure_type_id")
+				if let v = vulnerabilityOccupancyLevel {
+					aCoder.encode(v, forKey: "vulnerability_occupancy_level")
+				}
+				if let v = vulnerableEndTime {
+					aCoder.encode(v, forKey: "vulnerable_end_time")
+				}
+				if let v = vulnerableStartTime {
+					aCoder.encode(v, forKey: "vulnerable_start_time")
 				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
+				json["alliance_id"] = allianceID.json
+				json["solar_system_id"] = solarSystemID.json
+				json["structure_id"] = structureID.json
+				json["structure_type_id"] = structureTypeID.json
+				if let v = vulnerabilityOccupancyLevel?.json {
+					json["vulnerability_occupancy_level"] = v
+				}
+				if let v = vulnerableEndTime?.json {
+					json["vulnerable_end_time"] = v
+				}
+				if let v = vulnerableStartTime?.json {
+					json["vulnerable_start_time"] = v
 				}
 				return json
 			}
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: allianceID.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: structureID.hashValue)
+				hashCombine(seed: &hash, value: structureTypeID.hashValue)
+				hashCombine(seed: &hash, value: vulnerabilityOccupancyLevel?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: vulnerableEndTime?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: vulnerableStartTime?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Sovereignty.GetSovereigntyStructuresInternalServerError, rhs: Sovereignty.GetSovereigntyStructuresInternalServerError) -> Bool {
+			public static func ==(lhs: Sovereignty.Structure, rhs: Sovereignty.Structure) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Sovereignty.GetSovereigntyStructuresInternalServerError) {
-				error = other.error
+			init(_ other: Sovereignty.Structure) {
+				allianceID = other.allianceID
+				solarSystemID = other.solarSystemID
+				structureID = other.structureID
+				structureTypeID = other.structureTypeID
+				vulnerabilityOccupancyLevel = other.vulnerabilityOccupancyLevel
+				vulnerableEndTime = other.vulnerableEndTime
+				vulnerableStartTime = other.vulnerableStartTime
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Sovereignty.GetSovereigntyStructuresInternalServerError(self)
+				return Sovereignty.Structure(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetSovereigntyStructuresInternalServerError)?.hashValue == hashValue
+				return (object as? Structure)?.hashValue == hashValue
 			}
 			
 		}
@@ -483,291 +567,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Campaign)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var allianceID: Int? = nil
-			public var corporationID: Int? = nil
-			public var factionID: Int? = nil
-			public var systemID: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				allianceID = dictionary["alliance_id"] as? Int
-				corporationID = dictionary["corporation_id"] as? Int
-				factionID = dictionary["faction_id"] as? Int
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.systemID = systemID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-				corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-				factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-				systemID = aDecoder.decodeInteger(forKey: "system_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = allianceID {
-					aCoder.encode(v, forKey: "alliance_id")
-				}
-				if let v = corporationID {
-					aCoder.encode(v, forKey: "corporation_id")
-				}
-				if let v = factionID {
-					aCoder.encode(v, forKey: "faction_id")
-				}
-				aCoder.encode(systemID, forKey: "system_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = allianceID?.json {
-					json["alliance_id"] = v
-				}
-				if let v = corporationID?.json {
-					json["corporation_id"] = v
-				}
-				if let v = factionID?.json {
-					json["faction_id"] = v
-				}
-				json["system_id"] = systemID.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Sovereignty.System) {
-				allianceID = other.allianceID
-				corporationID = other.corporationID
-				factionID = other.factionID
-				systemID = other.systemID
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Sovereignty.System(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? System)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var allianceID: Int = Int()
-			public var solarSystemID: Int = Int()
-			public var structureID: Int64 = Int64()
-			public var structureTypeID: Int = Int()
-			public var vulnerabilityOccupancyLevel: Float? = nil
-			public var vulnerableEndTime: Date? = nil
-			public var vulnerableStartTime: Date? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.allianceID = allianceID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.solarSystemID = solarSystemID
-				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.structureID = structureID
-				guard let structureTypeID = dictionary["structure_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.structureTypeID = structureTypeID
-				vulnerabilityOccupancyLevel = dictionary["vulnerability_occupancy_level"] as? Float
-				vulnerableEndTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_end_time"] as? String ?? "")
-				vulnerableStartTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_start_time"] as? String ?? "")
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
-				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				structureID = aDecoder.decodeInt64(forKey: "structure_id")
-				structureTypeID = aDecoder.decodeInteger(forKey: "structure_type_id")
-				vulnerabilityOccupancyLevel = aDecoder.containsValue(forKey: "vulnerability_occupancy_level") ? aDecoder.decodeFloat(forKey: "vulnerability_occupancy_level") : nil
-				vulnerableEndTime = aDecoder.decodeObject(forKey: "vulnerable_end_time") as? Date
-				vulnerableStartTime = aDecoder.decodeObject(forKey: "vulnerable_start_time") as? Date
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(allianceID, forKey: "alliance_id")
-				aCoder.encode(solarSystemID, forKey: "solar_system_id")
-				aCoder.encode(structureID, forKey: "structure_id")
-				aCoder.encode(structureTypeID, forKey: "structure_type_id")
-				if let v = vulnerabilityOccupancyLevel {
-					aCoder.encode(v, forKey: "vulnerability_occupancy_level")
-				}
-				if let v = vulnerableEndTime {
-					aCoder.encode(v, forKey: "vulnerable_end_time")
-				}
-				if let v = vulnerableStartTime {
-					aCoder.encode(v, forKey: "vulnerable_start_time")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["alliance_id"] = allianceID.json
-				json["solar_system_id"] = solarSystemID.json
-				json["structure_id"] = structureID.json
-				json["structure_type_id"] = structureTypeID.json
-				if let v = vulnerabilityOccupancyLevel?.json {
-					json["vulnerability_occupancy_level"] = v
-				}
-				if let v = vulnerableEndTime?.json {
-					json["vulnerable_end_time"] = v
-				}
-				if let v = vulnerableStartTime?.json {
-					json["vulnerable_start_time"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: structureID.hashValue)
-				hashCombine(seed: &hash, value: structureTypeID.hashValue)
-				hashCombine(seed: &hash, value: vulnerabilityOccupancyLevel?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: vulnerableEndTime?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: vulnerableStartTime?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Sovereignty.Structure, rhs: Sovereignty.Structure) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Sovereignty.Structure) {
-				allianceID = other.allianceID
-				solarSystemID = other.solarSystemID
-				structureID = other.structureID
-				structureTypeID = other.structureTypeID
-				vulnerabilityOccupancyLevel = other.vulnerabilityOccupancyLevel
-				vulnerableEndTime = other.vulnerableEndTime
-				vulnerableStartTime = other.vulnerableStartTime
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Sovereignty.Structure(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Structure)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetSovereigntyMapInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Sovereignty.GetSovereigntyMapInternalServerError, rhs: Sovereignty.GetSovereigntyMapInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Sovereignty.GetSovereigntyMapInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Sovereignty.GetSovereigntyMapInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetSovereigntyMapInternalServerError)?.hashValue == hashValue
 			}
 			
 		}

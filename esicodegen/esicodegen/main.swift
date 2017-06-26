@@ -30,6 +30,18 @@ var allSchemes = [String: [Int:[Schema]]]()
 let globalScope = Scope(tag: "", parent: nil)
 scopes[""] = globalScope
 
+var definitions: [Schema]
+definitions = (swagger["definitions"] as? [String: [String: Any]])?.flatMap { i -> Schema? in
+	do {
+		return try Schema(i.value, title: i.key, parent: globalScope)
+	}
+	catch {
+		print ("error: \(i.key) \(error)")
+		return nil
+	}
+} ?? []
+
+
 for path in (swagger["paths"] as? [String: Any]) ?? [:] {
 	guard let dic = path.value as? [String: Any] else {continue}
 	do {

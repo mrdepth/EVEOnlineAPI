@@ -85,207 +85,6 @@ public extension ESI {
 		}
 		
 		
-		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity, rhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetKillmailsKillmailIDKillmailHashUnprocessableEntity)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDKillmailsRecentForbidden: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Killmails.GetCharactersCharacterIDKillmailsRecentForbidden, rhs: Killmails.GetCharactersCharacterIDKillmailsRecentForbidden) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Killmails.GetCharactersCharacterIDKillmailsRecentForbidden) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Killmails.GetCharactersCharacterIDKillmailsRecentForbidden(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDKillmailsRecentForbidden)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDKillmailsRecentInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Killmails.GetCharactersCharacterIDKillmailsRecentInternalServerError, rhs: Killmails.GetCharactersCharacterIDKillmailsRecentInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Killmails.GetCharactersCharacterIDKillmailsRecentInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Killmails.GetCharactersCharacterIDKillmailsRecentInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDKillmailsRecentInternalServerError)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class Recent: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -358,436 +157,76 @@ public extension ESI {
 		}
 		
 		
-		public class Killmail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetKillmailsKillmailIDKillmailHashVictim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-					
-					public class GetKillmailsKillmailIDKillmailHashItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-						
-						
-						public var flag: Int = Int()
-						public var itemTypeID: Int = Int()
-						public var quantityDestroyed: Int64? = nil
-						public var quantityDropped: Int64? = nil
-						public var singleton: Int = Int()
-						
-						public static var supportsSecureCoding: Bool {
-							return true
-						}
-						
-						public required init(json: Any) throws {
-							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-							
-							guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-							self.flag = flag
-							guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-							self.itemTypeID = itemTypeID
-							quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
-							quantityDropped = dictionary["quantity_dropped"] as? Int64
-							guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-							self.singleton = singleton
-							
-							super.init()
-						}
-						
-						override public init() {
-							super.init()
-						}
-						
-						public required init?(coder aDecoder: NSCoder) {
-							flag = aDecoder.decodeInteger(forKey: "flag")
-							itemTypeID = aDecoder.decodeInteger(forKey: "item_type_id")
-							quantityDestroyed = aDecoder.containsValue(forKey: "quantity_destroyed") ? aDecoder.decodeInt64(forKey: "quantity_destroyed") : nil
-							quantityDropped = aDecoder.containsValue(forKey: "quantity_dropped") ? aDecoder.decodeInt64(forKey: "quantity_dropped") : nil
-							singleton = aDecoder.decodeInteger(forKey: "singleton")
-							
-							super.init()
-						}
-						
-						public func encode(with aCoder: NSCoder) {
-							aCoder.encode(flag, forKey: "flag")
-							aCoder.encode(itemTypeID, forKey: "item_type_id")
-							if let v = quantityDestroyed {
-								aCoder.encode(v, forKey: "quantity_destroyed")
-							}
-							if let v = quantityDropped {
-								aCoder.encode(v, forKey: "quantity_dropped")
-							}
-							aCoder.encode(singleton, forKey: "singleton")
-						}
-						
-						public var json: Any {
-							var json = [String: Any]()
-							json["flag"] = flag.json
-							json["item_type_id"] = itemTypeID.json
-							if let v = quantityDestroyed?.json {
-								json["quantity_destroyed"] = v
-							}
-							if let v = quantityDropped?.json {
-								json["quantity_dropped"] = v
-							}
-							json["singleton"] = singleton.json
-							return json
-						}
-						
-						override public var hashValue: Int {
-							var hash: Int = 0
-							hashCombine(seed: &hash, value: flag.hashValue)
-							hashCombine(seed: &hash, value: itemTypeID.hashValue)
-							hashCombine(seed: &hash, value: quantityDestroyed?.hashValue ?? 0)
-							hashCombine(seed: &hash, value: quantityDropped?.hashValue ?? 0)
-							hashCombine(seed: &hash, value: singleton.hashValue)
-							return hash
-						}
-						
-						public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems) -> Bool {
-							return lhs.hashValue == rhs.hashValue
-						}
-						
-						init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems) {
-							flag = other.flag
-							itemTypeID = other.itemTypeID
-							quantityDestroyed = other.quantityDestroyed
-							quantityDropped = other.quantityDropped
-							singleton = other.singleton
-						}
-						
-						public func copy(with zone: NSZone? = nil) -> Any {
-							return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems(self)
-						}
-						
-						
-						public override func isEqual(_ object: Any?) -> Bool {
-							return (object as? GetKillmailsKillmailIDKillmailHashItems)?.hashValue == hashValue
-						}
-						
-					}
-					
-					public var flag: Int = Int()
-					public var itemTypeID: Int = Int()
-					public var items: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems]? = nil
-					public var quantityDestroyed: Int64? = nil
-					public var quantityDropped: Int64? = nil
-					public var singleton: Int = Int()
-					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
-					
-					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-						
-						guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.flag = flag
-						guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.itemTypeID = itemTypeID
-						items = try (dictionary["items"] as? [Any])?.map {try Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems(json: $0)}
-						quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
-						quantityDropped = dictionary["quantity_dropped"] as? Int64
-						guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.singleton = singleton
-						
-						super.init()
-					}
-					
-					override public init() {
-						super.init()
-					}
-					
-					public required init?(coder aDecoder: NSCoder) {
-						flag = aDecoder.decodeInteger(forKey: "flag")
-						itemTypeID = aDecoder.decodeInteger(forKey: "item_type_id")
-						items = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems.self], forKey: "items") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems]
-						quantityDestroyed = aDecoder.containsValue(forKey: "quantity_destroyed") ? aDecoder.decodeInt64(forKey: "quantity_destroyed") : nil
-						quantityDropped = aDecoder.containsValue(forKey: "quantity_dropped") ? aDecoder.decodeInt64(forKey: "quantity_dropped") : nil
-						singleton = aDecoder.decodeInteger(forKey: "singleton")
-						
-						super.init()
-					}
-					
-					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(flag, forKey: "flag")
-						aCoder.encode(itemTypeID, forKey: "item_type_id")
-						if let v = items {
-							aCoder.encode(v, forKey: "items")
-						}
-						if let v = quantityDestroyed {
-							aCoder.encode(v, forKey: "quantity_destroyed")
-						}
-						if let v = quantityDropped {
-							aCoder.encode(v, forKey: "quantity_dropped")
-						}
-						aCoder.encode(singleton, forKey: "singleton")
-					}
-					
-					public var json: Any {
-						var json = [String: Any]()
-						json["flag"] = flag.json
-						json["item_type_id"] = itemTypeID.json
-						if let v = items?.json {
-							json["items"] = v
-						}
-						if let v = quantityDestroyed?.json {
-							json["quantity_destroyed"] = v
-						}
-						if let v = quantityDropped?.json {
-							json["quantity_dropped"] = v
-						}
-						json["singleton"] = singleton.json
-						return json
-					}
-					
-					override public var hashValue: Int {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: flag.hashValue)
-						hashCombine(seed: &hash, value: itemTypeID.hashValue)
-						items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-						hashCombine(seed: &hash, value: quantityDestroyed?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: quantityDropped?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: singleton.hashValue)
-						return hash
-					}
-					
-					public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems) {
-						flag = other.flag
-						itemTypeID = other.itemTypeID
-						items = other.items?.flatMap { Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.GetKillmailsKillmailIDKillmailHashItems($0) }
-						quantityDestroyed = other.quantityDestroyed
-						quantityDropped = other.quantityDropped
-						singleton = other.singleton
-					}
-					
-					public func copy(with zone: NSZone? = nil) -> Any {
-						return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems(self)
-					}
-					
-					
-					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? GetKillmailsKillmailIDKillmailHashItems)?.hashValue == hashValue
-					}
-					
-				}
-				
-				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-					
-					
-					public var x: Float = Float()
-					public var y: Float = Float()
-					public var z: Float = Float()
-					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
-					
-					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-						
-						guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.x = x
-						guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.y = y
-						guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.z = z
-						
-						super.init()
-					}
-					
-					override public init() {
-						super.init()
-					}
-					
-					public required init?(coder aDecoder: NSCoder) {
-						x = aDecoder.decodeFloat(forKey: "x")
-						y = aDecoder.decodeFloat(forKey: "y")
-						z = aDecoder.decodeFloat(forKey: "z")
-						
-						super.init()
-					}
-					
-					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(x, forKey: "x")
-						aCoder.encode(y, forKey: "y")
-						aCoder.encode(z, forKey: "z")
-					}
-					
-					public var json: Any {
-						var json = [String: Any]()
-						json["x"] = x.json
-						json["y"] = y.json
-						json["z"] = z.json
-						return json
-					}
-					
-					override public var hashValue: Int {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: x.hashValue)
-						hashCombine(seed: &hash, value: y.hashValue)
-						hashCombine(seed: &hash, value: z.hashValue)
-						return hash
-					}
-					
-					public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition) {
-						x = other.x
-						y = other.y
-						z = other.z
-					}
-					
-					public func copy(with zone: NSZone? = nil) -> Any {
-						return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition(self)
-					}
-					
-					
-					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? GetKillmailsKillmailIDKillmailHashPosition)?.hashValue == hashValue
-					}
-					
-				}
-				
-				public var allianceID: Int? = nil
-				public var characterID: Int? = nil
-				public var corporationID: Int? = nil
-				public var damageTaken: Int = Int()
-				public var factionID: Int? = nil
-				public var items: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems]? = nil
-				public var position: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition? = nil
-				public var shipTypeID: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					allianceID = dictionary["alliance_id"] as? Int
-					characterID = dictionary["character_id"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					guard let damageTaken = dictionary["damage_taken"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.damageTaken = damageTaken
-					factionID = dictionary["faction_id"] as? Int
-					items = try (dictionary["items"] as? [Any])?.map {try Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems(json: $0)}
-					position = try? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-					guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.shipTypeID = shipTypeID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					damageTaken = aDecoder.decodeInteger(forKey: "damage_taken")
-					factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-					items = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems.self], forKey: "items") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems]
-					position = aDecoder.decodeObject(of: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition.self, forKey: "position") 
-					shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = allianceID {
-						aCoder.encode(v, forKey: "alliance_id")
-					}
-					if let v = characterID {
-						aCoder.encode(v, forKey: "character_id")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-					aCoder.encode(damageTaken, forKey: "damage_taken")
-					if let v = factionID {
-						aCoder.encode(v, forKey: "faction_id")
-					}
-					if let v = items {
-						aCoder.encode(v, forKey: "items")
-					}
-					if let v = position {
-						aCoder.encode(v, forKey: "position")
-					}
-					aCoder.encode(shipTypeID, forKey: "ship_type_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = allianceID?.json {
-						json["alliance_id"] = v
-					}
-					if let v = characterID?.json {
-						json["character_id"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					json["damage_taken"] = damageTaken.json
-					if let v = factionID?.json {
-						json["faction_id"] = v
-					}
-					if let v = items?.json {
-						json["items"] = v
-					}
-					if let v = position?.json {
-						json["position"] = v
-					}
-					json["ship_type_id"] = shipTypeID.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: damageTaken.hashValue)
-					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-					items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: position?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: shipTypeID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim) {
-					allianceID = other.allianceID
-					characterID = other.characterID
-					corporationID = other.corporationID
-					damageTaken = other.damageTaken
-					factionID = other.factionID
-					items = other.items?.flatMap { Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashItems($0) }
-					position = other.position != nil ? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.GetKillmailsKillmailIDKillmailHashPosition(other.position!) : nil
-					shipTypeID = other.shipTypeID
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetKillmailsKillmailIDKillmailHashVictim)?.hashValue == hashValue
-				}
-				
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
-			public class GetKillmailsKillmailIDKillmailHashAttackers: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity, rhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetKillmailsKillmailIDKillmailHashUnprocessableEntity)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class Killmail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public class Attacker: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int? = nil
@@ -905,11 +344,11 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers, rhs: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers) -> Bool {
+				public static func ==(lhs: Killmails.Killmail.Attacker, rhs: Killmails.Killmail.Attacker) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers) {
+				init(_ other: Killmails.Killmail.Attacker) {
 					allianceID = other.allianceID
 					characterID = other.characterID
 					corporationID = other.corporationID
@@ -922,22 +361,449 @@ public extension ESI {
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
-					return Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers(self)
+					return Killmails.Killmail.Attacker(self)
 				}
 				
 				
 				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetKillmailsKillmailIDKillmailHashAttackers)?.hashValue == hashValue
+					return (object as? Attacker)?.hashValue == hashValue
 				}
 				
 			}
 			
-			public var attackers: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers] = []
+			public class Victim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					
+					public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+						
+						
+						public var flag: Int = Int()
+						public var itemTypeID: Int = Int()
+						public var quantityDestroyed: Int64? = nil
+						public var quantityDropped: Int64? = nil
+						public var singleton: Int = Int()
+						
+						public static var supportsSecureCoding: Bool {
+							return true
+						}
+						
+						public required init(json: Any) throws {
+							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+							
+							guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							self.flag = flag
+							guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							self.itemTypeID = itemTypeID
+							quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
+							quantityDropped = dictionary["quantity_dropped"] as? Int64
+							guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							self.singleton = singleton
+							
+							super.init()
+						}
+						
+						override public init() {
+							super.init()
+						}
+						
+						public required init?(coder aDecoder: NSCoder) {
+							flag = aDecoder.decodeInteger(forKey: "flag")
+							itemTypeID = aDecoder.decodeInteger(forKey: "item_type_id")
+							quantityDestroyed = aDecoder.containsValue(forKey: "quantity_destroyed") ? aDecoder.decodeInt64(forKey: "quantity_destroyed") : nil
+							quantityDropped = aDecoder.containsValue(forKey: "quantity_dropped") ? aDecoder.decodeInt64(forKey: "quantity_dropped") : nil
+							singleton = aDecoder.decodeInteger(forKey: "singleton")
+							
+							super.init()
+						}
+						
+						public func encode(with aCoder: NSCoder) {
+							aCoder.encode(flag, forKey: "flag")
+							aCoder.encode(itemTypeID, forKey: "item_type_id")
+							if let v = quantityDestroyed {
+								aCoder.encode(v, forKey: "quantity_destroyed")
+							}
+							if let v = quantityDropped {
+								aCoder.encode(v, forKey: "quantity_dropped")
+							}
+							aCoder.encode(singleton, forKey: "singleton")
+						}
+						
+						public var json: Any {
+							var json = [String: Any]()
+							json["flag"] = flag.json
+							json["item_type_id"] = itemTypeID.json
+							if let v = quantityDestroyed?.json {
+								json["quantity_destroyed"] = v
+							}
+							if let v = quantityDropped?.json {
+								json["quantity_dropped"] = v
+							}
+							json["singleton"] = singleton.json
+							return json
+						}
+						
+						override public var hashValue: Int {
+							var hash: Int = 0
+							hashCombine(seed: &hash, value: flag.hashValue)
+							hashCombine(seed: &hash, value: itemTypeID.hashValue)
+							hashCombine(seed: &hash, value: quantityDestroyed?.hashValue ?? 0)
+							hashCombine(seed: &hash, value: quantityDropped?.hashValue ?? 0)
+							hashCombine(seed: &hash, value: singleton.hashValue)
+							return hash
+						}
+						
+						public static func ==(lhs: Killmails.Killmail.Victim.Item.Item, rhs: Killmails.Killmail.Victim.Item.Item) -> Bool {
+							return lhs.hashValue == rhs.hashValue
+						}
+						
+						init(_ other: Killmails.Killmail.Victim.Item.Item) {
+							flag = other.flag
+							itemTypeID = other.itemTypeID
+							quantityDestroyed = other.quantityDestroyed
+							quantityDropped = other.quantityDropped
+							singleton = other.singleton
+						}
+						
+						public func copy(with zone: NSZone? = nil) -> Any {
+							return Killmails.Killmail.Victim.Item.Item(self)
+						}
+						
+						
+						public override func isEqual(_ object: Any?) -> Bool {
+							return (object as? Item)?.hashValue == hashValue
+						}
+						
+					}
+					
+					public var flag: Int = Int()
+					public var itemTypeID: Int = Int()
+					public var items: [Killmails.Killmail.Victim.Item.Item]? = nil
+					public var quantityDestroyed: Int64? = nil
+					public var quantityDropped: Int64? = nil
+					public var singleton: Int = Int()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
+					
+					public required init(json: Any) throws {
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						
+						guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.flag = flag
+						guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.itemTypeID = itemTypeID
+						items = try (dictionary["items"] as? [Any])?.map {try Killmails.Killmail.Victim.Item.Item(json: $0)}
+						quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
+						quantityDropped = dictionary["quantity_dropped"] as? Int64
+						guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.singleton = singleton
+						
+						super.init()
+					}
+					
+					override public init() {
+						super.init()
+					}
+					
+					public required init?(coder aDecoder: NSCoder) {
+						flag = aDecoder.decodeInteger(forKey: "flag")
+						itemTypeID = aDecoder.decodeInteger(forKey: "item_type_id")
+						items = aDecoder.decodeObject(of: [Killmails.Killmail.Victim.Item.Item.self], forKey: "items") as? [Killmails.Killmail.Victim.Item.Item]
+						quantityDestroyed = aDecoder.containsValue(forKey: "quantity_destroyed") ? aDecoder.decodeInt64(forKey: "quantity_destroyed") : nil
+						quantityDropped = aDecoder.containsValue(forKey: "quantity_dropped") ? aDecoder.decodeInt64(forKey: "quantity_dropped") : nil
+						singleton = aDecoder.decodeInteger(forKey: "singleton")
+						
+						super.init()
+					}
+					
+					public func encode(with aCoder: NSCoder) {
+						aCoder.encode(flag, forKey: "flag")
+						aCoder.encode(itemTypeID, forKey: "item_type_id")
+						if let v = items {
+							aCoder.encode(v, forKey: "items")
+						}
+						if let v = quantityDestroyed {
+							aCoder.encode(v, forKey: "quantity_destroyed")
+						}
+						if let v = quantityDropped {
+							aCoder.encode(v, forKey: "quantity_dropped")
+						}
+						aCoder.encode(singleton, forKey: "singleton")
+					}
+					
+					public var json: Any {
+						var json = [String: Any]()
+						json["flag"] = flag.json
+						json["item_type_id"] = itemTypeID.json
+						if let v = items?.json {
+							json["items"] = v
+						}
+						if let v = quantityDestroyed?.json {
+							json["quantity_destroyed"] = v
+						}
+						if let v = quantityDropped?.json {
+							json["quantity_dropped"] = v
+						}
+						json["singleton"] = singleton.json
+						return json
+					}
+					
+					override public var hashValue: Int {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: flag.hashValue)
+						hashCombine(seed: &hash, value: itemTypeID.hashValue)
+						items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+						hashCombine(seed: &hash, value: quantityDestroyed?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: quantityDropped?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: singleton.hashValue)
+						return hash
+					}
+					
+					public static func ==(lhs: Killmails.Killmail.Victim.Item, rhs: Killmails.Killmail.Victim.Item) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: Killmails.Killmail.Victim.Item) {
+						flag = other.flag
+						itemTypeID = other.itemTypeID
+						items = other.items?.flatMap { Killmails.Killmail.Victim.Item.Item($0) }
+						quantityDestroyed = other.quantityDestroyed
+						quantityDropped = other.quantityDropped
+						singleton = other.singleton
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Killmails.Killmail.Victim.Item(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? Item)?.hashValue == hashValue
+					}
+					
+				}
+				
+				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					
+					
+					public var x: Float = Float()
+					public var y: Float = Float()
+					public var z: Float = Float()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
+					
+					public required init(json: Any) throws {
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						
+						guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.x = x
+						guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.y = y
+						guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.z = z
+						
+						super.init()
+					}
+					
+					override public init() {
+						super.init()
+					}
+					
+					public required init?(coder aDecoder: NSCoder) {
+						x = aDecoder.decodeFloat(forKey: "x")
+						y = aDecoder.decodeFloat(forKey: "y")
+						z = aDecoder.decodeFloat(forKey: "z")
+						
+						super.init()
+					}
+					
+					public func encode(with aCoder: NSCoder) {
+						aCoder.encode(x, forKey: "x")
+						aCoder.encode(y, forKey: "y")
+						aCoder.encode(z, forKey: "z")
+					}
+					
+					public var json: Any {
+						var json = [String: Any]()
+						json["x"] = x.json
+						json["y"] = y.json
+						json["z"] = z.json
+						return json
+					}
+					
+					override public var hashValue: Int {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: x.hashValue)
+						hashCombine(seed: &hash, value: y.hashValue)
+						hashCombine(seed: &hash, value: z.hashValue)
+						return hash
+					}
+					
+					public static func ==(lhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition, rhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) {
+						x = other.x
+						y = other.y
+						z = other.z
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetKillmailsKillmailIDKillmailHashPosition)?.hashValue == hashValue
+					}
+					
+				}
+				
+				public var allianceID: Int? = nil
+				public var characterID: Int? = nil
+				public var corporationID: Int? = nil
+				public var damageTaken: Int = Int()
+				public var factionID: Int? = nil
+				public var items: [Killmails.Killmail.Victim.Item]? = nil
+				public var position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition? = nil
+				public var shipTypeID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					allianceID = dictionary["alliance_id"] as? Int
+					characterID = dictionary["character_id"] as? Int
+					corporationID = dictionary["corporation_id"] as? Int
+					guard let damageTaken = dictionary["damage_taken"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.damageTaken = damageTaken
+					factionID = dictionary["faction_id"] as? Int
+					items = try (dictionary["items"] as? [Any])?.map {try Killmails.Killmail.Victim.Item(json: $0)}
+					position = try? Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition(json: dictionary["position"] as? [String: Any] ?? [:])
+					guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.shipTypeID = shipTypeID
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
+					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
+					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
+					damageTaken = aDecoder.decodeInteger(forKey: "damage_taken")
+					factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
+					items = aDecoder.decodeObject(of: [Killmails.Killmail.Victim.Item.self], forKey: "items") as? [Killmails.Killmail.Victim.Item]
+					position = aDecoder.decodeObject(of: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition.self, forKey: "position") 
+					shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = allianceID {
+						aCoder.encode(v, forKey: "alliance_id")
+					}
+					if let v = characterID {
+						aCoder.encode(v, forKey: "character_id")
+					}
+					if let v = corporationID {
+						aCoder.encode(v, forKey: "corporation_id")
+					}
+					aCoder.encode(damageTaken, forKey: "damage_taken")
+					if let v = factionID {
+						aCoder.encode(v, forKey: "faction_id")
+					}
+					if let v = items {
+						aCoder.encode(v, forKey: "items")
+					}
+					if let v = position {
+						aCoder.encode(v, forKey: "position")
+					}
+					aCoder.encode(shipTypeID, forKey: "ship_type_id")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = allianceID?.json {
+						json["alliance_id"] = v
+					}
+					if let v = characterID?.json {
+						json["character_id"] = v
+					}
+					if let v = corporationID?.json {
+						json["corporation_id"] = v
+					}
+					json["damage_taken"] = damageTaken.json
+					if let v = factionID?.json {
+						json["faction_id"] = v
+					}
+					if let v = items?.json {
+						json["items"] = v
+					}
+					if let v = position?.json {
+						json["position"] = v
+					}
+					json["ship_type_id"] = shipTypeID.json
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageTaken.hashValue)
+					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+					items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: position?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: shipTypeID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Killmails.Killmail.Victim, rhs: Killmails.Killmail.Victim) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Killmails.Killmail.Victim) {
+					allianceID = other.allianceID
+					characterID = other.characterID
+					corporationID = other.corporationID
+					damageTaken = other.damageTaken
+					factionID = other.factionID
+					items = other.items?.flatMap { Killmails.Killmail.Victim.Item($0) }
+					position = other.position != nil ? Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition(other.position!) : nil
+					shipTypeID = other.shipTypeID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Killmails.Killmail.Victim(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? Victim)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public var attackers: [Killmails.Killmail.Attacker] = []
 			public var killmailID: Int = Int()
 			public var killmailTime: Date = Date()
 			public var moonID: Int? = nil
 			public var solarSystemID: Int = Int()
-			public var victim: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim = Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim()
+			public var victim: Killmails.Killmail.Victim = Killmails.Killmail.Victim()
 			public var warID: Int? = nil
 			
 			public static var supportsSecureCoding: Bool {
@@ -947,7 +813,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				attackers = try (dictionary["attackers"] as? [Any])?.map {try Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers(json: $0)} ?? []
+				attackers = try (dictionary["attackers"] as? [Any])?.map {try Killmails.Killmail.Attacker(json: $0)} ?? []
 				guard let killmailID = dictionary["killmail_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.killmailID = killmailID
 				guard let killmailTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["killmail_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
@@ -955,7 +821,7 @@ public extension ESI {
 				moonID = dictionary["moon_id"] as? Int
 				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				victim = try Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim(json: dictionary["victim"] as? [String: Any] ?? [:])
+				victim = try Killmails.Killmail.Victim(json: dictionary["victim"] as? [String: Any] ?? [:])
 				warID = dictionary["war_id"] as? Int
 				
 				super.init()
@@ -966,12 +832,12 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				attackers = aDecoder.decodeObject(of: [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers.self], forKey: "attackers") as? [Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers] ?? []
+				attackers = aDecoder.decodeObject(of: [Killmails.Killmail.Attacker.self], forKey: "attackers") as? [Killmails.Killmail.Attacker] ?? []
 				killmailID = aDecoder.decodeInteger(forKey: "killmail_id")
 				killmailTime = aDecoder.decodeObject(forKey: "killmail_time") as? Date ?? Date()
 				moonID = aDecoder.containsValue(forKey: "moon_id") ? aDecoder.decodeInteger(forKey: "moon_id") : nil
 				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				victim = aDecoder.decodeObject(of: Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim.self, forKey: "victim")  ?? Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim()
+				victim = aDecoder.decodeObject(of: Killmails.Killmail.Victim.self, forKey: "victim")  ?? Killmails.Killmail.Victim()
 				warID = aDecoder.containsValue(forKey: "war_id") ? aDecoder.decodeInteger(forKey: "war_id") : nil
 				
 				super.init()
@@ -1024,12 +890,12 @@ public extension ESI {
 			}
 			
 			init(_ other: Killmails.Killmail) {
-				attackers = other.attackers.flatMap { Killmails.Killmail.GetKillmailsKillmailIDKillmailHashAttackers($0) }
+				attackers = other.attackers.flatMap { Killmails.Killmail.Attacker($0) }
 				killmailID = other.killmailID
 				killmailTime = other.killmailTime
 				moonID = other.moonID
 				solarSystemID = other.solarSystemID
-				victim = Killmails.Killmail.GetKillmailsKillmailIDKillmailHashVictim(other.victim)
+				victim = Killmails.Killmail.Victim(other.victim)
 				warID = other.warID
 			}
 			
@@ -1040,73 +906,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Killmail)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetKillmailsKillmailIDKillmailHashInternalServerError: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError, rhs: Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Killmails.GetKillmailsKillmailIDKillmailHashInternalServerError(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetKillmailsKillmailIDKillmailHashInternalServerError)?.hashValue == hashValue
 			}
 			
 		}
