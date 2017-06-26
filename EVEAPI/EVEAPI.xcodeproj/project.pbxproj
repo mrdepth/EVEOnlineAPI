@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1203E8731F017D82009ADF8D /* ZKillboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203E8721F017D82009ADF8D /* ZKillboard.swift */; };
 		122071A41EF4188A007D86CE /* EVEGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122071A31EF4188A007D86CE /* EVEGlobal.swift */; };
 		122B55471EB601A000E46536 /* EVE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55461EB601A000E46536 /* EVE.swift */; };
 		122B55571EB7154F00E46536 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55531EB7154F00E46536 /* Account.swift */; };
@@ -66,6 +67,7 @@
 		1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESConstants.swift; sourceTree = "<group>"; };
 		1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESBookmark.swift; sourceTree = "<group>"; };
 		1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCalendar.swift; sourceTree = "<group>"; };
+		1203E8721F017D82009ADF8D /* ZKillboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZKillboard.swift; sourceTree = "<group>"; };
 		122071A31EF4188A007D86CE /* EVEGlobal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEGlobal.swift; sourceTree = "<group>"; };
 		122B55461EB601A000E46536 /* EVE.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVE.swift; sourceTree = "<group>"; };
 		122B55531EB7154F00E46536 /* Account.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -240,6 +242,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1203E8711F017D69009ADF8D /* zKillboard */ = {
+			isa = PBXGroup;
+			children = (
+				1203E8721F017D82009ADF8D /* ZKillboard.swift */,
+			);
+			name = zKillboard;
+			sourceTree = "<group>";
+		};
 		122B54F51EB600E700E46536 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -556,6 +566,7 @@
 				1288F01B1DEB8C5300FD7FBE /* EVEAPI */,
 				1295ED3C1DF6E1B50048C895 /* CREST */,
 				1295ED501DF85CAF0048C895 /* ESI */,
+				1203E8711F017D69009ADF8D /* zKillboard */,
 				12AB654F1DE9A994003AA683 /* EVEAPI.h */,
 				12AB65501DE9A994003AA683 /* Info.plist */,
 			);
@@ -695,6 +706,7 @@
 				126296111EEAD16C00796B27 /* Search.swift in Sources */,
 				126296171EEAD16C00796B27 /* Wallet.swift in Sources */,
 				1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */,
+				1203E8731F017D82009ADF8D /* ZKillboard.swift in Sources */,
 				126296151EEAD16C00796B27 /* Universe.swift in Sources */,
 				122B55471EB601A000E46536 /* EVE.swift in Sources */,
 				126295FE1EEAD16C00796B27 /* Character.swift in Sources */,
