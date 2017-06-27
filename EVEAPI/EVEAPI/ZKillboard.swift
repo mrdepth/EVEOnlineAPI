@@ -107,6 +107,12 @@ extension ZKillboard {
 		case descending
 	}
 	
+	private static let dateFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "yyyyMMddHH00"
+		return formatter
+	}()
+	
 	public enum Filter {
 		case characterID([Int64])
 		case corporationID([Int64])
@@ -118,6 +124,8 @@ extension ZKillboard {
 		case regionID([Int])
 		case warID([Int])
 		case iskValue(Int64)
+		case startTime(Date)
+		case endTime(Date)
 		case noItems
 		case noAttackers
 		case zkbOnly
@@ -149,6 +157,10 @@ extension ZKillboard {
 				return "warID/\(id.map{String($0)}.joined(separator: ","))"
 			case let .iskValue(id):
 				return "iskValue/\(id)"
+			case let .startTime(date):
+				return "startTime/\(dateFormatter.string(from: date))"
+			case let .endTime(date):
+				return "endTime/\(dateFormatter.string(from: date))"
 			case .noItems:
 				return "no-items"
 			case .noAttackers:
