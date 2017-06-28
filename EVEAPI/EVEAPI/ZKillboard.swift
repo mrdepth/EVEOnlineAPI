@@ -19,6 +19,16 @@ enum ZKillboardError: Error {
 	case invalidFormat(Any.Type, Any)
 }
 
+extension DateFormatter {
+	static var zKillboardDateFormatter: DateFormatter {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+		return dateFormatter
+	}
+}
+
 
 public class ZKillboard: SessionManager {
 	let baseURL = "https://zkillboard.com/api/"
@@ -728,7 +738,7 @@ extension ZKillboard {
 			attackers = try (dictionary["attackers"] as? [Any])?.map {try Killmail.Attacker(json: $0)} ?? []
 			guard let killmailID = dictionary["killID"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 			self.killmailID = killmailID
-			guard let killmailTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["killTime"] as? String ?? "") else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+			guard let killmailTime = DateFormatter.zKillboardDateFormatter.date(from: dictionary["killTime"] as? String ?? "") else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 			self.killmailTime = killmailTime
 			moonID = dictionary["moonID"] as? Int
 			guard let solarSystemID = dictionary["solarSystemID"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
