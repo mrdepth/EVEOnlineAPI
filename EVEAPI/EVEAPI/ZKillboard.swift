@@ -58,7 +58,7 @@ public class ZKillboard: SessionManager {
 		
 		let progress = Progress(totalUnitCount: 100)
 		
-		session?.request(url + args.joined(separator: "/") + "/", method: .get).downloadProgress { p in
+		session?.request(url + args.joined(separator: "/") + "/orderDirection/desc/", method: .get).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
 				completionBlock?(response.result)
@@ -118,9 +118,11 @@ extension ZKillboard {
 	}
 	
 	private static let dateFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "yyyyMMddHH00"
-		return formatter
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyyMMddHH00"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+		return dateFormatter
 	}()
 	
 	public enum Filter {
