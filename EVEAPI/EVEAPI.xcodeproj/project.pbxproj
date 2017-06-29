@@ -57,6 +57,7 @@
 		12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AB65891DEB3528003AA683 /* NSString+md5.m */; };
 		12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */; };
 		12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */; };
+		12CFDAF91F053D6700CC0762 /* rss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CFDAF81F053D6700CC0762 /* rss.swift */; };
 		12D39D0C1EF923C90077BD17 /* Eve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D39D0B1EF923C90077BD17 /* Eve.swift */; };
 		12D39D121EF949500077BD17 /* Contracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D39D111EF949500077BD17 /* Contracts.swift */; };
 /* End PBXBuildFile section */
@@ -226,6 +227,7 @@
 		12C1C98E1DFEE982004E9026 /* ESSkills.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESSkills.swift; sourceTree = "<group>"; };
 		12C1C9901DFEEDDD004E9026 /* ESSovereignty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESSovereignty.swift; sourceTree = "<group>"; };
 		12C1C9921DFEF1DC004E9026 /* ESUniverse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESUniverse.swift; sourceTree = "<group>"; };
+		12CFDAF81F053D6700CC0762 /* rss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rss.swift; sourceTree = "<group>"; };
 		12D39D0B1EF923C90077BD17 /* Eve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eve.swift; sourceTree = "<group>"; };
 		12D39D111EF949500077BD17 /* Contracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contracts.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -562,6 +564,7 @@
 		12AB654E1DE9A994003AA683 /* EVEAPI */ = {
 			isa = PBXGroup;
 			children = (
+				12CFDAF71F053D4E00CC0762 /* RSS */,
 				1288F01A1DEB8C3E00FD7FBE /* Utility */,
 				1288F01B1DEB8C5300FD7FBE /* EVEAPI */,
 				1295ED3C1DF6E1B50048C895 /* CREST */,
@@ -580,6 +583,14 @@
 				12AB65741DE9AB22003AA683 /* AFNetworking.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		12CFDAF71F053D4E00CC0762 /* RSS */ = {
+			isa = PBXGroup;
+			children = (
+				12CFDAF81F053D6700CC0762 /* rss.swift */,
+			);
+			name = RSS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -690,6 +701,7 @@
 				126295FC1EEAD16C00796B27 /* Bookmarks.swift in Sources */,
 				126296181EEAD16C00796B27 /* Wars.swift in Sources */,
 				126296101EEAD16C00796B27 /* Routes.swift in Sources */,
+				12CFDAF91F053D6700CC0762 /* rss.swift in Sources */,
 				126296081EEAD16C00796B27 /* Insurance.swift in Sources */,
 				126296161EEAD16C00796B27 /* UserInterface.swift in Sources */,
 				12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */,
