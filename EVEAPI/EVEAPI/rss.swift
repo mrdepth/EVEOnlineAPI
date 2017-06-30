@@ -41,7 +41,7 @@ public enum RSS {
 		}
 		
 		public init(rss: Any) throws {
-			guard let channel = rss["channel"] as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
+			guard let channel = (rss as? [String: Any])?["channel"] as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
 			title = channel["title"] as? String
 			feedDescription = channel["description"] as? String
 			copyright = channel["copyright"] as? String
@@ -52,11 +52,11 @@ public enum RSS {
 			super.init()
 		}
 
-		public init(rdf: [String: Any]) throws {
+		public init(rdf: Any) throws {
 			super.init()
 		}
 
-		public init(atom: [String: Any]) throws {
+		public init(atom: Any) throws {
 			super.init()
 		}
 
@@ -148,9 +148,31 @@ public enum RSS {
 	
 	public class Enclosure: NSObject, NSSecureCoding {
 		var url: URL?
-		var length: Int = 0
+		var length: Int?
 		var type: String?
 
+		public init(rss: Any) throws {
+			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
+			url = URL(string: dic["url"] as? String)
+			length = dic["length"] as? Int
+			type = dic["type"] as? String
+		}
+		
+		public init(rdf: Any) throws {
+			guard let dic = rdf as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rdf)}
+			url = URL(string: dic["url"] as? String)
+			length = dic["length"] as? Int
+			type = dic["type"] as? String
+		}
+		
+		public init(atom: Any) throws {
+			guard let dic = atom as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), atom)}
+			url = URL(string: dic["href"] as? String)
+			length = dic["length"] as? Int
+			type = dic["type"] as? String
+			super.init()
+		}
+		
 		public static var supportsSecureCoding: Bool {
 			return true
 		}
