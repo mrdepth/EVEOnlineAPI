@@ -16,7 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+		let data = try! Data(contentsOf: URL(fileURLWithPath: "/Users/shimanski/sample.atom"))
+		let obj = try! XMLParser.xmlObject(data: data)!
 		
+		try? RSS.Feed(json: obj)
 
 		return true
 	}
@@ -44,12 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-		return OAuth2Handler.handleOpenURL(url, clientID: "c2cc974798d4485d966fba773a8f7ef8", secretKey: "GNhSE9GJ6q3QiuPSTIJ8Q1J6on4ClM4v9zvc0Qzu", completionHandler: {result in
-			guard case let .success(token) = result else {return}
-			let s = NSKeyedArchiver.archivedData(withRootObject: token).base64EncodedString()
-			print ("\(s)")
-		})
-		//return OAuth2Handler.handleOpenURL(url)
+		return true
 	}
 
 

@@ -51,6 +51,10 @@ private class ASXMLElement: NSObject, XMLParserDelegate {
 			else {
 				var dictionary = [String: Any]()
 				
+				if !string.isEmpty {
+					dictionary["_"] = string
+				}
+				
 				for (key, value) in children {
 					if value.count == 1 {
 						dictionary[key] = value[0].object
@@ -90,6 +94,7 @@ extension XMLParser {
 		let parser = XMLParser(data:data)
 		let root = ASXMLElement(name: nil, attributes: nil, parser: parser)
 		parser.delegate = root
+		parser.shouldProcessNamespaces = true
 		if parser.parse() {
 			return root.object
 		}
