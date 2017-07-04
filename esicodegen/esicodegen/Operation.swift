@@ -64,7 +64,12 @@ class Operation {
 		var parameters = [Parameter]()
 		
 		for parameter in dictionary["parameters"] as? [[String: Any]] ?? [] {
-			parameters.append(try Parameter(parameter, parent: scope))
+			if let refName = (parameter["$ref"] as? String)?.components(separatedBy: "/").last, let ref = refParameters[refName] {
+				parameters.append(try Parameter(ref, parent: scope))
+			}
+			else {
+				parameters.append(try Parameter(parameter, parent: scope))
+			}
 		}
 		
 		self.parameters = parameters

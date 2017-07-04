@@ -191,6 +191,16 @@ let typeNames: [String: String] = [
 
 	//MARK: Wallet
 	"GetCharactersCharacterIDWalletsOk"	: "Balance",
+	"GetCharactersCharacterIDWalletTransactionsOk"	: "Transaction",
+	"GetCharactersCharacterIDWalletsJournalOk"	: "WalletsJournalItem",
+	"GetCharactersCharacterIDWalletJournalOk"	: "WalletJournalItem",
+	"GetCharactersCharacterIDWalletsJournalSecondPartyType"	: "PartyType",
+	"GetCharactersCharacterIDWalletsJournalFirstPartyType"	: "PartyType",
+	"GetCharactersCharacterIDWalletJournalRefType"	: "RefType",
+	"GetCharactersCharacterIDWalletJournalFirstPartyType"	: "PartyType",
+	"GetCharactersCharacterIDWalletJournalSecondPartyType"	: "PartyType",
+	"GetCharactersCharacterIDWalletJournalExtraInfo"	: "ExtraInfo",
+	
 
 	//MARK: Wars
 	"GetWarsWarIDOk"	: "WarInformation",

@@ -30,6 +30,9 @@ var allSchemes = [String: [Int:[Schema]]]()
 let globalScope = Scope(tag: "", parent: nil)
 scopes[""] = globalScope
 
+var refParameters: [String: [String: Any]]
+refParameters = swagger["parameters"] as? [String: [String: Any]] ?? [:]
+
 var definitions: [Schema]
 definitions = (swagger["definitions"] as? [String: [String: Any]])?.flatMap { i -> Schema? in
 	do {

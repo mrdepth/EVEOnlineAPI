@@ -39,6 +39,8 @@ enum Type {
             self = .integer
 		case ("integer"?, "int64"?):
 			self = .long
+		case ("integer"?, "float"?):
+			self = .float
 		case ("number"?, "float"?):
 			self = .float
 		case ("number"?, "double"?):
