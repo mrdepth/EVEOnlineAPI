@@ -101,10 +101,10 @@ public extension EVE {
 				
 				public func encode(with aCoder: NSCoder) {
 					aCoder.encode(accessMask, forKey: "accessMask")
-					aCoder.encode(callDescription, forKey: "callDescription")
+					aCoder.encode(callDescription, forKey: "description")
 					aCoder.encode(groupID, forKey: "groupID")
 					aCoder.encode(name, forKey: "name")
-					aCoder.encode(type.rawValue, forKey: "CallType")
+					aCoder.encode(type.rawValue, forKey: "type")
 				}
 				
 				public var json: Any {
@@ -187,7 +187,7 @@ public extension EVE {
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(groupDescription, forKey: "groupDescription")
+					aCoder.encode(groupDescription, forKey: "description")
 					aCoder.encode(groupID, forKey: "groupID")
 					aCoder.encode(groupName, forKey: "groupName")
 				}

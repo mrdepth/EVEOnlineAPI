@@ -156,10 +156,10 @@ class Property: Hashable {
 		}
 		else {
 			if case let .schema(name, namespace, _) = type, namespace.schema(name: name) is Enum {
-				return "aCoder.encode(\(propertyName).rawValue, forKey: \"\(name)\")"
+				return "aCoder.encode(\(propertyName).rawValue, forKey: \"\(key)\")"
 			}
 			else {
-				return "aCoder.encode(\(propertyName), forKey: \"\(name)\")"
+				return "aCoder.encode(\(propertyName), forKey: \"\(key)\")"
 			}
 		}
 	}

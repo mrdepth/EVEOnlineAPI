@@ -272,7 +272,7 @@ public extension EVE {
 					if let v = expires {
 						aCoder.encode(v, forKey: "expires")
 					}
-					aCoder.encode(type.rawValue, forKey: "APIKeyType")
+					aCoder.encode(type.rawValue, forKey: "type")
 				}
 				
 				public var json: Any {
@@ -600,7 +600,7 @@ public extension EVE {
 						aCoder.encode(v, forKey: "allianceName")
 					}
 					aCoder.encode(characterID, forKey: "characterID")
-					aCoder.encode(characterName, forKey: "characterName")
+					aCoder.encode(characterName, forKey: "name")
 					aCoder.encode(corporationID, forKey: "corporationID")
 					aCoder.encode(corporationName, forKey: "corporationName")
 					if let v = factionID {

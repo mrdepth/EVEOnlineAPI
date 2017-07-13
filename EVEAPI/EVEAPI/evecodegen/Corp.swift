@@ -1970,7 +1970,7 @@ public extension EVE {
 				public func encode(with aCoder: NSCoder) {
 					aCoder.encode(acceptorID, forKey: "acceptorID")
 					aCoder.encode(assigneeID, forKey: "assigneeID")
-					aCoder.encode(availability.rawValue, forKey: "Availability")
+					aCoder.encode(availability.rawValue, forKey: "availability")
 					aCoder.encode(buyout, forKey: "buyout")
 					aCoder.encode(collateral, forKey: "collateral")
 					aCoder.encode(contractID, forKey: "contractID")
@@ -1986,9 +1986,9 @@ public extension EVE {
 					aCoder.encode(price, forKey: "price")
 					aCoder.encode(reward, forKey: "reward")
 					aCoder.encode(startStationID, forKey: "startStationID")
-					aCoder.encode(status.rawValue, forKey: "Status")
+					aCoder.encode(status.rawValue, forKey: "status")
 					aCoder.encode(title, forKey: "title")
-					aCoder.encode(type.rawValue, forKey: "ContractType")
+					aCoder.encode(type.rawValue, forKey: "type")
 					aCoder.encode(volume, forKey: "volume")
 				}
 				
@@ -2476,7 +2476,7 @@ public extension EVE {
 					aCoder.encode(solarSystemName, forKey: "solarSystemName")
 					aCoder.encode(startDate, forKey: "startDate")
 					aCoder.encode(stationID, forKey: "stationID")
-					aCoder.encode(status.rawValue, forKey: "Status")
+					aCoder.encode(status.rawValue, forKey: "status")
 					aCoder.encode(successfulRuns, forKey: "successfulRuns")
 					aCoder.encode(teamID, forKey: "teamID")
 					aCoder.encode(timeInSeconds, forKey: "timeInSeconds")
@@ -3533,13 +3533,13 @@ public extension EVE {
 				public func encode(with aCoder: NSCoder) {
 					aCoder.encode(accountKey, forKey: "accountKey")
 					aCoder.encode(bid, forKey: "bid")
-					aCoder.encode(characterID, forKey: "characterID")
+					aCoder.encode(characterID, forKey: "charID")
 					aCoder.encode(duration, forKey: "duration")
 					aCoder.encode(escrow, forKey: "escrow")
 					aCoder.encode(issued, forKey: "issued")
 					aCoder.encode(minVolume, forKey: "minVolume")
 					aCoder.encode(orderID, forKey: "orderID")
-					aCoder.encode(orderState.rawValue, forKey: "State")
+					aCoder.encode(orderState.rawValue, forKey: "orderState")
 					aCoder.encode(price, forKey: "price")
 					aCoder.encode(range, forKey: "range")
 					aCoder.encode(stationID, forKey: "stationID")
@@ -3766,7 +3766,7 @@ public extension EVE {
 					}
 					aCoder.encode(medalID, forKey: "medalID")
 					aCoder.encode(reason, forKey: "reason")
-					aCoder.encode(status.rawValue, forKey: "Status")
+					aCoder.encode(status.rawValue, forKey: "status")
 					if let v = title {
 						aCoder.encode(v, forKey: "title")
 					}
@@ -4462,9 +4462,9 @@ public extension EVE {
 					aCoder.encode(stationID, forKey: "stationID")
 					aCoder.encode(stationName, forKey: "stationName")
 					aCoder.encode(transactionDateTime, forKey: "transactionDateTime")
-					aCoder.encode(transactionFor.rawValue, forKey: "ClientType")
+					aCoder.encode(transactionFor.rawValue, forKey: "transactionFor")
 					aCoder.encode(transactionID, forKey: "transactionID")
-					aCoder.encode(transactionType.rawValue, forKey: "TransactionType")
+					aCoder.encode(transactionType.rawValue, forKey: "transactionType")
 					aCoder.encode(typeID, forKey: "typeID")
 					aCoder.encode(typeName, forKey: "typeName")
 				}
