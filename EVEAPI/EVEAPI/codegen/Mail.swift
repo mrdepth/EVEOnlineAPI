@@ -917,7 +917,7 @@ public extension ESI {
 		
 		public class MailLabelsAndUnreadCounts: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDMailLabelsLabels: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 					case h0000fe = "#0000fe"
@@ -958,7 +958,7 @@ public extension ESI {
 					
 				}
 				
-				public var color: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.GetCharactersCharacterIDMailLabelsColor? = nil
+				public var color: Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor? = nil
 				public var labelID: Int? = nil
 				public var name: String? = nil
 				public var unreadCount: Int? = nil
@@ -970,7 +970,7 @@ public extension ESI {
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 					
-					color = Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.GetCharactersCharacterIDMailLabelsColor(rawValue: dictionary["color"] as? String ?? "")
+					color = Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor(rawValue: dictionary["color"] as? String ?? "")
 					labelID = dictionary["label_id"] as? Int
 					name = dictionary["name"] as? String
 					unreadCount = dictionary["unread_count"] as? Int
@@ -983,7 +983,7 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					color = Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.GetCharactersCharacterIDMailLabelsColor(rawValue: aDecoder.decodeObject(forKey: "color") as? String ?? "")
+					color = Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor(rawValue: aDecoder.decodeObject(forKey: "color") as? String ?? "")
 					labelID = aDecoder.containsValue(forKey: "label_id") ? aDecoder.decodeInteger(forKey: "label_id") : nil
 					name = aDecoder.decodeObject(forKey: "name") as? String
 					unreadCount = aDecoder.containsValue(forKey: "unread_count") ? aDecoder.decodeInteger(forKey: "unread_count") : nil
@@ -1032,11 +1032,11 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels, rhs: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels) -> Bool {
+				public static func ==(lhs: Mail.MailLabelsAndUnreadCounts.Label, rhs: Mail.MailLabelsAndUnreadCounts.Label) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels) {
+				init(_ other: Mail.MailLabelsAndUnreadCounts.Label) {
 					color = other.color
 					labelID = other.labelID
 					name = other.name
@@ -1044,17 +1044,17 @@ public extension ESI {
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
-					return Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels(self)
+					return Mail.MailLabelsAndUnreadCounts.Label(self)
 				}
 				
 				
 				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDMailLabelsLabels)?.hashValue == hashValue
+					return (object as? Label)?.hashValue == hashValue
 				}
 				
 			}
 			
-			public var labels: [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]? = nil
+			public var labels: [Mail.MailLabelsAndUnreadCounts.Label]? = nil
 			public var totalUnreadCount: Int? = nil
 			
 			public static var supportsSecureCoding: Bool {
@@ -1064,7 +1064,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				labels = try (dictionary["labels"] as? [Any])?.map {try Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels(json: $0)}
+				labels = try (dictionary["labels"] as? [Any])?.map {try Mail.MailLabelsAndUnreadCounts.Label(json: $0)}
 				totalUnreadCount = dictionary["total_unread_count"] as? Int
 				
 				super.init()
@@ -1075,7 +1075,7 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				labels = aDecoder.decodeObject(of: [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels.self], forKey: "labels") as? [Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels]
+				labels = aDecoder.decodeObject(of: [Mail.MailLabelsAndUnreadCounts.Label.self], forKey: "labels") as? [Mail.MailLabelsAndUnreadCounts.Label]
 				totalUnreadCount = aDecoder.containsValue(forKey: "total_unread_count") ? aDecoder.decodeInteger(forKey: "total_unread_count") : nil
 				
 				super.init()
@@ -1113,7 +1113,7 @@ public extension ESI {
 			}
 			
 			init(_ other: Mail.MailLabelsAndUnreadCounts) {
-				labels = other.labels?.flatMap { Mail.MailLabelsAndUnreadCounts.GetCharactersCharacterIDMailLabelsLabels($0) }
+				labels = other.labels?.flatMap { Mail.MailLabelsAndUnreadCounts.Label($0) }
 				totalUnreadCount = other.totalUnreadCount
 			}
 			
