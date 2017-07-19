@@ -223,7 +223,7 @@ public extension ESI {
 		
 		public class Job: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDIndustryJobsStatus: String, JSONCoding, HTTPQueryable {
+			public enum Status: String, JSONCoding, HTTPQueryable {
 				case active = "active"
 				case cancelled = "cancelled"
 				case delivered = "delivered"
@@ -240,7 +240,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDIndustryJobsStatus(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Status(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -270,7 +270,7 @@ public extension ESI {
 			public var runs: Int = Int()
 			public var startDate: Date = Date()
 			public var stationID: Int64 = Int64()
-			public var status: Industry.Job.GetCharactersCharacterIDIndustryJobsStatus = Industry.Job.GetCharactersCharacterIDIndustryJobsStatus()
+			public var status: Industry.Job.Status = Industry.Job.Status()
 			public var successfulRuns: Int? = nil
 			
 			public static var supportsSecureCoding: Bool {
@@ -313,7 +313,7 @@ public extension ESI {
 				self.startDate = startDate
 				guard let stationID = dictionary["station_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.stationID = stationID
-				guard let status = Industry.Job.GetCharactersCharacterIDIndustryJobsStatus(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let status = Industry.Job.Status(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.status = status
 				successfulRuns = dictionary["successful_runs"] as? Int
 				
@@ -345,7 +345,7 @@ public extension ESI {
 				runs = aDecoder.decodeInteger(forKey: "runs")
 				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date ?? Date()
 				stationID = aDecoder.decodeInt64(forKey: "station_id")
-				status = Industry.Job.GetCharactersCharacterIDIndustryJobsStatus(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? "") ?? Industry.Job.GetCharactersCharacterIDIndustryJobsStatus()
+				status = Industry.Job.Status(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? "") ?? Industry.Job.Status()
 				successfulRuns = aDecoder.containsValue(forKey: "successful_runs") ? aDecoder.decodeInteger(forKey: "successful_runs") : nil
 				
 				super.init()

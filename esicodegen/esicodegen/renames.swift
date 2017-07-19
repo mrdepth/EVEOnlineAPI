@@ -99,6 +99,7 @@ let typeNames: [String: String] = [
 	"GetIndustryFacilitiesOk"	: "Facilities",
 	"GetIndustrySystemsOk"	: "SolarSystemCostIndices",
 	"GetCharactersCharacterIDIndustryJobsOk"    : "Job",
+	"GetCharactersCharacterIDIndustryJobsStatus"	: "Status",
 
 	//MARK: Insurance
 	"GetInsurancePricesOk"	: "Price",

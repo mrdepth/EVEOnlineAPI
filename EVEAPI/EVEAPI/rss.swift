@@ -360,7 +360,24 @@ public enum RSS {
 		public init(atom: Any) throws {
 			guard let dic = atom as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), atom)}
 			title = (dic["title"] as? String) ?? (dic["title"] as? [String: Any])?["_"] as? String
-			link = URL(string: (dic["link"] as? [String: Any])?["href"] as? String)
+			
+			link = {
+				guard let link = dic["link"] else {return nil}
+				switch link {
+				case let s as String:
+					return URL(string: s)
+				case let dic as [String: Any]:
+					return URL(string: (dic["href"] ?? dic["_"]) as? String)
+				case let array as [[String: Any]]:
+					let i = array.first {$0["rel"] as? String == "alternate"} ?? array.first
+					return URL(string: (i?["href"] ?? i?["_"]) as? String)
+				case let array as [String]:
+					return URL(string: array.first)
+				default:
+					return nil
+				}
+			}()
+			
 			if let content = dic["content"],
 				let text = content as? String ?? (content as? [String: Any])?["_"] as? String {
 					summary = text
