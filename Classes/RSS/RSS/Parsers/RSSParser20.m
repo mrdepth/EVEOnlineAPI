@@ -83,6 +83,10 @@
 		if ([object respondsToSelector:@selector(setDescription:)])
 			[object setDescription:self.text];
 	}
+	else if ([elementName compare:@"summary" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
+		if ([object respondsToSelector:@selector(setDescription:)])
+			[object setDescription:self.text];
+	}
 	else if ([elementName compare:@"language" options:NSCaseInsensitiveSearch] == NSOrderedSame) {
 		if ([object respondsToSelector:@selector(setLanguage:)])
 			[object setLanguage:self.text];
