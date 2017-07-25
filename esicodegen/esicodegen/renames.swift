@@ -73,9 +73,11 @@ let typeNames: [String: String] = [
 	"GetDogmaAttributesAttributeIDOk"	: "Attribute",
 
 	//MARK: Fittings
-	"PostCharactersCharacterIDFittingsFitting"	: "PostFitting",
-	"PostCharactersCharacterIDFittingsCreated"	: "PostFittingResult",
+	"PostCharactersCharacterIDFittingsFitting"	: "MutableFitting",
+	"PostCharactersCharacterIDFittingsCreated"	: "CreateFittingResult",
 	"GetCharactersCharacterIDFittingsOk"	: "Fitting",
+	"PostCharactersCharacterIDFittingsItems"	: "Item",
+	"GetCharactersCharacterIDFittingsItems"	: "Item",
 
 	//MARK: Fleets
 	"PutFleetsFleetIDNewSettings"	: "FleetUpdate",
