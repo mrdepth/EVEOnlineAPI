@@ -21,7 +21,26 @@ guard let data = try? Data.init(contentsOf: URL(fileURLWithPath: CommandLine.arg
 	exit(1)
 }
 
-guard let swagger = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {exit(1)}
+guard var swagger = (try? JSONSerialization.jsonObject(with: data, options: [.mutableContainers])) as? [String: Any] else {exit(1)}
+
+//Patch
+do {
+	let keyPath = "paths./characters/{character_id}/assets/.get.responses.200.schema.items.properties.location_flag.enum"
+	var array = (swagger as NSDictionary).value(forKeyPath: keyPath) as! [String]
+	array.append(contentsOf: ["StructureServiceSlot0",
+	                          "StructureServiceSlot1",
+	                          "StructureServiceSlot2",
+	                          "StructureServiceSlot3",
+	                          "StructureServiceSlot4",
+	                          "StructureServiceSlot5",
+	                          "StructureServiceSlot6",
+	                          "StructureServiceSlot7",
+	                          "StructureFuel"])
+	let dic = (swagger as NSDictionary).mutableCopy() as! NSMutableDictionary
+	dic.setValue(array, forKeyPath: keyPath)
+	swagger = dic as! [String: Any]
+}
+
 
 var scopes = [String: Scope]()
 var paths = [Path]()
@@ -138,3 +157,4 @@ for (_, scope) in scopes {
 //print("\(namespaces[["Search"]]!.map{$0.typePath.joined(separator: ".")})")
 
 //print ("\(Array(allSchemes.keys))")
+
