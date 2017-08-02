@@ -184,7 +184,7 @@ extension ZKillboard {
 			case .losses:
 				return "losses"
 			case .wSpace:
-				return "wSpace"
+				return "w-space"
 			case .solo:
 				return "solo"
 			case .finalBlowOnly:
