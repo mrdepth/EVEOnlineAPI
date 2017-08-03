@@ -213,7 +213,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getCharacterCorporationRoles(characterID: Int, completionBlock:((Result<[Character.GetCharactersCharacterIDRolesOk]>) -> Void)?) {
+		public func getCharacterCorporationRoles(characterID: Int, completionBlock:((Result<[Character.Role]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -240,7 +240,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDRolesOk]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Character.Role]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -402,6 +402,39 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Character.Information>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getJumpFatigue(characterID: Int, completionBlock:((Result<Character.Fatigue>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_fatigue.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/characters/\(characterID)/fatigue/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Character.Fatigue>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -642,6 +675,95 @@ public extension ESI {
 		}
 		
 		
+		public class Fatigue: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var jumpFatigueExpireDate: Date? = nil
+			public var lastJumpDate: Date? = nil
+			public var lastUpdateDate: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				jumpFatigueExpireDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["jump_fatigue_expire_date"] as? String ?? "")
+				lastJumpDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_jump_date"] as? String ?? "")
+				lastUpdateDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_update_date"] as? String ?? "")
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				jumpFatigueExpireDate = aDecoder.decodeObject(forKey: "jump_fatigue_expire_date") as? Date
+				lastJumpDate = aDecoder.decodeObject(forKey: "last_jump_date") as? Date
+				lastUpdateDate = aDecoder.decodeObject(forKey: "last_update_date") as? Date
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = jumpFatigueExpireDate {
+					aCoder.encode(v, forKey: "jump_fatigue_expire_date")
+				}
+				if let v = lastJumpDate {
+					aCoder.encode(v, forKey: "last_jump_date")
+				}
+				if let v = lastUpdateDate {
+					aCoder.encode(v, forKey: "last_update_date")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = jumpFatigueExpireDate?.json {
+					json["jump_fatigue_expire_date"] = v
+				}
+				if let v = lastJumpDate?.json {
+					json["last_jump_date"] = v
+				}
+				if let v = lastUpdateDate?.json {
+					json["last_update_date"] = v
+				}
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: jumpFatigueExpireDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: lastJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: lastUpdateDate?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Fatigue, rhs: Character.Fatigue) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Character.Fatigue) {
+				jumpFatigueExpireDate = other.jumpFatigueExpireDate
+				lastJumpDate = other.lastJumpDate
+				lastUpdateDate = other.lastUpdateDate
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Character.Fatigue(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Fatigue)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class Characters: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -700,78 +822,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Characters)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public enum GetCharactersCharacterIDRolesOk: String, JSONCoding, HTTPQueryable {
-			case accountTake1 = "Account_Take_1"
-			case accountTake2 = "Account_Take_2"
-			case accountTake3 = "Account_Take_3"
-			case accountTake4 = "Account_Take_4"
-			case accountTake5 = "Account_Take_5"
-			case accountTake6 = "Account_Take_6"
-			case accountTake7 = "Account_Take_7"
-			case accountant = "Accountant"
-			case auditor = "Auditor"
-			case communicationsOfficer = "Communications_Officer"
-			case configEquipment = "Config_Equipment"
-			case configStarbaseEquipment = "Config_Starbase_Equipment"
-			case containerTake1 = "Container_Take_1"
-			case containerTake2 = "Container_Take_2"
-			case containerTake3 = "Container_Take_3"
-			case containerTake4 = "Container_Take_4"
-			case containerTake5 = "Container_Take_5"
-			case containerTake6 = "Container_Take_6"
-			case containerTake7 = "Container_Take_7"
-			case contractManager = "Contract_Manager"
-			case diplomat = "Diplomat"
-			case director = "Director"
-			case factoryManager = "Factory_Manager"
-			case fittingManager = "Fitting_Manager"
-			case hangarQuery1 = "Hangar_Query_1"
-			case hangarQuery2 = "Hangar_Query_2"
-			case hangarQuery3 = "Hangar_Query_3"
-			case hangarQuery4 = "Hangar_Query_4"
-			case hangarQuery5 = "Hangar_Query_5"
-			case hangarQuery6 = "Hangar_Query_6"
-			case hangarQuery7 = "Hangar_Query_7"
-			case hangarTake1 = "Hangar_Take_1"
-			case hangarTake2 = "Hangar_Take_2"
-			case hangarTake3 = "Hangar_Take_3"
-			case hangarTake4 = "Hangar_Take_4"
-			case hangarTake5 = "Hangar_Take_5"
-			case hangarTake6 = "Hangar_Take_6"
-			case hangarTake7 = "Hangar_Take_7"
-			case juniorAccountant = "Junior_Accountant"
-			case personnelManager = "Personnel_Manager"
-			case rentFactoryFacility = "Rent_Factory_Facility"
-			case rentOffice = "Rent_Office"
-			case rentResearchFacility = "Rent_Research_Facility"
-			case securityOfficer = "Security_Officer"
-			case starbaseDefenseOperator = "Starbase_Defense_Operator"
-			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-			case stationManager = "Station_Manager"
-			case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-			case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-			case trader = "Trader"
-			
-			public init() {
-				self = .director
-			}
-			
-			public var json: Any {
-				return self.rawValue
-			}
-			
-			public init(json: Any) throws {
-				guard let s = json as? String, let v = GetCharactersCharacterIDRolesOk(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-				self = v
-			}
-			
-			public var httpQuery: String? {
-				return rawValue
 			}
 			
 		}
@@ -2160,6 +2210,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Name)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public enum Role: String, JSONCoding, HTTPQueryable {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+			case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+			case trader = "Trader"
+			
+			public init() {
+				self = .director
+			}
+			
+			public var json: Any {
+				return self.rawValue
+			}
+			
+			public init(json: Any) throws {
+				guard let s = json as? String, let v = Role(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				self = v
+			}
+			
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
 		}

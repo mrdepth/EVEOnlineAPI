@@ -151,6 +151,7 @@ public extension ESI {
 				case structureServiceSlot5 = "StructureServiceSlot5"
 				case structureServiceSlot6 = "StructureServiceSlot6"
 				case structureServiceSlot7 = "StructureServiceSlot7"
+				case subSystemBay = "SubSystemBay"
 				case subSystemSlot0 = "SubSystemSlot0"
 				case subSystemSlot1 = "SubSystemSlot1"
 				case subSystemSlot2 = "SubSystemSlot2"

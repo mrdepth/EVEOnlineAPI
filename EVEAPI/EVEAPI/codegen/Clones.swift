@@ -47,38 +47,48 @@ public extension ESI {
 			}
 		}
 		
+		public func getActiveImplants(characterID: Int, completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-clones.read_implants.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/characters/\(characterID)/implants/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		
 		public class JumpClones: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDClonesLocationType: String, JSONCoding, HTTPQueryable {
-				case station = "station"
-				case structure = "structure"
-				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDClonesLocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public class GetCharactersCharacterIDClonesJumpClones: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class JumpClone: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var implants: [Int]? = nil
 				public var locationID: Int64? = nil
-				public var locationType: Clones.JumpClones.GetCharactersCharacterIDClonesLocationType? = nil
+				public var locationType: Clones.JumpClones.LocationType? = nil
 				
 				public static var supportsSecureCoding: Bool {
 					return true
@@ -89,7 +99,7 @@ public extension ESI {
 					
 					implants = try (dictionary["implants"] as? [Any])?.map {try Int(json: $0)}
 					locationID = dictionary["location_id"] as? Int64
-					locationType = Clones.JumpClones.GetCharactersCharacterIDClonesLocationType(rawValue: dictionary["location_type"] as? String ?? "")
+					locationType = Clones.JumpClones.LocationType(rawValue: dictionary["location_type"] as? String ?? "")
 					
 					super.init()
 				}
@@ -101,7 +111,7 @@ public extension ESI {
 				public required init?(coder aDecoder: NSCoder) {
 					implants = aDecoder.decodeObject(forKey: "implants") as? [Int]
 					locationID = aDecoder.containsValue(forKey: "location_id") ? aDecoder.decodeInt64(forKey: "location_id") : nil
-					locationType = Clones.JumpClones.GetCharactersCharacterIDClonesLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "")
+					locationType = Clones.JumpClones.LocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "")
 					
 					super.init()
 				}
@@ -140,32 +150,32 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones, rhs: Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones) -> Bool {
+				public static func ==(lhs: Clones.JumpClones.JumpClone, rhs: Clones.JumpClones.JumpClone) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones) {
+				init(_ other: Clones.JumpClones.JumpClone) {
 					implants = other.implants?.flatMap { $0 }
 					locationID = other.locationID
 					locationType = other.locationType
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
-					return Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones(self)
+					return Clones.JumpClones.JumpClone(self)
 				}
 				
 				
 				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDClonesJumpClones)?.hashValue == hashValue
+					return (object as? JumpClone)?.hashValue == hashValue
 				}
 				
 			}
 			
-			public class GetCharactersCharacterIDClonesHomeLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Location: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var locationID: Int64? = nil
-				public var locationType: Clones.JumpClones.GetCharactersCharacterIDClonesLocationType? = nil
+				public var locationType: Clones.JumpClones.LocationType? = nil
 				
 				public static var supportsSecureCoding: Bool {
 					return true
@@ -175,7 +185,7 @@ public extension ESI {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 					
 					locationID = dictionary["location_id"] as? Int64
-					locationType = Clones.JumpClones.GetCharactersCharacterIDClonesLocationType(rawValue: dictionary["location_type"] as? String ?? "")
+					locationType = Clones.JumpClones.LocationType(rawValue: dictionary["location_type"] as? String ?? "")
 					
 					super.init()
 				}
@@ -186,7 +196,7 @@ public extension ESI {
 				
 				public required init?(coder aDecoder: NSCoder) {
 					locationID = aDecoder.containsValue(forKey: "location_id") ? aDecoder.decodeInt64(forKey: "location_id") : nil
-					locationType = Clones.JumpClones.GetCharactersCharacterIDClonesLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "")
+					locationType = Clones.JumpClones.LocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "")
 					
 					super.init()
 				}
@@ -218,28 +228,51 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation, rhs: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation) -> Bool {
+				public static func ==(lhs: Clones.JumpClones.Location, rhs: Clones.JumpClones.Location) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation) {
+				init(_ other: Clones.JumpClones.Location) {
 					locationID = other.locationID
 					locationType = other.locationType
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
-					return Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation(self)
+					return Clones.JumpClones.Location(self)
 				}
 				
 				
 				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDClonesHomeLocation)?.hashValue == hashValue
+					return (object as? Location)?.hashValue == hashValue
 				}
 				
 			}
 			
-			public var homeLocation: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation? = nil
-			public var jumpClones: [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones] = []
+			public enum LocationType: String, JSONCoding, HTTPQueryable {
+				case station = "station"
+				case structure = "structure"
+				
+				public init() {
+					self = .station
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = LocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var homeLocation: Clones.JumpClones.Location? = nil
+			public var jumpClones: [Clones.JumpClones.JumpClone] = []
 			public var lastJumpDate: Date? = nil
 			
 			public static var supportsSecureCoding: Bool {
@@ -249,8 +282,8 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				homeLocation = try? Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation(json: dictionary["home_location"] as? [String: Any] ?? [:])
-				jumpClones = try (dictionary["jump_clones"] as? [Any])?.map {try Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones(json: $0)} ?? []
+				homeLocation = try? Clones.JumpClones.Location(json: dictionary["home_location"] as? [String: Any] ?? [:])
+				jumpClones = try (dictionary["jump_clones"] as? [Any])?.map {try Clones.JumpClones.JumpClone(json: $0)} ?? []
 				lastJumpDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_jump_date"] as? String ?? "")
 				
 				super.init()
@@ -261,8 +294,8 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				homeLocation = aDecoder.decodeObject(of: Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation.self, forKey: "home_location") 
-				jumpClones = aDecoder.decodeObject(of: [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones.self], forKey: "jump_clones") as? [Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones] ?? []
+				homeLocation = aDecoder.decodeObject(of: Clones.JumpClones.Location.self, forKey: "home_location") 
+				jumpClones = aDecoder.decodeObject(of: [Clones.JumpClones.JumpClone.self], forKey: "jump_clones") as? [Clones.JumpClones.JumpClone] ?? []
 				lastJumpDate = aDecoder.decodeObject(forKey: "last_jump_date") as? Date
 				
 				super.init()
@@ -303,8 +336,8 @@ public extension ESI {
 			}
 			
 			init(_ other: Clones.JumpClones) {
-				homeLocation = other.homeLocation != nil ? Clones.JumpClones.GetCharactersCharacterIDClonesHomeLocation(other.homeLocation!) : nil
-				jumpClones = other.jumpClones.flatMap { Clones.JumpClones.GetCharactersCharacterIDClonesJumpClones($0) }
+				homeLocation = other.homeLocation != nil ? Clones.JumpClones.Location(other.homeLocation!) : nil
+				jumpClones = other.jumpClones.flatMap { Clones.JumpClones.JumpClone($0) }
 				lastJumpDate = other.lastJumpDate
 			}
 			

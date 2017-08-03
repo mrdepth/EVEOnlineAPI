@@ -215,12 +215,12 @@ public extension ESI.Scope {
 		get {
 			return [
 //				.characterAccountRead,
-				.characterClonesRead,
+//				.characterClonesRead,
 //				.characterIndustryJobsRead,
 //				.characterMarketOrdersRead,
 //				.characterSkillsRead,
 //				.characterContractsRead,
-				.characterStatsRead,
+//				.characterStatsRead,
 				.characterWalletRead,
 				.esiClonesReadClonesV1,
 				.esiFittingsWriteFittingsV1,
@@ -252,6 +252,9 @@ public extension ESI.Scope {
 				.esiIndustryReadCharacterJobsV1,
 				.esiCharactersReadBlueprintsV1,
 				.esiContractsReadCharacterContractsV1,
+				
+				.esiClonesReadImplantsV1,
+
 			]
 		}
 	}

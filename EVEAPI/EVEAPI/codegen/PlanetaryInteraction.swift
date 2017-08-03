@@ -115,7 +115,7 @@ public extension ESI {
 		
 		public class Colony: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDPlanetsPlanetType: String, JSONCoding, HTTPQueryable {
+			public enum PlanetType: String, JSONCoding, HTTPQueryable {
 				case barren = "barren"
 				case gas = "gas"
 				case ice = "ice"
@@ -134,7 +134,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDPlanetsPlanetType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = PlanetType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
 					self = v
 				}
 				
@@ -148,7 +148,7 @@ public extension ESI {
 			public var numPins: Int = Int()
 			public var ownerID: Int = Int()
 			public var planetID: Int = Int()
-			public var planetType: PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType = PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType()
+			public var planetType: PlanetaryInteraction.Colony.PlanetType = PlanetaryInteraction.Colony.PlanetType()
 			public var solarSystemID: Int = Int()
 			public var upgradeLevel: Int = Int()
 			
@@ -167,7 +167,7 @@ public extension ESI {
 				self.ownerID = ownerID
 				guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.planetID = planetID
-				guard let planetType = PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType(rawValue: dictionary["planet_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let planetType = PlanetaryInteraction.Colony.PlanetType(rawValue: dictionary["planet_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.planetType = planetType
 				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
@@ -186,7 +186,7 @@ public extension ESI {
 				numPins = aDecoder.decodeInteger(forKey: "num_pins")
 				ownerID = aDecoder.decodeInteger(forKey: "owner_id")
 				planetID = aDecoder.decodeInteger(forKey: "planet_id")
-				planetType = PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType(rawValue: aDecoder.decodeObject(forKey: "planet_type") as? String ?? "") ?? PlanetaryInteraction.Colony.GetCharactersCharacterIDPlanetsPlanetType()
+				planetType = PlanetaryInteraction.Colony.PlanetType(rawValue: aDecoder.decodeObject(forKey: "planet_type") as? String ?? "") ?? PlanetaryInteraction.Colony.PlanetType()
 				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
 				upgradeLevel = aDecoder.decodeInteger(forKey: "upgrade_level")
 				
@@ -389,11 +389,187 @@ public extension ESI {
 		
 		public class ColonyLayout: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDPins: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Route: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class Waypoint: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
-					public class GetCharactersCharacterIDPlanetsPlanetIDHeads: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					
+					public var order: Int = Int()
+					public var pinID: Int64 = Int64()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
+					
+					public required init(json: Any) throws {
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						
+						guard let order = dictionary["order"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.order = order
+						guard let pinID = dictionary["pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.pinID = pinID
+						
+						super.init()
+					}
+					
+					override public init() {
+						super.init()
+					}
+					
+					public required init?(coder aDecoder: NSCoder) {
+						order = aDecoder.decodeInteger(forKey: "order")
+						pinID = aDecoder.decodeInt64(forKey: "pin_id")
+						
+						super.init()
+					}
+					
+					public func encode(with aCoder: NSCoder) {
+						aCoder.encode(order, forKey: "order")
+						aCoder.encode(pinID, forKey: "pin_id")
+					}
+					
+					public var json: Any {
+						var json = [String: Any]()
+						json["order"] = order.json
+						json["pin_id"] = pinID.json
+						return json
+					}
+					
+					override public var hashValue: Int {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: order.hashValue)
+						hashCombine(seed: &hash, value: pinID.hashValue)
+						return hash
+					}
+					
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route.Waypoint, rhs: PlanetaryInteraction.ColonyLayout.Route.Waypoint) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: PlanetaryInteraction.ColonyLayout.Route.Waypoint) {
+						order = other.order
+						pinID = other.pinID
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return PlanetaryInteraction.ColonyLayout.Route.Waypoint(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? Waypoint)?.hashValue == hashValue
+					}
+					
+				}
+				
+				public var contentTypeID: Int = Int()
+				public var destinationPinID: Int64 = Int64()
+				public var quantity: Float = Float()
+				public var routeID: Int64 = Int64()
+				public var sourcePinID: Int64 = Int64()
+				public var waypoints: [PlanetaryInteraction.ColonyLayout.Route.Waypoint]? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let contentTypeID = dictionary["content_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.contentTypeID = contentTypeID
+					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.destinationPinID = destinationPinID
+					guard let quantity = dictionary["quantity"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.quantity = quantity
+					guard let routeID = dictionary["route_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.routeID = routeID
+					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.sourcePinID = sourcePinID
+					waypoints = try (dictionary["waypoints"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Route.Waypoint(json: $0)}
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					contentTypeID = aDecoder.decodeInteger(forKey: "content_type_id")
+					destinationPinID = aDecoder.decodeInt64(forKey: "destination_pin_id")
+					quantity = aDecoder.decodeFloat(forKey: "quantity")
+					routeID = aDecoder.decodeInt64(forKey: "route_id")
+					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
+					waypoints = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Route.Waypoint.self], forKey: "waypoints") as? [PlanetaryInteraction.ColonyLayout.Route.Waypoint]
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(contentTypeID, forKey: "content_type_id")
+					aCoder.encode(destinationPinID, forKey: "destination_pin_id")
+					aCoder.encode(quantity, forKey: "quantity")
+					aCoder.encode(routeID, forKey: "route_id")
+					aCoder.encode(sourcePinID, forKey: "source_pin_id")
+					if let v = waypoints {
+						aCoder.encode(v, forKey: "waypoints")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["content_type_id"] = contentTypeID.json
+					json["destination_pin_id"] = destinationPinID.json
+					json["quantity"] = quantity.json
+					json["route_id"] = routeID.json
+					json["source_pin_id"] = sourcePinID.json
+					if let v = waypoints?.json {
+						json["waypoints"] = v
+					}
+					return json
+				}
+				
+				override public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: contentTypeID.hashValue)
+					hashCombine(seed: &hash, value: destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: quantity.hashValue)
+					hashCombine(seed: &hash, value: routeID.hashValue)
+					hashCombine(seed: &hash, value: sourcePinID.hashValue)
+					waypoints?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					return hash
+				}
+				
+				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route, rhs: PlanetaryInteraction.ColonyLayout.Route) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: PlanetaryInteraction.ColonyLayout.Route) {
+					contentTypeID = other.contentTypeID
+					destinationPinID = other.destinationPinID
+					quantity = other.quantity
+					routeID = other.routeID
+					sourcePinID = other.sourcePinID
+					waypoints = other.waypoints?.flatMap { PlanetaryInteraction.ColonyLayout.Route.Waypoint($0) }
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return PlanetaryInteraction.ColonyLayout.Route(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? Route)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public class Pin: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				public class ExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					
+					public class Head: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 						
 						
 						public var headID: Int = Int()
@@ -451,30 +627,30 @@ public extension ESI {
 							return hash
 						}
 						
-						public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads) -> Bool {
+						public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head, rhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head) -> Bool {
 							return lhs.hashValue == rhs.hashValue
 						}
 						
-						init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads) {
+						init(_ other: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head) {
 							headID = other.headID
 							latitude = other.latitude
 							longitude = other.longitude
 						}
 						
 						public func copy(with zone: NSZone? = nil) -> Any {
-							return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads(self)
+							return PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head(self)
 						}
 						
 						
 						public override func isEqual(_ object: Any?) -> Bool {
-							return (object as? GetCharactersCharacterIDPlanetsPlanetIDHeads)?.hashValue == hashValue
+							return (object as? Head)?.hashValue == hashValue
 						}
 						
 					}
 					
 					public var cycleTime: Int? = nil
 					public var headRadius: Float? = nil
-					public var heads: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads] = []
+					public var heads: [PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head] = []
 					public var productTypeID: Int? = nil
 					public var qtyPerCycle: Int? = nil
 					
@@ -487,7 +663,7 @@ public extension ESI {
 						
 						cycleTime = dictionary["cycle_time"] as? Int
 						headRadius = dictionary["head_radius"] as? Float
-						heads = try (dictionary["heads"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads(json: $0)} ?? []
+						heads = try (dictionary["heads"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head(json: $0)} ?? []
 						productTypeID = dictionary["product_type_id"] as? Int
 						qtyPerCycle = dictionary["qty_per_cycle"] as? Int
 						
@@ -501,7 +677,7 @@ public extension ESI {
 					public required init?(coder aDecoder: NSCoder) {
 						cycleTime = aDecoder.containsValue(forKey: "cycle_time") ? aDecoder.decodeInteger(forKey: "cycle_time") : nil
 						headRadius = aDecoder.containsValue(forKey: "head_radius") ? aDecoder.decodeFloat(forKey: "head_radius") : nil
-						heads = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads.self], forKey: "heads") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads] ?? []
+						heads = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head.self], forKey: "heads") as? [PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head] ?? []
 						productTypeID = aDecoder.containsValue(forKey: "product_type_id") ? aDecoder.decodeInteger(forKey: "product_type_id") : nil
 						qtyPerCycle = aDecoder.containsValue(forKey: "qty_per_cycle") ? aDecoder.decodeInteger(forKey: "qty_per_cycle") : nil
 						
@@ -552,30 +728,30 @@ public extension ESI {
 						return hash
 					}
 					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails) -> Bool {
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails) -> Bool {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
-					init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails) {
+					init(_ other: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails) {
 						cycleTime = other.cycleTime
 						headRadius = other.headRadius
-						heads = other.heads.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.GetCharactersCharacterIDPlanetsPlanetIDHeads($0) }
+						heads = other.heads.flatMap { PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head($0) }
 						productTypeID = other.productTypeID
 						qtyPerCycle = other.qtyPerCycle
 					}
 					
 					public func copy(with zone: NSZone? = nil) -> Any {
-						return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails(self)
+						return PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails(self)
 					}
 					
 					
 					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails)?.hashValue == hashValue
+						return (object as? ExtractorDetails)?.hashValue == hashValue
 					}
 					
 				}
 				
-				public class GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class FactoryDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var schematicID: Int = Int()
@@ -619,28 +795,28 @@ public extension ESI {
 						return hash
 					}
 					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails) -> Bool {
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) -> Bool {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
-					init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails) {
+					init(_ other: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) {
 						schematicID = other.schematicID
 					}
 					
 					public func copy(with zone: NSZone? = nil) -> Any {
-						return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails(self)
+						return PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails(self)
 					}
 					
 					
 					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails)?.hashValue == hashValue
+						return (object as? FactoryDetails)?.hashValue == hashValue
 					}
 					
 				}
 				
 				public var expiryTime: Date? = nil
-				public var extractorDetails: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails? = nil
-				public var factoryDetails: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails? = nil
+				public var extractorDetails: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails? = nil
+				public var factoryDetails: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails? = nil
 				public var installTime: Date? = nil
 				public var lastCycleStart: Date? = nil
 				public var latitude: Float = Float()
@@ -657,8 +833,8 @@ public extension ESI {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 					
 					expiryTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["expiry_time"] as? String ?? "")
-					extractorDetails = try? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails(json: dictionary["extractor_details"] as? [String: Any] ?? [:])
-					factoryDetails = try? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails(json: dictionary["factory_details"] as? [String: Any] ?? [:])
+					extractorDetails = try? PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails(json: dictionary["extractor_details"] as? [String: Any] ?? [:])
+					factoryDetails = try? PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails(json: dictionary["factory_details"] as? [String: Any] ?? [:])
 					installTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["install_time"] as? String ?? "")
 					lastCycleStart = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_cycle_start"] as? String ?? "")
 					guard let latitude = dictionary["latitude"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
@@ -680,8 +856,8 @@ public extension ESI {
 				
 				public required init?(coder aDecoder: NSCoder) {
 					expiryTime = aDecoder.decodeObject(forKey: "expiry_time") as? Date
-					extractorDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails.self, forKey: "extractor_details") 
-					factoryDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails.self, forKey: "factory_details") 
+					extractorDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.self, forKey: "extractor_details") 
+					factoryDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails.self, forKey: "factory_details") 
 					installTime = aDecoder.decodeObject(forKey: "install_time") as? Date
 					lastCycleStart = aDecoder.decodeObject(forKey: "last_cycle_start") as? Date
 					latitude = aDecoder.decodeFloat(forKey: "latitude")
@@ -760,14 +936,14 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins) -> Bool {
+				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin, rhs: PlanetaryInteraction.ColonyLayout.Pin) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins) {
+				init(_ other: PlanetaryInteraction.ColonyLayout.Pin) {
 					expiryTime = other.expiryTime
-					extractorDetails = other.extractorDetails != nil ? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails(other.extractorDetails!) : nil
-					factoryDetails = other.factoryDetails != nil ? PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails(other.factoryDetails!) : nil
+					extractorDetails = other.extractorDetails != nil ? PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails(other.extractorDetails!) : nil
+					factoryDetails = other.factoryDetails != nil ? PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails(other.factoryDetails!) : nil
 					installTime = other.installTime
 					lastCycleStart = other.lastCycleStart
 					latitude = other.latitude
@@ -778,17 +954,17 @@ public extension ESI {
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
-					return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins(self)
+					return PlanetaryInteraction.ColonyLayout.Pin(self)
 				}
 				
 				
 				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDPlanetsPlanetIDPins)?.hashValue == hashValue
+					return (object as? Pin)?.hashValue == hashValue
 				}
 				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDLinks: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Link: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var destinationPinID: Int64 = Int64()
@@ -846,206 +1022,30 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks) -> Bool {
+				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Link, rhs: PlanetaryInteraction.ColonyLayout.Link) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks) {
+				init(_ other: PlanetaryInteraction.ColonyLayout.Link) {
 					destinationPinID = other.destinationPinID
 					linkLevel = other.linkLevel
 					sourcePinID = other.sourcePinID
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
-					return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks(self)
+					return PlanetaryInteraction.ColonyLayout.Link(self)
 				}
 				
 				
 				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDPlanetsPlanetIDLinks)?.hashValue == hashValue
+					return (object as? Link)?.hashValue == hashValue
 				}
 				
 			}
 			
-			public class GetCharactersCharacterIDPlanetsPlanetIDRoutes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				public class GetCharactersCharacterIDPlanetsPlanetIDWaypoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-					
-					
-					public var order: Int = Int()
-					public var pinID: Int64 = Int64()
-					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
-					
-					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-						
-						guard let order = dictionary["order"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.order = order
-						guard let pinID = dictionary["pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.pinID = pinID
-						
-						super.init()
-					}
-					
-					override public init() {
-						super.init()
-					}
-					
-					public required init?(coder aDecoder: NSCoder) {
-						order = aDecoder.decodeInteger(forKey: "order")
-						pinID = aDecoder.decodeInt64(forKey: "pin_id")
-						
-						super.init()
-					}
-					
-					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(order, forKey: "order")
-						aCoder.encode(pinID, forKey: "pin_id")
-					}
-					
-					public var json: Any {
-						var json = [String: Any]()
-						json["order"] = order.json
-						json["pin_id"] = pinID.json
-						return json
-					}
-					
-					override public var hashValue: Int {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: order.hashValue)
-						hashCombine(seed: &hash, value: pinID.hashValue)
-						return hash
-					}
-					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints) {
-						order = other.order
-						pinID = other.pinID
-					}
-					
-					public func copy(with zone: NSZone? = nil) -> Any {
-						return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints(self)
-					}
-					
-					
-					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? GetCharactersCharacterIDPlanetsPlanetIDWaypoints)?.hashValue == hashValue
-					}
-					
-				}
-				
-				public var contentTypeID: Int = Int()
-				public var destinationPinID: Int64 = Int64()
-				public var quantity: Float = Float()
-				public var routeID: Int64 = Int64()
-				public var sourcePinID: Int64 = Int64()
-				public var waypoints: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints]? = nil
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let contentTypeID = dictionary["content_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.contentTypeID = contentTypeID
-					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.destinationPinID = destinationPinID
-					guard let quantity = dictionary["quantity"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.quantity = quantity
-					guard let routeID = dictionary["route_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.routeID = routeID
-					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.sourcePinID = sourcePinID
-					waypoints = try (dictionary["waypoints"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints(json: $0)}
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					contentTypeID = aDecoder.decodeInteger(forKey: "content_type_id")
-					destinationPinID = aDecoder.decodeInt64(forKey: "destination_pin_id")
-					quantity = aDecoder.decodeFloat(forKey: "quantity")
-					routeID = aDecoder.decodeInt64(forKey: "route_id")
-					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
-					waypoints = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints.self], forKey: "waypoints") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints]
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(contentTypeID, forKey: "content_type_id")
-					aCoder.encode(destinationPinID, forKey: "destination_pin_id")
-					aCoder.encode(quantity, forKey: "quantity")
-					aCoder.encode(routeID, forKey: "route_id")
-					aCoder.encode(sourcePinID, forKey: "source_pin_id")
-					if let v = waypoints {
-						aCoder.encode(v, forKey: "waypoints")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["content_type_id"] = contentTypeID.json
-					json["destination_pin_id"] = destinationPinID.json
-					json["quantity"] = quantity.json
-					json["route_id"] = routeID.json
-					json["source_pin_id"] = sourcePinID.json
-					if let v = waypoints?.json {
-						json["waypoints"] = v
-					}
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: contentTypeID.hashValue)
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: routeID.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
-					waypoints?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					return hash
-				}
-				
-				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes, rhs: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes) {
-					contentTypeID = other.contentTypeID
-					destinationPinID = other.destinationPinID
-					quantity = other.quantity
-					routeID = other.routeID
-					sourcePinID = other.sourcePinID
-					waypoints = other.waypoints?.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.GetCharactersCharacterIDPlanetsPlanetIDWaypoints($0) }
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDPlanetsPlanetIDRoutes)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public var links: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] = []
-			public var pins: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins] = []
-			public var routes: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes] = []
+			public var links: [PlanetaryInteraction.ColonyLayout.Link] = []
+			public var pins: [PlanetaryInteraction.ColonyLayout.Pin] = []
+			public var routes: [PlanetaryInteraction.ColonyLayout.Route] = []
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -1054,9 +1054,9 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				links = try (dictionary["links"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks(json: $0)} ?? []
-				pins = try (dictionary["pins"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins(json: $0)} ?? []
-				routes = try (dictionary["routes"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes(json: $0)} ?? []
+				links = try (dictionary["links"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Link(json: $0)} ?? []
+				pins = try (dictionary["pins"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Pin(json: $0)} ?? []
+				routes = try (dictionary["routes"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Route(json: $0)} ?? []
 				
 				super.init()
 			}
@@ -1066,9 +1066,9 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				links = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks.self], forKey: "links") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks] ?? []
-				pins = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins.self], forKey: "pins") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins] ?? []
-				routes = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes.self], forKey: "routes") as? [PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes] ?? []
+				links = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Link.self], forKey: "links") as? [PlanetaryInteraction.ColonyLayout.Link] ?? []
+				pins = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Pin.self], forKey: "pins") as? [PlanetaryInteraction.ColonyLayout.Pin] ?? []
+				routes = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Route.self], forKey: "routes") as? [PlanetaryInteraction.ColonyLayout.Route] ?? []
 				
 				super.init()
 			}
@@ -1100,9 +1100,9 @@ public extension ESI {
 			}
 			
 			init(_ other: PlanetaryInteraction.ColonyLayout) {
-				links = other.links.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDLinks($0) }
-				pins = other.pins.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDPins($0) }
-				routes = other.routes.flatMap { PlanetaryInteraction.ColonyLayout.GetCharactersCharacterIDPlanetsPlanetIDRoutes($0) }
+				links = other.links.flatMap { PlanetaryInteraction.ColonyLayout.Link($0) }
+				pins = other.pins.flatMap { PlanetaryInteraction.ColonyLayout.Pin($0) }
+				routes = other.routes.flatMap { PlanetaryInteraction.ColonyLayout.Route($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {

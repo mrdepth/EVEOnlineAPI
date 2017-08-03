@@ -148,11 +148,12 @@ public extension ESI {
 			public class GetDogmaEffectsEffectIDModifiers: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var domain: String = String()
+				public var domain: String? = nil
+				public var effectID: Int? = nil
 				public var `func`: String = String()
-				public var modifiedAttributeID: Int = Int()
-				public var modifyingAttributeID: Int = Int()
-				public var `operator`: Int = Int()
+				public var modifiedAttributeID: Int? = nil
+				public var modifyingAttributeID: Int? = nil
+				public var `operator`: Int? = nil
 				
 				public static var supportsSecureCoding: Bool {
 					return true
@@ -161,16 +162,13 @@ public extension ESI {
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 					
-					guard let domain = dictionary["domain"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.domain = domain
+					domain = dictionary["domain"] as? String
+					effectID = dictionary["effect_id"] as? Int
 					guard let `func` = dictionary["func"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 					self.`func` = `func`
-					guard let modifiedAttributeID = dictionary["modified_attribute_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.modifiedAttributeID = modifiedAttributeID
-					guard let modifyingAttributeID = dictionary["modifying_attribute_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.modifyingAttributeID = modifyingAttributeID
-					guard let `operator` = dictionary["operator"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.`operator` = `operator`
+					modifiedAttributeID = dictionary["modified_attribute_id"] as? Int
+					modifyingAttributeID = dictionary["modifying_attribute_id"] as? Int
+					`operator` = dictionary["operator"] as? Int
 					
 					super.init()
 				}
@@ -180,40 +178,64 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					domain = aDecoder.decodeObject(forKey: "domain") as? String ?? String()
+					domain = aDecoder.decodeObject(forKey: "domain") as? String
+					effectID = aDecoder.containsValue(forKey: "effect_id") ? aDecoder.decodeInteger(forKey: "effect_id") : nil
 					`func` = aDecoder.decodeObject(forKey: "func") as? String ?? String()
-					modifiedAttributeID = aDecoder.decodeInteger(forKey: "modified_attribute_id")
-					modifyingAttributeID = aDecoder.decodeInteger(forKey: "modifying_attribute_id")
-					`operator` = aDecoder.decodeInteger(forKey: "operator")
+					modifiedAttributeID = aDecoder.containsValue(forKey: "modified_attribute_id") ? aDecoder.decodeInteger(forKey: "modified_attribute_id") : nil
+					modifyingAttributeID = aDecoder.containsValue(forKey: "modifying_attribute_id") ? aDecoder.decodeInteger(forKey: "modifying_attribute_id") : nil
+					`operator` = aDecoder.containsValue(forKey: "operator") ? aDecoder.decodeInteger(forKey: "operator") : nil
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(domain, forKey: "domain")
+					if let v = domain {
+						aCoder.encode(v, forKey: "domain")
+					}
+					if let v = effectID {
+						aCoder.encode(v, forKey: "effect_id")
+					}
 					aCoder.encode(`func`, forKey: "func")
-					aCoder.encode(modifiedAttributeID, forKey: "modified_attribute_id")
-					aCoder.encode(modifyingAttributeID, forKey: "modifying_attribute_id")
-					aCoder.encode(`operator`, forKey: "operator")
+					if let v = modifiedAttributeID {
+						aCoder.encode(v, forKey: "modified_attribute_id")
+					}
+					if let v = modifyingAttributeID {
+						aCoder.encode(v, forKey: "modifying_attribute_id")
+					}
+					if let v = `operator` {
+						aCoder.encode(v, forKey: "operator")
+					}
 				}
 				
 				public var json: Any {
 					var json = [String: Any]()
-					json["domain"] = domain.json
+					if let v = domain?.json {
+						json["domain"] = v
+					}
+					if let v = effectID?.json {
+						json["effect_id"] = v
+					}
 					json["func"] = `func`.json
-					json["modified_attribute_id"] = modifiedAttributeID.json
-					json["modifying_attribute_id"] = modifyingAttributeID.json
-					json["operator"] = `operator`.json
+					if let v = modifiedAttributeID?.json {
+						json["modified_attribute_id"] = v
+					}
+					if let v = modifyingAttributeID?.json {
+						json["modifying_attribute_id"] = v
+					}
+					if let v = `operator`?.json {
+						json["operator"] = v
+					}
 					return json
 				}
 				
 				override public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: domain.hashValue)
+					hashCombine(seed: &hash, value: domain?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: effectID?.hashValue ?? 0)
 					hashCombine(seed: &hash, value: `func`.hashValue)
-					hashCombine(seed: &hash, value: modifiedAttributeID.hashValue)
-					hashCombine(seed: &hash, value: modifyingAttributeID.hashValue)
-					hashCombine(seed: &hash, value: `operator`.hashValue)
+					hashCombine(seed: &hash, value: modifiedAttributeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: modifyingAttributeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: `operator`?.hashValue ?? 0)
 					return hash
 				}
 				
@@ -223,6 +245,7 @@ public extension ESI {
 				
 				init(_ other: Dogma.Effect.GetDogmaEffectsEffectIDModifiers) {
 					domain = other.domain
+					effectID = other.effectID
 					`func` = other.`func`
 					modifiedAttributeID = other.modifiedAttributeID
 					modifyingAttributeID = other.modifyingAttributeID

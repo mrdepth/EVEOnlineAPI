@@ -41,9 +41,14 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDCorporationhistoryOk"	: "CorporationHistory",
 	"GetCharactersCharacterIDOk"	: "Information",
 	"GetCharactersCharacterIDBlueprintsOk"  : "Blueprint",
+	"GetCharactersCharacterIDRolesOk"	: "Role",
+	"GetCharactersCharacterIDFatigueOk"	: "Fatigue",
 
 	//MARK: Clones
 	"GetCharactersCharacterIDClonesOk"	: "JumpClones",
+	"GetCharactersCharacterIDClonesLocationType"	: "LocationType",
+	"GetCharactersCharacterIDClonesJumpClones"	: "JumpClone",
+	"GetCharactersCharacterIDClonesHomeLocation"	: "Location",
 	
 	//MARK: Contacts
 	"GetCharactersCharacterIDContactsLabelsOk"	: "Label",
@@ -154,6 +159,15 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDPlanetsOk"	: "Colony",
 	"GetUniverseSchematicsSchematicIDOk"	: "SchematicInformation",
 	"GetCharactersCharacterIDPlanetsPlanetIDOk"	: "ColonyLayout",
+	"GetCharactersCharacterIDPlanetsPlanetIDHeads"	: "Head",
+	"GetCharactersCharacterIDPlanetsPlanetIDExtractorDetails"	: "ExtractorDetails",
+	"GetCharactersCharacterIDPlanetsPlanetIDFactoryDetails"	: "FactoryDetails",
+	"GetCharactersCharacterIDPlanetsPlanetIDPins"	: "Pin",
+	"GetCharactersCharacterIDPlanetsPlanetIDLinks"	: "Link",
+	"GetCharactersCharacterIDPlanetsPlanetIDRoutes"	: "Route",
+	"GetCharactersCharacterIDPlanetsPlanetIDWaypoints"	: "Waypoint",
+	"GetCharactersCharacterIDPlanetsPlanetType"	: "PlanetType",
+	
 
 	//MARK: Search
 	"GetCharactersCharacterIDSearchOk"	: "CharacterSearchResult",
@@ -163,6 +177,7 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDSkillsOk"	: "CharacterSkills",
 	"GetCharactersCharacterIDSkillqueueOk"	: "SkillQueueItem",
 	"GetCharactersCharacterIDSkillsSkills"	: "Skill",
+	"GetCharactersCharacterIDAttributesOk"	: "CharacterAttributes",
 
 	//MARK: Sovereignty
 	"GetSovereigntyMapOk"	: "System",

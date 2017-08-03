@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getCharacterAttributes(characterID: Int, completionBlock:((Result<Skills.GetCharactersCharacterIDAttributesOk>) -> Void)?) {
+		public func getCharacterAttributes(characterID: Int, completionBlock:((Result<Skills.CharacterAttributes>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -41,7 +41,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Skills.GetCharactersCharacterIDAttributesOk>) in
+			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -279,6 +279,135 @@ public extension ESI {
 		}
 		
 		
+		public class CharacterAttributes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var accruedRemapCooldownDate: Date? = nil
+			public var bonusRemaps: Int? = nil
+			public var charisma: Int = Int()
+			public var intelligence: Int = Int()
+			public var lastRemapDate: Date? = nil
+			public var memory: Int = Int()
+			public var perception: Int = Int()
+			public var willpower: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				accruedRemapCooldownDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["accrued_remap_cooldown_date"] as? String ?? "")
+				bonusRemaps = dictionary["bonus_remaps"] as? Int
+				guard let charisma = dictionary["charisma"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.charisma = charisma
+				guard let intelligence = dictionary["intelligence"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.intelligence = intelligence
+				lastRemapDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_remap_date"] as? String ?? "")
+				guard let memory = dictionary["memory"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.memory = memory
+				guard let perception = dictionary["perception"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.perception = perception
+				guard let willpower = dictionary["willpower"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.willpower = willpower
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				accruedRemapCooldownDate = aDecoder.decodeObject(forKey: "accrued_remap_cooldown_date") as? Date
+				bonusRemaps = aDecoder.containsValue(forKey: "bonus_remaps") ? aDecoder.decodeInteger(forKey: "bonus_remaps") : nil
+				charisma = aDecoder.decodeInteger(forKey: "charisma")
+				intelligence = aDecoder.decodeInteger(forKey: "intelligence")
+				lastRemapDate = aDecoder.decodeObject(forKey: "last_remap_date") as? Date
+				memory = aDecoder.decodeInteger(forKey: "memory")
+				perception = aDecoder.decodeInteger(forKey: "perception")
+				willpower = aDecoder.decodeInteger(forKey: "willpower")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = accruedRemapCooldownDate {
+					aCoder.encode(v, forKey: "accrued_remap_cooldown_date")
+				}
+				if let v = bonusRemaps {
+					aCoder.encode(v, forKey: "bonus_remaps")
+				}
+				aCoder.encode(charisma, forKey: "charisma")
+				aCoder.encode(intelligence, forKey: "intelligence")
+				if let v = lastRemapDate {
+					aCoder.encode(v, forKey: "last_remap_date")
+				}
+				aCoder.encode(memory, forKey: "memory")
+				aCoder.encode(perception, forKey: "perception")
+				aCoder.encode(willpower, forKey: "willpower")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = accruedRemapCooldownDate?.json {
+					json["accrued_remap_cooldown_date"] = v
+				}
+				if let v = bonusRemaps?.json {
+					json["bonus_remaps"] = v
+				}
+				json["charisma"] = charisma.json
+				json["intelligence"] = intelligence.json
+				if let v = lastRemapDate?.json {
+					json["last_remap_date"] = v
+				}
+				json["memory"] = memory.json
+				json["perception"] = perception.json
+				json["willpower"] = willpower.json
+				return json
+			}
+			
+			override public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: accruedRemapCooldownDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: bonusRemaps?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: charisma.hashValue)
+				hashCombine(seed: &hash, value: intelligence.hashValue)
+				hashCombine(seed: &hash, value: lastRemapDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: memory.hashValue)
+				hashCombine(seed: &hash, value: perception.hashValue)
+				hashCombine(seed: &hash, value: willpower.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Skills.CharacterAttributes, rhs: Skills.CharacterAttributes) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Skills.CharacterAttributes) {
+				accruedRemapCooldownDate = other.accruedRemapCooldownDate
+				bonusRemaps = other.bonusRemaps
+				charisma = other.charisma
+				intelligence = other.intelligence
+				lastRemapDate = other.lastRemapDate
+				memory = other.memory
+				perception = other.perception
+				willpower = other.willpower
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Skills.CharacterAttributes(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? CharacterAttributes)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class SkillQueueItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -409,135 +538,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? SkillQueueItem)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCharactersCharacterIDAttributesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var accruedRemapCooldownDate: Date? = nil
-			public var bonusRemaps: Int? = nil
-			public var charisma: Int = Int()
-			public var intelligence: Int = Int()
-			public var lastRemapDate: Date? = nil
-			public var memory: Int = Int()
-			public var perception: Int = Int()
-			public var willpower: Int = Int()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				accruedRemapCooldownDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["accrued_remap_cooldown_date"] as? String ?? "")
-				bonusRemaps = dictionary["bonus_remaps"] as? Int
-				guard let charisma = dictionary["charisma"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.charisma = charisma
-				guard let intelligence = dictionary["intelligence"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.intelligence = intelligence
-				lastRemapDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_remap_date"] as? String ?? "")
-				guard let memory = dictionary["memory"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.memory = memory
-				guard let perception = dictionary["perception"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.perception = perception
-				guard let willpower = dictionary["willpower"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.willpower = willpower
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				accruedRemapCooldownDate = aDecoder.decodeObject(forKey: "accrued_remap_cooldown_date") as? Date
-				bonusRemaps = aDecoder.containsValue(forKey: "bonus_remaps") ? aDecoder.decodeInteger(forKey: "bonus_remaps") : nil
-				charisma = aDecoder.decodeInteger(forKey: "charisma")
-				intelligence = aDecoder.decodeInteger(forKey: "intelligence")
-				lastRemapDate = aDecoder.decodeObject(forKey: "last_remap_date") as? Date
-				memory = aDecoder.decodeInteger(forKey: "memory")
-				perception = aDecoder.decodeInteger(forKey: "perception")
-				willpower = aDecoder.decodeInteger(forKey: "willpower")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = accruedRemapCooldownDate {
-					aCoder.encode(v, forKey: "accrued_remap_cooldown_date")
-				}
-				if let v = bonusRemaps {
-					aCoder.encode(v, forKey: "bonus_remaps")
-				}
-				aCoder.encode(charisma, forKey: "charisma")
-				aCoder.encode(intelligence, forKey: "intelligence")
-				if let v = lastRemapDate {
-					aCoder.encode(v, forKey: "last_remap_date")
-				}
-				aCoder.encode(memory, forKey: "memory")
-				aCoder.encode(perception, forKey: "perception")
-				aCoder.encode(willpower, forKey: "willpower")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = accruedRemapCooldownDate?.json {
-					json["accrued_remap_cooldown_date"] = v
-				}
-				if let v = bonusRemaps?.json {
-					json["bonus_remaps"] = v
-				}
-				json["charisma"] = charisma.json
-				json["intelligence"] = intelligence.json
-				if let v = lastRemapDate?.json {
-					json["last_remap_date"] = v
-				}
-				json["memory"] = memory.json
-				json["perception"] = perception.json
-				json["willpower"] = willpower.json
-				return json
-			}
-			
-			override public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: accruedRemapCooldownDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: bonusRemaps?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: charisma.hashValue)
-				hashCombine(seed: &hash, value: intelligence.hashValue)
-				hashCombine(seed: &hash, value: lastRemapDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: memory.hashValue)
-				hashCombine(seed: &hash, value: perception.hashValue)
-				hashCombine(seed: &hash, value: willpower.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Skills.GetCharactersCharacterIDAttributesOk, rhs: Skills.GetCharactersCharacterIDAttributesOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Skills.GetCharactersCharacterIDAttributesOk) {
-				accruedRemapCooldownDate = other.accruedRemapCooldownDate
-				bonusRemaps = other.bonusRemaps
-				charisma = other.charisma
-				intelligence = other.intelligence
-				lastRemapDate = other.lastRemapDate
-				memory = other.memory
-				perception = other.perception
-				willpower = other.willpower
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Skills.GetCharactersCharacterIDAttributesOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDAttributesOk)?.hashValue == hashValue
 			}
 			
 		}

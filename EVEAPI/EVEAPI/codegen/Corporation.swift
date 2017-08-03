@@ -519,78 +519,9 @@ public extension ESI {
 		
 		public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCorporationsCorporationIDAlliancehistoryAlliance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var allianceID: Int = Int()
-				public var isDeleted: Bool = Bool()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.allianceID = allianceID
-					guard let isDeleted = dictionary["is_deleted"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.isDeleted = isDeleted
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.decodeInteger(forKey: "alliance_id")
-					isDeleted = aDecoder.decodeBool(forKey: "is_deleted")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(allianceID, forKey: "alliance_id")
-					aCoder.encode(isDeleted, forKey: "is_deleted")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["alliance_id"] = allianceID.json
-					json["is_deleted"] = isDeleted.json
-					return json
-				}
-				
-				override public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID.hashValue)
-					hashCombine(seed: &hash, value: isDeleted.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance, rhs: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance) {
-					allianceID = other.allianceID
-					isDeleted = other.isDeleted
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDAlliancehistoryAlliance)?.hashValue == hashValue
-				}
-				
-			}
 			
-			public var alliance: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance? = nil
+			public var allianceID: Int? = nil
+			public var isDeleted: Bool? = nil
 			public var recordID: Int = Int()
 			public var startDate: Date = Date()
 			
@@ -601,7 +532,8 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				alliance = try? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(json: dictionary["alliance"] as? [String: Any] ?? [:])
+				allianceID = dictionary["alliance_id"] as? Int
+				isDeleted = dictionary["is_deleted"] as? Bool
 				guard let recordID = dictionary["record_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.recordID = recordID
 				guard let startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
@@ -615,7 +547,8 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				alliance = aDecoder.decodeObject(of: Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance.self, forKey: "alliance") 
+				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
+				isDeleted = aDecoder.containsValue(forKey: "is_deleted") ? aDecoder.decodeBool(forKey: "is_deleted") : nil
 				recordID = aDecoder.decodeInteger(forKey: "record_id")
 				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date ?? Date()
 				
@@ -623,8 +556,11 @@ public extension ESI {
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = alliance {
-					aCoder.encode(v, forKey: "alliance")
+				if let v = allianceID {
+					aCoder.encode(v, forKey: "alliance_id")
+				}
+				if let v = isDeleted {
+					aCoder.encode(v, forKey: "is_deleted")
 				}
 				aCoder.encode(recordID, forKey: "record_id")
 				aCoder.encode(startDate, forKey: "start_date")
@@ -632,8 +568,11 @@ public extension ESI {
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = alliance?.json {
-					json["alliance"] = v
+				if let v = allianceID?.json {
+					json["alliance_id"] = v
+				}
+				if let v = isDeleted?.json {
+					json["is_deleted"] = v
 				}
 				json["record_id"] = recordID.json
 				json["start_date"] = startDate.json
@@ -642,7 +581,8 @@ public extension ESI {
 			
 			override public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: alliance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isDeleted?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: recordID.hashValue)
 				hashCombine(seed: &hash, value: startDate.hashValue)
 				return hash
@@ -653,7 +593,8 @@ public extension ESI {
 			}
 			
 			init(_ other: Corporation.History) {
-				alliance = other.alliance != nil ? Corporation.History.GetCorporationsCorporationIDAlliancehistoryAlliance(other.alliance!) : nil
+				allianceID = other.allianceID
+				isDeleted = other.isDeleted
 				recordID = other.recordID
 				startDate = other.startDate
 			}
