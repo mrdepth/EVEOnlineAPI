@@ -142,12 +142,16 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					implants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: locationType?.hashValue ?? 0)
+					self.implants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.locationType?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Clones.JumpClones.JumpClone, rhs: Clones.JumpClones.JumpClone) -> Bool {
@@ -221,11 +225,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: locationType?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.locationType?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Clones.JumpClones.Location, rhs: Clones.JumpClones.Location) -> Bool {
@@ -323,12 +331,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: homeLocation?.hashValue ?? 0)
-				jumpClones.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: lastJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.homeLocation?.hashValue ?? 0)
+				self.jumpClones.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.lastJumpDate?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Clones.JumpClones, rhs: Clones.JumpClones) -> Bool {

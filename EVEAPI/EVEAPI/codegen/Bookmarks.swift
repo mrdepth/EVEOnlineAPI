@@ -129,11 +129,15 @@ public extension ESI {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: itemID.hashValue)
-						hashCombine(seed: &hash, value: typeID.hashValue)
+						hashCombine(seed: &hash, value: self.itemID.hashValue)
+						hashCombine(seed: &hash, value: self.typeID.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem) -> Bool {
@@ -206,12 +210,16 @@ public extension ESI {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: x.hashValue)
-						hashCombine(seed: &hash, value: y.hashValue)
-						hashCombine(seed: &hash, value: z.hashValue)
+						hashCombine(seed: &hash, value: self.x.hashValue)
+						hashCombine(seed: &hash, value: self.y.hashValue)
+						hashCombine(seed: &hash, value: self.z.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates) -> Bool {
@@ -288,12 +296,16 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: coordinates?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: item?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: locationID.hashValue)
+					hashCombine(seed: &hash, value: self.coordinates?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.item?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.locationID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget) -> Bool {
@@ -396,17 +408,21 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: bookmarkID.hashValue)
-				hashCombine(seed: &hash, value: createDate.hashValue)
-				hashCombine(seed: &hash, value: creatorID.hashValue)
-				hashCombine(seed: &hash, value: folderID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: memo.hashValue)
-				hashCombine(seed: &hash, value: note.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: target.hashValue)
+				hashCombine(seed: &hash, value: self.bookmarkID.hashValue)
+				hashCombine(seed: &hash, value: self.createDate.hashValue)
+				hashCombine(seed: &hash, value: self.creatorID.hashValue)
+				hashCombine(seed: &hash, value: self.folderID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.memo.hashValue)
+				hashCombine(seed: &hash, value: self.note.hashValue)
+				hashCombine(seed: &hash, value: self.ownerID.hashValue)
+				hashCombine(seed: &hash, value: self.target.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Bookmarks.Bookmark, rhs: Bookmarks.Bookmark) -> Bool {
@@ -495,12 +511,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: folderID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: ownerID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.folderID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.ownerID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Bookmarks.Folder, rhs: Bookmarks.Folder) -> Bool {

@@ -35,10 +35,14 @@ public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 		return json
 	}
 
-	override public var hashValue: Int {
+	private lazy var _hashValue: Int = {
 		var hash: Int = 0
 {hash}
 		return hash
+	}()
+
+	override public var hashValue: Int {
+		return _hashValue
 	}
 
 	public static func ==(lhs: {class}, rhs: {class}) -> Bool {

@@ -256,16 +256,20 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: isSingleton.hashValue)
-				hashCombine(seed: &hash, value: itemID.hashValue)
-				hashCombine(seed: &hash, value: locationFlag.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: locationType.hashValue)
-				hashCombine(seed: &hash, value: quantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.isSingleton.hashValue)
+				hashCombine(seed: &hash, value: self.itemID.hashValue)
+				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.locationType.hashValue)
+				hashCombine(seed: &hash, value: self.quantity?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.Asset, rhs: Assets.Asset) -> Bool {

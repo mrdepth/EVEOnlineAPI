@@ -81,11 +81,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: refTypeID.hashValue)
-					hashCombine(seed: &hash, value: refTypeName.hashValue)
+					hashCombine(seed: &hash, value: self.refTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.refTypeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Eve.RefTypes.RefType, rhs: EVE.Eve.RefTypes.RefType) -> Bool {
@@ -143,10 +147,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				refTypes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.refTypes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Eve.RefTypes, rhs: EVE.Eve.RefTypes) -> Bool {

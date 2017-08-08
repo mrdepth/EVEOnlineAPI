@@ -794,12 +794,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accountID.hashValue)
-					hashCombine(seed: &hash, value: accountKey.hashValue)
-					hashCombine(seed: &hash, value: balance.hashValue)
+					hashCombine(seed: &hash, value: self.accountID.hashValue)
+					hashCombine(seed: &hash, value: self.accountKey.hashValue)
+					hashCombine(seed: &hash, value: self.balance.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.AccountBalance.Account, rhs: EVE.Char.AccountBalance.Account) -> Bool {
@@ -858,10 +862,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				accounts.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.accounts.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.AccountBalance, rhs: EVE.Char.AccountBalance) -> Bool {
@@ -975,17 +983,21 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					contents?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: flag.hashValue)
-					hashCombine(seed: &hash, value: itemID.hashValue)
-					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: rawQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: singleton.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					self.contents?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.flag.hashValue)
+					hashCombine(seed: &hash, value: self.itemID.hashValue)
+					hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.rawQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.singleton.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.AssetList.Asset, rhs: EVE.Char.AssetList.Asset) -> Bool {
@@ -1049,10 +1061,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				assets.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.assets.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.AssetList, rhs: EVE.Char.AssetList) -> Bool {
@@ -1163,18 +1179,22 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: flag.hashValue)
-					hashCombine(seed: &hash, value: itemID.hashValue)
-					hashCombine(seed: &hash, value: locationID.hashValue)
-					hashCombine(seed: &hash, value: materialEfficiency.hashValue)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: runs.hashValue)
-					hashCombine(seed: &hash, value: timeEfficiency.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.flag.hashValue)
+					hashCombine(seed: &hash, value: self.itemID.hashValue)
+					hashCombine(seed: &hash, value: self.locationID.hashValue)
+					hashCombine(seed: &hash, value: self.materialEfficiency.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.runs.hashValue)
+					hashCombine(seed: &hash, value: self.timeEfficiency.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Blueprints.Blueprint, rhs: EVE.Char.Blueprints.Blueprint) -> Bool {
@@ -1239,10 +1259,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				blueprints.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.blueprints.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Blueprints, rhs: EVE.Char.Blueprints) -> Bool {
@@ -1367,20 +1391,24 @@ public extension EVE {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: bookmarkID.hashValue)
-						hashCombine(seed: &hash, value: created.hashValue)
-						hashCombine(seed: &hash, value: creatorID.hashValue)
-						hashCombine(seed: &hash, value: itemID.hashValue)
-						hashCombine(seed: &hash, value: locationID.hashValue)
-						hashCombine(seed: &hash, value: memo.hashValue)
-						hashCombine(seed: &hash, value: note.hashValue)
-						hashCombine(seed: &hash, value: typeID.hashValue)
-						hashCombine(seed: &hash, value: x.hashValue)
-						hashCombine(seed: &hash, value: y.hashValue)
-						hashCombine(seed: &hash, value: z.hashValue)
+						hashCombine(seed: &hash, value: self.bookmarkID.hashValue)
+						hashCombine(seed: &hash, value: self.created.hashValue)
+						hashCombine(seed: &hash, value: self.creatorID.hashValue)
+						hashCombine(seed: &hash, value: self.itemID.hashValue)
+						hashCombine(seed: &hash, value: self.locationID.hashValue)
+						hashCombine(seed: &hash, value: self.memo.hashValue)
+						hashCombine(seed: &hash, value: self.note.hashValue)
+						hashCombine(seed: &hash, value: self.typeID.hashValue)
+						hashCombine(seed: &hash, value: self.x.hashValue)
+						hashCombine(seed: &hash, value: self.y.hashValue)
+						hashCombine(seed: &hash, value: self.z.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: EVE.Char.Bookmarks.Folder.Bookmark, rhs: EVE.Char.Bookmarks.Folder.Bookmark) -> Bool {
@@ -1459,12 +1487,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					bookmarks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: folderID.hashValue)
-					hashCombine(seed: &hash, value: folderName.hashValue)
+					self.bookmarks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.folderID.hashValue)
+					hashCombine(seed: &hash, value: self.folderName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Bookmarks.Folder, rhs: EVE.Char.Bookmarks.Folder) -> Bool {
@@ -1523,10 +1555,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				folders.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.folders.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Bookmarks, rhs: EVE.Char.Bookmarks) -> Bool {
@@ -1621,12 +1657,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: characterID.hashValue)
-					hashCombine(seed: &hash, value: characterName.hashValue)
-					hashCombine(seed: &hash, value: response.hashValue)
+					hashCombine(seed: &hash, value: self.characterID.hashValue)
+					hashCombine(seed: &hash, value: self.characterName.hashValue)
+					hashCombine(seed: &hash, value: self.response.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CalendarEventAttendees.Attendee, rhs: EVE.Char.CalendarEventAttendees.Attendee) -> Bool {
@@ -1685,10 +1725,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				eventAttendees.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.eventAttendees.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.CalendarEventAttendees, rhs: EVE.Char.CalendarEventAttendees) -> Bool {
@@ -1775,14 +1819,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: charisma.hashValue)
-					hashCombine(seed: &hash, value: intelligence.hashValue)
-					hashCombine(seed: &hash, value: memory.hashValue)
-					hashCombine(seed: &hash, value: perception.hashValue)
-					hashCombine(seed: &hash, value: willpower.hashValue)
+					hashCombine(seed: &hash, value: self.charisma.hashValue)
+					hashCombine(seed: &hash, value: self.intelligence.hashValue)
+					hashCombine(seed: &hash, value: self.memory.hashValue)
+					hashCombine(seed: &hash, value: self.perception.hashValue)
+					hashCombine(seed: &hash, value: self.willpower.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.Attributes, rhs: EVE.Char.CharacterSheet.Attributes) -> Bool {
@@ -1846,10 +1894,14 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: certificateID.hashValue)
+					hashCombine(seed: &hash, value: self.certificateID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.Certificate, rhs: EVE.Char.CharacterSheet.Certificate) -> Bool {
@@ -1934,11 +1986,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.Implant, rhs: EVE.Char.CharacterSheet.Implant) -> Bool {
@@ -2017,13 +2073,17 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: cloneName.hashValue)
-					hashCombine(seed: &hash, value: jumpCloneID.hashValue)
-					hashCombine(seed: &hash, value: locationID.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.cloneName.hashValue)
+					hashCombine(seed: &hash, value: self.jumpCloneID.hashValue)
+					hashCombine(seed: &hash, value: self.locationID.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.JumpClone, rhs: EVE.Char.CharacterSheet.JumpClone) -> Bool {
@@ -2098,12 +2158,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: jumpCloneID.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.jumpCloneID.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.JumpCloneImplant, rhs: EVE.Char.CharacterSheet.JumpCloneImplant) -> Bool {
@@ -2171,11 +2235,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: roleID.hashValue)
-					hashCombine(seed: &hash, value: roleName.hashValue)
+					hashCombine(seed: &hash, value: self.roleID.hashValue)
+					hashCombine(seed: &hash, value: self.roleName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.Role, rhs: EVE.Char.CharacterSheet.Role) -> Bool {
@@ -2254,13 +2322,17 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: level.hashValue)
-					hashCombine(seed: &hash, value: published.hashValue)
-					hashCombine(seed: &hash, value: skillpoints.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.level.hashValue)
+					hashCombine(seed: &hash, value: self.published.hashValue)
+					hashCombine(seed: &hash, value: self.skillpoints.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.CharacterSheet.Skill, rhs: EVE.Char.CharacterSheet.Skill) -> Bool {
@@ -2583,49 +2655,53 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: allianceName?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: ancestry.hashValue)
-				hashCombine(seed: &hash, value: ancestryID.hashValue)
-				hashCombine(seed: &hash, value: attributes.hashValue)
-				hashCombine(seed: &hash, value: balance.hashValue)
-				hashCombine(seed: &hash, value: bloodLine.hashValue)
-				hashCombine(seed: &hash, value: bloodLineID.hashValue)
-				certificates.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				hashCombine(seed: &hash, value: characterName.hashValue)
-				hashCombine(seed: &hash, value: cloneJumpDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: cloneName.hashValue)
-				hashCombine(seed: &hash, value: cloneSkillPoints.hashValue)
-				hashCombine(seed: &hash, value: cloneTypeID.hashValue)
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: corporationName.hashValue)
-				corporationRoles.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporationRolesAtBase.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporationRolesAtHQ.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporationRolesAtOther.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporationTitles.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: dateOfBirth.hashValue)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: factionName?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: freeRespecs.hashValue)
-				hashCombine(seed: &hash, value: freeSkillPoints.hashValue)
-				hashCombine(seed: &hash, value: gender.hashValue)
-				hashCombine(seed: &hash, value: homeStationID.hashValue)
-				implants.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: jumpActivation?.hashValue ?? 0)
-				jumpCloneImplants.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				jumpClones.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: jumpFatigue?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: jumpLastUpdate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastRespecDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastTimedRespec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: race.hashValue)
-				hashCombine(seed: &hash, value: remoteStationDate?.hashValue ?? 0)
-				skills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.allianceID.hashValue)
+				hashCombine(seed: &hash, value: self.allianceName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.ancestry.hashValue)
+				hashCombine(seed: &hash, value: self.ancestryID.hashValue)
+				hashCombine(seed: &hash, value: self.attributes.hashValue)
+				hashCombine(seed: &hash, value: self.balance.hashValue)
+				hashCombine(seed: &hash, value: self.bloodLine.hashValue)
+				hashCombine(seed: &hash, value: self.bloodLineID.hashValue)
+				self.certificates.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.characterID.hashValue)
+				hashCombine(seed: &hash, value: self.characterName.hashValue)
+				hashCombine(seed: &hash, value: self.cloneJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.cloneName.hashValue)
+				hashCombine(seed: &hash, value: self.cloneSkillPoints.hashValue)
+				hashCombine(seed: &hash, value: self.cloneTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.corporationName.hashValue)
+				self.corporationRoles.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporationRolesAtBase.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporationRolesAtHQ.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporationRolesAtOther.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporationTitles.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.dateOfBirth.hashValue)
+				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.factionName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.freeRespecs.hashValue)
+				hashCombine(seed: &hash, value: self.freeSkillPoints.hashValue)
+				hashCombine(seed: &hash, value: self.gender.hashValue)
+				hashCombine(seed: &hash, value: self.homeStationID.hashValue)
+				self.implants.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.jumpActivation?.hashValue ?? 0)
+				self.jumpCloneImplants.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.jumpClones.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.jumpFatigue?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.jumpLastUpdate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastRespecDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastTimedRespec?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.race.hashValue)
+				hashCombine(seed: &hash, value: self.remoteStationDate?.hashValue ?? 0)
+				self.skills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.CharacterSheet, rhs: EVE.Char.CharacterSheet) -> Bool {
@@ -2753,13 +2829,17 @@ public extension EVE {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: accessorID.hashValue)
-						hashCombine(seed: &hash, value: accessorName.hashValue)
-						hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: untilWhen?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.accessorID.hashValue)
+						hashCombine(seed: &hash, value: self.accessorName.hashValue)
+						hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.untilWhen?.hashValue ?? 0)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: EVE.Char.ChatChannels.Channel.Accessor, rhs: EVE.Char.ChatChannels.Channel.Accessor) -> Bool {
@@ -2891,20 +2971,24 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					allowed?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					blocked?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: channelID.hashValue)
-					hashCombine(seed: &hash, value: comparisonKey.hashValue)
-					hashCombine(seed: &hash, value: displayName.hashValue)
-					hashCombine(seed: &hash, value: hasPassword.hashValue)
-					hashCombine(seed: &hash, value: motd.hashValue)
-					muted?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					operators?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: ownerID.hashValue)
-					hashCombine(seed: &hash, value: ownerName.hashValue)
+					self.allowed?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					self.blocked?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.channelID.hashValue)
+					hashCombine(seed: &hash, value: self.comparisonKey.hashValue)
+					hashCombine(seed: &hash, value: self.displayName.hashValue)
+					hashCombine(seed: &hash, value: self.hasPassword.hashValue)
+					hashCombine(seed: &hash, value: self.motd.hashValue)
+					self.muted?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					self.operators?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.ownerID.hashValue)
+					hashCombine(seed: &hash, value: self.ownerName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.ChatChannels.Channel, rhs: EVE.Char.ChatChannels.Channel) -> Bool {
@@ -2971,10 +3055,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				channels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.channels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.ChatChannels, rhs: EVE.Char.ChatChannels) -> Bool {
@@ -3061,14 +3149,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: charisma.hashValue)
-					hashCombine(seed: &hash, value: intelligence.hashValue)
-					hashCombine(seed: &hash, value: memory.hashValue)
-					hashCombine(seed: &hash, value: perception.hashValue)
-					hashCombine(seed: &hash, value: willpower.hashValue)
+					hashCombine(seed: &hash, value: self.charisma.hashValue)
+					hashCombine(seed: &hash, value: self.intelligence.hashValue)
+					hashCombine(seed: &hash, value: self.memory.hashValue)
+					hashCombine(seed: &hash, value: self.perception.hashValue)
+					hashCombine(seed: &hash, value: self.willpower.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Clones.Attributes, rhs: EVE.Char.Clones.Attributes) -> Bool {
@@ -3157,11 +3249,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Clones.Implant, rhs: EVE.Char.Clones.Implant) -> Bool {
@@ -3240,13 +3336,17 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: cloneName.hashValue)
-					hashCombine(seed: &hash, value: jumpCloneID.hashValue)
-					hashCombine(seed: &hash, value: locationID.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.cloneName.hashValue)
+					hashCombine(seed: &hash, value: self.jumpCloneID.hashValue)
+					hashCombine(seed: &hash, value: self.locationID.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Clones.JumpClone, rhs: EVE.Char.Clones.JumpClone) -> Bool {
@@ -3321,12 +3421,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: jumpCloneID.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.jumpCloneID.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Clones.JumpCloneImplant, rhs: EVE.Char.Clones.JumpCloneImplant) -> Bool {
@@ -3522,28 +3626,32 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: ancestry.hashValue)
-				hashCombine(seed: &hash, value: ancestryID.hashValue)
-				hashCombine(seed: &hash, value: attributes.hashValue)
-				hashCombine(seed: &hash, value: bloodLine.hashValue)
-				hashCombine(seed: &hash, value: bloodLineID.hashValue)
-				hashCombine(seed: &hash, value: cloneJumpDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: dateOfBirth.hashValue)
-				hashCombine(seed: &hash, value: freeRespecs.hashValue)
-				hashCombine(seed: &hash, value: gender.hashValue)
-				implants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: jumpActivation?.hashValue ?? 0)
-				jumpCloneImplants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				jumpClones?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: jumpFatigue?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: jumpLastUpdate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastRespecDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastTimedRespec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: race.hashValue)
-				hashCombine(seed: &hash, value: remoteStationDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.ancestry.hashValue)
+				hashCombine(seed: &hash, value: self.ancestryID.hashValue)
+				hashCombine(seed: &hash, value: self.attributes.hashValue)
+				hashCombine(seed: &hash, value: self.bloodLine.hashValue)
+				hashCombine(seed: &hash, value: self.bloodLineID.hashValue)
+				hashCombine(seed: &hash, value: self.cloneJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.dateOfBirth.hashValue)
+				hashCombine(seed: &hash, value: self.freeRespecs.hashValue)
+				hashCombine(seed: &hash, value: self.gender.hashValue)
+				self.implants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.jumpActivation?.hashValue ?? 0)
+				self.jumpCloneImplants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.jumpClones?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.jumpFatigue?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.jumpLastUpdate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastRespecDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastTimedRespec?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.race.hashValue)
+				hashCombine(seed: &hash, value: self.remoteStationDate?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Clones, rhs: EVE.Char.Clones) -> Bool {
@@ -3657,15 +3765,19 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: contactID.hashValue)
-					hashCombine(seed: &hash, value: contactName.hashValue)
-					hashCombine(seed: &hash, value: contactTypeID.hashValue)
-					hashCombine(seed: &hash, value: inWatchlist?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: labelMask.hashValue)
-					hashCombine(seed: &hash, value: standing.hashValue)
+					hashCombine(seed: &hash, value: self.contactID.hashValue)
+					hashCombine(seed: &hash, value: self.contactName.hashValue)
+					hashCombine(seed: &hash, value: self.contactTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.inWatchlist?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.labelMask.hashValue)
+					hashCombine(seed: &hash, value: self.standing.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.ContactList.Contact, rhs: EVE.Char.ContactList.Contact) -> Bool {
@@ -3736,11 +3848,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: labelID.hashValue)
-					hashCombine(seed: &hash, value: name.hashValue)
+					hashCombine(seed: &hash, value: self.labelID.hashValue)
+					hashCombine(seed: &hash, value: self.name.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.ContactList.Label, rhs: EVE.Char.ContactList.Label) -> Bool {
@@ -3828,15 +3944,19 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				allianceContactLabels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				allianceContactList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				contactLabels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				contactList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporateContactLabels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporateContactList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.allianceContactLabels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.allianceContactList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.contactLabels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.contactList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporateContactLabels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporateContactList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.ContactList, rhs: EVE.Char.ContactList) -> Bool {
@@ -3928,14 +4048,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: messageData.hashValue)
-					hashCombine(seed: &hash, value: notificationID.hashValue)
-					hashCombine(seed: &hash, value: senderID.hashValue)
-					hashCombine(seed: &hash, value: senderName.hashValue)
-					hashCombine(seed: &hash, value: sentDate.hashValue)
+					hashCombine(seed: &hash, value: self.messageData.hashValue)
+					hashCombine(seed: &hash, value: self.notificationID.hashValue)
+					hashCombine(seed: &hash, value: self.senderID.hashValue)
+					hashCombine(seed: &hash, value: self.senderName.hashValue)
+					hashCombine(seed: &hash, value: self.sentDate.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.ContactNotifications.Notification, rhs: EVE.Char.ContactNotifications.Notification) -> Bool {
@@ -3996,10 +4120,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				contactNotifications.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.contactNotifications.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.ContactNotifications, rhs: EVE.Char.ContactNotifications) -> Bool {
@@ -4086,14 +4214,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: amount.hashValue)
-					hashCombine(seed: &hash, value: bidID.hashValue)
-					hashCombine(seed: &hash, value: bidderID.hashValue)
-					hashCombine(seed: &hash, value: contractID.hashValue)
-					hashCombine(seed: &hash, value: dateBid.hashValue)
+					hashCombine(seed: &hash, value: self.amount.hashValue)
+					hashCombine(seed: &hash, value: self.bidID.hashValue)
+					hashCombine(seed: &hash, value: self.bidderID.hashValue)
+					hashCombine(seed: &hash, value: self.contractID.hashValue)
+					hashCombine(seed: &hash, value: self.dateBid.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.ContractBids.Bid, rhs: EVE.Char.ContractBids.Bid) -> Bool {
@@ -4154,10 +4286,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				bidList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.bidList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.ContractBids, rhs: EVE.Char.ContractBids) -> Bool {
@@ -4250,15 +4386,19 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: included.hashValue)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: rawQuantity.hashValue)
-					hashCombine(seed: &hash, value: recordID.hashValue)
-					hashCombine(seed: &hash, value: singleton.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.included.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.rawQuantity.hashValue)
+					hashCombine(seed: &hash, value: self.recordID.hashValue)
+					hashCombine(seed: &hash, value: self.singleton.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.ContractItems.Item, rhs: EVE.Char.ContractItems.Item) -> Bool {
@@ -4320,10 +4460,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				itemList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.itemList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.ContractItems, rhs: EVE.Char.ContractItems) -> Bool {
@@ -4578,31 +4722,35 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: acceptorID.hashValue)
-					hashCombine(seed: &hash, value: assigneeID.hashValue)
-					hashCombine(seed: &hash, value: availability.hashValue)
-					hashCombine(seed: &hash, value: buyout.hashValue)
-					hashCombine(seed: &hash, value: collateral.hashValue)
-					hashCombine(seed: &hash, value: contractID.hashValue)
-					hashCombine(seed: &hash, value: dateAccepted.hashValue)
-					hashCombine(seed: &hash, value: dateCompleted.hashValue)
-					hashCombine(seed: &hash, value: dateExpired.hashValue)
-					hashCombine(seed: &hash, value: dateIssued.hashValue)
-					hashCombine(seed: &hash, value: endStationID.hashValue)
-					hashCombine(seed: &hash, value: forCorp.hashValue)
-					hashCombine(seed: &hash, value: issuerCorpID.hashValue)
-					hashCombine(seed: &hash, value: issuerID.hashValue)
-					hashCombine(seed: &hash, value: numDays.hashValue)
-					hashCombine(seed: &hash, value: price.hashValue)
-					hashCombine(seed: &hash, value: reward.hashValue)
-					hashCombine(seed: &hash, value: startStationID.hashValue)
-					hashCombine(seed: &hash, value: status.hashValue)
-					hashCombine(seed: &hash, value: title.hashValue)
-					hashCombine(seed: &hash, value: type.hashValue)
-					hashCombine(seed: &hash, value: volume.hashValue)
+					hashCombine(seed: &hash, value: self.acceptorID.hashValue)
+					hashCombine(seed: &hash, value: self.assigneeID.hashValue)
+					hashCombine(seed: &hash, value: self.availability.hashValue)
+					hashCombine(seed: &hash, value: self.buyout.hashValue)
+					hashCombine(seed: &hash, value: self.collateral.hashValue)
+					hashCombine(seed: &hash, value: self.contractID.hashValue)
+					hashCombine(seed: &hash, value: self.dateAccepted.hashValue)
+					hashCombine(seed: &hash, value: self.dateCompleted.hashValue)
+					hashCombine(seed: &hash, value: self.dateExpired.hashValue)
+					hashCombine(seed: &hash, value: self.dateIssued.hashValue)
+					hashCombine(seed: &hash, value: self.endStationID.hashValue)
+					hashCombine(seed: &hash, value: self.forCorp.hashValue)
+					hashCombine(seed: &hash, value: self.issuerCorpID.hashValue)
+					hashCombine(seed: &hash, value: self.issuerID.hashValue)
+					hashCombine(seed: &hash, value: self.numDays.hashValue)
+					hashCombine(seed: &hash, value: self.price.hashValue)
+					hashCombine(seed: &hash, value: self.reward.hashValue)
+					hashCombine(seed: &hash, value: self.startStationID.hashValue)
+					hashCombine(seed: &hash, value: self.status.hashValue)
+					hashCombine(seed: &hash, value: self.title.hashValue)
+					hashCombine(seed: &hash, value: self.type.hashValue)
+					hashCombine(seed: &hash, value: self.volume.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Contracts.Contract, rhs: EVE.Char.Contracts.Contract) -> Bool {
@@ -4680,10 +4828,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				contractList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.contractList.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Contracts, rhs: EVE.Char.Contracts) -> Bool {
@@ -4804,20 +4956,24 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: currentRank.hashValue)
-				hashCombine(seed: &hash, value: enlisted.hashValue)
-				hashCombine(seed: &hash, value: factionID.hashValue)
-				hashCombine(seed: &hash, value: factionName.hashValue)
-				hashCombine(seed: &hash, value: highestRank.hashValue)
-				hashCombine(seed: &hash, value: killsLastWeek.hashValue)
-				hashCombine(seed: &hash, value: killsTotal.hashValue)
-				hashCombine(seed: &hash, value: killsYesterday.hashValue)
-				hashCombine(seed: &hash, value: victoryPointsLastWeek.hashValue)
-				hashCombine(seed: &hash, value: victoryPointsTotal.hashValue)
-				hashCombine(seed: &hash, value: victoryPointsYesterday.hashValue)
+				hashCombine(seed: &hash, value: self.currentRank.hashValue)
+				hashCombine(seed: &hash, value: self.enlisted.hashValue)
+				hashCombine(seed: &hash, value: self.factionID.hashValue)
+				hashCombine(seed: &hash, value: self.factionName.hashValue)
+				hashCombine(seed: &hash, value: self.highestRank.hashValue)
+				hashCombine(seed: &hash, value: self.killsLastWeek.hashValue)
+				hashCombine(seed: &hash, value: self.killsTotal.hashValue)
+				hashCombine(seed: &hash, value: self.killsYesterday.hashValue)
+				hashCombine(seed: &hash, value: self.victoryPointsLastWeek.hashValue)
+				hashCombine(seed: &hash, value: self.victoryPointsTotal.hashValue)
+				hashCombine(seed: &hash, value: self.victoryPointsYesterday.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.FacWarStats, rhs: EVE.Char.FacWarStats) -> Bool {
@@ -5074,37 +5230,41 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: activityID.hashValue)
-					hashCombine(seed: &hash, value: blueprintID.hashValue)
-					hashCombine(seed: &hash, value: blueprintLocationID.hashValue)
-					hashCombine(seed: &hash, value: blueprintTypeID.hashValue)
-					hashCombine(seed: &hash, value: blueprintTypeName.hashValue)
-					hashCombine(seed: &hash, value: completedCharacterID.hashValue)
-					hashCombine(seed: &hash, value: completedDate.hashValue)
-					hashCombine(seed: &hash, value: cost.hashValue)
-					hashCombine(seed: &hash, value: endDate.hashValue)
-					hashCombine(seed: &hash, value: facilityID.hashValue)
-					hashCombine(seed: &hash, value: installerID.hashValue)
-					hashCombine(seed: &hash, value: installerName.hashValue)
-					hashCombine(seed: &hash, value: jobID.hashValue)
-					hashCombine(seed: &hash, value: licensedRuns.hashValue)
-					hashCombine(seed: &hash, value: outputLocationID.hashValue)
-					hashCombine(seed: &hash, value: pauseDate.hashValue)
-					hashCombine(seed: &hash, value: probability.hashValue)
-					hashCombine(seed: &hash, value: productTypeID.hashValue)
-					hashCombine(seed: &hash, value: productTypeName.hashValue)
-					hashCombine(seed: &hash, value: runs.hashValue)
-					hashCombine(seed: &hash, value: solarSystemID.hashValue)
-					hashCombine(seed: &hash, value: solarSystemName.hashValue)
-					hashCombine(seed: &hash, value: startDate.hashValue)
-					hashCombine(seed: &hash, value: stationID.hashValue)
-					hashCombine(seed: &hash, value: status.hashValue)
-					hashCombine(seed: &hash, value: successfulRuns.hashValue)
-					hashCombine(seed: &hash, value: teamID.hashValue)
-					hashCombine(seed: &hash, value: timeInSeconds.hashValue)
+					hashCombine(seed: &hash, value: self.activityID.hashValue)
+					hashCombine(seed: &hash, value: self.blueprintID.hashValue)
+					hashCombine(seed: &hash, value: self.blueprintLocationID.hashValue)
+					hashCombine(seed: &hash, value: self.blueprintTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.blueprintTypeName.hashValue)
+					hashCombine(seed: &hash, value: self.completedCharacterID.hashValue)
+					hashCombine(seed: &hash, value: self.completedDate.hashValue)
+					hashCombine(seed: &hash, value: self.cost.hashValue)
+					hashCombine(seed: &hash, value: self.endDate.hashValue)
+					hashCombine(seed: &hash, value: self.facilityID.hashValue)
+					hashCombine(seed: &hash, value: self.installerID.hashValue)
+					hashCombine(seed: &hash, value: self.installerName.hashValue)
+					hashCombine(seed: &hash, value: self.jobID.hashValue)
+					hashCombine(seed: &hash, value: self.licensedRuns.hashValue)
+					hashCombine(seed: &hash, value: self.outputLocationID.hashValue)
+					hashCombine(seed: &hash, value: self.pauseDate.hashValue)
+					hashCombine(seed: &hash, value: self.probability.hashValue)
+					hashCombine(seed: &hash, value: self.productTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.productTypeName.hashValue)
+					hashCombine(seed: &hash, value: self.runs.hashValue)
+					hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+					hashCombine(seed: &hash, value: self.solarSystemName.hashValue)
+					hashCombine(seed: &hash, value: self.startDate.hashValue)
+					hashCombine(seed: &hash, value: self.stationID.hashValue)
+					hashCombine(seed: &hash, value: self.status.hashValue)
+					hashCombine(seed: &hash, value: self.successfulRuns.hashValue)
+					hashCombine(seed: &hash, value: self.teamID.hashValue)
+					hashCombine(seed: &hash, value: self.timeInSeconds.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.IndustryJobs.Job, rhs: EVE.Char.IndustryJobs.Job) -> Bool {
@@ -5188,10 +5348,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				jobs.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.jobs.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.IndustryJobs, rhs: EVE.Char.IndustryJobs) -> Bool {
@@ -5340,22 +5504,26 @@ public extension EVE {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: allianceName?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: characterID.hashValue)
-						hashCombine(seed: &hash, value: characterName.hashValue)
-						hashCombine(seed: &hash, value: corporationID.hashValue)
-						hashCombine(seed: &hash, value: corporationName.hashValue)
-						hashCombine(seed: &hash, value: damageDone.hashValue)
-						hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: factionName?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: finalBlow.hashValue)
-						hashCombine(seed: &hash, value: securityStatus.hashValue)
-						hashCombine(seed: &hash, value: shipTypeID.hashValue)
-						hashCombine(seed: &hash, value: weaponTypeID.hashValue)
+						hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.allianceName?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.characterID.hashValue)
+						hashCombine(seed: &hash, value: self.characterName.hashValue)
+						hashCombine(seed: &hash, value: self.corporationID.hashValue)
+						hashCombine(seed: &hash, value: self.corporationName.hashValue)
+						hashCombine(seed: &hash, value: self.damageDone.hashValue)
+						hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.factionName?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.finalBlow.hashValue)
+						hashCombine(seed: &hash, value: self.securityStatus.hashValue)
+						hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
+						hashCombine(seed: &hash, value: self.weaponTypeID.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: EVE.Char.KillMails.Kill.Attacker, rhs: EVE.Char.KillMails.Kill.Attacker) -> Bool {
@@ -5451,14 +5619,18 @@ public extension EVE {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: flag.hashValue)
-						hashCombine(seed: &hash, value: qtyDestroyed.hashValue)
-						hashCombine(seed: &hash, value: qtyDropped.hashValue)
-						hashCombine(seed: &hash, value: singleton.hashValue)
-						hashCombine(seed: &hash, value: typeID.hashValue)
+						hashCombine(seed: &hash, value: self.flag.hashValue)
+						hashCombine(seed: &hash, value: self.qtyDestroyed.hashValue)
+						hashCombine(seed: &hash, value: self.qtyDropped.hashValue)
+						hashCombine(seed: &hash, value: self.singleton.hashValue)
+						hashCombine(seed: &hash, value: self.typeID.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: EVE.Char.KillMails.Kill.Item, rhs: EVE.Char.KillMails.Kill.Item) -> Bool {
@@ -5606,22 +5778,26 @@ public extension EVE {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: allianceName?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: characterID.hashValue)
-						hashCombine(seed: &hash, value: characterName.hashValue)
-						hashCombine(seed: &hash, value: corporationID.hashValue)
-						hashCombine(seed: &hash, value: corporationName.hashValue)
-						hashCombine(seed: &hash, value: damageTaken.hashValue)
-						hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: factionName?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: shipTypeID.hashValue)
-						hashCombine(seed: &hash, value: x.hashValue)
-						hashCombine(seed: &hash, value: y.hashValue)
-						hashCombine(seed: &hash, value: z.hashValue)
+						hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.allianceName?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.characterID.hashValue)
+						hashCombine(seed: &hash, value: self.characterName.hashValue)
+						hashCombine(seed: &hash, value: self.corporationID.hashValue)
+						hashCombine(seed: &hash, value: self.corporationName.hashValue)
+						hashCombine(seed: &hash, value: self.damageTaken.hashValue)
+						hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.factionName?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
+						hashCombine(seed: &hash, value: self.x.hashValue)
+						hashCombine(seed: &hash, value: self.y.hashValue)
+						hashCombine(seed: &hash, value: self.z.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: EVE.Char.KillMails.Kill.Victim, rhs: EVE.Char.KillMails.Kill.Victim) -> Bool {
@@ -5725,16 +5901,20 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					attackers.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: killID.hashValue)
-					hashCombine(seed: &hash, value: killTime.hashValue)
-					hashCombine(seed: &hash, value: moonID.hashValue)
-					hashCombine(seed: &hash, value: solarSystemID.hashValue)
-					hashCombine(seed: &hash, value: victim.hashValue)
+					self.attackers.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.killID.hashValue)
+					hashCombine(seed: &hash, value: self.killTime.hashValue)
+					hashCombine(seed: &hash, value: self.moonID.hashValue)
+					hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+					hashCombine(seed: &hash, value: self.victim.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.KillMails.Kill, rhs: EVE.Char.KillMails.Kill) -> Bool {
@@ -5797,10 +5977,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				kills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.kills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.KillMails, rhs: EVE.Char.KillMails) -> Bool {
@@ -5887,14 +6071,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: itemID.hashValue)
-					hashCombine(seed: &hash, value: itemName.hashValue)
-					hashCombine(seed: &hash, value: x.hashValue)
-					hashCombine(seed: &hash, value: y.hashValue)
-					hashCombine(seed: &hash, value: z.hashValue)
+					hashCombine(seed: &hash, value: self.itemID.hashValue)
+					hashCombine(seed: &hash, value: self.itemName.hashValue)
+					hashCombine(seed: &hash, value: self.x.hashValue)
+					hashCombine(seed: &hash, value: self.y.hashValue)
+					hashCombine(seed: &hash, value: self.z.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Locations.Location, rhs: EVE.Char.Locations.Location) -> Bool {
@@ -5955,10 +6143,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				locations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.locations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Locations, rhs: EVE.Char.Locations) -> Bool {
@@ -6027,11 +6219,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: messageID.hashValue)
-					hashCombine(seed: &hash, value: text.hashValue)
+					hashCombine(seed: &hash, value: self.messageID.hashValue)
+					hashCombine(seed: &hash, value: self.text.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.MailBodies.Message, rhs: EVE.Char.MailBodies.Message) -> Bool {
@@ -6095,11 +6291,15 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				messages.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: missingMessageIDs.hashValue)
+				self.messages.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.missingMessageIDs.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.MailBodies, rhs: EVE.Char.MailBodies) -> Bool {
@@ -6169,11 +6369,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: displayName.hashValue)
-					hashCombine(seed: &hash, value: listID.hashValue)
+					hashCombine(seed: &hash, value: self.displayName.hashValue)
+					hashCombine(seed: &hash, value: self.listID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.MailingLists.MailingList, rhs: EVE.Char.MailingLists.MailingList) -> Bool {
@@ -6231,10 +6435,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				mailingLists.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.mailingLists.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.MailingLists, rhs: EVE.Char.MailingLists) -> Bool {
@@ -6403,24 +6611,28 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accountKey.hashValue)
-					hashCombine(seed: &hash, value: bid.hashValue)
-					hashCombine(seed: &hash, value: characterID.hashValue)
-					hashCombine(seed: &hash, value: duration.hashValue)
-					hashCombine(seed: &hash, value: escrow.hashValue)
-					hashCombine(seed: &hash, value: issued.hashValue)
-					hashCombine(seed: &hash, value: minVolume.hashValue)
-					hashCombine(seed: &hash, value: orderID.hashValue)
-					hashCombine(seed: &hash, value: orderState.hashValue)
-					hashCombine(seed: &hash, value: price.hashValue)
-					hashCombine(seed: &hash, value: range.hashValue)
-					hashCombine(seed: &hash, value: stationID.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: volEntered.hashValue)
-					hashCombine(seed: &hash, value: volRemaining.hashValue)
+					hashCombine(seed: &hash, value: self.accountKey.hashValue)
+					hashCombine(seed: &hash, value: self.bid.hashValue)
+					hashCombine(seed: &hash, value: self.characterID.hashValue)
+					hashCombine(seed: &hash, value: self.duration.hashValue)
+					hashCombine(seed: &hash, value: self.escrow.hashValue)
+					hashCombine(seed: &hash, value: self.issued.hashValue)
+					hashCombine(seed: &hash, value: self.minVolume.hashValue)
+					hashCombine(seed: &hash, value: self.orderID.hashValue)
+					hashCombine(seed: &hash, value: self.orderState.hashValue)
+					hashCombine(seed: &hash, value: self.price.hashValue)
+					hashCombine(seed: &hash, value: self.range.hashValue)
+					hashCombine(seed: &hash, value: self.stationID.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.volEntered.hashValue)
+					hashCombine(seed: &hash, value: self.volRemaining.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.MarketOrders.Order, rhs: EVE.Char.MarketOrders.Order) -> Bool {
@@ -6491,10 +6703,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				orders.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.orders.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.MarketOrders, rhs: EVE.Char.MarketOrders) -> Bool {
@@ -6626,17 +6842,21 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: issued.hashValue)
-					hashCombine(seed: &hash, value: issuerID.hashValue)
-					hashCombine(seed: &hash, value: medalDescription?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: medalID.hashValue)
-					hashCombine(seed: &hash, value: reason.hashValue)
-					hashCombine(seed: &hash, value: status.hashValue)
-					hashCombine(seed: &hash, value: title?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.issued.hashValue)
+					hashCombine(seed: &hash, value: self.issuerID.hashValue)
+					hashCombine(seed: &hash, value: self.medalDescription?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.medalID.hashValue)
+					hashCombine(seed: &hash, value: self.reason.hashValue)
+					hashCombine(seed: &hash, value: self.status.hashValue)
+					hashCombine(seed: &hash, value: self.title?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Medals.Medal, rhs: EVE.Char.Medals.Medal) -> Bool {
@@ -6706,11 +6926,15 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				currentCorporation.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				otherCorporations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.currentCorporation.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.otherCorporations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Medals, rhs: EVE.Char.Medals) -> Bool {
@@ -6825,17 +7049,21 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: messageID.hashValue)
-					hashCombine(seed: &hash, value: senderID.hashValue)
-					hashCombine(seed: &hash, value: senderName.hashValue)
-					hashCombine(seed: &hash, value: sentDate.hashValue)
-					hashCombine(seed: &hash, value: title.hashValue)
-					hashCombine(seed: &hash, value: toCharacterIDs?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: toCorpOrAllianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: toListID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.messageID.hashValue)
+					hashCombine(seed: &hash, value: self.senderID.hashValue)
+					hashCombine(seed: &hash, value: self.senderName.hashValue)
+					hashCombine(seed: &hash, value: self.sentDate.hashValue)
+					hashCombine(seed: &hash, value: self.title.hashValue)
+					hashCombine(seed: &hash, value: self.toCharacterIDs?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.toCorpOrAllianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.toListID?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Messages.Message, rhs: EVE.Char.Messages.Message) -> Bool {
@@ -6899,10 +7127,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				messages.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.messages.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Messages, rhs: EVE.Char.Messages) -> Bool {
@@ -6971,11 +7203,15 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: notificationID.hashValue)
-					hashCombine(seed: &hash, value: text.hashValue)
+					hashCombine(seed: &hash, value: self.notificationID.hashValue)
+					hashCombine(seed: &hash, value: self.text.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.NotificationTexts.Notification, rhs: EVE.Char.NotificationTexts.Notification) -> Bool {
@@ -7042,11 +7278,15 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: missindIDs?.hashValue ?? 0)
-				notifications.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.missindIDs?.hashValue ?? 0)
+				self.notifications.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.NotificationTexts, rhs: EVE.Char.NotificationTexts) -> Bool {
@@ -7165,15 +7405,19 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: notificationID.hashValue)
-					hashCombine(seed: &hash, value: read.hashValue)
-					hashCombine(seed: &hash, value: senderID.hashValue)
-					hashCombine(seed: &hash, value: senderName.hashValue)
-					hashCombine(seed: &hash, value: sentDate.hashValue)
-					hashCombine(seed: &hash, value: type.hashValue)
+					hashCombine(seed: &hash, value: self.notificationID.hashValue)
+					hashCombine(seed: &hash, value: self.read.hashValue)
+					hashCombine(seed: &hash, value: self.senderID.hashValue)
+					hashCombine(seed: &hash, value: self.senderName.hashValue)
+					hashCombine(seed: &hash, value: self.sentDate.hashValue)
+					hashCombine(seed: &hash, value: self.type.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Notifications.Notification, rhs: EVE.Char.Notifications.Notification) -> Bool {
@@ -7235,10 +7479,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				notifications.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.notifications.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Notifications, rhs: EVE.Char.Notifications) -> Bool {
@@ -7361,20 +7609,24 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: lastUpdate.hashValue)
-					hashCombine(seed: &hash, value: numberOfPins.hashValue)
-					hashCombine(seed: &hash, value: ownerID.hashValue)
-					hashCombine(seed: &hash, value: ownerName.hashValue)
-					hashCombine(seed: &hash, value: planetID.hashValue)
-					hashCombine(seed: &hash, value: planetName.hashValue)
-					hashCombine(seed: &hash, value: planetTypeID.hashValue)
-					hashCombine(seed: &hash, value: planetTypeName.hashValue)
-					hashCombine(seed: &hash, value: solarSystemID.hashValue)
-					hashCombine(seed: &hash, value: solarSystemName.hashValue)
-					hashCombine(seed: &hash, value: upgradeLevel.hashValue)
+					hashCombine(seed: &hash, value: self.lastUpdate.hashValue)
+					hashCombine(seed: &hash, value: self.numberOfPins.hashValue)
+					hashCombine(seed: &hash, value: self.ownerID.hashValue)
+					hashCombine(seed: &hash, value: self.ownerName.hashValue)
+					hashCombine(seed: &hash, value: self.planetID.hashValue)
+					hashCombine(seed: &hash, value: self.planetName.hashValue)
+					hashCombine(seed: &hash, value: self.planetTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.planetTypeName.hashValue)
+					hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+					hashCombine(seed: &hash, value: self.solarSystemName.hashValue)
+					hashCombine(seed: &hash, value: self.upgradeLevel.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.PlanetaryColonies.Colony, rhs: EVE.Char.PlanetaryColonies.Colony) -> Bool {
@@ -7441,10 +7693,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				colonies.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.colonies.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.PlanetaryColonies, rhs: EVE.Char.PlanetaryColonies) -> Bool {
@@ -7519,12 +7775,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: linkLevel.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
+					hashCombine(seed: &hash, value: self.destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: self.linkLevel.hashValue)
+					hashCombine(seed: &hash, value: self.sourcePinID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.PlanetaryLinks.Link, rhs: EVE.Char.PlanetaryLinks.Link) -> Bool {
@@ -7583,10 +7843,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				links.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.links.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.PlanetaryLinks, rhs: EVE.Char.PlanetaryLinks) -> Bool {
@@ -7736,23 +8000,27 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: contentQuantity.hashValue)
-					hashCombine(seed: &hash, value: contentTypeID.hashValue)
-					hashCombine(seed: &hash, value: contentTypeName.hashValue)
-					hashCombine(seed: &hash, value: cycleTime.hashValue)
-					hashCombine(seed: &hash, value: expiryTime?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: installTime?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: lastLaunchTime?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: latitude.hashValue)
-					hashCombine(seed: &hash, value: longitude.hashValue)
-					hashCombine(seed: &hash, value: pinID.hashValue)
-					hashCombine(seed: &hash, value: quantityPerCycle.hashValue)
-					hashCombine(seed: &hash, value: schematicID.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.contentQuantity.hashValue)
+					hashCombine(seed: &hash, value: self.contentTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.contentTypeName.hashValue)
+					hashCombine(seed: &hash, value: self.cycleTime.hashValue)
+					hashCombine(seed: &hash, value: self.expiryTime?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.installTime?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.lastLaunchTime?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.latitude.hashValue)
+					hashCombine(seed: &hash, value: self.longitude.hashValue)
+					hashCombine(seed: &hash, value: self.pinID.hashValue)
+					hashCombine(seed: &hash, value: self.quantityPerCycle.hashValue)
+					hashCombine(seed: &hash, value: self.schematicID.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.PlanetaryPins.Pin, rhs: EVE.Char.PlanetaryPins.Pin) -> Bool {
@@ -7822,10 +8090,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				pins.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.pins.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.PlanetaryPins, rhs: EVE.Char.PlanetaryPins) -> Bool {
@@ -7948,20 +8220,24 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: contentTypeID.hashValue)
-					hashCombine(seed: &hash, value: contentTypeName.hashValue)
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: routeID.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
-					hashCombine(seed: &hash, value: waypoint1.hashValue)
-					hashCombine(seed: &hash, value: waypoint2.hashValue)
-					hashCombine(seed: &hash, value: waypoint3.hashValue)
-					hashCombine(seed: &hash, value: waypoint4.hashValue)
-					hashCombine(seed: &hash, value: waypoint5.hashValue)
+					hashCombine(seed: &hash, value: self.contentTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.contentTypeName.hashValue)
+					hashCombine(seed: &hash, value: self.destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.routeID.hashValue)
+					hashCombine(seed: &hash, value: self.sourcePinID.hashValue)
+					hashCombine(seed: &hash, value: self.waypoint1.hashValue)
+					hashCombine(seed: &hash, value: self.waypoint2.hashValue)
+					hashCombine(seed: &hash, value: self.waypoint3.hashValue)
+					hashCombine(seed: &hash, value: self.waypoint4.hashValue)
+					hashCombine(seed: &hash, value: self.waypoint5.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.PlanetaryRoutes.Route, rhs: EVE.Char.PlanetaryRoutes.Route) -> Bool {
@@ -8028,10 +8304,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				routes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.routes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.PlanetaryRoutes, rhs: EVE.Char.PlanetaryRoutes) -> Bool {
@@ -8118,14 +8398,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: agentID.hashValue)
-					hashCombine(seed: &hash, value: pointsPerDay.hashValue)
-					hashCombine(seed: &hash, value: remainderPoints.hashValue)
-					hashCombine(seed: &hash, value: researchStartDate.hashValue)
-					hashCombine(seed: &hash, value: skillTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.agentID.hashValue)
+					hashCombine(seed: &hash, value: self.pointsPerDay.hashValue)
+					hashCombine(seed: &hash, value: self.remainderPoints.hashValue)
+					hashCombine(seed: &hash, value: self.researchStartDate.hashValue)
+					hashCombine(seed: &hash, value: self.skillTypeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Research.Research, rhs: EVE.Char.Research.Research) -> Bool {
@@ -8186,10 +8470,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				research.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.research.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Research, rhs: EVE.Char.Research) -> Bool {
@@ -8288,16 +8576,20 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: endSP.hashValue)
-					hashCombine(seed: &hash, value: endTime.hashValue)
-					hashCombine(seed: &hash, value: level.hashValue)
-					hashCombine(seed: &hash, value: queuePosition.hashValue)
-					hashCombine(seed: &hash, value: startSP.hashValue)
-					hashCombine(seed: &hash, value: startTime.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.endSP.hashValue)
+					hashCombine(seed: &hash, value: self.endTime.hashValue)
+					hashCombine(seed: &hash, value: self.level.hashValue)
+					hashCombine(seed: &hash, value: self.queuePosition.hashValue)
+					hashCombine(seed: &hash, value: self.startSP.hashValue)
+					hashCombine(seed: &hash, value: self.startTime.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.SkillQueue.Skill, rhs: EVE.Char.SkillQueue.Skill) -> Bool {
@@ -8360,10 +8652,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				skillQueue.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.skillQueue.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.SkillQueue, rhs: EVE.Char.SkillQueue) -> Bool {
@@ -8450,14 +8746,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: level.hashValue)
-					hashCombine(seed: &hash, value: published.hashValue)
-					hashCombine(seed: &hash, value: skillpoints.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.level.hashValue)
+					hashCombine(seed: &hash, value: self.published.hashValue)
+					hashCombine(seed: &hash, value: self.skillpoints.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Skills.Skill, rhs: EVE.Char.Skills.Skill) -> Bool {
@@ -8518,10 +8818,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				skills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.skills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Skills, rhs: EVE.Char.Skills) -> Bool {
@@ -8596,12 +8900,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: fromID.hashValue)
-					hashCombine(seed: &hash, value: fromName.hashValue)
-					hashCombine(seed: &hash, value: standing.hashValue)
+					hashCombine(seed: &hash, value: self.fromID.hashValue)
+					hashCombine(seed: &hash, value: self.fromName.hashValue)
+					hashCombine(seed: &hash, value: self.standing.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.Standings.Standing, rhs: EVE.Char.Standings.Standing) -> Bool {
@@ -8681,12 +8989,16 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				agents?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				factions?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				npcCorporations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.agents?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.factions?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.npcCorporations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.Standings, rhs: EVE.Char.Standings) -> Bool {
@@ -8819,18 +9131,22 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: duration.hashValue)
-					hashCombine(seed: &hash, value: eventDate.hashValue)
-					hashCombine(seed: &hash, value: eventID.hashValue)
-					hashCombine(seed: &hash, value: eventText.hashValue)
-					hashCombine(seed: &hash, value: eventTitle.hashValue)
-					hashCombine(seed: &hash, value: importance.hashValue)
-					hashCombine(seed: &hash, value: ownerID.hashValue)
-					hashCombine(seed: &hash, value: ownerName.hashValue)
-					hashCombine(seed: &hash, value: response.hashValue)
+					hashCombine(seed: &hash, value: self.duration.hashValue)
+					hashCombine(seed: &hash, value: self.eventDate.hashValue)
+					hashCombine(seed: &hash, value: self.eventID.hashValue)
+					hashCombine(seed: &hash, value: self.eventText.hashValue)
+					hashCombine(seed: &hash, value: self.eventTitle.hashValue)
+					hashCombine(seed: &hash, value: self.importance.hashValue)
+					hashCombine(seed: &hash, value: self.ownerID.hashValue)
+					hashCombine(seed: &hash, value: self.ownerName.hashValue)
+					hashCombine(seed: &hash, value: self.response.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.UpcomingCalendarEvents.Event, rhs: EVE.Char.UpcomingCalendarEvents.Event) -> Bool {
@@ -8895,10 +9211,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				upcomingEvents.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.upcomingEvents.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.UpcomingCalendarEvents, rhs: EVE.Char.UpcomingCalendarEvents) -> Bool {
@@ -9084,25 +9404,29 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: amount.hashValue)
-					hashCombine(seed: &hash, value: argID1?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: argName1?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: balance.hashValue)
-					hashCombine(seed: &hash, value: date.hashValue)
-					hashCombine(seed: &hash, value: owner1TypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: owner2TypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: ownerID1?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: ownerID2?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: ownerName1?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: ownerName2?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: refID.hashValue)
-					hashCombine(seed: &hash, value: refTypeID.hashValue)
-					hashCombine(seed: &hash, value: taxAmount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: taxReceiverID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.amount.hashValue)
+					hashCombine(seed: &hash, value: self.argID1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.argName1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.balance.hashValue)
+					hashCombine(seed: &hash, value: self.date.hashValue)
+					hashCombine(seed: &hash, value: self.owner1TypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.owner2TypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.ownerID1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.ownerID2?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.ownerName1?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.ownerName2?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.refID.hashValue)
+					hashCombine(seed: &hash, value: self.refTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.taxAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.taxReceiverID?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.WalletJournal.Transaction, rhs: EVE.Char.WalletJournal.Transaction) -> Bool {
@@ -9174,10 +9498,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				transactions.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.transactions.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.WalletJournal, rhs: EVE.Char.WalletJournal) -> Bool {
@@ -9355,23 +9683,27 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: clientID.hashValue)
-					hashCombine(seed: &hash, value: clientName.hashValue)
-					hashCombine(seed: &hash, value: clientTypeID.hashValue)
-					hashCombine(seed: &hash, value: journalTransactionID.hashValue)
-					hashCombine(seed: &hash, value: price.hashValue)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: stationID.hashValue)
-					hashCombine(seed: &hash, value: stationName.hashValue)
-					hashCombine(seed: &hash, value: transactionDateTime.hashValue)
-					hashCombine(seed: &hash, value: transactionFor.hashValue)
-					hashCombine(seed: &hash, value: transactionID.hashValue)
-					hashCombine(seed: &hash, value: transactionType.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					hashCombine(seed: &hash, value: typeName.hashValue)
+					hashCombine(seed: &hash, value: self.clientID.hashValue)
+					hashCombine(seed: &hash, value: self.clientName.hashValue)
+					hashCombine(seed: &hash, value: self.clientTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.journalTransactionID.hashValue)
+					hashCombine(seed: &hash, value: self.price.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.stationID.hashValue)
+					hashCombine(seed: &hash, value: self.stationName.hashValue)
+					hashCombine(seed: &hash, value: self.transactionDateTime.hashValue)
+					hashCombine(seed: &hash, value: self.transactionFor.hashValue)
+					hashCombine(seed: &hash, value: self.transactionID.hashValue)
+					hashCombine(seed: &hash, value: self.transactionType.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: self.typeName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Char.WalletTransactions.Transaction, rhs: EVE.Char.WalletTransactions.Transaction) -> Bool {
@@ -9441,10 +9773,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				transactions.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.transactions.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Char.WalletTransactions, rhs: EVE.Char.WalletTransactions) -> Bool {

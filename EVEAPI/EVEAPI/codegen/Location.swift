@@ -164,12 +164,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: shipItemID.hashValue)
-				hashCombine(seed: &hash, value: shipName.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.shipItemID.hashValue)
+				hashCombine(seed: &hash, value: self.shipName.hashValue)
+				hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
@@ -250,12 +254,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: stationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: structureID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.stationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.structureID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Location.CharacterLocation, rhs: Location.CharacterLocation) -> Bool {

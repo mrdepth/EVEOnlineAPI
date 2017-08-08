@@ -335,21 +335,25 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: contractID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: destroyedShipTypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: npcID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: npcName?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: planetID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: systemID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: transactionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.contractID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.destroyedShipTypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.jobID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.npcID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.npcName?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.planetID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.systemID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.transactionID?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Wallet.WalletJournalItem.ExtraInfo, rhs: Wallet.WalletJournalItem.ExtraInfo) -> Bool {
@@ -519,22 +523,26 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: balance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: extraInfo?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: firstPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: firstPartyType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: refID.hashValue)
-				hashCombine(seed: &hash, value: refType.hashValue)
-				hashCombine(seed: &hash, value: secondPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: secondPartyType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: taxRecieverID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.balance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.date.hashValue)
+				hashCombine(seed: &hash, value: self.extraInfo?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.firstPartyID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.firstPartyType?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.refID.hashValue)
+				hashCombine(seed: &hash, value: self.refType.hashValue)
+				hashCombine(seed: &hash, value: self.secondPartyID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.secondPartyType?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.tax?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.taxRecieverID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.WalletJournalItem, rhs: Wallet.WalletJournalItem) -> Bool {
@@ -661,19 +669,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: clientID.hashValue)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: isBuy.hashValue)
-				hashCombine(seed: &hash, value: isPersonal.hashValue)
-				hashCombine(seed: &hash, value: journalRefID.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: transactionID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: unitPrice.hashValue)
+				hashCombine(seed: &hash, value: self.clientID.hashValue)
+				hashCombine(seed: &hash, value: self.date.hashValue)
+				hashCombine(seed: &hash, value: self.isBuy.hashValue)
+				hashCombine(seed: &hash, value: self.isPersonal.hashValue)
+				hashCombine(seed: &hash, value: self.journalRefID.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				hashCombine(seed: &hash, value: self.transactionID.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: self.unitPrice.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.Transaction, rhs: Wallet.Transaction) -> Bool {

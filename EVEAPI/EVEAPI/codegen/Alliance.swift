@@ -218,10 +218,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Alliance.GetAlliancesAllianceIDNotFound, rhs: Alliance.GetAlliancesAllianceIDNotFound) -> Bool {
@@ -294,11 +298,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px128x128?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px64x64?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Alliance.Icon, rhs: Alliance.Icon) -> Bool {
@@ -366,11 +374,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: allianceName.hashValue)
+				hashCombine(seed: &hash, value: self.allianceID.hashValue)
+				hashCombine(seed: &hash, value: self.allianceName.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Alliance.Name, rhs: Alliance.Name) -> Bool {
@@ -435,10 +447,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Alliance.GetAlliancesAllianceIDIconsNotFound, rhs: Alliance.GetAlliancesAllianceIDIconsNotFound) -> Bool {
@@ -520,13 +536,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceName.hashValue)
-				hashCombine(seed: &hash, value: dateFounded.hashValue)
-				hashCombine(seed: &hash, value: executorCorp?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: ticker.hashValue)
+				hashCombine(seed: &hash, value: self.allianceName.hashValue)
+				hashCombine(seed: &hash, value: self.dateFounded.hashValue)
+				hashCombine(seed: &hash, value: self.executorCorp?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.ticker.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Alliance.Information, rhs: Alliance.Information) -> Bool {

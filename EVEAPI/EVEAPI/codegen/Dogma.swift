@@ -228,15 +228,19 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: domain?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: effectID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: `func`.hashValue)
-					hashCombine(seed: &hash, value: modifiedAttributeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: modifyingAttributeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: `operator`?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.domain?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.effectID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.`func`.hashValue)
+					hashCombine(seed: &hash, value: self.modifiedAttributeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.modifyingAttributeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.`operator`?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Dogma.Effect.GetDogmaEffectsEffectIDModifiers, rhs: Dogma.Effect.GetDogmaEffectsEffectIDModifiers) -> Bool {
@@ -478,30 +482,34 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: disallowAutoRepeat?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: dischargeAttributeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: displayName?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: durationAttributeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: effectCategory?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: effectID.hashValue)
-				hashCombine(seed: &hash, value: electronicChance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: falloffAttributeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: iconID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isAssistance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isOffensive?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isWarpSafe?.hashValue ?? 0)
-				modifiers?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: postExpression?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: preExpression?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: published?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: rangeAttributeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: rangeChance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: trackingSpeedAttributeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.localizedDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.disallowAutoRepeat?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.dischargeAttributeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.displayName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.durationAttributeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.effectCategory?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.effectID.hashValue)
+				hashCombine(seed: &hash, value: self.electronicChance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.falloffAttributeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.iconID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.isAssistance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.isOffensive?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.isWarpSafe?.hashValue ?? 0)
+				self.modifiers?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.postExpression?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.preExpression?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.published?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.rangeAttributeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.rangeChance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.trackingSpeedAttributeID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Dogma.Effect, rhs: Dogma.Effect) -> Bool {
@@ -585,10 +593,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Dogma.GetDogmaAttributesAttributeIDNotFound, rhs: Dogma.GetDogmaAttributesAttributeIDNotFound) -> Bool {
@@ -730,19 +742,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: attributeID.hashValue)
-				hashCombine(seed: &hash, value: defaultValue?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: localizedDescription?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: displayName?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: highIsGood?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: iconID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: published?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: stackable?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: unitID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.attributeID.hashValue)
+				hashCombine(seed: &hash, value: self.defaultValue?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.localizedDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.displayName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.highIsGood?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.iconID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.published?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.stackable?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.unitID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Dogma.Attribute, rhs: Dogma.Attribute) -> Bool {
@@ -815,10 +831,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Dogma.GetDogmaEffectsEffectIDNotFound, rhs: Dogma.GetDogmaEffectsEffectIDNotFound) -> Bool {

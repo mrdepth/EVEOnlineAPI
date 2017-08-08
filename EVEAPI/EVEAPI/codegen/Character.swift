@@ -482,10 +482,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.PostCharactersAffiliationUnprocessableEntity, rhs: Character.PostCharactersAffiliationUnprocessableEntity) -> Bool {
@@ -576,13 +580,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px256x256?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px512x512?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px128x128?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px256x256?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px512x512?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px64x64?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Portrait, rhs: Character.Portrait) -> Bool {
@@ -649,10 +657,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: cost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.cost?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.CSPAChargeCost, rhs: Character.CSPAChargeCost) -> Bool {
@@ -734,12 +746,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: jumpFatigueExpireDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastJumpDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastUpdateDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.jumpFatigueExpireDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastUpdateDate?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Fatigue, rhs: Character.Fatigue) -> Bool {
@@ -801,10 +817,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				characters.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.characters.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Characters, rhs: Character.Characters) -> Bool {
@@ -868,10 +888,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
@@ -982,13 +1006,17 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.accessorID.hashValue)
+					hashCombine(seed: &hash, value: self.accessorType.hashValue)
+					hashCombine(seed: &hash, value: self.endAt?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) -> Bool {
@@ -1057,11 +1085,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
+					hashCombine(seed: &hash, value: self.accessorID.hashValue)
+					hashCombine(seed: &hash, value: self.accessorType.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) -> Bool {
@@ -1128,11 +1160,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
+					hashCombine(seed: &hash, value: self.accessorID.hashValue)
+					hashCombine(seed: &hash, value: self.accessorType.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) -> Bool {
@@ -1217,13 +1253,17 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.accessorID.hashValue)
+					hashCombine(seed: &hash, value: self.accessorType.hashValue)
+					hashCombine(seed: &hash, value: self.endAt?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) -> Bool {
@@ -1333,19 +1373,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				allowed.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				blocked.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: channelID.hashValue)
-				hashCombine(seed: &hash, value: comparisonKey.hashValue)
-				hashCombine(seed: &hash, value: hasPassword.hashValue)
-				hashCombine(seed: &hash, value: motd.hashValue)
-				muted.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				operators.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: ownerID.hashValue)
+				self.allowed.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.blocked.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.channelID.hashValue)
+				hashCombine(seed: &hash, value: self.comparisonKey.hashValue)
+				hashCombine(seed: &hash, value: self.hasPassword.hashValue)
+				hashCombine(seed: &hash, value: self.motd.hashValue)
+				self.muted.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				self.operators.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.ownerID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.ChatChannel, rhs: Character.ChatChannel) -> Bool {
@@ -1450,12 +1494,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: fromID.hashValue)
-				hashCombine(seed: &hash, value: fromType.hashValue)
-				hashCombine(seed: &hash, value: standing.hashValue)
+				hashCombine(seed: &hash, value: self.fromID.hashValue)
+				hashCombine(seed: &hash, value: self.fromType.hashValue)
+				hashCombine(seed: &hash, value: self.standing.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Standing, rhs: Character.Standing) -> Bool {
@@ -1606,19 +1654,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: ancestryID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: birthday.hashValue)
-				hashCombine(seed: &hash, value: bloodlineID.hashValue)
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: gender.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: raceID.hashValue)
-				hashCombine(seed: &hash, value: securityStatus?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.ancestryID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.birthday.hashValue)
+				hashCombine(seed: &hash, value: self.bloodlineID.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.localizedDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.gender.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.raceID.hashValue)
+				hashCombine(seed: &hash, value: self.securityStatus?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Information, rhs: Character.Information) -> Bool {
@@ -1691,10 +1743,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDPortraitNotFound, rhs: Character.GetCharactersCharacterIDPortraitNotFound) -> Bool {
@@ -1779,14 +1835,18 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: agentID.hashValue)
-				hashCombine(seed: &hash, value: pointsPerDay.hashValue)
-				hashCombine(seed: &hash, value: remainderPoints.hashValue)
-				hashCombine(seed: &hash, value: skillTypeID.hashValue)
-				hashCombine(seed: &hash, value: startedAt.hashValue)
+				hashCombine(seed: &hash, value: self.agentID.hashValue)
+				hashCombine(seed: &hash, value: self.pointsPerDay.hashValue)
+				hashCombine(seed: &hash, value: self.remainderPoints.hashValue)
+				hashCombine(seed: &hash, value: self.skillTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.startedAt.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Research, rhs: Character.Research) -> Bool {
@@ -1897,13 +1957,17 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: color?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: graphic.hashValue)
-					hashCombine(seed: &hash, value: layer.hashValue)
-					hashCombine(seed: &hash, value: part.hashValue)
+					hashCombine(seed: &hash, value: self.color?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.graphic.hashValue)
+					hashCombine(seed: &hash, value: self.layer.hashValue)
+					hashCombine(seed: &hash, value: self.part.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics, rhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics) -> Bool {
@@ -2010,18 +2074,22 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				graphics.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: issuerID.hashValue)
-				hashCombine(seed: &hash, value: medalID.hashValue)
-				hashCombine(seed: &hash, value: reason.hashValue)
-				hashCombine(seed: &hash, value: status.hashValue)
-				hashCombine(seed: &hash, value: title.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.date.hashValue)
+				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				self.graphics.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.issuerID.hashValue)
+				hashCombine(seed: &hash, value: self.medalID.hashValue)
+				hashCombine(seed: &hash, value: self.reason.hashValue)
+				hashCombine(seed: &hash, value: self.status.hashValue)
+				hashCombine(seed: &hash, value: self.title.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Medal, rhs: Character.Medal) -> Bool {
@@ -2111,13 +2179,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: isDeleted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: recordID.hashValue)
-				hashCombine(seed: &hash, value: startDate.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.isDeleted?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.recordID.hashValue)
+				hashCombine(seed: &hash, value: self.startDate.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.CorporationHistory, rhs: Character.CorporationHistory) -> Bool {
@@ -2187,11 +2259,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				hashCombine(seed: &hash, value: characterName.hashValue)
+				hashCombine(seed: &hash, value: self.characterID.hashValue)
+				hashCombine(seed: &hash, value: self.characterName.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Name, rhs: Character.Name) -> Bool {
@@ -2349,13 +2425,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.characterID.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Affiliation, rhs: Character.Affiliation) -> Bool {
@@ -2557,17 +2637,21 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: itemID.hashValue)
-				hashCombine(seed: &hash, value: locationFlag.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: materialEfficiency.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: runs.hashValue)
-				hashCombine(seed: &hash, value: timeEfficiency.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.itemID.hashValue)
+				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.materialEfficiency.hashValue)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				hashCombine(seed: &hash, value: self.runs.hashValue)
+				hashCombine(seed: &hash, value: self.timeEfficiency.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Blueprint, rhs: Character.Blueprint) -> Bool {

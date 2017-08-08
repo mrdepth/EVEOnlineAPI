@@ -215,16 +215,20 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: lastUpdate.hashValue)
-				hashCombine(seed: &hash, value: numPins.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: planetID.hashValue)
-				hashCombine(seed: &hash, value: planetType.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: upgradeLevel.hashValue)
+				hashCombine(seed: &hash, value: self.lastUpdate.hashValue)
+				hashCombine(seed: &hash, value: self.numPins.hashValue)
+				hashCombine(seed: &hash, value: self.ownerID.hashValue)
+				hashCombine(seed: &hash, value: self.planetID.hashValue)
+				hashCombine(seed: &hash, value: self.planetType.hashValue)
+				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.upgradeLevel.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: PlanetaryInteraction.Colony, rhs: PlanetaryInteraction.Colony) -> Bool {
@@ -294,10 +298,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) -> Bool {
@@ -361,10 +369,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
@@ -435,11 +447,15 @@ public extension ESI {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: order.hashValue)
-						hashCombine(seed: &hash, value: pinID.hashValue)
+						hashCombine(seed: &hash, value: self.order.hashValue)
+						hashCombine(seed: &hash, value: self.pinID.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route.Waypoint, rhs: PlanetaryInteraction.ColonyLayout.Route.Waypoint) -> Bool {
@@ -530,15 +546,19 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: contentTypeID.hashValue)
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: routeID.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
-					waypoints?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.contentTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.routeID.hashValue)
+					hashCombine(seed: &hash, value: self.sourcePinID.hashValue)
+					self.waypoints?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route, rhs: PlanetaryInteraction.ColonyLayout.Route) -> Bool {
@@ -619,12 +639,16 @@ public extension ESI {
 							return json
 						}
 						
-						override public var hashValue: Int {
+						private lazy var _hashValue: Int = {
 							var hash: Int = 0
-							hashCombine(seed: &hash, value: headID.hashValue)
-							hashCombine(seed: &hash, value: latitude.hashValue)
-							hashCombine(seed: &hash, value: longitude.hashValue)
+							hashCombine(seed: &hash, value: self.headID.hashValue)
+							hashCombine(seed: &hash, value: self.latitude.hashValue)
+							hashCombine(seed: &hash, value: self.longitude.hashValue)
 							return hash
+						}()
+						
+						override public var hashValue: Int {
+							return _hashValue
 						}
 						
 						public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head, rhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head) -> Bool {
@@ -718,14 +742,18 @@ public extension ESI {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: cycleTime?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: headRadius?.hashValue ?? 0)
-						heads.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-						hashCombine(seed: &hash, value: productTypeID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: qtyPerCycle?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.cycleTime?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.headRadius?.hashValue ?? 0)
+						self.heads.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+						hashCombine(seed: &hash, value: self.productTypeID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.qtyPerCycle?.hashValue ?? 0)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails) -> Bool {
@@ -789,10 +817,14 @@ public extension ESI {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: schematicID.hashValue)
+						hashCombine(seed: &hash, value: self.schematicID.hashValue)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) -> Bool {
@@ -921,19 +953,23 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: expiryTime?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: extractorDetails?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: factoryDetails?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: installTime?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: lastCycleStart?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: latitude.hashValue)
-					hashCombine(seed: &hash, value: longitude.hashValue)
-					hashCombine(seed: &hash, value: pinID.hashValue)
-					hashCombine(seed: &hash, value: schematicID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.expiryTime?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.extractorDetails?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.factoryDetails?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.installTime?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.lastCycleStart?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.latitude.hashValue)
+					hashCombine(seed: &hash, value: self.longitude.hashValue)
+					hashCombine(seed: &hash, value: self.pinID.hashValue)
+					hashCombine(seed: &hash, value: self.schematicID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin, rhs: PlanetaryInteraction.ColonyLayout.Pin) -> Bool {
@@ -1014,12 +1050,16 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: linkLevel.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
+					hashCombine(seed: &hash, value: self.destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: self.linkLevel.hashValue)
+					hashCombine(seed: &hash, value: self.sourcePinID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Link, rhs: PlanetaryInteraction.ColonyLayout.Link) -> Bool {
@@ -1087,12 +1127,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				links.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				pins.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				routes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.links.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.pins.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.routes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: PlanetaryInteraction.ColonyLayout, rhs: PlanetaryInteraction.ColonyLayout) -> Bool {
@@ -1161,11 +1205,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: cycleTime.hashValue)
-				hashCombine(seed: &hash, value: schematicName.hashValue)
+				hashCombine(seed: &hash, value: self.cycleTime.hashValue)
+				hashCombine(seed: &hash, value: self.schematicName.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: PlanetaryInteraction.SchematicInformation, rhs: PlanetaryInteraction.SchematicInformation) -> Bool {

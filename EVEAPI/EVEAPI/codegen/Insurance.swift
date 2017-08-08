@@ -101,12 +101,16 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: cost.hashValue)
-					hashCombine(seed: &hash, value: name.hashValue)
-					hashCombine(seed: &hash, value: payout.hashValue)
+					hashCombine(seed: &hash, value: self.cost.hashValue)
+					hashCombine(seed: &hash, value: self.name.hashValue)
+					hashCombine(seed: &hash, value: self.payout.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Insurance.Price.GetInsurancePricesLevels, rhs: Insurance.Price.GetInsurancePricesLevels) -> Bool {
@@ -170,11 +174,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				levels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				self.levels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Insurance.Price, rhs: Insurance.Price) -> Bool {

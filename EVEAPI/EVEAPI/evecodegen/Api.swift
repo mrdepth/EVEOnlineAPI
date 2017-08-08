@@ -117,14 +117,18 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessMask.hashValue)
-					hashCombine(seed: &hash, value: callDescription.hashValue)
-					hashCombine(seed: &hash, value: groupID.hashValue)
-					hashCombine(seed: &hash, value: name.hashValue)
-					hashCombine(seed: &hash, value: type.hashValue)
+					hashCombine(seed: &hash, value: self.accessMask.hashValue)
+					hashCombine(seed: &hash, value: self.callDescription.hashValue)
+					hashCombine(seed: &hash, value: self.groupID.hashValue)
+					hashCombine(seed: &hash, value: self.name.hashValue)
+					hashCombine(seed: &hash, value: self.type.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Api.CallList.Call, rhs: EVE.Api.CallList.Call) -> Bool {
@@ -200,12 +204,16 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: groupDescription.hashValue)
-					hashCombine(seed: &hash, value: groupID.hashValue)
-					hashCombine(seed: &hash, value: groupName.hashValue)
+					hashCombine(seed: &hash, value: self.groupDescription.hashValue)
+					hashCombine(seed: &hash, value: self.groupID.hashValue)
+					hashCombine(seed: &hash, value: self.groupName.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Api.CallList.CallGroup, rhs: EVE.Api.CallList.CallGroup) -> Bool {
@@ -270,11 +278,15 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				callGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				calls.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.callGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.calls.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Api.CallList, rhs: EVE.Api.CallList) -> Bool {

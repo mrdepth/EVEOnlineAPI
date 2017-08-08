@@ -261,14 +261,18 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: body.hashValue)
-				recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: subject.hashValue)
-				hashCombine(seed: &hash, value: toCorpOrAllianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: toMailingListID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.body.hashValue)
+				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject.hashValue)
+				hashCombine(seed: &hash, value: self.toCorpOrAllianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.toMailingListID?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: UserInterface.NewMail, rhs: UserInterface.NewMail) -> Bool {
@@ -336,10 +340,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: UserInterface.PostUiOpenwindowNewmailUnprocessableEntity, rhs: UserInterface.PostUiOpenwindowNewmailUnprocessableEntity) -> Bool {

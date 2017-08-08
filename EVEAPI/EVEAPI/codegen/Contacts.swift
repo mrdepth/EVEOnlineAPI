@@ -299,15 +299,19 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: contactID.hashValue)
-				hashCombine(seed: &hash, value: contactType.hashValue)
-				hashCombine(seed: &hash, value: isBlocked?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isWatched?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: labelID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: standing.hashValue)
+				hashCombine(seed: &hash, value: self.contactID.hashValue)
+				hashCombine(seed: &hash, value: self.contactType.hashValue)
+				hashCombine(seed: &hash, value: self.isBlocked?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.isWatched?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.labelID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.standing.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Contacts.Contact, rhs: Contacts.Contact) -> Bool {
@@ -379,11 +383,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: labelID.hashValue)
-				hashCombine(seed: &hash, value: labelName.hashValue)
+				hashCombine(seed: &hash, value: self.labelID.hashValue)
+				hashCombine(seed: &hash, value: self.labelName.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Contacts.Label, rhs: Contacts.Label) -> Bool {

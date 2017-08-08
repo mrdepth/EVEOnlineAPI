@@ -50,11 +50,15 @@ public extension ESI {
 			return json
 		}
 		
-		override public var hashValue: Int {
+		private lazy var _hashValue: Int = {
 			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			hashCombine(seed: &hash, value: ssoStatus?.hashValue ?? 0)
+			hashCombine(seed: &hash, value: self.error.hashValue)
+			hashCombine(seed: &hash, value: self.ssoStatus?.hashValue ?? 0)
 			return hash
+		}()
+		
+		override public var hashValue: Int {
+			return _hashValue
 		}
 		
 		public static func ==(lhs: Forbidden, rhs: Forbidden) -> Bool {
@@ -116,10 +120,14 @@ public extension ESI {
 			return json
 		}
 		
-		override public var hashValue: Int {
+		private lazy var _hashValue: Int = {
 			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
+			hashCombine(seed: &hash, value: self.error.hashValue)
 			return hash
+		}()
+		
+		override public var hashValue: Int {
+			return _hashValue
 		}
 		
 		public static func ==(lhs: InternalServerError, rhs: InternalServerError) -> Bool {

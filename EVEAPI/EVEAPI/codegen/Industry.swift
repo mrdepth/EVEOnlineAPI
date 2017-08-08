@@ -185,15 +185,19 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: facilityID.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: regionID.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.facilityID.hashValue)
+				hashCombine(seed: &hash, value: self.ownerID.hashValue)
+				hashCombine(seed: &hash, value: self.regionID.hashValue)
+				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.tax?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Industry.Facilities, rhs: Industry.Facilities) -> Bool {
@@ -435,31 +439,35 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: activityID.hashValue)
-				hashCombine(seed: &hash, value: blueprintID.hashValue)
-				hashCombine(seed: &hash, value: blueprintLocationID.hashValue)
-				hashCombine(seed: &hash, value: blueprintTypeID.hashValue)
-				hashCombine(seed: &hash, value: completedCharacterID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: completedDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: cost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: endDate.hashValue)
-				hashCombine(seed: &hash, value: facilityID.hashValue)
-				hashCombine(seed: &hash, value: installerID.hashValue)
-				hashCombine(seed: &hash, value: jobID.hashValue)
-				hashCombine(seed: &hash, value: licensedRuns?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: outputLocationID.hashValue)
-				hashCombine(seed: &hash, value: pauseDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: probability?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: productTypeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: runs.hashValue)
-				hashCombine(seed: &hash, value: startDate.hashValue)
-				hashCombine(seed: &hash, value: stationID.hashValue)
-				hashCombine(seed: &hash, value: status.hashValue)
-				hashCombine(seed: &hash, value: successfulRuns?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.activityID.hashValue)
+				hashCombine(seed: &hash, value: self.blueprintID.hashValue)
+				hashCombine(seed: &hash, value: self.blueprintLocationID.hashValue)
+				hashCombine(seed: &hash, value: self.blueprintTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.completedCharacterID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.completedDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.cost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.endDate.hashValue)
+				hashCombine(seed: &hash, value: self.facilityID.hashValue)
+				hashCombine(seed: &hash, value: self.installerID.hashValue)
+				hashCombine(seed: &hash, value: self.jobID.hashValue)
+				hashCombine(seed: &hash, value: self.licensedRuns?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.outputLocationID.hashValue)
+				hashCombine(seed: &hash, value: self.pauseDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.probability?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.productTypeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.runs.hashValue)
+				hashCombine(seed: &hash, value: self.startDate.hashValue)
+				hashCombine(seed: &hash, value: self.stationID.hashValue)
+				hashCombine(seed: &hash, value: self.status.hashValue)
+				hashCombine(seed: &hash, value: self.successfulRuns?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Industry.Job, rhs: Industry.Job) -> Bool {
@@ -578,11 +586,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: activity.hashValue)
-					hashCombine(seed: &hash, value: costIndex.hashValue)
+					hashCombine(seed: &hash, value: self.activity.hashValue)
+					hashCombine(seed: &hash, value: self.costIndex.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices, rhs: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices) -> Bool {
@@ -645,11 +657,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				costIndices.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				self.costIndices.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Industry.SolarSystemCostIndices, rhs: Industry.SolarSystemCostIndices) -> Bool {

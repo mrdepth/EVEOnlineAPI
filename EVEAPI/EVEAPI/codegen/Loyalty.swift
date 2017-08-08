@@ -124,11 +124,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.loyaltyPoints.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
@@ -198,11 +202,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.typeID.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems, rhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) -> Bool {
@@ -289,15 +297,19 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: iskCost.hashValue)
-				hashCombine(seed: &hash, value: lpCost.hashValue)
-				hashCombine(seed: &hash, value: offerID.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				requiredItems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.iskCost.hashValue)
+				hashCombine(seed: &hash, value: self.lpCost.hashValue)
+				hashCombine(seed: &hash, value: self.offerID.hashValue)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				self.requiredItems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Loyalty.Offer, rhs: Loyalty.Offer) -> Bool {

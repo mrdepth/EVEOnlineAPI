@@ -191,17 +191,21 @@ public extension EVE {
 						return json
 					}
 					
-					override public var hashValue: Int {
+					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: allianceName?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: characterID.hashValue)
-						hashCombine(seed: &hash, value: characterName.hashValue)
-						hashCombine(seed: &hash, value: corporationID.hashValue)
-						hashCombine(seed: &hash, value: corporationName.hashValue)
-						hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-						hashCombine(seed: &hash, value: factionName?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.allianceName?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.characterID.hashValue)
+						hashCombine(seed: &hash, value: self.characterName.hashValue)
+						hashCombine(seed: &hash, value: self.corporationID.hashValue)
+						hashCombine(seed: &hash, value: self.corporationName.hashValue)
+						hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+						hashCombine(seed: &hash, value: self.factionName?.hashValue ?? 0)
 						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
 					}
 					
 					public static func ==(lhs: EVE.Account.APIKeyInfo.APIKey.Character, rhs: EVE.Account.APIKeyInfo.APIKey.Character) -> Bool {
@@ -286,13 +290,17 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessMask.hashValue)
-					characters.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: expires?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: type.hashValue)
+					hashCombine(seed: &hash, value: self.accessMask.hashValue)
+					self.characters.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.expires?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.type.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Account.APIKeyInfo.APIKey, rhs: EVE.Account.APIKeyInfo.APIKey) -> Bool {
@@ -351,10 +359,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: key.hashValue)
+				hashCombine(seed: &hash, value: self.key.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Account.APIKeyInfo, rhs: EVE.Account.APIKeyInfo) -> Bool {
@@ -417,10 +429,14 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: trainingEnd.hashValue)
+					hashCombine(seed: &hash, value: self.trainingEnd.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Account.AccountStatus.MultiCharacterTraining, rhs: EVE.Account.AccountStatus.MultiCharacterTraining) -> Bool {
@@ -504,14 +520,18 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: createDate.hashValue)
-				hashCombine(seed: &hash, value: logonCount.hashValue)
-				hashCombine(seed: &hash, value: logonMinutes.hashValue)
-				multiCharacterTraining.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: paidUntil?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.createDate.hashValue)
+				hashCombine(seed: &hash, value: self.logonCount.hashValue)
+				hashCombine(seed: &hash, value: self.logonMinutes.hashValue)
+				self.multiCharacterTraining.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.paidUntil?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Account.AccountStatus, rhs: EVE.Account.AccountStatus) -> Bool {
@@ -632,17 +652,21 @@ public extension EVE {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: allianceName?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: characterID.hashValue)
-					hashCombine(seed: &hash, value: characterName.hashValue)
-					hashCombine(seed: &hash, value: corporationID.hashValue)
-					hashCombine(seed: &hash, value: corporationName.hashValue)
-					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: factionName?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.allianceName?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.characterID.hashValue)
+					hashCombine(seed: &hash, value: self.characterName.hashValue)
+					hashCombine(seed: &hash, value: self.corporationID.hashValue)
+					hashCombine(seed: &hash, value: self.corporationName.hashValue)
+					hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.factionName?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: EVE.Account.Characters.Character, rhs: EVE.Account.Characters.Character) -> Bool {
@@ -705,10 +729,14 @@ public extension EVE {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: characters.hashValue)
+				hashCombine(seed: &hash, value: self.characters.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: EVE.Account.Characters, rhs: EVE.Account.Characters) -> Bool {

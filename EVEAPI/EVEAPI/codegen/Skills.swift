@@ -175,12 +175,16 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: currentSkillLevel?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: skillID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: skillpointsInSkill?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.currentSkillLevel?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.skillID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.skillpointsInSkill?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Skills.CharacterSkills.Skill, rhs: Skills.CharacterSkills.Skill) -> Bool {
@@ -251,11 +255,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				skills?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: totalSP?.hashValue ?? 0)
+				self.skills?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.totalSP?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Skills.CharacterSkills, rhs: Skills.CharacterSkills) -> Bool {
@@ -368,17 +376,21 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: accruedRemapCooldownDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: bonusRemaps?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: charisma.hashValue)
-				hashCombine(seed: &hash, value: intelligence.hashValue)
-				hashCombine(seed: &hash, value: lastRemapDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: memory.hashValue)
-				hashCombine(seed: &hash, value: perception.hashValue)
-				hashCombine(seed: &hash, value: willpower.hashValue)
+				hashCombine(seed: &hash, value: self.accruedRemapCooldownDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.bonusRemaps?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.charisma.hashValue)
+				hashCombine(seed: &hash, value: self.intelligence.hashValue)
+				hashCombine(seed: &hash, value: self.lastRemapDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.memory.hashValue)
+				hashCombine(seed: &hash, value: self.perception.hashValue)
+				hashCombine(seed: &hash, value: self.willpower.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Skills.CharacterAttributes, rhs: Skills.CharacterAttributes) -> Bool {
@@ -503,17 +515,21 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: finishDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: finishedLevel.hashValue)
-				hashCombine(seed: &hash, value: levelEndSP?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: levelStartSP?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: queuePosition.hashValue)
-				hashCombine(seed: &hash, value: skillID.hashValue)
-				hashCombine(seed: &hash, value: startDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: trainingStartSP?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.finishDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.finishedLevel.hashValue)
+				hashCombine(seed: &hash, value: self.levelEndSP?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.levelStartSP?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.queuePosition.hashValue)
+				hashCombine(seed: &hash, value: self.skillID.hashValue)
+				hashCombine(seed: &hash, value: self.startDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.trainingStartSP?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Skills.SkillQueueItem, rhs: Skills.SkillQueueItem) -> Bool {

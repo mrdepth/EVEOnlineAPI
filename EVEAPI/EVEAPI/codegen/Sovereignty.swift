@@ -176,13 +176,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: systemID.hashValue)
+				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.systemID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
@@ -291,16 +295,20 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: structureID.hashValue)
-				hashCombine(seed: &hash, value: structureTypeID.hashValue)
-				hashCombine(seed: &hash, value: vulnerabilityOccupancyLevel?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: vulnerableEndTime?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: vulnerableStartTime?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.allianceID.hashValue)
+				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.structureID.hashValue)
+				hashCombine(seed: &hash, value: self.structureTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.vulnerabilityOccupancyLevel?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.vulnerableEndTime?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.vulnerableStartTime?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Sovereignty.Structure, rhs: Sovereignty.Structure) -> Bool {
@@ -400,11 +408,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID.hashValue)
-					hashCombine(seed: &hash, value: score.hashValue)
+					hashCombine(seed: &hash, value: self.allianceID.hashValue)
+					hashCombine(seed: &hash, value: self.score.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants, rhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants) -> Bool {
@@ -528,19 +540,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: attackersScore?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: campaignID.hashValue)
-				hashCombine(seed: &hash, value: constellationID.hashValue)
-				hashCombine(seed: &hash, value: defenderID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: defenderScore?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: eventType.hashValue)
-				participants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: startTime.hashValue)
-				hashCombine(seed: &hash, value: structureID.hashValue)
+				hashCombine(seed: &hash, value: self.attackersScore?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.campaignID.hashValue)
+				hashCombine(seed: &hash, value: self.constellationID.hashValue)
+				hashCombine(seed: &hash, value: self.defenderID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.defenderScore?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.eventType.hashValue)
+				self.participants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.startTime.hashValue)
+				hashCombine(seed: &hash, value: self.structureID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Sovereignty.Campaign, rhs: Sovereignty.Campaign) -> Bool {

@@ -217,14 +217,18 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: eventDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: eventID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: eventResponse?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: importance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: title?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.eventDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.eventID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.eventResponse?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.importance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.title?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Calendar.Summary, rhs: Calendar.Summary) -> Bool {
@@ -368,19 +372,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: eventID.hashValue)
-				hashCombine(seed: &hash, value: importance.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: ownerName.hashValue)
-				hashCombine(seed: &hash, value: ownerType.hashValue)
-				hashCombine(seed: &hash, value: response.hashValue)
-				hashCombine(seed: &hash, value: text.hashValue)
-				hashCombine(seed: &hash, value: title.hashValue)
+				hashCombine(seed: &hash, value: self.date.hashValue)
+				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.eventID.hashValue)
+				hashCombine(seed: &hash, value: self.importance.hashValue)
+				hashCombine(seed: &hash, value: self.ownerID.hashValue)
+				hashCombine(seed: &hash, value: self.ownerName.hashValue)
+				hashCombine(seed: &hash, value: self.ownerType.hashValue)
+				hashCombine(seed: &hash, value: self.response.hashValue)
+				hashCombine(seed: &hash, value: self.text.hashValue)
+				hashCombine(seed: &hash, value: self.title.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Calendar.Event, rhs: Calendar.Event) -> Bool {
@@ -473,10 +481,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: response.hashValue)
+				hashCombine(seed: &hash, value: self.response.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Calendar.Response, rhs: Calendar.Response) -> Bool {

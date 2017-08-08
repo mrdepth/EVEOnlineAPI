@@ -158,11 +158,11 @@ class Property: Schema {
 	var hash: String {
 		switch type {
 		case .array:
-			return "\(propertyName)\(isRequired ? "" : "?").forEach {hashCombine(seed: &hash, value: $0.hashValue)}"
+			return "self.\(propertyName)\(isRequired ? "" : "?").forEach {hashCombine(seed: &hash, value: $0.hashValue)}"
 		default:
 			return isRequired ?
-				"hashCombine(seed: &hash, value: \(propertyName).hashValue)" :
-			"hashCombine(seed: &hash, value: \(propertyName)?.hashValue ?? 0)"
+				"hashCombine(seed: &hash, value: self.\(propertyName).hashValue)" :
+			"hashCombine(seed: &hash, value: self.\(propertyName)?.hashValue ?? 0)"
 		}
 	}
 	

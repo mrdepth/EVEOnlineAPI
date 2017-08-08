@@ -159,11 +159,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: killmailHash.hashValue)
-				hashCombine(seed: &hash, value: killmailID.hashValue)
+				hashCombine(seed: &hash, value: self.killmailHash.hashValue)
+				hashCombine(seed: &hash, value: self.killmailID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Wars.Kills, rhs: Wars.Kills) -> Bool {
@@ -251,13 +255,17 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: iskDestroyed.hashValue)
-					hashCombine(seed: &hash, value: shipsKilled.hashValue)
+					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.iskDestroyed.hashValue)
+					hashCombine(seed: &hash, value: self.shipsKilled.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDDefender, rhs: Wars.WarInformation.GetWarsWarIDDefender) -> Bool {
@@ -332,11 +340,15 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAllies, rhs: Wars.WarInformation.GetWarsWarIDAllies) -> Bool {
@@ -421,13 +433,17 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: iskDestroyed.hashValue)
-					hashCombine(seed: &hash, value: shipsKilled.hashValue)
+					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.iskDestroyed.hashValue)
+					hashCombine(seed: &hash, value: self.shipsKilled.hashValue)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAggressor, rhs: Wars.WarInformation.GetWarsWarIDAggressor) -> Bool {
@@ -551,19 +567,23 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: aggressor.hashValue)
-				allies?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: declared.hashValue)
-				hashCombine(seed: &hash, value: defender.hashValue)
-				hashCombine(seed: &hash, value: finished?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: id.hashValue)
-				hashCombine(seed: &hash, value: mutual.hashValue)
-				hashCombine(seed: &hash, value: openForAllies.hashValue)
-				hashCombine(seed: &hash, value: retracted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: started?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.aggressor.hashValue)
+				self.allies?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.declared.hashValue)
+				hashCombine(seed: &hash, value: self.defender.hashValue)
+				hashCombine(seed: &hash, value: self.finished?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.id.hashValue)
+				hashCombine(seed: &hash, value: self.mutual.hashValue)
+				hashCombine(seed: &hash, value: self.openForAllies.hashValue)
+				hashCombine(seed: &hash, value: self.retracted?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.started?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Wars.WarInformation, rhs: Wars.WarInformation) -> Bool {
@@ -636,10 +656,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Wars.GetWarsWarIDUnprocessableEntity, rhs: Wars.GetWarsWarIDUnprocessableEntity) -> Bool {
@@ -703,10 +727,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity, rhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity) -> Bool {

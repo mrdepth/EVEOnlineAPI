@@ -242,21 +242,25 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				character?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				inventorytype?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				solarsystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				structure?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				wormhole?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.character?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.inventorytype?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.solarsystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.structure?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.wormhole?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Search.CharacterSearchResult, rhs: Search.CharacterSearchResult) -> Bool {
@@ -455,20 +459,24 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				character?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				inventorytype?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				solarsystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				wormhole?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.character?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.inventorytype?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.solarsystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.wormhole?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Search.SearchResult, rhs: Search.SearchResult) -> Bool {

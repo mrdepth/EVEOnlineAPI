@@ -442,25 +442,29 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: accountID.hashValue)
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: escrow.hashValue)
-				hashCombine(seed: &hash, value: isBuyOrder.hashValue)
-				hashCombine(seed: &hash, value: isCorp.hashValue)
-				hashCombine(seed: &hash, value: issued.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: minVolume.hashValue)
-				hashCombine(seed: &hash, value: orderID.hashValue)
-				hashCombine(seed: &hash, value: price.hashValue)
-				hashCombine(seed: &hash, value: range.hashValue)
-				hashCombine(seed: &hash, value: regionID.hashValue)
-				hashCombine(seed: &hash, value: state.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: volumeRemain.hashValue)
-				hashCombine(seed: &hash, value: volumeTotal.hashValue)
+				hashCombine(seed: &hash, value: self.accountID.hashValue)
+				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.escrow.hashValue)
+				hashCombine(seed: &hash, value: self.isBuyOrder.hashValue)
+				hashCombine(seed: &hash, value: self.isCorp.hashValue)
+				hashCombine(seed: &hash, value: self.issued.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.minVolume.hashValue)
+				hashCombine(seed: &hash, value: self.orderID.hashValue)
+				hashCombine(seed: &hash, value: self.price.hashValue)
+				hashCombine(seed: &hash, value: self.range.hashValue)
+				hashCombine(seed: &hash, value: self.regionID.hashValue)
+				hashCombine(seed: &hash, value: self.state.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: self.volumeRemain.hashValue)
+				hashCombine(seed: &hash, value: self.volumeTotal.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.CharacterOrder, rhs: Market.CharacterOrder) -> Bool {
@@ -539,10 +543,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.GetMarketsRegionIDOrdersUnprocessableEntity, rhs: Market.GetMarketsRegionIDOrdersUnprocessableEntity) -> Bool {
@@ -629,14 +637,18 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: marketGroupID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: parentGroupID?.hashValue ?? 0)
-				types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: self.marketGroupID.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.parentGroupID?.hashValue ?? 0)
+				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.ItemGroupInformation, rhs: Market.ItemGroupInformation) -> Bool {
@@ -731,15 +743,19 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: average.hashValue)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: highest.hashValue)
-				hashCombine(seed: &hash, value: lowest.hashValue)
-				hashCombine(seed: &hash, value: orderCount.hashValue)
-				hashCombine(seed: &hash, value: volume.hashValue)
+				hashCombine(seed: &hash, value: self.average.hashValue)
+				hashCombine(seed: &hash, value: self.date.hashValue)
+				hashCombine(seed: &hash, value: self.highest.hashValue)
+				hashCombine(seed: &hash, value: self.lowest.hashValue)
+				hashCombine(seed: &hash, value: self.orderCount.hashValue)
+				hashCombine(seed: &hash, value: self.volume.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.History, rhs: Market.History) -> Bool {
@@ -823,12 +839,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: adjustedPrice?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: averagePrice?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.adjustedPrice?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.averagePrice?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.Price, rhs: Market.Price) -> Bool {
@@ -894,10 +914,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.GetMarketsGroupsMarketGroupIDNotFound, rhs: Market.GetMarketsGroupsMarketGroupIDNotFound) -> Bool {
@@ -1050,20 +1074,24 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: isBuyOrder.hashValue)
-				hashCombine(seed: &hash, value: issued.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: minVolume.hashValue)
-				hashCombine(seed: &hash, value: orderID.hashValue)
-				hashCombine(seed: &hash, value: price.hashValue)
-				hashCombine(seed: &hash, value: range.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: volumeRemain.hashValue)
-				hashCombine(seed: &hash, value: volumeTotal.hashValue)
+				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.isBuyOrder.hashValue)
+				hashCombine(seed: &hash, value: self.issued.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.minVolume.hashValue)
+				hashCombine(seed: &hash, value: self.orderID.hashValue)
+				hashCombine(seed: &hash, value: self.price.hashValue)
+				hashCombine(seed: &hash, value: self.range.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: self.volumeRemain.hashValue)
+				hashCombine(seed: &hash, value: self.volumeTotal.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.Order, rhs: Market.Order) -> Bool {
@@ -1162,10 +1190,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity, rhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity) -> Bool {
@@ -1318,20 +1350,24 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: isBuyOrder.hashValue)
-				hashCombine(seed: &hash, value: issued.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: minVolume.hashValue)
-				hashCombine(seed: &hash, value: orderID.hashValue)
-				hashCombine(seed: &hash, value: price.hashValue)
-				hashCombine(seed: &hash, value: range.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: volumeRemain.hashValue)
-				hashCombine(seed: &hash, value: volumeTotal.hashValue)
+				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.isBuyOrder.hashValue)
+				hashCombine(seed: &hash, value: self.issued.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.minVolume.hashValue)
+				hashCombine(seed: &hash, value: self.orderID.hashValue)
+				hashCombine(seed: &hash, value: self.price.hashValue)
+				hashCombine(seed: &hash, value: self.range.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: self.volumeRemain.hashValue)
+				hashCombine(seed: &hash, value: self.volumeTotal.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Market.Structure, rhs: Market.Structure) -> Bool {

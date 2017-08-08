@@ -234,13 +234,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: notification.hashValue)
-				hashCombine(seed: &hash, value: taskID.hashValue)
+				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.notification.hashValue)
+				hashCombine(seed: &hash, value: self.taskID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Opportunities.OpportunitiesTask, rhs: Opportunities.OpportunitiesTask) -> Bool {
@@ -310,11 +314,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: completedAt.hashValue)
-				hashCombine(seed: &hash, value: taskID.hashValue)
+				hashCombine(seed: &hash, value: self.completedAt.hashValue)
+				hashCombine(seed: &hash, value: self.taskID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Opportunities.CompletedTask, rhs: Opportunities.CompletedTask) -> Bool {
@@ -404,15 +412,19 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				connectedGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: groupID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: notification.hashValue)
-				requiredTasks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.connectedGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: self.groupID.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.notification.hashValue)
+				self.requiredTasks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Opportunities.Group, rhs: Opportunities.Group) -> Bool {

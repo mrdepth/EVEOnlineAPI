@@ -106,13 +106,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: players.hashValue)
-				hashCombine(seed: &hash, value: serverVersion.hashValue)
-				hashCombine(seed: &hash, value: startTime.hashValue)
-				hashCombine(seed: &hash, value: vip?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.players.hashValue)
+				hashCombine(seed: &hash, value: self.serverVersion.hashValue)
+				hashCombine(seed: &hash, value: self.startTime.hashValue)
+				hashCombine(seed: &hash, value: self.vip?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Status.GetStatusOk, rhs: Status.GetStatusOk) -> Bool {

@@ -164,12 +164,16 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: flag.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.flag.hashValue)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.Item, rhs: Fittings.Item) -> Bool {
@@ -255,14 +259,18 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: fittingID.hashValue)
-				items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: self.fittingID.hashValue)
+				self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.Fitting, rhs: Fittings.Fitting) -> Bool {
@@ -327,10 +335,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: fittingID.hashValue)
+				hashCombine(seed: &hash, value: self.fittingID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
@@ -408,13 +420,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.MutableFitting, rhs: Fittings.MutableFitting) -> Bool {

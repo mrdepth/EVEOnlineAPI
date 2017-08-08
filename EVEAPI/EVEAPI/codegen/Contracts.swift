@@ -185,15 +185,19 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: isIncluded.hashValue)
-				hashCombine(seed: &hash, value: isSingleton.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: rawQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: recordID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: self.isIncluded.hashValue)
+				hashCombine(seed: &hash, value: self.isSingleton.hashValue)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				hashCombine(seed: &hash, value: self.rawQuantity?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.recordID.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Contracts.Item, rhs: Contracts.Item) -> Bool {
@@ -499,31 +503,35 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: acceptorID.hashValue)
-				hashCombine(seed: &hash, value: assigneeID.hashValue)
-				hashCombine(seed: &hash, value: availability.hashValue)
-				hashCombine(seed: &hash, value: buyout?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: collateral?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: contractID.hashValue)
-				hashCombine(seed: &hash, value: dateAccepted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: dateCompleted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: dateExpired.hashValue)
-				hashCombine(seed: &hash, value: dateIssued.hashValue)
-				hashCombine(seed: &hash, value: daysToComplete?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: endLocationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: forCorporation.hashValue)
-				hashCombine(seed: &hash, value: issuerCorporationID.hashValue)
-				hashCombine(seed: &hash, value: issuerID.hashValue)
-				hashCombine(seed: &hash, value: price?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: reward?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: startLocationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: status.hashValue)
-				hashCombine(seed: &hash, value: title?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: type.hashValue)
-				hashCombine(seed: &hash, value: volume?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.acceptorID.hashValue)
+				hashCombine(seed: &hash, value: self.assigneeID.hashValue)
+				hashCombine(seed: &hash, value: self.availability.hashValue)
+				hashCombine(seed: &hash, value: self.buyout?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.collateral?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.contractID.hashValue)
+				hashCombine(seed: &hash, value: self.dateAccepted?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.dateCompleted?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.dateExpired.hashValue)
+				hashCombine(seed: &hash, value: self.dateIssued.hashValue)
+				hashCombine(seed: &hash, value: self.daysToComplete?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.endLocationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.forCorporation.hashValue)
+				hashCombine(seed: &hash, value: self.issuerCorporationID.hashValue)
+				hashCombine(seed: &hash, value: self.issuerID.hashValue)
+				hashCombine(seed: &hash, value: self.price?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.reward?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.startLocationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.status.hashValue)
+				hashCombine(seed: &hash, value: self.title?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.type.hashValue)
+				hashCombine(seed: &hash, value: self.volume?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Contracts.Contract, rhs: Contracts.Contract) -> Bool {
@@ -623,13 +631,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: amount.hashValue)
-				hashCombine(seed: &hash, value: bidID.hashValue)
-				hashCombine(seed: &hash, value: bidderID.hashValue)
-				hashCombine(seed: &hash, value: dateBid.hashValue)
+				hashCombine(seed: &hash, value: self.amount.hashValue)
+				hashCombine(seed: &hash, value: self.bidID.hashValue)
+				hashCombine(seed: &hash, value: self.bidderID.hashValue)
+				hashCombine(seed: &hash, value: self.dateBid.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Contracts.Bid, rhs: Contracts.Bid) -> Bool {

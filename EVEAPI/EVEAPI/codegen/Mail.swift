@@ -385,11 +385,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: recipientID.hashValue)
-				hashCombine(seed: &hash, value: recipientType.hashValue)
+				hashCombine(seed: &hash, value: self.recipientID.hashValue)
+				hashCombine(seed: &hash, value: self.recipientType.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.Recipient, rhs: Mail.Recipient) -> Bool {
@@ -463,11 +467,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: read?.hashValue ?? 0)
+				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.read?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.UpdateContents, rhs: Mail.UpdateContents) -> Bool {
@@ -532,10 +540,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.PutCharactersCharacterIDMailMailIDBadRequest, rhs: Mail.PutCharactersCharacterIDMailMailIDBadRequest) -> Bool {
@@ -599,10 +611,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.GetCharactersCharacterIDMailMailIDNotFound, rhs: Mail.GetCharactersCharacterIDMailMailIDNotFound) -> Bool {
@@ -666,10 +682,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity, rhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) -> Bool {
@@ -750,13 +770,17 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: approvedCost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: body.hashValue)
-				recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: subject.hashValue)
+				hashCombine(seed: &hash, value: self.approvedCost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.body.hashValue)
+				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
@@ -877,16 +901,20 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: from?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isRead?.hashValue ?? 0)
-				labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: mailID?.hashValue ?? 0)
-				recipients?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: subject?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: timestamp?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.from?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.isRead?.hashValue ?? 0)
+				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.mailID?.hashValue ?? 0)
+				self.recipients?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.timestamp?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.Header, rhs: Mail.Header) -> Bool {
@@ -1023,13 +1051,17 @@ public extension ESI {
 					return json
 				}
 				
-				override public var hashValue: Int {
+				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: color?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: labelID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: unreadCount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.color?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.labelID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.unreadCount?.hashValue ?? 0)
 					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
 				}
 				
 				public static func ==(lhs: Mail.MailLabelsAndUnreadCounts.Label, rhs: Mail.MailLabelsAndUnreadCounts.Label) -> Bool {
@@ -1101,11 +1133,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: totalUnreadCount?.hashValue ?? 0)
+				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.totalUnreadCount?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.MailLabelsAndUnreadCounts, rhs: Mail.MailLabelsAndUnreadCounts) -> Bool {
@@ -1173,11 +1209,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: mailingListID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: self.mailingListID.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.Subscription, rhs: Mail.Subscription) -> Bool {
@@ -1296,16 +1336,20 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: body?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: from?.hashValue ?? 0)
-				labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: read?.hashValue ?? 0)
-				recipients?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: subject?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: timestamp?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.body?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.from?.hashValue ?? 0)
+				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.read?.hashValue ?? 0)
+				self.recipients?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.timestamp?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.MailBody, rhs: Mail.MailBody) -> Bool {
@@ -1375,10 +1419,14 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.PostCharactersCharacterIDMailBadRequest, rhs: Mail.PostCharactersCharacterIDMailBadRequest) -> Bool {
@@ -1486,11 +1534,15 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: color?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: self.color?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.name.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Mail.Label, rhs: Mail.Label) -> Bool {

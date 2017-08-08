@@ -149,17 +149,21 @@ public extension ESI {
 				return json
 			}
 			
-			override public var hashValue: Int {
+			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: constellationID.hashValue)
-				hashCombine(seed: &hash, value: factionID.hashValue)
-				hashCombine(seed: &hash, value: hasBoss.hashValue)
-				infestedSolarSystems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: influence.hashValue)
-				hashCombine(seed: &hash, value: stagingSolarSystemID.hashValue)
-				hashCombine(seed: &hash, value: state.hashValue)
-				hashCombine(seed: &hash, value: type.hashValue)
+				hashCombine(seed: &hash, value: self.constellationID.hashValue)
+				hashCombine(seed: &hash, value: self.factionID.hashValue)
+				hashCombine(seed: &hash, value: self.hasBoss.hashValue)
+				self.infestedSolarSystems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.influence.hashValue)
+				hashCombine(seed: &hash, value: self.stagingSolarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.state.hashValue)
+				hashCombine(seed: &hash, value: self.type.hashValue)
 				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
 			}
 			
 			public static func ==(lhs: Incursions.Incursion, rhs: Incursions.Incursion) -> Bool {
