@@ -1,0 +1,17 @@
+public enum {enum}: {type}, JSONCoding {
+{cases}
+	
+	public init() {
+		self = .{default}
+	}
+			
+	public var json: Any {
+		return self.rawValue
+	}
+			
+	public init(json: Any) throws {
+		guard let s = json as? {type}, let v = {enum}(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+		self = v
+	}
+
+}

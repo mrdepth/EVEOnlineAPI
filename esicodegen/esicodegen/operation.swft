@@ -1,0 +1,31 @@
+	public func {operation}({definitions}completionBlock:((Result<{result}>) -> Void)?) {
+		var session = sessionManager
+		guard session != nil else {return}
+		
+{security}
+		
+		{body}
+
+		var headers = HTTPHeaders()
+		headers["Accept"] = "application/json"
+
+		{headers}
+
+		var query = [URLQueryItem]()
+		query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+
+		{queries}
+
+		let url = session!.baseURL + "latest{url}"
+		let components = NSURLComponents(string: url)!
+		components.queryItems = query
+
+		let progress = Progress(totalUnitCount: 100)
+
+		session!.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<{result}>) in
+				completionBlock?(response.result)
+				session = nil
+		}
+	}

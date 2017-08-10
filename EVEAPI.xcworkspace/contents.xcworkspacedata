@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:EVEAPI/EVEAPI.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:ThirdParty/AFNetworking/AFNetworking.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:apidump/apidump.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Develop/Develop.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Playground.playground">
+   </FileRef>
+   <FileRef
+      location = "group:ThirdParty/Alamofire/Alamofire.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:esicodegen/esicodegen.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:evecodegen/evecodegen.xcodeproj">
+   </FileRef>
+</Workspace>

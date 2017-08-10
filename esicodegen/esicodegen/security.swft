@@ -1,0 +1,13 @@
+public extension ESI.Scope {
+
+{values}
+	
+	public static var all: [ESI.Scope]  {
+		get {
+			return [
+{scopes}
+			]
+		}
+	}
+}
+	

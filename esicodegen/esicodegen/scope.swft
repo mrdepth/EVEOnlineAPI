@@ -1,0 +1,23 @@
+import Foundation
+import Alamofire
+
+
+public extension ESI {
+	public var {variable}: {scope} {
+		return {scope}(sessionManager: self)
+	}
+
+	class {scope} {
+		weak var sessionManager: ESI?
+	
+		init(sessionManager: ESI) {
+			self.sessionManager = sessionManager
+		}
+
+{operations}
+
+{classes}
+
+	}
+
+}
