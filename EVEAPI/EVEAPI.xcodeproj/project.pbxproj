@@ -49,6 +49,7 @@
 		126296181EEAD16C00796B27 /* Wars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F91EEAD16C00796B27 /* Wars.swift */; };
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
+		128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */; };
 		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB65781DEA0286003AA683 /* Synchronized.swift */; };
@@ -121,6 +122,7 @@
 		1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParserExtension.swift; sourceTree = "<group>"; };
 		1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEObject.swift; sourceTree = "<group>"; };
 		1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEServerStatus.swift; sourceTree = "<group>"; };
+		128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FactionWarfare.swift; sourceTree = "<group>"; };
 		1295ED3E1DF6E33A0048C895 /* CRAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRAPI.swift; sourceTree = "<group>"; };
 		1295ED481DF8169F0048C895 /* OAuth2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OAuth2.swift; sourceTree = "<group>"; };
 		1295ED4A1DF843740048C895 /* CRResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRResult.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 				12D39D111EF949500077BD17 /* Contracts.swift */,
 				126295E21EEAD16C00796B27 /* Corporation.swift */,
 				126295E31EEAD16C00796B27 /* Dogma.swift */,
+				128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */,
 				126295E41EEAD16C00796B27 /* Fittings.swift */,
 				126295E51EEAD16C00796B27 /* Fleets.swift */,
 				126295E61EEAD16C00796B27 /* Global.swift */,
@@ -714,6 +717,7 @@
 				1262960B1EEAD16C00796B27 /* Loyalty.swift in Sources */,
 				126296051EEAD16C00796B27 /* Global.swift in Sources */,
 				122B55591EB7154F00E46536 /* Char.swift in Sources */,
+				128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */,
 				12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */,
 				126296111EEAD16C00796B27 /* Search.swift in Sources */,
 				126296171EEAD16C00796B27 /* Wallet.swift in Sources */,

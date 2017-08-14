@@ -46,7 +46,7 @@ public extension ESI {
 			}
 		}
 		
-		public func listKillsAndLosses(characterID: Int, maxCount: Int? = nil, maxKillID: Int? = nil, completionBlock:((Result<[Killmails.Recent]>) -> Void)?) {
+		public func getCharacterKillsAndLosses(characterID: Int, maxCount: Int? = nil, maxKillID: Int? = nil, completionBlock:((Result<[Killmails.Recent]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			

@@ -3574,14 +3574,178 @@ public extension ESI {
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var moons: [Int]? = nil
+				public var planetID: Int = Int()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					moons = try (dictionary["moons"] as? [Any])?.map {try Int(json: $0)}
+					guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.planetID = planetID
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					moons = aDecoder.decodeObject(forKey: "moons") as? [Int]
+					planetID = aDecoder.decodeInteger(forKey: "planet_id")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = moons {
+						aCoder.encode(v, forKey: "moons")
+					}
+					aCoder.encode(planetID, forKey: "planet_id")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = moons?.json {
+						json["moons"] = v
+					}
+					json["planet_id"] = planetID.json
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					self.moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: self.planetID.hashValue)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) {
+					moons = other.moons?.flatMap { $0 }
+					planetID = other.planetID
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseSystemsSystemIDPlanets)?.hashValue == hashValue
+				}
+				
+			}
 			
-			public var categoryID: Int = Int()
-			public var groupID: Int = Int()
+			public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var x: Float = Float()
+				public var y: Float = Float()
+				public var z: Float = Float()
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.x = x
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.y = y
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.z = z
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					x = aDecoder.decodeFloat(forKey: "x")
+					y = aDecoder.decodeFloat(forKey: "y")
+					z = aDecoder.decodeFloat(forKey: "z")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(x, forKey: "x")
+					aCoder.encode(y, forKey: "y")
+					aCoder.encode(z, forKey: "z")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["x"] = x.json
+					json["y"] = y.json
+					json["z"] = z.json
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.x.hashValue)
+					hashCombine(seed: &hash, value: self.y.hashValue)
+					hashCombine(seed: &hash, value: self.z.hashValue)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseSystemsSystemIDPosition)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public var constellationID: Int = Int()
 			public var name: String = String()
-			public var published: Bool = Bool()
-			public var types: [Int] = []
+			public var planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets] = []
+			public var position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition()
+			public var securityClass: String? = nil
+			public var securityStatus: Float = Float()
+			public var starID: Int? = nil
+			public var stargates: [Int] = []
+			public var systemID: Int = Int()
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -3590,15 +3754,19 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.categoryID = categoryID
-				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.groupID = groupID
+				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.constellationID = constellationID
 				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
 				self.name = name
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.published = published
-				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
+				planets = try (dictionary["planets"] as? [Any])?.map {try Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(json: $0)} ?? []
+				position = try Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
+				securityClass = dictionary["security_class"] as? String
+				guard let securityStatus = dictionary["security_status"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.securityStatus = securityStatus
+				starID = dictionary["star_id"] as? Int
+				stargates = try (dictionary["stargates"] as? [Any])?.map {try Int(json: $0)} ?? []
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.systemID = systemID
 				
 				super.init()
 			}
@@ -3608,40 +3776,64 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				categoryID = aDecoder.decodeInteger(forKey: "category_id")
-				groupID = aDecoder.decodeInteger(forKey: "group_id")
+				constellationID = aDecoder.decodeInteger(forKey: "constellation_id")
 				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				published = aDecoder.decodeBool(forKey: "published")
-				types = aDecoder.decodeObject(forKey: "types") as? [Int] ?? []
+				planets = aDecoder.decodeObject(of: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets.self], forKey: "planets") as? [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets] ?? []
+				position = aDecoder.decodeObject(of: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition.self, forKey: "position")  ?? Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition()
+				securityClass = aDecoder.decodeObject(forKey: "security_class") as? String
+				securityStatus = aDecoder.decodeFloat(forKey: "security_status")
+				starID = aDecoder.containsValue(forKey: "star_id") ? aDecoder.decodeInteger(forKey: "star_id") : nil
+				stargates = aDecoder.decodeObject(forKey: "stargates") as? [Int] ?? []
+				systemID = aDecoder.decodeInteger(forKey: "system_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(categoryID, forKey: "category_id")
-				aCoder.encode(groupID, forKey: "group_id")
+				aCoder.encode(constellationID, forKey: "constellation_id")
 				aCoder.encode(name, forKey: "name")
-				aCoder.encode(published, forKey: "published")
-				aCoder.encode(types, forKey: "types")
+				aCoder.encode(planets, forKey: "planets")
+				aCoder.encode(position, forKey: "position")
+				if let v = securityClass {
+					aCoder.encode(v, forKey: "security_class")
+				}
+				aCoder.encode(securityStatus, forKey: "security_status")
+				if let v = starID {
+					aCoder.encode(v, forKey: "star_id")
+				}
+				aCoder.encode(stargates, forKey: "stargates")
+				aCoder.encode(systemID, forKey: "system_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["category_id"] = categoryID.json
-				json["group_id"] = groupID.json
+				json["constellation_id"] = constellationID.json
 				json["name"] = name.json
-				json["published"] = published.json
-				json["types"] = types.json
+				json["planets"] = planets.json
+				json["position"] = position.json
+				if let v = securityClass?.json {
+					json["security_class"] = v
+				}
+				json["security_status"] = securityStatus.json
+				if let v = starID?.json {
+					json["star_id"] = v
+				}
+				json["stargates"] = stargates.json
+				json["system_id"] = systemID.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.categoryID.hashValue)
-				hashCombine(seed: &hash, value: self.groupID.hashValue)
+				hashCombine(seed: &hash, value: self.constellationID.hashValue)
 				hashCombine(seed: &hash, value: self.name.hashValue)
-				hashCombine(seed: &hash, value: self.published.hashValue)
-				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.planets.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.position.hashValue)
+				hashCombine(seed: &hash, value: self.securityClass?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.securityStatus.hashValue)
+				hashCombine(seed: &hash, value: self.starID?.hashValue ?? 0)
+				self.stargates.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.systemID.hashValue)
 				return hash
 			}()
 			
@@ -3649,25 +3841,29 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
+			public static func ==(lhs: Universe.SolarSystemInformation, rhs: Universe.SolarSystemInformation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Universe.ItemGroupInformation) {
-				categoryID = other.categoryID
-				groupID = other.groupID
+			init(_ other: Universe.SolarSystemInformation) {
+				constellationID = other.constellationID
 				name = other.name
-				published = other.published
-				types = other.types.flatMap { $0 }
+				planets = other.planets.flatMap { Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets($0) }
+				position = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(other.position)
+				securityClass = other.securityClass
+				securityStatus = other.securityStatus
+				starID = other.starID
+				stargates = other.stargates.flatMap { $0 }
+				systemID = other.systemID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.ItemGroupInformation(self)
+				return Universe.SolarSystemInformation(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? ItemGroupInformation)?.hashValue == hashValue
+				return (object as? SolarSystemInformation)?.hashValue == hashValue
 			}
 			
 		}
@@ -3925,10 +4121,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var categoryID: Int = Int()
+			public var groupID: Int = Int()
+			public var name: String = String()
+			public var published: Bool = Bool()
+			public var types: [Int] = []
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -3937,7 +4137,15 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.categoryID = categoryID
+				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.groupID = groupID
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.name = name
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.published = published
+				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
 				
 				super.init()
 			}
@@ -3947,28 +4155,40 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				categoryID = aDecoder.decodeInteger(forKey: "category_id")
+				groupID = aDecoder.decodeInteger(forKey: "group_id")
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				published = aDecoder.decodeBool(forKey: "published")
+				types = aDecoder.decodeObject(forKey: "types") as? [Int] ?? []
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(categoryID, forKey: "category_id")
+				aCoder.encode(groupID, forKey: "group_id")
+				aCoder.encode(name, forKey: "name")
+				aCoder.encode(published, forKey: "published")
+				aCoder.encode(types, forKey: "types")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["category_id"] = categoryID.json
+				json["group_id"] = groupID.json
+				json["name"] = name.json
+				json["published"] = published.json
+				json["types"] = types.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.categoryID.hashValue)
+				hashCombine(seed: &hash, value: self.groupID.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.published.hashValue)
+				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
 			}()
 			
@@ -3976,21 +4196,25 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseConstellationsConstellationIDNotFound, rhs: Universe.GetUniverseConstellationsConstellationIDNotFound) -> Bool {
+			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Universe.GetUniverseConstellationsConstellationIDNotFound) {
-				error = other.error
+			init(_ other: Universe.ItemGroupInformation) {
+				categoryID = other.categoryID
+				groupID = other.groupID
+				name = other.name
+				published = other.published
+				types = other.types.flatMap { $0 }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseConstellationsConstellationIDNotFound(self)
+				return Universe.ItemGroupInformation(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseConstellationsConstellationIDNotFound)?.hashValue == hashValue
+				return (object as? ItemGroupInformation)?.hashValue == hashValue
 			}
 			
 		}
@@ -4286,177 +4510,10 @@ public extension ESI {
 		}
 		
 		
-		public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var moons: [Int]? = nil
-				public var planetID: Int = Int()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					moons = try (dictionary["moons"] as? [Any])?.map {try Int(json: $0)}
-					guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.planetID = planetID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					moons = aDecoder.decodeObject(forKey: "moons") as? [Int]
-					planetID = aDecoder.decodeInteger(forKey: "planet_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = moons {
-						aCoder.encode(v, forKey: "moons")
-					}
-					aCoder.encode(planetID, forKey: "planet_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = moons?.json {
-						json["moons"] = v
-					}
-					json["planet_id"] = planetID.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
-					var hash: Int = 0
-					self.moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: self.planetID.hashValue)
-					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
-				}
-				
-				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) {
-					moons = other.moons?.flatMap { $0 }
-					planetID = other.planetID
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetUniverseSystemsSystemIDPlanets)?.hashValue == hashValue
-				}
-				
-			}
 			
-			public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
-					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
-				}
-				
-				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) {
-					x = other.x
-					y = other.y
-					z = other.z
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetUniverseSystemsSystemIDPosition)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public var constellationID: Int = Int()
-			public var name: String = String()
-			public var planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets] = []
-			public var position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition()
-			public var securityClass: String? = nil
-			public var securityStatus: Float = Float()
-			public var stargates: [Int] = []
-			public var systemID: Int = Int()
+			public var error: String? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -4465,18 +4522,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.constellationID = constellationID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.name = name
-				planets = try (dictionary["planets"] as? [Any])?.map {try Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(json: $0)} ?? []
-				position = try Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				securityClass = dictionary["security_class"] as? String
-				guard let securityStatus = dictionary["security_status"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.securityStatus = securityStatus
-				stargates = try (dictionary["stargates"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.systemID = systemID
+				error = dictionary["error"] as? String
 				
 				super.init()
 			}
@@ -4486,56 +4532,28 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				constellationID = aDecoder.decodeInteger(forKey: "constellation_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				planets = aDecoder.decodeObject(of: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets.self], forKey: "planets") as? [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets] ?? []
-				position = aDecoder.decodeObject(of: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition.self, forKey: "position")  ?? Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition()
-				securityClass = aDecoder.decodeObject(forKey: "security_class") as? String
-				securityStatus = aDecoder.decodeFloat(forKey: "security_status")
-				stargates = aDecoder.decodeObject(forKey: "stargates") as? [Int] ?? []
-				systemID = aDecoder.decodeInteger(forKey: "system_id")
+				error = aDecoder.decodeObject(forKey: "error") as? String
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(constellationID, forKey: "constellation_id")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(planets, forKey: "planets")
-				aCoder.encode(position, forKey: "position")
-				if let v = securityClass {
-					aCoder.encode(v, forKey: "security_class")
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
 				}
-				aCoder.encode(securityStatus, forKey: "security_status")
-				aCoder.encode(stargates, forKey: "stargates")
-				aCoder.encode(systemID, forKey: "system_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["constellation_id"] = constellationID.json
-				json["name"] = name.json
-				json["planets"] = planets.json
-				json["position"] = position.json
-				if let v = securityClass?.json {
-					json["security_class"] = v
+				if let v = error?.json {
+					json["error"] = v
 				}
-				json["security_status"] = securityStatus.json
-				json["stargates"] = stargates.json
-				json["system_id"] = systemID.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.constellationID.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
-				self.planets.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.position.hashValue)
-				hashCombine(seed: &hash, value: self.securityClass?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.securityStatus.hashValue)
-				self.stargates.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.systemID.hashValue)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -4543,28 +4561,21 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Universe.SolarSystemInformation, rhs: Universe.SolarSystemInformation) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseConstellationsConstellationIDNotFound, rhs: Universe.GetUniverseConstellationsConstellationIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Universe.SolarSystemInformation) {
-				constellationID = other.constellationID
-				name = other.name
-				planets = other.planets.flatMap { Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets($0) }
-				position = Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(other.position)
-				securityClass = other.securityClass
-				securityStatus = other.securityStatus
-				stargates = other.stargates.flatMap { $0 }
-				systemID = other.systemID
+			init(_ other: Universe.GetUniverseConstellationsConstellationIDNotFound) {
+				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.SolarSystemInformation(self)
+				return Universe.GetUniverseConstellationsConstellationIDNotFound(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? SolarSystemInformation)?.hashValue == hashValue
+				return (object as? GetUniverseConstellationsConstellationIDNotFound)?.hashValue == hashValue
 			}
 			
 		}

@@ -15,8 +15,7 @@ let scopeURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathCo
 let securityURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("security.swft")
 
 
-
-guard let data = try? Data.init(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1])) else {
+guard let data = try? Data.init(contentsOf: URL(string: CommandLine.arguments[1])!) else {
 	print("Input file not found")
 	exit(1)
 }
