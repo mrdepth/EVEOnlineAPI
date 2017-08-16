@@ -148,12 +148,12 @@ extension Bool: JSONCoding, HTTPQueryable {
 
 extension Date: JSONCoding, HTTPQueryable {
 	public var json: Any {
-		return self
+		return DateFormatter.esiDateTimeFormatter.string(from: self)
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Date else {throw ESIError.invalidFormat(type(of: self), json)}
-		self = v
+		guard let s = json as? String, let d = DateFormatter.esiDateTimeFormatter.date(from: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+		self = d
 	}
 
 	public var httpQuery: String? {
