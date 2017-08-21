@@ -1,1558 +1,1560 @@
 {
-  "account": {
-    "AccountStatus": {
-      "method": "get",
-      "accessMask": 0,
-      "result": {
-        "AccountStatus": {
-          "paidUntil": "Date?",
-          "createDate": "Date",
-          "logonCount": "Int",
-          "logonMinutes": "Int",
-          "multiCharacterTraining": "[MultiCharacterTraining]",
-          "MultiCharacterTraining": {
-            "trainingEnd": "Date"
-          }
-        }
-      }
-    },
-    "APIKeyInfo": {
-      "method": "get",
-      "accessMask": 0,
-      "result": {
-        "APIKeyInfo": {
-          "key": "APIKey",
-          "APIKey": {
-            "accessMask": "Int",
-            "expires": "Date?",
-            "type": "APIKeyType",
-            "APIKeyType": [
-              "Account",
-              "Character",
-              "Corporation"
+	"account": {
+		"AccountStatus": {
+			"method": "get",
+			"accessMask": 0,
+			"result": {
+				"AccountStatus": {
+					"paidUntil": "Date?",
+					"createDate": "Date",
+					"logonCount": "Int",
+					"logonMinutes": "Int",
+					"multiCharacterTraining": "[MultiCharacterTraining]",
+					"MultiCharacterTraining": {
+						"trainingEnd": "Date"
+					}
+				}
+			}
+		},
+		"APIKeyInfo": {
+			"method": "get",
+			"accessMask": 0,
+			"result": {
+				"APIKeyInfo": {
+					"key": "APIKey",
+					"APIKey": {
+						"accessMask": "Int",
+						"expires": "Date?",
+						"type": "APIKeyType",
+						"APIKeyType": [
+									   "Account",
+									   "Character",
+									   "Corporation"
             ],
-            "characters": "[Character]",
-            "Character": {
-              "characterID": "Int64",
-              "characterName": "String",
-              "corporationID": "Int64",
-              "corporationName": "String",
-              "allianceID": "Int64?",
-              "allianceName": "String?",
-              "factionID": "Int?",
-              "factionName": "String?"
-            }
-          }
-        }
-      }
-    },
-    "Characters": {
-      "method": "get",
-      "accessMask": 0,
-      "result": {
-        "Characters": {
-          "characters": "Character",
-          "Character": {
-            "characterID": "Int64",
-            "characterName=name": "String",
-            "corporationID": "Int64",
-            "corporationName": "String",
-            "allianceID": "Int64?",
-            "allianceName": "String?",
-            "factionID": "Int?",
-            "factionName": "String?"
-          }
-        }
-      }
-    }
-  },
-  "api": {
-    "CallList": {
-      "method": "get",
-      "accessMask": 0,
-      "result": {
-        "CallList": {
-          "callGroups": "[CallGroup]",
-          "CallGroup": {
-            "groupID": "Int",
-            "groupName": "String",
-            "groupDescription=description": "String"
-          },
-          "calls": "[Call]",
-          "Call": {
-            "accessMask": "Int64",
-            "type": "CallType",
-            "CallType": [
-              "Character",
-              "Corporation"
-            ],
-            "name": "String",
-            "groupID": "Int",
-            "callDescription=description": "String"
-          }
-        }
-      }
-    }
-  },
-  "char": {
-    "AccountBalance": {
-      "method": "get",
-      "accessMask": 1,
-      "result": {
-        "AccountBalance": {
-          "accounts": "[Account]",
-          "Account": {
-            "accountID": "Int",
-            "accountKey": "Int",
-            "balance": "Double"
-          }
-        }
-      }
-    },
-    "AssetList": {
-      "method": "get",
-      "accessMask": 2,
-      "parameters": {
-        "flat": "Bool?"
-      },
-      "result": {
-        "AssetList": {
-          "assets": "[Asset]",
-          "Asset": {
-            "itemID": "Int64",
-            "locationID": "Int64?",
-            "typeID": "Int",
-            "quantity": "Int64",
-            "flag": "Int",
-            "singleton": "Bool",
-            "contents": "[Asset]?",
-            "rawQuantity": "Int?"
-          }
-        }
-      }
-    },
-    "Blueprints": {
-      "method": "get",
-      "accessMask": 2,
-      "result": {
-        "Blueprints": {
-          "blueprints": "[Blueprint]",
-          "Blueprint": {
-            "itemID": "Int64",
-            "locationID": "Int64",
-            "typeID": "Int",
-            "typeName": "String",
-            "flag": "Int",
-            "quantity": "Int64",
-            "timeEfficiency": "Int",
-            "materialEfficiency": "Int",
-            "runs": "Int"
-          }
-        }
-      }
-    },
-    "Bookmarks": {
-      "method": "get",
-      "accessMask": 268435456,
-      "result": {
-        "Bookmarks": {
-          "folders": "[Folder]",
-          "Folder": {
-            "folderID": "Int",
-            "folderName": "String",
-            "bookmarks": "[Bookmark]",
-            "Bookmark": {
-              "bookmarkID": "Int",
-              "creatorID": "Int64",
-              "created": "Date",
-              "itemID": "Int64",
-              "typeID": "Int",
-              "locationID": "Int64",
-              "x": "Double",
-              "y": "Double",
-              "z": "Double",
-              "memo": "String",
-              "note": "String"
-            }
-          }
-        }
-      }
-    },
-    "CalendarEventAttendees": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "eventIDs": "[Int64]"
-      },
-      "result": {
-        "CalendarEventAttendees": {
-          "eventAttendees": "[Attendee]",
-          "Attendee": {
-            "characterID": "Int64",
-            "characterName": "String",
-            "response": "Response",
-            "Response": [
-              "Undecided",
-              "Accepted",
-              "Declined",
-              "Tentative"
-            ]
-          }
-        }
-      }
-    },
-    "CharacterSheet": {
-      "method": "get",
-      "accessMask": 8,
-      "result": {
-        "CharacterSheet": {
-          "characterID": "Int64",
-          "characterName": "String",
-          "homeStationID": "Int",
-          "dateOfBirth=DoB": "Date",
-          "race": "String",
-          "bloodLineID": "Int",
-          "bloodLine": "String",
-          "ancestryID": "Int",
-          "ancestry": "String",
-          "gender": "Gender",
-          "Gender": [
-            "Male",
-            "Female"
+						"characters": "[Character]",
+						"Character": {
+							"characterID": "Int64",
+							"characterName": "String",
+							"corporationID": "Int64",
+							"corporationName": "String",
+							"allianceID": "Int64?",
+							"allianceName": "String?",
+							"factionID": "Int?",
+							"factionName": "String?"
+						}
+					}
+				}
+			}
+		},
+		"Characters": {
+			"method": "get",
+			"accessMask": 0,
+			"result": {
+				"Characters": {
+					"characters": "Character",
+					"Character": {
+						"characterID": "Int64",
+						"characterName=name": "String",
+						"corporationID": "Int64",
+						"corporationName": "String",
+						"allianceID": "Int64?",
+						"allianceName": "String?",
+						"factionID": "Int?",
+						"factionName": "String?"
+					}
+				}
+			}
+		}
+	},
+	"api": {
+		"CallList": {
+			"method": "get",
+			"accessMask": 0,
+			"result": {
+				"CallList": {
+					"callGroups": "[CallGroup]",
+					"CallGroup": {
+						"groupID": "Int",
+						"groupName": "String",
+						"groupDescription=description": "String"
+					},
+					"calls": "[Call]",
+					"Call": {
+						"accessMask": "Int64",
+						"type": "CallType",
+						"CallType": [
+									 "Character",
+									 "Corporation"
+									 ],
+						"name": "String",
+						"groupID": "Int",
+						"callDescription=description": "String"
+					}
+				}
+			}
+		}
+	},
+	"char": {
+		"AccountBalance": {
+			"method": "get",
+			"accessMask": 1,
+			"result": {
+				"AccountBalance": {
+					"accounts": "[Account]",
+					"Account": {
+						"accountID": "Int",
+						"accountKey": "Int",
+						"balance": "Double"
+					}
+				}
+			}
+		},
+		"AssetList": {
+			"method": "get",
+			"accessMask": 2,
+			"parameters": {
+				"flat": "Bool?"
+			},
+			"result": {
+				"AssetList": {
+					"assets": "[Asset]",
+					"Asset": {
+						"itemID": "Int64",
+						"locationID": "Int64?",
+						"typeID": "Int",
+						"quantity": "Int64",
+						"flag": "Int",
+						"singleton": "Bool",
+						"contents": "[Asset]?",
+						"rawQuantity": "Int?"
+					}
+				}
+			}
+		},
+		"Blueprints": {
+			"method": "get",
+			"accessMask": 2,
+			"result": {
+				"Blueprints": {
+					"blueprints": "[Blueprint]",
+					"Blueprint": {
+						"itemID": "Int64",
+						"locationID": "Int64",
+						"typeID": "Int",
+						"typeName": "String",
+						"flag": "Int",
+						"quantity": "Int64",
+						"timeEfficiency": "Int",
+						"materialEfficiency": "Int",
+						"runs": "Int"
+					}
+				}
+			}
+		},
+		"Bookmarks": {
+			"method": "get",
+			"accessMask": 268435456,
+			"result": {
+				"Bookmarks": {
+					"folders": "[Folder]",
+					"Folder": {
+						"folderID": "Int",
+						"folderName": "String",
+						"bookmarks": "[Bookmark]",
+						"Bookmark": {
+							"bookmarkID": "Int",
+							"creatorID": "Int64",
+							"created": "Date",
+							"itemID": "Int64",
+							"typeID": "Int",
+							"locationID": "Int64",
+							"x": "Double",
+							"y": "Double",
+							"z": "Double",
+							"memo": "String",
+							"note": "String"
+						}
+					}
+				}
+			}
+		},
+		"CalendarEventAttendees": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"eventIDs": "[Int64]"
+			},
+			"result": {
+				"CalendarEventAttendees": {
+					"eventAttendees": "[Attendee]",
+					"Attendee": {
+						"characterID": "Int64",
+						"characterName": "String",
+						"response": "Response",
+						"Response": [
+									 "Undecided",
+									 "Accepted",
+									 "Declined",
+									 "Tentative"
+									 ]
+					}
+				}
+			}
+		},
+		"CharacterSheet": {
+			"method": "get",
+			"accessMask": 8,
+			"result": {
+				"CharacterSheet": {
+					"characterID": "Int64",
+					"characterName": "String",
+					"homeStationID": "Int",
+					"dateOfBirth=DoB": "Date",
+					"race": "String",
+					"bloodLineID": "Int",
+					"bloodLine": "String",
+					"ancestryID": "Int",
+					"ancestry": "String",
+					"gender": "Gender",
+					"Gender": [
+							   "Male",
+							   "Female"
           ],
-          "corporationName": "String",
-          "corporationID": "Int64",
-          "allianceName": "String?",
-          "allianceID": "Int64",
-          "factionName": "String?",
-          "factionID": "Int?",
-          "cloneTypeID": "Int",
-          "cloneName": "String",
-          "cloneSkillPoints": "Int64",
-          "freeSkillPoints": "Int64",
-          "freeRespecs": "Int",
-          "cloneJumpDate": "Date?",
-          "lastRespecDate": "Date?",
-          "lastTimedRespec": "Date?",
-          "remoteStationDate": "Date?",
-          "jumpClones": "[JumpClone]",
-          "JumpClone": {
-            "jumpCloneID": "Int64",
-            "typeID": "Int",
-            "locationID": "Int64",
-            "cloneName": "String"
-          },
-          "jumpCloneImplants": "[JumpCloneImplant]",
-          "JumpCloneImplant": {
-            "jumpCloneID": "Int64",
-            "typeID": "Int",
-            "typeName": "String"
-          },
-          "jumpActivation": "Date?",
-          "jumpFatigue": "Date?",
-          "jumpLastUpdate": "Date?",
-          "balance": "Double",
-          "implants": "[Implant]",
-          "Implant": {
-            "typeID": "Int",
-            "typeName": "String"
-          },
-          "attributes": "Attributes",
-          "Attributes": {
-            "intelligence": "Int",
-            "memory": "Int",
-            "charisma": "Int",
-            "perception": "Int",
-            "willpower": "Int"
-          },
-          "skills": "[Skill]",
-          "Skill": {
-            "typeID": "Int",
-            "skillpoints": "Int",
-            "level": "Int",
-            "published": "Bool"
-          },
-          "certificates": "[Certificate]",
-          "Certificate": {
-            "certificateID": "Int"
-          },
-          "corporationRoles": "[Role]",
-          "corporationRolesAtHQ": "[Role]",
-          "corporationRolesAtBase": "[Role]",
-          "corporationRolesAtOther": "[Role]",
-          "corporationTitles": "[Role]",
-          "Role": {
-            "roleID": "Int",
-            "roleName": "String"
-          }
-        }
-      }
-    },
-    "ChatChannels": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "ChatChannels": {
-          "channels": "[Channel]",
-          "Channel": {
-            "channelID": "Int",
-            "ownerID": "Int64",
-            "ownerName": "String",
-            "displayName": "String",
-            "comparisonKey": "String",
-            "hasPassword": "Bool",
-            "motd": "String",
-            "allowed": "[Accessor]?",
-            "blocked": "[Accessor]?",
-            "muted": "[Accessor]?",
-            "operators": "[Accessor]?",
-            "Accessor": {
-              "accessorID": "Int64",
-              "accessorName": "String",
-              "untilWhen": "Date?",
-              "reason": "String?"
-            }
-          }
-        }
-      }
-    },
-    "Clones": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Clones": {
-          "dateOfBirth=DoB": "Date",
-          "race": "String",
-          "bloodLineID": "Int",
-          "bloodLine": "String",
-          "ancestryID": "Int",
-          "ancestry": "String",
-          "gender": "Gender",
-          "Gender": [
-            "Male",
-            "Female"
+					"corporationName": "String",
+					"corporationID": "Int64",
+					"allianceName": "String?",
+					"allianceID": "Int64",
+					"factionName": "String?",
+					"factionID": "Int?",
+					"cloneTypeID": "Int",
+					"cloneName": "String",
+					"cloneSkillPoints": "Int64",
+					"freeSkillPoints": "Int64",
+					"freeRespecs": "Int",
+					"cloneJumpDate": "Date?",
+					"lastRespecDate": "Date?",
+					"lastTimedRespec": "Date?",
+					"remoteStationDate": "Date?",
+					"jumpClones": "[JumpClone]",
+					"JumpClone": {
+						"jumpCloneID": "Int64",
+						"typeID": "Int",
+						"locationID": "Int64",
+						"cloneName": "String"
+					},
+					"jumpCloneImplants": "[JumpCloneImplant]",
+					"JumpCloneImplant": {
+						"jumpCloneID": "Int64",
+						"typeID": "Int",
+						"typeName": "String"
+					},
+					"jumpActivation": "Date?",
+					"jumpFatigue": "Date?",
+					"jumpLastUpdate": "Date?",
+					"balance": "Double",
+					"implants": "[Implant]",
+					"Implant": {
+						"typeID": "Int",
+						"typeName": "String"
+					},
+					"attributes": "Attributes",
+					"Attributes": {
+						"intelligence": "Int",
+						"memory": "Int",
+						"charisma": "Int",
+						"perception": "Int",
+						"willpower": "Int"
+					},
+					"skills": "[Skill]",
+					"Skill": {
+						"typeID": "Int",
+						"skillpoints": "Int",
+						"level": "Int",
+						"published": "Bool"
+					},
+					"certificates": "[Certificate]",
+					"Certificate": {
+						"certificateID": "Int"
+					},
+					"corporationRoles": "[Role]",
+					"corporationRolesAtHQ": "[Role]",
+					"corporationRolesAtBase": "[Role]",
+					"corporationRolesAtOther": "[Role]",
+					"corporationTitles": "[Role]",
+					"Role": {
+						"roleID": "Int",
+						"roleName": "String"
+					}
+				}
+			}
+		},
+		"ChatChannels": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"ChatChannels": {
+					"channels": "[Channel]",
+					"Channel": {
+						"channelID": "Int",
+						"ownerID": "Int64",
+						"ownerName": "String",
+						"displayName": "String",
+						"comparisonKey": "String",
+						"hasPassword": "Bool",
+						"motd": "String",
+						"allowed": "[Accessor]?",
+						"blocked": "[Accessor]?",
+						"muted": "[Accessor]?",
+						"operators": "[Accessor]?",
+						"Accessor": {
+							"accessorID": "Int64",
+							"accessorName": "String",
+							"untilWhen": "Date?",
+							"reason": "String?"
+						}
+					}
+				}
+			}
+		},
+		"Clones": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Clones": {
+					"dateOfBirth=DoB": "Date",
+					"race": "String",
+					"bloodLineID": "Int",
+					"bloodLine": "String",
+					"ancestryID": "Int",
+					"ancestry": "String",
+					"gender": "Gender",
+					"Gender": [
+							   "Male",
+							   "Female"
           ],
-          "freeRespecs": "Int",
-          "cloneJumpDate": "Date?",
-          "lastRespecDate": "Date?",
-          "lastTimedRespec": "Date?",
-          "remoteStationDate": "Date?",
-          "attributes": "Attributes",
-          "Attributes": {
-            "intelligence": "Int",
-            "memory": "Int",
-            "charisma": "Int",
-            "perception": "Int",
-            "willpower": "Int"
-          },
-          "implants": "[Implant]?",
-          "Implant": {
-            "typeID": "Int",
-            "typeName": "String"
-          },
-          "jumpClones": "[JumpClone]?",
-          "JumpClone": {
-            "jumpCloneID": "Int64",
-            "typeID": "Int",
-            "locationID": "Int64",
-            "cloneName": "String"
-          },
-          "jumpCloneImplants": "[JumpCloneImplant]?",
-          "JumpCloneImplant": {
-            "jumpCloneID": "Int64",
-            "typeID": "Int",
-            "typeName": "String"
-          },
-          "jumpActivation": "Date?",
-          "jumpFatigue": "Date?",
-          "jumpLastUpdate": "Date?"
-        }
-      }
-    },
-    "ContactList": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "ContactList": {
-          "contactList": "[Contact]",
-          "corporateContactList": "[Contact]",
-          "allianceContactList": "[Contact]",
-          "Contact": {
-            "contactID": "Int64",
-            "contactName": "String",
-            "standing": "Float",
-            "contactTypeID": "Int",
-            "labelMask": "Int64",
-            "inWatchlist": "Bool?"
-          },
-          "contactLabels": "[Label]",
-          "corporateContactLabels": "[Label]",
-          "allianceContactLabels": "[Label]",
-          "Label": {
-            "labelID": "Int64",
-            "name": "String"
-          }
-        }
-      }
-    },
-    "ContactNotifications": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "ContactNotifications": {
-          "contactNotifications": "[Notification]",
-          "Notification": {
-            "notificationID": "Int64",
-            "senderID": "Int64",
-            "senderName": "String",
-            "sentDate": "Date",
-            "messageData": "String"
-          }
-        }
-      }
-    },
-    "ContractBids": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "ContractBids": {
-          "bidList": "[Bid]",
-          "Bid": {
-            "bidID": "Int64",
-            "contractID": "Int64",
-            "bidderID": "Int64",
-            "dateBid": "Date",
-            "amount": "Double"
-          }
-        }
-      }
-    },
-    "ContractItems": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "contractID": "Int64"
-      },
-      "result": {
-        "ContractItems": {
-          "itemList": "[Item]",
-          "Item": {
-            "recordID": "Int64",
-            "typeID": "Int",
-            "quantity": "Int64",
-            "rawQuantity": "Int",
-            "singleton": "Bool",
-            "included": "Bool"
-          }
-        }
-      }
-    },
-    "Contracts": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Contracts": {
-          "contractList": "[Contract]",
-          "Contract": {
-            "contractID": "Int64",
-            "issuerID": "Int64",
-            "issuerCorpID": "Int64",
-            "assigneeID": "Int64",
-            "acceptorID": "Int64",
-            "startStationID": "Int",
-            "endStationID": "Int",
-            "type": "ContractType",
-            "ContractType": [
-              "ItemExchange",
-              "Courier",
-              "Loan",
-              "Auction"
+					"freeRespecs": "Int",
+					"cloneJumpDate": "Date?",
+					"lastRespecDate": "Date?",
+					"lastTimedRespec": "Date?",
+					"remoteStationDate": "Date?",
+					"attributes": "Attributes",
+					"Attributes": {
+						"intelligence": "Int",
+						"memory": "Int",
+						"charisma": "Int",
+						"perception": "Int",
+						"willpower": "Int"
+					},
+					"implants": "[Implant]?",
+					"Implant": {
+						"typeID": "Int",
+						"typeName": "String"
+					},
+					"jumpClones": "[JumpClone]?",
+					"JumpClone": {
+						"jumpCloneID": "Int64",
+						"typeID": "Int",
+						"locationID": "Int64",
+						"cloneName": "String"
+					},
+					"jumpCloneImplants": "[JumpCloneImplant]?",
+					"JumpCloneImplant": {
+						"jumpCloneID": "Int64",
+						"typeID": "Int",
+						"typeName": "String"
+					},
+					"jumpActivation": "Date?",
+					"jumpFatigue": "Date?",
+					"jumpLastUpdate": "Date?"
+				}
+			}
+		},
+		"ContactList": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"ContactList": {
+					"contactList": "[Contact]",
+					"corporateContactList": "[Contact]",
+					"allianceContactList": "[Contact]",
+					"Contact": {
+						"contactID": "Int64",
+						"contactName": "String",
+						"standing": "Float",
+						"contactTypeID": "Int",
+						"labelMask": "Int64",
+						"inWatchlist": "Bool?"
+					},
+					"contactLabels": "[Label]",
+					"corporateContactLabels": "[Label]",
+					"allianceContactLabels": "[Label]",
+					"Label": {
+						"labelID": "Int64",
+						"name": "String"
+					}
+				}
+			}
+		},
+		"ContactNotifications": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"ContactNotifications": {
+					"contactNotifications": "[Notification]",
+					"Notification": {
+						"notificationID": "Int64",
+						"senderID": "Int64",
+						"senderName": "String",
+						"sentDate": "Date",
+						"messageData": "String"
+					}
+				}
+			}
+		},
+		"ContractBids": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"ContractBids": {
+					"bidList": "[Bid]",
+					"Bid": {
+						"bidID": "Int64",
+						"contractID": "Int64",
+						"bidderID": "Int64",
+						"dateBid": "Date",
+						"amount": "Double"
+					}
+				}
+			}
+		},
+		"ContractItems": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"contractID": "Int64"
+			},
+			"result": {
+				"ContractItems": {
+					"itemList": "[Item]",
+					"Item": {
+						"recordID": "Int64",
+						"typeID": "Int",
+						"quantity": "Int64",
+						"rawQuantity": "Int",
+						"singleton": "Bool",
+						"included": "Bool"
+					}
+				}
+			}
+		},
+		"Contracts": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Contracts": {
+					"contractList": "[Contract]",
+					"Contract": {
+						"contractID": "Int64",
+						"issuerID": "Int64",
+						"issuerCorpID": "Int64",
+						"assigneeID": "Int64",
+						"acceptorID": "Int64",
+						"startStationID": "Int",
+						"endStationID": "Int",
+						"type": "ContractType",
+						"ContractType": [
+										 "ItemExchange",
+										 "Courier",
+										 "Loan",
+										 "Auction"
+										 ],
+						"status": "Status",
+						"Status": [
+								   "Outstanding",
+								   "Deleted",
+								   "Completed",
+								   "Failed",
+								   "CompletedByIssuer",
+								   "CompletedByContractor",
+								   "Cancelled",
+								   "Rejected",
+								   "Reversed",
+								   "InProgress"
+								   ],
+						"title": "String",
+						"forCorp": "Bool",
+						"availability": "Availability",
+						"Availability": [
+										 "Public",
+										 "Private"
+										 ],
+						"dateIssued": "Date",
+						"dateExpired": "Date",
+						"dateAccepted": "Date",
+						"numDays": "Int",
+						"dateCompleted": "Date",
+						"price": "Double",
+						"reward": "Double",
+						"collateral": "Double",
+						"buyout": "Double",
+						"volume": "Double"
+					}
+				}
+			}
+		},
+		"FacWarStats": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"FacWarStats": {
+					"factionID": "Int",
+					"factionName": "String",
+					"enlisted": "Date",
+					"currentRank": "Int",
+					"highestRank": "Int",
+					"killsYesterday": "Int",
+					"killsLastWeek": "Int",
+					"killsTotal": "Int",
+					"victoryPointsYesterday": "Int",
+					"victoryPointsLastWeek": "Int",
+					"victoryPointsTotal": "Int"
+				}
+			}
+		},
+		"IndustryJobs": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"IndustryJobs": {
+					"jobs": "[Job]",
+					"Job": {
+						"jobID": "Int64",
+						"installerID": "Int64",
+						"installerName": "String",
+						"facilityID": "Int",
+						"solarSystemID": "Int",
+						"solarSystemName": "String",
+						"stationID": "Int64",
+						"activityID": "Int",
+						"blueprintID": "Int64",
+						"blueprintTypeID": "Int",
+						"blueprintTypeName": "String",
+						"blueprintLocationID": "Int64",
+						"outputLocationID": "Int64",
+						"runs": "Int",
+						"cost": "Double",
+						"teamID": "Int",
+						"licensedRuns": "Int",
+						"probability": "Float",
+						"productTypeID": "Int",
+						"productTypeName": "String",
+						"status": "Status",
+						"Status": [
+								   "Active=1",
+								   "Paused=2",
+								   "Ready=3",
+								   "Delivered=101",
+								   "Cancelled=102",
+								   "Reverted=103"
+								   ],
+						"timeInSeconds": "Int",
+						"startDate": "Date",
+						"endDate": "Date",
+						"pauseDate": "Date",
+						"completedDate": "Date",
+						"completedCharacterID": "Int64",
+						"successfulRuns": "Int"
+					}
+				}
+			}
+		},
+		"KillMails": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"fromID": "Int64?",
+				"rowCount": "Int"
+			},
+			"result": {
+				"KillMails": {
+					"kills": "[Kill]",
+					"Kill": {
+						"killID": "Int64",
+						"solarSystemID": "Int",
+						"killTime": "Date",
+						"moonID": "Int",
+						"victim": "Victim",
+						"Victim": {
+							"characterID": "Int64",
+							"characterName": "String",
+							"corporationID": "Int64",
+							"corporationName": "String",
+							"allianceID": "Int64?",
+							"allianceName": "String?",
+							"factionID": "Int?",
+							"factionName": "String?",
+							"damageTaken": "Int64",
+							"shipTypeID": "Int",
+							"x": "Double",
+							"y": "Double",
+							"z": "Double"
+						},
+						"attackers": "[Attacker]",
+						"Attacker": {
+							"characterID": "Int64",
+							"characterName": "String",
+							"corporationID": "Int64",
+							"corporationName": "String",
+							"allianceID": "Int64?",
+							"allianceName": "String?",
+							"factionID": "Int?",
+							"factionName": "String?",
+							"securityStatus": "Float",
+							"damageDone": "Int64",
+							"finalBlow": "Bool",
+							"weaponTypeID": "Int",
+							"shipTypeID": "Int"
+						},
+						"items": "[Item]",
+						"Item": {
+							"typeID": "Int",
+							"flag": "Int",
+							"qtyDropped": "Int",
+							"qtyDestroyed": "Int",
+							"singleton": "Bool"
+						}
+					}
+				}
+			}
+		},
+		"Locations": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"ids": "[Int64]"
+			},
+			"result": {
+				"Locations": {
+					"locations": "[Location]",
+					"Location": {
+						"itemID": "Int64",
+						"itemName": "String",
+						"x": "Double",
+						"y": "Double",
+						"z": "Double"
+					}
+				}
+			}
+		},
+		"MailBodies": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"ids": "[Int64]"
+			},
+			"result": {
+				"MailBodies": {
+					"messages": "[Message]",
+					"Message": {
+						"messageID": "Int64",
+						"text=_": "String"
+					},
+					"missingMessageIDs": "String"
+				}
+			}
+		},
+		"MailingLists": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"MailingLists": {
+					"mailingLists": "[MailingList]",
+					"MailingList": {
+						"listID": "Int",
+						"displayName": "String"
+					}
+				}
+			}
+		},
+		"MailMessages": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Messages": {
+					"messages": "[Message]",
+					"Message": {
+						"messageID": "Int64",
+						"senderID": "Int64",
+						"senderName": "String",
+						"sentDate": "Date",
+						"title": "String",
+						"toCorpOrAllianceID": "Int?",
+						"toCharacterIDs": "String?",
+						"toListID": "String?"
+					}
+				}
+			}
+		},
+		"MarketOrders": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"MarketOrders": {
+					"orders": "[Order]",
+					"Order": {
+						"orderID": "Int64",
+						"characterID=charID": "Int64",
+						"stationID": "Int",
+						"volEntered": "Int64",
+						"volRemaining": "Int64",
+						"minVolume": "Int64",
+						"orderState": "State",
+						"State": [
+								  "Open=0",
+								  "Closed=1",
+								  "Expired=2",
+								  "Cancelled=3",
+								  "Pending=4",
+								  "Deleted=5"
+								  ],
+						"typeID": "Int",
+						"range": "Int",
+						"accountKey": "Int",
+						"duration": "Int",
+						"escrow": "Double",
+						"price": "Double",
+						"bid": "Bool",
+						"issued": "Date"
+					}
+				}
+			}
+		},
+		"Medals": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Medals": {
+					"currentCorporation": "[Medal]",
+					"otherCorporations": "[Medal]",
+					"Medal": {
+						"medalID": "Int",
+						"reason": "String",
+						"status": "Status",
+						"Status": [
+								   "public",
+								   "private"
+								   ],
+						"issuerID": "Int64",
+						"issued": "Date",
+						"corporationID": "Int64?",
+						"title": "String?",
+						"medalDescription=description": "String?"
+					}
+				}
+			}
+		},
+		"Notifications": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Notifications": {
+					"notifications": "[Notification]",
+					"Notification": {
+						"notificationID": "Int64",
+						"type=typeID": "NotificationType",
+						"NotificationType": [
+											 "AllianceWarDeclared=5",
+											 "AllianceWarSurrender=6",
+											 "AllianceWarRetracted=7",
+											 "AllianceWarInvalidatedByConcord=8",
+											 "CorpDeclaresWar=27",
+											 "CorpWarHasStarted=28",
+											 "CorpSurrendersWar=29",
+											 "CorpRetractsWar=30",
+											 "CorpWarInvalidatedByConcord=31"
             ],
-            "status": "Status",
-            "Status": [
-              "Outstanding",
-              "Deleted",
-              "Completed",
-              "Failed",
-              "CompletedByIssuer",
-              "CompletedByContractor",
-              "Cancelled",
-              "Rejected",
-              "Reversed",
-              "InProgress"
+						"senderID": "Int64",
+						"senderName": "String",
+						"sentDate": "Date",
+						"read": "Bool"
+					}
+				}
+			}
+		},
+		"NotificationTexts": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"ids": "[Int64]"
+			},
+			"result": {
+				"NotificationTexts": {
+					"notifications": "[Notification]",
+					"Notification": {
+						"notificationID": "Int64",
+						"text=_": "YAML"
+					},
+					"missindIDs": "String?"
+				}
+			}
+		},
+		"PlanetaryColonies": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"PlanetaryColonies": {
+					"colonies": "[Colony]",
+					"Colony": {
+						"solarSystemID": "Int",
+						"solarSystemName": "String",
+						"planetID": "Int",
+						"planetName": "String",
+						"planetTypeID": "Int",
+						"planetTypeName": "String",
+						"ownerID": "Int64",
+						"ownerName": "String",
+						"lastUpdate": "Date",
+						"upgradeLevel": "Int",
+						"numberOfPins": "Int"
+					}
+				}
+			}
+		},
+		"PlanetaryLinks": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"planetID": "Int"
+			},
+			"result": {
+				"PlanetaryLinks": {
+					"links": "[Link]",
+					"Link": {
+						"sourcePinID": "Int64",
+						"destinationPinID": "Int64",
+						"linkLevel": "Int"
+					}
+				}
+			}
+		},
+		"PlanetaryPins": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"planetID": "Int"
+			},
+			"result": {
+				"PlanetaryPins": {
+					"pins": "[Pin]",
+					"Pin": {
+						"pinID": "Int64",
+						"typeID": "Int",
+						"typeName": "String",
+						"schematicID": "Int",
+						"lastLaunchTime": "Date?",
+						"cycleTime": "Int",
+						"quantityPerCycle": "Int",
+						"installTime": "Date?",
+						"expiryTime": "Date?",
+						"contentTypeID": "Int",
+						"contentTypeName": "String",
+						"contentQuantity": "Int",
+						"longitude": "Double",
+						"latitude": "Double"
+					}
+				}
+			}
+		},
+		"PlanetaryRoutes": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"planetID": "Int"
+			},
+			"result": {
+				"PlanetaryRoutes": {
+					"routes": "[Route]",
+					"Route": {
+						"routeID": "Int64",
+						"sourcePinID": "Int64",
+						"destinationPinID": "Int64",
+						"contentTypeID": "Int",
+						"contentTypeName": "String",
+						"quantity": "Int",
+						"waypoint1": "Int64",
+						"waypoint2": "Int64",
+						"waypoint3": "Int64",
+						"waypoint4": "Int64",
+						"waypoint5": "Int64"
+					}
+				}
+			}
+		},
+		"Research": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Research": {
+					"research": "[Research]",
+					"Research": {
+						"agentID": "Int",
+						"skillTypeID": "Int",
+						"researchStartDate": "Date",
+						"pointsPerDay": "Float",
+						"remainderPoints": "Float"
+					}
+				}
+			}
+		},
+		"SkillQueue": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"SkillQueue": {
+					"skillQueue=skillqueue": "[Skill]",
+					"Skill": {
+						"queuePosition": "Int",
+						"typeID": "Int",
+						"level": "Int",
+						"startSP": "Int",
+						"endSP": "Int",
+						"startTime": "Date",
+						"endTime": "Date"
+					}
+				}
+			}
+		},
+		"Skills": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Skills": {
+					"skills": "[Skill]",
+					"Skill": {
+						"typeID": "Int",
+						"typeName": "String",
+						"skillpoints": "Int",
+						"level": "Int",
+						"published": "Bool"
+					}
+				}
+			}
+		},
+		"Standings": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Standings": {
+					"agents": "[Standing]?",
+					"npcCorporations=NPCCorporations": "[Standing]?",
+					"factions": "[Standing]?",
+					"Standing": {
+						"fromID": "Int64",
+						"fromName": "String",
+						"standing": "Float"
+					}
+				}
+			}
+		},
+		"UpcomingCalendarEvents": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"UpcomingCalendarEvents": {
+					"upcomingEvents": "[Event]",
+					"Event": {
+						"eventID": "Int64",
+						"ownerID": "Int64",
+						"ownerName": "String",
+						"eventDate": "Date",
+						"eventTitle": "String",
+						"duration": "Int",
+						"importance": "Bool",
+						"response": "Response",
+						"Response": [
+									 "Undecided",
+									 "Accepted",
+									 "Declined",
+									 "Tentative"
+									 ],
+						"eventText": "String"
+					}
+				}
+			}
+		},
+		"WalletJournal": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"fromID": "Int64?",
+				"rowCount": "Int?"
+			},
+			"result": {
+				"WalletJournal": {
+					"transactions": "[Transaction]",
+					"Transaction": {
+						"date": "Date",
+						"refID": "Int64",
+						"refTypeID": "Int",
+						"ownerName1": "String?",
+						"ownerID1": "Int64?",
+						"ownerName2": "String?",
+						"ownerID2": "Int64?",
+						"argName1": "String?",
+						"argID1": "Int?",
+						"amount": "Double",
+						"balance": "Double",
+						"reason": "String?",
+						"taxReceiverID": "Int64?",
+						"taxAmount": "Double?",
+						"owner1TypeID": "Int?",
+						"owner2TypeID": "Int?"
+						
+					}
+				}
+			}
+		},
+		"WalletTransactions": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"fromID": "Int64?",
+				"rowCount": "Int?"
+			},
+			"result": {
+				"WalletTransactions": {
+					"transactions": "[Transaction]",
+					"Transaction": {
+						"transactionDateTime": "Date",
+						"transactionID": "Int64",
+						"quantity": "Int64",
+						"typeName": "String",
+						"typeID": "Int",
+						"price": "Double",
+						"clientID": "Int64",
+						"clientName": "String",
+						"stationID": "Int",
+						"stationName": "String",
+						"transactionType": "TransactionType",
+						"TransactionType": [
+											"buy",
+											"sell"
+											],
+						"transactionFor": "ClientType",
+						"ClientType": [
+									   "personal",
+									   "corporation",
+									   "alliance"
             ],
-            "title": "String",
-            "forCorp": "Bool",
-            "availability": "Availability",
-            "Availability": [
-              "Public",
-              "Private"
+						"journalTransactionID": "Int64",
+						"clientTypeID": "Int"
+					}
+				}
+			}
+		}
+	},
+	"corp": {
+		"AccountBalance": {
+			"method": "get",
+			"accessMask": 1,
+			"result": {
+				"AccountBalance": {
+					"accounts": "[Account]",
+					"Account": {
+						"accountID": "Int",
+						"accountKey": "Int",
+						"balance": "Double"
+					}
+				}
+			}
+		},
+		"AssetList": {
+			"method": "get",
+			"accessMask": 2,
+			"parameters": {
+				"flat": "Bool?"
+			},
+			"result": {
+				"AssetList": {
+					"assets": "[Asset]",
+					"Asset": {
+						"itemID": "Int64",
+						"locationID": "Int64?",
+						"typeID": "Int",
+						"quantity": "Int64",
+						"flag": "Int",
+						"singleton": "Bool",
+						"contents": "[Asset]?",
+						"rawQuantity": "Int?"
+					}
+				}
+			}
+		},
+		"Blueprints": {
+			"method": "get",
+			"accessMask": 2,
+			"result": {
+				"Blueprints": {
+					"blueprints": "[Blueprint]",
+					"Blueprint": {
+						"itemID": "Int64",
+						"locationID": "Int64",
+						"typeID": "Int",
+						"typeName": "String",
+						"flag": "Int",
+						"quantity": "Int64",
+						"timeEfficiency": "Int",
+						"materialEfficiency": "Int",
+						"runs": "Int"
+					}
+				}
+			}
+		},
+		"Bookmarks": {
+			"method": "get",
+			"accessMask": 268435456,
+			"result": {
+				"Bookmarks": {
+					"folders": "[Folder]",
+					"Folder": {
+						"folderID": "Int",
+						"folderName": "String",
+						"bookmarks": "[Bookmark]",
+						"Bookmark": {
+							"bookmarkID": "Int",
+							"creatorID": "Int64",
+							"created": "Date",
+							"itemID": "Int64",
+							"typeID": "Int",
+							"locationID": "Int64",
+							"x": "Double",
+							"y": "Double",
+							"z": "Double",
+							"memo": "String",
+							"note": "String"
+						}
+					}
+				}
+			}
+		},
+		"ContactList": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"ContactList": {
+					"contactList": "[Contact]",
+					"corporateContactList": "[Contact]",
+					"allianceContactList": "[Contact]",
+					"Contact": {
+						"contactID": "Int64",
+						"contactName": "String",
+						"standing": "Float",
+						"contactTypeID": "Int",
+						"labelMask": "Int64",
+						"inWatchlist": "Bool?"
+					},
+					"contactLabels": "[Label]",
+					"corporateContactLabels": "[Label]",
+					"allianceContactLabels": "[Label]",
+					"Label": {
+						"labelID": "Int64",
+						"name": "String"
+					}
+				}
+			}
+		},
+		"ContractBids": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"ContractBids": {
+					"bidList": "[Bid]",
+					"Bid": {
+						"bidID": "Int64",
+						"contractID": "Int64",
+						"bidderID": "Int64",
+						"dateBid": "Date",
+						"amount": "Double"
+					}
+				}
+			}
+		},
+		"ContractItems": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"contractID": "Int64"
+			},
+			"result": {
+				"ContractItems": {
+					"itemList": "[Item]",
+					"Item": {
+						"recordID": "Int64",
+						"typeID": "Int",
+						"quantity": "Int64",
+						"rawQuantity": "Int",
+						"singleton": "Bool",
+						"included": "Bool"
+					}
+				}
+			}
+		},
+		"Contracts": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Contracts": {
+					"contractList": "[Contract]",
+					"Contract": {
+						"contractID": "Int64",
+						"issuerID": "Int64",
+						"issuerCorpID": "Int64",
+						"assigneeID": "Int64",
+						"acceptorID": "Int64",
+						"startStationID": "Int",
+						"endStationID": "Int",
+						"type": "ContractType",
+						"ContractType": [
+										 "ItemExchange",
+										 "Courier",
+										 "Loan",
+										 "Auction"
+										 ],
+						"status": "Status",
+						"Status": [
+								   "Outstanding",
+								   "Deleted",
+								   "Completed",
+								   "Failed",
+								   "CompletedByIssuer",
+								   "CompletedByContractor",
+								   "Cancelled",
+								   "Rejected",
+								   "Reversed",
+								   "InProgress"
+								   ],
+						"title": "String",
+						"forCorp": "Bool",
+						"availability": "Availability",
+						"Availability": [
+										 "Public",
+										 "Private"
+										 ],
+						"dateIssued": "Date",
+						"dateExpired": "Date",
+						"dateAccepted": "Date",
+						"numDays": "Int",
+						"dateCompleted": "Date",
+						"price": "Double",
+						"reward": "Double",
+						"collateral": "Double",
+						"buyout": "Double",
+						"volume": "Double"
+					}
+				}
+			}
+		},
+		"FacWarStats": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"FacWarStats": {
+					"factionID": "Int",
+					"factionName": "String",
+					"enlisted": "Date",
+					"currentRank": "Int",
+					"highestRank": "Int",
+					"killsYesterday": "Int",
+					"killsLastWeek": "Int",
+					"killsTotal": "Int",
+					"victoryPointsYesterday": "Int",
+					"victoryPointsLastWeek": "Int",
+					"victoryPointsTotal": "Int"
+				}
+			}
+		},
+		"IndustryJobs": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"IndustryJobs": {
+					"jobs": "[Job]",
+					"Job": {
+						"jobID": "Int64",
+						"installerID": "Int64",
+						"installerName": "String",
+						"facilityID": "Int",
+						"solarSystemID": "Int",
+						"solarSystemName": "String",
+						"stationID": "Int64",
+						"activityID": "Int",
+						"blueprintID": "Int64",
+						"blueprintTypeID": "Int",
+						"blueprintTypeName": "String",
+						"blueprintLocationID": "Int64",
+						"outputLocationID": "Int64",
+						"runs": "Int",
+						"cost": "Double",
+						"teamID": "Int",
+						"licensedRuns": "Int",
+						"probability": "Float",
+						"productTypeID": "Int",
+						"productTypeName": "String",
+						"status": "Status",
+						"Status": [
+								   "Active=1",
+								   "Paused=2",
+								   "Ready=3",
+								   "Delivered=101",
+								   "Cancelled=102",
+								   "Reverted=103"
+								   ],
+						"timeInSeconds": "Int",
+						"startDate": "Date",
+						"endDate": "Date",
+						"pauseDate": "Date",
+						"completedDate": "Date",
+						"completedCharacterID": "Int64",
+						"successfulRuns": "Int"
+					}
+				}
+			}
+		},
+		"KillMails": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"fromID": "Int64?",
+				"rowCount": "Int"
+			},
+			"result": {
+				"KillMails": {
+					"kills": "[Kill]",
+					"Kill": {
+						"killID": "Int64",
+						"solarSystemID": "Int",
+						"killTime": "Date",
+						"moonID": "Int",
+						"victim": "Victim",
+						"Victim": {
+							"characterID": "Int64",
+							"characterName": "String",
+							"corporationID": "Int64",
+							"corporationName": "String",
+							"allianceID": "Int64?",
+							"allianceName": "String?",
+							"factionID": "Int?",
+							"factionName": "String?",
+							"damageTaken": "Int64",
+							"shipTypeID": "Int",
+							"x": "Double",
+							"y": "Double",
+							"z": "Double"
+						},
+						"attackers": "[Attacker]",
+						"Attacker": {
+							"characterID": "Int64",
+							"characterName": "String",
+							"corporationID": "Int64",
+							"corporationName": "String",
+							"allianceID": "Int64?",
+							"allianceName": "String?",
+							"factionID": "Int?",
+							"factionName": "String?",
+							"securityStatus": "Float",
+							"damageDone": "Int64",
+							"finalBlow": "Bool",
+							"weaponTypeID": "Int",
+							"shipTypeID": "Int"
+						},
+						"items": "[Item]",
+						"Item": {
+							"typeID": "Int",
+							"flag": "Int",
+							"qtyDropped": "Int",
+							"qtyDestroyed": "Int",
+							"singleton": "Bool"
+						}
+					}
+				}
+			}
+		},
+		"Locations": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"ids": "[Int64]"
+			},
+			"result": {
+				"Locations": {
+					"locations": "[Location]",
+					"Location": {
+						"itemID": "Int64",
+						"itemName": "String",
+						"x": "Double",
+						"y": "Double",
+						"z": "Double"
+					}
+				}
+			}
+		},
+		"MarketOrders": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"MarketOrders": {
+					"orders": "[Order]",
+					"Order": {
+						"orderID": "Int64",
+						"characterID=charID": "Int64",
+						"stationID": "Int",
+						"volEntered": "Int64",
+						"volRemaining": "Int64",
+						"minVolume": "Int64",
+						"orderState": "State",
+						"State": [
+								  "Open=0",
+								  "Closed=1",
+								  "Expired=2",
+								  "Cancelled=3",
+								  "Pending=4",
+								  "Deleted=5"
+								  ],
+						"typeID": "Int",
+						"range": "Int",
+						"accountKey": "Int",
+						"duration": "Int",
+						"escrow": "Double",
+						"price": "Double",
+						"bid": "Bool",
+						"issued": "Date"
+					}
+				}
+			}
+		},
+		"Medals": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Medals": {
+					"currentCorporation": "[Medal]",
+					"otherCorporations": "[Medal]",
+					"Medal": {
+						"medalID": "Int",
+						"reason": "String",
+						"status": "Status",
+						"Status": [
+								   "public",
+								   "private"
+								   ],
+						"issuerID": "Int64",
+						"issued": "Date",
+						"corporationID": "Int64?",
+						"title": "String?",
+						"medalDescription=description": "String?"
+					}
+				}
+			}
+		},
+		"Standings": {
+			"method": "get",
+			"accessMask": 4,
+			"result": {
+				"Standings": {
+					"agents": "[Standing]?",
+					"npcCorporations=NPCCorporations": "[Standing]?",
+					"factions": "[Standing]?",
+					"Standing": {
+						"fromID": "Int64",
+						"fromName": "String",
+						"standing": "Float"
+					}
+				}
+			}
+		},
+		"WalletJournal": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"fromID": "Int64?",
+				"rowCount": "Int?"
+			},
+			"result": {
+				"WalletJournal": {
+					"entries": "[Transaction]",
+					"Transaction": {
+						"date": "Date",
+						"refID": "Int64",
+						"refTypeID": "Int",
+						"ownerName1": "String?",
+						"ownerID1": "Int64?",
+						"ownerName2": "String?",
+						"ownerID2": "Int64?",
+						"argName1": "String?",
+						"argID1": "Int?",
+						"amount": "Double",
+						"balance": "Double",
+						"reason": "String?",
+						"owner1TypeID": "Int?",
+						"owner2TypeID": "Int?"
+					}
+				}
+			}
+		},
+		"WalletTransactions": {
+			"method": "get",
+			"accessMask": 4,
+			"parameters": {
+				"fromID": "Int64?",
+				"rowCount": "Int?"
+			},
+			"result": {
+				"WalletTransactions": {
+					"transactions": "[Transaction]",
+					"Transaction": {
+						"transactionDateTime": "Date",
+						"transactionID": "Int64",
+						"quantity": "Int64",
+						"typeName": "String",
+						"typeID": "Int",
+						"price": "Double",
+						"clientID": "Int64",
+						"clientName": "String",
+						"characterID": "Int64",
+						"characterName": "String",
+						"stationID": "Int",
+						"stationName": "String",
+						"transactionType": "TransactionType",
+						"TransactionType": [
+											"buy",
+											"sell"
+											],
+						"transactionFor": "ClientType",
+						"ClientType": [
+									   "personal",
+									   "corporation",
+									   "alliance"
             ],
-            "dateIssued": "Date",
-            "dateExpired": "Date",
-            "dateAccepted": "Date",
-            "numDays": "Int",
-            "dateCompleted": "Date",
-            "price": "Double",
-            "reward": "Double",
-            "collateral": "Double",
-            "buyout": "Double",
-            "volume": "Double"
-          }
-        }
-      }
-    },
-    "FacWarStats": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "FacWarStats": {
-          "factionID": "Int",
-          "factionName": "String",
-          "enlisted": "Date",
-          "currentRank": "Int",
-          "highestRank": "Int",
-          "killsYesterday": "Int",
-          "killsLastWeek": "Int",
-          "killsTotal": "Int",
-          "victoryPointsYesterday": "Int",
-          "victoryPointsLastWeek": "Int",
-          "victoryPointsTotal": "Int"
-        }
-      }
-    },
-    "IndustryJobs": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "IndustryJobs": {
-          "jobs": "[Job]",
-          "Job": {
-            "jobID": "Int64",
-            "installerID": "Int64",
-            "installerName": "String",
-            "facilityID": "Int",
-            "solarSystemID": "Int",
-            "solarSystemName": "String",
-            "stationID": "Int64",
-            "activityID": "Int",
-            "blueprintID": "Int64",
-            "blueprintTypeID": "Int",
-            "blueprintTypeName": "String",
-            "blueprintLocationID": "Int64",
-            "outputLocationID": "Int64",
-            "runs": "Int",
-            "cost": "Double",
-            "teamID": "Int",
-            "licensedRuns": "Int",
-            "probability": "Float",
-            "productTypeID": "Int",
-            "productTypeName": "String",
-            "status": "Status",
-            "Status": [
-              "Active=1",
-              "Paused=2",
-              "Ready=3",
-              "Delivered=101",
-              "Cancelled=102",
-              "Reverted=103"
-            ],
-            "timeInSeconds": "Int",
-            "startDate": "Date",
-            "endDate": "Date",
-            "pauseDate": "Date",
-            "completedDate": "Date",
-            "completedCharacterID": "Int64",
-            "successfulRuns": "Int"
-          }
-        }
-      }
-    },
-    "KillMails": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "fromID": "Int64?",
-        "rowCount": "Int"
-      },
-      "result": {
-        "KillMails": {
-          "kills": "[Kill]",
-          "Kill": {
-            "killID": "Int64",
-            "solarSystemID": "Int",
-            "killTime": "Date",
-            "moonID": "Int",
-            "victim": "Victim",
-            "Victim": {
-              "characterID": "Int64",
-              "characterName": "String",
-              "corporationID": "Int64",
-              "corporationName": "String",
-              "allianceID": "Int64?",
-              "allianceName": "String?",
-              "factionID": "Int?",
-              "factionName": "String?",
-              "damageTaken": "Int64",
-              "shipTypeID": "Int",
-              "x": "Double",
-              "y": "Double",
-              "z": "Double"
-            },
-            "attackers": "[Attacker]",
-            "Attacker": {
-              "characterID": "Int64",
-              "characterName": "String",
-              "corporationID": "Int64",
-              "corporationName": "String",
-              "allianceID": "Int64?",
-              "allianceName": "String?",
-              "factionID": "Int?",
-              "factionName": "String?",
-              "securityStatus": "Float",
-              "damageDone": "Int64",
-              "finalBlow": "Bool",
-              "weaponTypeID": "Int",
-              "shipTypeID": "Int"
-            },
-            "items": "[Item]",
-            "Item": {
-              "typeID": "Int",
-              "flag": "Int",
-              "qtyDropped": "Int",
-              "qtyDestroyed": "Int",
-              "singleton": "Bool"
-            }
-          }
-        }
-      }
-    },
-    "Locations": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "ids": "[Int64]"
-      },
-      "result": {
-        "Locations": {
-          "locations": "[Location]",
-          "Location": {
-            "itemID": "Int64",
-            "itemName": "String",
-            "x": "Double",
-            "y": "Double",
-            "z": "Double"
-          }
-        }
-      }
-    },
-    "MailBodies": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "ids": "[Int64]"
-      },
-      "result": {
-        "MailBodies": {
-          "messages": "[Message]",
-          "Message": {
-            "messageID": "Int64",
-            "text=_": "String"
-          },
-          "missingMessageIDs": "String"
-        }
-      }
-    },
-    "MailingLists": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "MailingLists": {
-          "mailingLists": "[MailingList]",
-          "MailingList": {
-            "listID": "Int",
-            "displayName": "String"
-          }
-        }
-      }
-    },
-    "MailMessages": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Messages": {
-          "messages": "[Message]",
-          "Message": {
-            "messageID": "Int64",
-            "senderID": "Int64",
-            "senderName": "String",
-            "sentDate": "Date",
-            "title": "String",
-            "toCorpOrAllianceID": "Int?",
-            "toCharacterIDs": "String?",
-            "toListID": "String?"
-          }
-        }
-      }
-    },
-    "MarketOrders": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "MarketOrders": {
-          "orders": "[Order]",
-          "Order": {
-            "orderID": "Int64",
-            "characterID=charID": "Int64",
-            "stationID": "Int",
-            "volEntered": "Int64",
-            "volRemaining": "Int64",
-            "minVolume": "Int64",
-            "orderState": "State",
-            "State": [
-              "Open=0",
-              "Closed=1",
-              "Expired=2",
-              "Cancelled=3",
-              "Pending=4",
-              "Deleted=5"
-            ],
-            "typeID": "Int",
-            "range": "Int",
-            "accountKey": "Int",
-            "duration": "Int",
-            "escrow": "Double",
-            "price": "Double",
-            "bid": "Bool",
-            "issued": "Date"
-          }
-        }
-      }
-    },
-    "Medals": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Medals": {
-          "currentCorporation": "[Medal]",
-          "otherCorporations": "[Medal]",
-          "Medal": {
-            "medalID": "Int",
-            "reason": "String",
-            "status": "Status",
-            "Status": [
-              "public",
-              "private"
-            ],
-            "issuerID": "Int64",
-            "issued": "Date",
-            "corporationID": "Int64?",
-            "title": "String?",
-            "medalDescription=description": "String?"
-          }
-        }
-      }
-    },
-    "Notifications": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Notifications": {
-          "notifications": "[Notification]",
-          "Notification": {
-            "notificationID": "Int64",
-            "type=typeID": "NotificationType",
-            "NotificationType": [
-              "AllianceWarDeclared=5",
-              "AllianceWarSurrender=6",
-              "AllianceWarRetracted=7",
-              "AllianceWarInvalidatedByConcord=8",
-              "CorpDeclaresWar=27",
-              "CorpWarHasStarted=28",
-              "CorpSurrendersWar=29",
-              "CorpRetractsWar=30",
-              "CorpWarInvalidatedByConcord=31"
-            ],
-            "senderID": "Int64",
-            "senderName": "String",
-            "sentDate": "Date",
-            "read": "Bool"
-          }
-        }
-      }
-    },
-    "NotificationTexts": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "ids": "[Int64]"
-      },
-      "result": {
-        "NotificationTexts": {
-          "notifications": "[Notification]",
-          "Notification": {
-            "notificationID": "Int64",
-            "text=_": "YAML"
-          },
-          "missindIDs": "String?"
-        }
-      }
-    },
-    "PlanetaryColonies": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "PlanetaryColonies": {
-          "colonies": "[Colony]",
-          "Colony": {
-            "solarSystemID": "Int",
-            "solarSystemName": "String",
-            "planetID": "Int",
-            "planetName": "String",
-            "planetTypeID": "Int",
-            "planetTypeName": "String",
-            "ownerID": "Int64",
-            "ownerName": "String",
-            "lastUpdate": "Date",
-            "upgradeLevel": "Int",
-            "numberOfPins": "Int"
-          }
-        }
-      }
-    },
-    "PlanetaryLinks": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "planetID": "Int"
-      },
-      "result": {
-        "PlanetaryLinks": {
-          "links": "[Link]",
-          "Link": {
-            "sourcePinID": "Int64",
-            "destinationPinID": "Int64",
-            "linkLevel": "Int"
-          }
-        }
-      }
-    },
-    "PlanetaryPins": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "planetID": "Int"
-      },
-      "result": {
-        "PlanetaryPins": {
-          "pins": "[Pin]",
-          "Pin": {
-            "pinID": "Int64",
-            "typeID": "Int",
-            "typeName": "String",
-            "schematicID": "Int",
-            "lastLaunchTime": "Date?",
-            "cycleTime": "Int",
-            "quantityPerCycle": "Int",
-            "installTime": "Date?",
-            "expiryTime": "Date?",
-            "contentTypeID": "Int",
-            "contentTypeName": "String",
-            "contentQuantity": "Int",
-            "longitude": "Double",
-            "latitude": "Double"
-          }
-        }
-      }
-    },
-    "PlanetaryRoutes": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "planetID": "Int"
-      },
-      "result": {
-        "PlanetaryRoutes": {
-          "routes": "[Route]",
-          "Route": {
-            "routeID": "Int64",
-            "sourcePinID": "Int64",
-            "destinationPinID": "Int64",
-            "contentTypeID": "Int",
-            "contentTypeName": "String",
-            "quantity": "Int",
-            "waypoint1": "Int64",
-            "waypoint2": "Int64",
-            "waypoint3": "Int64",
-            "waypoint4": "Int64",
-            "waypoint5": "Int64"
-          }
-        }
-      }
-    },
-    "Research": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Research": {
-          "research": "[Research]",
-          "Research": {
-            "agentID": "Int",
-            "skillTypeID": "Int",
-            "researchStartDate": "Date",
-            "pointsPerDay": "Float",
-            "remainderPoints": "Float"
-          }
-        }
-      }
-    },
-    "SkillQueue": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "SkillQueue": {
-          "skillQueue=skillqueue": "[Skill]",
-          "Skill": {
-            "queuePosition": "Int",
-            "typeID": "Int",
-            "level": "Int",
-            "startSP": "Int",
-            "endSP": "Int",
-            "startTime": "Date",
-            "endTime": "Date"
-          }
-        }
-      }
-    },
-    "Skills": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Skills": {
-          "skills": "[Skill]",
-          "Skill": {
-            "typeID": "Int",
-            "typeName": "String",
-            "skillpoints": "Int",
-            "level": "Int",
-            "published": "Bool"
-          }
-        }
-      }
-    },
-    "Standings": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Standings": {
-          "agents": "[Standing]?",
-          "npcCorporations=NPCCorporations": "[Standing]?",
-          "factions": "[Standing]?",
-          "Standing": {
-            "fromID": "Int64",
-            "fromName": "String",
-            "standing": "Float"
-          }
-        }
-      }
-    },
-    "UpcomingCalendarEvents": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "UpcomingCalendarEvents": {
-          "upcomingEvents": "[Event]",
-          "Event": {
-            "eventID": "Int64",
-            "ownerID": "Int64",
-            "ownerName": "String",
-            "eventDate": "Date",
-            "eventTitle": "String",
-            "duration": "Int",
-            "importance": "Bool",
-            "response": "Response",
-            "Response": [
-              "Undecided",
-              "Accepted",
-              "Declined",
-              "Tentative"
-            ],
-            "eventText": "String"
-          }
-        }
-      }
-    },
-    "WalletJournal": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "fromID": "Int64?",
-        "rowCount": "Int?"
-      },
-      "result": {
-        "WalletJournal": {
-          "transactions": "[Transaction]",
-          "Transaction": {
-            "date": "Date",
-            "refID": "Int64",
-            "refTypeID": "Int",
-            "ownerName1": "String?",
-            "ownerID1": "Int64?",
-            "ownerName2": "String?",
-            "ownerID2": "Int64?",
-            "argName1": "String?",
-            "argID1": "Int?",
-            "amount": "Double",
-            "balance": "Double",
-            "reason": "String?",
-            "taxReceiverID": "Int64?",
-            "taxAmount": "Double?",
-            "owner1TypeID": "Int?",
-            "owner2TypeID": "Int?"
-
-          }
-        }
-      }
-    },
-    "WalletTransactions": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "fromID": "Int64?",
-        "rowCount": "Int?"
-      },
-      "result": {
-        "WalletTransactions": {
-          "transactions": "[Transaction]",
-          "Transaction": {
-            "transactionDateTime": "Date",
-            "transactionID": "Int64",
-            "quantity": "Int64",
-            "typeName": "String",
-            "typeID": "Int",
-            "price": "Double",
-            "clientID": "Int64",
-            "clientName": "String",
-            "stationID": "Int",
-            "stationName": "String",
-            "transactionType": "TransactionType",
-            "TransactionType": [
-              "buy",
-              "sell"
-            ],
-            "transactionFor": "ClientType",
-            "ClientType": [
-              "personal",
-              "corporate"
-            ],
-            "journalTransactionID": "Int64",
-            "clientTypeID": "Int"
-          }
-        }
-      }
-    }
-  },
-  "corp": {
-    "AccountBalance": {
-      "method": "get",
-      "accessMask": 1,
-      "result": {
-        "AccountBalance": {
-          "accounts": "[Account]",
-          "Account": {
-            "accountID": "Int",
-            "accountKey": "Int",
-            "balance": "Double"
-          }
-        }
-      }
-    },
-    "AssetList": {
-      "method": "get",
-      "accessMask": 2,
-      "parameters": {
-        "flat": "Bool?"
-      },
-      "result": {
-        "AssetList": {
-          "assets": "[Asset]",
-          "Asset": {
-            "itemID": "Int64",
-            "locationID": "Int64?",
-            "typeID": "Int",
-            "quantity": "Int64",
-            "flag": "Int",
-            "singleton": "Bool",
-            "contents": "[Asset]?",
-            "rawQuantity": "Int?"
-          }
-        }
-      }
-    },
-    "Blueprints": {
-      "method": "get",
-      "accessMask": 2,
-      "result": {
-        "Blueprints": {
-          "blueprints": "[Blueprint]",
-          "Blueprint": {
-            "itemID": "Int64",
-            "locationID": "Int64",
-            "typeID": "Int",
-            "typeName": "String",
-            "flag": "Int",
-            "quantity": "Int64",
-            "timeEfficiency": "Int",
-            "materialEfficiency": "Int",
-            "runs": "Int"
-          }
-        }
-      }
-    },
-    "Bookmarks": {
-      "method": "get",
-      "accessMask": 268435456,
-      "result": {
-        "Bookmarks": {
-          "folders": "[Folder]",
-          "Folder": {
-            "folderID": "Int",
-            "folderName": "String",
-            "bookmarks": "[Bookmark]",
-            "Bookmark": {
-              "bookmarkID": "Int",
-              "creatorID": "Int64",
-              "created": "Date",
-              "itemID": "Int64",
-              "typeID": "Int",
-              "locationID": "Int64",
-              "x": "Double",
-              "y": "Double",
-              "z": "Double",
-              "memo": "String",
-              "note": "String"
-            }
-          }
-        }
-      }
-    },
-    "ContactList": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "ContactList": {
-          "contactList": "[Contact]",
-          "corporateContactList": "[Contact]",
-          "allianceContactList": "[Contact]",
-          "Contact": {
-            "contactID": "Int64",
-            "contactName": "String",
-            "standing": "Float",
-            "contactTypeID": "Int",
-            "labelMask": "Int64",
-            "inWatchlist": "Bool?"
-          },
-          "contactLabels": "[Label]",
-          "corporateContactLabels": "[Label]",
-          "allianceContactLabels": "[Label]",
-          "Label": {
-            "labelID": "Int64",
-            "name": "String"
-          }
-        }
-      }
-    },
-    "ContractBids": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "ContractBids": {
-          "bidList": "[Bid]",
-          "Bid": {
-            "bidID": "Int64",
-            "contractID": "Int64",
-            "bidderID": "Int64",
-            "dateBid": "Date",
-            "amount": "Double"
-          }
-        }
-      }
-    },
-    "ContractItems": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "contractID": "Int64"
-      },
-      "result": {
-        "ContractItems": {
-          "itemList": "[Item]",
-          "Item": {
-            "recordID": "Int64",
-            "typeID": "Int",
-            "quantity": "Int64",
-            "rawQuantity": "Int",
-            "singleton": "Bool",
-            "included": "Bool"
-          }
-        }
-      }
-    },
-    "Contracts": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Contracts": {
-          "contractList": "[Contract]",
-          "Contract": {
-            "contractID": "Int64",
-            "issuerID": "Int64",
-            "issuerCorpID": "Int64",
-            "assigneeID": "Int64",
-            "acceptorID": "Int64",
-            "startStationID": "Int",
-            "endStationID": "Int",
-            "type": "ContractType",
-            "ContractType": [
-              "ItemExchange",
-              "Courier",
-              "Loan",
-              "Auction"
-            ],
-            "status": "Status",
-            "Status": [
-              "Outstanding",
-              "Deleted",
-              "Completed",
-              "Failed",
-              "CompletedByIssuer",
-              "CompletedByContractor",
-              "Cancelled",
-              "Rejected",
-              "Reversed",
-              "InProgress"
-            ],
-            "title": "String",
-            "forCorp": "Bool",
-            "availability": "Availability",
-            "Availability": [
-              "Public",
-              "Private"
-            ],
-            "dateIssued": "Date",
-            "dateExpired": "Date",
-            "dateAccepted": "Date",
-            "numDays": "Int",
-            "dateCompleted": "Date",
-            "price": "Double",
-            "reward": "Double",
-            "collateral": "Double",
-            "buyout": "Double",
-            "volume": "Double"
-          }
-        }
-      }
-    },
-    "FacWarStats": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "FacWarStats": {
-          "factionID": "Int",
-          "factionName": "String",
-          "enlisted": "Date",
-          "currentRank": "Int",
-          "highestRank": "Int",
-          "killsYesterday": "Int",
-          "killsLastWeek": "Int",
-          "killsTotal": "Int",
-          "victoryPointsYesterday": "Int",
-          "victoryPointsLastWeek": "Int",
-          "victoryPointsTotal": "Int"
-        }
-      }
-    },
-    "IndustryJobs": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "IndustryJobs": {
-          "jobs": "[Job]",
-          "Job": {
-            "jobID": "Int64",
-            "installerID": "Int64",
-            "installerName": "String",
-            "facilityID": "Int",
-            "solarSystemID": "Int",
-            "solarSystemName": "String",
-            "stationID": "Int64",
-            "activityID": "Int",
-            "blueprintID": "Int64",
-            "blueprintTypeID": "Int",
-            "blueprintTypeName": "String",
-            "blueprintLocationID": "Int64",
-            "outputLocationID": "Int64",
-            "runs": "Int",
-            "cost": "Double",
-            "teamID": "Int",
-            "licensedRuns": "Int",
-            "probability": "Float",
-            "productTypeID": "Int",
-            "productTypeName": "String",
-            "status": "Status",
-            "Status": [
-              "Active=1",
-              "Paused=2",
-              "Ready=3",
-              "Delivered=101",
-              "Cancelled=102",
-              "Reverted=103"
-            ],
-            "timeInSeconds": "Int",
-            "startDate": "Date",
-            "endDate": "Date",
-            "pauseDate": "Date",
-            "completedDate": "Date",
-            "completedCharacterID": "Int64",
-            "successfulRuns": "Int"
-          }
-        }
-      }
-    },
-    "KillMails": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "fromID": "Int64?",
-        "rowCount": "Int"
-      },
-      "result": {
-        "KillMails": {
-          "kills": "[Kill]",
-          "Kill": {
-            "killID": "Int64",
-            "solarSystemID": "Int",
-            "killTime": "Date",
-            "moonID": "Int",
-            "victim": "Victim",
-            "Victim": {
-              "characterID": "Int64",
-              "characterName": "String",
-              "corporationID": "Int64",
-              "corporationName": "String",
-              "allianceID": "Int64?",
-              "allianceName": "String?",
-              "factionID": "Int?",
-              "factionName": "String?",
-              "damageTaken": "Int64",
-              "shipTypeID": "Int",
-              "x": "Double",
-              "y": "Double",
-              "z": "Double"
-            },
-            "attackers": "[Attacker]",
-            "Attacker": {
-              "characterID": "Int64",
-              "characterName": "String",
-              "corporationID": "Int64",
-              "corporationName": "String",
-              "allianceID": "Int64?",
-              "allianceName": "String?",
-              "factionID": "Int?",
-              "factionName": "String?",
-              "securityStatus": "Float",
-              "damageDone": "Int64",
-              "finalBlow": "Bool",
-              "weaponTypeID": "Int",
-              "shipTypeID": "Int"
-            },
-            "items": "[Item]",
-            "Item": {
-              "typeID": "Int",
-              "flag": "Int",
-              "qtyDropped": "Int",
-              "qtyDestroyed": "Int",
-              "singleton": "Bool"
-            }
-          }
-        }
-      }
-    },
-    "Locations": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "ids": "[Int64]"
-      },
-      "result": {
-        "Locations": {
-          "locations": "[Location]",
-          "Location": {
-            "itemID": "Int64",
-            "itemName": "String",
-            "x": "Double",
-            "y": "Double",
-            "z": "Double"
-          }
-        }
-      }
-    },
-    "MarketOrders": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "MarketOrders": {
-          "orders": "[Order]",
-          "Order": {
-            "orderID": "Int64",
-            "characterID=charID": "Int64",
-            "stationID": "Int",
-            "volEntered": "Int64",
-            "volRemaining": "Int64",
-            "minVolume": "Int64",
-            "orderState": "State",
-            "State": [
-              "Open=0",
-              "Closed=1",
-              "Expired=2",
-              "Cancelled=3",
-              "Pending=4",
-              "Deleted=5"
-            ],
-            "typeID": "Int",
-            "range": "Int",
-            "accountKey": "Int",
-            "duration": "Int",
-            "escrow": "Double",
-            "price": "Double",
-            "bid": "Bool",
-            "issued": "Date"
-          }
-        }
-      }
-    },
-    "Medals": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Medals": {
-          "currentCorporation": "[Medal]",
-          "otherCorporations": "[Medal]",
-          "Medal": {
-            "medalID": "Int",
-            "reason": "String",
-            "status": "Status",
-            "Status": [
-              "public",
-              "private"
-            ],
-            "issuerID": "Int64",
-            "issued": "Date",
-            "corporationID": "Int64?",
-            "title": "String?",
-            "medalDescription=description": "String?"
-          }
-        }
-      }
-    },
-    "Standings": {
-      "method": "get",
-      "accessMask": 4,
-      "result": {
-        "Standings": {
-          "agents": "[Standing]?",
-          "npcCorporations=NPCCorporations": "[Standing]?",
-          "factions": "[Standing]?",
-          "Standing": {
-            "fromID": "Int64",
-            "fromName": "String",
-            "standing": "Float"
-          }
-        }
-      }
-    },
-    "WalletJournal": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "fromID": "Int64?",
-        "rowCount": "Int?"
-      },
-      "result": {
-        "WalletJournal": {
-          "entries": "[Transaction]",
-          "Transaction": {
-            "date": "Date",
-            "refID": "Int64",
-            "refTypeID": "Int",
-            "ownerName1": "String?",
-            "ownerID1": "Int64?",
-            "ownerName2": "String?",
-            "ownerID2": "Int64?",
-            "argName1": "String?",
-            "argID1": "Int?",
-            "amount": "Double",
-            "balance": "Double",
-            "reason": "String?",
-            "owner1TypeID": "Int?",
-            "owner2TypeID": "Int?"
-          }
-        }
-      }
-    },
-    "WalletTransactions": {
-      "method": "get",
-      "accessMask": 4,
-      "parameters": {
-        "fromID": "Int64?",
-        "rowCount": "Int?"
-      },
-      "result": {
-        "WalletTransactions": {
-          "transactions": "[Transaction]",
-          "Transaction": {
-            "transactionDateTime": "Date",
-            "transactionID": "Int64",
-            "quantity": "Int64",
-            "typeName": "String",
-            "typeID": "Int",
-            "price": "Double",
-            "clientID": "Int64",
-            "clientName": "String",
-            "characterID": "Int64",
-            "characterName": "String",
-            "stationID": "Int",
-            "stationName": "String",
-            "transactionType": "TransactionType",
-            "TransactionType": [
-              "buy",
-              "sell"
-            ],
-            "transactionFor": "ClientType",
-            "ClientType": [
-              "personal",
-              "corporate"
-            ],
-            "journalTransactionID": "Int64",
-            "clientTypeID": "Int"
-          }
-        }
-      }
-    }
-  },
-  "eve": {
-    "RefTypes": {
-      "method": "get",
-      "accessMask": 0,
-      "result": {
-        "RefTypes": {
-          "refTypes": "[RefType]",
-          "RefType": {
-            "refTypeID": "Int",
-            "refTypeName": "String"
-          }
-        }
-      }
-    }
-  }
+						"journalTransactionID": "Int64",
+						"clientTypeID": "Int"
+					}
+				}
+			}
+		}
+	},
+	"eve": {
+		"RefTypes": {
+			"method": "get",
+			"accessMask": 0,
+			"result": {
+				"RefTypes": {
+					"refTypes": "[RefType]",
+					"RefType": {
+						"refTypeID": "Int",
+						"refTypeName": "String"
+					}
+				}
+			}
+		}
+	}
 }

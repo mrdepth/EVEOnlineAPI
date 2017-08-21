@@ -4472,11 +4472,12 @@ public extension EVE {
 			public class Transaction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum ClientType: String, JSONCoding {
-					case corporate = "corporate"
+					case alliance = "alliance"
+					case corporation = "corporation"
 					case personal = "personal"
 					
 					public init() {
-						self = .corporate
+						self = .alliance
 					}
 					
 					public var json: Any {

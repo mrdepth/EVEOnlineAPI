@@ -44,18 +44,30 @@ extension Data: ParameterEncoding {
 	
 }
 
-public enum ESIError: Error {
+public enum ESIError: LocalizedError {
 	case internalError
-	case network(error: Error)
-	case objectSerialization(reason: String)
-	case serialization(error: Error)
-	case unauthorized(reason: String)
-	case server(exceptionType: String, reason: String?)
+//	case network(error: Error)
+//	case objectSerialization(reason: String)
+//	case serialization(error: Error)
+//	case unauthorized(reason: String)
+	case server(error: String, ssoStatus: Int?)
 	case notFound
 	case forbidden
 	case invalidFormat(Any.Type, Any)
 	
+	public var errorDescription: String? {
+		switch self {
+		case let .server(error, ssoStatus?):
+			return String(format: NSLocalizedString("%@ (Status: %d)", comment: ""), error, ssoStatus)
+		case let .server(error, nil):
+			return error
+		default:
+			return nil
+		}
+	}
+	
 }
+
 
 public protocol JSONCoding {
 	var json: Any {get}

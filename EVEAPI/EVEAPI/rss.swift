@@ -337,7 +337,7 @@ public enum RSS {
 			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
 			title = dic["title"] as? String
 			link = URL(string: dic["link"] as? String)
-			summary = dic["description"] as? String
+			summary = (dic["description"] as? String) ?? (dic["summary"] as? [String: Any])?["_"] as? String
 			author = dic["author"] as? String
 			category = dic["category"] as? String
 			guid = dic["guid"] as? String

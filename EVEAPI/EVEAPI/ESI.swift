@@ -116,23 +116,30 @@ extension DataRequest {
 	
 	@discardableResult
 	public func validateESI() -> Self {
-		var statusCode = IndexSet(200..<300)
-		statusCode.insert(403)
+		let statusCode = IndexSet(200..<300)
 		
-		return validate(statusCode: statusCode).validate() {(request, response, data) -> ValidationResult in
-			if response.statusCode == 403 {
-				guard let data = data else {return .success}
-				if let result = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] {
-					if let error = result["error"] as? String, error == "Forbidden" {
-						return .failure(ESIError.forbidden)
-					}
-				}
-				return .failure(OAuth2Error.tokenExpired)
-			}
-			else {
+		return validate() {(request, response, data) -> ValidationResult in
+			if statusCode.contains(response.statusCode) {
 				return .success
 			}
-		}
+			else {
+				let (error, ssoStatus): (String?, Int?) = {
+					guard let data = data,
+						let dic = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {return (nil, nil)}
+					return (dic["error"] as? String, dic["sso_status"] as? Int)
+				}()
+				switch (response.statusCode, error, ssoStatus) {
+//				case (403, "Forbidden"?, _), (403, _, 200?):
+//					return .failure(ESIError.forbidden)
+				case (403, "expired"?, _), (403, _, 400?):
+					return .failure(OAuth2Error.tokenExpired)
+				case let (_, error?, _):
+					return .failure(ESIError.server(error: error, ssoStatus: ssoStatus))
+				default:
+					return .success
+				}
+			}
+		}.validate(statusCode: statusCode)
 	}
 	
 
