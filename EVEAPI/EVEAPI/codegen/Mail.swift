@@ -417,88 +417,6 @@ public extension ESI {
 		}
 		
 		
-		public class UpdateContents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var labels: [Int64]? = nil
-			public var read: Bool? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				labels = try (dictionary["labels"] as? [Any])?.map {try Int64(json: $0)}
-				read = dictionary["read"] as? Bool
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				labels = aDecoder.decodeObject(forKey: "labels") as? [Int64]
-				read = aDecoder.containsValue(forKey: "read") ? aDecoder.decodeBool(forKey: "read") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = labels {
-					aCoder.encode(v, forKey: "labels")
-				}
-				if let v = read {
-					aCoder.encode(v, forKey: "read")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = labels?.json {
-					json["labels"] = v
-				}
-				if let v = read?.json {
-					json["read"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.read?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Mail.UpdateContents, rhs: Mail.UpdateContents) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Mail.UpdateContents) {
-				labels = other.labels?.flatMap { $0 }
-				read = other.read
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.UpdateContents(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? UpdateContents)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -565,6 +483,77 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? PutCharactersCharacterIDMailMailIDBadRequest)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Mail.PostCharactersCharacterIDMailBadRequest, rhs: Mail.PostCharactersCharacterIDMailBadRequest) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Mail.PostCharactersCharacterIDMailBadRequest) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailBadRequest(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailBadRequest)?.hashValue == hashValue
 			}
 			
 		}
@@ -712,110 +701,11 @@ public extension ESI {
 		}
 		
 		
-		public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class UpdateContents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var approvedCost: Int64? = nil
-			public var body: String = String()
-			public var recipients: [Mail.Recipient] = []
-			public var subject: String = String()
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				approvedCost = dictionary["approved_cost"] as? Int64
-				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.body = body
-				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)} ?? []
-				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-				self.subject = subject
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
-				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
-				recipients = aDecoder.decodeObject(of: [Mail.Recipient.self], forKey: "recipients") as? [Mail.Recipient] ?? []
-				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = approvedCost {
-					aCoder.encode(v, forKey: "approved_cost")
-				}
-				aCoder.encode(body, forKey: "body")
-				aCoder.encode(recipients, forKey: "recipients")
-				aCoder.encode(subject, forKey: "subject")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = approvedCost?.json {
-					json["approved_cost"] = v
-				}
-				json["body"] = body.json
-				json["recipients"] = recipients.json
-				json["subject"] = subject.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.approvedCost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.body.hashValue)
-				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.subject.hashValue)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Mail.NewMail) {
-				approvedCost = other.approvedCost
-				body = other.body
-				recipients = other.recipients.flatMap { Mail.Recipient($0) }
-				subject = other.subject
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.NewMail(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? NewMail)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class Header: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var from: Int? = nil
-			public var isRead: Bool? = nil
 			public var labels: [Int64]? = nil
-			public var mailID: Int64? = nil
-			public var recipients: [Mail.Recipient]? = nil
-			public var subject: String? = nil
-			public var timestamp: Date? = nil
+			public var read: Bool? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -824,13 +714,8 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				from = dictionary["from"] as? Int
-				isRead = dictionary["is_read"] as? Bool
 				labels = try (dictionary["labels"] as? [Any])?.map {try Int64(json: $0)}
-				mailID = dictionary["mail_id"] as? Int64
-				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)}
-				subject = dictionary["subject"] as? String
-				timestamp = DateFormatter.esiDateTimeFormatter.date(from: dictionary["timestamp"] as? String ?? "")
+				read = dictionary["read"] as? Bool
 				
 				super.init()
 			}
@@ -840,76 +725,36 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				from = aDecoder.containsValue(forKey: "from") ? aDecoder.decodeInteger(forKey: "from") : nil
-				isRead = aDecoder.containsValue(forKey: "is_read") ? aDecoder.decodeBool(forKey: "is_read") : nil
 				labels = aDecoder.decodeObject(forKey: "labels") as? [Int64]
-				mailID = aDecoder.containsValue(forKey: "mail_id") ? aDecoder.decodeInt64(forKey: "mail_id") : nil
-				recipients = aDecoder.decodeObject(of: [Mail.Recipient.self], forKey: "recipients") as? [Mail.Recipient]
-				subject = aDecoder.decodeObject(forKey: "subject") as? String
-				timestamp = aDecoder.decodeObject(forKey: "timestamp") as? Date
+				read = aDecoder.containsValue(forKey: "read") ? aDecoder.decodeBool(forKey: "read") : nil
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = from {
-					aCoder.encode(v, forKey: "from")
-				}
-				if let v = isRead {
-					aCoder.encode(v, forKey: "is_read")
-				}
 				if let v = labels {
 					aCoder.encode(v, forKey: "labels")
 				}
-				if let v = mailID {
-					aCoder.encode(v, forKey: "mail_id")
-				}
-				if let v = recipients {
-					aCoder.encode(v, forKey: "recipients")
-				}
-				if let v = subject {
-					aCoder.encode(v, forKey: "subject")
-				}
-				if let v = timestamp {
-					aCoder.encode(v, forKey: "timestamp")
+				if let v = read {
+					aCoder.encode(v, forKey: "read")
 				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = from?.json {
-					json["from"] = v
-				}
-				if let v = isRead?.json {
-					json["is_read"] = v
-				}
 				if let v = labels?.json {
 					json["labels"] = v
 				}
-				if let v = mailID?.json {
-					json["mail_id"] = v
-				}
-				if let v = recipients?.json {
-					json["recipients"] = v
-				}
-				if let v = subject?.json {
-					json["subject"] = v
-				}
-				if let v = timestamp?.json {
-					json["timestamp"] = v
+				if let v = read?.json {
+					json["read"] = v
 				}
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.from?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.isRead?.hashValue ?? 0)
 				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.mailID?.hashValue ?? 0)
-				self.recipients?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.subject?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.timestamp?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.read?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -917,27 +762,22 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Mail.Header, rhs: Mail.Header) -> Bool {
+			public static func ==(lhs: Mail.UpdateContents, rhs: Mail.UpdateContents) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Mail.Header) {
-				from = other.from
-				isRead = other.isRead
+			init(_ other: Mail.UpdateContents) {
 				labels = other.labels?.flatMap { $0 }
-				mailID = other.mailID
-				recipients = other.recipients?.flatMap { Mail.Recipient($0) }
-				subject = other.subject
-				timestamp = other.timestamp
+				read = other.read
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.Header(self)
+				return Mail.UpdateContents(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Header)?.hashValue == hashValue
+				return (object as? UpdateContents)?.hashValue == hashValue
 			}
 			
 		}
@@ -1165,6 +1005,100 @@ public extension ESI {
 		}
 		
 		
+		public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var approvedCost: Int64? = nil
+			public var body: String = String()
+			public var recipients: [Mail.Recipient] = []
+			public var subject: String = String()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				approvedCost = dictionary["approved_cost"] as? Int64
+				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.body = body
+				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)} ?? []
+				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.subject = subject
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
+				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
+				recipients = aDecoder.decodeObject(of: [Mail.Recipient.self], forKey: "recipients") as? [Mail.Recipient] ?? []
+				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = approvedCost {
+					aCoder.encode(v, forKey: "approved_cost")
+				}
+				aCoder.encode(body, forKey: "body")
+				aCoder.encode(recipients, forKey: "recipients")
+				aCoder.encode(subject, forKey: "subject")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = approvedCost?.json {
+					json["approved_cost"] = v
+				}
+				json["body"] = body.json
+				json["recipients"] = recipients.json
+				json["subject"] = subject.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.approvedCost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.body.hashValue)
+				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Mail.NewMail) {
+				approvedCost = other.approvedCost
+				body = other.body
+				recipients = other.recipients.flatMap { Mail.Recipient($0) }
+				subject = other.subject
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.NewMail(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? NewMail)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		public class Subscription: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -1378,10 +1312,16 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Header: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var error: String? = nil
+			public var from: Int? = nil
+			public var isRead: Bool? = nil
+			public var labels: [Int64]? = nil
+			public var mailID: Int64? = nil
+			public var recipients: [Mail.Recipient]? = nil
+			public var subject: String? = nil
+			public var timestamp: Date? = nil
 			
 			public static var supportsSecureCoding: Bool {
 				return true
@@ -1390,7 +1330,13 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				from = dictionary["from"] as? Int
+				isRead = dictionary["is_read"] as? Bool
+				labels = try (dictionary["labels"] as? [Any])?.map {try Int64(json: $0)}
+				mailID = dictionary["mail_id"] as? Int64
+				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)}
+				subject = dictionary["subject"] as? String
+				timestamp = DateFormatter.esiDateTimeFormatter.date(from: dictionary["timestamp"] as? String ?? "")
 				
 				super.init()
 			}
@@ -1400,28 +1346,76 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				from = aDecoder.containsValue(forKey: "from") ? aDecoder.decodeInteger(forKey: "from") : nil
+				isRead = aDecoder.containsValue(forKey: "is_read") ? aDecoder.decodeBool(forKey: "is_read") : nil
+				labels = aDecoder.decodeObject(forKey: "labels") as? [Int64]
+				mailID = aDecoder.containsValue(forKey: "mail_id") ? aDecoder.decodeInt64(forKey: "mail_id") : nil
+				recipients = aDecoder.decodeObject(of: [Mail.Recipient.self], forKey: "recipients") as? [Mail.Recipient]
+				subject = aDecoder.decodeObject(forKey: "subject") as? String
+				timestamp = aDecoder.decodeObject(forKey: "timestamp") as? Date
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
+				if let v = from {
+					aCoder.encode(v, forKey: "from")
+				}
+				if let v = isRead {
+					aCoder.encode(v, forKey: "is_read")
+				}
+				if let v = labels {
+					aCoder.encode(v, forKey: "labels")
+				}
+				if let v = mailID {
+					aCoder.encode(v, forKey: "mail_id")
+				}
+				if let v = recipients {
+					aCoder.encode(v, forKey: "recipients")
+				}
+				if let v = subject {
+					aCoder.encode(v, forKey: "subject")
+				}
+				if let v = timestamp {
+					aCoder.encode(v, forKey: "timestamp")
 				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
+				if let v = from?.json {
+					json["from"] = v
+				}
+				if let v = isRead?.json {
+					json["is_read"] = v
+				}
+				if let v = labels?.json {
+					json["labels"] = v
+				}
+				if let v = mailID?.json {
+					json["mail_id"] = v
+				}
+				if let v = recipients?.json {
+					json["recipients"] = v
+				}
+				if let v = subject?.json {
+					json["subject"] = v
+				}
+				if let v = timestamp?.json {
+					json["timestamp"] = v
 				}
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.from?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.isRead?.hashValue ?? 0)
+				self.labels?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.mailID?.hashValue ?? 0)
+				self.recipients?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.timestamp?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -1429,21 +1423,27 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Mail.PostCharactersCharacterIDMailBadRequest, rhs: Mail.PostCharactersCharacterIDMailBadRequest) -> Bool {
+			public static func ==(lhs: Mail.Header, rhs: Mail.Header) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Mail.PostCharactersCharacterIDMailBadRequest) {
-				error = other.error
+			init(_ other: Mail.Header) {
+				from = other.from
+				isRead = other.isRead
+				labels = other.labels?.flatMap { $0 }
+				mailID = other.mailID
+				recipients = other.recipients?.flatMap { Mail.Recipient($0) }
+				subject = other.subject
+				timestamp = other.timestamp
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.PostCharactersCharacterIDMailBadRequest(self)
+				return Mail.Header(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCharactersCharacterIDMailBadRequest)?.hashValue == hashValue
+				return (object as? Header)?.hashValue == hashValue
 			}
 			
 		}

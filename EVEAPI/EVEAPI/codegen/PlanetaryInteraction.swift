@@ -401,13 +401,13 @@ public extension ESI {
 		
 		public class ColonyLayout: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class Route: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Pin: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class Waypoint: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class Contents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
-					public var order: Int = Int()
-					public var pinID: Int64 = Int64()
+					public var amount: Int64 = Int64()
+					public var typeID: Int = Int()
 					
 					public static var supportsSecureCoding: Bool {
 						return true
@@ -416,10 +416,10 @@ public extension ESI {
 					public required init(json: Any) throws {
 						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 						
-						guard let order = dictionary["order"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.order = order
-						guard let pinID = dictionary["pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.pinID = pinID
+						guard let amount = dictionary["amount"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.amount = amount
+						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.typeID = typeID
 						
 						super.init()
 					}
@@ -429,28 +429,28 @@ public extension ESI {
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
-						order = aDecoder.decodeInteger(forKey: "order")
-						pinID = aDecoder.decodeInt64(forKey: "pin_id")
+						amount = aDecoder.decodeInt64(forKey: "amount")
+						typeID = aDecoder.decodeInteger(forKey: "type_id")
 						
 						super.init()
 					}
 					
 					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(order, forKey: "order")
-						aCoder.encode(pinID, forKey: "pin_id")
+						aCoder.encode(amount, forKey: "amount")
+						aCoder.encode(typeID, forKey: "type_id")
 					}
 					
 					public var json: Any {
 						var json = [String: Any]()
-						json["order"] = order.json
-						json["pin_id"] = pinID.json
+						json["amount"] = amount.json
+						json["type_id"] = typeID.json
 						return json
 					}
 					
 					private lazy var _hashValue: Int = {
 						var hash: Int = 0
-						hashCombine(seed: &hash, value: self.order.hashValue)
-						hashCombine(seed: &hash, value: self.pinID.hashValue)
+						hashCombine(seed: &hash, value: self.amount.hashValue)
+						hashCombine(seed: &hash, value: self.typeID.hashValue)
 						return hash
 					}()
 					
@@ -458,134 +458,25 @@ public extension ESI {
 						return _hashValue
 					}
 					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route.Waypoint, rhs: PlanetaryInteraction.ColonyLayout.Route.Waypoint) -> Bool {
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.Contents, rhs: PlanetaryInteraction.ColonyLayout.Pin.Contents) -> Bool {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
-					init(_ other: PlanetaryInteraction.ColonyLayout.Route.Waypoint) {
-						order = other.order
-						pinID = other.pinID
+					init(_ other: PlanetaryInteraction.ColonyLayout.Pin.Contents) {
+						amount = other.amount
+						typeID = other.typeID
 					}
 					
 					public func copy(with zone: NSZone? = nil) -> Any {
-						return PlanetaryInteraction.ColonyLayout.Route.Waypoint(self)
+						return PlanetaryInteraction.ColonyLayout.Pin.Contents(self)
 					}
 					
 					
 					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? Waypoint)?.hashValue == hashValue
+						return (object as? Contents)?.hashValue == hashValue
 					}
 					
 				}
-				
-				public var contentTypeID: Int = Int()
-				public var destinationPinID: Int64 = Int64()
-				public var quantity: Float = Float()
-				public var routeID: Int64 = Int64()
-				public var sourcePinID: Int64 = Int64()
-				public var waypoints: [PlanetaryInteraction.ColonyLayout.Route.Waypoint]? = nil
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-					
-					guard let contentTypeID = dictionary["content_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.contentTypeID = contentTypeID
-					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.destinationPinID = destinationPinID
-					guard let quantity = dictionary["quantity"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.quantity = quantity
-					guard let routeID = dictionary["route_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.routeID = routeID
-					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-					self.sourcePinID = sourcePinID
-					waypoints = try (dictionary["waypoints"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Route.Waypoint(json: $0)}
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					contentTypeID = aDecoder.decodeInteger(forKey: "content_type_id")
-					destinationPinID = aDecoder.decodeInt64(forKey: "destination_pin_id")
-					quantity = aDecoder.decodeFloat(forKey: "quantity")
-					routeID = aDecoder.decodeInt64(forKey: "route_id")
-					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
-					waypoints = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Route.Waypoint.self], forKey: "waypoints") as? [PlanetaryInteraction.ColonyLayout.Route.Waypoint]
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(contentTypeID, forKey: "content_type_id")
-					aCoder.encode(destinationPinID, forKey: "destination_pin_id")
-					aCoder.encode(quantity, forKey: "quantity")
-					aCoder.encode(routeID, forKey: "route_id")
-					aCoder.encode(sourcePinID, forKey: "source_pin_id")
-					if let v = waypoints {
-						aCoder.encode(v, forKey: "waypoints")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["content_type_id"] = contentTypeID.json
-					json["destination_pin_id"] = destinationPinID.json
-					json["quantity"] = quantity.json
-					json["route_id"] = routeID.json
-					json["source_pin_id"] = sourcePinID.json
-					if let v = waypoints?.json {
-						json["waypoints"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.contentTypeID.hashValue)
-					hashCombine(seed: &hash, value: self.destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: self.quantity.hashValue)
-					hashCombine(seed: &hash, value: self.routeID.hashValue)
-					hashCombine(seed: &hash, value: self.sourcePinID.hashValue)
-					self.waypoints?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
-				}
-				
-				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route, rhs: PlanetaryInteraction.ColonyLayout.Route) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: PlanetaryInteraction.ColonyLayout.Route) {
-					contentTypeID = other.contentTypeID
-					destinationPinID = other.destinationPinID
-					quantity = other.quantity
-					routeID = other.routeID
-					sourcePinID = other.sourcePinID
-					waypoints = other.waypoints?.flatMap { PlanetaryInteraction.ColonyLayout.Route.Waypoint($0) }
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return PlanetaryInteraction.ColonyLayout.Route(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? Route)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public class Pin: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public class ExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
@@ -846,6 +737,7 @@ public extension ESI {
 					
 				}
 				
+				public var contents: [PlanetaryInteraction.ColonyLayout.Pin.Contents]? = nil
 				public var expiryTime: Date? = nil
 				public var extractorDetails: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails? = nil
 				public var factoryDetails: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails? = nil
@@ -864,6 +756,7 @@ public extension ESI {
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
 					
+					contents = try (dictionary["contents"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Pin.Contents(json: $0)}
 					expiryTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["expiry_time"] as? String ?? "")
 					extractorDetails = try? PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails(json: dictionary["extractor_details"] as? [String: Any] ?? [:])
 					factoryDetails = try? PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails(json: dictionary["factory_details"] as? [String: Any] ?? [:])
@@ -887,6 +780,7 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
+					contents = aDecoder.decodeObject(of: [PlanetaryInteraction.ColonyLayout.Pin.Contents.self], forKey: "contents") as? [PlanetaryInteraction.ColonyLayout.Pin.Contents]
 					expiryTime = aDecoder.decodeObject(forKey: "expiry_time") as? Date
 					extractorDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.self, forKey: "extractor_details") 
 					factoryDetails = aDecoder.decodeObject(of: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails.self, forKey: "factory_details") 
@@ -902,6 +796,9 @@ public extension ESI {
 				}
 				
 				public func encode(with aCoder: NSCoder) {
+					if let v = contents {
+						aCoder.encode(v, forKey: "contents")
+					}
 					if let v = expiryTime {
 						aCoder.encode(v, forKey: "expiry_time")
 					}
@@ -928,6 +825,9 @@ public extension ESI {
 				
 				public var json: Any {
 					var json = [String: Any]()
+					if let v = contents?.json {
+						json["contents"] = v
+					}
 					if let v = expiryTime?.json {
 						json["expiry_time"] = v
 					}
@@ -955,6 +855,7 @@ public extension ESI {
 				
 				private lazy var _hashValue: Int = {
 					var hash: Int = 0
+					self.contents?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					hashCombine(seed: &hash, value: self.expiryTime?.hashValue ?? 0)
 					hashCombine(seed: &hash, value: self.extractorDetails?.hashValue ?? 0)
 					hashCombine(seed: &hash, value: self.factoryDetails?.hashValue ?? 0)
@@ -977,6 +878,7 @@ public extension ESI {
 				}
 				
 				init(_ other: PlanetaryInteraction.ColonyLayout.Pin) {
+					contents = other.contents?.flatMap { PlanetaryInteraction.ColonyLayout.Pin.Contents($0) }
 					expiryTime = other.expiryTime
 					extractorDetails = other.extractorDetails != nil ? PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails(other.extractorDetails!) : nil
 					factoryDetails = other.factoryDetails != nil ? PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails(other.factoryDetails!) : nil
@@ -1079,6 +981,116 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? Link)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public class Route: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var contentTypeID: Int = Int()
+				public var destinationPinID: Int64 = Int64()
+				public var quantity: Float = Float()
+				public var routeID: Int64 = Int64()
+				public var sourcePinID: Int64 = Int64()
+				public var waypoints: [Int64]? = nil
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					
+					guard let contentTypeID = dictionary["content_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.contentTypeID = contentTypeID
+					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.destinationPinID = destinationPinID
+					guard let quantity = dictionary["quantity"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.quantity = quantity
+					guard let routeID = dictionary["route_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.routeID = routeID
+					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					self.sourcePinID = sourcePinID
+					waypoints = try (dictionary["waypoints"] as? [Any])?.map {try Int64(json: $0)}
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					contentTypeID = aDecoder.decodeInteger(forKey: "content_type_id")
+					destinationPinID = aDecoder.decodeInt64(forKey: "destination_pin_id")
+					quantity = aDecoder.decodeFloat(forKey: "quantity")
+					routeID = aDecoder.decodeInt64(forKey: "route_id")
+					sourcePinID = aDecoder.decodeInt64(forKey: "source_pin_id")
+					waypoints = aDecoder.decodeObject(forKey: "waypoints") as? [Int64]
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(contentTypeID, forKey: "content_type_id")
+					aCoder.encode(destinationPinID, forKey: "destination_pin_id")
+					aCoder.encode(quantity, forKey: "quantity")
+					aCoder.encode(routeID, forKey: "route_id")
+					aCoder.encode(sourcePinID, forKey: "source_pin_id")
+					if let v = waypoints {
+						aCoder.encode(v, forKey: "waypoints")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["content_type_id"] = contentTypeID.json
+					json["destination_pin_id"] = destinationPinID.json
+					json["quantity"] = quantity.json
+					json["route_id"] = routeID.json
+					json["source_pin_id"] = sourcePinID.json
+					if let v = waypoints?.json {
+						json["waypoints"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.contentTypeID.hashValue)
+					hashCombine(seed: &hash, value: self.destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: self.quantity.hashValue)
+					hashCombine(seed: &hash, value: self.routeID.hashValue)
+					hashCombine(seed: &hash, value: self.sourcePinID.hashValue)
+					self.waypoints?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Route, rhs: PlanetaryInteraction.ColonyLayout.Route) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: PlanetaryInteraction.ColonyLayout.Route) {
+					contentTypeID = other.contentTypeID
+					destinationPinID = other.destinationPinID
+					quantity = other.quantity
+					routeID = other.routeID
+					sourcePinID = other.sourcePinID
+					waypoints = other.waypoints?.flatMap { $0 }
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return PlanetaryInteraction.ColonyLayout.Route(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? Route)?.hashValue == hashValue
 				}
 				
 			}

@@ -76,6 +76,14 @@ let typeNames: [String: String] = [
 	//MARK: Dogma
 	"GetDogmaEffectsEffectIDOk"	: "Effect",
 	"GetDogmaAttributesAttributeIDOk"	: "Attribute",
+	
+	//MARK: FactionWarfare
+	"GetFwSystemsOk"	: "System",
+	"GetFwLeaderboardsCharactersOk"	: "Characters",
+	"GetFwLeaderboardsCorporationsOk"	: "Corporations",
+	"GetFwWarsOk"	: "FactionWar",
+	"GetFwStatsOk"	: "FactionStats",
+	"GetFwLeaderboardsOk"	: "Leaderboards",
 
 	//MARK: Fittings
 	"PostCharactersCharacterIDFittingsFitting"	: "MutableFitting",
@@ -167,6 +175,7 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDPlanetsPlanetIDRoutes"	: "Route",
 	"GetCharactersCharacterIDPlanetsPlanetIDWaypoints"	: "Waypoint",
 	"GetCharactersCharacterIDPlanetsPlanetType"	: "PlanetType",
+	"GetCharactersCharacterIDPlanetsPlanetIDContents"	: "Contents",
 	
 
 	//MARK: Search
@@ -209,7 +218,7 @@ let typeNames: [String: String] = [
 	"PostUiOpenwindowNewmailNewMail"	: "NewMail",
 
 	//MARK: Wallet
-	"GetCharactersCharacterIDWalletsOk"	: "Balance",
+	"GetCorporationsCorporationIDWalletsOk"	: "Balance",
 	"GetCharactersCharacterIDWalletTransactionsOk"	: "Transaction",
 	"GetCharactersCharacterIDWalletsJournalOk"	: "WalletsJournalItem",
 	"GetCharactersCharacterIDWalletJournalOk"	: "WalletJournalItem",

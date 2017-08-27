@@ -117,6 +117,39 @@ public extension ESI {
 			}
 		}
 		
+		public func returnsCorporationsWalletBalance(corporationID: Int, completionBlock:((Result<[Wallet.Balance]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/corporations/\(corporationID)/wallets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Wallet.Balance]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		
 		public class WalletJournalItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
@@ -572,6 +605,82 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? WalletJournalItem)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class Balance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var balance: Float = Float()
+			public var division: Int = Int()
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				guard let balance = dictionary["balance"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.balance = balance
+				guard let division = dictionary["division"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.division = division
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				balance = aDecoder.decodeFloat(forKey: "balance")
+				division = aDecoder.decodeInteger(forKey: "division")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(balance, forKey: "balance")
+				aCoder.encode(division, forKey: "division")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["balance"] = balance.json
+				json["division"] = division.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.balance.hashValue)
+				hashCombine(seed: &hash, value: self.division.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Wallet.Balance) {
+				balance = other.balance
+				division = other.division
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Wallet.Balance(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Balance)?.hashValue == hashValue
 			}
 			
 		}

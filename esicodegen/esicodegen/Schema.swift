@@ -103,7 +103,7 @@ class Schema: Namespace {
 		case .object, .enum:
 			return title
 		case .array:
-			return "[\(array!.typeIdentifier)]"
+			return "[\(array!.title)]"
 		default:
 			return type.typeName!
 		}

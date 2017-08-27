@@ -183,6 +183,39 @@ public extension ESI {
 			}
 		}
 		
+		public func getCorporationMembers(corporationID: Int, completionBlock:((Result<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.track_members.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/corporations/\(corporationID)/membertracking/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func getAllianceHistory(corporationID: Int, completionBlock:((Result<[Corporation.History]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -311,6 +344,140 @@ public extension ESI {
 				completionBlock?(response.result)
 				session = nil
 			}
+		}
+		
+		
+		public class GetCorporationsCorporationIDMembertrackingOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var baseID: Int? = nil
+			public var characterID: Int = Int()
+			public var locationID: Int64? = nil
+			public var logoffDate: Date? = nil
+			public var logonDate: Date? = nil
+			public var shipTypeID: Int? = nil
+			public var startDate: Date? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				baseID = dictionary["base_id"] as? Int
+				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				self.characterID = characterID
+				locationID = dictionary["location_id"] as? Int64
+				logoffDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["logoff_date"] as? String ?? "")
+				logonDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["logon_date"] as? String ?? "")
+				shipTypeID = dictionary["ship_type_id"] as? Int
+				startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "")
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				baseID = aDecoder.containsValue(forKey: "base_id") ? aDecoder.decodeInteger(forKey: "base_id") : nil
+				characterID = aDecoder.decodeInteger(forKey: "character_id")
+				locationID = aDecoder.containsValue(forKey: "location_id") ? aDecoder.decodeInt64(forKey: "location_id") : nil
+				logoffDate = aDecoder.decodeObject(forKey: "logoff_date") as? Date
+				logonDate = aDecoder.decodeObject(forKey: "logon_date") as? Date
+				shipTypeID = aDecoder.containsValue(forKey: "ship_type_id") ? aDecoder.decodeInteger(forKey: "ship_type_id") : nil
+				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = baseID {
+					aCoder.encode(v, forKey: "base_id")
+				}
+				aCoder.encode(characterID, forKey: "character_id")
+				if let v = locationID {
+					aCoder.encode(v, forKey: "location_id")
+				}
+				if let v = logoffDate {
+					aCoder.encode(v, forKey: "logoff_date")
+				}
+				if let v = logonDate {
+					aCoder.encode(v, forKey: "logon_date")
+				}
+				if let v = shipTypeID {
+					aCoder.encode(v, forKey: "ship_type_id")
+				}
+				if let v = startDate {
+					aCoder.encode(v, forKey: "start_date")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = baseID?.json {
+					json["base_id"] = v
+				}
+				json["character_id"] = characterID.json
+				if let v = locationID?.json {
+					json["location_id"] = v
+				}
+				if let v = logoffDate?.json {
+					json["logoff_date"] = v
+				}
+				if let v = logonDate?.json {
+					json["logon_date"] = v
+				}
+				if let v = shipTypeID?.json {
+					json["ship_type_id"] = v
+				}
+				if let v = startDate?.json {
+					json["start_date"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.baseID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.characterID.hashValue)
+				hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.logoffDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.logonDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.shipTypeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.startDate?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDMembertrackingOk, rhs: Corporation.GetCorporationsCorporationIDMembertrackingOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.GetCorporationsCorporationIDMembertrackingOk) {
+				baseID = other.baseID
+				characterID = other.characterID
+				locationID = other.locationID
+				logoffDate = other.logoffDate
+				logonDate = other.logonDate
+				shipTypeID = other.shipTypeID
+				startDate = other.startDate
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDMembertrackingOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDMembertrackingOk)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
@@ -622,77 +789,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? History)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDNotFound, rhs: Corporation.GetCorporationsCorporationIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsCorporationIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
 			}
 			
 		}
@@ -1492,6 +1588,77 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Role)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDNotFound, rhs: Corporation.GetCorporationsCorporationIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
 			}
 			
 		}

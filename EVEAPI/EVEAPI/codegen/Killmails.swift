@@ -385,6 +385,89 @@ public extension ESI {
 			
 			public class Victim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
+				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					
+					
+					public var x: Float = Float()
+					public var y: Float = Float()
+					public var z: Float = Float()
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
+					
+					public required init(json: Any) throws {
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						
+						guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.x = x
+						guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.y = y
+						guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						self.z = z
+						
+						super.init()
+					}
+					
+					override public init() {
+						super.init()
+					}
+					
+					public required init?(coder aDecoder: NSCoder) {
+						x = aDecoder.decodeFloat(forKey: "x")
+						y = aDecoder.decodeFloat(forKey: "y")
+						z = aDecoder.decodeFloat(forKey: "z")
+						
+						super.init()
+					}
+					
+					public func encode(with aCoder: NSCoder) {
+						aCoder.encode(x, forKey: "x")
+						aCoder.encode(y, forKey: "y")
+						aCoder.encode(z, forKey: "z")
+					}
+					
+					public var json: Any {
+						var json = [String: Any]()
+						json["x"] = x.json
+						json["y"] = y.json
+						json["z"] = z.json
+						return json
+					}
+					
+					private lazy var _hashValue: Int = {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: self.x.hashValue)
+						hashCombine(seed: &hash, value: self.y.hashValue)
+						hashCombine(seed: &hash, value: self.z.hashValue)
+						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
+					}
+					
+					public static func ==(lhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition, rhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) {
+						x = other.x
+						y = other.y
+						z = other.z
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? GetKillmailsKillmailIDKillmailHashPosition)?.hashValue == hashValue
+					}
+					
+				}
+				
 				public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
@@ -601,89 +684,6 @@ public extension ESI {
 					
 					public override func isEqual(_ object: Any?) -> Bool {
 						return (object as? Item)?.hashValue == hashValue
-					}
-					
-				}
-				
-				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-					
-					
-					public var x: Float = Float()
-					public var y: Float = Float()
-					public var z: Float = Float()
-					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
-					
-					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
-						
-						guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.x = x
-						guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.y = y
-						guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
-						self.z = z
-						
-						super.init()
-					}
-					
-					override public init() {
-						super.init()
-					}
-					
-					public required init?(coder aDecoder: NSCoder) {
-						x = aDecoder.decodeFloat(forKey: "x")
-						y = aDecoder.decodeFloat(forKey: "y")
-						z = aDecoder.decodeFloat(forKey: "z")
-						
-						super.init()
-					}
-					
-					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(x, forKey: "x")
-						aCoder.encode(y, forKey: "y")
-						aCoder.encode(z, forKey: "z")
-					}
-					
-					public var json: Any {
-						var json = [String: Any]()
-						json["x"] = x.json
-						json["y"] = y.json
-						json["z"] = z.json
-						return json
-					}
-					
-					private lazy var _hashValue: Int = {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: self.x.hashValue)
-						hashCombine(seed: &hash, value: self.y.hashValue)
-						hashCombine(seed: &hash, value: self.z.hashValue)
-						return hash
-					}()
-					
-					override public var hashValue: Int {
-						return _hashValue
-					}
-					
-					public static func ==(lhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition, rhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					init(_ other: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) {
-						x = other.x
-						y = other.y
-						z = other.z
-					}
-					
-					public func copy(with zone: NSZone? = nil) -> Any {
-						return Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition(self)
-					}
-					
-					
-					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? GetKillmailsKillmailIDKillmailHashPosition)?.hashValue == hashValue
 					}
 					
 				}
