@@ -101,12 +101,22 @@ public class ESI: SessionManager {
 		}
 	}
 
-	public struct Scope {
+	public struct Scope: Hashable {
+
 		public let rawValue: String
 		
 		public init(_ value: String) {
 			rawValue = value
 		}
+		
+		public var hashValue: Int {
+			return rawValue.hashValue
+		}
+		
+		public static func ==(lhs: ESI.Scope, rhs: ESI.Scope) -> Bool {
+			return lhs.rawValue == rhs.rawValue
+		}
+	
 	}
 }
 
