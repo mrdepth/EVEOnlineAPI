@@ -902,7 +902,7 @@ public extension ESI {
 		}
 		
 		
-		public class SystemKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseSystemKills) public class SystemKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var npcKills: Int = Int()
@@ -910,20 +910,17 @@ public extension ESI {
 			public var shipKills: Int = Int()
 			public var systemID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let npcKills = dictionary["npc_kills"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let npcKills = dictionary["npc_kills"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.npcKills = npcKills
-				guard let podKills = dictionary["pod_kills"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let podKills = dictionary["pod_kills"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.podKills = podKills
-				guard let shipKills = dictionary["ship_kills"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipKills = dictionary["ship_kills"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipKills = shipKills
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
 				
 				super.init()
@@ -931,6 +928,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -994,17 +995,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUniverseNamesNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniversePostUniverseNamesNotFound) public class PostUniverseNamesNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1013,6 +1011,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1065,7 +1067,7 @@ public extension ESI {
 		}
 		
 		
-		public class Bloodline: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseBloodline) public class Bloodline: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var bloodlineID: Int = Int()
@@ -1080,34 +1082,31 @@ public extension ESI {
 			public var shipTypeID: Int = Int()
 			public var willpower: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let bloodlineID = dictionary["bloodline_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let bloodlineID = dictionary["bloodline_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.bloodlineID = bloodlineID
-				guard let charisma = dictionary["charisma"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let charisma = dictionary["charisma"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.charisma = charisma
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.corporationID = corporationID
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
-				guard let intelligence = dictionary["intelligence"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let intelligence = dictionary["intelligence"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.intelligence = intelligence
-				guard let memory = dictionary["memory"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let memory = dictionary["memory"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.memory = memory
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let perception = dictionary["perception"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let perception = dictionary["perception"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.perception = perception
-				guard let raceID = dictionary["race_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let raceID = dictionary["race_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.raceID = raceID
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipTypeID = shipTypeID
-				guard let willpower = dictionary["willpower"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let willpower = dictionary["willpower"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.willpower = willpower
 				
 				super.init()
@@ -1115,6 +1114,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1213,7 +1216,7 @@ public extension ESI {
 		}
 		
 		
-		public class Race: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseRace) public class Race: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int = Int()
@@ -1221,20 +1224,17 @@ public extension ESI {
 			public var name: String = String()
 			public var raceID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceID = allianceID
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let raceID = dictionary["race_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let raceID = dictionary["race_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.raceID = raceID
 				
 				super.init()
@@ -1242,6 +1242,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1305,17 +1309,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseStructuresStructureIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseStructuresStructureIDNotFound) public class GetUniverseStructuresStructureIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1324,6 +1325,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1376,17 +1381,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniversePlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniversePlanetsPlanetIDNotFound) public class GetUniversePlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1395,6 +1397,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1447,17 +1453,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseTypesTypeIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseTypesTypeIDNotFound) public class GetUniverseTypesTypeIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1466,6 +1469,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1518,24 +1525,21 @@ public extension ESI {
 		}
 		
 		
-		public class TypeInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseTypeInformation) public class TypeInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseTypesTypeIDDogmaEffects: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseTypeInformationGetUniverseTypesTypeIDDogmaEffects) public class GetUniverseTypesTypeIDDogmaEffects: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var effectID: Int = Int()
 				public var isDefault: Bool = Bool()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let effectID = dictionary["effect_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let effectID = dictionary["effect_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.effectID = effectID
-					guard let isDefault = dictionary["is_default"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let isDefault = dictionary["is_default"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.isDefault = isDefault
 					
 					super.init()
@@ -1543,6 +1547,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1595,22 +1603,19 @@ public extension ESI {
 				
 			}
 			
-			public class GetUniverseTypesTypeIDDogmaAttributes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseTypeInformationGetUniverseTypesTypeIDDogmaAttributes) public class GetUniverseTypesTypeIDDogmaAttributes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var attributeID: Int = Int()
 				public var value: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let attributeID = dictionary["attribute_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let attributeID = dictionary["attribute_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.attributeID = attributeID
-					guard let value = dictionary["value"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let value = dictionary["value"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.value = value
 					
 					super.init()
@@ -1618,6 +1623,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1685,30 +1694,27 @@ public extension ESI {
 			public var typeID: Int = Int()
 			public var volume: Float? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				capacity = dictionary["capacity"] as? Float
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
 				dogmaAttributes = try (dictionary["dogma_attributes"] as? [Any])?.map {try Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes(json: $0)}
 				dogmaEffects = try (dictionary["dogma_effects"] as? [Any])?.map {try Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects(json: $0)}
 				graphicID = dictionary["graphic_id"] as? Int
-				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.groupID = groupID
 				iconID = dictionary["icon_id"] as? Int
 				mass = dictionary["mass"] as? Float
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				portionSize = dictionary["portion_size"] as? Int
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.published = published
 				radius = dictionary["radius"] as? Float
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				volume = dictionary["volume"] as? Float
 				
@@ -1717,6 +1723,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1866,7 +1876,7 @@ public extension ESI {
 		}
 		
 		
-		public class RegionInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseRegionInformation) public class RegionInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var constellations: [Int] = []
@@ -1874,18 +1884,15 @@ public extension ESI {
 			public var name: String = String()
 			public var regionID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				constellations = try (dictionary["constellations"] as? [Any])?.map {try Int(json: $0)} ?? []
 				localizedDescription = dictionary["description"] as? String
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.regionID = regionID
 				
 				super.init()
@@ -1893,6 +1900,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1960,7 +1971,7 @@ public extension ESI {
 		}
 		
 		
-		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseName) public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Category: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -1981,7 +1992,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = Category(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Category(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1995,18 +2006,15 @@ public extension ESI {
 			public var id: Int = Int()
 			public var name: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let category = Universe.Name.Category(rawValue: dictionary["category"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let category = Universe.Name.Category(rawValue: dictionary["category"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.category = category
-				guard let id = dictionary["id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let id = dictionary["id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.id = id
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				
 				super.init()
@@ -2014,6 +2022,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2072,17 +2084,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseStargatesStargateIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseStargatesStargateIDNotFound) public class GetUniverseStargatesStargateIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2091,6 +2100,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2143,17 +2156,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseStationsStationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseStationsStationIDNotFound) public class GetUniverseStationsStationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2162,6 +2172,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2214,24 +2228,21 @@ public extension ESI {
 		}
 		
 		
-		public class StargateInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseStargateInformation) public class StargateInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseStargateInformationGetUniverseStargatesStargateIDDestination) public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var stargateID: Int = Int()
 				public var systemID: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let stargateID = dictionary["stargate_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let stargateID = dictionary["stargate_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.stargateID = stargateID
-					guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.systemID = systemID
 					
 					super.init()
@@ -2239,6 +2250,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -2291,25 +2306,22 @@ public extension ESI {
 				
 			}
 			
-			public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseStargateInformationGetUniverseStargatesStargateIDPosition) public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -2317,6 +2329,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -2381,22 +2397,19 @@ public extension ESI {
 			public var systemID: Int = Int()
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				destination = try Universe.StargateInformation.GetUniverseStargatesStargateIDDestination(json: dictionary["destination"] as? [String: Any] ?? [:])
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				position = try Universe.StargateInformation.GetUniverseStargatesStargateIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				guard let stargateID = dictionary["stargate_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let stargateID = dictionary["stargate_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stargateID = stargateID
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -2404,6 +2417,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2477,7 +2494,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseStarsStarIDOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseStarsStarIDOk) public class GetUniverseStarsStarIDOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetUniverseStarsStarIDSpectralClass: String, JSONCoding, HTTPQueryable {
 				case a0 = "A0"
@@ -2579,7 +2596,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetUniverseStarsStarIDSpectralClass(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetUniverseStarsStarIDSpectralClass(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -2598,28 +2615,25 @@ public extension ESI {
 			public var temperature: Int = Int()
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let age = dictionary["age"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let age = dictionary["age"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.age = age
-				guard let luminosity = dictionary["luminosity"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let luminosity = dictionary["luminosity"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.luminosity = luminosity
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let radius = dictionary["radius"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let radius = dictionary["radius"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.radius = radius
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let spectralClass = Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass(rawValue: dictionary["spectral_class"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let spectralClass = Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass(rawValue: dictionary["spectral_class"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.spectralClass = spectralClass
-				guard let temperature = dictionary["temperature"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let temperature = dictionary["temperature"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.temperature = temperature
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -2627,6 +2641,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2710,7 +2728,7 @@ public extension ESI {
 		}
 		
 		
-		public class ItemCategoryInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseItemCategoryInformation) public class ItemCategoryInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var categoryID: Int = Int()
@@ -2718,19 +2736,16 @@ public extension ESI {
 			public var name: String = String()
 			public var published: Bool = Bool()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.categoryID = categoryID
 				groups = try (dictionary["groups"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.published = published
 				
 				super.init()
@@ -2738,6 +2753,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2801,17 +2820,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseGroupsGroupIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseGroupsGroupIDNotFound) public class GetUniverseGroupsGroupIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2820,6 +2836,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2872,7 +2892,7 @@ public extension ESI {
 		}
 		
 		
-		public class GraphicInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGraphicInformation) public class GraphicInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var collisionFile: String? = nil
@@ -2884,16 +2904,13 @@ public extension ESI {
 			public var sofHullName: String? = nil
 			public var sofRaceName: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				collisionFile = dictionary["collision_file"] as? String
 				graphicFile = dictionary["graphic_file"] as? String
-				guard let graphicID = dictionary["graphic_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let graphicID = dictionary["graphic_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.graphicID = graphicID
 				iconFolder = dictionary["icon_folder"] as? String
 				sofDna = dictionary["sof_dna"] as? String
@@ -2906,6 +2923,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3017,22 +3038,19 @@ public extension ESI {
 		}
 		
 		
-		public class Jump: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseJump) public class Jump: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var shipJumps: Int = Int()
 			public var systemID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let shipJumps = dictionary["ship_jumps"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipJumps = dictionary["ship_jumps"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipJumps = shipJumps
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
 				
 				super.init()
@@ -3040,6 +3058,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3093,17 +3115,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseRegionsRegionIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseRegionsRegionIDNotFound) public class GetUniverseRegionsRegionIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -3112,6 +3131,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3164,17 +3187,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseGraphicsGraphicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseGraphicsGraphicIDNotFound) public class GetUniverseGraphicsGraphicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -3183,6 +3203,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3235,17 +3259,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseCategoriesCategoryIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseCategoriesCategoryIDNotFound) public class GetUniverseCategoriesCategoryIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -3254,6 +3275,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3306,27 +3331,24 @@ public extension ESI {
 		}
 		
 		
-		public class ConstellationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseConstellationInformation) public class ConstellationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseConstellationsConstellationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseConstellationInformationGetUniverseConstellationsConstellationIDPosition) public class GetUniverseConstellationsConstellationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3334,6 +3356,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -3397,19 +3423,16 @@ public extension ESI {
 			public var regionID: Int = Int()
 			public var systems: [Int] = []
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.constellationID = constellationID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				position = try Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.regionID = regionID
 				systems = try (dictionary["systems"] as? [Any])?.map {try Int(json: $0)} ?? []
 				
@@ -3418,6 +3441,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3486,27 +3513,24 @@ public extension ESI {
 		}
 		
 		
-		public class MoonInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseMoonInformation) public class MoonInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseMoonsMoonIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseMoonInformationGetUniverseMoonsMoonIDPosition) public class GetUniverseMoonsMoonIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3514,6 +3538,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -3576,19 +3604,16 @@ public extension ESI {
 			public var position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition = Universe.MoonInformation.GetUniverseMoonsMoonIDPosition()
 			public var systemID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let moonID = dictionary["moon_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let moonID = dictionary["moon_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.moonID = moonID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				position = try Universe.MoonInformation.GetUniverseMoonsMoonIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
 				
 				super.init()
@@ -3596,6 +3621,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3659,27 +3688,24 @@ public extension ESI {
 		}
 		
 		
-		public class StructureInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseStructureInformation) public class StructureInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseStructuresStructureIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseStructureInformationGetUniverseStructuresStructureIDPosition) public class GetUniverseStructuresStructureIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3687,6 +3713,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -3749,17 +3779,14 @@ public extension ESI {
 			public var solarSystemID: Int = Int()
 			public var typeID: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				position = try? Universe.StructureInformation.GetUniverseStructuresStructureIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
 				typeID = dictionary["type_id"] as? Int
 				
@@ -3768,6 +3795,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -3839,23 +3870,20 @@ public extension ESI {
 		}
 		
 		
-		public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseSolarSystemInformation) public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseSolarSystemInformationGetUniverseSystemsSystemIDPlanets) public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var moons: [Int]? = nil
 				public var planetID: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					moons = try (dictionary["moons"] as? [Any])?.map {try Int(json: $0)}
-					guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.planetID = planetID
 					
 					super.init()
@@ -3863,6 +3891,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -3919,25 +3951,22 @@ public extension ESI {
 				
 			}
 			
-			public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseSolarSystemInformationGetUniverseSystemsSystemIDPosition) public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3945,6 +3974,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -4009,29 +4042,28 @@ public extension ESI {
 			public var securityClass: String? = nil
 			public var securityStatus: Float = Float()
 			public var starID: Int = Int()
-			public var stargates: [Int] = []
+			public var stargates: [Int]? = nil
+			public var stations: [Int]? = nil
 			public var systemID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.constellationID = constellationID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				planets = try (dictionary["planets"] as? [Any])?.map {try Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets(json: $0)} ?? []
 				position = try Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
 				securityClass = dictionary["security_class"] as? String
-				guard let securityStatus = dictionary["security_status"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let securityStatus = dictionary["security_status"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.securityStatus = securityStatus
-				guard let starID = dictionary["star_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let starID = dictionary["star_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.starID = starID
-				stargates = try (dictionary["stargates"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				stargates = try (dictionary["stargates"] as? [Any])?.map {try Int(json: $0)}
+				stations = try (dictionary["stations"] as? [Any])?.map {try Int(json: $0)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
 				
 				super.init()
@@ -4039,6 +4071,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4049,7 +4085,8 @@ public extension ESI {
 				securityClass = aDecoder.decodeObject(forKey: "security_class") as? String
 				securityStatus = aDecoder.decodeFloat(forKey: "security_status")
 				starID = aDecoder.decodeInteger(forKey: "star_id")
-				stargates = aDecoder.decodeObject(forKey: "stargates") as? [Int] ?? []
+				stargates = aDecoder.decodeObject(forKey: "stargates") as? [Int]
+				stations = aDecoder.decodeObject(forKey: "stations") as? [Int]
 				systemID = aDecoder.decodeInteger(forKey: "system_id")
 				
 				super.init()
@@ -4065,7 +4102,12 @@ public extension ESI {
 				}
 				aCoder.encode(securityStatus, forKey: "security_status")
 				aCoder.encode(starID, forKey: "star_id")
-				aCoder.encode(stargates, forKey: "stargates")
+				if let v = stargates {
+					aCoder.encode(v, forKey: "stargates")
+				}
+				if let v = stations {
+					aCoder.encode(v, forKey: "stations")
+				}
 				aCoder.encode(systemID, forKey: "system_id")
 			}
 			
@@ -4080,7 +4122,12 @@ public extension ESI {
 				}
 				json["security_status"] = securityStatus.json
 				json["star_id"] = starID.json
-				json["stargates"] = stargates.json
+				if let v = stargates?.json {
+					json["stargates"] = v
+				}
+				if let v = stations?.json {
+					json["stations"] = v
+				}
 				json["system_id"] = systemID.json
 				return json
 			}
@@ -4094,7 +4141,8 @@ public extension ESI {
 				hashCombine(seed: &hash, value: self.securityClass?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.securityStatus.hashValue)
 				hashCombine(seed: &hash, value: self.starID.hashValue)
-				self.stargates.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.stargates?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.stations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				hashCombine(seed: &hash, value: self.systemID.hashValue)
 				return hash
 			}()
@@ -4115,7 +4163,8 @@ public extension ESI {
 				securityClass = other.securityClass
 				securityStatus = other.securityStatus
 				starID = other.starID
-				stargates = other.stargates.flatMap { $0 }
+				stargates = other.stargates?.flatMap { $0 }
+				stations = other.stations?.flatMap { $0 }
 				systemID = other.systemID
 			}
 			
@@ -4131,27 +4180,24 @@ public extension ESI {
 		}
 		
 		
-		public class PlanetInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniversePlanetInformation) public class PlanetInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniversePlanetsPlanetIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniversePlanetInformationGetUniversePlanetsPlanetIDPosition) public class GetUniversePlanetsPlanetIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -4159,6 +4205,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -4222,21 +4272,18 @@ public extension ESI {
 			public var systemID: Int = Int()
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.planetID = planetID
 				position = try Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -4244,6 +4291,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4312,17 +4363,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseMoonsMoonIDNotFound) public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -4331,6 +4379,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4383,7 +4435,7 @@ public extension ESI {
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseItemGroupInformation) public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var categoryID: Int = Int()
@@ -4392,20 +4444,17 @@ public extension ESI {
 			public var published: Bool = Bool()
 			public var types: [Int] = []
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.categoryID = categoryID
-				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.groupID = groupID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.published = published
 				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
 				
@@ -4414,6 +4463,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4482,17 +4535,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseConstellationsConstellationIDNotFound) public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -4501,6 +4551,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4553,27 +4607,24 @@ public extension ESI {
 		}
 		
 		
-		public class StationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseStationInformation) public class StationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetUniverseStationsStationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIUniverseStationInformationGetUniverseStationsStationIDPosition) public class GetUniverseStationsStationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var x: Float = Float()
 				public var y: Float = Float()
 				public var z: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -4581,6 +4632,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -4676,7 +4731,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetUniverseStationsStationIDServices(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetUniverseStationsStationIDServices(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -4699,32 +4754,29 @@ public extension ESI {
 			public var systemID: Int = Int()
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let maxDockableShipVolume = dictionary["max_dockable_ship_volume"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let maxDockableShipVolume = dictionary["max_dockable_ship_volume"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.maxDockableShipVolume = maxDockableShipVolume
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let officeRentalCost = dictionary["office_rental_cost"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let officeRentalCost = dictionary["office_rental_cost"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.officeRentalCost = officeRentalCost
 				owner = dictionary["owner"] as? Int
 				position = try Universe.StationInformation.GetUniverseStationsStationIDPosition(json: dictionary["position"] as? [String: Any] ?? [:])
 				raceID = dictionary["race_id"] as? Int
-				guard let reprocessingEfficiency = dictionary["reprocessing_efficiency"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let reprocessingEfficiency = dictionary["reprocessing_efficiency"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.reprocessingEfficiency = reprocessingEfficiency
-				guard let reprocessingStationsTake = dictionary["reprocessing_stations_take"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let reprocessingStationsTake = dictionary["reprocessing_stations_take"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.reprocessingStationsTake = reprocessingStationsTake
 				services = try (dictionary["services"] as? [Any])?.map {try Universe.StationInformation.GetUniverseStationsStationIDServices(json: $0)} ?? []
-				guard let stationID = dictionary["station_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let stationID = dictionary["station_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stationID = stationID
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -4732,6 +4784,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4843,17 +4899,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseSystemsSystemIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseGetUniverseSystemsSystemIDNotFound) public class GetUniverseSystemsSystemIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -4862,6 +4915,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -4914,7 +4971,7 @@ public extension ESI {
 		}
 		
 		
-		public class Faction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUniverseFaction) public class Faction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var corporationID: Int = Int()
@@ -4928,31 +4985,28 @@ public extension ESI {
 			public var stationCount: Int = Int()
 			public var stationSystemCount: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.corporationID = corporationID
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
-				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.factionID = factionID
-				guard let isUnique = dictionary["is_unique"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isUnique = dictionary["is_unique"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isUnique = isUnique
 				militiaCorporationID = dictionary["militia_corporation_id"] as? Int
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let sizeFactor = dictionary["size_factor"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let sizeFactor = dictionary["size_factor"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.sizeFactor = sizeFactor
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let stationCount = dictionary["station_count"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let stationCount = dictionary["station_count"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stationCount = stationCount
-				guard let stationSystemCount = dictionary["station_system_count"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let stationSystemCount = dictionary["station_system_count"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stationSystemCount = stationSystemCount
 				
 				super.init()
@@ -4960,6 +5014,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

@@ -114,21 +114,18 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterSkills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISkillsCharacterSkills) public class CharacterSkills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class Skill: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESISkillsCharacterSkillsSkill) public class Skill: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var currentSkillLevel: Int? = nil
 				public var skillID: Int? = nil
 				public var skillpointsInSkill: Int64? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					currentSkillLevel = dictionary["current_skill_level"] as? Int
 					skillID = dictionary["skill_id"] as? Int
@@ -139,6 +136,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -211,12 +212,9 @@ public extension ESI {
 			public var skills: [Skills.CharacterSkills.Skill]? = nil
 			public var totalSP: Int64? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				skills = try (dictionary["skills"] as? [Any])?.map {try Skills.CharacterSkills.Skill(json: $0)}
 				totalSP = dictionary["total_sp"] as? Int64
@@ -226,6 +224,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -287,7 +289,7 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterAttributes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISkillsCharacterAttributes) public class CharacterAttributes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var accruedRemapCooldownDate: Date? = nil
@@ -299,25 +301,22 @@ public extension ESI {
 			public var perception: Int = Int()
 			public var willpower: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				accruedRemapCooldownDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["accrued_remap_cooldown_date"] as? String ?? "")
 				bonusRemaps = dictionary["bonus_remaps"] as? Int
-				guard let charisma = dictionary["charisma"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let charisma = dictionary["charisma"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.charisma = charisma
-				guard let intelligence = dictionary["intelligence"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let intelligence = dictionary["intelligence"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.intelligence = intelligence
 				lastRemapDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_remap_date"] as? String ?? "")
-				guard let memory = dictionary["memory"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let memory = dictionary["memory"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.memory = memory
-				guard let perception = dictionary["perception"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let perception = dictionary["perception"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.perception = perception
-				guard let willpower = dictionary["willpower"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let willpower = dictionary["willpower"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.willpower = willpower
 				
 				super.init()
@@ -325,6 +324,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -420,7 +423,7 @@ public extension ESI {
 		}
 		
 		
-		public class SkillQueueItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISkillsSkillQueueItem) public class SkillQueueItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var finishDate: Date? = nil
@@ -432,21 +435,18 @@ public extension ESI {
 			public var startDate: Date? = nil
 			public var trainingStartSP: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				finishDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["finish_date"] as? String ?? "")
-				guard let finishedLevel = dictionary["finished_level"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let finishedLevel = dictionary["finished_level"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.finishedLevel = finishedLevel
 				levelEndSP = dictionary["level_end_sp"] as? Int
 				levelStartSP = dictionary["level_start_sp"] as? Int
-				guard let queuePosition = dictionary["queue_position"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let queuePosition = dictionary["queue_position"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.queuePosition = queuePosition
-				guard let skillID = dictionary["skill_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let skillID = dictionary["skill_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.skillID = skillID
 				startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "")
 				trainingStartSP = dictionary["training_start_sp"] as? Int
@@ -456,6 +456,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

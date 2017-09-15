@@ -43,7 +43,7 @@ class Operation {
 		self.scope = scope
 		self.name = name
 		
-		guard let dic = dictionary as? [String: Any] else {throw ParserError.format(type(of: self).self, dictionary)}
+		guard let dic = dictionary as? [String: Any] else {throw ParserError.format(Swift.type(of: self).self, dictionary)}
 		let resultDic: [String: Any] = try dic.safeGet(key: "result")
 		
 		guard let (key, value) = resultDic.first else {throw ParserError.missing("result", dic)}

@@ -22,7 +22,7 @@ class Scope: Namespace {
 	
 	init(_ dictionary: Any, name: String) throws {
 		super.init()
-		guard let dic = dictionary as? [String: Any] else {throw ParserError.format(type(of: self).self, dictionary)}
+		guard let dic = dictionary as? [String: Any] else {throw ParserError.format(Swift.type(of: self).self, dictionary)}
 		self.name = name.camelCaps
 		
 		var operations = [Operation]()

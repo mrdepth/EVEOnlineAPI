@@ -76,7 +76,7 @@ enum Type {
                 self = .object
             }
             else {
-                throw ESIParserError.format(type(of: self).self, dictionary)
+                throw ESIParserError.format(Swift.type(of: self).self, dictionary)
             }
 		}
 	}
@@ -141,7 +141,7 @@ enum ParameterLocation: String {
 	case header = "header"
 	
 	init(_ value: String) throws {
-		guard let location = ParameterLocation(rawValue: value) else {throw ESIParserError.format(type(of: self).self, value)}
+		guard let location = ParameterLocation(rawValue: value) else {throw ESIParserError.format(Swift.type(of: self).self, value)}
 		self = location
 	}
 	
@@ -154,7 +154,7 @@ enum HTTPMethod: String {
 	case delete = "delete"
 	
 	init(_ value: String) throws {
-		guard let method = HTTPMethod(rawValue: value) else {throw ESIParserError.format(type(of: self).self, value)}
+		guard let method = HTTPMethod(rawValue: value) else {throw ESIParserError.format(Swift.type(of: self).self, value)}
 		self = method
 	}
 	
@@ -237,7 +237,7 @@ func unnamed() -> String {
 	return "Unnamed\(unnamedCounter)"
 }
 
-fileprivate let salt = Int(truncatingBitPattern: 0x9e3779b9 as UInt64)
+fileprivate let salt = Int(truncatingIfNeeded: 0x9e3779b9 as UInt64)
 
 func hashCombine(seed: inout Int, value: Int) {
 	seed ^= value &+ salt &+ (seed << 6) &+ (seed >> 2);

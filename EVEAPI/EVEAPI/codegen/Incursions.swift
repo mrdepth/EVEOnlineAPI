@@ -47,7 +47,7 @@ public extension ESI {
 		}
 		
 		
-		public class Incursion: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIIncursionsIncursion) public class Incursion: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum State: String, JSONCoding, HTTPQueryable {
 				case established = "established"
@@ -63,7 +63,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = State(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = State(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -82,27 +82,24 @@ public extension ESI {
 			public var state: Incursions.Incursion.State = Incursions.Incursion.State()
 			public var type: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.constellationID = constellationID
-				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.factionID = factionID
-				guard let hasBoss = dictionary["has_boss"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let hasBoss = dictionary["has_boss"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.hasBoss = hasBoss
 				infestedSolarSystems = try (dictionary["infested_solar_systems"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let influence = dictionary["influence"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let influence = dictionary["influence"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.influence = influence
-				guard let stagingSolarSystemID = dictionary["staging_solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let stagingSolarSystemID = dictionary["staging_solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stagingSolarSystemID = stagingSolarSystemID
-				guard let state = Incursions.Incursion.State(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let state = Incursions.Incursion.State(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.state = state
-				guard let type = dictionary["type"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let type = dictionary["type"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.type = type
 				
 				super.init()
@@ -110,6 +107,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

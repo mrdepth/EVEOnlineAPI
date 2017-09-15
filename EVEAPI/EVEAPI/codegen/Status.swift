@@ -47,7 +47,7 @@ public extension ESI {
 		}
 		
 		
-		public class GetStatusOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIStatusGetStatusOk) public class GetStatusOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var players: Int = Int()
@@ -55,18 +55,15 @@ public extension ESI {
 			public var startTime: Date = Date()
 			public var vip: Bool? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let players = dictionary["players"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let players = dictionary["players"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.players = players
-				guard let serverVersion = dictionary["server_version"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let serverVersion = dictionary["server_version"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.serverVersion = serverVersion
-				guard let startTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let startTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.startTime = startTime
 				vip = dictionary["vip"] as? Bool
 				
@@ -75,6 +72,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

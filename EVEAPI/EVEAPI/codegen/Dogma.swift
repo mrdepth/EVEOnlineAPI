@@ -143,9 +143,9 @@ public extension ESI {
 		}
 		
 		
-		public class Effect: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIDogmaEffect) public class Effect: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetDogmaEffectsEffectIDModifiers: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIDogmaEffectGetDogmaEffectsEffectIDModifiers) public class GetDogmaEffectsEffectIDModifiers: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var domain: String? = nil
@@ -155,16 +155,13 @@ public extension ESI {
 				public var modifyingAttributeID: Int? = nil
 				public var `operator`: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					domain = dictionary["domain"] as? String
 					effectID = dictionary["effect_id"] as? Int
-					guard let `func` = dictionary["func"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let `func` = dictionary["func"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.`func` = `func`
 					modifiedAttributeID = dictionary["modified_attribute_id"] as? Int
 					modifyingAttributeID = dictionary["modifying_attribute_id"] as? Int
@@ -175,6 +172,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -289,12 +290,9 @@ public extension ESI {
 			public var rangeChance: Bool? = nil
 			public var trackingSpeedAttributeID: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				localizedDescription = dictionary["description"] as? String
 				disallowAutoRepeat = dictionary["disallow_auto_repeat"] as? Bool
@@ -302,7 +300,7 @@ public extension ESI {
 				displayName = dictionary["display_name"] as? String
 				durationAttributeID = dictionary["duration_attribute_id"] as? Int
 				effectCategory = dictionary["effect_category"] as? Int
-				guard let effectID = dictionary["effect_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let effectID = dictionary["effect_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.effectID = effectID
 				electronicChance = dictionary["electronic_chance"] as? Bool
 				falloffAttributeID = dictionary["falloff_attribute_id"] as? Int
@@ -324,6 +322,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -552,17 +554,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetDogmaAttributesAttributeIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIDogmaGetDogmaAttributesAttributeIDNotFound) public class GetDogmaAttributesAttributeIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -571,6 +570,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -623,7 +626,7 @@ public extension ESI {
 		}
 		
 		
-		public class Attribute: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIDogmaAttribute) public class Attribute: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var attributeID: Int = Int()
@@ -637,14 +640,11 @@ public extension ESI {
 			public var stackable: Bool? = nil
 			public var unitID: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let attributeID = dictionary["attribute_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let attributeID = dictionary["attribute_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.attributeID = attributeID
 				defaultValue = dictionary["default_value"] as? Float
 				localizedDescription = dictionary["description"] as? String
@@ -661,6 +661,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -790,17 +794,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetDogmaEffectsEffectIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIDogmaGetDogmaEffectsEffectIDNotFound) public class GetDogmaEffectsEffectIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -809,6 +810,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

@@ -1,4 +1,4 @@
-public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+@objc({objcName}) public class {className}: NSObject, Codable, NSCopying, JSONCoding {
 
 {nested}
 {definitions}
@@ -8,7 +8,7 @@ public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 	}
 
 	public required init(json: Any) throws {
-		guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		
 {initializations}
 
@@ -18,7 +18,7 @@ public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 	override public init() {
 		super.init()
 	}
-	
+	/*
 	public required init?(coder aDecoder: NSCoder) {
 {decodings}
 
@@ -28,7 +28,7 @@ public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 	public func encode(with aCoder: NSCoder) {
 {encodings}
 	}
-	
+	*/
 	public var json: Any {
 		var json = [String: Any]()
 {json}

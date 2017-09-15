@@ -114,7 +114,7 @@ public extension ESI {
 		}
 		
 		
-		public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIContractsItem) public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var isIncluded: Bool = Bool()
@@ -124,23 +124,20 @@ public extension ESI {
 			public var recordID: Int64 = Int64()
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let isIncluded = dictionary["is_included"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isIncluded = dictionary["is_included"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isIncluded = isIncluded
-				guard let isSingleton = dictionary["is_singleton"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isSingleton = dictionary["is_singleton"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isSingleton = isSingleton
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.quantity = quantity
 				rawQuantity = dictionary["raw_quantity"] as? Int
-				guard let recordID = dictionary["record_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let recordID = dictionary["record_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.recordID = recordID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -148,6 +145,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -225,7 +226,7 @@ public extension ESI {
 		}
 		
 		
-		public class Contract: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIContractsContract) public class Contract: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Availability: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -242,7 +243,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = Availability(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Availability(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -268,7 +269,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = ContractType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = ContractType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -299,7 +300,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = Status(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Status(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -332,44 +333,41 @@ public extension ESI {
 			public var type: Contracts.Contract.ContractType = Contracts.Contract.ContractType()
 			public var volume: Float? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let acceptorID = dictionary["acceptor_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let acceptorID = dictionary["acceptor_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.acceptorID = acceptorID
-				guard let assigneeID = dictionary["assignee_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let assigneeID = dictionary["assignee_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.assigneeID = assigneeID
-				guard let availability = Contracts.Contract.Availability(rawValue: dictionary["availability"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let availability = Contracts.Contract.Availability(rawValue: dictionary["availability"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.availability = availability
 				buyout = dictionary["buyout"] as? Float
 				collateral = dictionary["collateral"] as? Float
-				guard let contractID = dictionary["contract_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let contractID = dictionary["contract_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.contractID = contractID
 				dateAccepted = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_accepted"] as? String ?? "")
 				dateCompleted = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_completed"] as? String ?? "")
-				guard let dateExpired = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_expired"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let dateExpired = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_expired"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.dateExpired = dateExpired
-				guard let dateIssued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_issued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let dateIssued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.dateIssued = dateIssued
 				daysToComplete = dictionary["days_to_complete"] as? Int
 				endLocationID = dictionary["end_location_id"] as? Int64
-				guard let forCorporation = dictionary["for_corporation"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let forCorporation = dictionary["for_corporation"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.forCorporation = forCorporation
-				guard let issuerCorporationID = dictionary["issuer_corporation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let issuerCorporationID = dictionary["issuer_corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issuerCorporationID = issuerCorporationID
-				guard let issuerID = dictionary["issuer_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let issuerID = dictionary["issuer_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issuerID = issuerID
 				price = dictionary["price"] as? Float
 				reward = dictionary["reward"] as? Float
 				startLocationID = dictionary["start_location_id"] as? Int64
-				guard let status = Contracts.Contract.Status(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let status = Contracts.Contract.Status(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.status = status
 				title = dictionary["title"] as? String
-				guard let type = Contracts.Contract.ContractType(rawValue: dictionary["type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let type = Contracts.Contract.ContractType(rawValue: dictionary["type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.type = type
 				volume = dictionary["volume"] as? Float
 				
@@ -378,6 +376,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -575,7 +577,7 @@ public extension ESI {
 		}
 		
 		
-		public class Bid: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIContractsBid) public class Bid: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var amount: Float = Float()
@@ -583,20 +585,17 @@ public extension ESI {
 			public var bidderID: Int = Int()
 			public var dateBid: Date = Date()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let amount = dictionary["amount"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let amount = dictionary["amount"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.amount = amount
-				guard let bidID = dictionary["bid_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let bidID = dictionary["bid_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.bidID = bidID
-				guard let bidderID = dictionary["bidder_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let bidderID = dictionary["bidder_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.bidderID = bidderID
-				guard let dateBid = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_bid"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let dateBid = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_bid"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.dateBid = dateBid
 				
 				super.init()
@@ -604,6 +603,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

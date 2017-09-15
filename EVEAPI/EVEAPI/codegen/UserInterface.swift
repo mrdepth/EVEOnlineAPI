@@ -194,17 +194,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUserInterfacePostUiOpenwindowNewmailUnprocessableEntity) public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -213,6 +210,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -265,7 +266,7 @@ public extension ESI {
 		}
 		
 		
-		public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIUserInterfaceNewMail) public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var body: String = String()
@@ -274,17 +275,14 @@ public extension ESI {
 			public var toCorpOrAllianceID: Int? = nil
 			public var toMailingListID: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.body = body
 				recipients = try (dictionary["recipients"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.subject = subject
 				toCorpOrAllianceID = dictionary["to_corp_or_alliance_id"] as? Int
 				toMailingListID = dictionary["to_mailing_list_id"] as? Int
@@ -294,6 +292,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

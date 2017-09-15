@@ -35,11 +35,11 @@ public extension EVE {
 		}
 		
 		
-		public class CallList: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class CallList: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Call: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Call: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public enum CallType: String, JSONCoding {
+				public enum CallType: String, JSONCoding, Codable {
 					case character = "Character"
 					case corporation = "Corporation"
 					
@@ -52,7 +52,7 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = CallType(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = CallType(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -69,17 +69,17 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let accessMask = dictionary["accessMask"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let accessMask = dictionary["accessMask"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.accessMask = accessMask
-					guard let callDescription = dictionary["description"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let callDescription = dictionary["description"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.callDescription = callDescription
-					guard let groupID = dictionary["groupID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let groupID = dictionary["groupID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.groupID = groupID
-					guard let name = dictionary["name"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let name = dictionary["name"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.name = name
-					guard let type = EVE.Api.CallList.Call.CallType(rawValue: dictionary["type"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let type = EVE.Api.CallList.Call.CallType(rawValue: dictionary["type"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.type = type
 					
 					super.init()
@@ -88,25 +88,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					accessMask = aDecoder.decodeInt64(forKey: "accessMask")
-					callDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
-					groupID = aDecoder.decodeInteger(forKey: "groupID")
-					name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-					type = EVE.Api.CallList.Call.CallType(rawValue: aDecoder.decodeObject(forKey: "type") as? String ?? String()) ?? EVE.Api.CallList.Call.CallType()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessMask, forKey: "accessMask")
-					aCoder.encode(callDescription, forKey: "description")
-					aCoder.encode(groupID, forKey: "groupID")
-					aCoder.encode(name, forKey: "name")
-					aCoder.encode(type.rawValue, forKey: "type")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["accessMask"] = accessMask.json
@@ -154,7 +146,7 @@ public extension EVE {
 				
 			}
 			
-			public class CallGroup: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class CallGroup: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var groupDescription: String = String()
@@ -166,13 +158,13 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let groupDescription = dictionary["description"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let groupDescription = dictionary["description"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.groupDescription = groupDescription
-					guard let groupID = dictionary["groupID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let groupID = dictionary["groupID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.groupID = groupID
-					guard let groupName = dictionary["groupName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let groupName = dictionary["groupName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.groupName = groupName
 					
 					super.init()
@@ -181,21 +173,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					groupDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
-					groupID = aDecoder.decodeInteger(forKey: "groupID")
-					groupName = aDecoder.decodeObject(forKey: "groupName") as? String ?? String()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(groupDescription, forKey: "description")
-					aCoder.encode(groupID, forKey: "groupID")
-					aCoder.encode(groupName, forKey: "groupName")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["groupDescription"] = groupDescription.json
@@ -245,11 +233,11 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let callGroups = try dictionary.rowset(name: "callGroups")?.map ({try EVE.Api.CallList.CallGroup(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let callGroups = try dictionary.rowset(name: "callGroups")?.map ({try EVE.Api.CallList.CallGroup(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.callGroups = callGroups
-				guard let calls = try dictionary.rowset(name: "calls")?.map ({try EVE.Api.CallList.Call(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let calls = try dictionary.rowset(name: "calls")?.map ({try EVE.Api.CallList.Call(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.calls = calls
 				
 				super.init()
@@ -258,19 +246,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				callGroups = aDecoder.decodeObject(of: [EVE.Api.CallList.CallGroup.self], forKey: "callGroups") as? [EVE.Api.CallList.CallGroup] ?? []
-				calls = aDecoder.decodeObject(of: [EVE.Api.CallList.Call.self], forKey: "calls") as? [EVE.Api.CallList.Call] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(callGroups, forKey: "callGroups")
-				aCoder.encode(calls, forKey: "calls")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["callGroups"] = callGroups.json

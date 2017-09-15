@@ -113,7 +113,7 @@ public extension ESI {
 		}
 		
 		
-		public class Colony: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIPlanetaryInteractionColony) public class Colony: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PlanetType: String, JSONCoding, HTTPQueryable {
 				case barren = "barren"
@@ -134,7 +134,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = PlanetType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = PlanetType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -152,26 +152,23 @@ public extension ESI {
 			public var solarSystemID: Int = Int()
 			public var upgradeLevel: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let lastUpdate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_update"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let lastUpdate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_update"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.lastUpdate = lastUpdate
-				guard let numPins = dictionary["num_pins"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let numPins = dictionary["num_pins"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.numPins = numPins
-				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerID = ownerID
-				guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let planetID = dictionary["planet_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.planetID = planetID
-				guard let planetType = PlanetaryInteraction.Colony.PlanetType(rawValue: dictionary["planet_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let planetType = PlanetaryInteraction.Colony.PlanetType(rawValue: dictionary["planet_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.planetType = planetType
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let upgradeLevel = dictionary["upgrade_level"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let upgradeLevel = dictionary["upgrade_level"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.upgradeLevel = upgradeLevel
 				
 				super.init()
@@ -179,6 +176,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -257,17 +258,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIPlanetaryInteractionGetCharactersCharacterIDPlanetsPlanetIDNotFound) public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -276,6 +274,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -328,17 +330,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIPlanetaryInteractionGetUniverseSchematicsSchematicIDNotFound) public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -347,6 +346,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -399,26 +402,23 @@ public extension ESI {
 		}
 		
 		
-		public class ColonyLayout: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIPlanetaryInteractionColonyLayout) public class ColonyLayout: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class Pin: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIPlanetaryInteractionColonyLayoutPin) public class Pin: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class Contents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIPlanetaryInteractionColonyLayoutPinContents) public class Contents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var amount: Int64 = Int64()
 					public var typeID: Int = Int()
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let amount = dictionary["amount"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let amount = dictionary["amount"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.amount = amount
-						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.typeID = typeID
 						
 						super.init()
@@ -426,6 +426,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -478,27 +482,24 @@ public extension ESI {
 					
 				}
 				
-				public class ExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIPlanetaryInteractionColonyLayoutPinExtractorDetails) public class ExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
-					public class Head: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					@objc(ESIPlanetaryInteractionColonyLayoutPinExtractorDetailsHead) public class Head: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 						
 						
 						public var headID: Int = Int()
 						public var latitude: Float = Float()
 						public var longitude: Float = Float()
 						
-						public static var supportsSecureCoding: Bool {
-							return true
-						}
 						
 						public required init(json: Any) throws {
-							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 							
-							guard let headID = dictionary["head_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							guard let headID = dictionary["head_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 							self.headID = headID
-							guard let latitude = dictionary["latitude"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							guard let latitude = dictionary["latitude"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 							self.latitude = latitude
-							guard let longitude = dictionary["longitude"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							guard let longitude = dictionary["longitude"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 							self.longitude = longitude
 							
 							super.init()
@@ -506,6 +507,10 @@ public extension ESI {
 						
 						override public init() {
 							super.init()
+						}
+						
+						public static var supportsSecureCoding: Bool {
+							return true
 						}
 						
 						public required init?(coder aDecoder: NSCoder) {
@@ -569,12 +574,9 @@ public extension ESI {
 					public var productTypeID: Int? = nil
 					public var qtyPerCycle: Int? = nil
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
 						cycleTime = dictionary["cycle_time"] as? Int
 						headRadius = dictionary["head_radius"] as? Float
@@ -587,6 +589,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -670,19 +676,16 @@ public extension ESI {
 					
 				}
 				
-				public class FactoryDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIPlanetaryInteractionColonyLayoutPinFactoryDetails) public class FactoryDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var schematicID: Int = Int()
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let schematicID = dictionary["schematic_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let schematicID = dictionary["schematic_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.schematicID = schematicID
 						
 						super.init()
@@ -690,6 +693,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -749,12 +756,9 @@ public extension ESI {
 				public var schematicID: Int? = nil
 				public var typeID: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					contents = try (dictionary["contents"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Pin.Contents(json: $0)}
 					expiryTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["expiry_time"] as? String ?? "")
@@ -762,14 +766,14 @@ public extension ESI {
 					factoryDetails = try? PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails(json: dictionary["factory_details"] as? [String: Any] ?? [:])
 					installTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["install_time"] as? String ?? "")
 					lastCycleStart = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_cycle_start"] as? String ?? "")
-					guard let latitude = dictionary["latitude"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let latitude = dictionary["latitude"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.latitude = latitude
-					guard let longitude = dictionary["longitude"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let longitude = dictionary["longitude"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.longitude = longitude
-					guard let pinID = dictionary["pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let pinID = dictionary["pin_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.pinID = pinID
 					schematicID = dictionary["schematic_id"] as? Int
-					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
 					
 					super.init()
@@ -777,6 +781,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -902,25 +910,22 @@ public extension ESI {
 				
 			}
 			
-			public class Link: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIPlanetaryInteractionColonyLayoutLink) public class Link: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var destinationPinID: Int64 = Int64()
 				public var linkLevel: Int = Int()
 				public var sourcePinID: Int64 = Int64()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.destinationPinID = destinationPinID
-					guard let linkLevel = dictionary["link_level"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let linkLevel = dictionary["link_level"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.linkLevel = linkLevel
-					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.sourcePinID = sourcePinID
 					
 					super.init()
@@ -928,6 +933,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -985,7 +994,7 @@ public extension ESI {
 				
 			}
 			
-			public class Route: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIPlanetaryInteractionColonyLayoutRoute) public class Route: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var contentTypeID: Int = Int()
@@ -995,22 +1004,19 @@ public extension ESI {
 				public var sourcePinID: Int64 = Int64()
 				public var waypoints: [Int64]? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let contentTypeID = dictionary["content_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let contentTypeID = dictionary["content_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.contentTypeID = contentTypeID
-					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let destinationPinID = dictionary["destination_pin_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.destinationPinID = destinationPinID
-					guard let quantity = dictionary["quantity"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let quantity = dictionary["quantity"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.quantity = quantity
-					guard let routeID = dictionary["route_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let routeID = dictionary["route_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.routeID = routeID
-					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let sourcePinID = dictionary["source_pin_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.sourcePinID = sourcePinID
 					waypoints = try (dictionary["waypoints"] as? [Any])?.map {try Int64(json: $0)}
 					
@@ -1019,6 +1025,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1099,12 +1109,9 @@ public extension ESI {
 			public var pins: [PlanetaryInteraction.ColonyLayout.Pin] = []
 			public var routes: [PlanetaryInteraction.ColonyLayout.Route] = []
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				links = try (dictionary["links"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Link(json: $0)} ?? []
 				pins = try (dictionary["pins"] as? [Any])?.map {try PlanetaryInteraction.ColonyLayout.Pin(json: $0)} ?? []
@@ -1115,6 +1122,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1173,22 +1184,19 @@ public extension ESI {
 		}
 		
 		
-		public class SchematicInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIPlanetaryInteractionSchematicInformation) public class SchematicInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var cycleTime: Int = Int()
 			public var schematicName: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let cycleTime = dictionary["cycle_time"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let cycleTime = dictionary["cycle_time"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.cycleTime = cycleTime
-				guard let schematicName = dictionary["schematic_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let schematicName = dictionary["schematic_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.schematicName = schematicName
 				
 				super.init()
@@ -1196,6 +1204,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

@@ -207,20 +207,17 @@ public extension ESI {
 		}
 		
 		
-		public class Characters: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFactionWarfareCharacters) public class Characters: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetFwLeaderboardsCharactersYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersYesterday) public class GetFwLeaderboardsCharactersYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var characterID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					characterID = dictionary["character_id"] as? Int
@@ -230,6 +227,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -290,19 +291,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCharactersVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersVictoryPoints) public class GetFwLeaderboardsCharactersVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal] = []
 				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek] = []
 				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday] = []
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal(json: $0)} ?? []
 					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek(json: $0)} ?? []
@@ -313,6 +311,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -370,18 +372,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCharactersLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersLastWeek) public class GetFwLeaderboardsCharactersLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var characterID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					characterID = dictionary["character_id"] as? Int
@@ -391,6 +390,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -451,19 +454,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCharactersKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersKills) public class GetFwLeaderboardsCharactersKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal] = []
 				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek] = []
 				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday] = []
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal(json: $0)} ?? []
 					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek(json: $0)} ?? []
@@ -474,6 +474,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -531,18 +535,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCharactersActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersActiveTotal) public class GetFwLeaderboardsCharactersActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var characterID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					characterID = dictionary["character_id"] as? Int
@@ -552,6 +553,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -615,12 +620,9 @@ public extension ESI {
 			public var kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills = FactionWarfare.Characters.GetFwLeaderboardsCharactersKills()
 			public var victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints = FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				kills = try FactionWarfare.Characters.GetFwLeaderboardsCharactersKills(json: dictionary["kills"] as? [String: Any] ?? [:])
 				victoryPoints = try FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
@@ -630,6 +632,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -683,27 +689,24 @@ public extension ESI {
 		}
 		
 		
-		public class FactionStats: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFactionWarfareFactionStats) public class FactionStats: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetFwStatsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareFactionStatsGetFwStatsVictoryPoints) public class GetFwStatsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var lastWeek: Int = Int()
 				public var total: Int = Int()
 				public var yesterday: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.yesterday = yesterday
 					
 					super.init()
@@ -711,6 +714,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -768,25 +775,22 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwStatsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareFactionStatsGetFwStatsKills) public class GetFwStatsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var lastWeek: Int = Int()
 				public var total: Int = Int()
 				public var yesterday: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.yesterday = yesterday
 					
 					super.init()
@@ -794,6 +798,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -857,19 +865,16 @@ public extension ESI {
 			public var systemsControlled: Int = Int()
 			public var victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints = FactionWarfare.FactionStats.GetFwStatsVictoryPoints()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.factionID = factionID
 				kills = try FactionWarfare.FactionStats.GetFwStatsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				guard let pilots = dictionary["pilots"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let pilots = dictionary["pilots"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.pilots = pilots
-				guard let systemsControlled = dictionary["systems_controlled"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemsControlled = dictionary["systems_controlled"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemsControlled = systemsControlled
 				victoryPoints = try FactionWarfare.FactionStats.GetFwStatsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
 				
@@ -878,6 +883,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -946,20 +955,17 @@ public extension ESI {
 		}
 		
 		
-		public class Corporations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFactionWarfareCorporations) public class Corporations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetFwLeaderboardsCorporationsActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsActiveTotal) public class GetFwLeaderboardsCorporationsActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var corporationID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					corporationID = dictionary["corporation_id"] as? Int
@@ -969,6 +975,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1029,19 +1039,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCorporationsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsKills) public class GetFwLeaderboardsCorporationsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal] = []
 				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek] = []
 				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday] = []
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal(json: $0)} ?? []
 					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek(json: $0)} ?? []
@@ -1052,6 +1059,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1109,18 +1120,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCorporationsYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsYesterday) public class GetFwLeaderboardsCorporationsYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var corporationID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					corporationID = dictionary["corporation_id"] as? Int
@@ -1130,6 +1138,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1190,19 +1202,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCorporationsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsVictoryPoints) public class GetFwLeaderboardsCorporationsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal] = []
 				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek] = []
 				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday] = []
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal(json: $0)} ?? []
 					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek(json: $0)} ?? []
@@ -1213,6 +1222,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1270,18 +1283,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsCorporationsLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsLastWeek) public class GetFwLeaderboardsCorporationsLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var corporationID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					corporationID = dictionary["corporation_id"] as? Int
@@ -1291,6 +1301,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1354,12 +1368,9 @@ public extension ESI {
 			public var kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills = FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills()
 			public var victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints = FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				kills = try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
 				victoryPoints = try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
@@ -1369,6 +1380,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1422,7 +1437,7 @@ public extension ESI {
 		}
 		
 		
-		public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFactionWarfareSystem) public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var contested: Bool = Bool()
@@ -1432,24 +1447,21 @@ public extension ESI {
 			public var victoryPoints: Int = Int()
 			public var victoryPointsThreshold: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let contested = dictionary["contested"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let contested = dictionary["contested"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.contested = contested
-				guard let occupierFactionID = dictionary["occupier_faction_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let occupierFactionID = dictionary["occupier_faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.occupierFactionID = occupierFactionID
-				guard let ownerFactionID = dictionary["owner_faction_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerFactionID = dictionary["owner_faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerFactionID = ownerFactionID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let victoryPoints = dictionary["victory_points"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let victoryPoints = dictionary["victory_points"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.victoryPoints = victoryPoints
-				guard let victoryPointsThreshold = dictionary["victory_points_threshold"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let victoryPointsThreshold = dictionary["victory_points_threshold"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.victoryPointsThreshold = victoryPointsThreshold
 				
 				super.init()
@@ -1457,6 +1469,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1530,22 +1546,19 @@ public extension ESI {
 		}
 		
 		
-		public class FactionWar: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFactionWarfareFactionWar) public class FactionWar: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var againstID: Int = Int()
 			public var factionID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let againstID = dictionary["against_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let againstID = dictionary["against_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.againstID = againstID
-				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.factionID = factionID
 				
 				super.init()
@@ -1553,6 +1566,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1606,20 +1623,17 @@ public extension ESI {
 		}
 		
 		
-		public class Leaderboards: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFactionWarfareLeaderboards) public class Leaderboards: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetFwLeaderboardsYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsYesterday) public class GetFwLeaderboardsYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var factionID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					factionID = dictionary["faction_id"] as? Int
@@ -1629,6 +1643,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1689,19 +1707,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsVictoryPoints) public class GetFwLeaderboardsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal] = []
 				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek] = []
 				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday] = []
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal(json: $0)} ?? []
 					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek(json: $0)} ?? []
@@ -1712,6 +1727,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1769,19 +1788,16 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsKills) public class GetFwLeaderboardsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal] = []
 				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek] = []
 				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday] = []
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal(json: $0)} ?? []
 					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek(json: $0)} ?? []
@@ -1792,6 +1808,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1849,18 +1869,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsActiveTotal) public class GetFwLeaderboardsActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var factionID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					factionID = dictionary["faction_id"] as? Int
@@ -1870,6 +1887,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1930,18 +1951,15 @@ public extension ESI {
 				
 			}
 			
-			public class GetFwLeaderboardsLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsLastWeek) public class GetFwLeaderboardsLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var amount: Int? = nil
 				public var factionID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					amount = dictionary["amount"] as? Int
 					factionID = dictionary["faction_id"] as? Int
@@ -1951,6 +1969,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -2014,12 +2036,9 @@ public extension ESI {
 			public var kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills = FactionWarfare.Leaderboards.GetFwLeaderboardsKills()
 			public var victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints = FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				kills = try FactionWarfare.Leaderboards.GetFwLeaderboardsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
 				victoryPoints = try FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
@@ -2029,6 +2048,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

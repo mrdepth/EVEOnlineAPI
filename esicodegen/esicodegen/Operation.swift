@@ -13,7 +13,7 @@ fileprivate let Skip = ["datasource", "token", "user_agent", "X-User-Agent"]
 class Security {
 	let security: [String]
 	init(_ array: [Any]) throws {
-		guard let a = array as? [[String: [String]]] else { throw ESIParserError.format(type(of: self).self, array)}
+		guard let a = array as? [[String: [String]]] else { throw ESIParserError.format(Swift.type(of: self).self, array)}
 		var scopes = [String]()
 		for i in a {
 			for (_, j) in i {

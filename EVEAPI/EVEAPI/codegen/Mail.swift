@@ -317,7 +317,7 @@ public extension ESI {
 		}
 		
 		
-		public class Recipient: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailRecipient) public class Recipient: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum RecipientType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -334,7 +334,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = RecipientType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = RecipientType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -347,16 +347,13 @@ public extension ESI {
 			public var recipientID: Int = Int()
 			public var recipientType: Mail.Recipient.RecipientType = Mail.Recipient.RecipientType()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let recipientID = dictionary["recipient_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let recipientID = dictionary["recipient_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.recipientID = recipientID
-				guard let recipientType = Mail.Recipient.RecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let recipientType = Mail.Recipient.RecipientType(rawValue: dictionary["recipient_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.recipientType = recipientType
 				
 				super.init()
@@ -364,6 +361,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -417,17 +418,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailPutCharactersCharacterIDMailMailIDBadRequest) public class PutCharactersCharacterIDMailMailIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -436,6 +434,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -488,17 +490,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailPostCharactersCharacterIDMailBadRequest) public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -507,6 +506,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -559,17 +562,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailGetCharactersCharacterIDMailMailIDNotFound) public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -578,6 +578,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -630,17 +634,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailDeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -649,6 +650,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -701,18 +706,15 @@ public extension ESI {
 		}
 		
 		
-		public class UpdateContents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailUpdateContents) public class UpdateContents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var labels: [Int64]? = nil
 			public var read: Bool? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				labels = try (dictionary["labels"] as? [Any])?.map {try Int64(json: $0)}
 				read = dictionary["read"] as? Bool
@@ -722,6 +724,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -783,9 +789,9 @@ public extension ESI {
 		}
 		
 		
-		public class MailLabelsAndUnreadCounts: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailMailLabelsAndUnreadCounts) public class MailLabelsAndUnreadCounts: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIMailMailLabelsAndUnreadCountsLabel) public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 					case h0000fe = "#0000fe"
@@ -816,7 +822,7 @@ public extension ESI {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = GetCharactersCharacterIDMailLabelsColor(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = GetCharactersCharacterIDMailLabelsColor(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -831,12 +837,9 @@ public extension ESI {
 				public var name: String? = nil
 				public var unreadCount: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					color = Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor(rawValue: dictionary["color"] as? String ?? "")
 					labelID = dictionary["label_id"] as? Int
@@ -848,6 +851,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -929,12 +936,9 @@ public extension ESI {
 			public var labels: [Mail.MailLabelsAndUnreadCounts.Label]? = nil
 			public var totalUnreadCount: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				labels = try (dictionary["labels"] as? [Any])?.map {try Mail.MailLabelsAndUnreadCounts.Label(json: $0)}
 				totalUnreadCount = dictionary["total_unread_count"] as? Int
@@ -944,6 +948,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1005,7 +1013,7 @@ public extension ESI {
 		}
 		
 		
-		public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailNewMail) public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var approvedCost: Int64? = nil
@@ -1013,18 +1021,15 @@ public extension ESI {
 			public var recipients: [Mail.Recipient] = []
 			public var subject: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				approvedCost = dictionary["approved_cost"] as? Int64
-				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.body = body
 				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)} ?? []
-				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.subject = subject
 				
 				super.init()
@@ -1032,6 +1037,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1099,22 +1108,19 @@ public extension ESI {
 		}
 		
 		
-		public class Subscription: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailSubscription) public class Subscription: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var mailingListID: Int = Int()
 			public var name: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let mailingListID = dictionary["mailing_list_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let mailingListID = dictionary["mailing_list_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.mailingListID = mailingListID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				
 				super.init()
@@ -1122,6 +1128,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1175,7 +1185,7 @@ public extension ESI {
 		}
 		
 		
-		public class MailBody: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailMailBody) public class MailBody: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var body: String? = nil
@@ -1186,12 +1196,9 @@ public extension ESI {
 			public var subject: String? = nil
 			public var timestamp: Date? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				body = dictionary["body"] as? String
 				from = dictionary["from"] as? Int
@@ -1206,6 +1213,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1312,7 +1323,7 @@ public extension ESI {
 		}
 		
 		
-		public class Header: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailHeader) public class Header: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var from: Int? = nil
@@ -1323,12 +1334,9 @@ public extension ESI {
 			public var subject: String? = nil
 			public var timestamp: Date? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				from = dictionary["from"] as? Int
 				isRead = dictionary["is_read"] as? Bool
@@ -1343,6 +1351,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1449,7 +1461,7 @@ public extension ESI {
 		}
 		
 		
-		public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMailLabel) public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PostCharactersCharacterIDMailLabelsColor: String, JSONCoding, HTTPQueryable {
 				case h0000fe = "#0000fe"
@@ -1480,7 +1492,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = PostCharactersCharacterIDMailLabelsColor(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = PostCharactersCharacterIDMailLabelsColor(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1493,15 +1505,12 @@ public extension ESI {
 			public var color: Mail.Label.PostCharactersCharacterIDMailLabelsColor? = nil
 			public var name: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				color = Mail.Label.PostCharactersCharacterIDMailLabelsColor(rawValue: dictionary["color"] as? String ?? "")
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				
 				super.init()
@@ -1509,6 +1518,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

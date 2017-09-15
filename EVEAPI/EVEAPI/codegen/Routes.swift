@@ -69,7 +69,7 @@ public extension ESI {
 			}
 			
 			public init(json: Any) throws {
-				guard let s = json as? String, let v = Flag(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let s = json as? String, let v = Flag(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				self = v
 			}
 			
@@ -80,17 +80,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetRouteOriginDestinationNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIRoutesGetRouteOriginDestinationNotFound) public class GetRouteOriginDestinationNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -99,6 +96,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

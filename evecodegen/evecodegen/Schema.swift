@@ -25,7 +25,7 @@ class Property: Hashable {
 			self.key = name
 		}
 		else {
-			throw ParserError.format(type(of:self).self, name)
+			throw ParserError.format(Swift.type(of:self).self, name)
 		}
 		self.type = try Type(type, namespace: `class`)
 		self.class = `class`
@@ -76,13 +76,13 @@ class Property: Hashable {
 		case let .array(item, isOptional):
 			return isOptional ?
 			"\(propertyName) = try dictionary.rowset(name: \"\(key)\")?.map {try \(item.typeIdentifier)(json: $0)}" :
-			"guard let \(propertyName) = try dictionary.rowset(name: \"\(key)\")?.map ({try \(item.typeIdentifier)(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}\n" +
+			"guard let \(propertyName) = try dictionary.rowset(name: \"\(key)\")?.map ({try \(item.typeIdentifier)(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 			"self.\(propertyName) = \(propertyName)"
 		case let .schema(_, _, isOptional):
 			if type.isEnum {
 				let item = self.class.schema(name: type.typeName) as! Enum
 				return !isOptional ?
-					"guard let \(propertyName) = \(type.typeIdentifier)(rawValue: dictionary[\"\(key)\"] as? \(item.type.typeIdentifier) ?? \(item.type.typeIdentifier)()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+					"guard let \(propertyName) = \(type.typeIdentifier)(rawValue: dictionary[\"\(key)\"] as? \(item.type.typeIdentifier) ?? \(item.type.typeIdentifier)()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 					"self.\(propertyName) = \(propertyName)" :
 				"\(propertyName) = \(type.typeIdentifier)(rawValue: dictionary[\"\(key)\"] as? \(item.type.typeIdentifier) ?? \(item.type.typeIdentifier)())"
 
@@ -93,12 +93,12 @@ class Property: Hashable {
 		case let .date(isOptional):
 			return isOptional ?
 				"\(propertyName) = DateFormatter.eveDateFormatter.date(from: dictionary[\"\(key)\"] as? String ?? \"\")" :
-				"guard let \(propertyName) = DateFormatter.eveDateFormatter.date(from: dictionary[\"\(key)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+				"guard let \(propertyName) = DateFormatter.eveDateFormatter.date(from: dictionary[\"\(key)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)"
 		default:
 			return type.isOptional ?
 				"\(propertyName) = dictionary[\"\(key)\"] as? \(type.typeIdentifier)" :
-				"guard let \(propertyName) = dictionary[\"\(key)\"] as? \(type.typeIdentifier) else {throw EVEError.invalidFormat(type(of: self), dictionary)}\n" +
+				"guard let \(propertyName) = dictionary[\"\(key)\"] as? \(type.typeIdentifier) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)"
 		}
 		
@@ -201,7 +201,7 @@ class Enum: Schema {
 	let type: Type
 
 	init(_ value: Any, name: String, namespace: Namespace) throws {
-		guard let array = value as? [String] else {throw ParserError.format(type(of: self).self, value)}
+		guard let array = value as? [String] else {throw ParserError.format(Swift.type(of: self).self, value)}
 		
 		var type: Type = .string(false)
 		var cases = [(String, Any)]()
@@ -254,7 +254,7 @@ class Enum: Schema {
 				return "`private`"
 			default:
 				let r = s.startIndex..<s.index(after: s.startIndex)
-				return s.replacingCharacters(in: r, with: s.substring(with: r).lowercased())
+				return s.replacingCharacters(in: r, with: s[r].lowercased())
 			}
 		}
 
@@ -286,7 +286,7 @@ class Class: Schema {
 	var properties: [Property] = []
 	
 	init(_ dictionary: Any, name: String, namespace: Namespace) throws {
-		guard let dic = dictionary as? [String: Any] else {throw ParserError.format(type(of: self).self, dictionary)}
+		guard let dic = dictionary as? [String: Any] else {throw ParserError.format(Swift.type(of: self).self, dictionary)}
 		
 		try super.init(name: name, namespace: namespace)
 
@@ -304,7 +304,7 @@ class Class: Schema {
 				children.append(try Enum(array, name: key, namespace: self))
 			}
 			else {
-				throw ParserError.format(type(of: self).self, value)
+				throw ParserError.format(Swift.type(of: self).self, value)
 			}
 		}
 		properties.sort {$0.name < $1.name}
@@ -361,8 +361,8 @@ class Class: Schema {
 		template.replaceSubrange(template.range(of: "{definitions}")!, with: definitions.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
 		//		template.replaceSubrange(template.range(of: "{defaults}")!, with: defaults.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{hash}")!, with: hashes.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{nested}")!, with: nested.joined(separator: "\n"))

@@ -376,9 +376,9 @@ public extension EVE {
 		}
 		
 		
-		public class AccountBalance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class AccountBalance: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Account: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Account: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var accountID: Int = Int()
@@ -390,13 +390,13 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let accountID = dictionary["accountID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let accountID = dictionary["accountID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.accountID = accountID
-					guard let accountKey = dictionary["accountKey"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let accountKey = dictionary["accountKey"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.accountKey = accountKey
-					guard let balance = dictionary["balance"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let balance = dictionary["balance"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.balance = balance
 					
 					super.init()
@@ -405,21 +405,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					accountID = aDecoder.decodeInteger(forKey: "accountID")
-					accountKey = aDecoder.decodeInteger(forKey: "accountKey")
-					balance = aDecoder.decodeDouble(forKey: "balance")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accountID, forKey: "accountID")
-					aCoder.encode(accountKey, forKey: "accountKey")
-					aCoder.encode(balance, forKey: "balance")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["accountID"] = accountID.json
@@ -468,9 +464,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let accounts = try dictionary.rowset(name: "accounts")?.map ({try EVE.Corp.AccountBalance.Account(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let accounts = try dictionary.rowset(name: "accounts")?.map ({try EVE.Corp.AccountBalance.Account(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.accounts = accounts
 				
 				super.init()
@@ -479,17 +475,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				accounts = aDecoder.decodeObject(of: [EVE.Corp.AccountBalance.Account.self], forKey: "accounts") as? [EVE.Corp.AccountBalance.Account] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(accounts, forKey: "accounts")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["accounts"] = accounts.json
@@ -526,9 +522,9 @@ public extension EVE {
 		}
 		
 		
-		public class AssetList: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class AssetList: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Asset: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Asset: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var contents: [EVE.Corp.AssetList.Asset]? = nil
@@ -545,20 +541,20 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					contents = try dictionary.rowset(name: "contents")?.map {try EVE.Corp.AssetList.Asset(json: $0)}
-					guard let flag = dictionary["flag"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let flag = dictionary["flag"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.flag = flag
-					guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.itemID = itemID
 					locationID = dictionary["locationID"] as? Int64
-					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.quantity = quantity
 					rawQuantity = dictionary["rawQuantity"] as? Int
-					guard let singleton = dictionary["singleton"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let singleton = dictionary["singleton"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.singleton = singleton
-					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
 					
 					super.init()
@@ -567,37 +563,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					contents = aDecoder.decodeObject(of: [EVE.Corp.AssetList.Asset.self], forKey: "contents") as? [EVE.Corp.AssetList.Asset]
-					flag = aDecoder.decodeInteger(forKey: "flag")
-					itemID = aDecoder.decodeInt64(forKey: "itemID")
-					locationID = aDecoder.containsValue(forKey: "locationID") ? aDecoder.decodeInt64(forKey: "locationID") : nil
-					quantity = aDecoder.decodeInt64(forKey: "quantity")
-					rawQuantity = aDecoder.containsValue(forKey: "rawQuantity") ? aDecoder.decodeInteger(forKey: "rawQuantity") : nil
-					singleton = aDecoder.decodeBool(forKey: "singleton")
-					typeID = aDecoder.decodeInteger(forKey: "typeID")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					if let v = contents {
-						aCoder.encode(v, forKey: "contents")
-					}
-					aCoder.encode(flag, forKey: "flag")
-					aCoder.encode(itemID, forKey: "itemID")
-					if let v = locationID {
-						aCoder.encode(v, forKey: "locationID")
-					}
-					aCoder.encode(quantity, forKey: "quantity")
-					if let v = rawQuantity {
-						aCoder.encode(v, forKey: "rawQuantity")
-					}
-					aCoder.encode(singleton, forKey: "singleton")
-					aCoder.encode(typeID, forKey: "typeID")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					if let v = contents?.json {
@@ -667,9 +643,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let assets = try dictionary.rowset(name: "assets")?.map ({try EVE.Corp.AssetList.Asset(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let assets = try dictionary.rowset(name: "assets")?.map ({try EVE.Corp.AssetList.Asset(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.assets = assets
 				
 				super.init()
@@ -678,17 +654,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				assets = aDecoder.decodeObject(of: [EVE.Corp.AssetList.Asset.self], forKey: "assets") as? [EVE.Corp.AssetList.Asset] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(assets, forKey: "assets")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["assets"] = assets.json
@@ -725,9 +701,9 @@ public extension EVE {
 		}
 		
 		
-		public class Blueprints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Blueprints: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Blueprint: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Blueprint: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var flag: Int = Int()
@@ -745,25 +721,25 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let flag = dictionary["flag"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let flag = dictionary["flag"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.flag = flag
-					guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.itemID = itemID
-					guard let locationID = dictionary["locationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let locationID = dictionary["locationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.locationID = locationID
-					guard let materialEfficiency = dictionary["materialEfficiency"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let materialEfficiency = dictionary["materialEfficiency"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.materialEfficiency = materialEfficiency
-					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.quantity = quantity
-					guard let runs = dictionary["runs"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let runs = dictionary["runs"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.runs = runs
-					guard let timeEfficiency = dictionary["timeEfficiency"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let timeEfficiency = dictionary["timeEfficiency"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.timeEfficiency = timeEfficiency
-					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
-					guard let typeName = dictionary["typeName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeName = dictionary["typeName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeName = typeName
 					
 					super.init()
@@ -772,33 +748,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					flag = aDecoder.decodeInteger(forKey: "flag")
-					itemID = aDecoder.decodeInt64(forKey: "itemID")
-					locationID = aDecoder.decodeInt64(forKey: "locationID")
-					materialEfficiency = aDecoder.decodeInteger(forKey: "materialEfficiency")
-					quantity = aDecoder.decodeInt64(forKey: "quantity")
-					runs = aDecoder.decodeInteger(forKey: "runs")
-					timeEfficiency = aDecoder.decodeInteger(forKey: "timeEfficiency")
-					typeID = aDecoder.decodeInteger(forKey: "typeID")
-					typeName = aDecoder.decodeObject(forKey: "typeName") as? String ?? String()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(flag, forKey: "flag")
-					aCoder.encode(itemID, forKey: "itemID")
-					aCoder.encode(locationID, forKey: "locationID")
-					aCoder.encode(materialEfficiency, forKey: "materialEfficiency")
-					aCoder.encode(quantity, forKey: "quantity")
-					aCoder.encode(runs, forKey: "runs")
-					aCoder.encode(timeEfficiency, forKey: "timeEfficiency")
-					aCoder.encode(typeID, forKey: "typeID")
-					aCoder.encode(typeName, forKey: "typeName")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["flag"] = flag.json
@@ -865,9 +825,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let blueprints = try dictionary.rowset(name: "blueprints")?.map ({try EVE.Corp.Blueprints.Blueprint(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let blueprints = try dictionary.rowset(name: "blueprints")?.map ({try EVE.Corp.Blueprints.Blueprint(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.blueprints = blueprints
 				
 				super.init()
@@ -876,17 +836,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				blueprints = aDecoder.decodeObject(of: [EVE.Corp.Blueprints.Blueprint.self], forKey: "blueprints") as? [EVE.Corp.Blueprints.Blueprint] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(blueprints, forKey: "blueprints")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["blueprints"] = blueprints.json
@@ -923,11 +883,11 @@ public extension EVE {
 		}
 		
 		
-		public class Bookmarks: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Bookmarks: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Folder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Folder: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public class Bookmark: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class Bookmark: NSObject, Codable, NSCopying, JSONCoding {
 					
 					
 					public var bookmarkID: Int = Int()
@@ -947,29 +907,29 @@ public extension EVE {
 					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let bookmarkID = dictionary["bookmarkID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let bookmarkID = dictionary["bookmarkID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.bookmarkID = bookmarkID
-						guard let created = DateFormatter.eveDateFormatter.date(from: dictionary["created"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let created = DateFormatter.eveDateFormatter.date(from: dictionary["created"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.created = created
-						guard let creatorID = dictionary["creatorID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let creatorID = dictionary["creatorID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.creatorID = creatorID
-						guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.itemID = itemID
-						guard let locationID = dictionary["locationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let locationID = dictionary["locationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.locationID = locationID
-						guard let memo = dictionary["memo"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let memo = dictionary["memo"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.memo = memo
-						guard let note = dictionary["note"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let note = dictionary["note"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.note = note
-						guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.typeID = typeID
-						guard let x = dictionary["x"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let x = dictionary["x"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.x = x
-						guard let y = dictionary["y"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let y = dictionary["y"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.y = y
-						guard let z = dictionary["z"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let z = dictionary["z"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.z = z
 						
 						super.init()
@@ -978,37 +938,17 @@ public extension EVE {
 					override public init() {
 						super.init()
 					}
-					
+					/*
 					public required init?(coder aDecoder: NSCoder) {
-						bookmarkID = aDecoder.decodeInteger(forKey: "bookmarkID")
-						created = aDecoder.decodeObject(forKey: "created") as? Date ?? Date()
-						creatorID = aDecoder.decodeInt64(forKey: "creatorID")
-						itemID = aDecoder.decodeInt64(forKey: "itemID")
-						locationID = aDecoder.decodeInt64(forKey: "locationID")
-						memo = aDecoder.decodeObject(forKey: "memo") as? String ?? String()
-						note = aDecoder.decodeObject(forKey: "note") as? String ?? String()
-						typeID = aDecoder.decodeInteger(forKey: "typeID")
-						x = aDecoder.decodeDouble(forKey: "x")
-						y = aDecoder.decodeDouble(forKey: "y")
-						z = aDecoder.decodeDouble(forKey: "z")
+						{decodings}
 						
 						super.init()
 					}
 					
 					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(bookmarkID, forKey: "bookmarkID")
-						aCoder.encode(created, forKey: "created")
-						aCoder.encode(creatorID, forKey: "creatorID")
-						aCoder.encode(itemID, forKey: "itemID")
-						aCoder.encode(locationID, forKey: "locationID")
-						aCoder.encode(memo, forKey: "memo")
-						aCoder.encode(note, forKey: "note")
-						aCoder.encode(typeID, forKey: "typeID")
-						aCoder.encode(x, forKey: "x")
-						aCoder.encode(y, forKey: "y")
-						aCoder.encode(z, forKey: "z")
+						{encodings}
 					}
-					
+					*/
 					public var json: Any {
 						var json = [String: Any]()
 						json["bookmarkID"] = bookmarkID.json
@@ -1083,13 +1023,13 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let bookmarks = try dictionary.rowset(name: "bookmarks")?.map ({try EVE.Corp.Bookmarks.Folder.Bookmark(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let bookmarks = try dictionary.rowset(name: "bookmarks")?.map ({try EVE.Corp.Bookmarks.Folder.Bookmark(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.bookmarks = bookmarks
-					guard let folderID = dictionary["folderID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let folderID = dictionary["folderID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.folderID = folderID
-					guard let folderName = dictionary["folderName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let folderName = dictionary["folderName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.folderName = folderName
 					
 					super.init()
@@ -1098,21 +1038,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					bookmarks = aDecoder.decodeObject(of: [EVE.Corp.Bookmarks.Folder.Bookmark.self], forKey: "bookmarks") as? [EVE.Corp.Bookmarks.Folder.Bookmark] ?? []
-					folderID = aDecoder.decodeInteger(forKey: "folderID")
-					folderName = aDecoder.decodeObject(forKey: "folderName") as? String ?? String()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(bookmarks, forKey: "bookmarks")
-					aCoder.encode(folderID, forKey: "folderID")
-					aCoder.encode(folderName, forKey: "folderName")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["bookmarks"] = bookmarks.json
@@ -1161,9 +1097,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let folders = try dictionary.rowset(name: "folders")?.map ({try EVE.Corp.Bookmarks.Folder(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let folders = try dictionary.rowset(name: "folders")?.map ({try EVE.Corp.Bookmarks.Folder(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.folders = folders
 				
 				super.init()
@@ -1172,17 +1108,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				folders = aDecoder.decodeObject(of: [EVE.Corp.Bookmarks.Folder.self], forKey: "folders") as? [EVE.Corp.Bookmarks.Folder] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(folders, forKey: "folders")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["folders"] = folders.json
@@ -1219,9 +1155,9 @@ public extension EVE {
 		}
 		
 		
-		public class ContactList: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class ContactList: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Contact: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Contact: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var contactID: Int64 = Int64()
@@ -1236,18 +1172,18 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let contactID = dictionary["contactID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let contactID = dictionary["contactID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.contactID = contactID
-					guard let contactName = dictionary["contactName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let contactName = dictionary["contactName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.contactName = contactName
-					guard let contactTypeID = dictionary["contactTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let contactTypeID = dictionary["contactTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.contactTypeID = contactTypeID
 					inWatchlist = dictionary["inWatchlist"] as? Bool
-					guard let labelMask = dictionary["labelMask"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let labelMask = dictionary["labelMask"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.labelMask = labelMask
-					guard let standing = dictionary["standing"] as? Float else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let standing = dictionary["standing"] as? Float else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.standing = standing
 					
 					super.init()
@@ -1256,29 +1192,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					contactID = aDecoder.decodeInt64(forKey: "contactID")
-					contactName = aDecoder.decodeObject(forKey: "contactName") as? String ?? String()
-					contactTypeID = aDecoder.decodeInteger(forKey: "contactTypeID")
-					inWatchlist = aDecoder.containsValue(forKey: "inWatchlist") ? aDecoder.decodeBool(forKey: "inWatchlist") : nil
-					labelMask = aDecoder.decodeInt64(forKey: "labelMask")
-					standing = aDecoder.decodeFloat(forKey: "standing")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(contactID, forKey: "contactID")
-					aCoder.encode(contactName, forKey: "contactName")
-					aCoder.encode(contactTypeID, forKey: "contactTypeID")
-					if let v = inWatchlist {
-						aCoder.encode(v, forKey: "inWatchlist")
-					}
-					aCoder.encode(labelMask, forKey: "labelMask")
-					aCoder.encode(standing, forKey: "standing")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["contactID"] = contactID.json
@@ -1331,7 +1255,7 @@ public extension EVE {
 				
 			}
 			
-			public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Label: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var labelID: Int64 = Int64()
@@ -1342,11 +1266,11 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let labelID = dictionary["labelID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let labelID = dictionary["labelID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.labelID = labelID
-					guard let name = dictionary["name"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let name = dictionary["name"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.name = name
 					
 					super.init()
@@ -1355,19 +1279,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					labelID = aDecoder.decodeInt64(forKey: "labelID")
-					name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(labelID, forKey: "labelID")
-					aCoder.encode(name, forKey: "name")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["labelID"] = labelID.json
@@ -1418,19 +1340,19 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let allianceContactLabels = try dictionary.rowset(name: "allianceContactLabels")?.map ({try EVE.Corp.ContactList.Label(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceContactLabels = try dictionary.rowset(name: "allianceContactLabels")?.map ({try EVE.Corp.ContactList.Label(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceContactLabels = allianceContactLabels
-				guard let allianceContactList = try dictionary.rowset(name: "allianceContactList")?.map ({try EVE.Corp.ContactList.Contact(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceContactList = try dictionary.rowset(name: "allianceContactList")?.map ({try EVE.Corp.ContactList.Contact(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceContactList = allianceContactList
-				guard let contactLabels = try dictionary.rowset(name: "contactLabels")?.map ({try EVE.Corp.ContactList.Label(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let contactLabels = try dictionary.rowset(name: "contactLabels")?.map ({try EVE.Corp.ContactList.Label(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.contactLabels = contactLabels
-				guard let contactList = try dictionary.rowset(name: "contactList")?.map ({try EVE.Corp.ContactList.Contact(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let contactList = try dictionary.rowset(name: "contactList")?.map ({try EVE.Corp.ContactList.Contact(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.contactList = contactList
-				guard let corporateContactLabels = try dictionary.rowset(name: "corporateContactLabels")?.map ({try EVE.Corp.ContactList.Label(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let corporateContactLabels = try dictionary.rowset(name: "corporateContactLabels")?.map ({try EVE.Corp.ContactList.Label(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.corporateContactLabels = corporateContactLabels
-				guard let corporateContactList = try dictionary.rowset(name: "corporateContactList")?.map ({try EVE.Corp.ContactList.Contact(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let corporateContactList = try dictionary.rowset(name: "corporateContactList")?.map ({try EVE.Corp.ContactList.Contact(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.corporateContactList = corporateContactList
 				
 				super.init()
@@ -1439,27 +1361,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				allianceContactLabels = aDecoder.decodeObject(of: [EVE.Corp.ContactList.Label.self], forKey: "allianceContactLabels") as? [EVE.Corp.ContactList.Label] ?? []
-				allianceContactList = aDecoder.decodeObject(of: [EVE.Corp.ContactList.Contact.self], forKey: "allianceContactList") as? [EVE.Corp.ContactList.Contact] ?? []
-				contactLabels = aDecoder.decodeObject(of: [EVE.Corp.ContactList.Label.self], forKey: "contactLabels") as? [EVE.Corp.ContactList.Label] ?? []
-				contactList = aDecoder.decodeObject(of: [EVE.Corp.ContactList.Contact.self], forKey: "contactList") as? [EVE.Corp.ContactList.Contact] ?? []
-				corporateContactLabels = aDecoder.decodeObject(of: [EVE.Corp.ContactList.Label.self], forKey: "corporateContactLabels") as? [EVE.Corp.ContactList.Label] ?? []
-				corporateContactList = aDecoder.decodeObject(of: [EVE.Corp.ContactList.Contact.self], forKey: "corporateContactList") as? [EVE.Corp.ContactList.Contact] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(allianceContactLabels, forKey: "allianceContactLabels")
-				aCoder.encode(allianceContactList, forKey: "allianceContactList")
-				aCoder.encode(contactLabels, forKey: "contactLabels")
-				aCoder.encode(contactList, forKey: "contactList")
-				aCoder.encode(corporateContactLabels, forKey: "corporateContactLabels")
-				aCoder.encode(corporateContactList, forKey: "corporateContactList")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["allianceContactLabels"] = allianceContactLabels.json
@@ -1511,9 +1423,9 @@ public extension EVE {
 		}
 		
 		
-		public class ContractBids: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class ContractBids: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Bid: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Bid: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var amount: Double = Double()
@@ -1527,17 +1439,17 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let amount = dictionary["amount"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let amount = dictionary["amount"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.amount = amount
-					guard let bidID = dictionary["bidID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let bidID = dictionary["bidID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.bidID = bidID
-					guard let bidderID = dictionary["bidderID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let bidderID = dictionary["bidderID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.bidderID = bidderID
-					guard let contractID = dictionary["contractID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let contractID = dictionary["contractID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.contractID = contractID
-					guard let dateBid = DateFormatter.eveDateFormatter.date(from: dictionary["dateBid"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let dateBid = DateFormatter.eveDateFormatter.date(from: dictionary["dateBid"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.dateBid = dateBid
 					
 					super.init()
@@ -1546,25 +1458,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.decodeDouble(forKey: "amount")
-					bidID = aDecoder.decodeInt64(forKey: "bidID")
-					bidderID = aDecoder.decodeInt64(forKey: "bidderID")
-					contractID = aDecoder.decodeInt64(forKey: "contractID")
-					dateBid = aDecoder.decodeObject(forKey: "dateBid") as? Date ?? Date()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(amount, forKey: "amount")
-					aCoder.encode(bidID, forKey: "bidID")
-					aCoder.encode(bidderID, forKey: "bidderID")
-					aCoder.encode(contractID, forKey: "contractID")
-					aCoder.encode(dateBid, forKey: "dateBid")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["amount"] = amount.json
@@ -1619,9 +1523,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let bidList = try dictionary.rowset(name: "bidList")?.map ({try EVE.Corp.ContractBids.Bid(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let bidList = try dictionary.rowset(name: "bidList")?.map ({try EVE.Corp.ContractBids.Bid(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.bidList = bidList
 				
 				super.init()
@@ -1630,17 +1534,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				bidList = aDecoder.decodeObject(of: [EVE.Corp.ContractBids.Bid.self], forKey: "bidList") as? [EVE.Corp.ContractBids.Bid] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(bidList, forKey: "bidList")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["bidList"] = bidList.json
@@ -1677,9 +1581,9 @@ public extension EVE {
 		}
 		
 		
-		public class ContractItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class ContractItems: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Item: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var included: Bool = Bool()
@@ -1694,19 +1598,19 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let included = dictionary["included"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let included = dictionary["included"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.included = included
-					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.quantity = quantity
-					guard let rawQuantity = dictionary["rawQuantity"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let rawQuantity = dictionary["rawQuantity"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.rawQuantity = rawQuantity
-					guard let recordID = dictionary["recordID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let recordID = dictionary["recordID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.recordID = recordID
-					guard let singleton = dictionary["singleton"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let singleton = dictionary["singleton"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.singleton = singleton
-					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
 					
 					super.init()
@@ -1715,27 +1619,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					included = aDecoder.decodeBool(forKey: "included")
-					quantity = aDecoder.decodeInt64(forKey: "quantity")
-					rawQuantity = aDecoder.decodeInteger(forKey: "rawQuantity")
-					recordID = aDecoder.decodeInt64(forKey: "recordID")
-					singleton = aDecoder.decodeBool(forKey: "singleton")
-					typeID = aDecoder.decodeInteger(forKey: "typeID")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(included, forKey: "included")
-					aCoder.encode(quantity, forKey: "quantity")
-					aCoder.encode(rawQuantity, forKey: "rawQuantity")
-					aCoder.encode(recordID, forKey: "recordID")
-					aCoder.encode(singleton, forKey: "singleton")
-					aCoder.encode(typeID, forKey: "typeID")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["included"] = included.json
@@ -1793,9 +1687,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let itemList = try dictionary.rowset(name: "itemList")?.map ({try EVE.Corp.ContractItems.Item(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let itemList = try dictionary.rowset(name: "itemList")?.map ({try EVE.Corp.ContractItems.Item(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.itemList = itemList
 				
 				super.init()
@@ -1804,17 +1698,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				itemList = aDecoder.decodeObject(of: [EVE.Corp.ContractItems.Item.self], forKey: "itemList") as? [EVE.Corp.ContractItems.Item] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(itemList, forKey: "itemList")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["itemList"] = itemList.json
@@ -1851,11 +1745,11 @@ public extension EVE {
 		}
 		
 		
-		public class Contracts: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Contracts: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Contract: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Contract: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public enum Availability: String, JSONCoding {
+				public enum Availability: String, JSONCoding, Codable {
 					case `private` = "Private"
 					case `public` = "Public"
 					
@@ -1868,13 +1762,13 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = Availability(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = Availability(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
 				}
 				
-				public enum ContractType: String, JSONCoding {
+				public enum ContractType: String, JSONCoding, Codable {
 					case auction = "Auction"
 					case courier = "Courier"
 					case itemExchange = "ItemExchange"
@@ -1889,13 +1783,13 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = ContractType(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = ContractType(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
 				}
 				
-				public enum Status: String, JSONCoding {
+				public enum Status: String, JSONCoding, Codable {
 					case cancelled = "Cancelled"
 					case completed = "Completed"
 					case completedByContractor = "CompletedByContractor"
@@ -1916,7 +1810,7 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = Status(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = Status(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -1950,51 +1844,51 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let acceptorID = dictionary["acceptorID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let acceptorID = dictionary["acceptorID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.acceptorID = acceptorID
-					guard let assigneeID = dictionary["assigneeID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let assigneeID = dictionary["assigneeID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.assigneeID = assigneeID
-					guard let availability = EVE.Corp.Contracts.Contract.Availability(rawValue: dictionary["availability"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let availability = EVE.Corp.Contracts.Contract.Availability(rawValue: dictionary["availability"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.availability = availability
-					guard let buyout = dictionary["buyout"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let buyout = dictionary["buyout"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.buyout = buyout
-					guard let collateral = dictionary["collateral"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let collateral = dictionary["collateral"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.collateral = collateral
-					guard let contractID = dictionary["contractID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let contractID = dictionary["contractID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.contractID = contractID
-					guard let dateAccepted = DateFormatter.eveDateFormatter.date(from: dictionary["dateAccepted"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let dateAccepted = DateFormatter.eveDateFormatter.date(from: dictionary["dateAccepted"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.dateAccepted = dateAccepted
-					guard let dateCompleted = DateFormatter.eveDateFormatter.date(from: dictionary["dateCompleted"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let dateCompleted = DateFormatter.eveDateFormatter.date(from: dictionary["dateCompleted"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.dateCompleted = dateCompleted
-					guard let dateExpired = DateFormatter.eveDateFormatter.date(from: dictionary["dateExpired"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let dateExpired = DateFormatter.eveDateFormatter.date(from: dictionary["dateExpired"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.dateExpired = dateExpired
-					guard let dateIssued = DateFormatter.eveDateFormatter.date(from: dictionary["dateIssued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let dateIssued = DateFormatter.eveDateFormatter.date(from: dictionary["dateIssued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.dateIssued = dateIssued
-					guard let endStationID = dictionary["endStationID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let endStationID = dictionary["endStationID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.endStationID = endStationID
-					guard let forCorp = dictionary["forCorp"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let forCorp = dictionary["forCorp"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.forCorp = forCorp
-					guard let issuerCorpID = dictionary["issuerCorpID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let issuerCorpID = dictionary["issuerCorpID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.issuerCorpID = issuerCorpID
-					guard let issuerID = dictionary["issuerID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let issuerID = dictionary["issuerID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.issuerID = issuerID
-					guard let numDays = dictionary["numDays"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let numDays = dictionary["numDays"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.numDays = numDays
-					guard let price = dictionary["price"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let price = dictionary["price"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.price = price
-					guard let reward = dictionary["reward"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let reward = dictionary["reward"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.reward = reward
-					guard let startStationID = dictionary["startStationID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let startStationID = dictionary["startStationID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.startStationID = startStationID
-					guard let status = EVE.Corp.Contracts.Contract.Status(rawValue: dictionary["status"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let status = EVE.Corp.Contracts.Contract.Status(rawValue: dictionary["status"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.status = status
-					guard let title = dictionary["title"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let title = dictionary["title"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.title = title
-					guard let type = EVE.Corp.Contracts.Contract.ContractType(rawValue: dictionary["type"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let type = EVE.Corp.Contracts.Contract.ContractType(rawValue: dictionary["type"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.type = type
-					guard let volume = dictionary["volume"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let volume = dictionary["volume"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.volume = volume
 					
 					super.init()
@@ -2003,59 +1897,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					acceptorID = aDecoder.decodeInt64(forKey: "acceptorID")
-					assigneeID = aDecoder.decodeInt64(forKey: "assigneeID")
-					availability = EVE.Corp.Contracts.Contract.Availability(rawValue: aDecoder.decodeObject(forKey: "availability") as? String ?? String()) ?? EVE.Corp.Contracts.Contract.Availability()
-					buyout = aDecoder.decodeDouble(forKey: "buyout")
-					collateral = aDecoder.decodeDouble(forKey: "collateral")
-					contractID = aDecoder.decodeInt64(forKey: "contractID")
-					dateAccepted = aDecoder.decodeObject(forKey: "dateAccepted") as? Date ?? Date()
-					dateCompleted = aDecoder.decodeObject(forKey: "dateCompleted") as? Date ?? Date()
-					dateExpired = aDecoder.decodeObject(forKey: "dateExpired") as? Date ?? Date()
-					dateIssued = aDecoder.decodeObject(forKey: "dateIssued") as? Date ?? Date()
-					endStationID = aDecoder.decodeInteger(forKey: "endStationID")
-					forCorp = aDecoder.decodeBool(forKey: "forCorp")
-					issuerCorpID = aDecoder.decodeInt64(forKey: "issuerCorpID")
-					issuerID = aDecoder.decodeInt64(forKey: "issuerID")
-					numDays = aDecoder.decodeInteger(forKey: "numDays")
-					price = aDecoder.decodeDouble(forKey: "price")
-					reward = aDecoder.decodeDouble(forKey: "reward")
-					startStationID = aDecoder.decodeInteger(forKey: "startStationID")
-					status = EVE.Corp.Contracts.Contract.Status(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? String()) ?? EVE.Corp.Contracts.Contract.Status()
-					title = aDecoder.decodeObject(forKey: "title") as? String ?? String()
-					type = EVE.Corp.Contracts.Contract.ContractType(rawValue: aDecoder.decodeObject(forKey: "type") as? String ?? String()) ?? EVE.Corp.Contracts.Contract.ContractType()
-					volume = aDecoder.decodeDouble(forKey: "volume")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(acceptorID, forKey: "acceptorID")
-					aCoder.encode(assigneeID, forKey: "assigneeID")
-					aCoder.encode(availability.rawValue, forKey: "availability")
-					aCoder.encode(buyout, forKey: "buyout")
-					aCoder.encode(collateral, forKey: "collateral")
-					aCoder.encode(contractID, forKey: "contractID")
-					aCoder.encode(dateAccepted, forKey: "dateAccepted")
-					aCoder.encode(dateCompleted, forKey: "dateCompleted")
-					aCoder.encode(dateExpired, forKey: "dateExpired")
-					aCoder.encode(dateIssued, forKey: "dateIssued")
-					aCoder.encode(endStationID, forKey: "endStationID")
-					aCoder.encode(forCorp, forKey: "forCorp")
-					aCoder.encode(issuerCorpID, forKey: "issuerCorpID")
-					aCoder.encode(issuerID, forKey: "issuerID")
-					aCoder.encode(numDays, forKey: "numDays")
-					aCoder.encode(price, forKey: "price")
-					aCoder.encode(reward, forKey: "reward")
-					aCoder.encode(startStationID, forKey: "startStationID")
-					aCoder.encode(status.rawValue, forKey: "status")
-					aCoder.encode(title, forKey: "title")
-					aCoder.encode(type.rawValue, forKey: "type")
-					aCoder.encode(volume, forKey: "volume")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["acceptorID"] = acceptorID.json
@@ -2161,9 +2013,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let contractList = try dictionary.rowset(name: "contractList")?.map ({try EVE.Corp.Contracts.Contract(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let contractList = try dictionary.rowset(name: "contractList")?.map ({try EVE.Corp.Contracts.Contract(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.contractList = contractList
 				
 				super.init()
@@ -2172,17 +2024,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				contractList = aDecoder.decodeObject(of: [EVE.Corp.Contracts.Contract.self], forKey: "contractList") as? [EVE.Corp.Contracts.Contract] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(contractList, forKey: "contractList")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["contractList"] = contractList.json
@@ -2219,7 +2071,7 @@ public extension EVE {
 		}
 		
 		
-		public class FacWarStats: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class FacWarStats: NSObject, Codable, NSCopying, JSONCoding {
 			
 			
 			public var currentRank: Int = Int()
@@ -2239,29 +2091,29 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let currentRank = dictionary["currentRank"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let currentRank = dictionary["currentRank"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.currentRank = currentRank
-				guard let enlisted = DateFormatter.eveDateFormatter.date(from: dictionary["enlisted"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let enlisted = DateFormatter.eveDateFormatter.date(from: dictionary["enlisted"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.enlisted = enlisted
-				guard let factionID = dictionary["factionID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let factionID = dictionary["factionID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.factionID = factionID
-				guard let factionName = dictionary["factionName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let factionName = dictionary["factionName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.factionName = factionName
-				guard let highestRank = dictionary["highestRank"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let highestRank = dictionary["highestRank"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.highestRank = highestRank
-				guard let killsLastWeek = dictionary["killsLastWeek"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let killsLastWeek = dictionary["killsLastWeek"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killsLastWeek = killsLastWeek
-				guard let killsTotal = dictionary["killsTotal"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let killsTotal = dictionary["killsTotal"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killsTotal = killsTotal
-				guard let killsYesterday = dictionary["killsYesterday"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let killsYesterday = dictionary["killsYesterday"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killsYesterday = killsYesterday
-				guard let victoryPointsLastWeek = dictionary["victoryPointsLastWeek"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let victoryPointsLastWeek = dictionary["victoryPointsLastWeek"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.victoryPointsLastWeek = victoryPointsLastWeek
-				guard let victoryPointsTotal = dictionary["victoryPointsTotal"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let victoryPointsTotal = dictionary["victoryPointsTotal"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.victoryPointsTotal = victoryPointsTotal
-				guard let victoryPointsYesterday = dictionary["victoryPointsYesterday"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let victoryPointsYesterday = dictionary["victoryPointsYesterday"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.victoryPointsYesterday = victoryPointsYesterday
 				
 				super.init()
@@ -2270,37 +2122,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				currentRank = aDecoder.decodeInteger(forKey: "currentRank")
-				enlisted = aDecoder.decodeObject(forKey: "enlisted") as? Date ?? Date()
-				factionID = aDecoder.decodeInteger(forKey: "factionID")
-				factionName = aDecoder.decodeObject(forKey: "factionName") as? String ?? String()
-				highestRank = aDecoder.decodeInteger(forKey: "highestRank")
-				killsLastWeek = aDecoder.decodeInteger(forKey: "killsLastWeek")
-				killsTotal = aDecoder.decodeInteger(forKey: "killsTotal")
-				killsYesterday = aDecoder.decodeInteger(forKey: "killsYesterday")
-				victoryPointsLastWeek = aDecoder.decodeInteger(forKey: "victoryPointsLastWeek")
-				victoryPointsTotal = aDecoder.decodeInteger(forKey: "victoryPointsTotal")
-				victoryPointsYesterday = aDecoder.decodeInteger(forKey: "victoryPointsYesterday")
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(currentRank, forKey: "currentRank")
-				aCoder.encode(enlisted, forKey: "enlisted")
-				aCoder.encode(factionID, forKey: "factionID")
-				aCoder.encode(factionName, forKey: "factionName")
-				aCoder.encode(highestRank, forKey: "highestRank")
-				aCoder.encode(killsLastWeek, forKey: "killsLastWeek")
-				aCoder.encode(killsTotal, forKey: "killsTotal")
-				aCoder.encode(killsYesterday, forKey: "killsYesterday")
-				aCoder.encode(victoryPointsLastWeek, forKey: "victoryPointsLastWeek")
-				aCoder.encode(victoryPointsTotal, forKey: "victoryPointsTotal")
-				aCoder.encode(victoryPointsYesterday, forKey: "victoryPointsYesterday")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["currentRank"] = currentRank.json
@@ -2367,11 +2199,11 @@ public extension EVE {
 		}
 		
 		
-		public class IndustryJobs: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class IndustryJobs: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Job: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Job: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public enum Status: Int, JSONCoding {
+				public enum Status: Int, JSONCoding, Codable {
 					case active = 1
 					case cancelled = 102
 					case delivered = 101
@@ -2388,7 +2220,7 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? Int, let v = Status(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? Int, let v = Status(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -2428,63 +2260,63 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let activityID = dictionary["activityID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let activityID = dictionary["activityID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.activityID = activityID
-					guard let blueprintID = dictionary["blueprintID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let blueprintID = dictionary["blueprintID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.blueprintID = blueprintID
-					guard let blueprintLocationID = dictionary["blueprintLocationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let blueprintLocationID = dictionary["blueprintLocationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.blueprintLocationID = blueprintLocationID
-					guard let blueprintTypeID = dictionary["blueprintTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let blueprintTypeID = dictionary["blueprintTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.blueprintTypeID = blueprintTypeID
-					guard let blueprintTypeName = dictionary["blueprintTypeName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let blueprintTypeName = dictionary["blueprintTypeName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.blueprintTypeName = blueprintTypeName
-					guard let completedCharacterID = dictionary["completedCharacterID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let completedCharacterID = dictionary["completedCharacterID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.completedCharacterID = completedCharacterID
-					guard let completedDate = DateFormatter.eveDateFormatter.date(from: dictionary["completedDate"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let completedDate = DateFormatter.eveDateFormatter.date(from: dictionary["completedDate"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.completedDate = completedDate
-					guard let cost = dictionary["cost"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let cost = dictionary["cost"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.cost = cost
-					guard let endDate = DateFormatter.eveDateFormatter.date(from: dictionary["endDate"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let endDate = DateFormatter.eveDateFormatter.date(from: dictionary["endDate"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.endDate = endDate
-					guard let facilityID = dictionary["facilityID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let facilityID = dictionary["facilityID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.facilityID = facilityID
-					guard let installerID = dictionary["installerID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let installerID = dictionary["installerID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.installerID = installerID
-					guard let installerName = dictionary["installerName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let installerName = dictionary["installerName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.installerName = installerName
-					guard let jobID = dictionary["jobID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let jobID = dictionary["jobID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.jobID = jobID
-					guard let licensedRuns = dictionary["licensedRuns"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let licensedRuns = dictionary["licensedRuns"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.licensedRuns = licensedRuns
-					guard let outputLocationID = dictionary["outputLocationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let outputLocationID = dictionary["outputLocationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.outputLocationID = outputLocationID
-					guard let pauseDate = DateFormatter.eveDateFormatter.date(from: dictionary["pauseDate"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let pauseDate = DateFormatter.eveDateFormatter.date(from: dictionary["pauseDate"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.pauseDate = pauseDate
-					guard let probability = dictionary["probability"] as? Float else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let probability = dictionary["probability"] as? Float else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.probability = probability
-					guard let productTypeID = dictionary["productTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let productTypeID = dictionary["productTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.productTypeID = productTypeID
-					guard let productTypeName = dictionary["productTypeName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let productTypeName = dictionary["productTypeName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.productTypeName = productTypeName
-					guard let runs = dictionary["runs"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let runs = dictionary["runs"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.runs = runs
-					guard let solarSystemID = dictionary["solarSystemID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let solarSystemID = dictionary["solarSystemID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.solarSystemID = solarSystemID
-					guard let solarSystemName = dictionary["solarSystemName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let solarSystemName = dictionary["solarSystemName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.solarSystemName = solarSystemName
-					guard let startDate = DateFormatter.eveDateFormatter.date(from: dictionary["startDate"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let startDate = DateFormatter.eveDateFormatter.date(from: dictionary["startDate"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.startDate = startDate
-					guard let stationID = dictionary["stationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let stationID = dictionary["stationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.stationID = stationID
-					guard let status = EVE.Corp.IndustryJobs.Job.Status(rawValue: dictionary["status"] as? Int ?? Int()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let status = EVE.Corp.IndustryJobs.Job.Status(rawValue: dictionary["status"] as? Int ?? Int()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.status = status
-					guard let successfulRuns = dictionary["successfulRuns"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let successfulRuns = dictionary["successfulRuns"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.successfulRuns = successfulRuns
-					guard let teamID = dictionary["teamID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let teamID = dictionary["teamID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.teamID = teamID
-					guard let timeInSeconds = dictionary["timeInSeconds"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let timeInSeconds = dictionary["timeInSeconds"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.timeInSeconds = timeInSeconds
 					
 					super.init()
@@ -2493,71 +2325,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					activityID = aDecoder.decodeInteger(forKey: "activityID")
-					blueprintID = aDecoder.decodeInt64(forKey: "blueprintID")
-					blueprintLocationID = aDecoder.decodeInt64(forKey: "blueprintLocationID")
-					blueprintTypeID = aDecoder.decodeInteger(forKey: "blueprintTypeID")
-					blueprintTypeName = aDecoder.decodeObject(forKey: "blueprintTypeName") as? String ?? String()
-					completedCharacterID = aDecoder.decodeInt64(forKey: "completedCharacterID")
-					completedDate = aDecoder.decodeObject(forKey: "completedDate") as? Date ?? Date()
-					cost = aDecoder.decodeDouble(forKey: "cost")
-					endDate = aDecoder.decodeObject(forKey: "endDate") as? Date ?? Date()
-					facilityID = aDecoder.decodeInteger(forKey: "facilityID")
-					installerID = aDecoder.decodeInt64(forKey: "installerID")
-					installerName = aDecoder.decodeObject(forKey: "installerName") as? String ?? String()
-					jobID = aDecoder.decodeInt64(forKey: "jobID")
-					licensedRuns = aDecoder.decodeInteger(forKey: "licensedRuns")
-					outputLocationID = aDecoder.decodeInt64(forKey: "outputLocationID")
-					pauseDate = aDecoder.decodeObject(forKey: "pauseDate") as? Date ?? Date()
-					probability = aDecoder.decodeFloat(forKey: "probability")
-					productTypeID = aDecoder.decodeInteger(forKey: "productTypeID")
-					productTypeName = aDecoder.decodeObject(forKey: "productTypeName") as? String ?? String()
-					runs = aDecoder.decodeInteger(forKey: "runs")
-					solarSystemID = aDecoder.decodeInteger(forKey: "solarSystemID")
-					solarSystemName = aDecoder.decodeObject(forKey: "solarSystemName") as? String ?? String()
-					startDate = aDecoder.decodeObject(forKey: "startDate") as? Date ?? Date()
-					stationID = aDecoder.decodeInt64(forKey: "stationID")
-					status = EVE.Corp.IndustryJobs.Job.Status(rawValue: aDecoder.decodeObject(forKey: "status") as? Int ?? Int()) ?? EVE.Corp.IndustryJobs.Job.Status()
-					successfulRuns = aDecoder.decodeInteger(forKey: "successfulRuns")
-					teamID = aDecoder.decodeInteger(forKey: "teamID")
-					timeInSeconds = aDecoder.decodeInteger(forKey: "timeInSeconds")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activityID, forKey: "activityID")
-					aCoder.encode(blueprintID, forKey: "blueprintID")
-					aCoder.encode(blueprintLocationID, forKey: "blueprintLocationID")
-					aCoder.encode(blueprintTypeID, forKey: "blueprintTypeID")
-					aCoder.encode(blueprintTypeName, forKey: "blueprintTypeName")
-					aCoder.encode(completedCharacterID, forKey: "completedCharacterID")
-					aCoder.encode(completedDate, forKey: "completedDate")
-					aCoder.encode(cost, forKey: "cost")
-					aCoder.encode(endDate, forKey: "endDate")
-					aCoder.encode(facilityID, forKey: "facilityID")
-					aCoder.encode(installerID, forKey: "installerID")
-					aCoder.encode(installerName, forKey: "installerName")
-					aCoder.encode(jobID, forKey: "jobID")
-					aCoder.encode(licensedRuns, forKey: "licensedRuns")
-					aCoder.encode(outputLocationID, forKey: "outputLocationID")
-					aCoder.encode(pauseDate, forKey: "pauseDate")
-					aCoder.encode(probability, forKey: "probability")
-					aCoder.encode(productTypeID, forKey: "productTypeID")
-					aCoder.encode(productTypeName, forKey: "productTypeName")
-					aCoder.encode(runs, forKey: "runs")
-					aCoder.encode(solarSystemID, forKey: "solarSystemID")
-					aCoder.encode(solarSystemName, forKey: "solarSystemName")
-					aCoder.encode(startDate, forKey: "startDate")
-					aCoder.encode(stationID, forKey: "stationID")
-					aCoder.encode(status.rawValue, forKey: "status")
-					aCoder.encode(successfulRuns, forKey: "successfulRuns")
-					aCoder.encode(teamID, forKey: "teamID")
-					aCoder.encode(timeInSeconds, forKey: "timeInSeconds")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["activityID"] = activityID.json
@@ -2681,9 +2459,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let jobs = try dictionary.rowset(name: "jobs")?.map ({try EVE.Corp.IndustryJobs.Job(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let jobs = try dictionary.rowset(name: "jobs")?.map ({try EVE.Corp.IndustryJobs.Job(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.jobs = jobs
 				
 				super.init()
@@ -2692,17 +2470,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				jobs = aDecoder.decodeObject(of: [EVE.Corp.IndustryJobs.Job.self], forKey: "jobs") as? [EVE.Corp.IndustryJobs.Job] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(jobs, forKey: "jobs")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["jobs"] = jobs.json
@@ -2739,11 +2517,11 @@ public extension EVE {
 		}
 		
 		
-		public class KillMails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class KillMails: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Kill: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Kill: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public class Attacker: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class Attacker: NSObject, Codable, NSCopying, JSONCoding {
 					
 					
 					public var allianceID: Int64? = nil
@@ -2765,29 +2543,29 @@ public extension EVE {
 					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
 						allianceID = dictionary["allianceID"] as? Int64
 						allianceName = dictionary["allianceName"] as? String
-						guard let characterID = dictionary["characterID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let characterID = dictionary["characterID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.characterID = characterID
-						guard let characterName = dictionary["characterName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let characterName = dictionary["characterName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.characterName = characterName
-						guard let corporationID = dictionary["corporationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let corporationID = dictionary["corporationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.corporationID = corporationID
-						guard let corporationName = dictionary["corporationName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let corporationName = dictionary["corporationName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.corporationName = corporationName
-						guard let damageDone = dictionary["damageDone"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let damageDone = dictionary["damageDone"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.damageDone = damageDone
 						factionID = dictionary["factionID"] as? Int
 						factionName = dictionary["factionName"] as? String
-						guard let finalBlow = dictionary["finalBlow"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let finalBlow = dictionary["finalBlow"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.finalBlow = finalBlow
-						guard let securityStatus = dictionary["securityStatus"] as? Float else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let securityStatus = dictionary["securityStatus"] as? Float else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.securityStatus = securityStatus
-						guard let shipTypeID = dictionary["shipTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let shipTypeID = dictionary["shipTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.shipTypeID = shipTypeID
-						guard let weaponTypeID = dictionary["weaponTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let weaponTypeID = dictionary["weaponTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.weaponTypeID = weaponTypeID
 						
 						super.init()
@@ -2796,49 +2574,17 @@ public extension EVE {
 					override public init() {
 						super.init()
 					}
-					
+					/*
 					public required init?(coder aDecoder: NSCoder) {
-						allianceID = aDecoder.containsValue(forKey: "allianceID") ? aDecoder.decodeInt64(forKey: "allianceID") : nil
-						allianceName = aDecoder.decodeObject(forKey: "allianceName") as? String
-						characterID = aDecoder.decodeInt64(forKey: "characterID")
-						characterName = aDecoder.decodeObject(forKey: "characterName") as? String ?? String()
-						corporationID = aDecoder.decodeInt64(forKey: "corporationID")
-						corporationName = aDecoder.decodeObject(forKey: "corporationName") as? String ?? String()
-						damageDone = aDecoder.decodeInt64(forKey: "damageDone")
-						factionID = aDecoder.containsValue(forKey: "factionID") ? aDecoder.decodeInteger(forKey: "factionID") : nil
-						factionName = aDecoder.decodeObject(forKey: "factionName") as? String
-						finalBlow = aDecoder.decodeBool(forKey: "finalBlow")
-						securityStatus = aDecoder.decodeFloat(forKey: "securityStatus")
-						shipTypeID = aDecoder.decodeInteger(forKey: "shipTypeID")
-						weaponTypeID = aDecoder.decodeInteger(forKey: "weaponTypeID")
+						{decodings}
 						
 						super.init()
 					}
 					
 					public func encode(with aCoder: NSCoder) {
-						if let v = allianceID {
-							aCoder.encode(v, forKey: "allianceID")
-						}
-						if let v = allianceName {
-							aCoder.encode(v, forKey: "allianceName")
-						}
-						aCoder.encode(characterID, forKey: "characterID")
-						aCoder.encode(characterName, forKey: "characterName")
-						aCoder.encode(corporationID, forKey: "corporationID")
-						aCoder.encode(corporationName, forKey: "corporationName")
-						aCoder.encode(damageDone, forKey: "damageDone")
-						if let v = factionID {
-							aCoder.encode(v, forKey: "factionID")
-						}
-						if let v = factionName {
-							aCoder.encode(v, forKey: "factionName")
-						}
-						aCoder.encode(finalBlow, forKey: "finalBlow")
-						aCoder.encode(securityStatus, forKey: "securityStatus")
-						aCoder.encode(shipTypeID, forKey: "shipTypeID")
-						aCoder.encode(weaponTypeID, forKey: "weaponTypeID")
+						{encodings}
 					}
-					
+					*/
 					public var json: Any {
 						var json = [String: Any]()
 						if let v = allianceID?.json {
@@ -2918,7 +2664,7 @@ public extension EVE {
 					
 				}
 				
-				public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class Item: NSObject, Codable, NSCopying, JSONCoding {
 					
 					
 					public var flag: Int = Int()
@@ -2932,17 +2678,17 @@ public extension EVE {
 					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let flag = dictionary["flag"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let flag = dictionary["flag"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.flag = flag
-						guard let qtyDestroyed = dictionary["qtyDestroyed"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let qtyDestroyed = dictionary["qtyDestroyed"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.qtyDestroyed = qtyDestroyed
-						guard let qtyDropped = dictionary["qtyDropped"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let qtyDropped = dictionary["qtyDropped"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.qtyDropped = qtyDropped
-						guard let singleton = dictionary["singleton"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let singleton = dictionary["singleton"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.singleton = singleton
-						guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.typeID = typeID
 						
 						super.init()
@@ -2951,25 +2697,17 @@ public extension EVE {
 					override public init() {
 						super.init()
 					}
-					
+					/*
 					public required init?(coder aDecoder: NSCoder) {
-						flag = aDecoder.decodeInteger(forKey: "flag")
-						qtyDestroyed = aDecoder.decodeInteger(forKey: "qtyDestroyed")
-						qtyDropped = aDecoder.decodeInteger(forKey: "qtyDropped")
-						singleton = aDecoder.decodeBool(forKey: "singleton")
-						typeID = aDecoder.decodeInteger(forKey: "typeID")
+						{decodings}
 						
 						super.init()
 					}
 					
 					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(flag, forKey: "flag")
-						aCoder.encode(qtyDestroyed, forKey: "qtyDestroyed")
-						aCoder.encode(qtyDropped, forKey: "qtyDropped")
-						aCoder.encode(singleton, forKey: "singleton")
-						aCoder.encode(typeID, forKey: "typeID")
+						{encodings}
 					}
-					
+					*/
 					public var json: Any {
 						var json = [String: Any]()
 						json["flag"] = flag.json
@@ -3017,7 +2755,7 @@ public extension EVE {
 					
 				}
 				
-				public class Victim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				public class Victim: NSObject, Codable, NSCopying, JSONCoding {
 					
 					
 					public var allianceID: Int64? = nil
@@ -3039,29 +2777,29 @@ public extension EVE {
 					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
 						allianceID = dictionary["allianceID"] as? Int64
 						allianceName = dictionary["allianceName"] as? String
-						guard let characterID = dictionary["characterID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let characterID = dictionary["characterID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.characterID = characterID
-						guard let characterName = dictionary["characterName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let characterName = dictionary["characterName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.characterName = characterName
-						guard let corporationID = dictionary["corporationID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let corporationID = dictionary["corporationID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.corporationID = corporationID
-						guard let corporationName = dictionary["corporationName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let corporationName = dictionary["corporationName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.corporationName = corporationName
-						guard let damageTaken = dictionary["damageTaken"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let damageTaken = dictionary["damageTaken"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.damageTaken = damageTaken
 						factionID = dictionary["factionID"] as? Int
 						factionName = dictionary["factionName"] as? String
-						guard let shipTypeID = dictionary["shipTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let shipTypeID = dictionary["shipTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.shipTypeID = shipTypeID
-						guard let x = dictionary["x"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let x = dictionary["x"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.x = x
-						guard let y = dictionary["y"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let y = dictionary["y"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.y = y
-						guard let z = dictionary["z"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+						guard let z = dictionary["z"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.z = z
 						
 						super.init()
@@ -3070,49 +2808,17 @@ public extension EVE {
 					override public init() {
 						super.init()
 					}
-					
+					/*
 					public required init?(coder aDecoder: NSCoder) {
-						allianceID = aDecoder.containsValue(forKey: "allianceID") ? aDecoder.decodeInt64(forKey: "allianceID") : nil
-						allianceName = aDecoder.decodeObject(forKey: "allianceName") as? String
-						characterID = aDecoder.decodeInt64(forKey: "characterID")
-						characterName = aDecoder.decodeObject(forKey: "characterName") as? String ?? String()
-						corporationID = aDecoder.decodeInt64(forKey: "corporationID")
-						corporationName = aDecoder.decodeObject(forKey: "corporationName") as? String ?? String()
-						damageTaken = aDecoder.decodeInt64(forKey: "damageTaken")
-						factionID = aDecoder.containsValue(forKey: "factionID") ? aDecoder.decodeInteger(forKey: "factionID") : nil
-						factionName = aDecoder.decodeObject(forKey: "factionName") as? String
-						shipTypeID = aDecoder.decodeInteger(forKey: "shipTypeID")
-						x = aDecoder.decodeDouble(forKey: "x")
-						y = aDecoder.decodeDouble(forKey: "y")
-						z = aDecoder.decodeDouble(forKey: "z")
+						{decodings}
 						
 						super.init()
 					}
 					
 					public func encode(with aCoder: NSCoder) {
-						if let v = allianceID {
-							aCoder.encode(v, forKey: "allianceID")
-						}
-						if let v = allianceName {
-							aCoder.encode(v, forKey: "allianceName")
-						}
-						aCoder.encode(characterID, forKey: "characterID")
-						aCoder.encode(characterName, forKey: "characterName")
-						aCoder.encode(corporationID, forKey: "corporationID")
-						aCoder.encode(corporationName, forKey: "corporationName")
-						aCoder.encode(damageTaken, forKey: "damageTaken")
-						if let v = factionID {
-							aCoder.encode(v, forKey: "factionID")
-						}
-						if let v = factionName {
-							aCoder.encode(v, forKey: "factionName")
-						}
-						aCoder.encode(shipTypeID, forKey: "shipTypeID")
-						aCoder.encode(x, forKey: "x")
-						aCoder.encode(y, forKey: "y")
-						aCoder.encode(z, forKey: "z")
+						{encodings}
 					}
-					
+					*/
 					public var json: Any {
 						var json = [String: Any]()
 						if let v = allianceID?.json {
@@ -3205,19 +2911,19 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let attackers = try dictionary.rowset(name: "attackers")?.map ({try EVE.Corp.KillMails.Kill.Attacker(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let attackers = try dictionary.rowset(name: "attackers")?.map ({try EVE.Corp.KillMails.Kill.Attacker(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.attackers = attackers
-					guard let items = try dictionary.rowset(name: "items")?.map ({try EVE.Corp.KillMails.Kill.Item(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let items = try dictionary.rowset(name: "items")?.map ({try EVE.Corp.KillMails.Kill.Item(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.items = items
-					guard let killID = dictionary["killID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let killID = dictionary["killID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.killID = killID
-					guard let killTime = DateFormatter.eveDateFormatter.date(from: dictionary["killTime"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let killTime = DateFormatter.eveDateFormatter.date(from: dictionary["killTime"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.killTime = killTime
-					guard let moonID = dictionary["moonID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let moonID = dictionary["moonID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.moonID = moonID
-					guard let solarSystemID = dictionary["solarSystemID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let solarSystemID = dictionary["solarSystemID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.solarSystemID = solarSystemID
 					victim = try EVE.Corp.KillMails.Kill.Victim(json: dictionary["victim"] as? [String: Any] ?? [:])
 					
@@ -3227,29 +2933,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					attackers = aDecoder.decodeObject(of: [EVE.Corp.KillMails.Kill.Attacker.self], forKey: "attackers") as? [EVE.Corp.KillMails.Kill.Attacker] ?? []
-					items = aDecoder.decodeObject(of: [EVE.Corp.KillMails.Kill.Item.self], forKey: "items") as? [EVE.Corp.KillMails.Kill.Item] ?? []
-					killID = aDecoder.decodeInt64(forKey: "killID")
-					killTime = aDecoder.decodeObject(forKey: "killTime") as? Date ?? Date()
-					moonID = aDecoder.decodeInteger(forKey: "moonID")
-					solarSystemID = aDecoder.decodeInteger(forKey: "solarSystemID")
-					victim = aDecoder.decodeObject(of: EVE.Corp.KillMails.Kill.Victim.self, forKey: "victim")  ?? EVE.Corp.KillMails.Kill.Victim()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(attackers, forKey: "attackers")
-					aCoder.encode(items, forKey: "items")
-					aCoder.encode(killID, forKey: "killID")
-					aCoder.encode(killTime, forKey: "killTime")
-					aCoder.encode(moonID, forKey: "moonID")
-					aCoder.encode(solarSystemID, forKey: "solarSystemID")
-					aCoder.encode(victim, forKey: "victim")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["attackers"] = attackers.json
@@ -3310,9 +3004,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let kills = try dictionary.rowset(name: "kills")?.map ({try EVE.Corp.KillMails.Kill(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let kills = try dictionary.rowset(name: "kills")?.map ({try EVE.Corp.KillMails.Kill(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.kills = kills
 				
 				super.init()
@@ -3321,17 +3015,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				kills = aDecoder.decodeObject(of: [EVE.Corp.KillMails.Kill.self], forKey: "kills") as? [EVE.Corp.KillMails.Kill] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(kills, forKey: "kills")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["kills"] = kills.json
@@ -3368,9 +3062,9 @@ public extension EVE {
 		}
 		
 		
-		public class Locations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Locations: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Location: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Location: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var itemID: Int64 = Int64()
@@ -3384,17 +3078,17 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let itemID = dictionary["itemID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.itemID = itemID
-					guard let itemName = dictionary["itemName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let itemName = dictionary["itemName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.itemName = itemName
-					guard let x = dictionary["x"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3403,25 +3097,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					itemID = aDecoder.decodeInt64(forKey: "itemID")
-					itemName = aDecoder.decodeObject(forKey: "itemName") as? String ?? String()
-					x = aDecoder.decodeDouble(forKey: "x")
-					y = aDecoder.decodeDouble(forKey: "y")
-					z = aDecoder.decodeDouble(forKey: "z")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(itemID, forKey: "itemID")
-					aCoder.encode(itemName, forKey: "itemName")
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["itemID"] = itemID.json
@@ -3476,9 +3162,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let locations = try dictionary.rowset(name: "locations")?.map ({try EVE.Corp.Locations.Location(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let locations = try dictionary.rowset(name: "locations")?.map ({try EVE.Corp.Locations.Location(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.locations = locations
 				
 				super.init()
@@ -3487,17 +3173,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				locations = aDecoder.decodeObject(of: [EVE.Corp.Locations.Location.self], forKey: "locations") as? [EVE.Corp.Locations.Location] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(locations, forKey: "locations")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["locations"] = locations.json
@@ -3534,11 +3220,11 @@ public extension EVE {
 		}
 		
 		
-		public class MarketOrders: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class MarketOrders: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Order: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Order: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public enum State: Int, JSONCoding {
+				public enum State: Int, JSONCoding, Codable {
 					case cancelled = 3
 					case closed = 1
 					case deleted = 5
@@ -3555,7 +3241,7 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? Int, let v = State(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? Int, let v = State(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -3582,37 +3268,37 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let accountKey = dictionary["accountKey"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let accountKey = dictionary["accountKey"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.accountKey = accountKey
-					guard let bid = dictionary["bid"] as? Bool else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let bid = dictionary["bid"] as? Bool else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.bid = bid
-					guard let characterID = dictionary["charID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let characterID = dictionary["charID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.characterID = characterID
-					guard let duration = dictionary["duration"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let duration = dictionary["duration"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.duration = duration
-					guard let escrow = dictionary["escrow"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let escrow = dictionary["escrow"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.escrow = escrow
-					guard let issued = DateFormatter.eveDateFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let issued = DateFormatter.eveDateFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.issued = issued
-					guard let minVolume = dictionary["minVolume"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let minVolume = dictionary["minVolume"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.minVolume = minVolume
-					guard let orderID = dictionary["orderID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let orderID = dictionary["orderID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.orderID = orderID
-					guard let orderState = EVE.Corp.MarketOrders.Order.State(rawValue: dictionary["orderState"] as? Int ?? Int()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let orderState = EVE.Corp.MarketOrders.Order.State(rawValue: dictionary["orderState"] as? Int ?? Int()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.orderState = orderState
-					guard let price = dictionary["price"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let price = dictionary["price"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.price = price
-					guard let range = dictionary["range"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let range = dictionary["range"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.range = range
-					guard let stationID = dictionary["stationID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let stationID = dictionary["stationID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.stationID = stationID
-					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
-					guard let volEntered = dictionary["volEntered"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let volEntered = dictionary["volEntered"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.volEntered = volEntered
-					guard let volRemaining = dictionary["volRemaining"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let volRemaining = dictionary["volRemaining"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.volRemaining = volRemaining
 					
 					super.init()
@@ -3621,45 +3307,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					accountKey = aDecoder.decodeInteger(forKey: "accountKey")
-					bid = aDecoder.decodeBool(forKey: "bid")
-					characterID = aDecoder.decodeInt64(forKey: "charID")
-					duration = aDecoder.decodeInteger(forKey: "duration")
-					escrow = aDecoder.decodeDouble(forKey: "escrow")
-					issued = aDecoder.decodeObject(forKey: "issued") as? Date ?? Date()
-					minVolume = aDecoder.decodeInt64(forKey: "minVolume")
-					orderID = aDecoder.decodeInt64(forKey: "orderID")
-					orderState = EVE.Corp.MarketOrders.Order.State(rawValue: aDecoder.decodeObject(forKey: "orderState") as? Int ?? Int()) ?? EVE.Corp.MarketOrders.Order.State()
-					price = aDecoder.decodeDouble(forKey: "price")
-					range = aDecoder.decodeInteger(forKey: "range")
-					stationID = aDecoder.decodeInteger(forKey: "stationID")
-					typeID = aDecoder.decodeInteger(forKey: "typeID")
-					volEntered = aDecoder.decodeInt64(forKey: "volEntered")
-					volRemaining = aDecoder.decodeInt64(forKey: "volRemaining")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accountKey, forKey: "accountKey")
-					aCoder.encode(bid, forKey: "bid")
-					aCoder.encode(characterID, forKey: "charID")
-					aCoder.encode(duration, forKey: "duration")
-					aCoder.encode(escrow, forKey: "escrow")
-					aCoder.encode(issued, forKey: "issued")
-					aCoder.encode(minVolume, forKey: "minVolume")
-					aCoder.encode(orderID, forKey: "orderID")
-					aCoder.encode(orderState.rawValue, forKey: "orderState")
-					aCoder.encode(price, forKey: "price")
-					aCoder.encode(range, forKey: "range")
-					aCoder.encode(stationID, forKey: "stationID")
-					aCoder.encode(typeID, forKey: "typeID")
-					aCoder.encode(volEntered, forKey: "volEntered")
-					aCoder.encode(volRemaining, forKey: "volRemaining")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["accountKey"] = accountKey.json
@@ -3744,9 +3402,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let orders = try dictionary.rowset(name: "orders")?.map ({try EVE.Corp.MarketOrders.Order(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let orders = try dictionary.rowset(name: "orders")?.map ({try EVE.Corp.MarketOrders.Order(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orders = orders
 				
 				super.init()
@@ -3755,17 +3413,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				orders = aDecoder.decodeObject(of: [EVE.Corp.MarketOrders.Order.self], forKey: "orders") as? [EVE.Corp.MarketOrders.Order] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(orders, forKey: "orders")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["orders"] = orders.json
@@ -3802,11 +3460,11 @@ public extension EVE {
 		}
 		
 		
-		public class Medals: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Medals: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Medal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Medal: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public enum Status: String, JSONCoding {
+				public enum Status: String, JSONCoding, Codable {
 					case `private` = "private"
 					case `public` = "public"
 					
@@ -3819,7 +3477,7 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = Status(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = Status(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -3839,19 +3497,19 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					corporationID = dictionary["corporationID"] as? Int64
-					guard let issued = DateFormatter.eveDateFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let issued = DateFormatter.eveDateFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.issued = issued
-					guard let issuerID = dictionary["issuerID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let issuerID = dictionary["issuerID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.issuerID = issuerID
 					medalDescription = dictionary["description"] as? String
-					guard let medalID = dictionary["medalID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let medalID = dictionary["medalID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.medalID = medalID
-					guard let reason = dictionary["reason"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let reason = dictionary["reason"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.reason = reason
-					guard let status = EVE.Corp.Medals.Medal.Status(rawValue: dictionary["status"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let status = EVE.Corp.Medals.Medal.Status(rawValue: dictionary["status"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.status = status
 					title = dictionary["title"] as? String
 					
@@ -3861,37 +3519,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					corporationID = aDecoder.containsValue(forKey: "corporationID") ? aDecoder.decodeInt64(forKey: "corporationID") : nil
-					issued = aDecoder.decodeObject(forKey: "issued") as? Date ?? Date()
-					issuerID = aDecoder.decodeInt64(forKey: "issuerID")
-					medalDescription = aDecoder.decodeObject(forKey: "description") as? String
-					medalID = aDecoder.decodeInteger(forKey: "medalID")
-					reason = aDecoder.decodeObject(forKey: "reason") as? String ?? String()
-					status = EVE.Corp.Medals.Medal.Status(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? String()) ?? EVE.Corp.Medals.Medal.Status()
-					title = aDecoder.decodeObject(forKey: "title") as? String
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporationID")
-					}
-					aCoder.encode(issued, forKey: "issued")
-					aCoder.encode(issuerID, forKey: "issuerID")
-					if let v = medalDescription {
-						aCoder.encode(v, forKey: "description")
-					}
-					aCoder.encode(medalID, forKey: "medalID")
-					aCoder.encode(reason, forKey: "reason")
-					aCoder.encode(status.rawValue, forKey: "status")
-					if let v = title {
-						aCoder.encode(v, forKey: "title")
-					}
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					if let v = corporationID?.json {
@@ -3962,11 +3600,11 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let currentCorporation = try dictionary.rowset(name: "currentCorporation")?.map ({try EVE.Corp.Medals.Medal(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let currentCorporation = try dictionary.rowset(name: "currentCorporation")?.map ({try EVE.Corp.Medals.Medal(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.currentCorporation = currentCorporation
-				guard let otherCorporations = try dictionary.rowset(name: "otherCorporations")?.map ({try EVE.Corp.Medals.Medal(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let otherCorporations = try dictionary.rowset(name: "otherCorporations")?.map ({try EVE.Corp.Medals.Medal(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.otherCorporations = otherCorporations
 				
 				super.init()
@@ -3975,19 +3613,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				currentCorporation = aDecoder.decodeObject(of: [EVE.Corp.Medals.Medal.self], forKey: "currentCorporation") as? [EVE.Corp.Medals.Medal] ?? []
-				otherCorporations = aDecoder.decodeObject(of: [EVE.Corp.Medals.Medal.self], forKey: "otherCorporations") as? [EVE.Corp.Medals.Medal] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(currentCorporation, forKey: "currentCorporation")
-				aCoder.encode(otherCorporations, forKey: "otherCorporations")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["currentCorporation"] = currentCorporation.json
@@ -4027,9 +3663,9 @@ public extension EVE {
 		}
 		
 		
-		public class Standings: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Standings: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Standing: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Standing: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var fromID: Int64 = Int64()
@@ -4041,13 +3677,13 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let fromID = dictionary["fromID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let fromID = dictionary["fromID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.fromID = fromID
-					guard let fromName = dictionary["fromName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let fromName = dictionary["fromName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.fromName = fromName
-					guard let standing = dictionary["standing"] as? Float else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let standing = dictionary["standing"] as? Float else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.standing = standing
 					
 					super.init()
@@ -4056,21 +3692,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					fromID = aDecoder.decodeInt64(forKey: "fromID")
-					fromName = aDecoder.decodeObject(forKey: "fromName") as? String ?? String()
-					standing = aDecoder.decodeFloat(forKey: "standing")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(fromID, forKey: "fromID")
-					aCoder.encode(fromName, forKey: "fromName")
-					aCoder.encode(standing, forKey: "standing")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["fromID"] = fromID.json
@@ -4121,7 +3753,7 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				agents = try dictionary.rowset(name: "agents")?.map {try EVE.Corp.Standings.Standing(json: $0)}
 				factions = try dictionary.rowset(name: "factions")?.map {try EVE.Corp.Standings.Standing(json: $0)}
@@ -4133,27 +3765,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				agents = aDecoder.decodeObject(of: [EVE.Corp.Standings.Standing.self], forKey: "agents") as? [EVE.Corp.Standings.Standing]
-				factions = aDecoder.decodeObject(of: [EVE.Corp.Standings.Standing.self], forKey: "factions") as? [EVE.Corp.Standings.Standing]
-				npcCorporations = aDecoder.decodeObject(of: [EVE.Corp.Standings.Standing.self], forKey: "NPCCorporations") as? [EVE.Corp.Standings.Standing]
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = agents {
-					aCoder.encode(v, forKey: "agents")
-				}
-				if let v = factions {
-					aCoder.encode(v, forKey: "factions")
-				}
-				if let v = npcCorporations {
-					aCoder.encode(v, forKey: "NPCCorporations")
-				}
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				if let v = agents?.json {
@@ -4202,9 +3824,9 @@ public extension EVE {
 		}
 		
 		
-		public class WalletJournal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class WalletJournal: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Transaction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Transaction: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var amount: Double = Double()
@@ -4227,15 +3849,15 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let amount = dictionary["amount"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let amount = dictionary["amount"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.amount = amount
 					argID1 = dictionary["argID1"] as? Int
 					argName1 = dictionary["argName1"] as? String
-					guard let balance = dictionary["balance"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let balance = dictionary["balance"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.balance = balance
-					guard let date = DateFormatter.eveDateFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let date = DateFormatter.eveDateFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.date = date
 					owner1TypeID = dictionary["owner1TypeID"] as? Int
 					owner2TypeID = dictionary["owner2TypeID"] as? Int
@@ -4244,9 +3866,9 @@ public extension EVE {
 					ownerName1 = dictionary["ownerName1"] as? String
 					ownerName2 = dictionary["ownerName2"] as? String
 					reason = dictionary["reason"] as? String
-					guard let refID = dictionary["refID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let refID = dictionary["refID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.refID = refID
-					guard let refTypeID = dictionary["refTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let refTypeID = dictionary["refTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.refTypeID = refTypeID
 					
 					super.init()
@@ -4255,61 +3877,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.decodeDouble(forKey: "amount")
-					argID1 = aDecoder.containsValue(forKey: "argID1") ? aDecoder.decodeInteger(forKey: "argID1") : nil
-					argName1 = aDecoder.decodeObject(forKey: "argName1") as? String
-					balance = aDecoder.decodeDouble(forKey: "balance")
-					date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-					owner1TypeID = aDecoder.containsValue(forKey: "owner1TypeID") ? aDecoder.decodeInteger(forKey: "owner1TypeID") : nil
-					owner2TypeID = aDecoder.containsValue(forKey: "owner2TypeID") ? aDecoder.decodeInteger(forKey: "owner2TypeID") : nil
-					ownerID1 = aDecoder.containsValue(forKey: "ownerID1") ? aDecoder.decodeInt64(forKey: "ownerID1") : nil
-					ownerID2 = aDecoder.containsValue(forKey: "ownerID2") ? aDecoder.decodeInt64(forKey: "ownerID2") : nil
-					ownerName1 = aDecoder.decodeObject(forKey: "ownerName1") as? String
-					ownerName2 = aDecoder.decodeObject(forKey: "ownerName2") as? String
-					reason = aDecoder.decodeObject(forKey: "reason") as? String
-					refID = aDecoder.decodeInt64(forKey: "refID")
-					refTypeID = aDecoder.decodeInteger(forKey: "refTypeID")
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(amount, forKey: "amount")
-					if let v = argID1 {
-						aCoder.encode(v, forKey: "argID1")
-					}
-					if let v = argName1 {
-						aCoder.encode(v, forKey: "argName1")
-					}
-					aCoder.encode(balance, forKey: "balance")
-					aCoder.encode(date, forKey: "date")
-					if let v = owner1TypeID {
-						aCoder.encode(v, forKey: "owner1TypeID")
-					}
-					if let v = owner2TypeID {
-						aCoder.encode(v, forKey: "owner2TypeID")
-					}
-					if let v = ownerID1 {
-						aCoder.encode(v, forKey: "ownerID1")
-					}
-					if let v = ownerID2 {
-						aCoder.encode(v, forKey: "ownerID2")
-					}
-					if let v = ownerName1 {
-						aCoder.encode(v, forKey: "ownerName1")
-					}
-					if let v = ownerName2 {
-						aCoder.encode(v, forKey: "ownerName2")
-					}
-					if let v = reason {
-						aCoder.encode(v, forKey: "reason")
-					}
-					aCoder.encode(refID, forKey: "refID")
-					aCoder.encode(refTypeID, forKey: "refTypeID")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["amount"] = amount.json
@@ -4409,9 +3987,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let entries = try dictionary.rowset(name: "entries")?.map ({try EVE.Corp.WalletJournal.Transaction(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let entries = try dictionary.rowset(name: "entries")?.map ({try EVE.Corp.WalletJournal.Transaction(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.entries = entries
 				
 				super.init()
@@ -4420,17 +3998,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				entries = aDecoder.decodeObject(of: [EVE.Corp.WalletJournal.Transaction.self], forKey: "entries") as? [EVE.Corp.WalletJournal.Transaction] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(entries, forKey: "entries")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["entries"] = entries.json
@@ -4467,11 +4045,11 @@ public extension EVE {
 		}
 		
 		
-		public class WalletTransactions: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class WalletTransactions: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class Transaction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class Transaction: NSObject, Codable, NSCopying, JSONCoding {
 				
-				public enum ClientType: String, JSONCoding {
+				public enum ClientType: String, JSONCoding, Codable {
 					case alliance = "alliance"
 					case corporation = "corporation"
 					case personal = "personal"
@@ -4485,13 +4063,13 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = ClientType(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = ClientType(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
 				}
 				
-				public enum TransactionType: String, JSONCoding {
+				public enum TransactionType: String, JSONCoding, Codable {
 					case buy = "buy"
 					case sell = "sell"
 					
@@ -4504,7 +4082,7 @@ public extension EVE {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = TransactionType(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = TransactionType(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -4532,39 +4110,39 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let characterID = dictionary["characterID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let characterID = dictionary["characterID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.characterID = characterID
-					guard let characterName = dictionary["characterName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let characterName = dictionary["characterName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.characterName = characterName
-					guard let clientID = dictionary["clientID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let clientID = dictionary["clientID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.clientID = clientID
-					guard let clientName = dictionary["clientName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let clientName = dictionary["clientName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.clientName = clientName
-					guard let clientTypeID = dictionary["clientTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let clientTypeID = dictionary["clientTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.clientTypeID = clientTypeID
-					guard let journalTransactionID = dictionary["journalTransactionID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let journalTransactionID = dictionary["journalTransactionID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.journalTransactionID = journalTransactionID
-					guard let price = dictionary["price"] as? Double else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let price = dictionary["price"] as? Double else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.price = price
-					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let quantity = dictionary["quantity"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.quantity = quantity
-					guard let stationID = dictionary["stationID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let stationID = dictionary["stationID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.stationID = stationID
-					guard let stationName = dictionary["stationName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let stationName = dictionary["stationName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.stationName = stationName
-					guard let transactionDateTime = DateFormatter.eveDateFormatter.date(from: dictionary["transactionDateTime"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let transactionDateTime = DateFormatter.eveDateFormatter.date(from: dictionary["transactionDateTime"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.transactionDateTime = transactionDateTime
-					guard let transactionFor = EVE.Corp.WalletTransactions.Transaction.ClientType(rawValue: dictionary["transactionFor"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let transactionFor = EVE.Corp.WalletTransactions.Transaction.ClientType(rawValue: dictionary["transactionFor"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.transactionFor = transactionFor
-					guard let transactionID = dictionary["transactionID"] as? Int64 else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let transactionID = dictionary["transactionID"] as? Int64 else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.transactionID = transactionID
-					guard let transactionType = EVE.Corp.WalletTransactions.Transaction.TransactionType(rawValue: dictionary["transactionType"] as? String ?? String()) else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let transactionType = EVE.Corp.WalletTransactions.Transaction.TransactionType(rawValue: dictionary["transactionType"] as? String ?? String()) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.transactionType = transactionType
-					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["typeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
-					guard let typeName = dictionary["typeName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let typeName = dictionary["typeName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeName = typeName
 					
 					super.init()
@@ -4573,47 +4151,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					characterID = aDecoder.decodeInt64(forKey: "characterID")
-					characterName = aDecoder.decodeObject(forKey: "characterName") as? String ?? String()
-					clientID = aDecoder.decodeInt64(forKey: "clientID")
-					clientName = aDecoder.decodeObject(forKey: "clientName") as? String ?? String()
-					clientTypeID = aDecoder.decodeInteger(forKey: "clientTypeID")
-					journalTransactionID = aDecoder.decodeInt64(forKey: "journalTransactionID")
-					price = aDecoder.decodeDouble(forKey: "price")
-					quantity = aDecoder.decodeInt64(forKey: "quantity")
-					stationID = aDecoder.decodeInteger(forKey: "stationID")
-					stationName = aDecoder.decodeObject(forKey: "stationName") as? String ?? String()
-					transactionDateTime = aDecoder.decodeObject(forKey: "transactionDateTime") as? Date ?? Date()
-					transactionFor = EVE.Corp.WalletTransactions.Transaction.ClientType(rawValue: aDecoder.decodeObject(forKey: "transactionFor") as? String ?? String()) ?? EVE.Corp.WalletTransactions.Transaction.ClientType()
-					transactionID = aDecoder.decodeInt64(forKey: "transactionID")
-					transactionType = EVE.Corp.WalletTransactions.Transaction.TransactionType(rawValue: aDecoder.decodeObject(forKey: "transactionType") as? String ?? String()) ?? EVE.Corp.WalletTransactions.Transaction.TransactionType()
-					typeID = aDecoder.decodeInteger(forKey: "typeID")
-					typeName = aDecoder.decodeObject(forKey: "typeName") as? String ?? String()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(characterID, forKey: "characterID")
-					aCoder.encode(characterName, forKey: "characterName")
-					aCoder.encode(clientID, forKey: "clientID")
-					aCoder.encode(clientName, forKey: "clientName")
-					aCoder.encode(clientTypeID, forKey: "clientTypeID")
-					aCoder.encode(journalTransactionID, forKey: "journalTransactionID")
-					aCoder.encode(price, forKey: "price")
-					aCoder.encode(quantity, forKey: "quantity")
-					aCoder.encode(stationID, forKey: "stationID")
-					aCoder.encode(stationName, forKey: "stationName")
-					aCoder.encode(transactionDateTime, forKey: "transactionDateTime")
-					aCoder.encode(transactionFor.rawValue, forKey: "transactionFor")
-					aCoder.encode(transactionID, forKey: "transactionID")
-					aCoder.encode(transactionType.rawValue, forKey: "transactionType")
-					aCoder.encode(typeID, forKey: "typeID")
-					aCoder.encode(typeName, forKey: "typeName")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["characterID"] = characterID.json
@@ -4701,9 +4249,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let transactions = try dictionary.rowset(name: "transactions")?.map ({try EVE.Corp.WalletTransactions.Transaction(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let transactions = try dictionary.rowset(name: "transactions")?.map ({try EVE.Corp.WalletTransactions.Transaction(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.transactions = transactions
 				
 				super.init()
@@ -4712,17 +4260,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				transactions = aDecoder.decodeObject(of: [EVE.Corp.WalletTransactions.Transaction.self], forKey: "transactions") as? [EVE.Corp.WalletTransactions.Transaction] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(transactions, forKey: "transactions")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["transactions"] = transactions.json

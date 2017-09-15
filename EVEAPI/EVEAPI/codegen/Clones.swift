@@ -81,7 +81,7 @@ public extension ESI {
 		}
 		
 		
-		public class JumpClones: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIClonesJumpClones) public class JumpClones: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum LocationType: String, JSONCoding, HTTPQueryable {
 				case station = "station"
@@ -96,7 +96,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = LocationType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = LocationType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -106,18 +106,15 @@ public extension ESI {
 				
 			}
 			
-			public class Location: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIClonesJumpClonesLocation) public class Location: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var locationID: Int64? = nil
 				public var locationType: Clones.JumpClones.LocationType? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					locationID = dictionary["location_id"] as? Int64
 					locationType = Clones.JumpClones.LocationType(rawValue: dictionary["location_type"] as? String ?? "")
@@ -127,6 +124,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -187,19 +188,16 @@ public extension ESI {
 				
 			}
 			
-			public class JumpClone: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIClonesJumpClonesJumpClone) public class JumpClone: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var implants: [Int]? = nil
 				public var locationID: Int64? = nil
 				public var locationType: Clones.JumpClones.LocationType? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					implants = try (dictionary["implants"] as? [Any])?.map {try Int(json: $0)}
 					locationID = dictionary["location_id"] as? Int64
@@ -210,6 +208,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -283,12 +285,9 @@ public extension ESI {
 			public var jumpClones: [Clones.JumpClones.JumpClone] = []
 			public var lastJumpDate: Date? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				homeLocation = try? Clones.JumpClones.Location(json: dictionary["home_location"] as? [String: Any] ?? [:])
 				jumpClones = try (dictionary["jump_clones"] as? [Any])?.map {try Clones.JumpClones.JumpClone(json: $0)} ?? []
@@ -299,6 +298,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

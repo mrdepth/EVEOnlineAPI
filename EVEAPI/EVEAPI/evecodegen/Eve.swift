@@ -35,9 +35,9 @@ public extension EVE {
 		}
 		
 		
-		public class RefTypes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class RefTypes: NSObject, Codable, NSCopying, JSONCoding {
 			
-			public class RefType: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public class RefType: NSObject, Codable, NSCopying, JSONCoding {
 				
 				
 				public var refTypeID: Int = Int()
@@ -48,11 +48,11 @@ public extension EVE {
 				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let refTypeID = dictionary["refTypeID"] as? Int else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let refTypeID = dictionary["refTypeID"] as? Int else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.refTypeID = refTypeID
-					guard let refTypeName = dictionary["refTypeName"] as? String else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+					guard let refTypeName = dictionary["refTypeName"] as? String else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.refTypeName = refTypeName
 					
 					super.init()
@@ -61,19 +61,17 @@ public extension EVE {
 				override public init() {
 					super.init()
 				}
-				
+				/*
 				public required init?(coder aDecoder: NSCoder) {
-					refTypeID = aDecoder.decodeInteger(forKey: "refTypeID")
-					refTypeName = aDecoder.decodeObject(forKey: "refTypeName") as? String ?? String()
+					{decodings}
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(refTypeID, forKey: "refTypeID")
-					aCoder.encode(refTypeName, forKey: "refTypeName")
+					{encodings}
 				}
-				
+				*/
 				public var json: Any {
 					var json = [String: Any]()
 					json["refTypeID"] = refTypeID.json
@@ -119,9 +117,9 @@ public extension EVE {
 			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let refTypes = try dictionary.rowset(name: "refTypes")?.map ({try EVE.Eve.RefTypes.RefType(json: $0)}) else {throw EVEError.invalidFormat(type(of: self), dictionary)}
+				guard let refTypes = try dictionary.rowset(name: "refTypes")?.map ({try EVE.Eve.RefTypes.RefType(json: $0)}) else {throw EVEError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.refTypes = refTypes
 				
 				super.init()
@@ -130,17 +128,17 @@ public extension EVE {
 			override public init() {
 				super.init()
 			}
-			
+			/*
 			public required init?(coder aDecoder: NSCoder) {
-				refTypes = aDecoder.decodeObject(of: [EVE.Eve.RefTypes.RefType.self], forKey: "refTypes") as? [EVE.Eve.RefTypes.RefType] ?? []
+				{decodings}
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(refTypes, forKey: "refTypes")
+				{encodings}
 			}
-			
+			*/
 			public var json: Any {
 				var json = [String: Any]()
 				json["refTypes"] = refTypes.json

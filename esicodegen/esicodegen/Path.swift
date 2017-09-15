@@ -17,7 +17,7 @@ class Path {
 		
 		var operations = [Operation]()
 		for (method, dictionary) in dictionary {
-			guard let dic = dictionary as? [String: Any] else {throw ESIParserError.format(type(of: self).self, dictionary)}
+			guard let dic = dictionary as? [String: Any] else {throw ESIParserError.format(Swift.type(of: self).self, dictionary)}
 			try operations.append(Operation(dic, method: try HTTPMethod(method)))
 		}
 		self.operations = operations

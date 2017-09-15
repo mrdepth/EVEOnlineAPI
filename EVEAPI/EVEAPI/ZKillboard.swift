@@ -195,9 +195,9 @@ extension ZKillboard {
 	
 	
 
-	public class Killmail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+	public class Killmail: NSObject, Codable, NSCopying, JSONCoding {
 		
-		public class Attacker: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Attacker: NSObject, Codable, NSCopying, JSONCoding {
 
 			public var characterID: Int? = nil
 			public var characterName: String? = nil
@@ -246,7 +246,7 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			public required init?(coder aDecoder: NSCoder) {
+			/*public required init?(coder aDecoder: NSCoder) {
 				characterID = aDecoder.containsValue(forKey: "characterID") ? aDecoder.decodeInteger(forKey: "characterID") : nil
 				characterName = aDecoder.containsValue(forKey: "characterName") ? aDecoder.decodeObject(forKey: "characterName") as? String : nil
 				corporationID = aDecoder.containsValue(forKey: "corporationID") ? aDecoder.decodeInteger(forKey: "corporationID") : nil
@@ -299,7 +299,7 @@ extension ZKillboard {
 				if let v = weaponTypeID {
 					aCoder.encode(v, forKey: "weaponTypeID")
 				}
-			}
+			}*/
 			
 			public var json: Any {
 				var json = [String: Any]()
@@ -384,7 +384,7 @@ extension ZKillboard {
 			
 		}
 		
-		public class Victim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Victim: NSObject, Codable, NSCopying, JSONCoding {
 			
 			
 			public var characterID: Int? = nil
@@ -426,7 +426,7 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			public required init?(coder aDecoder: NSCoder) {
+			/*public required init?(coder aDecoder: NSCoder) {
 				characterID = aDecoder.containsValue(forKey: "characterID") ? aDecoder.decodeInteger(forKey: "characterID") : nil
 				characterName = aDecoder.containsValue(forKey: "characterName") ? aDecoder.decodeObject(forKey: "characterName") as? String : nil
 				corporationID = aDecoder.containsValue(forKey: "corporationID") ? aDecoder.decodeInteger(forKey: "corporationID") : nil
@@ -469,7 +469,7 @@ extension ZKillboard {
 				}
 				aCoder.encode(damageTaken, forKey: "damageTaken")
 				aCoder.encode(shipTypeID, forKey: "shipTypeID")
-			}
+			}*/
 			
 			public var json: Any {
 				var json = [String: Any]()
@@ -541,7 +541,7 @@ extension ZKillboard {
 			
 		}
 		
-		public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Item: NSObject, Codable, NSCopying, JSONCoding {
 			
 			public var flag: Int = Int()
 			public var itemTypeID: Int = Int()
@@ -572,7 +572,7 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			public required init?(coder aDecoder: NSCoder) {
+			/*public required init?(coder aDecoder: NSCoder) {
 				flag = aDecoder.decodeInteger(forKey: "flag")
 				itemTypeID = aDecoder.decodeInteger(forKey: "typeID")
 				quantityDestroyed = aDecoder.containsValue(forKey: "qtyDestroyed") ? aDecoder.decodeInt64(forKey: "qtyDestroyed") : nil
@@ -592,7 +592,7 @@ extension ZKillboard {
 					aCoder.encode(v, forKey: "qtyDropped")
 				}
 				aCoder.encode(singleton, forKey: "singleton")
-			}
+			}*/
 			
 			public var json: Any {
 				var json = [String: Any]()
@@ -641,7 +641,7 @@ extension ZKillboard {
 			
 		}
 
-		public class Position: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public class Position: NSObject, Codable, NSCopying, JSONCoding {
 			
 			
 			public var x: Float = Float()
@@ -669,7 +669,7 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			public required init?(coder aDecoder: NSCoder) {
+			/*public required init?(coder aDecoder: NSCoder) {
 				x = aDecoder.decodeFloat(forKey: "x")
 				y = aDecoder.decodeFloat(forKey: "y")
 				z = aDecoder.decodeFloat(forKey: "z")
@@ -681,7 +681,7 @@ extension ZKillboard {
 				aCoder.encode(x, forKey: "x")
 				aCoder.encode(y, forKey: "y")
 				aCoder.encode(z, forKey: "z")
-			}
+			}*/
 			
 			public var json: Any {
 				var json = [String: Any]()
@@ -756,7 +756,7 @@ extension ZKillboard {
 			super.init()
 		}
 		
-		public required init?(coder aDecoder: NSCoder) {
+		/*public required init?(coder aDecoder: NSCoder) {
 			attackers = aDecoder.decodeObject(of: [Killmail.Attacker.self], forKey: "attackers") as? [Killmail.Attacker] ?? []
 			killmailID = aDecoder.decodeInteger(forKey: "killID")
 			killmailTime = aDecoder.decodeObject(forKey: "killTime") as? Date ?? Date()
@@ -784,7 +784,7 @@ extension ZKillboard {
 			if let v = position {
 				aCoder.encode(v, forKey: "position")
 			}
-		}
+		}*/
 		
 		public var json: Any {
 			var json = [String: Any]()

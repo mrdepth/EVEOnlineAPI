@@ -25,7 +25,7 @@ enum Type: Hashable {
 		let isOptional: Bool
 		
 		if string.hasSuffix("?") {
-			typeName = string.substring(to: string.index(before: string.endIndex))
+			typeName = String(string[..<string.index(before: string.endIndex)])
 			isOptional = true
 		}
 		else {
@@ -52,14 +52,14 @@ enum Type: Hashable {
 			self = .yaml(isOptional)
 		default:
 			if typeName.hasPrefix("[") && typeName.hasSuffix("]") {
-				let typeName = typeName.substring(with: typeName.index(after: typeName.startIndex)..<typeName.index(before: typeName.endIndex))
-				self = .array(try Type(typeName, namespace: namespace), isOptional)
+				let typeName = typeName[typeName.index(after: typeName.startIndex)..<typeName.index(before: typeName.endIndex)]
+				self = .array(try Type(String(typeName), namespace: namespace), isOptional)
 			}
 			else if typeName.rangeOfCharacter(from: CharacterSet.alphanumerics.inverted) == nil {
 				self = .schema(typeName, namespace, isOptional)
 			}
 			else {
-				throw ParserError.format(type(of:self).self, string)
+				throw ParserError.format(Swift.type(of:self).self, string)
 			}
 		}
 	}

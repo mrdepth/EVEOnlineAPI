@@ -102,7 +102,7 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterSearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISearchCharacterSearchResult) public class CharacterSearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var agent: [Int]? = nil
@@ -118,12 +118,9 @@ public extension ESI {
 			public var structure: [Int64]? = nil
 			public var wormhole: [Int]? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				agent = try (dictionary["agent"] as? [Any])?.map {try Int(json: $0)}
 				alliance = try (dictionary["alliance"] as? [Any])?.map {try Int(json: $0)}
@@ -143,6 +140,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -317,7 +318,7 @@ public extension ESI {
 			}
 			
 			public init(json: Any) throws {
-				guard let s = json as? String, let v = SearchCategories(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let s = json as? String, let v = SearchCategories(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				self = v
 			}
 			
@@ -328,7 +329,7 @@ public extension ESI {
 		}
 		
 		
-		public class SearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISearchSearchResult) public class SearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var agent: [Int]? = nil
@@ -343,12 +344,9 @@ public extension ESI {
 			public var station: [Int]? = nil
 			public var wormhole: [Int]? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				agent = try (dictionary["agent"] as? [Any])?.map {try Int(json: $0)}
 				alliance = try (dictionary["alliance"] as? [Any])?.map {try Int(json: $0)}
@@ -367,6 +365,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -531,7 +533,7 @@ public extension ESI {
 			}
 			
 			public init(json: Any) throws {
-				guard let s = json as? String, let v = Categories(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let s = json as? String, let v = Categories(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				self = v
 			}
 			

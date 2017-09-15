@@ -111,7 +111,7 @@ public extension ESI {
 		}
 		
 		
-		public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISovereigntySystem) public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int? = nil
@@ -119,17 +119,14 @@ public extension ESI {
 			public var factionID: Int? = nil
 			public var systemID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				allianceID = dictionary["alliance_id"] as? Int
 				corporationID = dictionary["corporation_id"] as? Int
 				factionID = dictionary["faction_id"] as? Int
-				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.systemID = systemID
 				
 				super.init()
@@ -137,6 +134,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -212,7 +213,7 @@ public extension ESI {
 		}
 		
 		
-		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISovereigntyStructure) public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int = Int()
@@ -223,20 +224,17 @@ public extension ESI {
 			public var vulnerableEndTime: Date? = nil
 			public var vulnerableStartTime: Date? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceID = allianceID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.structureID = structureID
-				guard let structureTypeID = dictionary["structure_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let structureTypeID = dictionary["structure_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.structureTypeID = structureTypeID
 				vulnerabilityOccupancyLevel = dictionary["vulnerability_occupancy_level"] as? Float
 				vulnerableEndTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["vulnerable_end_time"] as? String ?? "")
@@ -247,6 +245,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -337,7 +339,7 @@ public extension ESI {
 		}
 		
 		
-		public class Campaign: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESISovereigntyCampaign) public class Campaign: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetSovereigntyCampaignsEventType: String, JSONCoding, HTTPQueryable {
 				case ihubDefense = "ihub_defense"
@@ -354,7 +356,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetSovereigntyCampaignsEventType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetSovereigntyCampaignsEventType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -364,22 +366,19 @@ public extension ESI {
 				
 			}
 			
-			public class GetSovereigntyCampaignsParticipants: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESISovereigntyCampaignGetSovereigntyCampaignsParticipants) public class GetSovereigntyCampaignsParticipants: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int = Int()
 				public var score: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.allianceID = allianceID
-					guard let score = dictionary["score"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let score = dictionary["score"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.score = score
 					
 					super.init()
@@ -387,6 +386,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -450,28 +453,25 @@ public extension ESI {
 			public var startTime: Date = Date()
 			public var structureID: Int64 = Int64()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				attackersScore = dictionary["attackers_score"] as? Float
-				guard let campaignID = dictionary["campaign_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let campaignID = dictionary["campaign_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.campaignID = campaignID
-				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let constellationID = dictionary["constellation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.constellationID = constellationID
 				defenderID = dictionary["defender_id"] as? Int
 				defenderScore = dictionary["defender_score"] as? Float
-				guard let eventType = Sovereignty.Campaign.GetSovereigntyCampaignsEventType(rawValue: dictionary["event_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let eventType = Sovereignty.Campaign.GetSovereigntyCampaignsEventType(rawValue: dictionary["event_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.eventType = eventType
 				participants = try (dictionary["participants"] as? [Any])?.map {try Sovereignty.Campaign.GetSovereigntyCampaignsParticipants(json: $0)}
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let startTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let startTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_time"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.startTime = startTime
-				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let structureID = dictionary["structure_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.structureID = structureID
 				
 				super.init()
@@ -479,6 +479,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

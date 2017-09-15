@@ -177,17 +177,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIAllianceGetAlliancesAllianceIDNotFound) public class GetAlliancesAllianceIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -196,6 +193,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -248,18 +249,15 @@ public extension ESI {
 		}
 		
 		
-		public class Icon: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIAllianceIcon) public class Icon: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var px128x128: String? = nil
 			public var px64x64: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				px128x128 = dictionary["px128x128"] as? String
 				px64x64 = dictionary["px64x64"] as? String
@@ -269,6 +267,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -330,22 +332,19 @@ public extension ESI {
 		}
 		
 		
-		public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIAllianceName) public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceID: Int = Int()
 			public var allianceName: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceID = dictionary["alliance_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceID = allianceID
-				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceName = allianceName
 				
 				super.init()
@@ -353,6 +352,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -406,17 +409,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIAllianceGetAlliancesAllianceIDIconsNotFound) public class GetAlliancesAllianceIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -425,6 +425,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -477,7 +481,7 @@ public extension ESI {
 		}
 		
 		
-		public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIAllianceInformation) public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var allianceName: String = String()
@@ -485,19 +489,16 @@ public extension ESI {
 			public var executorCorp: Int? = nil
 			public var ticker: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let allianceName = dictionary["alliance_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.allianceName = allianceName
-				guard let dateFounded = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_founded"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let dateFounded = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date_founded"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.dateFounded = dateFounded
 				executorCorp = dictionary["executor_corp"] as? Int
-				guard let ticker = dictionary["ticker"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ticker = dictionary["ticker"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ticker = ticker
 				
 				super.init()
@@ -505,6 +506,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

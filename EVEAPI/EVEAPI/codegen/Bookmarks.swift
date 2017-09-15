@@ -81,26 +81,23 @@ public extension ESI {
 		}
 		
 		
-		public class Bookmark: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIBookmarksBookmark) public class Bookmark: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetCharactersCharacterIDBookmarksTarget: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIBookmarksBookmarkGetCharactersCharacterIDBookmarksTarget) public class GetCharactersCharacterIDBookmarksTarget: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIBookmarksBookmarkGetCharactersCharacterIDBookmarksTargetGetCharactersCharacterIDBookmarksItem) public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var itemID: Int64 = Int64()
 					public var typeID: Int = Int()
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.itemID = itemID
-						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.typeID = typeID
 						
 						super.init()
@@ -108,6 +105,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -160,25 +161,22 @@ public extension ESI {
 					
 				}
 				
-				public class GetCharactersCharacterIDBookmarksCoordinates: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIBookmarksBookmarkGetCharactersCharacterIDBookmarksTargetGetCharactersCharacterIDBookmarksCoordinates) public class GetCharactersCharacterIDBookmarksCoordinates: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var x: Double = Double()
 					public var y: Double = Double()
 					public var z: Double = Double()
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.x = x
-						guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.y = y
-						guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.z = z
 						
 						super.init()
@@ -186,6 +184,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -247,16 +249,13 @@ public extension ESI {
 				public var item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem? = nil
 				public var locationID: Int64 = Int64()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					coordinates = try? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksCoordinates(json: dictionary["coordinates"] as? [String: Any] ?? [:])
 					item = try? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget.GetCharactersCharacterIDBookmarksItem(json: dictionary["item"] as? [String: Any] ?? [:])
-					guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.locationID = locationID
 					
 					super.init()
@@ -264,6 +263,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -338,25 +341,22 @@ public extension ESI {
 			public var ownerID: Int = Int()
 			public var target: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget = Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let bookmarkID = dictionary["bookmark_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let bookmarkID = dictionary["bookmark_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.bookmarkID = bookmarkID
-				guard let createDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["create_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let createDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["create_date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.createDate = createDate
-				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.creatorID = creatorID
 				folderID = dictionary["folder_id"] as? Int
-				guard let memo = dictionary["memo"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let memo = dictionary["memo"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.memo = memo
-				guard let note = dictionary["note"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let note = dictionary["note"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.note = note
-				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerID = ownerID
 				target = try Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksTarget(json: dictionary["target"] as? [String: Any] ?? [:])
 				
@@ -365,6 +365,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -452,19 +456,16 @@ public extension ESI {
 		}
 		
 		
-		public class Folder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIBookmarksFolder) public class Folder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var folderID: Int? = nil
 			public var name: String? = nil
 			public var ownerID: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				folderID = dictionary["folder_id"] as? Int
 				name = dictionary["name"] as? String
@@ -475,6 +476,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

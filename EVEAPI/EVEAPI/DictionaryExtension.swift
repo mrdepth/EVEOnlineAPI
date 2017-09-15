@@ -8,7 +8,7 @@
 
 import Foundation
 
-let salt = Int(truncatingBitPattern: 0x9e3779b9 as UInt64)
+let salt = Int(truncatingIfNeeded: 0x9e3779b9 as UInt64)
 
 func hashCombine(seed: inout Int, value: Int) {
 	

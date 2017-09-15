@@ -62,22 +62,22 @@ class Property: Schema {
 			break
 		case .date:
 			return isRequired ?
-				"guard let \(propertyName) = DateFormatter.esiDateFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+				"guard let \(propertyName) = DateFormatter.esiDateFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)" :
 			"\(propertyName) = DateFormatter.esiDateFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\")"
 		case .dateTime:
 			return isRequired ?
-				"guard let \(propertyName) = DateFormatter.esiDateTimeFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+				"guard let \(propertyName) = DateFormatter.esiDateTimeFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)" :
 			"\(propertyName) = DateFormatter.esiDateTimeFormatter.date(from: dictionary[\"\(name)\"] as? String ?? \"\")"
 		case .enum:
 			return isRequired ?
-				"guard let \(propertyName) = \(typeIdentifier)(rawValue: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+				"guard let \(propertyName) = \(typeIdentifier)(rawValue: dictionary[\"\(name)\"] as? String ?? \"\") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)" :
 			"\(propertyName) = \(typeIdentifier)(rawValue: dictionary[\"\(name)\"] as? String ?? \"\")"
 		default:
 			return isRequired ?
-				"guard let \(propertyName) = dictionary[\"\(name)\"] as? \(typeIdentifier) else {throw ESIError.invalidFormat(type(of: self), dictionary)}\n" +
+				"guard let \(propertyName) = dictionary[\"\(name)\"] as? \(typeIdentifier) else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}\n" +
 				"self.\(propertyName) = \(propertyName)" :
 			"\(propertyName) = dictionary[\"\(name)\"] as? \(typeIdentifier)"
 		}

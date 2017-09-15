@@ -114,25 +114,22 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterShip: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESILocationCharacterShip) public class CharacterShip: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var shipItemID: Int64 = Int64()
 			public var shipName: String = String()
 			public var shipTypeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let shipItemID = dictionary["ship_item_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipItemID = dictionary["ship_item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipItemID = shipItemID
-				guard let shipName = dictionary["ship_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipName = dictionary["ship_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipName = shipName
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipTypeID = shipTypeID
 				
 				super.init()
@@ -140,6 +137,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -198,21 +199,18 @@ public extension ESI {
 		}
 		
 		
-		public class CharacterLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESILocationCharacterLocation) public class CharacterLocation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var solarSystemID: Int = Int()
 			public var stationID: Int? = nil
 			public var structureID: Int64? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
 				stationID = dictionary["station_id"] as? Int
 				structureID = dictionary["structure_id"] as? Int64
@@ -222,6 +220,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

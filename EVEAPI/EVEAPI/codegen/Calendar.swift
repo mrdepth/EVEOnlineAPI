@@ -116,7 +116,7 @@ public extension ESI {
 		}
 		
 		
-		public class Summary: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESICalendarSummary) public class Summary: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Response: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
@@ -133,7 +133,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = Response(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Response(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -149,12 +149,9 @@ public extension ESI {
 			public var importance: Int? = nil
 			public var title: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				eventDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["event_date"] as? String ?? "")
 				eventID = dictionary["event_id"] as? Int
@@ -167,6 +164,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -255,7 +256,7 @@ public extension ESI {
 		}
 		
 		
-		public class Event: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESICalendarEvent) public class Event: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, JSONCoding, HTTPQueryable {
 				case alliance = "alliance"
@@ -273,7 +274,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDCalendarEventIDOwnerType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetCharactersCharacterIDCalendarEventIDOwnerType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -294,32 +295,29 @@ public extension ESI {
 			public var text: String = String()
 			public var title: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.date = date
-				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let eventID = dictionary["event_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let eventID = dictionary["event_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.eventID = eventID
-				guard let importance = dictionary["importance"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let importance = dictionary["importance"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.importance = importance
-				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerID = ownerID
-				guard let ownerName = dictionary["owner_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerName = dictionary["owner_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerName = ownerName
-				guard let ownerType = Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType(rawValue: dictionary["owner_type"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerType = Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType(rawValue: dictionary["owner_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerType = ownerType
-				guard let response = dictionary["response"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let response = dictionary["response"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.response = response
-				guard let text = dictionary["text"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let text = dictionary["text"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.text = text
-				guard let title = dictionary["title"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let title = dictionary["title"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.title = title
 				
 				super.init()
@@ -327,6 +325,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -420,7 +422,7 @@ public extension ESI {
 		}
 		
 		
-		public class Response: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESICalendarResponse) public class Response: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Response: String, JSONCoding, HTTPQueryable {
 				case accepted = "accepted"
@@ -436,7 +438,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = Response(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Response(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -448,14 +450,11 @@ public extension ESI {
 			
 			public var response: Calendar.Response.Response = Calendar.Response.Response()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let response = Calendar.Response.Response(rawValue: dictionary["response"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let response = Calendar.Response.Response(rawValue: dictionary["response"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.response = response
 				
 				super.init()
@@ -463,6 +462,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

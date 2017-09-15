@@ -80,22 +80,19 @@ public extension ESI {
 		}
 		
 		
-		public class Point: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESILoyaltyPoint) public class Point: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var corporationID: Int = Int()
 			public var loyaltyPoints: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.corporationID = corporationID
-				guard let loyaltyPoints = dictionary["loyalty_points"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let loyaltyPoints = dictionary["loyalty_points"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.loyaltyPoints = loyaltyPoints
 				
 				super.init()
@@ -103,6 +100,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -156,24 +157,21 @@ public extension ESI {
 		}
 		
 		
-		public class Offer: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESILoyaltyOffer) public class Offer: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESILoyaltyOfferGetLoyaltyStoresCorporationIDOffersRequiredItems) public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var quantity: Int = Int()
 				public var typeID: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.quantity = quantity
-					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.typeID = typeID
 					
 					super.init()
@@ -181,6 +179,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -240,23 +242,20 @@ public extension ESI {
 			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems] = []
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let iskCost = dictionary["isk_cost"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let iskCost = dictionary["isk_cost"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.iskCost = iskCost
-				guard let lpCost = dictionary["lp_cost"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let lpCost = dictionary["lp_cost"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.lpCost = lpCost
-				guard let offerID = dictionary["offer_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let offerID = dictionary["offer_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.offerID = offerID
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.quantity = quantity
 				requiredItems = try (dictionary["required_items"] as? [Any])?.map {try Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems(json: $0)} ?? []
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -264,6 +263,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

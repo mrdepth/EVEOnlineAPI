@@ -49,27 +49,24 @@ public extension ESI {
 		}
 		
 		
-		public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIInsurancePrice) public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetInsurancePricesLevels: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIInsurancePriceGetInsurancePricesLevels) public class GetInsurancePricesLevels: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var cost: Float = Float()
 				public var name: String = String()
 				public var payout: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let cost = dictionary["cost"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let cost = dictionary["cost"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.cost = cost
-					guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.name = name
-					guard let payout = dictionary["payout"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let payout = dictionary["payout"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.payout = payout
 					
 					super.init()
@@ -77,6 +74,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -137,15 +138,12 @@ public extension ESI {
 			public var levels: [Insurance.Price.GetInsurancePricesLevels] = []
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				levels = try (dictionary["levels"] as? [Any])?.map {try Insurance.Price.GetInsurancePricesLevels(json: $0)} ?? []
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -153,6 +151,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

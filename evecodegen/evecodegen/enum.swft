@@ -1,4 +1,4 @@
-public enum {enum}: {type}, JSONCoding {
+public enum {enum}: {type}, JSONCoding, Codable {
 {cases}
 	
 	public init() {
@@ -10,7 +10,7 @@ public enum {enum}: {type}, JSONCoding {
 	}
 			
 	public init(json: Any) throws {
-		guard let s = json as? {type}, let v = {enum}(rawValue: s) else {throw EVEError.invalidFormat(type(of: self), json)}
+		guard let s = json as? {type}, let v = {enum}(rawValue: s) else {throw EVEError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 

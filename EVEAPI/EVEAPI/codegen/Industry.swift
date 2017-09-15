@@ -114,7 +114,7 @@ public extension ESI {
 		}
 		
 		
-		public class Facilities: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIIndustryFacilities) public class Facilities: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var facilityID: Int64 = Int64()
@@ -124,23 +124,20 @@ public extension ESI {
 			public var tax: Float? = nil
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let facilityID = dictionary["facility_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let facilityID = dictionary["facility_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.facilityID = facilityID
-				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.ownerID = ownerID
-				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.regionID = regionID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
 				tax = dictionary["tax"] as? Float
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -148,6 +145,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -225,7 +226,7 @@ public extension ESI {
 		}
 		
 		
-		public class Job: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIIndustryJob) public class Job: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum Status: String, JSONCoding, HTTPQueryable {
 				case active = "active"
@@ -244,7 +245,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = Status(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = Status(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -277,47 +278,44 @@ public extension ESI {
 			public var status: Industry.Job.Status = Industry.Job.Status()
 			public var successfulRuns: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let activityID = dictionary["activity_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let activityID = dictionary["activity_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.activityID = activityID
-				guard let blueprintID = dictionary["blueprint_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let blueprintID = dictionary["blueprint_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.blueprintID = blueprintID
-				guard let blueprintLocationID = dictionary["blueprint_location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let blueprintLocationID = dictionary["blueprint_location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.blueprintLocationID = blueprintLocationID
-				guard let blueprintTypeID = dictionary["blueprint_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let blueprintTypeID = dictionary["blueprint_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.blueprintTypeID = blueprintTypeID
 				completedCharacterID = dictionary["completed_character_id"] as? Int
 				completedDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["completed_date"] as? String ?? "")
 				cost = dictionary["cost"] as? Float
-				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let endDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["end_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let endDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["end_date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.endDate = endDate
-				guard let facilityID = dictionary["facility_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let facilityID = dictionary["facility_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.facilityID = facilityID
-				guard let installerID = dictionary["installer_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let installerID = dictionary["installer_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.installerID = installerID
-				guard let jobID = dictionary["job_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let jobID = dictionary["job_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.jobID = jobID
 				licensedRuns = dictionary["licensed_runs"] as? Int
-				guard let outputLocationID = dictionary["output_location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let outputLocationID = dictionary["output_location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.outputLocationID = outputLocationID
 				pauseDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["pause_date"] as? String ?? "")
 				probability = dictionary["probability"] as? Float
 				productTypeID = dictionary["product_type_id"] as? Int
-				guard let runs = dictionary["runs"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let runs = dictionary["runs"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.runs = runs
-				guard let startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.startDate = startDate
-				guard let stationID = dictionary["station_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let stationID = dictionary["station_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stationID = stationID
-				guard let status = Industry.Job.Status(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let status = Industry.Job.Status(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.status = status
 				successfulRuns = dictionary["successful_runs"] as? Int
 				
@@ -326,6 +324,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -511,9 +513,9 @@ public extension ESI {
 		}
 		
 		
-		public class SolarSystemCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIIndustrySolarSystemCostIndices) public class SolarSystemCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIIndustrySolarSystemCostIndicesGetIndustrySystemsCostIndices) public class GetIndustrySystemsCostIndices: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				public enum GetIndustrySystemsActivity: String, JSONCoding, HTTPQueryable {
 					case copying = "copying"
@@ -535,7 +537,7 @@ public extension ESI {
 					}
 					
 					public init(json: Any) throws {
-						guard let s = json as? String, let v = GetIndustrySystemsActivity(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let s = json as? String, let v = GetIndustrySystemsActivity(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						self = v
 					}
 					
@@ -548,16 +550,13 @@ public extension ESI {
 				public var activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity()
 				public var costIndex: Float = Float()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity(rawValue: dictionary["activity"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let activity = Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity(rawValue: dictionary["activity"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.activity = activity
-					guard let costIndex = dictionary["cost_index"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let costIndex = dictionary["cost_index"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.costIndex = costIndex
 					
 					super.init()
@@ -565,6 +564,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -620,15 +623,12 @@ public extension ESI {
 			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices] = []
 			public var solarSystemID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				costIndices = try (dictionary["cost_indices"] as? [Any])?.map {try Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices(json: $0)} ?? []
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
 				
 				super.init()
@@ -636,6 +636,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

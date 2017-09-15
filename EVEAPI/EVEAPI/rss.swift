@@ -37,7 +37,7 @@ public enum RSS {
 		}
 	}()
 	
-	public class Feed: NSObject, NSSecureCoding, JSONCoding {
+	@objc(RSSFeed) public class Feed: NSObject, NSSecureCoding, JSONCoding {
 		public var title: String?
 		public var feedDescription: String?
 		public var copyright: String?
@@ -205,7 +205,7 @@ public enum RSS {
 		
 	}
 	
-	public class Image: NSObject, NSSecureCoding {
+	@objc(RSSImage) public class Image: NSObject, NSSecureCoding {
 		public var title: String?
 		public var link: URL?
 		public var url: URL?
@@ -263,13 +263,13 @@ public enum RSS {
 		}
 	}
 	
-	public class Enclosure: NSObject, NSSecureCoding {
+	@objc(RSSEnclosure) public class Enclosure: NSObject, NSSecureCoding {
 		public var url: URL?
 		public var length: Int?
 		public var type: String?
 		
 		public init(rss: Any) throws {
-			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
+			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(Swift.type(of: self), rss)}
 			url = URL(string: dic["url"] as? String)
 			length = dic["length"] as? Int
 			type = dic["type"] as? String
@@ -277,7 +277,7 @@ public enum RSS {
 		}
 		
 		public init(rdf: Any) throws {
-			guard let dic = rdf as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rdf)}
+			guard let dic = rdf as? [String: Any] else {throw RSSError.invalidFormat(Swift.type(of: self), rdf)}
 			url = URL(string: dic["url"] as? String)
 			length = dic["length"] as? Int
 			type = dic["type"] as? String
@@ -285,7 +285,7 @@ public enum RSS {
 		}
 		
 		public init(atom: Any) throws {
-			guard let dic = atom as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), atom)}
+			guard let dic = atom as? [String: Any] else {throw RSSError.invalidFormat(Swift.type(of: self), atom)}
 			url = URL(string: dic["href"] as? String)
 			length = dic["length"] as? Int
 			type = dic["type"] as? String
@@ -322,7 +322,7 @@ public enum RSS {
 		}
 	}
 	
-	public class Item: NSObject, NSSecureCoding {
+	@objc(RSSItem) public class Item: NSObject, NSSecureCoding {
 		public var title: String?
 		public var link: URL?
 		public var summary: String?
@@ -449,7 +449,7 @@ public enum RSS {
 		}
 	}
 	
-	public class Source: NSObject, NSSecureCoding {
+	@objc(RSSSource) public class Source: NSObject, NSSecureCoding {
 		var title: String?
 		var url: URL?
 		
@@ -514,7 +514,7 @@ extension DataRequest {
 		let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
 			do {
 				guard let data = data,
-					let value = try XMLParser.xmlObject(data: data) as? [String: Any] else {throw EVEError.objectSerialization(reason: "No XML Data")}
+					let value = try XMLParser.xmlObject(data: data) as? [String: Any] else {throw ESIError.objectSerialization(reason: "No XML Data")}
 				return .success(try T(json: value))
 			}
 			catch {

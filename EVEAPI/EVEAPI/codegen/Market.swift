@@ -254,8 +254,42 @@ public extension ESI {
 			}
 		}
 		
+		public func listTypeIDsRelevantToMarket(page: Int? = nil, regionID: Int, completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "latest/markets/\(regionID)/types/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
 		
-		public class CharacterOrder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		
+		@objc(ESIMarketCharacterOrder) public class CharacterOrder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDOrdersState: String, JSONCoding, HTTPQueryable {
 				case cancelled = "cancelled"
@@ -274,7 +308,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersState(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersState(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -307,7 +341,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -334,44 +368,41 @@ public extension ESI {
 			public var volumeRemain: Int = Int()
 			public var volumeTotal: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let accountID = dictionary["account_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let accountID = dictionary["account_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.accountID = accountID
-				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let escrow = dictionary["escrow"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let escrow = dictionary["escrow"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.escrow = escrow
-				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isBuyOrder = isBuyOrder
-				guard let isCorp = dictionary["is_corp"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isCorp = dictionary["is_corp"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isCorp = isCorp
-				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issued = issued
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.locationID = locationID
-				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.minVolume = minVolume
-				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderID = orderID
-				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
-				guard let range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
-				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.regionID = regionID
-				guard let state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.state = state
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
-				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volumeRemain = volumeRemain
-				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volumeTotal = volumeTotal
 				
 				super.init()
@@ -379,6 +410,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -502,7 +537,7 @@ public extension ESI {
 		}
 		
 		
-		public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketItemGroupInformation) public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var localizedDescription: String = String()
@@ -511,18 +546,15 @@ public extension ESI {
 			public var parentGroupID: Int? = nil
 			public var types: [Int] = []
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
-				guard let marketGroupID = dictionary["market_group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let marketGroupID = dictionary["market_group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.marketGroupID = marketGroupID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				parentGroupID = dictionary["parent_group_id"] as? Int
 				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
@@ -532,6 +564,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -604,17 +640,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketGetMarketsRegionIDOrdersUnprocessableEntity) public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -623,6 +656,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -675,7 +712,7 @@ public extension ESI {
 		}
 		
 		
-		public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketHistory) public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var average: Float = Float()
@@ -685,24 +722,21 @@ public extension ESI {
 			public var orderCount: Int64 = Int64()
 			public var volume: Int64 = Int64()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let average = dictionary["average"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let average = dictionary["average"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.average = average
-				guard let date = DateFormatter.esiDateFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let date = DateFormatter.esiDateFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.date = date
-				guard let highest = dictionary["highest"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let highest = dictionary["highest"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.highest = highest
-				guard let lowest = dictionary["lowest"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let lowest = dictionary["lowest"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.lowest = lowest
-				guard let orderCount = dictionary["order_count"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let orderCount = dictionary["order_count"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderCount = orderCount
-				guard let volume = dictionary["volume"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volume = dictionary["volume"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volume = volume
 				
 				super.init()
@@ -710,6 +744,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -783,23 +821,20 @@ public extension ESI {
 		}
 		
 		
-		public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketPrice) public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var adjustedPrice: Float? = nil
 			public var averagePrice: Float? = nil
 			public var typeID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				adjustedPrice = dictionary["adjusted_price"] as? Float
 				averagePrice = dictionary["average_price"] as? Float
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
 				super.init()
@@ -807,6 +842,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -873,17 +912,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsGroupsMarketGroupIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketGetMarketsGroupsMarketGroupIDNotFound) public class GetMarketsGroupsMarketGroupIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -892,6 +928,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -944,7 +984,7 @@ public extension ESI {
 		}
 		
 		
-		public class Order: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketOrder) public class Order: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetMarketsRegionIDOrdersRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
@@ -969,7 +1009,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetMarketsRegionIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetMarketsRegionIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -991,34 +1031,31 @@ public extension ESI {
 			public var volumeRemain: Int = Int()
 			public var volumeTotal: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isBuyOrder = isBuyOrder
-				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issued = issued
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.locationID = locationID
-				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.minVolume = minVolume
-				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderID = orderID
-				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
-				guard let range = Market.Order.GetMarketsRegionIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let range = Market.Order.GetMarketsRegionIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
-				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volumeRemain = volumeRemain
-				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volumeTotal = volumeTotal
 				
 				super.init()
@@ -1026,6 +1063,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1138,7 +1179,7 @@ public extension ESI {
 			}
 			
 			public init(json: Any) throws {
-				guard let s = json as? String, let v = OrderType(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let s = json as? String, let v = OrderType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				self = v
 			}
 			
@@ -1149,17 +1190,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketGetMarketsRegionIDHistoryUnprocessableEntity) public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1168,6 +1206,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1220,7 +1262,7 @@ public extension ESI {
 		}
 		
 		
-		public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketStructure) public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
@@ -1245,7 +1287,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetMarketsStructuresStructureIDRange(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetMarketsStructuresStructureIDRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1267,34 +1309,31 @@ public extension ESI {
 			public var volumeRemain: Int = Int()
 			public var volumeTotal: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isBuyOrder = isBuyOrder
-				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issued = issued
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.locationID = locationID
-				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.minVolume = minVolume
-				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderID = orderID
-				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
-				guard let range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
-				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volumeRemain = volumeRemain
-				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.volumeTotal = volumeTotal
 				
 				super.init()
@@ -1302,6 +1341,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

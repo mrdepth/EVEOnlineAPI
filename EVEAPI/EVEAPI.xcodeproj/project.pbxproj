@@ -8,12 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1203E8731F017D82009ADF8D /* ZKillboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203E8721F017D82009ADF8D /* ZKillboard.swift */; };
-		122071A41EF4188A007D86CE /* EVEGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122071A31EF4188A007D86CE /* EVEGlobal.swift */; };
-		122B55471EB601A000E46536 /* EVE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55461EB601A000E46536 /* EVE.swift */; };
-		122B55571EB7154F00E46536 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55531EB7154F00E46536 /* Account.swift */; };
-		122B55581EB7154F00E46536 /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55541EB7154F00E46536 /* Api.swift */; };
-		122B55591EB7154F00E46536 /* Char.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55551EB7154F00E46536 /* Char.swift */; };
-		122B555A1EB7154F00E46536 /* Corp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 122B55561EB7154F00E46536 /* Corp.swift */; };
 		1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C8081E9EB3D900CA409A /* Helper.swift */; };
 		1231C80C1E9EB42500CA409A /* ESI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1231C80B1E9EB42500CA409A /* ESI.swift */; };
 		126295FA1EEAD16C00796B27 /* Alliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DB1EEAD16C00796B27 /* Alliance.swift */; };
@@ -59,7 +53,6 @@
 		12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */; };
 		12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */; };
 		12CFDAF91F053D6700CC0762 /* rss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CFDAF81F053D6700CC0762 /* rss.swift */; };
-		12D39D0C1EF923C90077BD17 /* Eve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D39D0B1EF923C90077BD17 /* Eve.swift */; };
 		12D39D121EF949500077BD17 /* Contracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D39D111EF949500077BD17 /* Contracts.swift */; };
 /* End PBXBuildFile section */
 
@@ -635,13 +628,13 @@
 		12AB65431DE9A993003AA683 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Artem Shimanski";
 				TargetAttributes = {
 					12AB654B1DE9A993003AA683 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = YB4RLQ4M9A;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -681,25 +674,20 @@
 				1262960C1EEAD16C00796B27 /* Mail.swift in Sources */,
 				126296141EEAD16C00796B27 /* Status.swift in Sources */,
 				126296091EEAD16C00796B27 /* Killmails.swift in Sources */,
-				122071A41EF4188A007D86CE /* EVEGlobal.swift in Sources */,
 				1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */,
 				126296131EEAD16C00796B27 /* Sovereignty.swift in Sources */,
 				126295FD1EEAD16C00796B27 /* Calendar.swift in Sources */,
 				126296021EEAD16C00796B27 /* Dogma.swift in Sources */,
 				1262960D1EEAD16C00796B27 /* Market.swift in Sources */,
-				122B55581EB7154F00E46536 /* Api.swift in Sources */,
-				122B55571EB7154F00E46536 /* Account.swift in Sources */,
 				12D39D121EF949500077BD17 /* Contracts.swift in Sources */,
 				12AB658D1DEB39D6003AA683 /* DateFormatterExtension.swift in Sources */,
 				1262960F1EEAD16C00796B27 /* PlanetaryInteraction.swift in Sources */,
 				126296121EEAD16C00796B27 /* Skills.swift in Sources */,
 				12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */,
 				126296011EEAD16C00796B27 /* Corporation.swift in Sources */,
-				122B555A1EB7154F00E46536 /* Corp.swift in Sources */,
 				126296031EEAD16C00796B27 /* Fittings.swift in Sources */,
 				1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */,
 				126296071EEAD16C00796B27 /* Industry.swift in Sources */,
-				12D39D0C1EF923C90077BD17 /* Eve.swift in Sources */,
 				12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */,
 				126295FC1EEAD16C00796B27 /* Bookmarks.swift in Sources */,
 				126296181EEAD16C00796B27 /* Wars.swift in Sources */,
@@ -716,7 +704,6 @@
 				126295FA1EEAD16C00796B27 /* Alliance.swift in Sources */,
 				1262960B1EEAD16C00796B27 /* Loyalty.swift in Sources */,
 				126296051EEAD16C00796B27 /* Global.swift in Sources */,
-				122B55591EB7154F00E46536 /* Char.swift in Sources */,
 				128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */,
 				12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */,
 				126296111EEAD16C00796B27 /* Search.swift in Sources */,
@@ -724,7 +711,6 @@
 				1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */,
 				1203E8731F017D82009ADF8D /* ZKillboard.swift in Sources */,
 				126296151EEAD16C00796B27 /* Universe.swift in Sources */,
-				122B55471EB601A000E46536 /* EVE.swift in Sources */,
 				126295FE1EEAD16C00796B27 /* Character.swift in Sources */,
 				1262960A1EEAD16C00796B27 /* Location.swift in Sources */,
 				126296041EEAD16C00796B27 /* Fleets.swift in Sources */,
@@ -744,7 +730,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -752,7 +740,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -798,7 +790,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -806,7 +800,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
@@ -855,7 +853,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -877,7 +875,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimanski.EVEAPI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

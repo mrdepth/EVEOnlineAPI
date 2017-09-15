@@ -448,17 +448,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPostFleetsFleetIDMembersNotFound) public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -467,6 +464,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -519,17 +520,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPutFleetsFleetIDMembersMemberIDNotFound) public class PutFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -538,6 +536,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -590,7 +592,7 @@ public extension ESI {
 		}
 		
 		
-		public class Invitation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsInvitation) public class Invitation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PostFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
@@ -607,7 +609,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = PostFleetsFleetIDMembersRole(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = PostFleetsFleetIDMembersRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -622,16 +624,13 @@ public extension ESI {
 			public var squadID: Int64? = nil
 			public var wingID: Int64? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.characterID = characterID
-				guard let role = Fleets.Invitation.PostFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let role = Fleets.Invitation.PostFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.role = role
 				squadID = dictionary["squad_id"] as? Int64
 				wingID = dictionary["wing_id"] as? Int64
@@ -641,6 +640,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -712,17 +715,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsGetFleetsFleetIDNotFound) public class GetFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -731,6 +731,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -783,17 +787,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPutFleetsFleetIDBadRequest) public class PutFleetsFleetIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -802,6 +803,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -854,19 +859,16 @@ public extension ESI {
 		}
 		
 		
-		public class Naming: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsNaming) public class Naming: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var name: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				
 				super.init()
@@ -874,6 +876,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -922,17 +928,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPostFleetsFleetIDWingsNotFound) public class PostFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -941,6 +944,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -993,19 +1000,16 @@ public extension ESI {
 		}
 		
 		
-		public class SquadCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsSquadCreated) public class SquadCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var squadID: Int64 = Int64()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.squadID = squadID
 				
 				super.init()
@@ -1013,6 +1017,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1061,17 +1069,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsDeleteFleetsFleetIDMembersMemberIDNotFound) public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1080,6 +1085,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1132,18 +1141,15 @@ public extension ESI {
 		}
 		
 		
-		public class FleetUpdate: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsFleetUpdate) public class FleetUpdate: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var isFreeMove: Bool? = nil
 			public var motd: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				isFreeMove = dictionary["is_free_move"] as? Bool
 				motd = dictionary["motd"] as? String
@@ -1153,6 +1159,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1214,7 +1224,7 @@ public extension ESI {
 		}
 		
 		
-		public class Movement: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsMovement) public class Movement: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum PutFleetsFleetIDMembersMemberIDRole: String, JSONCoding, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
@@ -1231,7 +1241,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = PutFleetsFleetIDMembersMemberIDRole(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = PutFleetsFleetIDMembersMemberIDRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1245,14 +1255,11 @@ public extension ESI {
 			public var squadID: Int64? = nil
 			public var wingID: Int64? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let role = Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let role = Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.role = role
 				squadID = dictionary["squad_id"] as? Int64
 				wingID = dictionary["wing_id"] as? Int64
@@ -1262,6 +1269,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1328,17 +1339,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPutFleetsFleetIDSquadsSquadIDNotFound) public class PutFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1347,6 +1355,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1399,24 +1411,21 @@ public extension ESI {
 		}
 		
 		
-		public class GetFleetsFleetIDWingsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsGetFleetsFleetIDWingsOk) public class GetFleetsFleetIDWingsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class GetFleetsFleetIDWingsSquads: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIFleetsGetFleetsFleetIDWingsOkGetFleetsFleetIDWingsSquads) public class GetFleetsFleetIDWingsSquads: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var id: Int64 = Int64()
 				public var name: String = String()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let id = dictionary["id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let id = dictionary["id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.id = id
-					guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.name = name
 					
 					super.init()
@@ -1424,6 +1433,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -1480,16 +1493,13 @@ public extension ESI {
 			public var name: String = String()
 			public var squads: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads] = []
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let id = dictionary["id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let id = dictionary["id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.id = id
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
 				squads = try (dictionary["squads"] as? [Any])?.map {try Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads(json: $0)} ?? []
 				
@@ -1498,6 +1508,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1556,17 +1570,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsDeleteFleetsFleetIDSquadsSquadIDNotFound) public class DeleteFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1575,6 +1586,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1627,17 +1642,14 @@ public extension ESI {
 		}
 		
 		
-		public class DeleteFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsDeleteFleetsFleetIDWingsWingIDNotFound) public class DeleteFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1646,6 +1658,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1698,7 +1714,7 @@ public extension ESI {
 		}
 		
 		
-		public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsInformation) public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var isFreeMove: Bool = Bool()
@@ -1706,20 +1722,17 @@ public extension ESI {
 			public var isVoiceEnabled: Bool = Bool()
 			public var motd: String = String()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let isFreeMove = dictionary["is_free_move"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isFreeMove = dictionary["is_free_move"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isFreeMove = isFreeMove
-				guard let isRegistered = dictionary["is_registered"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isRegistered = dictionary["is_registered"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isRegistered = isRegistered
-				guard let isVoiceEnabled = dictionary["is_voice_enabled"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let isVoiceEnabled = dictionary["is_voice_enabled"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isVoiceEnabled = isVoiceEnabled
-				guard let motd = dictionary["motd"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let motd = dictionary["motd"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.motd = motd
 				
 				super.init()
@@ -1727,6 +1740,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1790,17 +1807,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsGetFleetsFleetIDWingsNotFound) public class GetFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1809,6 +1823,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1861,17 +1879,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPutFleetsFleetIDWingsWingIDNotFound) public class PutFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -1880,6 +1895,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -1932,7 +1951,7 @@ public extension ESI {
 		}
 		
 		
-		public class Member: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsMember) public class Member: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
@@ -1949,7 +1968,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetFleetsFleetIDMembersRole(rawValue: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let s = json as? String, let v = GetFleetsFleetIDMembersRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1970,31 +1989,28 @@ public extension ESI {
 			public var takesFleetWarp: Bool = Bool()
 			public var wingID: Int64 = Int64()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.characterID = characterID
-				guard let joinTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["join_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let joinTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["join_time"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.joinTime = joinTime
-				guard let role = Fleets.Member.GetFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let role = Fleets.Member.GetFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.role = role
-				guard let roleName = dictionary["role_name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let roleName = dictionary["role_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.roleName = roleName
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.shipTypeID = shipTypeID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
-				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.squadID = squadID
 				stationID = dictionary["station_id"] as? Int64
-				guard let takesFleetWarp = dictionary["takes_fleet_warp"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let takesFleetWarp = dictionary["takes_fleet_warp"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.takesFleetWarp = takesFleetWarp
-				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.wingID = wingID
 				
 				super.init()
@@ -2002,6 +2018,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2099,17 +2119,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPutFleetsFleetIDNotFound) public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2118,6 +2135,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2170,17 +2191,14 @@ public extension ESI {
 		}
 		
 		
-		public class GetFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsGetFleetsFleetIDMembersNotFound) public class GetFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2189,6 +2207,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2241,17 +2263,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPostFleetsFleetIDWingsWingIDSquadsNotFound) public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2260,6 +2279,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2312,17 +2335,14 @@ public extension ESI {
 		}
 		
 		
-		public class PostFleetsFleetIDMembersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPostFleetsFleetIDMembersUnprocessableEntity) public class PostFleetsFleetIDMembersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2331,6 +2351,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2383,17 +2407,14 @@ public extension ESI {
 		}
 		
 		
-		public class PutFleetsFleetIDMembersMemberIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPutFleetsFleetIDMembersMemberIDUnprocessableEntity) public class PutFleetsFleetIDMembersMemberIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -2402,6 +2423,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -2454,19 +2479,16 @@ public extension ESI {
 		}
 		
 		
-		public class WingCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsWingCreated) public class WingCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var wingID: Int64 = Int64()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.wingID = wingID
 				
 				super.init()
@@ -2474,6 +2496,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

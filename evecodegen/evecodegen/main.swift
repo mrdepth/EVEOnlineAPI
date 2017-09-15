@@ -48,7 +48,7 @@ extension String {
 			}
 			else {
 				let r = s.startIndex..<s.index(after: s.startIndex)
-				return s.replacingCharacters(in: r, with: s.substring(with: r).uppercased())
+				return s.replacingCharacters(in: r, with: s[r].uppercased())
 			}
 			}.joined()
 	}
@@ -57,7 +57,7 @@ extension String {
 		guard !isEmpty else {return self}
 		let s = camelCaps
 		let r = s.startIndex..<s.index(after: s.startIndex)
-		return s.replacingCharacters(in: r, with: s.substring(with: r).lowercased())
+		return s.replacingCharacters(in: r, with: s[r].lowercased())
 	}
 	
 	var indented: String {
@@ -83,7 +83,7 @@ extension String {
 	}
 }
 
-fileprivate let salt = Int(truncatingBitPattern: 0x9e3779b9 as UInt64)
+fileprivate let salt = Int(truncatingIfNeeded: 0x9e3779b9 as UInt64)
 
 func hashCombine(seed: inout Int, value: Int) {
 	seed ^= value &+ salt &+ (seed << 6) &+ (seed >> 2);

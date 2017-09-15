@@ -178,7 +178,7 @@ public extension ESI {
 		}
 		
 		
-		public class OpportunitiesTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIOpportunitiesOpportunitiesTask) public class OpportunitiesTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var localizedDescription: String = String()
@@ -186,20 +186,17 @@ public extension ESI {
 			public var notification: String = String()
 			public var taskID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let notification = dictionary["notification"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let notification = dictionary["notification"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.notification = notification
-				guard let taskID = dictionary["task_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let taskID = dictionary["task_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.taskID = taskID
 				
 				super.init()
@@ -207,6 +204,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -270,22 +271,19 @@ public extension ESI {
 		}
 		
 		
-		public class CompletedTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIOpportunitiesCompletedTask) public class CompletedTask: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var completedAt: Date = Date()
 			public var taskID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let completedAt = DateFormatter.esiDateTimeFormatter.date(from: dictionary["completed_at"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let completedAt = DateFormatter.esiDateTimeFormatter.date(from: dictionary["completed_at"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.completedAt = completedAt
-				guard let taskID = dictionary["task_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let taskID = dictionary["task_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.taskID = taskID
 				
 				super.init()
@@ -293,6 +291,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -346,7 +348,7 @@ public extension ESI {
 		}
 		
 		
-		public class Group: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIOpportunitiesGroup) public class Group: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var connectedGroups: [Int] = []
@@ -356,21 +358,18 @@ public extension ESI {
 			public var notification: String = String()
 			public var requiredTasks: [Int] = []
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				connectedGroups = try (dictionary["connected_groups"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
-				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.groupID = groupID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
-				guard let notification = dictionary["notification"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let notification = dictionary["notification"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.notification = notification
 				requiredTasks = try (dictionary["required_tasks"] as? [Any])?.map {try Int(json: $0)} ?? []
 				
@@ -379,6 +378,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {

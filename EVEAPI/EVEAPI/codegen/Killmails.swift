@@ -84,23 +84,55 @@ public extension ESI {
 			}
 		}
 		
+		public func getCorporationKillsAndLosses(corporationID: Int, maxKillID: Int? = nil, completionBlock:((Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-killmails.read_corporation_killmails.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = maxKillID?.httpQuery {
+				query.append(URLQueryItem(name: "max_kill_id", value: v))
+			}
+			
+			let url = session!.baseURL + "latest/corporations/\(corporationID)/killmails/recent/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
 		
-		public class Recent: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		
+		@objc(ESIKillmailsGetCorporationsCorporationIDKillmailsRecentOk) public class GetCorporationsCorporationIDKillmailsRecentOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var killmailHash: String = String()
 			public var killmailID: Int = Int()
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let killmailHash = dictionary["killmail_hash"] as? String else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let killmailHash = dictionary["killmail_hash"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killmailHash = killmailHash
-				guard let killmailID = dictionary["killmail_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let killmailID = dictionary["killmail_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killmailID = killmailID
 				
 				super.init()
@@ -108,6 +140,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -140,38 +176,35 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Killmails.Recent, rhs: Killmails.Recent) -> Bool {
+			public static func ==(lhs: Killmails.GetCorporationsCorporationIDKillmailsRecentOk, rhs: Killmails.GetCorporationsCorporationIDKillmailsRecentOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Killmails.Recent) {
+			init(_ other: Killmails.GetCorporationsCorporationIDKillmailsRecentOk) {
 				killmailHash = other.killmailHash
 				killmailID = other.killmailID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Killmails.Recent(self)
+				return Killmails.GetCorporationsCorporationIDKillmailsRecentOk(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Recent)?.hashValue == hashValue
+				return (object as? GetCorporationsCorporationIDKillmailsRecentOk)?.hashValue == hashValue
 			}
 			
 		}
 		
 		
-		public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIKillmailsGetKillmailsKillmailIDKillmailHashUnprocessableEntity) public class GetKillmailsKillmailIDKillmailHashUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var error: String? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				error = dictionary["error"] as? String
 				
@@ -180,6 +213,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -232,9 +269,9 @@ public extension ESI {
 		}
 		
 		
-		public class Killmail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIKillmailsKillmail) public class Killmail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public class Attacker: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIKillmailsKillmailAttacker) public class Attacker: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
 				public var allianceID: Int? = nil
@@ -247,22 +284,19 @@ public extension ESI {
 				public var shipTypeID: Int? = nil
 				public var weaponTypeID: Int? = nil
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					allianceID = dictionary["alliance_id"] as? Int
 					characterID = dictionary["character_id"] as? Int
 					corporationID = dictionary["corporation_id"] as? Int
-					guard let damageDone = dictionary["damage_done"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let damageDone = dictionary["damage_done"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.damageDone = damageDone
 					factionID = dictionary["faction_id"] as? Int
-					guard let finalBlow = dictionary["final_blow"] as? Bool else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let finalBlow = dictionary["final_blow"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.finalBlow = finalBlow
-					guard let securityStatus = dictionary["security_status"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let securityStatus = dictionary["security_status"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.securityStatus = securityStatus
 					shipTypeID = dictionary["ship_type_id"] as? Int
 					weaponTypeID = dictionary["weapon_type_id"] as? Int
@@ -272,6 +306,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -383,27 +421,24 @@ public extension ESI {
 				
 			}
 			
-			public class Victim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			@objc(ESIKillmailsKillmailVictim) public class Victim: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
-				public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIKillmailsKillmailVictimGetKillmailsKillmailIDKillmailHashPosition) public class GetKillmailsKillmailIDKillmailHashPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
 					
 					public var x: Float = Float()
 					public var y: Float = Float()
 					public var z: Float = Float()
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.x = x
-						guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.y = y
-						guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.z = z
 						
 						super.init()
@@ -411,6 +446,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -468,9 +507,9 @@ public extension ESI {
 					
 				}
 				
-				public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				@objc(ESIKillmailsKillmailVictimItem) public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
-					public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					@objc(ESIKillmailsKillmailVictimItemItem) public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 						
 						
 						public var flag: Int = Int()
@@ -479,20 +518,17 @@ public extension ESI {
 						public var quantityDropped: Int64? = nil
 						public var singleton: Int = Int()
 						
-						public static var supportsSecureCoding: Bool {
-							return true
-						}
 						
 						public required init(json: Any) throws {
-							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+							guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 							
-							guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 							self.flag = flag
-							guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 							self.itemTypeID = itemTypeID
 							quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
 							quantityDropped = dictionary["quantity_dropped"] as? Int64
-							guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+							guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 							self.singleton = singleton
 							
 							super.init()
@@ -500,6 +536,10 @@ public extension ESI {
 						
 						override public init() {
 							super.init()
+						}
+						
+						public static var supportsSecureCoding: Bool {
+							return true
 						}
 						
 						public required init?(coder aDecoder: NSCoder) {
@@ -582,21 +622,18 @@ public extension ESI {
 					public var quantityDropped: Int64? = nil
 					public var singleton: Int = Int()
 					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
 					
 					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 						
-						guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.flag = flag
-						guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.itemTypeID = itemTypeID
 						items = try (dictionary["items"] as? [Any])?.map {try Killmails.Killmail.Victim.Item.Item(json: $0)}
 						quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
 						quantityDropped = dictionary["quantity_dropped"] as? Int64
-						guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+						guard let singleton = dictionary["singleton"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 						self.singleton = singleton
 						
 						super.init()
@@ -604,6 +641,10 @@ public extension ESI {
 					
 					override public init() {
 						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
 					}
 					
 					public required init?(coder aDecoder: NSCoder) {
@@ -697,22 +738,19 @@ public extension ESI {
 				public var position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition? = nil
 				public var shipTypeID: Int = Int()
 				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
 				
 				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
 					allianceID = dictionary["alliance_id"] as? Int
 					characterID = dictionary["character_id"] as? Int
 					corporationID = dictionary["corporation_id"] as? Int
-					guard let damageTaken = dictionary["damage_taken"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let damageTaken = dictionary["damage_taken"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.damageTaken = damageTaken
 					factionID = dictionary["faction_id"] as? Int
 					items = try (dictionary["items"] as? [Any])?.map {try Killmails.Killmail.Victim.Item(json: $0)}
 					position = try? Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-					guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+					guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.shipTypeID = shipTypeID
 					
 					super.init()
@@ -720,6 +758,10 @@ public extension ESI {
 				
 				override public init() {
 					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
@@ -834,20 +876,17 @@ public extension ESI {
 			public var victim: Killmails.Killmail.Victim = Killmails.Killmail.Victim()
 			public var warID: Int? = nil
 			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
 			
 			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(type(of: self), json)}
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
 				attackers = try (dictionary["attackers"] as? [Any])?.map {try Killmails.Killmail.Attacker(json: $0)} ?? []
-				guard let killmailID = dictionary["killmail_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let killmailID = dictionary["killmail_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killmailID = killmailID
-				guard let killmailTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["killmail_time"] as? String ?? "") else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let killmailTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["killmail_time"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.killmailTime = killmailTime
 				moonID = dictionary["moon_id"] as? Int
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(type(of: self), dictionary)}
+				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.solarSystemID = solarSystemID
 				victim = try Killmails.Killmail.Victim(json: dictionary["victim"] as? [String: Any] ?? [:])
 				warID = dictionary["war_id"] as? Int
@@ -857,6 +896,10 @@ public extension ESI {
 			
 			override public init() {
 				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
@@ -938,6 +981,83 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Killmail)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIKillmailsRecent) public class Recent: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var killmailHash: String = String()
+			public var killmailID: Int = Int()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				guard let killmailHash = dictionary["killmail_hash"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.killmailHash = killmailHash
+				guard let killmailID = dictionary["killmail_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.killmailID = killmailID
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				killmailHash = aDecoder.decodeObject(forKey: "killmail_hash") as? String ?? String()
+				killmailID = aDecoder.decodeInteger(forKey: "killmail_id")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(killmailHash, forKey: "killmail_hash")
+				aCoder.encode(killmailID, forKey: "killmail_id")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["killmail_hash"] = killmailHash.json
+				json["killmail_id"] = killmailID.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.killmailHash.hashValue)
+				hashCombine(seed: &hash, value: self.killmailID.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Killmails.Recent, rhs: Killmails.Recent) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Killmails.Recent) {
+				killmailHash = other.killmailHash
+				killmailID = other.killmailID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Killmails.Recent(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Recent)?.hashValue == hashValue
 			}
 			
 		}

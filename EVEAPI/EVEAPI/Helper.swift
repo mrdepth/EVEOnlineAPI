@@ -54,7 +54,8 @@ public enum ESIError: LocalizedError {
 	case notFound
 	case forbidden
 	case invalidFormat(Any.Type, Any)
-	
+	case objectSerialization(reason: String)
+
 	public var errorDescription: String? {
 		switch self {
 		case let .server(error, ssoStatus?):
@@ -84,7 +85,7 @@ extension Int: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Int else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let v = json as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 
@@ -100,7 +101,7 @@ extension Int64: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Int64 else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let v = json as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 
@@ -116,7 +117,7 @@ extension Double: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Double else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let v = json as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 
@@ -132,7 +133,7 @@ extension Float: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Float else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let v = json as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 
@@ -148,7 +149,7 @@ extension Bool: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Bool else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let v = json as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 	
@@ -164,7 +165,7 @@ extension Date: JSONCoding, HTTPQueryable {
 	}
 	
 	public init(json: Any) throws {
-		guard let s = json as? String, let d = DateFormatter.esiDateTimeFormatter.date(from: s) else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let s = json as? String, let d = DateFormatter.esiDateTimeFormatter.date(from: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = d
 	}
 
@@ -180,7 +181,7 @@ extension Data: JSONCoding {
 	}
 	
 	public init(json: Any) throws {
-		guard let v = json as? Data else {throw ESIError.invalidFormat(type(of: self), json)}
+		guard let v = json as? Data else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		self = v
 	}
 
@@ -196,7 +197,7 @@ extension String: JSONCoding, HTTPQueryable {
 			self = ""
 		}
 		else {
-			guard let v = json as? String else {throw ESIError.invalidFormat(type(of: self), json)}
+			guard let v = json as? String else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 			self = v
 		}
 	}
@@ -214,7 +215,7 @@ extension Array: JSONCoding, HTTPQueryable {
 	
 	public init(json: Any) throws {
 		guard let v = json as? [Any],
-			let type = Element.self as? JSONCoding.Type else {throw ESIError.invalidFormat(type(of: self), json)}
+			let type = Element.self as? JSONCoding.Type else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		
 		self = try v.flatMap{try type.init(json: $0) as? Element}
 	}

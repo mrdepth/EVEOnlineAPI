@@ -124,7 +124,7 @@ class Schema: Namespace {
 		switch self.type {
 		case .object:
 			return self.classDefinition
-		case .enum(_):
+		case .enum:
 			return self.enumDefinition
 		default:
 			return nil
@@ -207,6 +207,7 @@ class Schema: Namespace {
 		template.replaceSubrange(template.range(of: "{hash}")!, with: hashes.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{nested}")!, with: nested.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{copy}")!, with: copy.joined(separator: "\n"))
+		template.replaceSubrange(template.range(of: "{objcName}")!, with: typeIdentifier.replacingOccurrences(of: ".", with: ""))
 		
 		return template
 	}
