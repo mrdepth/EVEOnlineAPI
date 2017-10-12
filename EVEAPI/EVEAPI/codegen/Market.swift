@@ -289,36 +289,9 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIMarketCharacterOrder) public class CharacterOrder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketStructure) public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCharactersCharacterIDOrdersState: String, JSONCoding, HTTPQueryable {
-				case cancelled = "cancelled"
-				case characterDeleted = "character_deleted"
-				case closed = "closed"
-				case expired = "expired"
-				case open = "open"
-				case pending = "pending"
-				
-				public init() {
-					self = .open
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersState(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDOrdersRange: String, JSONCoding, HTTPQueryable {
+			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
 				case i10 = "10"
 				case i2 = "2"
@@ -341,7 +314,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					guard let s = json as? String, let v = GetMarketsStructuresStructureIDRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -351,19 +324,14 @@ public extension ESI {
 				
 			}
 			
-			public var accountID: Int = Int()
 			public var duration: Int = Int()
-			public var escrow: Float = Float()
 			public var isBuyOrder: Bool = Bool()
-			public var isCorp: Bool = Bool()
 			public var issued: Date = Date()
 			public var locationID: Int64 = Int64()
 			public var minVolume: Int = Int()
 			public var orderID: Int64 = Int64()
 			public var price: Float = Float()
-			public var range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange()
-			public var regionID: Int = Int()
-			public var state: Market.CharacterOrder.GetCharactersCharacterIDOrdersState = Market.CharacterOrder.GetCharactersCharacterIDOrdersState()
+			public var range: Market.Structure.GetMarketsStructuresStructureIDRange = Market.Structure.GetMarketsStructuresStructureIDRange()
 			public var typeID: Int = Int()
 			public var volumeRemain: Int = Int()
 			public var volumeTotal: Int = Int()
@@ -372,16 +340,10 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let accountID = dictionary["account_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.accountID = accountID
 				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let escrow = dictionary["escrow"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.escrow = escrow
 				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isBuyOrder = isBuyOrder
-				guard let isCorp = dictionary["is_corp"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isCorp = isCorp
 				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issued = issued
 				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
@@ -392,12 +354,8 @@ public extension ESI {
 				self.orderID = orderID
 				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
-				guard let range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
-				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.regionID = regionID
-				guard let state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.state = state
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
@@ -417,19 +375,14 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				accountID = aDecoder.decodeInteger(forKey: "account_id")
 				duration = aDecoder.decodeInteger(forKey: "duration")
-				escrow = aDecoder.decodeFloat(forKey: "escrow")
 				isBuyOrder = aDecoder.decodeBool(forKey: "is_buy_order")
-				isCorp = aDecoder.decodeBool(forKey: "is_corp")
 				issued = aDecoder.decodeObject(forKey: "issued") as? Date ?? Date()
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				minVolume = aDecoder.decodeInteger(forKey: "min_volume")
 				orderID = aDecoder.decodeInt64(forKey: "order_id")
 				price = aDecoder.decodeFloat(forKey: "price")
-				range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.CharacterOrder.GetCharactersCharacterIDOrdersRange()
-				regionID = aDecoder.decodeInteger(forKey: "region_id")
-				state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: aDecoder.decodeObject(forKey: "state") as? String ?? "") ?? Market.CharacterOrder.GetCharactersCharacterIDOrdersState()
+				range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.Structure.GetMarketsStructuresStructureIDRange()
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				volumeRemain = aDecoder.decodeInteger(forKey: "volume_remain")
 				volumeTotal = aDecoder.decodeInteger(forKey: "volume_total")
@@ -438,19 +391,14 @@ public extension ESI {
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(accountID, forKey: "account_id")
 				aCoder.encode(duration, forKey: "duration")
-				aCoder.encode(escrow, forKey: "escrow")
 				aCoder.encode(isBuyOrder, forKey: "is_buy_order")
-				aCoder.encode(isCorp, forKey: "is_corp")
 				aCoder.encode(issued, forKey: "issued")
 				aCoder.encode(locationID, forKey: "location_id")
 				aCoder.encode(minVolume, forKey: "min_volume")
 				aCoder.encode(orderID, forKey: "order_id")
 				aCoder.encode(price, forKey: "price")
 				aCoder.encode(range.rawValue, forKey: "range")
-				aCoder.encode(regionID, forKey: "region_id")
-				aCoder.encode(state.rawValue, forKey: "state")
 				aCoder.encode(typeID, forKey: "type_id")
 				aCoder.encode(volumeRemain, forKey: "volume_remain")
 				aCoder.encode(volumeTotal, forKey: "volume_total")
@@ -458,19 +406,14 @@ public extension ESI {
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["account_id"] = accountID.json
 				json["duration"] = duration.json
-				json["escrow"] = escrow.json
 				json["is_buy_order"] = isBuyOrder.json
-				json["is_corp"] = isCorp.json
 				json["issued"] = issued.json
 				json["location_id"] = locationID.json
 				json["min_volume"] = minVolume.json
 				json["order_id"] = orderID.json
 				json["price"] = price.json
 				json["range"] = range.json
-				json["region_id"] = regionID.json
-				json["state"] = state.json
 				json["type_id"] = typeID.json
 				json["volume_remain"] = volumeRemain.json
 				json["volume_total"] = volumeTotal.json
@@ -479,19 +422,14 @@ public extension ESI {
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.accountID.hashValue)
 				hashCombine(seed: &hash, value: self.duration.hashValue)
-				hashCombine(seed: &hash, value: self.escrow.hashValue)
 				hashCombine(seed: &hash, value: self.isBuyOrder.hashValue)
-				hashCombine(seed: &hash, value: self.isCorp.hashValue)
 				hashCombine(seed: &hash, value: self.issued.hashValue)
 				hashCombine(seed: &hash, value: self.locationID.hashValue)
 				hashCombine(seed: &hash, value: self.minVolume.hashValue)
 				hashCombine(seed: &hash, value: self.orderID.hashValue)
 				hashCombine(seed: &hash, value: self.price.hashValue)
 				hashCombine(seed: &hash, value: self.range.hashValue)
-				hashCombine(seed: &hash, value: self.regionID.hashValue)
-				hashCombine(seed: &hash, value: self.state.hashValue)
 				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				hashCombine(seed: &hash, value: self.volumeRemain.hashValue)
 				hashCombine(seed: &hash, value: self.volumeTotal.hashValue)
@@ -502,36 +440,31 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Market.CharacterOrder, rhs: Market.CharacterOrder) -> Bool {
+			public static func ==(lhs: Market.Structure, rhs: Market.Structure) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Market.CharacterOrder) {
-				accountID = other.accountID
+			init(_ other: Market.Structure) {
 				duration = other.duration
-				escrow = other.escrow
 				isBuyOrder = other.isBuyOrder
-				isCorp = other.isCorp
 				issued = other.issued
 				locationID = other.locationID
 				minVolume = other.minVolume
 				orderID = other.orderID
 				price = other.price
 				range = other.range
-				regionID = other.regionID
-				state = other.state
 				typeID = other.typeID
 				volumeRemain = other.volumeRemain
 				volumeTotal = other.volumeTotal
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Market.CharacterOrder(self)
+				return Market.Structure(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CharacterOrder)?.hashValue == hashValue
+				return (object as? Structure)?.hashValue == hashValue
 			}
 			
 		}
@@ -1262,9 +1195,36 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIMarketStructure) public class Structure: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIMarketCharacterOrder) public class CharacterOrder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetMarketsStructuresStructureIDRange: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDOrdersState: String, JSONCoding, HTTPQueryable {
+				case cancelled = "cancelled"
+				case characterDeleted = "character_deleted"
+				case closed = "closed"
+				case expired = "expired"
+				case open = "open"
+				case pending = "pending"
+				
+				public init() {
+					self = .cancelled
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersState(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCharactersCharacterIDOrdersRange: String, JSONCoding, HTTPQueryable {
 				case i1 = "1"
 				case i10 = "10"
 				case i2 = "2"
@@ -1279,7 +1239,7 @@ public extension ESI {
 				case station = "station"
 				
 				public init() {
-					self = .station
+					self = .i1
 				}
 				
 				public var json: Any {
@@ -1287,7 +1247,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetMarketsStructuresStructureIDRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					guard let s = json as? String, let v = GetCharactersCharacterIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1297,14 +1257,19 @@ public extension ESI {
 				
 			}
 			
+			public var accountID: Int = Int()
 			public var duration: Int = Int()
+			public var escrow: Float = Float()
 			public var isBuyOrder: Bool = Bool()
+			public var isCorp: Bool = Bool()
 			public var issued: Date = Date()
 			public var locationID: Int64 = Int64()
 			public var minVolume: Int = Int()
 			public var orderID: Int64 = Int64()
 			public var price: Float = Float()
-			public var range: Market.Structure.GetMarketsStructuresStructureIDRange = Market.Structure.GetMarketsStructuresStructureIDRange()
+			public var range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange()
+			public var regionID: Int = Int()
+			public var state: Market.CharacterOrder.GetCharactersCharacterIDOrdersState = Market.CharacterOrder.GetCharactersCharacterIDOrdersState()
 			public var typeID: Int = Int()
 			public var volumeRemain: Int = Int()
 			public var volumeTotal: Int = Int()
@@ -1313,10 +1278,16 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
+				guard let accountID = dictionary["account_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.accountID = accountID
 				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
+				guard let escrow = dictionary["escrow"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.escrow = escrow
 				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isBuyOrder = isBuyOrder
+				guard let isCorp = dictionary["is_corp"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.isCorp = isCorp
 				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.issued = issued
 				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
@@ -1327,8 +1298,12 @@ public extension ESI {
 				self.orderID = orderID
 				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
-				guard let range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.regionID = regionID
+				guard let state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.state = state
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
@@ -1348,14 +1323,19 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
+				accountID = aDecoder.decodeInteger(forKey: "account_id")
 				duration = aDecoder.decodeInteger(forKey: "duration")
+				escrow = aDecoder.decodeFloat(forKey: "escrow")
 				isBuyOrder = aDecoder.decodeBool(forKey: "is_buy_order")
+				isCorp = aDecoder.decodeBool(forKey: "is_corp")
 				issued = aDecoder.decodeObject(forKey: "issued") as? Date ?? Date()
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				minVolume = aDecoder.decodeInteger(forKey: "min_volume")
 				orderID = aDecoder.decodeInt64(forKey: "order_id")
 				price = aDecoder.decodeFloat(forKey: "price")
-				range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.Structure.GetMarketsStructuresStructureIDRange()
+				range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.CharacterOrder.GetCharactersCharacterIDOrdersRange()
+				regionID = aDecoder.decodeInteger(forKey: "region_id")
+				state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: aDecoder.decodeObject(forKey: "state") as? String ?? "") ?? Market.CharacterOrder.GetCharactersCharacterIDOrdersState()
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				volumeRemain = aDecoder.decodeInteger(forKey: "volume_remain")
 				volumeTotal = aDecoder.decodeInteger(forKey: "volume_total")
@@ -1364,14 +1344,19 @@ public extension ESI {
 			}
 			
 			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(accountID, forKey: "account_id")
 				aCoder.encode(duration, forKey: "duration")
+				aCoder.encode(escrow, forKey: "escrow")
 				aCoder.encode(isBuyOrder, forKey: "is_buy_order")
+				aCoder.encode(isCorp, forKey: "is_corp")
 				aCoder.encode(issued, forKey: "issued")
 				aCoder.encode(locationID, forKey: "location_id")
 				aCoder.encode(minVolume, forKey: "min_volume")
 				aCoder.encode(orderID, forKey: "order_id")
 				aCoder.encode(price, forKey: "price")
 				aCoder.encode(range.rawValue, forKey: "range")
+				aCoder.encode(regionID, forKey: "region_id")
+				aCoder.encode(state.rawValue, forKey: "state")
 				aCoder.encode(typeID, forKey: "type_id")
 				aCoder.encode(volumeRemain, forKey: "volume_remain")
 				aCoder.encode(volumeTotal, forKey: "volume_total")
@@ -1379,14 +1364,19 @@ public extension ESI {
 			
 			public var json: Any {
 				var json = [String: Any]()
+				json["account_id"] = accountID.json
 				json["duration"] = duration.json
+				json["escrow"] = escrow.json
 				json["is_buy_order"] = isBuyOrder.json
+				json["is_corp"] = isCorp.json
 				json["issued"] = issued.json
 				json["location_id"] = locationID.json
 				json["min_volume"] = minVolume.json
 				json["order_id"] = orderID.json
 				json["price"] = price.json
 				json["range"] = range.json
+				json["region_id"] = regionID.json
+				json["state"] = state.json
 				json["type_id"] = typeID.json
 				json["volume_remain"] = volumeRemain.json
 				json["volume_total"] = volumeTotal.json
@@ -1395,14 +1385,19 @@ public extension ESI {
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.accountID.hashValue)
 				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.escrow.hashValue)
 				hashCombine(seed: &hash, value: self.isBuyOrder.hashValue)
+				hashCombine(seed: &hash, value: self.isCorp.hashValue)
 				hashCombine(seed: &hash, value: self.issued.hashValue)
 				hashCombine(seed: &hash, value: self.locationID.hashValue)
 				hashCombine(seed: &hash, value: self.minVolume.hashValue)
 				hashCombine(seed: &hash, value: self.orderID.hashValue)
 				hashCombine(seed: &hash, value: self.price.hashValue)
 				hashCombine(seed: &hash, value: self.range.hashValue)
+				hashCombine(seed: &hash, value: self.regionID.hashValue)
+				hashCombine(seed: &hash, value: self.state.hashValue)
 				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				hashCombine(seed: &hash, value: self.volumeRemain.hashValue)
 				hashCombine(seed: &hash, value: self.volumeTotal.hashValue)
@@ -1413,31 +1408,36 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Market.Structure, rhs: Market.Structure) -> Bool {
+			public static func ==(lhs: Market.CharacterOrder, rhs: Market.CharacterOrder) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Market.Structure) {
+			init(_ other: Market.CharacterOrder) {
+				accountID = other.accountID
 				duration = other.duration
+				escrow = other.escrow
 				isBuyOrder = other.isBuyOrder
+				isCorp = other.isCorp
 				issued = other.issued
 				locationID = other.locationID
 				minVolume = other.minVolume
 				orderID = other.orderID
 				price = other.price
 				range = other.range
+				regionID = other.regionID
+				state = other.state
 				typeID = other.typeID
 				volumeRemain = other.volumeRemain
 				volumeTotal = other.volumeTotal
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Market.Structure(self)
+				return Market.CharacterOrder(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Structure)?.hashValue == hashValue
+				return (object as? CharacterOrder)?.hashValue == hashValue
 			}
 			
 		}

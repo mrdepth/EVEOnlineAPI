@@ -80,7 +80,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getBlueprints(characterID: Int, completionBlock:((Result<[Character.Blueprint]>) -> Void)?) {
+		public func getBlueprints(characterID: Int, page: Int? = nil, completionBlock:((Result<[Character.Blueprint]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -97,7 +97,9 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
 			
 			let url = session!.baseURL + "latest/characters/\(characterID)/blueprints/"
 			let components = NSURLComponents(string: url)!
@@ -311,6 +313,39 @@ public extension ESI {
 			}
 		}
 		
+		public func getChatChannels(characterID: Int, completionBlock:((Result<[Character.ChatChannel]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_chat_channels.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/characters/\(characterID)/chat_channels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Character.ChatChannel]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func getCharacterNotifications(characterID: Int, completionBlock:((Result<[Character.GetCharactersCharacterIDNotificationsOk]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -371,39 +406,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getChatChannels(characterID: Int, completionBlock:((Result<[Character.ChatChannel]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_chat_channels.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/chat_channels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Character.ChatChannel]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -2530,7 +2532,7 @@ public extension ESI {
 			case trader = "Trader"
 			
 			public init() {
-				self = .director
+				self = .accountTake1
 			}
 			
 			public var json: Any {
@@ -2550,6 +2552,32 @@ public extension ESI {
 		
 		
 		@objc(ESICharacterGetCharactersCharacterIDNotificationsOk) public class GetCharactersCharacterIDNotificationsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCharactersCharacterIDNotificationsSenderType: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case other = "other"
+				
+				public init() {
+					self = .character
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDNotificationsSenderType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
 			public enum GetCharactersCharacterIDNotificationsType: String, JSONCoding, HTTPQueryable {
 				case acceptedAlly = "AcceptedAlly"
@@ -2670,6 +2698,10 @@ public extension ESI {
 				case mercOfferedNegotiationMsg = "MercOfferedNegotiationMsg"
 				case missionOfferExpirationMsg = "MissionOfferExpirationMsg"
 				case missionTimeoutMsg = "MissionTimeoutMsg"
+				case moonminingAutomaticFracture = "MoonminingAutomaticFracture"
+				case moonminingExtractionCancelled = "MoonminingExtractionCancelled"
+				case moonminingExtractionFinished = "MoonminingExtractionFinished"
+				case moonminingLaserFired = "MoonminingLaserFired"
 				case nPCStandingsGained = "NPCStandingsGained"
 				case nPCStandingsLost = "NPCStandingsLost"
 				case offeredSurrender = "OfferedSurrender"
@@ -2723,6 +2755,7 @@ public extension ESI {
 				case warAllyOfferDeclinedMsg = "WarAllyOfferDeclinedMsg"
 				case warSurrenderDeclinedMsg = "WarSurrenderDeclinedMsg"
 				case warSurrenderOfferMsg = "WarSurrenderOfferMsg"
+				case notificationTypeMoonminingExtractionStarted = "notificationTypeMoonminingExtractionStarted"
 				
 				public init() {
 					self = .acceptedAlly
@@ -2734,31 +2767,6 @@ public extension ESI {
 				
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCharactersCharacterIDNotificationsType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCharactersCharacterIDNotificationsSenderType: String, JSONCoding, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDNotificationsSenderType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				

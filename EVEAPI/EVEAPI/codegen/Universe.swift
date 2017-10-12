@@ -312,38 +312,6 @@ public extension ESI {
 			}
 		}
 		
-		public func getItemCategories(completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/categories/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
 		public func getGraphics(completionBlock:((Result<[Int]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -363,6 +331,38 @@ public extension ESI {
 			
 			
 			let url = session!.baseURL + "latest/universe/graphics/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getItemCategories(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/universe/categories/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -1525,6 +1525,101 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIUniverseRegionInformation) public class RegionInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var constellations: [Int] = []
+			public var localizedDescription: String? = nil
+			public var name: String = String()
+			public var regionID: Int = Int()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				constellations = try (dictionary["constellations"] as? [Any])?.map {try Int(json: $0)} ?? []
+				localizedDescription = dictionary["description"] as? String
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.name = name
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.regionID = regionID
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				constellations = aDecoder.decodeObject(forKey: "constellations") as? [Int] ?? []
+				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				regionID = aDecoder.decodeInteger(forKey: "region_id")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(constellations, forKey: "constellations")
+				if let v = localizedDescription {
+					aCoder.encode(v, forKey: "description")
+				}
+				aCoder.encode(name, forKey: "name")
+				aCoder.encode(regionID, forKey: "region_id")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["constellations"] = constellations.json
+				if let v = localizedDescription?.json {
+					json["description"] = v
+				}
+				json["name"] = name.json
+				json["region_id"] = regionID.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				self.constellations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.localizedDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.regionID.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Universe.RegionInformation, rhs: Universe.RegionInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.RegionInformation) {
+				constellations = other.constellations.flatMap { $0 }
+				localizedDescription = other.localizedDescription
+				name = other.name
+				regionID = other.regionID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.RegionInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? RegionInformation)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIUniverseTypeInformation) public class TypeInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			@objc(ESIUniverseTypeInformationGetUniverseTypesTypeIDDogmaEffects) public class GetUniverseTypesTypeIDDogmaEffects: NSObject, NSSecureCoding, NSCopying, JSONCoding {
@@ -1686,8 +1781,10 @@ public extension ESI {
 			public var graphicID: Int? = nil
 			public var groupID: Int = Int()
 			public var iconID: Int? = nil
+			public var marketGroupID: Int? = nil
 			public var mass: Float? = nil
 			public var name: String = String()
+			public var packagedVolume: Float? = nil
 			public var portionSize: Int? = nil
 			public var published: Bool = Bool()
 			public var radius: Float? = nil
@@ -1707,9 +1804,11 @@ public extension ESI {
 				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.groupID = groupID
 				iconID = dictionary["icon_id"] as? Int
+				marketGroupID = dictionary["market_group_id"] as? Int
 				mass = dictionary["mass"] as? Float
 				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.name = name
+				packagedVolume = dictionary["packaged_volume"] as? Float
 				portionSize = dictionary["portion_size"] as? Int
 				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.published = published
@@ -1737,8 +1836,10 @@ public extension ESI {
 				graphicID = aDecoder.containsValue(forKey: "graphic_id") ? aDecoder.decodeInteger(forKey: "graphic_id") : nil
 				groupID = aDecoder.decodeInteger(forKey: "group_id")
 				iconID = aDecoder.containsValue(forKey: "icon_id") ? aDecoder.decodeInteger(forKey: "icon_id") : nil
+				marketGroupID = aDecoder.containsValue(forKey: "market_group_id") ? aDecoder.decodeInteger(forKey: "market_group_id") : nil
 				mass = aDecoder.containsValue(forKey: "mass") ? aDecoder.decodeFloat(forKey: "mass") : nil
 				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				packagedVolume = aDecoder.containsValue(forKey: "packaged_volume") ? aDecoder.decodeFloat(forKey: "packaged_volume") : nil
 				portionSize = aDecoder.containsValue(forKey: "portion_size") ? aDecoder.decodeInteger(forKey: "portion_size") : nil
 				published = aDecoder.decodeBool(forKey: "published")
 				radius = aDecoder.containsValue(forKey: "radius") ? aDecoder.decodeFloat(forKey: "radius") : nil
@@ -1766,10 +1867,16 @@ public extension ESI {
 				if let v = iconID {
 					aCoder.encode(v, forKey: "icon_id")
 				}
+				if let v = marketGroupID {
+					aCoder.encode(v, forKey: "market_group_id")
+				}
 				if let v = mass {
 					aCoder.encode(v, forKey: "mass")
 				}
 				aCoder.encode(name, forKey: "name")
+				if let v = packagedVolume {
+					aCoder.encode(v, forKey: "packaged_volume")
+				}
 				if let v = portionSize {
 					aCoder.encode(v, forKey: "portion_size")
 				}
@@ -1802,10 +1909,16 @@ public extension ESI {
 				if let v = iconID?.json {
 					json["icon_id"] = v
 				}
+				if let v = marketGroupID?.json {
+					json["market_group_id"] = v
+				}
 				if let v = mass?.json {
 					json["mass"] = v
 				}
 				json["name"] = name.json
+				if let v = packagedVolume?.json {
+					json["packaged_volume"] = v
+				}
 				if let v = portionSize?.json {
 					json["portion_size"] = v
 				}
@@ -1829,8 +1942,10 @@ public extension ESI {
 				hashCombine(seed: &hash, value: self.graphicID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.groupID.hashValue)
 				hashCombine(seed: &hash, value: self.iconID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.marketGroupID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.mass?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.packagedVolume?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.portionSize?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.published.hashValue)
 				hashCombine(seed: &hash, value: self.radius?.hashValue ?? 0)
@@ -1855,8 +1970,10 @@ public extension ESI {
 				graphicID = other.graphicID
 				groupID = other.groupID
 				iconID = other.iconID
+				marketGroupID = other.marketGroupID
 				mass = other.mass
 				name = other.name
+				packagedVolume = other.packagedVolume
 				portionSize = other.portionSize
 				published = other.published
 				radius = other.radius
@@ -1871,101 +1988,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? TypeInformation)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESIUniverseRegionInformation) public class RegionInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var constellations: [Int] = []
-			public var localizedDescription: String? = nil
-			public var name: String = String()
-			public var regionID: Int = Int()
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				constellations = try (dictionary["constellations"] as? [Any])?.map {try Int(json: $0)} ?? []
-				localizedDescription = dictionary["description"] as? String
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.regionID = regionID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				constellations = aDecoder.decodeObject(forKey: "constellations") as? [Int] ?? []
-				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				regionID = aDecoder.decodeInteger(forKey: "region_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(constellations, forKey: "constellations")
-				if let v = localizedDescription {
-					aCoder.encode(v, forKey: "description")
-				}
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(regionID, forKey: "region_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["constellations"] = constellations.json
-				if let v = localizedDescription?.json {
-					json["description"] = v
-				}
-				json["name"] = name.json
-				json["region_id"] = regionID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				self.constellations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.localizedDescription?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.name.hashValue)
-				hashCombine(seed: &hash, value: self.regionID.hashValue)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Universe.RegionInformation, rhs: Universe.RegionInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.RegionInformation) {
-				constellations = other.constellations.flatMap { $0 }
-				localizedDescription = other.localizedDescription
-				name = other.name
-				regionID = other.regionID
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.RegionInformation(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? RegionInformation)?.hashValue == hashValue
 			}
 			
 		}

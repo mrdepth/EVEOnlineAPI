@@ -14,6 +14,40 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
+		public func getCorporationNames(corporationIds: [Int64], completionBlock:((Result<[Corporation.Name]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = corporationIds.httpQuery {
+				query.append(URLQueryItem(name: "corporation_ids", value: v))
+			}
+			
+			let url = session!.baseURL + "latest/corporations/names/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Corporation.Name]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func getCorporationMemberLimit(corporationID: Int, completionBlock:((Result<Int>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -80,11 +114,12 @@ public extension ESI {
 			}
 		}
 		
-		public func getCorporationNames(corporationIds: [Int64], completionBlock:((Result<[Corporation.Name]>) -> Void)?) {
+		public func getCorporationBlueprints(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_blueprints.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
 			
@@ -96,11 +131,11 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			if let v = corporationIds.httpQuery {
-				query.append(URLQueryItem(name: "corporation_ids", value: v))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/corporations/names/"
+			let url = session!.baseURL + "latest/corporations/\(corporationID)/blueprints/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -108,7 +143,40 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Corporation.Name]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCorporationTitles(corporationID: Int, completionBlock:((Result<[Corporation.GetCorporationsCorporationIDTitlesOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_titles.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/corporations/\(corporationID)/titles/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDTitlesOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -548,6 +616,910 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESICorporationGetCorporationsCorporationIDNotFound) public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDNotFound, rhs: Corporation.GetCorporationsCorporationIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESICorporationGetCorporationsCorporationIDTitlesOk) public class GetCorporationsCorporationIDTitlesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCorporationsCorporationIDTitlesGrantableRolesAtOther: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesGrantableRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesGrantableRolesAtBase: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesGrantableRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesGrantableRoles: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesGrantableRoles(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesRoles: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesRoles(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesGrantableRolesAtHq: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesGrantableRolesAtHq(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesRolesAtBase: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesRolesAtHq: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesRolesAtHq(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDTitlesRolesAtOther: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDTitlesRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var grantableRoles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRoles]? = nil
+			public var grantableRolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtBase]? = nil
+			public var grantableRolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtHq]? = nil
+			public var grantableRolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtOther]? = nil
+			public var name: String? = nil
+			public var roles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRoles]? = nil
+			public var rolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtBase]? = nil
+			public var rolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtHq]? = nil
+			public var rolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtOther]? = nil
+			public var titleID: Int? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				grantableRoles = try (dictionary["grantable_roles"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRoles(json: $0)}
+				grantableRolesAtBase = try (dictionary["grantable_roles_at_base"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtBase(json: $0)}
+				grantableRolesAtHq = try (dictionary["grantable_roles_at_hq"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtHq(json: $0)}
+				grantableRolesAtOther = try (dictionary["grantable_roles_at_other"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtOther(json: $0)}
+				name = dictionary["name"] as? String
+				roles = try (dictionary["roles"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRoles(json: $0)}
+				rolesAtBase = try (dictionary["roles_at_base"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtBase(json: $0)}
+				rolesAtHq = try (dictionary["roles_at_hq"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtHq(json: $0)}
+				rolesAtOther = try (dictionary["roles_at_other"] as? [Any])?.map {try Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtOther(json: $0)}
+				titleID = dictionary["title_id"] as? Int
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				grantableRoles = aDecoder.decodeObject(forKey: "grantable_roles") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRoles]
+				grantableRolesAtBase = aDecoder.decodeObject(forKey: "grantable_roles_at_base") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtBase]
+				grantableRolesAtHq = aDecoder.decodeObject(forKey: "grantable_roles_at_hq") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtHq]
+				grantableRolesAtOther = aDecoder.decodeObject(forKey: "grantable_roles_at_other") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtOther]
+				name = aDecoder.decodeObject(forKey: "name") as? String
+				roles = aDecoder.decodeObject(forKey: "roles") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRoles]
+				rolesAtBase = aDecoder.decodeObject(forKey: "roles_at_base") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtBase]
+				rolesAtHq = aDecoder.decodeObject(forKey: "roles_at_hq") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtHq]
+				rolesAtOther = aDecoder.decodeObject(forKey: "roles_at_other") as? [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtOther]
+				titleID = aDecoder.containsValue(forKey: "title_id") ? aDecoder.decodeInteger(forKey: "title_id") : nil
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = grantableRoles {
+					aCoder.encode(v, forKey: "grantable_roles")
+				}
+				if let v = grantableRolesAtBase {
+					aCoder.encode(v, forKey: "grantable_roles_at_base")
+				}
+				if let v = grantableRolesAtHq {
+					aCoder.encode(v, forKey: "grantable_roles_at_hq")
+				}
+				if let v = grantableRolesAtOther {
+					aCoder.encode(v, forKey: "grantable_roles_at_other")
+				}
+				if let v = name {
+					aCoder.encode(v, forKey: "name")
+				}
+				if let v = roles {
+					aCoder.encode(v, forKey: "roles")
+				}
+				if let v = rolesAtBase {
+					aCoder.encode(v, forKey: "roles_at_base")
+				}
+				if let v = rolesAtHq {
+					aCoder.encode(v, forKey: "roles_at_hq")
+				}
+				if let v = rolesAtOther {
+					aCoder.encode(v, forKey: "roles_at_other")
+				}
+				if let v = titleID {
+					aCoder.encode(v, forKey: "title_id")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = grantableRoles?.json {
+					json["grantable_roles"] = v
+				}
+				if let v = grantableRolesAtBase?.json {
+					json["grantable_roles_at_base"] = v
+				}
+				if let v = grantableRolesAtHq?.json {
+					json["grantable_roles_at_hq"] = v
+				}
+				if let v = grantableRolesAtOther?.json {
+					json["grantable_roles_at_other"] = v
+				}
+				if let v = name?.json {
+					json["name"] = v
+				}
+				if let v = roles?.json {
+					json["roles"] = v
+				}
+				if let v = rolesAtBase?.json {
+					json["roles_at_base"] = v
+				}
+				if let v = rolesAtHq?.json {
+					json["roles_at_hq"] = v
+				}
+				if let v = rolesAtOther?.json {
+					json["roles_at_other"] = v
+				}
+				if let v = titleID?.json {
+					json["title_id"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				self.grantableRoles?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.grantableRolesAtBase?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.grantableRolesAtHq?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.grantableRolesAtOther?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+				self.roles?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.rolesAtBase?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.rolesAtHq?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.rolesAtOther?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.titleID?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDTitlesOk, rhs: Corporation.GetCorporationsCorporationIDTitlesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.GetCorporationsCorporationIDTitlesOk) {
+				grantableRoles = other.grantableRoles?.flatMap { $0 }
+				grantableRolesAtBase = other.grantableRolesAtBase?.flatMap { $0 }
+				grantableRolesAtHq = other.grantableRolesAtHq?.flatMap { $0 }
+				grantableRolesAtOther = other.grantableRolesAtOther?.flatMap { $0 }
+				name = other.name
+				roles = other.roles?.flatMap { $0 }
+				rolesAtBase = other.rolesAtBase?.flatMap { $0 }
+				rolesAtHq = other.rolesAtHq?.flatMap { $0 }
+				rolesAtOther = other.rolesAtOther?.flatMap { $0 }
+				titleID = other.titleID
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.GetCorporationsCorporationIDTitlesOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDTitlesOk)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESICorporationIcon) public class Icon: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var px128x128: String? = nil
+			public var px256x256: String? = nil
+			public var px64x64: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				px128x128 = dictionary["px128x128"] as? String
+				px256x256 = dictionary["px256x256"] as? String
+				px64x64 = dictionary["px64x64"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				px128x128 = aDecoder.decodeObject(forKey: "px128x128") as? String
+				px256x256 = aDecoder.decodeObject(forKey: "px256x256") as? String
+				px64x64 = aDecoder.decodeObject(forKey: "px64x64") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = px128x128 {
+					aCoder.encode(v, forKey: "px128x128")
+				}
+				if let v = px256x256 {
+					aCoder.encode(v, forKey: "px256x256")
+				}
+				if let v = px64x64 {
+					aCoder.encode(v, forKey: "px64x64")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = px128x128?.json {
+					json["px128x128"] = v
+				}
+				if let v = px256x256?.json {
+					json["px256x256"] = v
+				}
+				if let v = px64x64?.json {
+					json["px64x64"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.px128x128?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px256x256?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.px64x64?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Corporation.Icon, rhs: Corporation.Icon) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.Icon) {
+				px128x128 = other.px128x128
+				px256x256 = other.px256x256
+				px64x64 = other.px64x64
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Icon(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Icon)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESICorporationGetCorporationsCorporationIDIconsNotFound) public class GetCorporationsCorporationIDIconsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -615,6 +1587,188 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetCorporationsCorporationIDIconsNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESICorporationInformation) public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCorporationsCorporationIDFaction: String, JSONCoding, HTTPQueryable {
+				case amarr = "Amarr"
+				case caldari = "Caldari"
+				case gallente = "Gallente"
+				case minmatar = "Minmatar"
+				
+				public init() {
+					self = .minmatar
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDFaction(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var allianceID: Int? = nil
+			public var ceoID: Int = Int()
+			public var corporationDescription: String = String()
+			public var corporationName: String = String()
+			public var creationDate: Date? = nil
+			public var creatorID: Int = Int()
+			public var faction: Corporation.Information.GetCorporationsCorporationIDFaction? = nil
+			public var memberCount: Int = Int()
+			public var taxRate: Float = Float()
+			public var ticker: String = String()
+			public var url: String = String()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				allianceID = dictionary["alliance_id"] as? Int
+				guard let ceoID = dictionary["ceo_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.ceoID = ceoID
+				guard let corporationDescription = dictionary["corporation_description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.corporationDescription = corporationDescription
+				guard let corporationName = dictionary["corporation_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.corporationName = corporationName
+				creationDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["creation_date"] as? String ?? "")
+				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.creatorID = creatorID
+				faction = Corporation.Information.GetCorporationsCorporationIDFaction(rawValue: dictionary["faction"] as? String ?? "")
+				guard let memberCount = dictionary["member_count"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.memberCount = memberCount
+				guard let taxRate = dictionary["tax_rate"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.taxRate = taxRate
+				guard let ticker = dictionary["ticker"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.ticker = ticker
+				guard let url = dictionary["url"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.url = url
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
+				ceoID = aDecoder.decodeInteger(forKey: "ceo_id")
+				corporationDescription = aDecoder.decodeObject(forKey: "corporation_description") as? String ?? String()
+				corporationName = aDecoder.decodeObject(forKey: "corporation_name") as? String ?? String()
+				creationDate = aDecoder.decodeObject(forKey: "creation_date") as? Date
+				creatorID = aDecoder.decodeInteger(forKey: "creator_id")
+				faction = Corporation.Information.GetCorporationsCorporationIDFaction(rawValue: aDecoder.decodeObject(forKey: "faction") as? String ?? "")
+				memberCount = aDecoder.decodeInteger(forKey: "member_count")
+				taxRate = aDecoder.decodeFloat(forKey: "tax_rate")
+				ticker = aDecoder.decodeObject(forKey: "ticker") as? String ?? String()
+				url = aDecoder.decodeObject(forKey: "url") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = allianceID {
+					aCoder.encode(v, forKey: "alliance_id")
+				}
+				aCoder.encode(ceoID, forKey: "ceo_id")
+				aCoder.encode(corporationDescription, forKey: "corporation_description")
+				aCoder.encode(corporationName, forKey: "corporation_name")
+				if let v = creationDate {
+					aCoder.encode(v, forKey: "creation_date")
+				}
+				aCoder.encode(creatorID, forKey: "creator_id")
+				if let v = faction {
+					aCoder.encode(v.rawValue, forKey: "faction")
+				}
+				aCoder.encode(memberCount, forKey: "member_count")
+				aCoder.encode(taxRate, forKey: "tax_rate")
+				aCoder.encode(ticker, forKey: "ticker")
+				aCoder.encode(url, forKey: "url")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = allianceID?.json {
+					json["alliance_id"] = v
+				}
+				json["ceo_id"] = ceoID.json
+				json["corporation_description"] = corporationDescription.json
+				json["corporation_name"] = corporationName.json
+				if let v = creationDate?.json {
+					json["creation_date"] = v
+				}
+				json["creator_id"] = creatorID.json
+				if let v = faction?.json {
+					json["faction"] = v
+				}
+				json["member_count"] = memberCount.json
+				json["tax_rate"] = taxRate.json
+				json["ticker"] = ticker.json
+				json["url"] = url.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.ceoID.hashValue)
+				hashCombine(seed: &hash, value: self.corporationDescription.hashValue)
+				hashCombine(seed: &hash, value: self.corporationName.hashValue)
+				hashCombine(seed: &hash, value: self.creationDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.creatorID.hashValue)
+				hashCombine(seed: &hash, value: self.faction?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.memberCount.hashValue)
+				hashCombine(seed: &hash, value: self.taxRate.hashValue)
+				hashCombine(seed: &hash, value: self.ticker.hashValue)
+				hashCombine(seed: &hash, value: self.url.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Corporation.Information, rhs: Corporation.Information) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Corporation.Information) {
+				allianceID = other.allianceID
+				ceoID = other.ceoID
+				corporationDescription = other.corporationDescription
+				corporationName = other.corporationName
+				creationDate = other.creationDate
+				creatorID = other.creatorID
+				faction = other.faction
+				memberCount = other.memberCount
+				taxRate = other.taxRate
+				ticker = other.ticker
+				url = other.url
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Corporation.Information(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? Information)?.hashValue == hashValue
 			}
 			
 		}
@@ -944,7 +2098,7 @@ public extension ESI {
 		
 		@objc(ESICorporationRole) public class Role: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
-			public enum GetCorporationsCorporationIDRolesGrantableRolesAtBase: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDRolesRolesAtHq: String, JSONCoding, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -997,7 +2151,7 @@ public extension ESI {
 				case trader = "Trader"
 				
 				public init() {
-					self = .director
+					self = .accountTake1
 				}
 				
 				public var json: Any {
@@ -1005,78 +2159,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesGrantableRolesAtOther: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtHq(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1139,7 +2222,7 @@ public extension ESI {
 				case trader = "Trader"
 				
 				public init() {
-					self = .director
+					self = .accountTake1
 				}
 				
 				public var json: Any {
@@ -1157,7 +2240,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCorporationsCorporationIDRolesRolesAtBase: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDRolesGrantableRolesAtBase: String, JSONCoding, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -1210,7 +2293,7 @@ public extension ESI {
 				case trader = "Trader"
 				
 				public init() {
-					self = .director
+					self = .accountTake1
 				}
 				
 				public var json: Any {
@@ -1218,7 +2301,7 @@ public extension ESI {
 				}
 				
 				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1281,7 +2364,7 @@ public extension ESI {
 				case trader = "Trader"
 				
 				public init() {
-					self = .director
+					self = .accountTake1
 				}
 				
 				public var json: Any {
@@ -1290,148 +2373,6 @@ public extension ESI {
 				
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRoles(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesGrantableRoles: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRoles(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDRolesRolesAtHq: String, JSONCoding, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
-				
-				public init() {
-					self = .director
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtHq(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1494,7 +2435,7 @@ public extension ESI {
 				case trader = "Trader"
 				
 				public init() {
-					self = .director
+					self = .accountTake1
 				}
 				
 				public var json: Any {
@@ -1503,6 +2444,219 @@ public extension ESI {
 				
 				public init(json: Any) throws {
 					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDRolesGrantableRolesAtOther: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDRolesGrantableRoles: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesGrantableRoles(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDRolesRolesAtBase: String, JSONCoding, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public init() {
+					self = .accountTake1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDRolesRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					self = v
 				}
 				
@@ -1666,16 +2820,173 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESICorporationGetCorporationsCorporationIDNotFound) public class GetCorporationsCorporationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESICorporationGetCorporationsCorporationIDBlueprintsOk) public class GetCorporationsCorporationIDBlueprintsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public enum GetCorporationsCorporationIDBlueprintsLocationFlag: String, JSONCoding, HTTPQueryable {
+				case assetSafety = "AssetSafety"
+				case autoFit = "AutoFit"
+				case bonus = "Bonus"
+				case booster = "Booster"
+				case boosterBay = "BoosterBay"
+				case capsule = "Capsule"
+				case cargo = "Cargo"
+				case corpDeliveries = "CorpDeliveries"
+				case corpSAG1 = "CorpSAG1"
+				case corpSAG2 = "CorpSAG2"
+				case corpSAG3 = "CorpSAG3"
+				case corpSAG4 = "CorpSAG4"
+				case corpSAG5 = "CorpSAG5"
+				case corpSAG6 = "CorpSAG6"
+				case corpSAG7 = "CorpSAG7"
+				case crateLoot = "CrateLoot"
+				case deliveries = "Deliveries"
+				case droneBay = "DroneBay"
+				case dustBattle = "DustBattle"
+				case dustDatabank = "DustDatabank"
+				case fighterBay = "FighterBay"
+				case fighterTube0 = "FighterTube0"
+				case fighterTube1 = "FighterTube1"
+				case fighterTube2 = "FighterTube2"
+				case fighterTube3 = "FighterTube3"
+				case fighterTube4 = "FighterTube4"
+				case fleetHangar = "FleetHangar"
+				case hangar = "Hangar"
+				case hangarAll = "HangarAll"
+				case hiSlot0 = "HiSlot0"
+				case hiSlot1 = "HiSlot1"
+				case hiSlot2 = "HiSlot2"
+				case hiSlot3 = "HiSlot3"
+				case hiSlot4 = "HiSlot4"
+				case hiSlot5 = "HiSlot5"
+				case hiSlot6 = "HiSlot6"
+				case hiSlot7 = "HiSlot7"
+				case hiddenModifers = "HiddenModifers"
+				case implant = "Implant"
+				case impounded = "Impounded"
+				case junkyardReprocessed = "JunkyardReprocessed"
+				case junkyardTrashed = "JunkyardTrashed"
+				case loSlot0 = "LoSlot0"
+				case loSlot1 = "LoSlot1"
+				case loSlot2 = "LoSlot2"
+				case loSlot3 = "LoSlot3"
+				case loSlot4 = "LoSlot4"
+				case loSlot5 = "LoSlot5"
+				case loSlot6 = "LoSlot6"
+				case loSlot7 = "LoSlot7"
+				case locked = "Locked"
+				case medSlot0 = "MedSlot0"
+				case medSlot1 = "MedSlot1"
+				case medSlot2 = "MedSlot2"
+				case medSlot3 = "MedSlot3"
+				case medSlot4 = "MedSlot4"
+				case medSlot5 = "MedSlot5"
+				case medSlot6 = "MedSlot6"
+				case medSlot7 = "MedSlot7"
+				case officeFolder = "OfficeFolder"
+				case pilot = "Pilot"
+				case planetSurface = "PlanetSurface"
+				case quafeBay = "QuafeBay"
+				case reward = "Reward"
+				case rigSlot0 = "RigSlot0"
+				case rigSlot1 = "RigSlot1"
+				case rigSlot2 = "RigSlot2"
+				case rigSlot3 = "RigSlot3"
+				case rigSlot4 = "RigSlot4"
+				case rigSlot5 = "RigSlot5"
+				case rigSlot6 = "RigSlot6"
+				case rigSlot7 = "RigSlot7"
+				case secondaryStorage = "SecondaryStorage"
+				case serviceSlot0 = "ServiceSlot0"
+				case serviceSlot1 = "ServiceSlot1"
+				case serviceSlot2 = "ServiceSlot2"
+				case serviceSlot3 = "ServiceSlot3"
+				case serviceSlot4 = "ServiceSlot4"
+				case serviceSlot5 = "ServiceSlot5"
+				case serviceSlot6 = "ServiceSlot6"
+				case serviceSlot7 = "ServiceSlot7"
+				case shipHangar = "ShipHangar"
+				case shipOffline = "ShipOffline"
+				case skill = "Skill"
+				case skillInTraining = "SkillInTraining"
+				case specializedAmmoHold = "SpecializedAmmoHold"
+				case specializedCommandCenterHold = "SpecializedCommandCenterHold"
+				case specializedFuelBay = "SpecializedFuelBay"
+				case specializedGasHold = "SpecializedGasHold"
+				case specializedIndustrialShipHold = "SpecializedIndustrialShipHold"
+				case specializedLargeShipHold = "SpecializedLargeShipHold"
+				case specializedMaterialBay = "SpecializedMaterialBay"
+				case specializedMediumShipHold = "SpecializedMediumShipHold"
+				case specializedMineralHold = "SpecializedMineralHold"
+				case specializedOreHold = "SpecializedOreHold"
+				case specializedPlanetaryCommoditiesHold = "SpecializedPlanetaryCommoditiesHold"
+				case specializedSalvageHold = "SpecializedSalvageHold"
+				case specializedShipHold = "SpecializedShipHold"
+				case specializedSmallShipHold = "SpecializedSmallShipHold"
+				case structureActive = "StructureActive"
+				case structureFuel = "StructureFuel"
+				case structureInactive = "StructureInactive"
+				case structureOffline = "StructureOffline"
+				case subSystemSlot0 = "SubSystemSlot0"
+				case subSystemSlot1 = "SubSystemSlot1"
+				case subSystemSlot2 = "SubSystemSlot2"
+				case subSystemSlot3 = "SubSystemSlot3"
+				case subSystemSlot4 = "SubSystemSlot4"
+				case subSystemSlot5 = "SubSystemSlot5"
+				case subSystemSlot6 = "SubSystemSlot6"
+				case subSystemSlot7 = "SubSystemSlot7"
+				case subsystemBay = "SubsystemBay"
+				case unlocked = "Unlocked"
+				case wallet = "Wallet"
+				case wardrobe = "Wardrobe"
+				
+				public init() {
+					self = .assetSafety
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDBlueprintsLocationFlag(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
-			public var error: String? = nil
+			public var itemID: Int64 = Int64()
+			public var locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag = Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag()
+			public var locationID: Int64 = Int64()
+			public var materialEfficiency: Int = Int()
+			public var quantity: Int = Int()
+			public var runs: Int = Int()
+			public var timeEfficiency: Int = Int()
+			public var typeID: Int = Int()
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.itemID = itemID
+				guard let locationFlag = Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.locationFlag = locationFlag
+				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.locationID = locationID
+				guard let materialEfficiency = dictionary["material_efficiency"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.materialEfficiency = materialEfficiency
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.quantity = quantity
+				guard let runs = dictionary["runs"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.runs = runs
+				guard let timeEfficiency = dictionary["time_efficiency"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.timeEfficiency = timeEfficiency
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.typeID = typeID
 				
 				super.init()
 			}
@@ -1689,28 +3000,52 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				itemID = aDecoder.decodeInt64(forKey: "item_id")
+				locationFlag = Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag()
+				locationID = aDecoder.decodeInt64(forKey: "location_id")
+				materialEfficiency = aDecoder.decodeInteger(forKey: "material_efficiency")
+				quantity = aDecoder.decodeInteger(forKey: "quantity")
+				runs = aDecoder.decodeInteger(forKey: "runs")
+				timeEfficiency = aDecoder.decodeInteger(forKey: "time_efficiency")
+				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(itemID, forKey: "item_id")
+				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
+				aCoder.encode(locationID, forKey: "location_id")
+				aCoder.encode(materialEfficiency, forKey: "material_efficiency")
+				aCoder.encode(quantity, forKey: "quantity")
+				aCoder.encode(runs, forKey: "runs")
+				aCoder.encode(timeEfficiency, forKey: "time_efficiency")
+				aCoder.encode(typeID, forKey: "type_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["item_id"] = itemID.json
+				json["location_flag"] = locationFlag.json
+				json["location_id"] = locationID.json
+				json["material_efficiency"] = materialEfficiency.json
+				json["quantity"] = quantity.json
+				json["runs"] = runs.json
+				json["time_efficiency"] = timeEfficiency.json
+				json["type_id"] = typeID.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.itemID.hashValue)
+				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.materialEfficiency.hashValue)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				hashCombine(seed: &hash, value: self.runs.hashValue)
+				hashCombine(seed: &hash, value: self.timeEfficiency.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
 			}()
 			
@@ -1718,115 +3053,28 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDNotFound, rhs: Corporation.GetCorporationsCorporationIDNotFound) -> Bool {
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDBlueprintsOk, rhs: Corporation.GetCorporationsCorporationIDBlueprintsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Corporation.GetCorporationsCorporationIDNotFound) {
-				error = other.error
+			init(_ other: Corporation.GetCorporationsCorporationIDBlueprintsOk) {
+				itemID = other.itemID
+				locationFlag = other.locationFlag
+				locationID = other.locationID
+				materialEfficiency = other.materialEfficiency
+				quantity = other.quantity
+				runs = other.runs
+				timeEfficiency = other.timeEfficiency
+				typeID = other.typeID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.GetCorporationsCorporationIDNotFound(self)
+				return Corporation.GetCorporationsCorporationIDBlueprintsOk(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESICorporationIcon) public class Icon: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var px128x128: String? = nil
-			public var px256x256: String? = nil
-			public var px64x64: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				px128x128 = dictionary["px128x128"] as? String
-				px256x256 = dictionary["px256x256"] as? String
-				px64x64 = dictionary["px64x64"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				px128x128 = aDecoder.decodeObject(forKey: "px128x128") as? String
-				px256x256 = aDecoder.decodeObject(forKey: "px256x256") as? String
-				px64x64 = aDecoder.decodeObject(forKey: "px64x64") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = px128x128 {
-					aCoder.encode(v, forKey: "px128x128")
-				}
-				if let v = px256x256 {
-					aCoder.encode(v, forKey: "px256x256")
-				}
-				if let v = px64x64 {
-					aCoder.encode(v, forKey: "px64x64")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = px128x128?.json {
-					json["px128x128"] = v
-				}
-				if let v = px256x256?.json {
-					json["px256x256"] = v
-				}
-				if let v = px64x64?.json {
-					json["px64x64"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.px128x128?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.px256x256?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.px64x64?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Corporation.Icon, rhs: Corporation.Icon) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Corporation.Icon) {
-				px128x128 = other.px128x128
-				px256x256 = other.px256x256
-				px64x64 = other.px64x64
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.Icon(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Icon)?.hashValue == hashValue
+				return (object as? GetCorporationsCorporationIDBlueprintsOk)?.hashValue == hashValue
 			}
 			
 		}
@@ -2493,188 +3741,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Structure)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESICorporationInformation) public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			public enum GetCorporationsCorporationIDFaction: String, JSONCoding, HTTPQueryable {
-				case amarr = "Amarr"
-				case caldari = "Caldari"
-				case gallente = "Gallente"
-				case minmatar = "Minmatar"
-				
-				public init() {
-					self = .minmatar
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDFaction(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var allianceID: Int? = nil
-			public var ceoID: Int = Int()
-			public var corporationDescription: String = String()
-			public var corporationName: String = String()
-			public var creationDate: Date? = nil
-			public var creatorID: Int = Int()
-			public var faction: Corporation.Information.GetCorporationsCorporationIDFaction? = nil
-			public var memberCount: Int = Int()
-			public var taxRate: Float = Float()
-			public var ticker: String = String()
-			public var url: String = String()
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				allianceID = dictionary["alliance_id"] as? Int
-				guard let ceoID = dictionary["ceo_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.ceoID = ceoID
-				guard let corporationDescription = dictionary["corporation_description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationDescription = corporationDescription
-				guard let corporationName = dictionary["corporation_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationName = corporationName
-				creationDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["creation_date"] as? String ?? "")
-				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.creatorID = creatorID
-				faction = Corporation.Information.GetCorporationsCorporationIDFaction(rawValue: dictionary["faction"] as? String ?? "")
-				guard let memberCount = dictionary["member_count"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.memberCount = memberCount
-				guard let taxRate = dictionary["tax_rate"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.taxRate = taxRate
-				guard let ticker = dictionary["ticker"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.ticker = ticker
-				guard let url = dictionary["url"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.url = url
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-				ceoID = aDecoder.decodeInteger(forKey: "ceo_id")
-				corporationDescription = aDecoder.decodeObject(forKey: "corporation_description") as? String ?? String()
-				corporationName = aDecoder.decodeObject(forKey: "corporation_name") as? String ?? String()
-				creationDate = aDecoder.decodeObject(forKey: "creation_date") as? Date
-				creatorID = aDecoder.decodeInteger(forKey: "creator_id")
-				faction = Corporation.Information.GetCorporationsCorporationIDFaction(rawValue: aDecoder.decodeObject(forKey: "faction") as? String ?? "")
-				memberCount = aDecoder.decodeInteger(forKey: "member_count")
-				taxRate = aDecoder.decodeFloat(forKey: "tax_rate")
-				ticker = aDecoder.decodeObject(forKey: "ticker") as? String ?? String()
-				url = aDecoder.decodeObject(forKey: "url") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = allianceID {
-					aCoder.encode(v, forKey: "alliance_id")
-				}
-				aCoder.encode(ceoID, forKey: "ceo_id")
-				aCoder.encode(corporationDescription, forKey: "corporation_description")
-				aCoder.encode(corporationName, forKey: "corporation_name")
-				if let v = creationDate {
-					aCoder.encode(v, forKey: "creation_date")
-				}
-				aCoder.encode(creatorID, forKey: "creator_id")
-				if let v = faction {
-					aCoder.encode(v.rawValue, forKey: "faction")
-				}
-				aCoder.encode(memberCount, forKey: "member_count")
-				aCoder.encode(taxRate, forKey: "tax_rate")
-				aCoder.encode(ticker, forKey: "ticker")
-				aCoder.encode(url, forKey: "url")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = allianceID?.json {
-					json["alliance_id"] = v
-				}
-				json["ceo_id"] = ceoID.json
-				json["corporation_description"] = corporationDescription.json
-				json["corporation_name"] = corporationName.json
-				if let v = creationDate?.json {
-					json["creation_date"] = v
-				}
-				json["creator_id"] = creatorID.json
-				if let v = faction?.json {
-					json["faction"] = v
-				}
-				json["member_count"] = memberCount.json
-				json["tax_rate"] = taxRate.json
-				json["ticker"] = ticker.json
-				json["url"] = url.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.ceoID.hashValue)
-				hashCombine(seed: &hash, value: self.corporationDescription.hashValue)
-				hashCombine(seed: &hash, value: self.corporationName.hashValue)
-				hashCombine(seed: &hash, value: self.creationDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.creatorID.hashValue)
-				hashCombine(seed: &hash, value: self.faction?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.memberCount.hashValue)
-				hashCombine(seed: &hash, value: self.taxRate.hashValue)
-				hashCombine(seed: &hash, value: self.ticker.hashValue)
-				hashCombine(seed: &hash, value: self.url.hashValue)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Corporation.Information, rhs: Corporation.Information) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Corporation.Information) {
-				allianceID = other.allianceID
-				ceoID = other.ceoID
-				corporationDescription = other.corporationDescription
-				corporationName = other.corporationName
-				creationDate = other.creationDate
-				creatorID = other.creatorID
-				faction = other.faction
-				memberCount = other.memberCount
-				taxRate = other.taxRate
-				ticker = other.ticker
-				url = other.url
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Corporation.Information(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Information)?.hashValue == hashValue
 			}
 			
 		}

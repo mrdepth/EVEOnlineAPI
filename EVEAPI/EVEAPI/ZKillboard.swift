@@ -21,11 +21,12 @@ enum ZKillboardError: Error {
 
 extension DateFormatter {
 	static var zKillboardDateFormatter: DateFormatter {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-		return dateFormatter
+		return .esiDateTimeFormatter
+//		let dateFormatter = DateFormatter()
+//		dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+//		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+//		return dateFormatter
 	}
 }
 
@@ -195,18 +196,14 @@ extension ZKillboard {
 	
 	
 
-	public class Killmail: NSObject, Codable, NSCopying, JSONCoding {
+	@objc(ZKillboardKillmail) public class Killmail: NSObject, NSCoding, NSCopying, JSONCoding {
 		
-		public class Attacker: NSObject, Codable, NSCopying, JSONCoding {
+		@objc(ZKillboardKillmailAttacker) public class Attacker: NSObject, NSCoding, NSCopying, JSONCoding {
 
 			public var characterID: Int? = nil
-			public var characterName: String? = nil
 			public var corporationID: Int? = nil
-			public var corporationName: String? = nil
 			public var allianceID: Int? = nil
-			public var allianceName: String? = nil
 			public var factionID: Int? = nil
-			public var factionName: String? = nil
 			public var securityStatus: Float = Float()
 			public var damageDone: Int = Int()
 			public var finalBlow: Bool = Bool()
@@ -220,24 +217,20 @@ extension ZKillboard {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ZKillboardError.invalidFormat(type(of: self), json)}
 				
-				characterID = dictionary["characterID"] as? Int
-				characterName = dictionary["characterName"] as? String
-				corporationID = dictionary["corporationID"] as? Int
-				corporationName = dictionary["corporationName"] as? String
-				allianceID = dictionary["allianceID"] as? Int
-				allianceName = dictionary["allianceName"] as? String
-				factionID = dictionary["factionID"] as? Int
-				factionName = dictionary["factionName"] as? String
+				characterID = dictionary["character_id"] as? Int
+				corporationID = dictionary["corporation_id"] as? Int
+				allianceID = dictionary["alliance_id"] as? Int
+				factionID = dictionary["faction_id"] as? Int
 				
-				guard let damageDone = dictionary["damageDone"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+				guard let damageDone = dictionary["damage_done"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.damageDone = damageDone
 				
-				guard let finalBlow = dictionary["finalBlow"] as? Bool else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+				guard let finalBlow = dictionary["final_blow"] as? Bool else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.finalBlow = finalBlow
-				guard let securityStatus = dictionary["securityStatus"] as? Float else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+				guard let securityStatus = dictionary["security_status"] as? Float else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.securityStatus = securityStatus
-				shipTypeID = dictionary["shipTypeID"] as? Int
-				weaponTypeID = dictionary["weaponTypeID"] as? Int
+				shipTypeID = dictionary["ship_type_id"] as? Int
+				weaponTypeID = dictionary["weapon_type_id"] as? Int
 				
 				super.init()
 			}
@@ -246,15 +239,11 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			/*public required init?(coder aDecoder: NSCoder) {
+			public required init?(coder aDecoder: NSCoder) {
 				characterID = aDecoder.containsValue(forKey: "characterID") ? aDecoder.decodeInteger(forKey: "characterID") : nil
-				characterName = aDecoder.containsValue(forKey: "characterName") ? aDecoder.decodeObject(forKey: "characterName") as? String : nil
 				corporationID = aDecoder.containsValue(forKey: "corporationID") ? aDecoder.decodeInteger(forKey: "corporationID") : nil
-				corporationName = aDecoder.containsValue(forKey: "corporationName") ? aDecoder.decodeObject(forKey: "corporationName") as? String : nil
 				allianceID = aDecoder.containsValue(forKey: "allianceID") ? aDecoder.decodeInteger(forKey: "allianceID") : nil
-				allianceName = aDecoder.containsValue(forKey: "allianceName") ? aDecoder.decodeObject(forKey: "allianceName") as? String : nil
 				factionID = aDecoder.containsValue(forKey: "factionID") ? aDecoder.decodeInteger(forKey: "factionID") : nil
-				factionName = aDecoder.containsValue(forKey: "factionName") ? aDecoder.decodeObject(forKey: "factionName") as? String : nil
 				
 				damageDone = aDecoder.decodeInteger(forKey: "damageDone")
 				finalBlow = aDecoder.decodeBool(forKey: "finalBlow")
@@ -269,26 +258,14 @@ extension ZKillboard {
 				if let v = characterID {
 					aCoder.encode(v, forKey: "characterID")
 				}
-				if let v = characterName {
-					aCoder.encode(v, forKey: "characterName")
-				}
 				if let v = corporationID {
 					aCoder.encode(v, forKey: "corporationID")
-				}
-				if let v = corporationName {
-					aCoder.encode(v, forKey: "corporationName")
 				}
 				if let v = allianceID {
 					aCoder.encode(v, forKey: "allianceID")
 				}
-				if let v = allianceName {
-					aCoder.encode(v, forKey: "allianceName")
-				}
 				if let v = factionID {
 					aCoder.encode(v, forKey: "factionID")
-				}
-				if let v = factionName {
-					aCoder.encode(v, forKey: "factionName")
 				}
 				aCoder.encode(damageDone, forKey: "damageDone")
 				aCoder.encode(finalBlow, forKey: "finalBlow")
@@ -299,42 +276,30 @@ extension ZKillboard {
 				if let v = weaponTypeID {
 					aCoder.encode(v, forKey: "weaponTypeID")
 				}
-			}*/
+			}
 			
 			public var json: Any {
 				var json = [String: Any]()
 				if let v = characterID?.json {
-					json["characterID"] = v
-				}
-				if let v = characterName?.json {
-					json["characterName"] = v
+					json["character_id"] = v
 				}
 				if let v = corporationID?.json {
-					json["corporationID"] = v
-				}
-				if let v = corporationName?.json {
-					json["corporationName"] = v
+					json["corporation_id"] = v
 				}
 				if let v = allianceID?.json {
-					json["allianceID"] = v
-				}
-				if let v = allianceName?.json {
-					json["allianceName"] = v
+					json["alliance_id"] = v
 				}
 				if let v = factionID?.json {
-					json["factionID"] = v
+					json["faction_id"] = v
 				}
-				if let v = factionName?.json {
-					json["factionName"] = v
-				}
-				json["damageDone"] = damageDone.json
-				json["finalBlow"] = finalBlow.json
-				json["securityStatus"] = securityStatus.json
+				json["damage_done"] = damageDone.json
+				json["final_blow"] = finalBlow.json
+				json["security_status"] = securityStatus.json
 				if let v = shipTypeID?.json {
-					json["shipTypeID"] = v
+					json["ship_type_id"] = v
 				}
 				if let v = weaponTypeID?.json {
-					json["weaponTypeID"] = v
+					json["weapon_type_id"] = v
 				}
 				return json
 			}
@@ -359,13 +324,9 @@ extension ZKillboard {
 			
 			init(_ other: Killmail.Attacker) {
 				characterID = other.characterID
-				characterName = other.characterName
 				corporationID = other.corporationID
-				corporationName = other.corporationName
 				allianceID = other.allianceID
-				allianceName = other.allianceName
 				factionID = other.factionID
-				factionName = other.factionName
 				damageDone = other.damageDone
 				finalBlow = other.finalBlow
 				securityStatus = other.securityStatus
@@ -384,17 +345,13 @@ extension ZKillboard {
 			
 		}
 		
-		public class Victim: NSObject, Codable, NSCopying, JSONCoding {
+		@objc(ZKillboardKillmailVictim) public class Victim: NSObject, NSCoding, NSCopying, JSONCoding {
 			
 			
 			public var characterID: Int? = nil
-			public var characterName: String? = nil
 			public var corporationID: Int? = nil
-			public var corporationName: String? = nil
 			public var allianceID: Int? = nil
-			public var allianceName: String? = nil
 			public var factionID: Int? = nil
-			public var factionName: String? = nil
 			public var damageTaken: Int = Int()
 			public var shipTypeID: Int = Int()
 			
@@ -405,18 +362,14 @@ extension ZKillboard {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ZKillboardError.invalidFormat(type(of: self), json)}
 				
-				characterID = dictionary["characterID"] as? Int
-				characterName = dictionary["characterName"] as? String
-				corporationID = dictionary["corporationID"] as? Int
-				corporationName = dictionary["corporationName"] as? String
-				allianceID = dictionary["allianceID"] as? Int
-				allianceName = dictionary["allianceName"] as? String
-				factionID = dictionary["factionID"] as? Int
-				factionName = dictionary["factionName"] as? String
+				characterID = dictionary["character_id"] as? Int
+				corporationID = dictionary["corporation_id"] as? Int
+				allianceID = dictionary["alliance_id"] as? Int
+				factionID = dictionary["faction_id"] as? Int
 
-				guard let damageTaken = dictionary["damageTaken"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+				guard let damageTaken = dictionary["damage_taken"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.damageTaken = damageTaken
-				guard let shipTypeID = dictionary["shipTypeID"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.shipTypeID = shipTypeID
 				
 				super.init()
@@ -426,15 +379,11 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			/*public required init?(coder aDecoder: NSCoder) {
+			public required init?(coder aDecoder: NSCoder) {
 				characterID = aDecoder.containsValue(forKey: "characterID") ? aDecoder.decodeInteger(forKey: "characterID") : nil
-				characterName = aDecoder.containsValue(forKey: "characterName") ? aDecoder.decodeObject(forKey: "characterName") as? String : nil
 				corporationID = aDecoder.containsValue(forKey: "corporationID") ? aDecoder.decodeInteger(forKey: "corporationID") : nil
-				corporationName = aDecoder.containsValue(forKey: "corporationName") ? aDecoder.decodeObject(forKey: "corporationName") as? String : nil
 				allianceID = aDecoder.containsValue(forKey: "allianceID") ? aDecoder.decodeInteger(forKey: "allianceID") : nil
-				allianceName = aDecoder.containsValue(forKey: "allianceName") ? aDecoder.decodeObject(forKey: "allianceName") as? String : nil
 				factionID = aDecoder.containsValue(forKey: "factionID") ? aDecoder.decodeInteger(forKey: "factionID") : nil
-				factionName = aDecoder.containsValue(forKey: "factionName") ? aDecoder.decodeObject(forKey: "factionName") as? String : nil
 
 				damageTaken = aDecoder.decodeInteger(forKey: "damageTaken")
 				shipTypeID = aDecoder.decodeInteger(forKey: "shipTypeID")
@@ -446,59 +395,36 @@ extension ZKillboard {
 				if let v = characterID {
 					aCoder.encode(v, forKey: "characterID")
 				}
-				if let v = characterName {
-					aCoder.encode(v, forKey: "characterName")
-				}
 				if let v = corporationID {
 					aCoder.encode(v, forKey: "corporationID")
-				}
-				if let v = corporationName {
-					aCoder.encode(v, forKey: "corporationName")
 				}
 				if let v = allianceID {
 					aCoder.encode(v, forKey: "allianceID")
 				}
-				if let v = allianceName {
-					aCoder.encode(v, forKey: "allianceName")
-				}
 				if let v = factionID {
 					aCoder.encode(v, forKey: "factionID")
 				}
-				if let v = factionName {
-					aCoder.encode(v, forKey: "factionName")
-				}
 				aCoder.encode(damageTaken, forKey: "damageTaken")
 				aCoder.encode(shipTypeID, forKey: "shipTypeID")
-			}*/
+			}
 			
 			public var json: Any {
 				var json = [String: Any]()
 				if let v = characterID?.json {
-					json["characterID"] = v
-				}
-				if let v = characterName?.json {
-					json["characterName"] = v
+					json["character_id"] = v
 				}
 				if let v = corporationID?.json {
-					json["corporationID"] = v
-				}
-				if let v = corporationName?.json {
-					json["corporationName"] = v
+					json["corporation_id"] = v
 				}
 				if let v = allianceID?.json {
-					json["allianceID"] = v
-				}
-				if let v = allianceName?.json {
-					json["allianceName"] = v
+					json["alliance_id"] = v
 				}
 				if let v = factionID?.json {
-					json["factionID"] = v
+					json["faction_id"] = v
 				}
-				if let v = factionName?.json {
-					json["factionName"] = v
-				}
-				json["damageTaken"] = damageTaken.json
-				json["shipTypeID"] = shipTypeID.json
+
+				json["damage_taken"] = damageTaken.json
+				json["ship_type_id"] = shipTypeID.json
 				return json
 			}
 			
@@ -519,13 +445,9 @@ extension ZKillboard {
 			
 			init(_ other: Killmail.Victim) {
 				characterID = other.characterID
-				characterName = other.characterName
 				corporationID = other.corporationID
-				corporationName = other.corporationName
 				allianceID = other.allianceID
-				allianceName = other.allianceName
 				factionID = other.factionID
-				factionName = other.factionName
 				damageTaken = other.damageTaken
 				shipTypeID = other.shipTypeID
 			}
@@ -541,7 +463,7 @@ extension ZKillboard {
 			
 		}
 		
-		public class Item: NSObject, Codable, NSCopying, JSONCoding {
+		@objc(ZKillboardKillmailItem) public class Item: NSObject, NSCoding, NSCopying, JSONCoding {
 			
 			public var flag: Int = Int()
 			public var itemTypeID: Int = Int()
@@ -558,10 +480,10 @@ extension ZKillboard {
 				
 				guard let flag = dictionary["flag"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.flag = flag
-				guard let itemTypeID = dictionary["typeID"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+				guard let itemTypeID = dictionary["item_type_id"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.itemTypeID = itemTypeID
-				quantityDestroyed = dictionary["qtyDestroyed"] as? Int64
-				quantityDropped = dictionary["qtyDropped"] as? Int64
+				quantityDestroyed = dictionary["quantity_destroyed"] as? Int64
+				quantityDropped = dictionary["quantity_dropped"] as? Int64
 				guard let singleton = dictionary["singleton"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.singleton = singleton
 				
@@ -572,7 +494,7 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			/*public required init?(coder aDecoder: NSCoder) {
+			public required init?(coder aDecoder: NSCoder) {
 				flag = aDecoder.decodeInteger(forKey: "flag")
 				itemTypeID = aDecoder.decodeInteger(forKey: "typeID")
 				quantityDestroyed = aDecoder.containsValue(forKey: "qtyDestroyed") ? aDecoder.decodeInt64(forKey: "qtyDestroyed") : nil
@@ -592,17 +514,17 @@ extension ZKillboard {
 					aCoder.encode(v, forKey: "qtyDropped")
 				}
 				aCoder.encode(singleton, forKey: "singleton")
-			}*/
+			}
 			
 			public var json: Any {
 				var json = [String: Any]()
 				json["flag"] = flag.json
-				json["typeID"] = itemTypeID.json
+				json["item_type_id"] = itemTypeID.json
 				if let v = quantityDestroyed?.json {
-					json["qtyDestroyed"] = v
+					json["quantity_destroyed"] = v
 				}
 				if let v = quantityDropped?.json {
-					json["qtyDropped"] = v
+					json["quantity_dropped"] = v
 				}
 				json["singleton"] = singleton.json
 				return json
@@ -641,7 +563,7 @@ extension ZKillboard {
 			
 		}
 
-		public class Position: NSObject, Codable, NSCopying, JSONCoding {
+		@objc(ZKillboardKillmailPosition) public class Position: NSObject, NSCoding, NSCopying, JSONCoding {
 			
 			
 			public var x: Float = Float()
@@ -669,7 +591,7 @@ extension ZKillboard {
 				super.init()
 			}
 			
-			/*public required init?(coder aDecoder: NSCoder) {
+			public required init?(coder aDecoder: NSCoder) {
 				x = aDecoder.decodeFloat(forKey: "x")
 				y = aDecoder.decodeFloat(forKey: "y")
 				z = aDecoder.decodeFloat(forKey: "z")
@@ -681,7 +603,7 @@ extension ZKillboard {
 				aCoder.encode(x, forKey: "x")
 				aCoder.encode(y, forKey: "y")
 				aCoder.encode(z, forKey: "z")
-			}*/
+			}
 			
 			public var json: Any {
 				var json = [String: Any]()
@@ -724,7 +646,6 @@ extension ZKillboard {
 		public var attackers: [Killmail.Attacker] = []
 		public var killmailID: Int = Int()
 		public var killmailTime: Date = Date()
-		public var moonID: Int? = nil
 		public var solarSystemID: Int = Int()
 		public var victim: Killmail.Victim = Killmail.Victim()
 		public var items: [Killmail.Item]? = nil
@@ -738,12 +659,11 @@ extension ZKillboard {
 			guard let dictionary = json as? [String: Any] else {throw ZKillboardError.invalidFormat(type(of: self), json)}
 			
 			attackers = try (dictionary["attackers"] as? [Any])?.map {try Killmail.Attacker(json: $0)} ?? []
-			guard let killmailID = dictionary["killID"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+			guard let killmailID = dictionary["killmail_id"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 			self.killmailID = killmailID
-			guard let killmailTime = DateFormatter.zKillboardDateFormatter.date(from: dictionary["killTime"] as? String ?? "") else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+			guard let killmailTime = DateFormatter.zKillboardDateFormatter.date(from: dictionary["killmail_time"] as? String ?? "") else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 			self.killmailTime = killmailTime
-			moonID = dictionary["moonID"] as? Int
-			guard let solarSystemID = dictionary["solarSystemID"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
+			guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 			self.solarSystemID = solarSystemID
 			victim = try Killmail.Victim(json: dictionary["victim"] as? [String: Any] ?? [:])
 			items = try (dictionary["items"] as? [Any])?.map {try Killmail.Item(json: $0)}
@@ -756,11 +676,10 @@ extension ZKillboard {
 			super.init()
 		}
 		
-		/*public required init?(coder aDecoder: NSCoder) {
+		public required init?(coder aDecoder: NSCoder) {
 			attackers = aDecoder.decodeObject(of: [Killmail.Attacker.self], forKey: "attackers") as? [Killmail.Attacker] ?? []
 			killmailID = aDecoder.decodeInteger(forKey: "killID")
 			killmailTime = aDecoder.decodeObject(forKey: "killTime") as? Date ?? Date()
-			moonID = aDecoder.containsValue(forKey: "moonID") ? aDecoder.decodeInteger(forKey: "moonID") : nil
 			solarSystemID = aDecoder.decodeInteger(forKey: "solarSystemID")
 			victim = aDecoder.decodeObject(of: Killmail.Victim.self, forKey: "victim")  ?? Killmail.Victim()
 			items = aDecoder.decodeObject(of: [Killmail.Item.self], forKey: "items") as? [Killmail.Item]
@@ -773,9 +692,6 @@ extension ZKillboard {
 			aCoder.encode(attackers, forKey: "attackers")
 			aCoder.encode(killmailID, forKey: "killID")
 			aCoder.encode(killmailTime, forKey: "killTime")
-			if let v = moonID {
-				aCoder.encode(v, forKey: "moonID")
-			}
 			aCoder.encode(solarSystemID, forKey: "solarSystemID")
 			aCoder.encode(victim, forKey: "victim")
 			if let v = items {
@@ -784,17 +700,14 @@ extension ZKillboard {
 			if let v = position {
 				aCoder.encode(v, forKey: "position")
 			}
-		}*/
+		}
 		
 		public var json: Any {
 			var json = [String: Any]()
 			json["attackers"] = attackers.json
-			json["killID"] = killmailID.json
-			json["killTime"] = killmailTime.json
-			if let v = moonID?.json {
-				json["moonID"] = v
-			}
-			json["solarSystemID"] = solarSystemID.json
+			json["killmail_id"] = killmailID.json
+			json["killmail_time"] = killmailTime.json
+			json["solar_system_id"] = solarSystemID.json
 			json["victim"] = victim.json
 			if let v = items?.json {
 				json["items"] = v
@@ -810,7 +723,6 @@ extension ZKillboard {
 			attackers.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 			hashCombine(seed: &hash, value: killmailID.hashValue)
 			hashCombine(seed: &hash, value: killmailTime.hashValue)
-			hashCombine(seed: &hash, value: moonID?.hashValue ?? 0)
 			hashCombine(seed: &hash, value: solarSystemID.hashValue)
 			hashCombine(seed: &hash, value: victim.hashValue)
 			items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
@@ -826,7 +738,6 @@ extension ZKillboard {
 			attackers = other.attackers.flatMap { Killmail.Attacker($0) }
 			killmailID = other.killmailID
 			killmailTime = other.killmailTime
-			moonID = other.moonID
 			solarSystemID = other.solarSystemID
 			victim = Killmail.Victim(other.victim)
 			items = other.items?.flatMap { Killmail.Item($0) }

@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func retrieveTheUptimeAndPlayerCounts(completionBlock:((Result<Status.GetStatusOk>) -> Void)?) {
+		public func retrieveTheUptimeAndPlayerCounts(completionBlock:((Result<Status.ServerStatus>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -40,14 +40,14 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Status.GetStatusOk>) in
+			}.validateESI().responseESI { (response: DataResponse<Status.ServerStatus>) in
 				completionBlock?(response.result)
 				session = nil
 			}
 		}
 		
 		
-		@objc(ESIStatusGetStatusOk) public class GetStatusOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIStatusServerStatus) public class ServerStatus: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
 			public var players: Int = Int()
@@ -120,11 +120,11 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Status.GetStatusOk, rhs: Status.GetStatusOk) -> Bool {
+			public static func ==(lhs: Status.ServerStatus, rhs: Status.ServerStatus) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Status.GetStatusOk) {
+			init(_ other: Status.ServerStatus) {
 				players = other.players
 				serverVersion = other.serverVersion
 				startTime = other.startTime
@@ -132,12 +132,12 @@ public extension ESI {
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Status.GetStatusOk(self)
+				return Status.ServerStatus(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetStatusOk)?.hashValue == hashValue
+				return (object as? ServerStatus)?.hashValue == hashValue
 			}
 			
 		}

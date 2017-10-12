@@ -115,6 +115,39 @@ public extension ESI {
 			}
 		}
 		
+		public func getAttendees(characterID: Int, eventID: Int, completionBlock:((Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "latest/characters/\(characterID)/calendar/\(eventID)/attendees/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		
 		@objc(ESICalendarSummary) public class Summary: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
@@ -251,6 +284,113 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Summary)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESICalendarGetCharactersCharacterIDCalendarEventIDAttendeesOk) public class GetCharactersCharacterIDCalendarEventIDAttendeesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse: String, JSONCoding, HTTPQueryable {
+				case accepted = "accepted"
+				case declined = "declined"
+				case notResponded = "not_responded"
+				case tentative = "tentative"
+				
+				public init() {
+					self = .declined
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var characterID: Int? = nil
+			public var eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				characterID = dictionary["character_id"] as? Int
+				eventResponse = Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse(rawValue: dictionary["event_response"] as? String ?? "")
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
+				eventResponse = Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse(rawValue: aDecoder.decodeObject(forKey: "event_response") as? String ?? "")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = characterID {
+					aCoder.encode(v, forKey: "character_id")
+				}
+				if let v = eventResponse {
+					aCoder.encode(v.rawValue, forKey: "event_response")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = characterID?.json {
+					json["character_id"] = v
+				}
+				if let v = eventResponse?.json {
+					json["event_response"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.eventResponse?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk, rhs: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk) {
+				characterID = other.characterID
+				eventResponse = other.eventResponse
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDCalendarEventIDAttendeesOk)?.hashValue == hashValue
 			}
 			
 		}

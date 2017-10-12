@@ -192,6 +192,9 @@ let typeNames: [String: String] = [
 	"GetSovereigntyMapOk"	: "System",
 	"GetSovereigntyCampaignsOk"	: "Campaign",
 	"GetSovereigntyStructuresOk"	: "Structure",
+	
+	//MARK: Status
+	"GetStatusOk"	: "ServerStatus",
 
 	//MARK: Universe
 	"GetUniverseCategoriesCategoryIDOk"	: "ItemCategoryInformation",
