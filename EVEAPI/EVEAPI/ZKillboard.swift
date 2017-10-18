@@ -354,7 +354,8 @@ extension ZKillboard {
 			public var factionID: Int? = nil
 			public var damageTaken: Int = Int()
 			public var shipTypeID: Int = Int()
-			
+			public var items: [Killmail.Item]? = nil
+
 			public static var supportsSecureCoding: Bool {
 				return true
 			}
@@ -366,6 +367,8 @@ extension ZKillboard {
 				corporationID = dictionary["corporation_id"] as? Int
 				allianceID = dictionary["alliance_id"] as? Int
 				factionID = dictionary["faction_id"] as? Int
+
+				items = try (dictionary["items"] as? [Any])?.map {try Killmail.Item(json: $0)}
 
 				guard let damageTaken = dictionary["damage_taken"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 				self.damageTaken = damageTaken
@@ -387,7 +390,8 @@ extension ZKillboard {
 
 				damageTaken = aDecoder.decodeInteger(forKey: "damageTaken")
 				shipTypeID = aDecoder.decodeInteger(forKey: "shipTypeID")
-				
+				items = aDecoder.decodeObject(of: [Killmail.Item.self], forKey: "items") as? [Killmail.Item]
+
 				super.init()
 			}
 			
@@ -406,6 +410,9 @@ extension ZKillboard {
 				}
 				aCoder.encode(damageTaken, forKey: "damageTaken")
 				aCoder.encode(shipTypeID, forKey: "shipTypeID")
+				if let v = items {
+					aCoder.encode(v, forKey: "items")
+				}
 			}
 			
 			public var json: Any {
@@ -425,6 +432,9 @@ extension ZKillboard {
 
 				json["damage_taken"] = damageTaken.json
 				json["ship_type_id"] = shipTypeID.json
+				if let v = items?.json {
+					json["items"] = v
+				}
 				return json
 			}
 			
@@ -436,6 +446,7 @@ extension ZKillboard {
 				hashCombine(seed: &hash, value: damageTaken.hashValue)
 				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
 			}
 			
@@ -450,6 +461,7 @@ extension ZKillboard {
 				factionID = other.factionID
 				damageTaken = other.damageTaken
 				shipTypeID = other.shipTypeID
+				items = other.items?.flatMap { Killmail.Item($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -648,7 +660,6 @@ extension ZKillboard {
 		public var killmailTime: Date = Date()
 		public var solarSystemID: Int = Int()
 		public var victim: Killmail.Victim = Killmail.Victim()
-		public var items: [Killmail.Item]? = nil
 		public var position: Killmail.Position? = nil
 
 		public static var supportsSecureCoding: Bool {
@@ -666,7 +677,6 @@ extension ZKillboard {
 			guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ZKillboardError.invalidFormat(type(of: self), dictionary)}
 			self.solarSystemID = solarSystemID
 			victim = try Killmail.Victim(json: dictionary["victim"] as? [String: Any] ?? [:])
-			items = try (dictionary["items"] as? [Any])?.map {try Killmail.Item(json: $0)}
 			position = try? Killmail.Position(json: dictionary["position"] as? [String: Any] ?? [:])
 
 			super.init()
@@ -682,7 +692,6 @@ extension ZKillboard {
 			killmailTime = aDecoder.decodeObject(forKey: "killTime") as? Date ?? Date()
 			solarSystemID = aDecoder.decodeInteger(forKey: "solarSystemID")
 			victim = aDecoder.decodeObject(of: Killmail.Victim.self, forKey: "victim")  ?? Killmail.Victim()
-			items = aDecoder.decodeObject(of: [Killmail.Item.self], forKey: "items") as? [Killmail.Item]
 			position = aDecoder.decodeObject(of: Killmail.Position.self, forKey: "position")
 
 			super.init()
@@ -694,9 +703,6 @@ extension ZKillboard {
 			aCoder.encode(killmailTime, forKey: "killTime")
 			aCoder.encode(solarSystemID, forKey: "solarSystemID")
 			aCoder.encode(victim, forKey: "victim")
-			if let v = items {
-				aCoder.encode(v, forKey: "items")
-			}
 			if let v = position {
 				aCoder.encode(v, forKey: "position")
 			}
@@ -709,9 +715,6 @@ extension ZKillboard {
 			json["killmail_time"] = killmailTime.json
 			json["solar_system_id"] = solarSystemID.json
 			json["victim"] = victim.json
-			if let v = items?.json {
-				json["items"] = v
-			}
 			if let v = position?.json {
 				json["position"] = v
 			}
@@ -725,7 +728,6 @@ extension ZKillboard {
 			hashCombine(seed: &hash, value: killmailTime.hashValue)
 			hashCombine(seed: &hash, value: solarSystemID.hashValue)
 			hashCombine(seed: &hash, value: victim.hashValue)
-			items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 			hashCombine(seed: &hash, value: position?.hashValue ?? 0)
 			return hash
 		}
@@ -740,7 +742,6 @@ extension ZKillboard {
 			killmailTime = other.killmailTime
 			solarSystemID = other.solarSystemID
 			victim = Killmail.Victim(other.victim)
-			items = other.items?.flatMap { Killmail.Item($0) }
 			position = other.position != nil ? Killmail.Position(other.position!) : nil
 		}
 		
