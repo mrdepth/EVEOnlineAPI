@@ -14,6 +14,49 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
+		public func search(categories: [Search.Categories], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = categories.httpQuery {
+				query.append(URLQueryItem(name: "categories", value: v))
+			}
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			if let v = search.httpQuery {
+				query.append(URLQueryItem(name: "search", value: v))
+			}
+			if let v = strict?.httpQuery {
+				query.append(URLQueryItem(name: "strict", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/search/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func characterSearch(categories: [Search.SearchCategories], characterID: Int, language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.CharacterSearchResult>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -44,7 +87,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/search/"
+			let url = session!.baseURL + "/v3/characters/\(characterID)/search/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -53,49 +96,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Search.CharacterSearchResult>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func search(categories: [Search.Categories], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = categories.httpQuery {
-				query.append(URLQueryItem(name: "categories", value: v))
-			}
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			if let v = search.httpQuery {
-				query.append(URLQueryItem(name: "search", value: v))
-			}
-			if let v = strict?.httpQuery {
-				query.append(URLQueryItem(name: "strict", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/search/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -111,12 +111,11 @@ public extension ESI {
 			public var constellation: [Int]? = nil
 			public var corporation: [Int]? = nil
 			public var faction: [Int]? = nil
-			public var inventorytype: [Int]? = nil
+			public var inventoryType: [Int]? = nil
 			public var region: [Int]? = nil
-			public var solarsystem: [Int]? = nil
+			public var solarSystem: [Int]? = nil
 			public var station: [Int]? = nil
 			public var structure: [Int64]? = nil
-			public var wormhole: [Int]? = nil
 			
 			
 			public required init(json: Any) throws {
@@ -128,12 +127,11 @@ public extension ESI {
 				constellation = try (dictionary["constellation"] as? [Any])?.map {try Int(json: $0)}
 				corporation = try (dictionary["corporation"] as? [Any])?.map {try Int(json: $0)}
 				faction = try (dictionary["faction"] as? [Any])?.map {try Int(json: $0)}
-				inventorytype = try (dictionary["inventorytype"] as? [Any])?.map {try Int(json: $0)}
+				inventoryType = try (dictionary["inventory_type"] as? [Any])?.map {try Int(json: $0)}
 				region = try (dictionary["region"] as? [Any])?.map {try Int(json: $0)}
-				solarsystem = try (dictionary["solarsystem"] as? [Any])?.map {try Int(json: $0)}
+				solarSystem = try (dictionary["solar_system"] as? [Any])?.map {try Int(json: $0)}
 				station = try (dictionary["station"] as? [Any])?.map {try Int(json: $0)}
 				structure = try (dictionary["structure"] as? [Any])?.map {try Int64(json: $0)}
-				wormhole = try (dictionary["wormhole"] as? [Any])?.map {try Int(json: $0)}
 				
 				super.init()
 			}
@@ -153,12 +151,11 @@ public extension ESI {
 				constellation = aDecoder.decodeObject(forKey: "constellation") as? [Int]
 				corporation = aDecoder.decodeObject(forKey: "corporation") as? [Int]
 				faction = aDecoder.decodeObject(forKey: "faction") as? [Int]
-				inventorytype = aDecoder.decodeObject(forKey: "inventorytype") as? [Int]
+				inventoryType = aDecoder.decodeObject(forKey: "inventory_type") as? [Int]
 				region = aDecoder.decodeObject(forKey: "region") as? [Int]
-				solarsystem = aDecoder.decodeObject(forKey: "solarsystem") as? [Int]
+				solarSystem = aDecoder.decodeObject(forKey: "solar_system") as? [Int]
 				station = aDecoder.decodeObject(forKey: "station") as? [Int]
 				structure = aDecoder.decodeObject(forKey: "structure") as? [Int64]
-				wormhole = aDecoder.decodeObject(forKey: "wormhole") as? [Int]
 				
 				super.init()
 			}
@@ -182,23 +179,20 @@ public extension ESI {
 				if let v = faction {
 					aCoder.encode(v, forKey: "faction")
 				}
-				if let v = inventorytype {
-					aCoder.encode(v, forKey: "inventorytype")
+				if let v = inventoryType {
+					aCoder.encode(v, forKey: "inventory_type")
 				}
 				if let v = region {
 					aCoder.encode(v, forKey: "region")
 				}
-				if let v = solarsystem {
-					aCoder.encode(v, forKey: "solarsystem")
+				if let v = solarSystem {
+					aCoder.encode(v, forKey: "solar_system")
 				}
 				if let v = station {
 					aCoder.encode(v, forKey: "station")
 				}
 				if let v = structure {
 					aCoder.encode(v, forKey: "structure")
-				}
-				if let v = wormhole {
-					aCoder.encode(v, forKey: "wormhole")
 				}
 			}
 			
@@ -222,23 +216,20 @@ public extension ESI {
 				if let v = faction?.json {
 					json["faction"] = v
 				}
-				if let v = inventorytype?.json {
-					json["inventorytype"] = v
+				if let v = inventoryType?.json {
+					json["inventory_type"] = v
 				}
 				if let v = region?.json {
 					json["region"] = v
 				}
-				if let v = solarsystem?.json {
-					json["solarsystem"] = v
+				if let v = solarSystem?.json {
+					json["solar_system"] = v
 				}
 				if let v = station?.json {
 					json["station"] = v
 				}
 				if let v = structure?.json {
 					json["structure"] = v
-				}
-				if let v = wormhole?.json {
-					json["wormhole"] = v
 				}
 				return json
 			}
@@ -251,12 +242,11 @@ public extension ESI {
 				self.constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.inventorytype?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.inventoryType?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.solarsystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.solarSystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.structure?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.wormhole?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
 			}()
 			
@@ -275,12 +265,11 @@ public extension ESI {
 				constellation = other.constellation?.flatMap { $0 }
 				corporation = other.corporation?.flatMap { $0 }
 				faction = other.faction?.flatMap { $0 }
-				inventorytype = other.inventorytype?.flatMap { $0 }
+				inventoryType = other.inventoryType?.flatMap { $0 }
 				region = other.region?.flatMap { $0 }
-				solarsystem = other.solarsystem?.flatMap { $0 }
+				solarSystem = other.solarSystem?.flatMap { $0 }
 				station = other.station?.flatMap { $0 }
 				structure = other.structure?.flatMap { $0 }
-				wormhole = other.wormhole?.flatMap { $0 }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -302,12 +291,11 @@ public extension ESI {
 			case constellation = "constellation"
 			case corporation = "corporation"
 			case faction = "faction"
-			case inventorytype = "inventorytype"
+			case inventoryType = "inventory_type"
 			case region = "region"
-			case solarsystem = "solarsystem"
+			case solarSystem = "solar_system"
 			case station = "station"
 			case structure = "structure"
-			case wormhole = "wormhole"
 			
 			public init() {
 				self = .agent
@@ -338,11 +326,10 @@ public extension ESI {
 			public var constellation: [Int]? = nil
 			public var corporation: [Int]? = nil
 			public var faction: [Int]? = nil
-			public var inventorytype: [Int]? = nil
+			public var inventoryType: [Int]? = nil
 			public var region: [Int]? = nil
-			public var solarsystem: [Int]? = nil
+			public var solarSystem: [Int]? = nil
 			public var station: [Int]? = nil
-			public var wormhole: [Int]? = nil
 			
 			
 			public required init(json: Any) throws {
@@ -354,11 +341,10 @@ public extension ESI {
 				constellation = try (dictionary["constellation"] as? [Any])?.map {try Int(json: $0)}
 				corporation = try (dictionary["corporation"] as? [Any])?.map {try Int(json: $0)}
 				faction = try (dictionary["faction"] as? [Any])?.map {try Int(json: $0)}
-				inventorytype = try (dictionary["inventorytype"] as? [Any])?.map {try Int(json: $0)}
+				inventoryType = try (dictionary["inventory_type"] as? [Any])?.map {try Int(json: $0)}
 				region = try (dictionary["region"] as? [Any])?.map {try Int(json: $0)}
-				solarsystem = try (dictionary["solarsystem"] as? [Any])?.map {try Int(json: $0)}
+				solarSystem = try (dictionary["solar_system"] as? [Any])?.map {try Int(json: $0)}
 				station = try (dictionary["station"] as? [Any])?.map {try Int(json: $0)}
-				wormhole = try (dictionary["wormhole"] as? [Any])?.map {try Int(json: $0)}
 				
 				super.init()
 			}
@@ -378,11 +364,10 @@ public extension ESI {
 				constellation = aDecoder.decodeObject(forKey: "constellation") as? [Int]
 				corporation = aDecoder.decodeObject(forKey: "corporation") as? [Int]
 				faction = aDecoder.decodeObject(forKey: "faction") as? [Int]
-				inventorytype = aDecoder.decodeObject(forKey: "inventorytype") as? [Int]
+				inventoryType = aDecoder.decodeObject(forKey: "inventory_type") as? [Int]
 				region = aDecoder.decodeObject(forKey: "region") as? [Int]
-				solarsystem = aDecoder.decodeObject(forKey: "solarsystem") as? [Int]
+				solarSystem = aDecoder.decodeObject(forKey: "solar_system") as? [Int]
 				station = aDecoder.decodeObject(forKey: "station") as? [Int]
-				wormhole = aDecoder.decodeObject(forKey: "wormhole") as? [Int]
 				
 				super.init()
 			}
@@ -406,20 +391,17 @@ public extension ESI {
 				if let v = faction {
 					aCoder.encode(v, forKey: "faction")
 				}
-				if let v = inventorytype {
-					aCoder.encode(v, forKey: "inventorytype")
+				if let v = inventoryType {
+					aCoder.encode(v, forKey: "inventory_type")
 				}
 				if let v = region {
 					aCoder.encode(v, forKey: "region")
 				}
-				if let v = solarsystem {
-					aCoder.encode(v, forKey: "solarsystem")
+				if let v = solarSystem {
+					aCoder.encode(v, forKey: "solar_system")
 				}
 				if let v = station {
 					aCoder.encode(v, forKey: "station")
-				}
-				if let v = wormhole {
-					aCoder.encode(v, forKey: "wormhole")
 				}
 			}
 			
@@ -443,20 +425,17 @@ public extension ESI {
 				if let v = faction?.json {
 					json["faction"] = v
 				}
-				if let v = inventorytype?.json {
-					json["inventorytype"] = v
+				if let v = inventoryType?.json {
+					json["inventory_type"] = v
 				}
 				if let v = region?.json {
 					json["region"] = v
 				}
-				if let v = solarsystem?.json {
-					json["solarsystem"] = v
+				if let v = solarSystem?.json {
+					json["solar_system"] = v
 				}
 				if let v = station?.json {
 					json["station"] = v
-				}
-				if let v = wormhole?.json {
-					json["wormhole"] = v
 				}
 				return json
 			}
@@ -469,11 +448,10 @@ public extension ESI {
 				self.constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.inventorytype?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.inventoryType?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.solarsystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.solarSystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.wormhole?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
 			}()
 			
@@ -492,11 +470,10 @@ public extension ESI {
 				constellation = other.constellation?.flatMap { $0 }
 				corporation = other.corporation?.flatMap { $0 }
 				faction = other.faction?.flatMap { $0 }
-				inventorytype = other.inventorytype?.flatMap { $0 }
+				inventoryType = other.inventoryType?.flatMap { $0 }
 				region = other.region?.flatMap { $0 }
-				solarsystem = other.solarsystem?.flatMap { $0 }
+				solarSystem = other.solarSystem?.flatMap { $0 }
 				station = other.station?.flatMap { $0 }
-				wormhole = other.wormhole?.flatMap { $0 }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -518,11 +495,10 @@ public extension ESI {
 			case constellation = "constellation"
 			case corporation = "corporation"
 			case faction = "faction"
-			case inventorytype = "inventorytype"
+			case inventoryType = "inventory_type"
 			case region = "region"
-			case solarsystem = "solarsystem"
+			case solarSystem = "solar_system"
 			case station = "station"
-			case wormhole = "wormhole"
 			
 			public init() {
 				self = .agent

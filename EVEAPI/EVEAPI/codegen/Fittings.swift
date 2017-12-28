@@ -14,6 +14,39 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
+		public func deleteFitting(characterID: Int, fittingID: Int, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/\(fittingID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func createFitting(characterID: Int, fitting: Fittings.MutableFitting? = nil, completionBlock:((Result<Fittings.CreateFittingResult>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -33,7 +66,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/fittings/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -66,7 +99,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/fittings/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -75,39 +108,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func deleteFitting(characterID: Int, fittingID: Int, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/fittings/\(fittingID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
 				session = nil
 			}

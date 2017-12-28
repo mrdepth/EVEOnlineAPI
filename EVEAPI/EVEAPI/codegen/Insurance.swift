@@ -34,7 +34,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/insurance/prices/"
+			let url = session!.baseURL + "/v1/insurance/prices/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

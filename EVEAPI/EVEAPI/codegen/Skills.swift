@@ -33,7 +33,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/attributes/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/attributes/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -42,39 +42,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getCharacterSkills(characterID: Int, completionBlock:((Result<Skills.CharacterSkills>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-skills.read_skills.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/skills/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterSkills>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -99,7 +66,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/skillqueue/"
+			let url = session!.baseURL + "/v2/characters/\(characterID)/skillqueue/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -113,23 +80,62 @@ public extension ESI {
 			}
 		}
 		
+		public func getCharacterSkills(characterID: Int, completionBlock:((Result<Skills.CharacterSkills>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-skills.read_skills.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v4/characters/\(characterID)/skills/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterSkills>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		
 		@objc(ESISkillsCharacterSkills) public class CharacterSkills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			@objc(ESISkillsCharacterSkillsSkill) public class Skill: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var currentSkillLevel: Int? = nil
-				public var skillID: Int? = nil
-				public var skillpointsInSkill: Int64? = nil
+				public var activeSkillLevel: Int = Int()
+				public var skillID: Int = Int()
+				public var skillpointsInSkill: Int64 = Int64()
+				public var trainedSkillLevel: Int = Int()
 				
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					currentSkillLevel = dictionary["current_skill_level"] as? Int
-					skillID = dictionary["skill_id"] as? Int
-					skillpointsInSkill = dictionary["skillpoints_in_skill"] as? Int64
+					guard let activeSkillLevel = dictionary["active_skill_level"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.activeSkillLevel = activeSkillLevel
+					guard let skillID = dictionary["skill_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.skillID = skillID
+					guard let skillpointsInSkill = dictionary["skillpoints_in_skill"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.skillpointsInSkill = skillpointsInSkill
+					guard let trainedSkillLevel = dictionary["trained_skill_level"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.trainedSkillLevel = trainedSkillLevel
 					
 					super.init()
 				}
@@ -143,44 +149,36 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					currentSkillLevel = aDecoder.containsValue(forKey: "current_skill_level") ? aDecoder.decodeInteger(forKey: "current_skill_level") : nil
-					skillID = aDecoder.containsValue(forKey: "skill_id") ? aDecoder.decodeInteger(forKey: "skill_id") : nil
-					skillpointsInSkill = aDecoder.containsValue(forKey: "skillpoints_in_skill") ? aDecoder.decodeInt64(forKey: "skillpoints_in_skill") : nil
+					activeSkillLevel = aDecoder.decodeInteger(forKey: "active_skill_level")
+					skillID = aDecoder.decodeInteger(forKey: "skill_id")
+					skillpointsInSkill = aDecoder.decodeInt64(forKey: "skillpoints_in_skill")
+					trainedSkillLevel = aDecoder.decodeInteger(forKey: "trained_skill_level")
 					
 					super.init()
 				}
 				
 				public func encode(with aCoder: NSCoder) {
-					if let v = currentSkillLevel {
-						aCoder.encode(v, forKey: "current_skill_level")
-					}
-					if let v = skillID {
-						aCoder.encode(v, forKey: "skill_id")
-					}
-					if let v = skillpointsInSkill {
-						aCoder.encode(v, forKey: "skillpoints_in_skill")
-					}
+					aCoder.encode(activeSkillLevel, forKey: "active_skill_level")
+					aCoder.encode(skillID, forKey: "skill_id")
+					aCoder.encode(skillpointsInSkill, forKey: "skillpoints_in_skill")
+					aCoder.encode(trainedSkillLevel, forKey: "trained_skill_level")
 				}
 				
 				public var json: Any {
 					var json = [String: Any]()
-					if let v = currentSkillLevel?.json {
-						json["current_skill_level"] = v
-					}
-					if let v = skillID?.json {
-						json["skill_id"] = v
-					}
-					if let v = skillpointsInSkill?.json {
-						json["skillpoints_in_skill"] = v
-					}
+					json["active_skill_level"] = activeSkillLevel.json
+					json["skill_id"] = skillID.json
+					json["skillpoints_in_skill"] = skillpointsInSkill.json
+					json["trained_skill_level"] = trainedSkillLevel.json
 					return json
 				}
 				
 				private lazy var _hashValue: Int = {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.currentSkillLevel?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.skillID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.skillpointsInSkill?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.activeSkillLevel.hashValue)
+					hashCombine(seed: &hash, value: self.skillID.hashValue)
+					hashCombine(seed: &hash, value: self.skillpointsInSkill.hashValue)
+					hashCombine(seed: &hash, value: self.trainedSkillLevel.hashValue)
 					return hash
 				}()
 				
@@ -193,9 +191,10 @@ public extension ESI {
 				}
 				
 				init(_ other: Skills.CharacterSkills.Skill) {
-					currentSkillLevel = other.currentSkillLevel
+					activeSkillLevel = other.activeSkillLevel
 					skillID = other.skillID
 					skillpointsInSkill = other.skillpointsInSkill
+					trainedSkillLevel = other.trainedSkillLevel
 				}
 				
 				public func copy(with zone: NSZone? = nil) -> Any {
@@ -209,15 +208,18 @@ public extension ESI {
 				
 			}
 			
-			public var skills: [Skills.CharacterSkills.Skill]? = nil
-			public var totalSP: Int64? = nil
+			public var skills: [Skills.CharacterSkills.Skill] = []
+			public var totalSP: Int64 = Int64()
+			public var unallocatedSP: Int? = nil
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				skills = try (dictionary["skills"] as? [Any])?.map {try Skills.CharacterSkills.Skill(json: $0)}
-				totalSP = dictionary["total_sp"] as? Int64
+				skills = try (dictionary["skills"] as? [Any])?.map {try Skills.CharacterSkills.Skill(json: $0)} ?? []
+				guard let totalSP = dictionary["total_sp"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.totalSP = totalSP
+				unallocatedSP = dictionary["unallocated_sp"] as? Int
 				
 				super.init()
 			}
@@ -231,36 +233,36 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				skills = aDecoder.decodeObject(of: [Skills.CharacterSkills.Skill.self], forKey: "skills") as? [Skills.CharacterSkills.Skill]
-				totalSP = aDecoder.containsValue(forKey: "total_sp") ? aDecoder.decodeInt64(forKey: "total_sp") : nil
+				skills = aDecoder.decodeObject(of: [Skills.CharacterSkills.Skill.self], forKey: "skills") as? [Skills.CharacterSkills.Skill] ?? []
+				totalSP = aDecoder.decodeInt64(forKey: "total_sp")
+				unallocatedSP = aDecoder.containsValue(forKey: "unallocated_sp") ? aDecoder.decodeInteger(forKey: "unallocated_sp") : nil
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = skills {
-					aCoder.encode(v, forKey: "skills")
-				}
-				if let v = totalSP {
-					aCoder.encode(v, forKey: "total_sp")
+				aCoder.encode(skills, forKey: "skills")
+				aCoder.encode(totalSP, forKey: "total_sp")
+				if let v = unallocatedSP {
+					aCoder.encode(v, forKey: "unallocated_sp")
 				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = skills?.json {
-					json["skills"] = v
-				}
-				if let v = totalSP?.json {
-					json["total_sp"] = v
+				json["skills"] = skills.json
+				json["total_sp"] = totalSP.json
+				if let v = unallocatedSP?.json {
+					json["unallocated_sp"] = v
 				}
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				self.skills?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.totalSP?.hashValue ?? 0)
+				self.skills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.totalSP.hashValue)
+				hashCombine(seed: &hash, value: self.unallocatedSP?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -273,8 +275,9 @@ public extension ESI {
 			}
 			
 			init(_ other: Skills.CharacterSkills) {
-				skills = other.skills?.flatMap { Skills.CharacterSkills.Skill($0) }
+				skills = other.skills.flatMap { Skills.CharacterSkills.Skill($0) }
 				totalSP = other.totalSP
+				unallocatedSP = other.unallocatedSP
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {

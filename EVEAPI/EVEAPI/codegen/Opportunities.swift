@@ -14,6 +14,38 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
+		public func getOpportunitiesTask(taskID: Int, completionBlock:((Result<Opportunities.OpportunitiesTask>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/opportunities/tasks/\(taskID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func getOpportunitiesGroup(groupID: Int, language: Language? = nil, completionBlock:((Result<Opportunities.Group>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -34,7 +66,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/opportunities/groups/\(groupID)/"
+			let url = session!.baseURL + "/v1/opportunities/groups/\(groupID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -43,38 +75,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getOpportunitiesGroups(completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/opportunities/groups/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -98,7 +98,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/opportunities/tasks/"
+			let url = session!.baseURL + "/v1/opportunities/tasks/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -112,7 +112,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getOpportunitiesTask(taskID: Int, completionBlock:((Result<Opportunities.OpportunitiesTask>) -> Void)?) {
+		public func getOpportunitiesGroups(completionBlock:((Result<[Int]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -130,7 +130,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/opportunities/tasks/\(taskID)/"
+			let url = session!.baseURL + "/v1/opportunities/groups/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -138,7 +138,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -163,7 +163,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/opportunities/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/opportunities/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

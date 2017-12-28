@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func openMarketDetails(typeID: Int, completionBlock:((Result<String>) -> Void)?) {
+		public func openInformationWindow(targetID: Int, completionBlock:((Result<String>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -31,11 +31,11 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			if let v = typeID.httpQuery {
-				query.append(URLQueryItem(name: "type_id", value: v))
+			if let v = targetID.httpQuery {
+				query.append(URLQueryItem(name: "target_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/ui/openwindow/marketdetails/"
+			let url = session!.baseURL + "/v1/ui/openwindow/information/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -76,7 +76,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "destination_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/ui/autopilot/waypoint/"
+			let url = session!.baseURL + "/v2/ui/autopilot/waypoint/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -90,7 +90,7 @@ public extension ESI {
 			}
 		}
 		
-		public func openInformationWindow(targetID: Int, completionBlock:((Result<String>) -> Void)?) {
+		public func openMarketDetails(typeID: Int, completionBlock:((Result<String>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -107,11 +107,11 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			if let v = targetID.httpQuery {
-				query.append(URLQueryItem(name: "target_id", value: v))
+			if let v = typeID.httpQuery {
+				query.append(URLQueryItem(name: "type_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/ui/openwindow/information/"
+			let url = session!.baseURL + "/v1/ui/openwindow/marketdetails/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -146,7 +146,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "contract_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/ui/openwindow/contract/"
+			let url = session!.baseURL + "/v1/ui/openwindow/contract/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -179,7 +179,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/ui/openwindow/newmail/"
+			let url = session!.baseURL + "/v1/ui/openwindow/newmail/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

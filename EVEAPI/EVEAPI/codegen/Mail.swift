@@ -14,72 +14,6 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func createMailLabel(characterID: Int, label: Mail.Label? = nil, completionBlock:((Result<Int64>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = label != nil ? (try? JSONSerialization.data(withJSONObject: label!.json, options: [])) : nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/labels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Int64>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getMailLabelsAndUnreadCounts(characterID: Int, completionBlock:((Result<Mail.MailLabelsAndUnreadCounts>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/labels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
 		public func deleteMail(characterID: Int, mailID: Int, completionBlock:((Result<String>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -99,7 +33,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/\(mailID)/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -132,7 +66,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/\(mailID)/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -165,7 +99,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/\(mailID)/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -179,14 +113,14 @@ public extension ESI {
 			}
 		}
 		
-		public func deleteMailLabel(characterID: Int, labelID: Int, completionBlock:((Result<String>) -> Void)?) {
+		public func createMailLabel(characterID: Int, label: Mail.Label? = nil, completionBlock:((Result<Int64>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body: Data? = nil
+			let body = label != nil ? (try? JSONSerialization.data(withJSONObject: label!.json, options: [])) : nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -198,15 +132,81 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/labels/\(labelID)/"
+			let url = session!.baseURL + "/v2/characters/\(characterID)/mail/labels/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
+			}.validateESI().responseESI { (response: DataResponse<Int64>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func returnMailingListSubscriptions(characterID: Int, completionBlock:((Result<[Mail.Subscription]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/lists/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getMailLabelsAndUnreadCounts(characterID: Int, completionBlock:((Result<Mail.MailLabelsAndUnreadCounts>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v3/characters/\(characterID)/mail/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -231,7 +231,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -269,7 +269,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "last_mail_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -283,34 +283,34 @@ public extension ESI {
 			}
 		}
 		
-		public func returnMailingListSubscriptions(characterID: Int, completionBlock:((Result<[Mail.Subscription]>) -> Void)?) {
+		public func deleteMailLabel(characterID: Int, labelID: Int, completionBlock:((Result<String>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
-			
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/mail/lists/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/labels/\(labelID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
+			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -490,78 +490,6 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIMailPostCharactersCharacterIDMailBadRequest) public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Mail.PostCharactersCharacterIDMailBadRequest, rhs: Mail.PostCharactersCharacterIDMailBadRequest) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Mail.PostCharactersCharacterIDMailBadRequest) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.PostCharactersCharacterIDMailBadRequest(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCharactersCharacterIDMailBadRequest)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		@objc(ESIMailGetCharactersCharacterIDMailMailIDNotFound) public class GetCharactersCharacterIDMailMailIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -629,78 +557,6 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? GetCharactersCharacterIDMailMailIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESIMailDeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity, rhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity)?.hashValue == hashValue
 			}
 			
 		}
@@ -784,6 +640,173 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? UpdateContents)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIMailDeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) public class DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity, rhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIMailNewMail) public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var approvedCost: Int64? = nil
+			public var body: String = String()
+			public var recipients: [Mail.Recipient] = []
+			public var subject: String = String()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				approvedCost = dictionary["approved_cost"] as? Int64
+				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.body = body
+				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)} ?? []
+				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.subject = subject
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
+				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
+				recipients = aDecoder.decodeObject(of: [Mail.Recipient.self], forKey: "recipients") as? [Mail.Recipient] ?? []
+				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = approvedCost {
+					aCoder.encode(v, forKey: "approved_cost")
+				}
+				aCoder.encode(body, forKey: "body")
+				aCoder.encode(recipients, forKey: "recipients")
+				aCoder.encode(subject, forKey: "subject")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = approvedCost?.json {
+					json["approved_cost"] = v
+				}
+				json["body"] = body.json
+				json["recipients"] = recipients.json
+				json["subject"] = subject.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.approvedCost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.body.hashValue)
+				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: self.subject.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Mail.NewMail) {
+				approvedCost = other.approvedCost
+				body = other.body
+				recipients = other.recipients.flatMap { Mail.Recipient($0) }
+				subject = other.subject
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.NewMail(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? NewMail)?.hashValue == hashValue
 			}
 			
 		}
@@ -1013,101 +1036,6 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIMailNewMail) public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var approvedCost: Int64? = nil
-			public var body: String = String()
-			public var recipients: [Mail.Recipient] = []
-			public var subject: String = String()
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				approvedCost = dictionary["approved_cost"] as? Int64
-				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.body = body
-				recipients = try (dictionary["recipients"] as? [Any])?.map {try Mail.Recipient(json: $0)} ?? []
-				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.subject = subject
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				approvedCost = aDecoder.containsValue(forKey: "approved_cost") ? aDecoder.decodeInt64(forKey: "approved_cost") : nil
-				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
-				recipients = aDecoder.decodeObject(of: [Mail.Recipient.self], forKey: "recipients") as? [Mail.Recipient] ?? []
-				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = approvedCost {
-					aCoder.encode(v, forKey: "approved_cost")
-				}
-				aCoder.encode(body, forKey: "body")
-				aCoder.encode(recipients, forKey: "recipients")
-				aCoder.encode(subject, forKey: "subject")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = approvedCost?.json {
-					json["approved_cost"] = v
-				}
-				json["body"] = body.json
-				json["recipients"] = recipients.json
-				json["subject"] = subject.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.approvedCost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.body.hashValue)
-				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.subject.hashValue)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Mail.NewMail) {
-				approvedCost = other.approvedCost
-				body = other.body
-				recipients = other.recipients.flatMap { Mail.Recipient($0) }
-				subject = other.subject
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Mail.NewMail(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? NewMail)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		@objc(ESIMailSubscription) public class Subscription: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -1180,6 +1108,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Subscription)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIMailPostCharactersCharacterIDMailBadRequest) public class PostCharactersCharacterIDMailBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Mail.PostCharactersCharacterIDMailBadRequest, rhs: Mail.PostCharactersCharacterIDMailBadRequest) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Mail.PostCharactersCharacterIDMailBadRequest) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Mail.PostCharactersCharacterIDMailBadRequest(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCharactersCharacterIDMailBadRequest)?.hashValue == hashValue
 			}
 			
 		}

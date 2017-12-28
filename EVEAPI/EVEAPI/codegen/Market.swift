@@ -14,38 +14,6 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func listMarketPrices(completionBlock:((Result<[Market.Price]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/markets/prices/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Market.Price]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
 		public func listHistoricalMarketStatisticsInRegion(regionID: Int, typeID: Int, completionBlock:((Result<[Market.History]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -66,7 +34,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "type_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/markets/\(regionID)/history/"
+			let url = session!.baseURL + "/v1/markets/\(regionID)/history/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -75,6 +43,105 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.History]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func listOrdersFromCorporation(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Market.GetCorporationsCorporationIDOrdersOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/orders/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Market.GetCorporationsCorporationIDOrdersOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func listMarketPrices(completionBlock:((Result<[Market.Price]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/markets/prices/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Market.Price]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getItemGroups(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/markets/groups/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -101,7 +168,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/markets/structures/\(structureID)/"
+			let url = session!.baseURL + "/v1/markets/structures/\(structureID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -110,6 +177,107 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.Structure]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func listOrdersFromCharacter(characterID: Int, completionBlock:((Result<[Market.CharacterOrder]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.read_character_orders.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/orders/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Market.CharacterOrder]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getItemGroupInformation(language: Language? = nil, marketGroupID: Int, completionBlock:((Result<Market.ItemGroupInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/markets/groups/\(marketGroupID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Market.ItemGroupInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func listTypeIDsRelevantToMarket(page: Int? = nil, regionID: Int, completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/markets/\(regionID)/types/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -141,7 +309,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "type_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/markets/\(regionID)/orders/"
+			let url = session!.baseURL + "/v1/markets/\(regionID)/orders/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -150,139 +318,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Market.Order]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getItemGroupInformation(language: Language? = nil, marketGroupID: Int, completionBlock:((Result<Market.ItemGroupInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/markets/groups/\(marketGroupID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Market.ItemGroupInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getItemGroups(completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/markets/groups/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func listOrdersFromCharacter(characterID: Int, completionBlock:((Result<[Market.CharacterOrder]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-markets.read_character_orders.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/orders/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Market.CharacterOrder]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func listTypeIDsRelevantToMarket(page: Int? = nil, regionID: Int, completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/markets/\(regionID)/types/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -330,7 +365,7 @@ public extension ESI {
 			public var locationID: Int64 = Int64()
 			public var minVolume: Int = Int()
 			public var orderID: Int64 = Int64()
-			public var price: Float = Float()
+			public var price: Double = Double()
 			public var range: Market.Structure.GetMarketsStructuresStructureIDRange = Market.Structure.GetMarketsStructuresStructureIDRange()
 			public var typeID: Int = Int()
 			public var volumeRemain: Int = Int()
@@ -352,7 +387,7 @@ public extension ESI {
 				self.minVolume = minVolume
 				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderID = orderID
-				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let price = dictionary["price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
 				guard let range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
@@ -381,7 +416,7 @@ public extension ESI {
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				minVolume = aDecoder.decodeInteger(forKey: "min_volume")
 				orderID = aDecoder.decodeInt64(forKey: "order_id")
-				price = aDecoder.decodeFloat(forKey: "price")
+				price = aDecoder.decodeDouble(forKey: "price")
 				range = Market.Structure.GetMarketsStructuresStructureIDRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.Structure.GetMarketsStructuresStructureIDRange()
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				volumeRemain = aDecoder.decodeInteger(forKey: "volume_remain")
@@ -465,6 +500,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? Structure)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIMarketGetMarketsRegionIDOrdersUnprocessableEntity) public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Market.GetMarketsRegionIDOrdersUnprocessableEntity, rhs: Market.GetMarketsRegionIDOrdersUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Market.GetMarketsRegionIDOrdersUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsRegionIDOrdersUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsRegionIDOrdersUnprocessableEntity)?.hashValue == hashValue
 			}
 			
 		}
@@ -573,85 +680,13 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIMarketGetMarketsRegionIDOrdersUnprocessableEntity) public class GetMarketsRegionIDOrdersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Market.GetMarketsRegionIDOrdersUnprocessableEntity, rhs: Market.GetMarketsRegionIDOrdersUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Market.GetMarketsRegionIDOrdersUnprocessableEntity) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Market.GetMarketsRegionIDOrdersUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetMarketsRegionIDOrdersUnprocessableEntity)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		@objc(ESIMarketHistory) public class History: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var average: Float = Float()
+			public var average: Double = Double()
 			public var date: Date = Date()
-			public var highest: Float = Float()
-			public var lowest: Float = Float()
+			public var highest: Double = Double()
+			public var lowest: Double = Double()
 			public var orderCount: Int64 = Int64()
 			public var volume: Int64 = Int64()
 			
@@ -659,13 +694,13 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let average = dictionary["average"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let average = dictionary["average"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.average = average
 				guard let date = DateFormatter.esiDateFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.date = date
-				guard let highest = dictionary["highest"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let highest = dictionary["highest"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.highest = highest
-				guard let lowest = dictionary["lowest"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let lowest = dictionary["lowest"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.lowest = lowest
 				guard let orderCount = dictionary["order_count"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderCount = orderCount
@@ -684,10 +719,10 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				average = aDecoder.decodeFloat(forKey: "average")
+				average = aDecoder.decodeDouble(forKey: "average")
 				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-				highest = aDecoder.decodeFloat(forKey: "highest")
-				lowest = aDecoder.decodeFloat(forKey: "lowest")
+				highest = aDecoder.decodeDouble(forKey: "highest")
+				lowest = aDecoder.decodeDouble(forKey: "lowest")
 				orderCount = aDecoder.decodeInt64(forKey: "order_count")
 				volume = aDecoder.decodeInt64(forKey: "volume")
 				
@@ -757,16 +792,16 @@ public extension ESI {
 		@objc(ESIMarketPrice) public class Price: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var adjustedPrice: Float? = nil
-			public var averagePrice: Float? = nil
+			public var adjustedPrice: Double? = nil
+			public var averagePrice: Double? = nil
 			public var typeID: Int = Int()
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				adjustedPrice = dictionary["adjusted_price"] as? Float
-				averagePrice = dictionary["average_price"] as? Float
+				adjustedPrice = dictionary["adjusted_price"] as? Double
+				averagePrice = dictionary["average_price"] as? Double
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
@@ -782,8 +817,8 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				adjustedPrice = aDecoder.containsValue(forKey: "adjusted_price") ? aDecoder.decodeFloat(forKey: "adjusted_price") : nil
-				averagePrice = aDecoder.containsValue(forKey: "average_price") ? aDecoder.decodeFloat(forKey: "average_price") : nil
+				adjustedPrice = aDecoder.containsValue(forKey: "adjusted_price") ? aDecoder.decodeDouble(forKey: "adjusted_price") : nil
+				averagePrice = aDecoder.containsValue(forKey: "average_price") ? aDecoder.decodeDouble(forKey: "average_price") : nil
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
@@ -917,6 +952,246 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIMarketGetCorporationsCorporationIDOrdersOk) public class GetCorporationsCorporationIDOrdersOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCorporationsCorporationIDOrdersRange: String, JSONCoding, HTTPQueryable {
+				case i1 = "1"
+				case i10 = "10"
+				case i2 = "2"
+				case i20 = "20"
+				case i3 = "3"
+				case i30 = "30"
+				case i4 = "4"
+				case i40 = "40"
+				case i5 = "5"
+				case region = "region"
+				case solarsystem = "solarsystem"
+				case station = "station"
+				
+				public init() {
+					self = .i1
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDOrdersRange(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDOrdersState: String, JSONCoding, HTTPQueryable {
+				case cancelled = "cancelled"
+				case characterDeleted = "character_deleted"
+				case closed = "closed"
+				case expired = "expired"
+				case open = "open"
+				case pending = "pending"
+				
+				public init() {
+					self = .cancelled
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDOrdersState(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var duration: Int = Int()
+			public var escrow: Double = Double()
+			public var isBuyOrder: Bool = Bool()
+			public var issued: Date = Date()
+			public var locationID: Int64 = Int64()
+			public var minVolume: Int = Int()
+			public var orderID: Int64 = Int64()
+			public var price: Double = Double()
+			public var range: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange = Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange()
+			public var regionID: Int = Int()
+			public var state: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState = Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState()
+			public var typeID: Int = Int()
+			public var volumeRemain: Int = Int()
+			public var volumeTotal: Int = Int()
+			public var walletDivision: Int = Int()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.duration = duration
+				guard let escrow = dictionary["escrow"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.escrow = escrow
+				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.isBuyOrder = isBuyOrder
+				guard let issued = DateFormatter.esiDateTimeFormatter.date(from: dictionary["issued"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.issued = issued
+				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.locationID = locationID
+				guard let minVolume = dictionary["min_volume"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.minVolume = minVolume
+				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.orderID = orderID
+				guard let price = dictionary["price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.price = price
+				guard let range = Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.range = range
+				guard let regionID = dictionary["region_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.regionID = regionID
+				guard let state = Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState(rawValue: dictionary["state"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.state = state
+				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.typeID = typeID
+				guard let volumeRemain = dictionary["volume_remain"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.volumeRemain = volumeRemain
+				guard let volumeTotal = dictionary["volume_total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.volumeTotal = volumeTotal
+				guard let walletDivision = dictionary["wallet_division"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.walletDivision = walletDivision
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				duration = aDecoder.decodeInteger(forKey: "duration")
+				escrow = aDecoder.decodeDouble(forKey: "escrow")
+				isBuyOrder = aDecoder.decodeBool(forKey: "is_buy_order")
+				issued = aDecoder.decodeObject(forKey: "issued") as? Date ?? Date()
+				locationID = aDecoder.decodeInt64(forKey: "location_id")
+				minVolume = aDecoder.decodeInteger(forKey: "min_volume")
+				orderID = aDecoder.decodeInt64(forKey: "order_id")
+				price = aDecoder.decodeDouble(forKey: "price")
+				range = Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange()
+				regionID = aDecoder.decodeInteger(forKey: "region_id")
+				state = Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState(rawValue: aDecoder.decodeObject(forKey: "state") as? String ?? "") ?? Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState()
+				typeID = aDecoder.decodeInteger(forKey: "type_id")
+				volumeRemain = aDecoder.decodeInteger(forKey: "volume_remain")
+				volumeTotal = aDecoder.decodeInteger(forKey: "volume_total")
+				walletDivision = aDecoder.decodeInteger(forKey: "wallet_division")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(duration, forKey: "duration")
+				aCoder.encode(escrow, forKey: "escrow")
+				aCoder.encode(isBuyOrder, forKey: "is_buy_order")
+				aCoder.encode(issued, forKey: "issued")
+				aCoder.encode(locationID, forKey: "location_id")
+				aCoder.encode(minVolume, forKey: "min_volume")
+				aCoder.encode(orderID, forKey: "order_id")
+				aCoder.encode(price, forKey: "price")
+				aCoder.encode(range.rawValue, forKey: "range")
+				aCoder.encode(regionID, forKey: "region_id")
+				aCoder.encode(state.rawValue, forKey: "state")
+				aCoder.encode(typeID, forKey: "type_id")
+				aCoder.encode(volumeRemain, forKey: "volume_remain")
+				aCoder.encode(volumeTotal, forKey: "volume_total")
+				aCoder.encode(walletDivision, forKey: "wallet_division")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["duration"] = duration.json
+				json["escrow"] = escrow.json
+				json["is_buy_order"] = isBuyOrder.json
+				json["issued"] = issued.json
+				json["location_id"] = locationID.json
+				json["min_volume"] = minVolume.json
+				json["order_id"] = orderID.json
+				json["price"] = price.json
+				json["range"] = range.json
+				json["region_id"] = regionID.json
+				json["state"] = state.json
+				json["type_id"] = typeID.json
+				json["volume_remain"] = volumeRemain.json
+				json["volume_total"] = volumeTotal.json
+				json["wallet_division"] = walletDivision.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.duration.hashValue)
+				hashCombine(seed: &hash, value: self.escrow.hashValue)
+				hashCombine(seed: &hash, value: self.isBuyOrder.hashValue)
+				hashCombine(seed: &hash, value: self.issued.hashValue)
+				hashCombine(seed: &hash, value: self.locationID.hashValue)
+				hashCombine(seed: &hash, value: self.minVolume.hashValue)
+				hashCombine(seed: &hash, value: self.orderID.hashValue)
+				hashCombine(seed: &hash, value: self.price.hashValue)
+				hashCombine(seed: &hash, value: self.range.hashValue)
+				hashCombine(seed: &hash, value: self.regionID.hashValue)
+				hashCombine(seed: &hash, value: self.state.hashValue)
+				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: self.volumeRemain.hashValue)
+				hashCombine(seed: &hash, value: self.volumeTotal.hashValue)
+				hashCombine(seed: &hash, value: self.walletDivision.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Market.GetCorporationsCorporationIDOrdersOk, rhs: Market.GetCorporationsCorporationIDOrdersOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Market.GetCorporationsCorporationIDOrdersOk) {
+				duration = other.duration
+				escrow = other.escrow
+				isBuyOrder = other.isBuyOrder
+				issued = other.issued
+				locationID = other.locationID
+				minVolume = other.minVolume
+				orderID = other.orderID
+				price = other.price
+				range = other.range
+				regionID = other.regionID
+				state = other.state
+				typeID = other.typeID
+				volumeRemain = other.volumeRemain
+				volumeTotal = other.volumeTotal
+				walletDivision = other.walletDivision
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetCorporationsCorporationIDOrdersOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDOrdersOk)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIMarketOrder) public class Order: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetMarketsRegionIDOrdersRange: String, JSONCoding, HTTPQueryable {
@@ -958,7 +1233,7 @@ public extension ESI {
 			public var locationID: Int64 = Int64()
 			public var minVolume: Int = Int()
 			public var orderID: Int64 = Int64()
-			public var price: Float = Float()
+			public var price: Double = Double()
 			public var range: Market.Order.GetMarketsRegionIDOrdersRange = Market.Order.GetMarketsRegionIDOrdersRange()
 			public var typeID: Int = Int()
 			public var volumeRemain: Int = Int()
@@ -980,7 +1255,7 @@ public extension ESI {
 				self.minVolume = minVolume
 				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderID = orderID
-				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let price = dictionary["price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
 				guard let range = Market.Order.GetMarketsRegionIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
@@ -1009,7 +1284,7 @@ public extension ESI {
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				minVolume = aDecoder.decodeInteger(forKey: "min_volume")
 				orderID = aDecoder.decodeInt64(forKey: "order_id")
-				price = aDecoder.decodeFloat(forKey: "price")
+				price = aDecoder.decodeDouble(forKey: "price")
 				range = Market.Order.GetMarketsRegionIDOrdersRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.Order.GetMarketsRegionIDOrdersRange()
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				volumeRemain = aDecoder.decodeInteger(forKey: "volume_remain")
@@ -1123,78 +1398,6 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIMarketGetMarketsRegionIDHistoryUnprocessableEntity) public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity, rhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Market.GetMarketsRegionIDHistoryUnprocessableEntity) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Market.GetMarketsRegionIDHistoryUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetMarketsRegionIDHistoryUnprocessableEntity)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		@objc(ESIMarketCharacterOrder) public class CharacterOrder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			public enum GetCharactersCharacterIDOrdersState: String, JSONCoding, HTTPQueryable {
@@ -1259,14 +1462,14 @@ public extension ESI {
 			
 			public var accountID: Int = Int()
 			public var duration: Int = Int()
-			public var escrow: Float = Float()
+			public var escrow: Double = Double()
 			public var isBuyOrder: Bool = Bool()
 			public var isCorp: Bool = Bool()
 			public var issued: Date = Date()
 			public var locationID: Int64 = Int64()
 			public var minVolume: Int = Int()
 			public var orderID: Int64 = Int64()
-			public var price: Float = Float()
+			public var price: Double = Double()
 			public var range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange()
 			public var regionID: Int = Int()
 			public var state: Market.CharacterOrder.GetCharactersCharacterIDOrdersState = Market.CharacterOrder.GetCharactersCharacterIDOrdersState()
@@ -1282,7 +1485,7 @@ public extension ESI {
 				self.accountID = accountID
 				guard let duration = dictionary["duration"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.duration = duration
-				guard let escrow = dictionary["escrow"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let escrow = dictionary["escrow"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.escrow = escrow
 				guard let isBuyOrder = dictionary["is_buy_order"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.isBuyOrder = isBuyOrder
@@ -1296,7 +1499,7 @@ public extension ESI {
 				self.minVolume = minVolume
 				guard let orderID = dictionary["order_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.orderID = orderID
-				guard let price = dictionary["price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let price = dictionary["price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.price = price
 				guard let range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: dictionary["range"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.range = range
@@ -1325,14 +1528,14 @@ public extension ESI {
 			public required init?(coder aDecoder: NSCoder) {
 				accountID = aDecoder.decodeInteger(forKey: "account_id")
 				duration = aDecoder.decodeInteger(forKey: "duration")
-				escrow = aDecoder.decodeFloat(forKey: "escrow")
+				escrow = aDecoder.decodeDouble(forKey: "escrow")
 				isBuyOrder = aDecoder.decodeBool(forKey: "is_buy_order")
 				isCorp = aDecoder.decodeBool(forKey: "is_corp")
 				issued = aDecoder.decodeObject(forKey: "issued") as? Date ?? Date()
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				minVolume = aDecoder.decodeInteger(forKey: "min_volume")
 				orderID = aDecoder.decodeInt64(forKey: "order_id")
-				price = aDecoder.decodeFloat(forKey: "price")
+				price = aDecoder.decodeDouble(forKey: "price")
 				range = Market.CharacterOrder.GetCharactersCharacterIDOrdersRange(rawValue: aDecoder.decodeObject(forKey: "range") as? String ?? "") ?? Market.CharacterOrder.GetCharactersCharacterIDOrdersRange()
 				regionID = aDecoder.decodeInteger(forKey: "region_id")
 				state = Market.CharacterOrder.GetCharactersCharacterIDOrdersState(rawValue: aDecoder.decodeObject(forKey: "state") as? String ?? "") ?? Market.CharacterOrder.GetCharactersCharacterIDOrdersState()
@@ -1438,6 +1641,78 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? CharacterOrder)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIMarketGetMarketsRegionIDHistoryUnprocessableEntity) public class GetMarketsRegionIDHistoryUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity, rhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Market.GetMarketsRegionIDHistoryUnprocessableEntity) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Market.GetMarketsRegionIDHistoryUnprocessableEntity(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetMarketsRegionIDHistoryUnprocessableEntity)?.hashValue == hashValue
 			}
 			
 		}

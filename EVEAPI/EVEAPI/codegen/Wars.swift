@@ -34,7 +34,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "max_war_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/wars/"
+			let url = session!.baseURL + "/v1/wars/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -66,7 +66,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/wars/\(warID)/"
+			let url = session!.baseURL + "/v1/wars/\(warID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -100,7 +100,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/wars/\(warID)/killmails/"
+			let url = session!.baseURL + "/v1/wars/\(warID)/killmails/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

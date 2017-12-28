@@ -33,7 +33,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/location/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/location/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -47,7 +47,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getCharacterOnline(characterID: Int, completionBlock:((Result<Bool>) -> Void)?) {
+		public func getCharacterOnline(characterID: Int, completionBlock:((Result<Location.GetCharactersCharacterIDOnlineOk>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -66,7 +66,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/online/"
+			let url = session!.baseURL + "/v2/characters/\(characterID)/online/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -74,7 +74,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Bool>) in
+			}.validateESI().responseESI { (response: DataResponse<Location.GetCharactersCharacterIDOnlineOk>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -99,7 +99,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/ship/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/ship/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -194,6 +194,108 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? CharacterShip)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESILocationGetCharactersCharacterIDOnlineOk) public class GetCharactersCharacterIDOnlineOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var lastLogin: Date? = nil
+			public var lastLogout: Date? = nil
+			public var logins: Int? = nil
+			public var online: Bool = Bool()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				lastLogin = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_login"] as? String ?? "")
+				lastLogout = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_logout"] as? String ?? "")
+				logins = dictionary["logins"] as? Int
+				guard let online = dictionary["online"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.online = online
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				lastLogin = aDecoder.decodeObject(forKey: "last_login") as? Date
+				lastLogout = aDecoder.decodeObject(forKey: "last_logout") as? Date
+				logins = aDecoder.containsValue(forKey: "logins") ? aDecoder.decodeInteger(forKey: "logins") : nil
+				online = aDecoder.decodeBool(forKey: "online")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = lastLogin {
+					aCoder.encode(v, forKey: "last_login")
+				}
+				if let v = lastLogout {
+					aCoder.encode(v, forKey: "last_logout")
+				}
+				if let v = logins {
+					aCoder.encode(v, forKey: "logins")
+				}
+				aCoder.encode(online, forKey: "online")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = lastLogin?.json {
+					json["last_login"] = v
+				}
+				if let v = lastLogout?.json {
+					json["last_logout"] = v
+				}
+				if let v = logins?.json {
+					json["logins"] = v
+				}
+				json["online"] = online.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.lastLogin?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.lastLogout?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.logins?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.online.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineOk, rhs: Location.GetCharactersCharacterIDOnlineOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Location.GetCharactersCharacterIDOnlineOk) {
+				lastLogin = other.lastLogin
+				lastLogout = other.lastLogout
+				logins = other.logins
+				online = other.online
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Location.GetCharactersCharacterIDOnlineOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDOnlineOk)?.hashValue == hashValue
 			}
 			
 		}

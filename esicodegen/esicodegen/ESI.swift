@@ -181,7 +181,8 @@ extension String {
 	
 	var camelCaps: String {
 		return components(separatedBy: CharacterSet(charactersIn: "_-. ")).enumerated().map { (i, s) -> String in
-			let s = s.replacingOccurrences(of: "'", with: "")
+			let s = s.replacingOccurrences(of: "'", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+			
 			guard !s.isEmpty else {return ""}
 			if i > 0 {
 				if s.compare("id", options: [.caseInsensitive]) == .orderedSame {

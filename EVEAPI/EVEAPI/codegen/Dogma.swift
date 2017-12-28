@@ -14,38 +14,6 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getEffects(completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/dogma/effects/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
 		public func getEffectInformation(effectID: Int, completionBlock:((Result<Dogma.Effect>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -64,7 +32,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/dogma/effects/\(effectID)/"
+			let url = session!.baseURL + "/v2/dogma/effects/\(effectID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -78,7 +46,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getAttributes(completionBlock:((Result<[Int]>) -> Void)?) {
+		public func getEffects(completionBlock:((Result<[Int]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -96,7 +64,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/dogma/attributes/"
+			let url = session!.baseURL + "/v1/dogma/effects/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -128,7 +96,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/dogma/attributes/\(attributeID)/"
+			let url = session!.baseURL + "/v1/dogma/attributes/\(attributeID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -137,6 +105,38 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Dogma.Attribute>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getAttributes(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/dogma/attributes/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}

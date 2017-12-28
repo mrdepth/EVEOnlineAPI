@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func listSovereigntyOfSystems(completionBlock:((Result<[Sovereignty.System]>) -> Void)?) {
+		public func listSovereigntyStructures(completionBlock:((Result<[Sovereignty.Structure]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -32,7 +32,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/sovereignty/map/"
+			let url = session!.baseURL + "/v1/sovereignty/structures/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -40,7 +40,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -64,7 +64,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/sovereignty/campaigns/"
+			let url = session!.baseURL + "/v1/sovereignty/campaigns/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -78,7 +78,7 @@ public extension ESI {
 			}
 		}
 		
-		public func listSovereigntyStructures(completionBlock:((Result<[Sovereignty.Structure]>) -> Void)?) {
+		public func listSovereigntyOfSystems(completionBlock:((Result<[Sovereignty.System]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -96,7 +96,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/sovereignty/structures/"
+			let url = session!.baseURL + "/v1/sovereignty/map/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -104,7 +104,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
 				completionBlock?(response.result)
 				session = nil
 			}

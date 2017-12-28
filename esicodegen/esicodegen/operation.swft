@@ -16,7 +16,7 @@
 
 		{queries}
 
-		let url = session!.baseURL + "latest{url}"
+		let url = session!.baseURL + "{url}"
 		let components = NSURLComponents(string: url)!
 		components.queryItems = query
 

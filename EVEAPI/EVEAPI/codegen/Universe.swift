@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getItemCategoryInformation(categoryID: Int, language: Language? = nil, completionBlock:((Result<Universe.ItemCategoryInformation>) -> Void)?) {
+		public func getRegionInformation(language: Language? = nil, regionID: Int, completionBlock:((Result<Universe.RegionInformation>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -34,7 +34,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/universe/categories/\(categoryID)/"
+			let url = session!.baseURL + "/v1/universe/regions/\(regionID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -42,73 +42,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.ItemCategoryInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func listAllPublicStructures(completionBlock:((Result<[Int64]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/structures/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int64]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getTypes(page: Int? = nil, completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/universe/types/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -134,7 +68,367 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/universe/groups/"
+			let url = session!.baseURL + "/v1/universe/groups/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getSystemKills(completionBlock:((Result<[Universe.SystemKills]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v2/universe/system_kills/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Universe.SystemKills]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getRegions(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/regions/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getConstellationInformation(constellationID: Int, language: Language? = nil, completionBlock:((Result<Universe.ConstellationInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/constellations/\(constellationID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getStarInformation(starID: Int, completionBlock:((Result<Universe.GetUniverseStarsStarIDOk>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/stars/\(starID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getGraphicInformation(graphicID: Int, completionBlock:((Result<Universe.GraphicInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/graphics/\(graphicID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.GraphicInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getItemGroupInformation(groupID: Int, language: Language? = nil, completionBlock:((Result<Universe.ItemGroupInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/groups/\(groupID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.ItemGroupInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getItemCategoryInformation(categoryID: Int, language: Language? = nil, completionBlock:((Result<Universe.ItemCategoryInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/categories/\(categoryID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.ItemCategoryInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getSolarSystemInformation(language: Language? = nil, systemID: Int, completionBlock:((Result<Universe.SolarSystemInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v3/universe/systems/\(systemID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getStargateInformation(stargateID: Int, completionBlock:((Result<Universe.StargateInformation>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/stargates/\(stargateID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getGraphics(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/graphics/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getConstellations(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/constellations/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -168,7 +462,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/universe/races/"
+			let url = session!.baseURL + "/v1/universe/races/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -182,7 +476,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getPlanetInformation(planetID: Int, completionBlock:((Result<Universe.PlanetInformation>) -> Void)?) {
+		public func getMoonInformation(moonID: Int, completionBlock:((Result<Universe.MoonInformation>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -200,7 +494,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/planets/\(planetID)/"
+			let url = session!.baseURL + "/v1/universe/moons/\(moonID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -208,45 +502,13 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.PlanetInformation>) in
+			}.validateESI().responseESI { (response: DataResponse<Universe.MoonInformation>) in
 				completionBlock?(response.result)
 				session = nil
 			}
 		}
 		
-		public func getNamesAndCategoriesForSetOfIDs(ids: [Int], completionBlock:((Result<[Universe.Name]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body = try? JSONSerialization.data(withJSONObject: ids.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/names/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Name]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getConstellations(completionBlock:((Result<[Int]>) -> Void)?) {
+		public func getFactions(language: Language? = nil, completionBlock:((Result<[Universe.Faction]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -262,9 +524,45 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/universe/factions/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Universe.Faction]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getTypes(page: Int? = nil, completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
 			
 			
-			let url = session!.baseURL + "latest/universe/constellations/"
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/types/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -298,7 +596,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/universe/types/\(typeID)/"
+			let url = session!.baseURL + "/v3/universe/types/\(typeID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -312,7 +610,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getGraphics(completionBlock:((Result<[Int]>) -> Void)?) {
+		public func listAllPublicStructures(completionBlock:((Result<[Int64]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -330,7 +628,71 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/graphics/"
+			let url = session!.baseURL + "/v1/universe/structures/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int64]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getNamesAndCategoriesForSetOfIDs(ids: [Int], completionBlock:((Result<[Universe.Name]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body = try? JSONSerialization.data(withJSONObject: ids.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v2/universe/names/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Universe.Name]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getSolarSystems(completionBlock:((Result<[Int]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/universe/systems/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -344,7 +706,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getItemCategories(completionBlock:((Result<[Int]>) -> Void)?) {
+		public func getPlanetInformation(planetID: Int, completionBlock:((Result<Universe.PlanetInformation>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -362,7 +724,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/categories/"
+			let url = session!.baseURL + "/v1/universe/planets/\(planetID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -370,305 +732,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getSystemJumps(completionBlock:((Result<[Universe.Jump]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/system_jumps/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getStarInformation(starID: Int, completionBlock:((Result<Universe.GetUniverseStarsStarIDOk>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/stars/\(starID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getMoonInformation(moonID: Int, completionBlock:((Result<Universe.MoonInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/moons/\(moonID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.MoonInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getConstellationInformation(constellationID: Int, language: Language? = nil, completionBlock:((Result<Universe.ConstellationInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/universe/constellations/\(constellationID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getFactions(language: Language? = nil, completionBlock:((Result<[Universe.Faction]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/universe/factions/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Faction]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getRegionInformation(language: Language? = nil, regionID: Int, completionBlock:((Result<Universe.RegionInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/universe/regions/\(regionID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getStationInformation(stationID: Int, completionBlock:((Result<Universe.StationInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/stations/\(stationID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getItemGroupInformation(groupID: Int, language: Language? = nil, completionBlock:((Result<Universe.ItemGroupInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/universe/groups/\(groupID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.ItemGroupInformation>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getSolarSystemInformation(language: Language? = nil, systemID: Int, completionBlock:((Result<Universe.SolarSystemInformation>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/universe/systems/\(systemID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
+			}.validateESI().responseESI { (response: DataResponse<Universe.PlanetInformation>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -693,7 +757,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/structures/\(structureID)/"
+			let url = session!.baseURL + "/v1/universe/structures/\(structureID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -707,7 +771,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getGraphicInformation(graphicID: Int, completionBlock:((Result<Universe.GraphicInformation>) -> Void)?) {
+		public func getSystemJumps(completionBlock:((Result<[Universe.Jump]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -725,7 +789,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/graphics/\(graphicID)/"
+			let url = session!.baseURL + "/v1/universe/system_jumps/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -733,13 +797,13 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.GraphicInformation>) in
+			}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
 		}
 		
-		public func getSystemKills(completionBlock:((Result<[Universe.SystemKills]>) -> Void)?) {
+		public func getItemCategories(completionBlock:((Result<[Int]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -757,7 +821,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/system_kills/"
+			let url = session!.baseURL + "/v1/universe/categories/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -765,13 +829,13 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.SystemKills]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
 		}
 		
-		public func getStargateInformation(stargateID: Int, completionBlock:((Result<Universe.StargateInformation>) -> Void)?) {
+		public func getStationInformation(stationID: Int, completionBlock:((Result<Universe.StationInformation>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -789,7 +853,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/stargates/\(stargateID)/"
+			let url = session!.baseURL + "/v2/universe/stations/\(stationID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -797,7 +861,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
+			}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -823,7 +887,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/universe/bloodlines/"
+			let url = session!.baseURL + "/v1/universe/bloodlines/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -837,65 +901,35 @@ public extension ESI {
 			}
 		}
 		
-		public func getRegions(completionBlock:((Result<[Int]>) -> Void)?) {
+		public func bulkNamesToIDs(language: Language? = nil, names: [String], completionBlock:((Result<Universe.PostUniverseIdsOk>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			
 			
-			let body: Data? = nil
+			let body = try? JSONSerialization.data(withJSONObject: names.json, options: [])
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
-			
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			
-			
-			let url = session!.baseURL + "latest/universe/regions/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
 			}
-		}
-		
-		public func getSolarSystems(completionBlock:((Result<[Int]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
 			
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/universe/systems/"
+			let url = session!.baseURL + "/v1/universe/ids/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			}.validateESI().responseESI { (response: DataResponse<Universe.PostUniverseIdsOk>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -2252,6 +2286,90 @@ public extension ESI {
 		
 		@objc(ESIUniverseStargateInformation) public class StargateInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			@objc(ESIUniverseStargateInformationGetUniverseStargatesStargateIDPosition) public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.x = x
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.y = y
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.z = z
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(x, forKey: "x")
+					aCoder.encode(y, forKey: "y")
+					aCoder.encode(z, forKey: "z")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["x"] = x.json
+					json["y"] = y.json
+					json["z"] = z.json
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.x.hashValue)
+					hashCombine(seed: &hash, value: self.y.hashValue)
+					hashCombine(seed: &hash, value: self.z.hashValue)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.StargateInformation.GetUniverseStargatesStargateIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseStargatesStargateIDPosition)?.hashValue == hashValue
+				}
+				
+			}
+			
 			@objc(ESIUniverseStargateInformationGetUniverseStargatesStargateIDDestination) public class GetUniverseStargatesStargateIDDestination: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
@@ -2324,90 +2442,6 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetUniverseStargatesStargateIDDestination)?.hashValue == hashValue
-				}
-				
-			}
-			
-			@objc(ESIUniverseStargateInformationGetUniverseStargatesStargateIDPosition) public class GetUniverseStargatesStargateIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
-				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
-					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
-				}
-				
-				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) {
-					x = other.x
-					y = other.y
-					z = other.z
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Universe.StargateInformation.GetUniverseStargatesStargateIDPosition(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetUniverseStargatesStargateIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -3060,6 +3094,78 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIUniversePostUniverseIdsServiceUnavailable) public class PostUniverseIdsServiceUnavailable: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Universe.PostUniverseIdsServiceUnavailable, rhs: Universe.PostUniverseIdsServiceUnavailable) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.PostUniverseIdsServiceUnavailable) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.PostUniverseIdsServiceUnavailable(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUniverseIdsServiceUnavailable)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIUniverseJump) public class Jump: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -3281,6 +3387,996 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIUniversePostUniverseIdsOk) public class PostUniverseIdsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsCharacters) public class PostUniverseIdsCharacters: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsCharacters(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsCharacters)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsAlliances) public class PostUniverseIdsAlliances: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsAlliances(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsAlliances)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsConstellations) public class PostUniverseIdsConstellations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsConstellations(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsConstellations)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsInventoryTypes) public class PostUniverseIdsInventoryTypes: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsInventoryTypes)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsSystems) public class PostUniverseIdsSystems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsSystems, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsSystems) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsSystems) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsSystems(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsSystems)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsStations) public class PostUniverseIdsStations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsStations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsStations) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsStations) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsStations(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsStations)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsRegions) public class PostUniverseIdsRegions: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsRegions, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsRegions) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsRegions) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsRegions(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsRegions)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsAgents) public class PostUniverseIdsAgents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsAgents, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsAgents) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsAgents) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsAgents(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsAgents)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsFactions) public class PostUniverseIdsFactions: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsFactions, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsFactions) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsFactions) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsFactions(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsFactions)?.hashValue == hashValue
+				}
+				
+			}
+			
+			@objc(ESIUniversePostUniverseIdsOkPostUniverseIdsCorporations) public class PostUniverseIdsCorporations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var id: Int? = nil
+				public var name: String? = nil
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					id = dictionary["id"] as? Int
+					name = dictionary["name"] as? String
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					id = aDecoder.containsValue(forKey: "id") ? aDecoder.decodeInteger(forKey: "id") : nil
+					name = aDecoder.decodeObject(forKey: "name") as? String
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					if let v = id {
+						aCoder.encode(v, forKey: "id")
+					}
+					if let v = name {
+						aCoder.encode(v, forKey: "name")
+					}
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					if let v = id?.json {
+						json["id"] = v
+					}
+					if let v = name?.json {
+						json["name"] = v
+					}
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations) {
+					id = other.id
+					name = other.name
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.PostUniverseIdsOk.PostUniverseIdsCorporations(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostUniverseIdsCorporations)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public var agents: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]? = nil
+			public var alliances: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]? = nil
+			public var characters: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]? = nil
+			public var constellations: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]? = nil
+			public var corporations: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]? = nil
+			public var factions: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]? = nil
+			public var inventoryTypes: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]? = nil
+			public var regions: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]? = nil
+			public var stations: [Universe.PostUniverseIdsOk.PostUniverseIdsStations]? = nil
+			public var systems: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				agents = try (dictionary["agents"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsAgents(json: $0)}
+				alliances = try (dictionary["alliances"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsAlliances(json: $0)}
+				characters = try (dictionary["characters"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsCharacters(json: $0)}
+				constellations = try (dictionary["constellations"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsConstellations(json: $0)}
+				corporations = try (dictionary["corporations"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsCorporations(json: $0)}
+				factions = try (dictionary["factions"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsFactions(json: $0)}
+				inventoryTypes = try (dictionary["inventory_types"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes(json: $0)}
+				regions = try (dictionary["regions"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsRegions(json: $0)}
+				stations = try (dictionary["stations"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsStations(json: $0)}
+				systems = try (dictionary["systems"] as? [Any])?.map {try Universe.PostUniverseIdsOk.PostUniverseIdsSystems(json: $0)}
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				agents = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents.self], forKey: "agents") as? [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]
+				alliances = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances.self], forKey: "alliances") as? [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]
+				characters = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters.self], forKey: "characters") as? [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]
+				constellations = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations.self], forKey: "constellations") as? [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]
+				corporations = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations.self], forKey: "corporations") as? [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]
+				factions = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions.self], forKey: "factions") as? [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]
+				inventoryTypes = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes.self], forKey: "inventory_types") as? [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]
+				regions = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions.self], forKey: "regions") as? [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]
+				stations = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsStations.self], forKey: "stations") as? [Universe.PostUniverseIdsOk.PostUniverseIdsStations]
+				systems = aDecoder.decodeObject(of: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems.self], forKey: "systems") as? [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = agents {
+					aCoder.encode(v, forKey: "agents")
+				}
+				if let v = alliances {
+					aCoder.encode(v, forKey: "alliances")
+				}
+				if let v = characters {
+					aCoder.encode(v, forKey: "characters")
+				}
+				if let v = constellations {
+					aCoder.encode(v, forKey: "constellations")
+				}
+				if let v = corporations {
+					aCoder.encode(v, forKey: "corporations")
+				}
+				if let v = factions {
+					aCoder.encode(v, forKey: "factions")
+				}
+				if let v = inventoryTypes {
+					aCoder.encode(v, forKey: "inventory_types")
+				}
+				if let v = regions {
+					aCoder.encode(v, forKey: "regions")
+				}
+				if let v = stations {
+					aCoder.encode(v, forKey: "stations")
+				}
+				if let v = systems {
+					aCoder.encode(v, forKey: "systems")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = agents?.json {
+					json["agents"] = v
+				}
+				if let v = alliances?.json {
+					json["alliances"] = v
+				}
+				if let v = characters?.json {
+					json["characters"] = v
+				}
+				if let v = constellations?.json {
+					json["constellations"] = v
+				}
+				if let v = corporations?.json {
+					json["corporations"] = v
+				}
+				if let v = factions?.json {
+					json["factions"] = v
+				}
+				if let v = inventoryTypes?.json {
+					json["inventory_types"] = v
+				}
+				if let v = regions?.json {
+					json["regions"] = v
+				}
+				if let v = stations?.json {
+					json["stations"] = v
+				}
+				if let v = systems?.json {
+					json["systems"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				self.agents?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.alliances?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.characters?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.constellations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.corporations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.factions?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.inventoryTypes?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.regions?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.stations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.systems?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Universe.PostUniverseIdsOk, rhs: Universe.PostUniverseIdsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.PostUniverseIdsOk) {
+				agents = other.agents?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsAgents($0) }
+				alliances = other.alliances?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsAlliances($0) }
+				characters = other.characters?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsCharacters($0) }
+				constellations = other.constellations?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsConstellations($0) }
+				corporations = other.corporations?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsCorporations($0) }
+				factions = other.factions?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsFactions($0) }
+				inventoryTypes = other.inventoryTypes?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes($0) }
+				regions = other.regions?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsRegions($0) }
+				stations = other.stations?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsStations($0) }
+				systems = other.systems?.flatMap { Universe.PostUniverseIdsOk.PostUniverseIdsSystems($0) }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.PostUniverseIdsOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostUniverseIdsOk)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIUniverseGetUniverseCategoriesCategoryIDNotFound) public class GetUniverseCategoriesCategoryIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -3358,19 +4454,19 @@ public extension ESI {
 			@objc(ESIUniverseConstellationInformationGetUniverseConstellationsConstellationIDPosition) public class GetUniverseConstellationsConstellationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
 				
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3385,9 +4481,9 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
 					
 					super.init()
 				}
@@ -3540,19 +4636,19 @@ public extension ESI {
 			@objc(ESIUniverseMoonInformationGetUniverseMoonsMoonIDPosition) public class GetUniverseMoonsMoonIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
 				
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3567,9 +4663,9 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
 					
 					super.init()
 				}
@@ -3715,19 +4811,19 @@ public extension ESI {
 			@objc(ESIUniverseStructureInformationGetUniverseStructuresStructureIDPosition) public class GetUniverseStructuresStructureIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
 				
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -3742,9 +4838,9 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
 					
 					super.init()
 				}
@@ -3892,7 +4988,263 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIUniverseItemGroupInformation) public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var categoryID: Int = Int()
+			public var groupID: Int = Int()
+			public var name: String = String()
+			public var published: Bool = Bool()
+			public var types: [Int] = []
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.categoryID = categoryID
+				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.groupID = groupID
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.name = name
+				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.published = published
+				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				categoryID = aDecoder.decodeInteger(forKey: "category_id")
+				groupID = aDecoder.decodeInteger(forKey: "group_id")
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				published = aDecoder.decodeBool(forKey: "published")
+				types = aDecoder.decodeObject(forKey: "types") as? [Int] ?? []
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(categoryID, forKey: "category_id")
+				aCoder.encode(groupID, forKey: "group_id")
+				aCoder.encode(name, forKey: "name")
+				aCoder.encode(published, forKey: "published")
+				aCoder.encode(types, forKey: "types")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["category_id"] = categoryID.json
+				json["group_id"] = groupID.json
+				json["name"] = name.json
+				json["published"] = published.json
+				json["types"] = types.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.categoryID.hashValue)
+				hashCombine(seed: &hash, value: self.groupID.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: self.published.hashValue)
+				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.ItemGroupInformation) {
+				categoryID = other.categoryID
+				groupID = other.groupID
+				name = other.name
+				published = other.published
+				types = other.types.flatMap { $0 }
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.ItemGroupInformation(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? ItemGroupInformation)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIUniverseGetUniverseMoonsMoonIDNotFound) public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseMoonsMoonIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseMoonsMoonIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseMoonsMoonIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIUniverseSolarSystemInformation) public class SolarSystemInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			@objc(ESIUniverseSolarSystemInformationGetUniverseSystemsSystemIDPosition) public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.x = x
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.y = y
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.z = z
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(x, forKey: "x")
+					aCoder.encode(y, forKey: "y")
+					aCoder.encode(z, forKey: "z")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["x"] = x.json
+					json["y"] = y.json
+					json["z"] = z.json
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.x.hashValue)
+					hashCombine(seed: &hash, value: self.y.hashValue)
+					hashCombine(seed: &hash, value: self.z.hashValue)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? GetUniverseSystemsSystemIDPosition)?.hashValue == hashValue
+				}
+				
+			}
 			
 			@objc(ESIUniverseSolarSystemInformationGetUniverseSystemsSystemIDPlanets) public class GetUniverseSystemsSystemIDPlanets: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
@@ -3969,90 +5321,6 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetUniverseSystemsSystemIDPlanets)?.hashValue == hashValue
-				}
-				
-			}
-			
-			@objc(ESIUniverseSolarSystemInformationGetUniverseSystemsSystemIDPosition) public class GetUniverseSystemsSystemIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
-				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
-					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
-				}
-				
-				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				init(_ other: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) {
-					x = other.x
-					y = other.y
-					z = other.z
-				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetUniverseSystemsSystemIDPosition)?.hashValue == hashValue
 				}
 				
 			}
@@ -4207,19 +5475,19 @@ public extension ESI {
 			@objc(ESIUniversePlanetInformationGetUniversePlanetsPlanetIDPosition) public class GetUniversePlanetsPlanetIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
 				
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -4234,9 +5502,9 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
 					
 					super.init()
 				}
@@ -4385,268 +5653,72 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIUniverseGetUniverseMoonsMoonIDNotFound) public class GetUniverseMoonsMoonIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseMoonsMoonIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseMoonsMoonIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseMoonsMoonIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESIUniverseItemGroupInformation) public class ItemGroupInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var categoryID: Int = Int()
-			public var groupID: Int = Int()
-			public var name: String = String()
-			public var published: Bool = Bool()
-			public var types: [Int] = []
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let categoryID = dictionary["category_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.categoryID = categoryID
-				guard let groupID = dictionary["group_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.groupID = groupID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				guard let published = dictionary["published"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.published = published
-				types = try (dictionary["types"] as? [Any])?.map {try Int(json: $0)} ?? []
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				categoryID = aDecoder.decodeInteger(forKey: "category_id")
-				groupID = aDecoder.decodeInteger(forKey: "group_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				published = aDecoder.decodeBool(forKey: "published")
-				types = aDecoder.decodeObject(forKey: "types") as? [Int] ?? []
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(categoryID, forKey: "category_id")
-				aCoder.encode(groupID, forKey: "group_id")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(published, forKey: "published")
-				aCoder.encode(types, forKey: "types")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["category_id"] = categoryID.json
-				json["group_id"] = groupID.json
-				json["name"] = name.json
-				json["published"] = published.json
-				json["types"] = types.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.categoryID.hashValue)
-				hashCombine(seed: &hash, value: self.groupID.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
-				hashCombine(seed: &hash, value: self.published.hashValue)
-				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.ItemGroupInformation) {
-				categoryID = other.categoryID
-				groupID = other.groupID
-				name = other.name
-				published = other.published
-				types = other.types.flatMap { $0 }
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.ItemGroupInformation(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? ItemGroupInformation)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESIUniverseGetUniverseConstellationsConstellationIDNotFound) public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseConstellationsConstellationIDNotFound, rhs: Universe.GetUniverseConstellationsConstellationIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Universe.GetUniverseConstellationsConstellationIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Universe.GetUniverseConstellationsConstellationIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseConstellationsConstellationIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		@objc(ESIUniverseStationInformation) public class StationInformation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetUniverseStationsStationIDServices: String, JSONCoding, HTTPQueryable {
+				case assasinationMissions = "assasination-missions"
+				case blackMarket = "black-market"
+				case bountyMissions = "bounty-missions"
+				case cloning = "cloning"
+				case courierMissions = "courier-missions"
+				case dnaTherapy = "dna-therapy"
+				case docking = "docking"
+				case factory = "factory"
+				case fitting = "fitting"
+				case gambling = "gambling"
+				case insurance = "insurance"
+				case interbus = "interbus"
+				case jumpCloneFacility = "jump-clone-facility"
+				case labratory = "labratory"
+				case loyaltyPointStore = "loyalty-point-store"
+				case market = "market"
+				case navyOffices = "navy-offices"
+				case news = "news"
+				case officeRental = "office-rental"
+				case paintshop = "paintshop"
+				case refinery = "refinery"
+				case repairFacilities = "repair-facilities"
+				case reprocessingPlant = "reprocessing-plant"
+				case securityOffices = "security-offices"
+				case stockExchange = "stock-exchange"
+				case storage = "storage"
+				case surgery = "surgery"
+				
+				public init() {
+					self = .bountyMissions
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetUniverseStationsStationIDServices(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
 			@objc(ESIUniverseStationInformationGetUniverseStationsStationIDPosition) public class GetUniverseStationsStationIDPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
 				
-				public var x: Float = Float()
-				public var y: Float = Float()
-				public var z: Float = Float()
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
 				
 				
 				public required init(json: Any) throws {
 					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 					
-					guard let x = dictionary["x"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.x = x
-					guard let y = dictionary["y"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.y = y
-					guard let z = dictionary["z"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 					self.z = z
 					
 					super.init()
@@ -4661,9 +5733,9 @@ public extension ESI {
 				}
 				
 				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeFloat(forKey: "x")
-					y = aDecoder.decodeFloat(forKey: "y")
-					z = aDecoder.decodeFloat(forKey: "z")
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
 					
 					super.init()
 				}
@@ -4711,54 +5783,6 @@ public extension ESI {
 				
 				public override func isEqual(_ object: Any?) -> Bool {
 					return (object as? GetUniverseStationsStationIDPosition)?.hashValue == hashValue
-				}
-				
-			}
-			
-			public enum GetUniverseStationsStationIDServices: String, JSONCoding, HTTPQueryable {
-				case assasinationMissions = "assasination-missions"
-				case blackMarket = "black-market"
-				case bountyMissions = "bounty-missions"
-				case cloning = "cloning"
-				case courierMissions = "courier-missions"
-				case dnaTherapy = "dna-therapy"
-				case docking = "docking"
-				case factory = "factory"
-				case fitting = "fitting"
-				case gambling = "gambling"
-				case insurance = "insurance"
-				case interbus = "interbus"
-				case jumpCloneFacility = "jump-clone-facility"
-				case labratory = "labratory"
-				case loyaltyPointStore = "loyalty-point-store"
-				case market = "market"
-				case navyOffices = "navy-offices"
-				case news = "news"
-				case officeRental = "office-rental"
-				case paintshop = "paintshop"
-				case refinery = "refinery"
-				case repairFacilities = "repair-facilities"
-				case reprocessingPlant = "reprocessing-plant"
-				case securityOffices = "security-offices"
-				case stockExchange = "stock-exchange"
-				case storage = "storage"
-				case surgery = "surgery"
-				
-				public init() {
-					self = .bountyMissions
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetUniverseStationsStationIDServices(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
 				}
 				
 			}
@@ -4921,6 +5945,78 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIUniverseGetUniverseConstellationsConstellationIDNotFound) public class GetUniverseConstellationsConstellationIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseConstellationsConstellationIDNotFound, rhs: Universe.GetUniverseConstellationsConstellationIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Universe.GetUniverseConstellationsConstellationIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Universe.GetUniverseConstellationsConstellationIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseConstellationsConstellationIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIUniverseGetUniverseSystemsSystemIDNotFound) public class GetUniverseSystemsSystemIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -4996,14 +6092,14 @@ public extension ESI {
 		@objc(ESIUniverseFaction) public class Faction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var corporationID: Int = Int()
+			public var corporationID: Int? = nil
 			public var localizedDescription: String = String()
 			public var factionID: Int = Int()
 			public var isUnique: Bool = Bool()
 			public var militiaCorporationID: Int? = nil
 			public var name: String = String()
 			public var sizeFactor: Float = Float()
-			public var solarSystemID: Int = Int()
+			public var solarSystemID: Int? = nil
 			public var stationCount: Int = Int()
 			public var stationSystemCount: Int = Int()
 			
@@ -5011,8 +6107,7 @@ public extension ESI {
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationID = corporationID
+				corporationID = dictionary["corporation_id"] as? Int
 				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.localizedDescription = localizedDescription
 				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
@@ -5024,8 +6119,7 @@ public extension ESI {
 				self.name = name
 				guard let sizeFactor = dictionary["size_factor"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.sizeFactor = sizeFactor
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.solarSystemID = solarSystemID
+				solarSystemID = dictionary["solar_system_id"] as? Int
 				guard let stationCount = dictionary["station_count"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.stationCount = stationCount
 				guard let stationSystemCount = dictionary["station_system_count"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
@@ -5043,14 +6137,14 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
+				corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
 				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
 				factionID = aDecoder.decodeInteger(forKey: "faction_id")
 				isUnique = aDecoder.decodeBool(forKey: "is_unique")
 				militiaCorporationID = aDecoder.containsValue(forKey: "militia_corporation_id") ? aDecoder.decodeInteger(forKey: "militia_corporation_id") : nil
 				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
 				sizeFactor = aDecoder.decodeFloat(forKey: "size_factor")
-				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
+				solarSystemID = aDecoder.containsValue(forKey: "solar_system_id") ? aDecoder.decodeInteger(forKey: "solar_system_id") : nil
 				stationCount = aDecoder.decodeInteger(forKey: "station_count")
 				stationSystemCount = aDecoder.decodeInteger(forKey: "station_system_count")
 				
@@ -5058,7 +6152,9 @@ public extension ESI {
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(corporationID, forKey: "corporation_id")
+				if let v = corporationID {
+					aCoder.encode(v, forKey: "corporation_id")
+				}
 				aCoder.encode(localizedDescription, forKey: "description")
 				aCoder.encode(factionID, forKey: "faction_id")
 				aCoder.encode(isUnique, forKey: "is_unique")
@@ -5067,14 +6163,18 @@ public extension ESI {
 				}
 				aCoder.encode(name, forKey: "name")
 				aCoder.encode(sizeFactor, forKey: "size_factor")
-				aCoder.encode(solarSystemID, forKey: "solar_system_id")
+				if let v = solarSystemID {
+					aCoder.encode(v, forKey: "solar_system_id")
+				}
 				aCoder.encode(stationCount, forKey: "station_count")
 				aCoder.encode(stationSystemCount, forKey: "station_system_count")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["corporation_id"] = corporationID.json
+				if let v = corporationID?.json {
+					json["corporation_id"] = v
+				}
 				json["description"] = localizedDescription.json
 				json["faction_id"] = factionID.json
 				json["is_unique"] = isUnique.json
@@ -5083,7 +6183,9 @@ public extension ESI {
 				}
 				json["name"] = name.json
 				json["size_factor"] = sizeFactor.json
-				json["solar_system_id"] = solarSystemID.json
+				if let v = solarSystemID?.json {
+					json["solar_system_id"] = v
+				}
 				json["station_count"] = stationCount.json
 				json["station_system_count"] = stationSystemCount.json
 				return json
@@ -5091,14 +6193,14 @@ public extension ESI {
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.corporationID.hashValue)
+				hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
 				hashCombine(seed: &hash, value: self.factionID.hashValue)
 				hashCombine(seed: &hash, value: self.isUnique.hashValue)
 				hashCombine(seed: &hash, value: self.militiaCorporationID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.name.hashValue)
 				hashCombine(seed: &hash, value: self.sizeFactor.hashValue)
-				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: self.solarSystemID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.stationCount.hashValue)
 				hashCombine(seed: &hash, value: self.stationSystemCount.hashValue)
 				return hash

@@ -14,7 +14,7 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getColonies(characterID: Int, completionBlock:((Result<[PlanetaryInteraction.Colony]>) -> Void)?) {
+		public func getColonyLayout(characterID: Int, planetID: Int, completionBlock:((Result<PlanetaryInteraction.ColonyLayout>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -33,7 +33,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/planets/"
+			let url = session!.baseURL + "/v3/characters/\(characterID)/planets/\(planetID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -41,7 +41,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
+			}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -65,7 +65,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/universe/schematics/\(schematicID)/"
+			let url = session!.baseURL + "/v1/universe/schematics/\(schematicID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -79,7 +79,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getColonyLayout(characterID: Int, planetID: Int, completionBlock:((Result<PlanetaryInteraction.ColonyLayout>) -> Void)?) {
+		public func getColonies(characterID: Int, completionBlock:((Result<[PlanetaryInteraction.Colony]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -98,7 +98,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/planets/\(planetID)/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/planets/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -106,10 +106,189 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
+			}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
+		}
+		
+		public func listCorporationCustomsOffices(corporationID: Int, page: Int? = nil, completionBlock:((Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-planets.read_customs_offices.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/customs_offices/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		
+		@objc(ESIPlanetaryInteractionGetCharactersCharacterIDPlanetsPlanetIDNotFound) public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDPlanetsPlanetIDNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIPlanetaryInteractionGetUniverseSchematicsSchematicIDNotFound) public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetUniverseSchematicsSchematicIDNotFound)?.hashValue == hashValue
+			}
+			
 		}
 		
 		
@@ -258,229 +437,9 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIPlanetaryInteractionGetCharactersCharacterIDPlanetsPlanetIDNotFound) public class GetCharactersCharacterIDPlanetsPlanetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDPlanetsPlanetIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESIPlanetaryInteractionGetUniverseSchematicsSchematicIDNotFound) public class GetUniverseSchematicsSchematicIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var error: String? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) {
-				error = other.error
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetUniverseSchematicsSchematicIDNotFound)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
 		@objc(ESIPlanetaryInteractionColonyLayout) public class ColonyLayout: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			@objc(ESIPlanetaryInteractionColonyLayoutPin) public class Pin: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-				
-				@objc(ESIPlanetaryInteractionColonyLayoutPinContents) public class Contents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-					
-					
-					public var amount: Int64 = Int64()
-					public var typeID: Int = Int()
-					
-					
-					public required init(json: Any) throws {
-						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-						
-						guard let amount = dictionary["amount"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-						self.amount = amount
-						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-						self.typeID = typeID
-						
-						super.init()
-					}
-					
-					override public init() {
-						super.init()
-					}
-					
-					public static var supportsSecureCoding: Bool {
-						return true
-					}
-					
-					public required init?(coder aDecoder: NSCoder) {
-						amount = aDecoder.decodeInt64(forKey: "amount")
-						typeID = aDecoder.decodeInteger(forKey: "type_id")
-						
-						super.init()
-					}
-					
-					public func encode(with aCoder: NSCoder) {
-						aCoder.encode(amount, forKey: "amount")
-						aCoder.encode(typeID, forKey: "type_id")
-					}
-					
-					public var json: Any {
-						var json = [String: Any]()
-						json["amount"] = amount.json
-						json["type_id"] = typeID.json
-						return json
-					}
-					
-					private lazy var _hashValue: Int = {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: self.amount.hashValue)
-						hashCombine(seed: &hash, value: self.typeID.hashValue)
-						return hash
-					}()
-					
-					override public var hashValue: Int {
-						return _hashValue
-					}
-					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.Contents, rhs: PlanetaryInteraction.ColonyLayout.Pin.Contents) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					init(_ other: PlanetaryInteraction.ColonyLayout.Pin.Contents) {
-						amount = other.amount
-						typeID = other.typeID
-					}
-					
-					public func copy(with zone: NSZone? = nil) -> Any {
-						return PlanetaryInteraction.ColonyLayout.Pin.Contents(self)
-					}
-					
-					
-					public override func isEqual(_ object: Any?) -> Bool {
-						return (object as? Contents)?.hashValue == hashValue
-					}
-					
-				}
 				
 				@objc(ESIPlanetaryInteractionColonyLayoutPinExtractorDetails) public class ExtractorDetails: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 					
@@ -672,6 +631,82 @@ public extension ESI {
 					
 					public override func isEqual(_ object: Any?) -> Bool {
 						return (object as? ExtractorDetails)?.hashValue == hashValue
+					}
+					
+				}
+				
+				@objc(ESIPlanetaryInteractionColonyLayoutPinContents) public class Contents: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+					
+					
+					public var amount: Int64 = Int64()
+					public var typeID: Int = Int()
+					
+					
+					public required init(json: Any) throws {
+						guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+						
+						guard let amount = dictionary["amount"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+						self.amount = amount
+						guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+						self.typeID = typeID
+						
+						super.init()
+					}
+					
+					override public init() {
+						super.init()
+					}
+					
+					public static var supportsSecureCoding: Bool {
+						return true
+					}
+					
+					public required init?(coder aDecoder: NSCoder) {
+						amount = aDecoder.decodeInt64(forKey: "amount")
+						typeID = aDecoder.decodeInteger(forKey: "type_id")
+						
+						super.init()
+					}
+					
+					public func encode(with aCoder: NSCoder) {
+						aCoder.encode(amount, forKey: "amount")
+						aCoder.encode(typeID, forKey: "type_id")
+					}
+					
+					public var json: Any {
+						var json = [String: Any]()
+						json["amount"] = amount.json
+						json["type_id"] = typeID.json
+						return json
+					}
+					
+					private lazy var _hashValue: Int = {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: self.amount.hashValue)
+						hashCombine(seed: &hash, value: self.typeID.hashValue)
+						return hash
+					}()
+					
+					override public var hashValue: Int {
+						return _hashValue
+					}
+					
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.Contents, rhs: PlanetaryInteraction.ColonyLayout.Pin.Contents) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					init(_ other: PlanetaryInteraction.ColonyLayout.Pin.Contents) {
+						amount = other.amount
+						typeID = other.typeID
+					}
+					
+					public func copy(with zone: NSZone? = nil) -> Any {
+						return PlanetaryInteraction.ColonyLayout.Pin.Contents(self)
+					}
+					
+					
+					public override func isEqual(_ object: Any?) -> Bool {
+						return (object as? Contents)?.hashValue == hashValue
 					}
 					
 				}
@@ -1256,6 +1291,228 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? SchematicInformation)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIPlanetaryInteractionGetCorporationsCorporationIDCustomsOfficesOk) public class GetCorporationsCorporationIDCustomsOfficesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetCorporationsCorporationIDCustomsOfficesStandingLevel: String, JSONCoding, HTTPQueryable {
+				case bad = "bad"
+				case excellent = "excellent"
+				case good = "good"
+				case neutral = "neutral"
+				case terrible = "terrible"
+				
+				public init() {
+					self = .bad
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDCustomsOfficesStandingLevel(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var allianceTaxRate: Float? = nil
+			public var allowAccessWithStandings: Bool = Bool()
+			public var allowAllianceAccess: Bool = Bool()
+			public var badStandingTaxRate: Float? = nil
+			public var corporationTaxRate: Float? = nil
+			public var excellentStandingTaxRate: Float? = nil
+			public var goodStandingTaxRate: Float? = nil
+			public var neutralStandingTaxRate: Float? = nil
+			public var officeID: Int64 = Int64()
+			public var reinforceExitEnd: Int = Int()
+			public var reinforceExitStart: Int = Int()
+			public var standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel? = nil
+			public var systemID: Int = Int()
+			public var terribleStandingTaxRate: Float? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				allianceTaxRate = dictionary["alliance_tax_rate"] as? Float
+				guard let allowAccessWithStandings = dictionary["allow_access_with_standings"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.allowAccessWithStandings = allowAccessWithStandings
+				guard let allowAllianceAccess = dictionary["allow_alliance_access"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.allowAllianceAccess = allowAllianceAccess
+				badStandingTaxRate = dictionary["bad_standing_tax_rate"] as? Float
+				corporationTaxRate = dictionary["corporation_tax_rate"] as? Float
+				excellentStandingTaxRate = dictionary["excellent_standing_tax_rate"] as? Float
+				goodStandingTaxRate = dictionary["good_standing_tax_rate"] as? Float
+				neutralStandingTaxRate = dictionary["neutral_standing_tax_rate"] as? Float
+				guard let officeID = dictionary["office_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.officeID = officeID
+				guard let reinforceExitEnd = dictionary["reinforce_exit_end"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.reinforceExitEnd = reinforceExitEnd
+				guard let reinforceExitStart = dictionary["reinforce_exit_start"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.reinforceExitStart = reinforceExitStart
+				standingLevel = PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel(rawValue: dictionary["standing_level"] as? String ?? "")
+				guard let systemID = dictionary["system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.systemID = systemID
+				terribleStandingTaxRate = dictionary["terrible_standing_tax_rate"] as? Float
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				allianceTaxRate = aDecoder.containsValue(forKey: "alliance_tax_rate") ? aDecoder.decodeFloat(forKey: "alliance_tax_rate") : nil
+				allowAccessWithStandings = aDecoder.decodeBool(forKey: "allow_access_with_standings")
+				allowAllianceAccess = aDecoder.decodeBool(forKey: "allow_alliance_access")
+				badStandingTaxRate = aDecoder.containsValue(forKey: "bad_standing_tax_rate") ? aDecoder.decodeFloat(forKey: "bad_standing_tax_rate") : nil
+				corporationTaxRate = aDecoder.containsValue(forKey: "corporation_tax_rate") ? aDecoder.decodeFloat(forKey: "corporation_tax_rate") : nil
+				excellentStandingTaxRate = aDecoder.containsValue(forKey: "excellent_standing_tax_rate") ? aDecoder.decodeFloat(forKey: "excellent_standing_tax_rate") : nil
+				goodStandingTaxRate = aDecoder.containsValue(forKey: "good_standing_tax_rate") ? aDecoder.decodeFloat(forKey: "good_standing_tax_rate") : nil
+				neutralStandingTaxRate = aDecoder.containsValue(forKey: "neutral_standing_tax_rate") ? aDecoder.decodeFloat(forKey: "neutral_standing_tax_rate") : nil
+				officeID = aDecoder.decodeInt64(forKey: "office_id")
+				reinforceExitEnd = aDecoder.decodeInteger(forKey: "reinforce_exit_end")
+				reinforceExitStart = aDecoder.decodeInteger(forKey: "reinforce_exit_start")
+				standingLevel = PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel(rawValue: aDecoder.decodeObject(forKey: "standing_level") as? String ?? "")
+				systemID = aDecoder.decodeInteger(forKey: "system_id")
+				terribleStandingTaxRate = aDecoder.containsValue(forKey: "terrible_standing_tax_rate") ? aDecoder.decodeFloat(forKey: "terrible_standing_tax_rate") : nil
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = allianceTaxRate {
+					aCoder.encode(v, forKey: "alliance_tax_rate")
+				}
+				aCoder.encode(allowAccessWithStandings, forKey: "allow_access_with_standings")
+				aCoder.encode(allowAllianceAccess, forKey: "allow_alliance_access")
+				if let v = badStandingTaxRate {
+					aCoder.encode(v, forKey: "bad_standing_tax_rate")
+				}
+				if let v = corporationTaxRate {
+					aCoder.encode(v, forKey: "corporation_tax_rate")
+				}
+				if let v = excellentStandingTaxRate {
+					aCoder.encode(v, forKey: "excellent_standing_tax_rate")
+				}
+				if let v = goodStandingTaxRate {
+					aCoder.encode(v, forKey: "good_standing_tax_rate")
+				}
+				if let v = neutralStandingTaxRate {
+					aCoder.encode(v, forKey: "neutral_standing_tax_rate")
+				}
+				aCoder.encode(officeID, forKey: "office_id")
+				aCoder.encode(reinforceExitEnd, forKey: "reinforce_exit_end")
+				aCoder.encode(reinforceExitStart, forKey: "reinforce_exit_start")
+				if let v = standingLevel {
+					aCoder.encode(v.rawValue, forKey: "standing_level")
+				}
+				aCoder.encode(systemID, forKey: "system_id")
+				if let v = terribleStandingTaxRate {
+					aCoder.encode(v, forKey: "terrible_standing_tax_rate")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = allianceTaxRate?.json {
+					json["alliance_tax_rate"] = v
+				}
+				json["allow_access_with_standings"] = allowAccessWithStandings.json
+				json["allow_alliance_access"] = allowAllianceAccess.json
+				if let v = badStandingTaxRate?.json {
+					json["bad_standing_tax_rate"] = v
+				}
+				if let v = corporationTaxRate?.json {
+					json["corporation_tax_rate"] = v
+				}
+				if let v = excellentStandingTaxRate?.json {
+					json["excellent_standing_tax_rate"] = v
+				}
+				if let v = goodStandingTaxRate?.json {
+					json["good_standing_tax_rate"] = v
+				}
+				if let v = neutralStandingTaxRate?.json {
+					json["neutral_standing_tax_rate"] = v
+				}
+				json["office_id"] = officeID.json
+				json["reinforce_exit_end"] = reinforceExitEnd.json
+				json["reinforce_exit_start"] = reinforceExitStart.json
+				if let v = standingLevel?.json {
+					json["standing_level"] = v
+				}
+				json["system_id"] = systemID.json
+				if let v = terribleStandingTaxRate?.json {
+					json["terrible_standing_tax_rate"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.allianceTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.allowAccessWithStandings.hashValue)
+				hashCombine(seed: &hash, value: self.allowAllianceAccess.hashValue)
+				hashCombine(seed: &hash, value: self.badStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.corporationTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.excellentStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.goodStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.neutralStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.officeID.hashValue)
+				hashCombine(seed: &hash, value: self.reinforceExitEnd.hashValue)
+				hashCombine(seed: &hash, value: self.reinforceExitStart.hashValue)
+				hashCombine(seed: &hash, value: self.standingLevel?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.systemID.hashValue)
+				hashCombine(seed: &hash, value: self.terribleStandingTaxRate?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk, rhs: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk) {
+				allianceTaxRate = other.allianceTaxRate
+				allowAccessWithStandings = other.allowAccessWithStandings
+				allowAllianceAccess = other.allowAllianceAccess
+				badStandingTaxRate = other.badStandingTaxRate
+				corporationTaxRate = other.corporationTaxRate
+				excellentStandingTaxRate = other.excellentStandingTaxRate
+				goodStandingTaxRate = other.goodStandingTaxRate
+				neutralStandingTaxRate = other.neutralStandingTaxRate
+				officeID = other.officeID
+				reinforceExitEnd = other.reinforceExitEnd
+				reinforceExitStart = other.reinforceExitStart
+				standingLevel = other.standingLevel
+				systemID = other.systemID
+				terribleStandingTaxRate = other.terribleStandingTaxRate
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCorporationsCorporationIDCustomsOfficesOk)?.hashValue == hashValue
 			}
 			
 		}

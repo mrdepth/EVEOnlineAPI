@@ -14,34 +14,42 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getContactLabels(characterID: Int, completionBlock:((Result<[Contacts.Label]>) -> Void)?) {
+		public func addContacts(characterID: Int, contactIds: [Int], labelID: Int64? = nil, standing: Float, watched: Bool? = nil, completionBlock:((Result<[Int]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			guard scopes.contains("esi-characters.write_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body: Data? = nil
+			let body = try? JSONSerialization.data(withJSONObject: contactIds.json, options: [])
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
-			
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
+			if let v = labelID?.httpQuery {
+				query.append(URLQueryItem(name: "label_id", value: v))
+			}
+			if let v = standing.httpQuery {
+				query.append(URLQueryItem(name: "standing", value: v))
+			}
+			if let v = watched?.httpQuery {
+				query.append(URLQueryItem(name: "watched", value: v))
+			}
 			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/contacts/labels/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.Label]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -74,7 +82,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "watched", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/contacts/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -109,7 +117,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/contacts/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -123,75 +131,69 @@ public extension ESI {
 			}
 		}
 		
-		public func addContacts(characterID: Int, contactIds: [Int], labelID: Int64? = nil, standing: Float, watched: Bool? = nil, completionBlock:((Result<[Int]>) -> Void)?) {
+		public func getAllianceContacts(allianceID: Int, page: Int? = nil, completionBlock:((Result<[Contacts.GetAlliancesAllianceIDContactsOk]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.write_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			guard scopes.contains("esi-alliances.read_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: contactIds.json, options: [])
+			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
-			headers["Content-Type"] = "application/json"
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			if let v = labelID?.httpQuery {
-				query.append(URLQueryItem(name: "label_id", value: v))
-			}
-			if let v = standing.httpQuery {
-				query.append(URLQueryItem(name: "standing", value: v))
-			}
-			if let v = watched?.httpQuery {
-				query.append(URLQueryItem(name: "watched", value: v))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/contacts/"
+			let url = session!.baseURL + "/v1/alliances/\(allianceID)/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
 		}
 		
-		public func deleteContacts(characterID: Int, contactIds: [Int], completionBlock:((Result<String>) -> Void)?) {
+		public func getContactLabels(characterID: Int, completionBlock:((Result<[Contacts.Label]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.write_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			guard scopes.contains("esi-characters.read_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: contactIds.json, options: [])
+			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
-			headers["Content-Type"] = "application/json"
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/contacts/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/contacts/labels/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
+			}.validateESI().responseESI { (response: DataResponse<[Contacts.Label]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -218,7 +220,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/corporations/\(corporationID)/contacts/"
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -230,6 +232,161 @@ public extension ESI {
 				completionBlock?(response.result)
 				session = nil
 			}
+		}
+		
+		public func deleteContacts(characterID: Int, contactIds: [Int], completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.write_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			if let v = contactIds.httpQuery {
+				query.append(URLQueryItem(name: "contact_ids", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		
+		@objc(ESIContactsGetAlliancesAllianceIDContactsOk) public class GetAlliancesAllianceIDContactsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			public enum GetAlliancesAllianceIDContactsContactType: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				
+				public init() {
+					self = .character
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetAlliancesAllianceIDContactsContactType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var contactID: Int = Int()
+			public var contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType = Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType()
+			public var labelID: Int64? = nil
+			public var standing: Float = Float()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				guard let contactID = dictionary["contact_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.contactID = contactID
+				guard let contactType = Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType(rawValue: dictionary["contact_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.contactType = contactType
+				labelID = dictionary["label_id"] as? Int64
+				guard let standing = dictionary["standing"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.standing = standing
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				contactID = aDecoder.decodeInteger(forKey: "contact_id")
+				contactType = Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType(rawValue: aDecoder.decodeObject(forKey: "contact_type") as? String ?? "") ?? Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType()
+				labelID = aDecoder.containsValue(forKey: "label_id") ? aDecoder.decodeInt64(forKey: "label_id") : nil
+				standing = aDecoder.decodeFloat(forKey: "standing")
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(contactID, forKey: "contact_id")
+				aCoder.encode(contactType.rawValue, forKey: "contact_type")
+				if let v = labelID {
+					aCoder.encode(v, forKey: "label_id")
+				}
+				aCoder.encode(standing, forKey: "standing")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["contact_id"] = contactID.json
+				json["contact_type"] = contactType.json
+				if let v = labelID?.json {
+					json["label_id"] = v
+				}
+				json["standing"] = standing.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.contactID.hashValue)
+				hashCombine(seed: &hash, value: self.contactType.hashValue)
+				hashCombine(seed: &hash, value: self.labelID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.standing.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Contacts.GetAlliancesAllianceIDContactsOk, rhs: Contacts.GetAlliancesAllianceIDContactsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Contacts.GetAlliancesAllianceIDContactsOk) {
+				contactID = other.contactID
+				contactType = other.contactType
+				labelID = other.labelID
+				standing = other.standing
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Contacts.GetAlliancesAllianceIDContactsOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetAlliancesAllianceIDContactsOk)?.hashValue == hashValue
+			}
+			
 		}
 		
 		

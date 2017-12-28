@@ -14,72 +14,6 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func updateFleet(fleetID: Int64, newSettings: Fleets.FleetUpdate, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = try? JSONSerialization.data(withJSONObject: newSettings.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getFleetInformation(fleetID: Int64, completionBlock:((Result<Fleets.Information>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.read_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Fleets.Information>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
 		public func createFleetSquad(fleetID: Int64, wingID: Int64, completionBlock:((Result<Fleets.SquadCreated>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -99,7 +33,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/wings/\(wingID)/squads/"
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/squads/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -108,204 +42,6 @@ public extension ESI {
 			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Fleets.SquadCreated>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func kickFleetMember(fleetID: Int64, memberID: Int, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/members/\(memberID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func moveFleetMember(fleetID: Int64, memberID: Int, movement: Fleets.Movement, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = try? JSONSerialization.data(withJSONObject: movement.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/members/\(memberID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func deleteFleetSquad(fleetID: Int64, squadID: Int64, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/squads/\(squadID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func renameFleetSquad(fleetID: Int64, naming: Fleets.Naming, squadID: Int64, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = try? JSONSerialization.data(withJSONObject: naming.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/squads/\(squadID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func deleteFleetWing(fleetID: Int64, wingID: Int64, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/wings/\(wingID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func renameFleetWing(fleetID: Int64, naming: Fleets.Naming, wingID: Int64, completionBlock:((Result<String>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = try? JSONSerialization.data(withJSONObject: naming.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/wings/\(wingID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -330,7 +66,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/wings/"
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/wings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -365,7 +101,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/wings/"
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/wings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -374,6 +110,72 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Fleets.GetFleetsFleetIDWingsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func deleteFleetSquad(fleetID: Int64, squadID: Int64, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/squads/\(squadID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func renameFleetSquad(fleetID: Int64, naming: Fleets.Naming, squadID: Int64, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: naming.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/squads/\(squadID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -398,7 +200,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/members/"
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/members/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -433,7 +235,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/fleets/\(fleetID)/members/"
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/members/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -447,17 +249,249 @@ public extension ESI {
 			}
 		}
 		
+		public func kickFleetMember(fleetID: Int64, memberID: Int, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/members/\(memberID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
 		
-		@objc(ESIFleetsPostFleetsFleetIDMembersNotFound) public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public func moveFleetMember(fleetID: Int64, memberID: Int, movement: Fleets.Movement, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: movement.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			public var error: String? = nil
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/members/\(memberID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func updateFleet(fleetID: Int64, newSettings: Fleets.FleetUpdate, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: newSettings.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getFleetInformation(fleetID: Int64, completionBlock:((Result<Fleets.Information>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.read_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Fleets.Information>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCharacterFleetInfo(characterID: Int, completionBlock:((Result<Fleets.GetCharactersCharacterIDFleetOk>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.read_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/fleet/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Fleets.GetCharactersCharacterIDFleetOk>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func deleteFleetWing(fleetID: Int64, wingID: Int64, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func renameFleetWing(fleetID: Int64, naming: Fleets.Naming, wingID: Int64, completionBlock:((Result<String>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: naming.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		
+		@objc(ESIFleetsWingCreated) public class WingCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var wingID: Int64 = Int64()
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.wingID = wingID
 				
 				super.init()
 			}
@@ -471,28 +505,24 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				wingID = aDecoder.decodeInt64(forKey: "wing_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(wingID, forKey: "wing_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["wing_id"] = wingID.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.wingID.hashValue)
 				return hash
 			}()
 			
@@ -500,21 +530,21 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersNotFound, rhs: Fleets.PostFleetsFleetIDMembersNotFound) -> Bool {
+			public static func ==(lhs: Fleets.WingCreated, rhs: Fleets.WingCreated) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PostFleetsFleetIDMembersNotFound) {
-				error = other.error
+			init(_ other: Fleets.WingCreated) {
+				wingID = other.wingID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PostFleetsFleetIDMembersNotFound(self)
+				return Fleets.WingCreated(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostFleetsFleetIDMembersNotFound)?.hashValue == hashValue
+				return (object as? WingCreated)?.hashValue == hashValue
 			}
 			
 		}
@@ -2191,6 +2221,78 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIFleetsGetCharactersCharacterIDFleetNotFound) public class GetCharactersCharacterIDFleetNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Fleets.GetCharactersCharacterIDFleetNotFound, rhs: Fleets.GetCharactersCharacterIDFleetNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fleets.GetCharactersCharacterIDFleetNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.GetCharactersCharacterIDFleetNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? GetCharactersCharacterIDFleetNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIFleetsGetFleetsFleetIDMembersNotFound) public class GetFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2263,16 +2365,50 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIFleetsPostFleetsFleetIDWingsWingIDSquadsNotFound) public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsGetCharactersCharacterIDFleetOk) public class GetCharactersCharacterIDFleetOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			public enum GetCharactersCharacterIDFleetRole: String, JSONCoding, HTTPQueryable {
+				case fleetCommander = "fleet_commander"
+				case squadCommander = "squad_commander"
+				case squadMember = "squad_member"
+				case wingCommander = "wing_commander"
+				
+				public init() {
+					self = .fleetCommander
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDFleetRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
-			public var error: String? = nil
+			public var fleetID: Int64 = Int64()
+			public var role: Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole = Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole()
+			public var squadID: Int64 = Int64()
+			public var wingID: Int64 = Int64()
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				error = dictionary["error"] as? String
+				guard let fleetID = dictionary["fleet_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.fleetID = fleetID
+				guard let role = Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.role = role
+				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.squadID = squadID
+				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.wingID = wingID
 				
 				super.init()
 			}
@@ -2286,28 +2422,36 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
+				fleetID = aDecoder.decodeInt64(forKey: "fleet_id")
+				role = Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole(rawValue: aDecoder.decodeObject(forKey: "role") as? String ?? "") ?? Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole()
+				squadID = aDecoder.decodeInt64(forKey: "squad_id")
+				wingID = aDecoder.decodeInt64(forKey: "wing_id")
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
+				aCoder.encode(fleetID, forKey: "fleet_id")
+				aCoder.encode(role.rawValue, forKey: "role")
+				aCoder.encode(squadID, forKey: "squad_id")
+				aCoder.encode(wingID, forKey: "wing_id")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
+				json["fleet_id"] = fleetID.json
+				json["role"] = role.json
+				json["squad_id"] = squadID.json
+				json["wing_id"] = wingID.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.fleetID.hashValue)
+				hashCombine(seed: &hash, value: self.role.hashValue)
+				hashCombine(seed: &hash, value: self.squadID.hashValue)
+				hashCombine(seed: &hash, value: self.wingID.hashValue)
 				return hash
 			}()
 			
@@ -2315,21 +2459,24 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound, rhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) -> Bool {
+			public static func ==(lhs: Fleets.GetCharactersCharacterIDFleetOk, rhs: Fleets.GetCharactersCharacterIDFleetOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) {
-				error = other.error
+			init(_ other: Fleets.GetCharactersCharacterIDFleetOk) {
+				fleetID = other.fleetID
+				role = other.role
+				squadID = other.squadID
+				wingID = other.wingID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound(self)
+				return Fleets.GetCharactersCharacterIDFleetOk(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostFleetsFleetIDWingsWingIDSquadsNotFound)?.hashValue == hashValue
+				return (object as? GetCharactersCharacterIDFleetOk)?.hashValue == hashValue
 			}
 			
 		}
@@ -2407,6 +2554,78 @@ public extension ESI {
 		}
 		
 		
+		@objc(ESIFleetsPostFleetsFleetIDWingsWingIDSquadsNotFound) public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var error: String? = nil
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				error = dictionary["error"] as? String
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				error = aDecoder.decodeObject(forKey: "error") as? String
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				if let v = error?.json {
+					json["error"] = v
+				}
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound, rhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) {
+				error = other.error
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostFleetsFleetIDWingsWingIDSquadsNotFound)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
 		@objc(ESIFleetsPutFleetsFleetIDMembersMemberIDUnprocessableEntity) public class PutFleetsFleetIDMembersMemberIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
@@ -2479,17 +2698,16 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIFleetsWingCreated) public class WingCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		@objc(ESIFleetsPostFleetsFleetIDMembersNotFound) public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var wingID: Int64 = Int64()
+			public var error: String? = nil
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.wingID = wingID
+				error = dictionary["error"] as? String
 				
 				super.init()
 			}
@@ -2503,24 +2721,28 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				wingID = aDecoder.decodeInt64(forKey: "wing_id")
+				error = aDecoder.decodeObject(forKey: "error") as? String
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(wingID, forKey: "wing_id")
+				if let v = error {
+					aCoder.encode(v, forKey: "error")
+				}
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
-				json["wing_id"] = wingID.json
+				if let v = error?.json {
+					json["error"] = v
+				}
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.wingID.hashValue)
+				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -2528,21 +2750,21 @@ public extension ESI {
 				return _hashValue
 			}
 			
-			public static func ==(lhs: Fleets.WingCreated, rhs: Fleets.WingCreated) -> Bool {
+			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersNotFound, rhs: Fleets.PostFleetsFleetIDMembersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.WingCreated) {
-				wingID = other.wingID
+			init(_ other: Fleets.PostFleetsFleetIDMembersNotFound) {
+				error = other.error
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.WingCreated(self)
+				return Fleets.PostFleetsFleetIDMembersNotFound(self)
 			}
 			
 			
 			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? WingCreated)?.hashValue == hashValue
+				return (object as? PostFleetsFleetIDMembersNotFound)?.hashValue == hashValue
 			}
 			
 		}

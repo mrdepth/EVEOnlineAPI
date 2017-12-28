@@ -32,7 +32,7 @@ public extension ESI {
 			
 			
 			
-			let url = session!.baseURL + "latest/status/"
+			let url = session!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

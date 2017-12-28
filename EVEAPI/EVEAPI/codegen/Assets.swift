@@ -14,6 +14,39 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
+		public func getCoporationAssetNames(corporationID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/assets/names/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func getCorporationAssets(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Assets.GetCorporationsCorporationIDAssetsOk]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -35,7 +68,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/corporations/\(corporationID)/assets/"
+			let url = session!.baseURL + "/v2/corporations/\(corporationID)/assets/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -44,6 +77,105 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Assets.GetCorporationsCorporationIDAssetsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/assets/locations/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCorporationAssetLocations(corporationID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v2/corporations/\(corporationID)/assets/locations/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/assets/names/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsNamesOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -70,7 +202,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/assets/"
+			let url = session!.baseURL + "/v3/characters/\(characterID)/assets/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -79,72 +211,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Assets.Asset]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/assets/locations/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/assets/names/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsNamesOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -318,7 +384,7 @@ public extension ESI {
 			public var locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag()
 			public var locationID: Int64 = Int64()
 			public var locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType()
-			public var quantity: Int? = nil
+			public var quantity: Int = Int()
 			public var typeID: Int = Int()
 			
 			
@@ -335,7 +401,8 @@ public extension ESI {
 				self.locationID = locationID
 				guard let locationType = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType(rawValue: dictionary["location_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.locationType = locationType
-				quantity = dictionary["quantity"] as? Int
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.quantity = quantity
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
@@ -356,7 +423,7 @@ public extension ESI {
 				locationFlag = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag()
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				locationType = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "") ?? Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType()
-				quantity = aDecoder.containsValue(forKey: "quantity") ? aDecoder.decodeInteger(forKey: "quantity") : nil
+				quantity = aDecoder.decodeInteger(forKey: "quantity")
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
@@ -368,9 +435,7 @@ public extension ESI {
 				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
 				aCoder.encode(locationID, forKey: "location_id")
 				aCoder.encode(locationType.rawValue, forKey: "location_type")
-				if let v = quantity {
-					aCoder.encode(v, forKey: "quantity")
-				}
+				aCoder.encode(quantity, forKey: "quantity")
 				aCoder.encode(typeID, forKey: "type_id")
 			}
 			
@@ -381,9 +446,7 @@ public extension ESI {
 				json["location_flag"] = locationFlag.json
 				json["location_id"] = locationID.json
 				json["location_type"] = locationType.json
-				if let v = quantity?.json {
-					json["quantity"] = v
-				}
+				json["quantity"] = quantity.json
 				json["type_id"] = typeID.json
 				return json
 			}
@@ -395,7 +458,7 @@ public extension ESI {
 				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
 				hashCombine(seed: &hash, value: self.locationID.hashValue)
 				hashCombine(seed: &hash, value: self.locationType.hashValue)
-				hashCombine(seed: &hash, value: self.quantity?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
 				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
 			}()
@@ -431,30 +494,6 @@ public extension ESI {
 		
 		
 		@objc(ESIAssetsAsset) public class Asset: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
-				case other = "other"
-				case solarSystem = "solar_system"
-				case station = "station"
-				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
 			public enum Flag: String, JSONCoding, HTTPQueryable {
 				case assetSafety = "AssetSafety"
@@ -499,7 +538,6 @@ public extension ESI {
 				case medSlot5 = "MedSlot5"
 				case medSlot6 = "MedSlot6"
 				case medSlot7 = "MedSlot7"
-				case module = "Module"
 				case quafeBay = "QuafeBay"
 				case rigSlot0 = "RigSlot0"
 				case rigSlot1 = "RigSlot1"
@@ -510,6 +548,7 @@ public extension ESI {
 				case rigSlot6 = "RigSlot6"
 				case rigSlot7 = "RigSlot7"
 				case shipHangar = "ShipHangar"
+				case skill = "Skill"
 				case specializedAmmoHold = "SpecializedAmmoHold"
 				case specializedCommandCenterHold = "SpecializedCommandCenterHold"
 				case specializedFuelBay = "SpecializedFuelBay"
@@ -564,12 +603,36 @@ public extension ESI {
 				
 			}
 			
+			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
+				case other = "other"
+				case solarSystem = "solar_system"
+				case station = "station"
+				
+				public init() {
+					self = .station
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
 			public var isSingleton: Bool = Bool()
 			public var itemID: Int64 = Int64()
 			public var locationFlag: Assets.Asset.Flag = Assets.Asset.Flag()
 			public var locationID: Int64 = Int64()
 			public var locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
-			public var quantity: Int? = nil
+			public var quantity: Int = Int()
 			public var typeID: Int = Int()
 			
 			
@@ -586,7 +649,8 @@ public extension ESI {
 				self.locationID = locationID
 				guard let locationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType(rawValue: dictionary["location_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.locationType = locationType
-				quantity = dictionary["quantity"] as? Int
+				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.quantity = quantity
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
 				
@@ -607,7 +671,7 @@ public extension ESI {
 				locationFlag = Assets.Asset.Flag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Assets.Asset.Flag()
 				locationID = aDecoder.decodeInt64(forKey: "location_id")
 				locationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "") ?? Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
-				quantity = aDecoder.containsValue(forKey: "quantity") ? aDecoder.decodeInteger(forKey: "quantity") : nil
+				quantity = aDecoder.decodeInteger(forKey: "quantity")
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
 				
 				super.init()
@@ -619,9 +683,7 @@ public extension ESI {
 				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
 				aCoder.encode(locationID, forKey: "location_id")
 				aCoder.encode(locationType.rawValue, forKey: "location_type")
-				if let v = quantity {
-					aCoder.encode(v, forKey: "quantity")
-				}
+				aCoder.encode(quantity, forKey: "quantity")
 				aCoder.encode(typeID, forKey: "type_id")
 			}
 			
@@ -632,9 +694,7 @@ public extension ESI {
 				json["location_flag"] = locationFlag.json
 				json["location_id"] = locationID.json
 				json["location_type"] = locationType.json
-				if let v = quantity?.json {
-					json["quantity"] = v
-				}
+				json["quantity"] = quantity.json
 				json["type_id"] = typeID.json
 				return json
 			}
@@ -646,7 +706,7 @@ public extension ESI {
 				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
 				hashCombine(seed: &hash, value: self.locationID.hashValue)
 				hashCombine(seed: &hash, value: self.locationType.hashValue)
-				hashCombine(seed: &hash, value: self.quantity?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.quantity.hashValue)
 				hashCombine(seed: &hash, value: self.typeID.hashValue)
 				return hash
 			}()
@@ -683,11 +743,92 @@ public extension ESI {
 		
 		@objc(ESIAssetsPostCharactersCharacterIDAssetsLocationsOk) public class PostCharactersCharacterIDAssetsLocationsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
+			@objc(ESIAssetsPostCharactersCharacterIDAssetsLocationsOkPostCharactersCharacterIDAssetsLocationsPosition) public class PostCharactersCharacterIDAssetsLocationsPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.x = x
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.y = y
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.z = z
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(x, forKey: "x")
+					aCoder.encode(y, forKey: "y")
+					aCoder.encode(z, forKey: "z")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["x"] = x.json
+					json["y"] = y.json
+					json["z"] = z.json
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.x.hashValue)
+					hashCombine(seed: &hash, value: self.y.hashValue)
+					hashCombine(seed: &hash, value: self.z.hashValue)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition, rhs: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostCharactersCharacterIDAssetsLocationsPosition)?.hashValue == hashValue
+				}
+				
+			}
 			
 			public var itemID: Int64 = Int64()
-			public var x: Double = Double()
-			public var y: Double = Double()
-			public var z: Double = Double()
+			public var position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition = Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition()
 			
 			
 			public required init(json: Any) throws {
@@ -695,12 +836,7 @@ public extension ESI {
 				
 				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.itemID = itemID
-				guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.x = x
-				guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.y = y
-				guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.z = z
+				position = try Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition(json: dictionary["position"] as? [String: Any] ?? [:])
 				
 				super.init()
 			}
@@ -715,35 +851,27 @@ public extension ESI {
 			
 			public required init?(coder aDecoder: NSCoder) {
 				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				x = aDecoder.decodeDouble(forKey: "x")
-				y = aDecoder.decodeDouble(forKey: "y")
-				z = aDecoder.decodeDouble(forKey: "z")
+				position = aDecoder.decodeObject(of: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition.self, forKey: "position")  ?? Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition()
 				
 				super.init()
 			}
 			
 			public func encode(with aCoder: NSCoder) {
 				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(x, forKey: "x")
-				aCoder.encode(y, forKey: "y")
-				aCoder.encode(z, forKey: "z")
+				aCoder.encode(position, forKey: "position")
 			}
 			
 			public var json: Any {
 				var json = [String: Any]()
 				json["item_id"] = itemID.json
-				json["x"] = x.json
-				json["y"] = y.json
-				json["z"] = z.json
+				json["position"] = position.json
 				return json
 			}
 			
 			private lazy var _hashValue: Int = {
 				var hash: Int = 0
 				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.x.hashValue)
-				hashCombine(seed: &hash, value: self.y.hashValue)
-				hashCombine(seed: &hash, value: self.z.hashValue)
+				hashCombine(seed: &hash, value: self.position.hashValue)
 				return hash
 			}()
 			
@@ -757,9 +885,7 @@ public extension ESI {
 			
 			init(_ other: Assets.PostCharactersCharacterIDAssetsLocationsOk) {
 				itemID = other.itemID
-				x = other.x
-				y = other.y
-				z = other.z
+				position = Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition(other.position)
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -769,6 +895,165 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? PostCharactersCharacterIDAssetsLocationsOk)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIAssetsPostCorporationsCorporationIDAssetsLocationsOk) public class PostCorporationsCorporationIDAssetsLocationsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			@objc(ESIAssetsPostCorporationsCorporationIDAssetsLocationsOkPostCorporationsCorporationIDAssetsLocationsPosition) public class PostCorporationsCorporationIDAssetsLocationsPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+				
+				
+				public var x: Double = Double()
+				public var y: Double = Double()
+				public var z: Double = Double()
+				
+				
+				public required init(json: Any) throws {
+					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					
+					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.x = x
+					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.y = y
+					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+					self.z = z
+					
+					super.init()
+				}
+				
+				override public init() {
+					super.init()
+				}
+				
+				public static var supportsSecureCoding: Bool {
+					return true
+				}
+				
+				public required init?(coder aDecoder: NSCoder) {
+					x = aDecoder.decodeDouble(forKey: "x")
+					y = aDecoder.decodeDouble(forKey: "y")
+					z = aDecoder.decodeDouble(forKey: "z")
+					
+					super.init()
+				}
+				
+				public func encode(with aCoder: NSCoder) {
+					aCoder.encode(x, forKey: "x")
+					aCoder.encode(y, forKey: "y")
+					aCoder.encode(z, forKey: "z")
+				}
+				
+				public var json: Any {
+					var json = [String: Any]()
+					json["x"] = x.json
+					json["y"] = y.json
+					json["z"] = z.json
+					return json
+				}
+				
+				private lazy var _hashValue: Int = {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: self.x.hashValue)
+					hashCombine(seed: &hash, value: self.y.hashValue)
+					hashCombine(seed: &hash, value: self.z.hashValue)
+					return hash
+				}()
+				
+				override public var hashValue: Int {
+					return _hashValue
+				}
+				
+				public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				init(_ other: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
+					x = other.x
+					y = other.y
+					z = other.z
+				}
+				
+				public func copy(with zone: NSZone? = nil) -> Any {
+					return Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition(self)
+				}
+				
+				
+				public override func isEqual(_ object: Any?) -> Bool {
+					return (object as? PostCorporationsCorporationIDAssetsLocationsPosition)?.hashValue == hashValue
+				}
+				
+			}
+			
+			public var itemID: Int64 = Int64()
+			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition = Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.itemID = itemID
+				position = try Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition(json: dictionary["position"] as? [String: Any] ?? [:])
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				itemID = aDecoder.decodeInt64(forKey: "item_id")
+				position = aDecoder.decodeObject(of: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition.self, forKey: "position")  ?? Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(itemID, forKey: "item_id")
+				aCoder.encode(position, forKey: "position")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["item_id"] = itemID.json
+				json["position"] = position.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.itemID.hashValue)
+				hashCombine(seed: &hash, value: self.position.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Assets.PostCorporationsCorporationIDAssetsLocationsOk) {
+				itemID = other.itemID
+				position = Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition(other.position)
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Assets.PostCorporationsCorporationIDAssetsLocationsOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCorporationsCorporationIDAssetsLocationsOk)?.hashValue == hashValue
 			}
 			
 		}
@@ -846,6 +1131,83 @@ public extension ESI {
 			
 			public override func isEqual(_ object: Any?) -> Bool {
 				return (object as? PostCharactersCharacterIDAssetsNamesOk)?.hashValue == hashValue
+			}
+			
+		}
+		
+		
+		@objc(ESIAssetsPostCorporationsCorporationIDAssetsNamesOk) public class PostCorporationsCorporationIDAssetsNamesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			
+			
+			public var itemID: Int64 = Int64()
+			public var name: String = String()
+			
+			
+			public required init(json: Any) throws {
+				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+				
+				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.itemID = itemID
+				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				self.name = name
+				
+				super.init()
+			}
+			
+			override public init() {
+				super.init()
+			}
+			
+			public static var supportsSecureCoding: Bool {
+				return true
+			}
+			
+			public required init?(coder aDecoder: NSCoder) {
+				itemID = aDecoder.decodeInt64(forKey: "item_id")
+				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
+				
+				super.init()
+			}
+			
+			public func encode(with aCoder: NSCoder) {
+				aCoder.encode(itemID, forKey: "item_id")
+				aCoder.encode(name, forKey: "name")
+			}
+			
+			public var json: Any {
+				var json = [String: Any]()
+				json["item_id"] = itemID.json
+				json["name"] = name.json
+				return json
+			}
+			
+			private lazy var _hashValue: Int = {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: self.itemID.hashValue)
+				hashCombine(seed: &hash, value: self.name.hashValue)
+				return hash
+			}()
+			
+			override public var hashValue: Int {
+				return _hashValue
+			}
+			
+			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsNamesOk, rhs: Assets.PostCorporationsCorporationIDAssetsNamesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			init(_ other: Assets.PostCorporationsCorporationIDAssetsNamesOk) {
+				itemID = other.itemID
+				name = other.name
+			}
+			
+			public func copy(with zone: NSZone? = nil) -> Any {
+				return Assets.PostCorporationsCorporationIDAssetsNamesOk(self)
+			}
+			
+			
+			public override func isEqual(_ object: Any?) -> Bool {
+				return (object as? PostCorporationsCorporationIDAssetsNamesOk)?.hashValue == hashValue
 			}
 			
 		}

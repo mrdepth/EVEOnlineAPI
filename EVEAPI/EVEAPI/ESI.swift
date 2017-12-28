@@ -15,7 +15,7 @@ public enum ESServer: String {
 }
 
 public class ESI: SessionManager {
-	let baseURL = "https://esi.tech.ccp.is/"
+	let baseURL = "https://esi.tech.ccp.is"
 	let server: ESServer
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Adapter? = nil, retrier: OAuth2Retrier? = nil) {

@@ -35,7 +35,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/wallet/transactions/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/wallet/transactions/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -44,41 +44,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Wallet.Transaction]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func getCorporationWalletJournal(corporationID: Int, division: Int, fromID: Int64? = nil, completionBlock:((Result<[Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			if let v = fromID?.httpQuery {
-				query.append(URLQueryItem(name: "from_id", value: v))
-			}
-			
-			let url = session!.baseURL + "latest/corporations/\(corporationID)/wallets/\(division)/journal/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -105,7 +70,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/characters/\(characterID)/wallet/journal/"
+			let url = session!.baseURL + "/v3/characters/\(characterID)/wallet/journal/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -119,40 +84,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getCharactersWalletBalance(characterID: Int, completionBlock:((Result<Float>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "latest/characters/\(characterID)/wallet/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Float>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func returnsCorporationsWalletBalance(corporationID: Int, completionBlock:((Result<[Wallet.Balance]>) -> Void)?) {
+		public func getCorporationWalletJournal(corporationID: Int, division: Int, fromID: Int64? = nil, completionBlock:((Result<[Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -169,9 +101,11 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
+			if let v = fromID?.httpQuery {
+				query.append(URLQueryItem(name: "from_id", value: v))
+			}
 			
-			
-			let url = session!.baseURL + "latest/corporations/\(corporationID)/wallets/"
+			let url = session!.baseURL + "/v2/corporations/\(corporationID)/wallets/\(division)/journal/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -179,7 +113,7 @@ public extension ESI {
 			
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Wallet.Balance]>) in
+			}.validateESI().responseESI { (response: DataResponse<[Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -206,7 +140,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
 			
-			let url = session!.baseURL + "latest/corporations/\(corporationID)/wallets/\(division)/transactions/"
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/wallets/\(division)/transactions/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -215,6 +149,72 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func returnsCorporationsWalletBalance(corporationID: Int, completionBlock:((Result<[Wallet.Balance]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/wallets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Wallet.Balance]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
+		public func getCharactersWalletBalance(characterID: Int, completionBlock:((Result<Double>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/wallet/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Double>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -232,7 +232,7 @@ public extension ESI {
 			public var quantity: Int = Int()
 			public var transactionID: Int64 = Int64()
 			public var typeID: Int = Int()
-			public var unitPrice: Float = Float()
+			public var unitPrice: Double = Double()
 			
 			
 			public required init(json: Any) throws {
@@ -254,7 +254,7 @@ public extension ESI {
 				self.transactionID = transactionID
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
-				guard let unitPrice = dictionary["unit_price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let unitPrice = dictionary["unit_price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.unitPrice = unitPrice
 				
 				super.init()
@@ -277,7 +277,7 @@ public extension ESI {
 				quantity = aDecoder.decodeInteger(forKey: "quantity")
 				transactionID = aDecoder.decodeInt64(forKey: "transaction_id")
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				unitPrice = aDecoder.decodeFloat(forKey: "unit_price")
+				unitPrice = aDecoder.decodeDouble(forKey: "unit_price")
 				
 				super.init()
 			}
@@ -366,7 +366,7 @@ public extension ESI {
 			public var quantity: Int = Int()
 			public var transactionID: Int64 = Int64()
 			public var typeID: Int = Int()
-			public var unitPrice: Float = Float()
+			public var unitPrice: Double = Double()
 			
 			
 			public required init(json: Any) throws {
@@ -390,7 +390,7 @@ public extension ESI {
 				self.transactionID = transactionID
 				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.typeID = typeID
-				guard let unitPrice = dictionary["unit_price"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let unitPrice = dictionary["unit_price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.unitPrice = unitPrice
 				
 				super.init()
@@ -414,7 +414,7 @@ public extension ESI {
 				quantity = aDecoder.decodeInteger(forKey: "quantity")
 				transactionID = aDecoder.decodeInt64(forKey: "transaction_id")
 				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				unitPrice = aDecoder.decodeFloat(forKey: "unit_price")
+				unitPrice = aDecoder.decodeDouble(forKey: "unit_price")
 				
 				super.init()
 			}
@@ -689,56 +689,6 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType: String, JSONCoding, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType: String, JSONCoding, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public enum GetCorporationsCorporationIDWalletsDivisionJournalRefType: String, JSONCoding, HTTPQueryable {
 				case accelerationGateFee = "acceleration_gate_fee"
 				case advertisementListingFee = "advertisement_listing_fee"
@@ -805,6 +755,9 @@ public extension ESI {
 				case datacoreFee = "datacore_fee"
 				case dnaModificationFee = "dna_modification_fee"
 				case dockingFee = "docking_fee"
+				case duelWagerEscrow = "duel_wager_escrow"
+				case duelWagerPayment = "duel_wager_payment"
+				case duelWagerRefund = "duel_wager_refund"
 				case factorySlotRentalFee = "factory_slot_rental_fee"
 				case gmCashTransfer = "gm_cash_transfer"
 				case industryJobTax = "industry_job_tax"
@@ -835,12 +788,14 @@ public extension ESI {
 				case playerTrading = "player_trading"
 				case projectDiscoveryReward = "project_discovery_reward"
 				case projectDiscoveryTax = "project_discovery_tax"
+				case reaction = "reaction"
 				case releaseOfImpoundedProperty = "release_of_impounded_property"
 				case repairBill = "repair_bill"
 				case reprocessingTax = "reprocessing_tax"
 				case researchingMaterialProductivity = "researching_material_productivity"
 				case researchingTechnology = "researching_technology"
 				case researchingTimeProductivity = "researching_time_productivity"
+				case resourceWarsReward = "resource_wars_reward"
 				case reverseEngineering = "reverse_engineering"
 				case securityProcessingFee = "security_processing_fee"
 				case shares = "shares"
@@ -854,7 +809,7 @@ public extension ESI {
 				case warFeeSurrender = "war_fee_surrender"
 				
 				public init() {
-					self = .playerTrading
+					self = .accelerationGateFee
 				}
 				
 				public var json: Any {
@@ -872,8 +827,60 @@ public extension ESI {
 				
 			}
 			
-			public var amount: Float? = nil
-			public var balance: Float? = nil
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case system = "system"
+				
+				public init() {
+					self = .character
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case system = "system"
+				
+				public init() {
+					self = .character
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var amount: Double? = nil
+			public var balance: Double? = nil
 			public var date: Date = Date()
 			public var extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo? = nil
 			public var firstPartyID: Int? = nil
@@ -883,15 +890,15 @@ public extension ESI {
 			public var refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType()
 			public var secondPartyID: Int? = nil
 			public var secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType? = nil
-			public var tax: Float? = nil
-			public var taxRecieverID: Int? = nil
+			public var tax: Double? = nil
+			public var taxReceiverID: Int? = nil
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				amount = dictionary["amount"] as? Float
-				balance = dictionary["balance"] as? Float
+				amount = dictionary["amount"] as? Double
+				balance = dictionary["balance"] as? Double
 				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.date = date
 				extraInfo = try? Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo(json: dictionary["extra_info"] as? [String: Any] ?? [:])
@@ -904,8 +911,8 @@ public extension ESI {
 				self.refType = refType
 				secondPartyID = dictionary["second_party_id"] as? Int
 				secondPartyType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: dictionary["second_party_type"] as? String ?? "")
-				tax = dictionary["tax"] as? Float
-				taxRecieverID = dictionary["tax_reciever_id"] as? Int
+				tax = dictionary["tax"] as? Double
+				taxReceiverID = dictionary["tax_receiver_id"] as? Int
 				
 				super.init()
 			}
@@ -919,8 +926,8 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeFloat(forKey: "amount") : nil
-				balance = aDecoder.containsValue(forKey: "balance") ? aDecoder.decodeFloat(forKey: "balance") : nil
+				amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeDouble(forKey: "amount") : nil
+				balance = aDecoder.containsValue(forKey: "balance") ? aDecoder.decodeDouble(forKey: "balance") : nil
 				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
 				extraInfo = aDecoder.decodeObject(of: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo.self, forKey: "extra_info") 
 				firstPartyID = aDecoder.containsValue(forKey: "first_party_id") ? aDecoder.decodeInteger(forKey: "first_party_id") : nil
@@ -930,8 +937,8 @@ public extension ESI {
 				refType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType(rawValue: aDecoder.decodeObject(forKey: "ref_type") as? String ?? "") ?? Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType()
 				secondPartyID = aDecoder.containsValue(forKey: "second_party_id") ? aDecoder.decodeInteger(forKey: "second_party_id") : nil
 				secondPartyType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: aDecoder.decodeObject(forKey: "second_party_type") as? String ?? "")
-				tax = aDecoder.containsValue(forKey: "tax") ? aDecoder.decodeFloat(forKey: "tax") : nil
-				taxRecieverID = aDecoder.containsValue(forKey: "tax_reciever_id") ? aDecoder.decodeInteger(forKey: "tax_reciever_id") : nil
+				tax = aDecoder.containsValue(forKey: "tax") ? aDecoder.decodeDouble(forKey: "tax") : nil
+				taxReceiverID = aDecoder.containsValue(forKey: "tax_receiver_id") ? aDecoder.decodeInteger(forKey: "tax_receiver_id") : nil
 				
 				super.init()
 			}
@@ -967,8 +974,8 @@ public extension ESI {
 				if let v = tax {
 					aCoder.encode(v, forKey: "tax")
 				}
-				if let v = taxRecieverID {
-					aCoder.encode(v, forKey: "tax_reciever_id")
+				if let v = taxReceiverID {
+					aCoder.encode(v, forKey: "tax_receiver_id")
 				}
 			}
 			
@@ -1004,8 +1011,8 @@ public extension ESI {
 				if let v = tax?.json {
 					json["tax"] = v
 				}
-				if let v = taxRecieverID?.json {
-					json["tax_reciever_id"] = v
+				if let v = taxReceiverID?.json {
+					json["tax_receiver_id"] = v
 				}
 				return json
 			}
@@ -1024,7 +1031,7 @@ public extension ESI {
 				hashCombine(seed: &hash, value: self.secondPartyID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.secondPartyType?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.taxRecieverID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.taxReceiverID?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -1049,7 +1056,7 @@ public extension ESI {
 				secondPartyID = other.secondPartyID
 				secondPartyType = other.secondPartyType
 				tax = other.tax
-				taxRecieverID = other.taxRecieverID
+				taxReceiverID = other.taxReceiverID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1067,14 +1074,14 @@ public extension ESI {
 		@objc(ESIWalletBalance) public class Balance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 			
 			
-			public var balance: Float = Float()
+			public var balance: Double = Double()
 			public var division: Int = Int()
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				guard let balance = dictionary["balance"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
+				guard let balance = dictionary["balance"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.balance = balance
 				guard let division = dictionary["division"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.division = division
@@ -1091,7 +1098,7 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				balance = aDecoder.decodeFloat(forKey: "balance")
+				balance = aDecoder.decodeDouble(forKey: "balance")
 				division = aDecoder.decodeInteger(forKey: "division")
 				
 				super.init()
@@ -1142,164 +1149,6 @@ public extension ESI {
 		
 		
 		@objc(ESIWalletWalletJournalItem) public class WalletJournalItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			public enum PartyType: String, JSONCoding, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = PartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum RefType: String, JSONCoding, HTTPQueryable {
-				case accelerationGateFee = "acceleration_gate_fee"
-				case advertisementListingFee = "advertisement_listing_fee"
-				case agentDonation = "agent_donation"
-				case agentLocationServices = "agent_location_services"
-				case agentMiscellaneous = "agent_miscellaneous"
-				case agentMissionCollateralPaid = "agent_mission_collateral_paid"
-				case agentMissionCollateralRefunded = "agent_mission_collateral_refunded"
-				case agentMissionReward = "agent_mission_reward"
-				case agentMissionRewardCorporationTax = "agent_mission_reward_corporation_tax"
-				case agentMissionTimeBonusReward = "agent_mission_time_bonus_reward"
-				case agentMissionTimeBonusRewardCorporationTax = "agent_mission_time_bonus_reward_corporation_tax"
-				case agentSecurityServices = "agent_security_services"
-				case agentServicesRendered = "agent_services_rendered"
-				case agentsPreward = "agents_preward"
-				case allianceMaintainanceFee = "alliance_maintainance_fee"
-				case allianceRegistrationFee = "alliance_registration_fee"
-				case assetSafetyRecoveryTax = "asset_safety_recovery_tax"
-				case bounty = "bounty"
-				case bountyPrize = "bounty_prize"
-				case bountyPrizeCorporationTax = "bounty_prize_corporation_tax"
-				case bountyPrizes = "bounty_prizes"
-				case bountyReimbursement = "bounty_reimbursement"
-				case bountySurcharge = "bounty_surcharge"
-				case brokersFee = "brokers_fee"
-				case cloneActivation = "clone_activation"
-				case cloneTransfer = "clone_transfer"
-				case contrabandFine = "contraband_fine"
-				case contractAuctionBid = "contract_auction_bid"
-				case contractAuctionBidCorp = "contract_auction_bid_corp"
-				case contractAuctionBidRefund = "contract_auction_bid_refund"
-				case contractAuctionSold = "contract_auction_sold"
-				case contractBrokersFee = "contract_brokers_fee"
-				case contractBrokersFeeCorp = "contract_brokers_fee_corp"
-				case contractCollateral = "contract_collateral"
-				case contractCollateralDepositedCorp = "contract_collateral_deposited_corp"
-				case contractCollateralPayout = "contract_collateral_payout"
-				case contractCollateralRefund = "contract_collateral_refund"
-				case contractDeposit = "contract_deposit"
-				case contractDepositCorp = "contract_deposit_corp"
-				case contractDepositRefund = "contract_deposit_refund"
-				case contractDepositSalesTax = "contract_deposit_sales_tax"
-				case contractPrice = "contract_price"
-				case contractPricePaymentCorp = "contract_price_payment_corp"
-				case contractReversal = "contract_reversal"
-				case contractReward = "contract_reward"
-				case contractRewardDeposited = "contract_reward_deposited"
-				case contractRewardDepositedCorp = "contract_reward_deposited_corp"
-				case contractRewardRefund = "contract_reward_refund"
-				case contractSalesTax = "contract_sales_tax"
-				case copying = "copying"
-				case corporateRewardPayout = "corporate_reward_payout"
-				case corporateRewardTax = "corporate_reward_tax"
-				case corporationAccountWithdrawal = "corporation_account_withdrawal"
-				case corporationBulkPayment = "corporation_bulk_payment"
-				case corporationDividendPayment = "corporation_dividend_payment"
-				case corporationLiquidation = "corporation_liquidation"
-				case corporationLogoChangeCost = "corporation_logo_change_cost"
-				case corporationPayment = "corporation_payment"
-				case corporationRegistrationFee = "corporation_registration_fee"
-				case courierMissionEscrow = "courier_mission_escrow"
-				case cspa = "cspa"
-				case cspaofflinerefund = "cspaofflinerefund"
-				case datacoreFee = "datacore_fee"
-				case dnaModificationFee = "dna_modification_fee"
-				case dockingFee = "docking_fee"
-				case factorySlotRentalFee = "factory_slot_rental_fee"
-				case gmCashTransfer = "gm_cash_transfer"
-				case industryJobTax = "industry_job_tax"
-				case infrastructureHubMaintenance = "infrastructure_hub_maintenance"
-				case inheritance = "inheritance"
-				case insurance = "insurance"
-				case jumpCloneActivationFee = "jump_clone_activation_fee"
-				case jumpCloneInstallationFee = "jump_clone_installation_fee"
-				case killRightFee = "kill_right_fee"
-				case lpStore = "lp_store"
-				case manufacturing = "manufacturing"
-				case marketEscrow = "market_escrow"
-				case marketFinePaid = "market_fine_paid"
-				case marketTransaction = "market_transaction"
-				case medalCreation = "medal_creation"
-				case medalIssued = "medal_issued"
-				case missionCompletion = "mission_completion"
-				case missionCost = "mission_cost"
-				case missionExpiration = "mission_expiration"
-				case missionReward = "mission_reward"
-				case officeRentalFee = "office_rental_fee"
-				case operationBonus = "operation_bonus"
-				case opportunityReward = "opportunity_reward"
-				case planetaryConstruction = "planetary_construction"
-				case planetaryExportTax = "planetary_export_tax"
-				case planetaryImportTax = "planetary_import_tax"
-				case playerDonation = "player_donation"
-				case playerTrading = "player_trading"
-				case projectDiscoveryReward = "project_discovery_reward"
-				case projectDiscoveryTax = "project_discovery_tax"
-				case releaseOfImpoundedProperty = "release_of_impounded_property"
-				case repairBill = "repair_bill"
-				case reprocessingTax = "reprocessing_tax"
-				case researchingMaterialProductivity = "researching_material_productivity"
-				case researchingTechnology = "researching_technology"
-				case researchingTimeProductivity = "researching_time_productivity"
-				case reverseEngineering = "reverse_engineering"
-				case securityProcessingFee = "security_processing_fee"
-				case shares = "shares"
-				case sovereignityBill = "sovereignity_bill"
-				case storePurchase = "store_purchase"
-				case storePurchaseRefund = "store_purchase_refund"
-				case transactionTax = "transaction_tax"
-				case upkeepAdjustmentFee = "upkeep_adjustment_fee"
-				case warAllyContract = "war_ally_contract"
-				case warFee = "war_fee"
-				case warFeeSurrender = "war_fee_surrender"
-				
-				public init() {
-					self = .playerTrading
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = RefType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
 			@objc(ESIWalletWalletJournalItemExtraInfo) public class ExtraInfo: NSObject, NSSecureCoding, NSCopying, JSONCoding {
 				
@@ -1493,8 +1342,172 @@ public extension ESI {
 				
 			}
 			
-			public var amount: Float? = nil
-			public var balance: Float? = nil
+			public enum PartyType: String, JSONCoding, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case system = "system"
+				
+				public init() {
+					self = .character
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = PartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum RefType: String, JSONCoding, HTTPQueryable {
+				case accelerationGateFee = "acceleration_gate_fee"
+				case advertisementListingFee = "advertisement_listing_fee"
+				case agentDonation = "agent_donation"
+				case agentLocationServices = "agent_location_services"
+				case agentMiscellaneous = "agent_miscellaneous"
+				case agentMissionCollateralPaid = "agent_mission_collateral_paid"
+				case agentMissionCollateralRefunded = "agent_mission_collateral_refunded"
+				case agentMissionReward = "agent_mission_reward"
+				case agentMissionRewardCorporationTax = "agent_mission_reward_corporation_tax"
+				case agentMissionTimeBonusReward = "agent_mission_time_bonus_reward"
+				case agentMissionTimeBonusRewardCorporationTax = "agent_mission_time_bonus_reward_corporation_tax"
+				case agentSecurityServices = "agent_security_services"
+				case agentServicesRendered = "agent_services_rendered"
+				case agentsPreward = "agents_preward"
+				case allianceMaintainanceFee = "alliance_maintainance_fee"
+				case allianceRegistrationFee = "alliance_registration_fee"
+				case assetSafetyRecoveryTax = "asset_safety_recovery_tax"
+				case bounty = "bounty"
+				case bountyPrize = "bounty_prize"
+				case bountyPrizeCorporationTax = "bounty_prize_corporation_tax"
+				case bountyPrizes = "bounty_prizes"
+				case bountyReimbursement = "bounty_reimbursement"
+				case bountySurcharge = "bounty_surcharge"
+				case brokersFee = "brokers_fee"
+				case cloneActivation = "clone_activation"
+				case cloneTransfer = "clone_transfer"
+				case contrabandFine = "contraband_fine"
+				case contractAuctionBid = "contract_auction_bid"
+				case contractAuctionBidCorp = "contract_auction_bid_corp"
+				case contractAuctionBidRefund = "contract_auction_bid_refund"
+				case contractAuctionSold = "contract_auction_sold"
+				case contractBrokersFee = "contract_brokers_fee"
+				case contractBrokersFeeCorp = "contract_brokers_fee_corp"
+				case contractCollateral = "contract_collateral"
+				case contractCollateralDepositedCorp = "contract_collateral_deposited_corp"
+				case contractCollateralPayout = "contract_collateral_payout"
+				case contractCollateralRefund = "contract_collateral_refund"
+				case contractDeposit = "contract_deposit"
+				case contractDepositCorp = "contract_deposit_corp"
+				case contractDepositRefund = "contract_deposit_refund"
+				case contractDepositSalesTax = "contract_deposit_sales_tax"
+				case contractPrice = "contract_price"
+				case contractPricePaymentCorp = "contract_price_payment_corp"
+				case contractReversal = "contract_reversal"
+				case contractReward = "contract_reward"
+				case contractRewardDeposited = "contract_reward_deposited"
+				case contractRewardDepositedCorp = "contract_reward_deposited_corp"
+				case contractRewardRefund = "contract_reward_refund"
+				case contractSalesTax = "contract_sales_tax"
+				case copying = "copying"
+				case corporateRewardPayout = "corporate_reward_payout"
+				case corporateRewardTax = "corporate_reward_tax"
+				case corporationAccountWithdrawal = "corporation_account_withdrawal"
+				case corporationBulkPayment = "corporation_bulk_payment"
+				case corporationDividendPayment = "corporation_dividend_payment"
+				case corporationLiquidation = "corporation_liquidation"
+				case corporationLogoChangeCost = "corporation_logo_change_cost"
+				case corporationPayment = "corporation_payment"
+				case corporationRegistrationFee = "corporation_registration_fee"
+				case courierMissionEscrow = "courier_mission_escrow"
+				case cspa = "cspa"
+				case cspaofflinerefund = "cspaofflinerefund"
+				case datacoreFee = "datacore_fee"
+				case dnaModificationFee = "dna_modification_fee"
+				case dockingFee = "docking_fee"
+				case duelWagerEscrow = "duel_wager_escrow"
+				case duelWagerPayment = "duel_wager_payment"
+				case duelWagerRefund = "duel_wager_refund"
+				case factorySlotRentalFee = "factory_slot_rental_fee"
+				case gmCashTransfer = "gm_cash_transfer"
+				case industryJobTax = "industry_job_tax"
+				case infrastructureHubMaintenance = "infrastructure_hub_maintenance"
+				case inheritance = "inheritance"
+				case insurance = "insurance"
+				case jumpCloneActivationFee = "jump_clone_activation_fee"
+				case jumpCloneInstallationFee = "jump_clone_installation_fee"
+				case killRightFee = "kill_right_fee"
+				case lpStore = "lp_store"
+				case manufacturing = "manufacturing"
+				case marketEscrow = "market_escrow"
+				case marketFinePaid = "market_fine_paid"
+				case marketTransaction = "market_transaction"
+				case medalCreation = "medal_creation"
+				case medalIssued = "medal_issued"
+				case missionCompletion = "mission_completion"
+				case missionCost = "mission_cost"
+				case missionExpiration = "mission_expiration"
+				case missionReward = "mission_reward"
+				case officeRentalFee = "office_rental_fee"
+				case operationBonus = "operation_bonus"
+				case opportunityReward = "opportunity_reward"
+				case planetaryConstruction = "planetary_construction"
+				case planetaryExportTax = "planetary_export_tax"
+				case planetaryImportTax = "planetary_import_tax"
+				case playerDonation = "player_donation"
+				case playerTrading = "player_trading"
+				case projectDiscoveryReward = "project_discovery_reward"
+				case projectDiscoveryTax = "project_discovery_tax"
+				case reaction = "reaction"
+				case releaseOfImpoundedProperty = "release_of_impounded_property"
+				case repairBill = "repair_bill"
+				case reprocessingTax = "reprocessing_tax"
+				case researchingMaterialProductivity = "researching_material_productivity"
+				case researchingTechnology = "researching_technology"
+				case researchingTimeProductivity = "researching_time_productivity"
+				case resourceWarsReward = "resource_wars_reward"
+				case reverseEngineering = "reverse_engineering"
+				case securityProcessingFee = "security_processing_fee"
+				case shares = "shares"
+				case sovereignityBill = "sovereignity_bill"
+				case storePurchase = "store_purchase"
+				case storePurchaseRefund = "store_purchase_refund"
+				case transactionTax = "transaction_tax"
+				case upkeepAdjustmentFee = "upkeep_adjustment_fee"
+				case warAllyContract = "war_ally_contract"
+				case warFee = "war_fee"
+				case warFeeSurrender = "war_fee_surrender"
+				
+				public init() {
+					self = .accelerationGateFee
+				}
+				
+				public var json: Any {
+					return self.rawValue
+				}
+				
+				public init(json: Any) throws {
+					guard let s = json as? String, let v = RefType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+					self = v
+				}
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var amount: Double? = nil
+			public var balance: Double? = nil
 			public var date: Date = Date()
 			public var extraInfo: Wallet.WalletJournalItem.ExtraInfo? = nil
 			public var firstPartyID: Int? = nil
@@ -1504,15 +1517,15 @@ public extension ESI {
 			public var refType: Wallet.WalletJournalItem.RefType = Wallet.WalletJournalItem.RefType()
 			public var secondPartyID: Int? = nil
 			public var secondPartyType: Wallet.WalletJournalItem.PartyType? = nil
-			public var tax: Float? = nil
-			public var taxRecieverID: Int? = nil
+			public var tax: Double? = nil
+			public var taxReceiverID: Int? = nil
 			
 			
 			public required init(json: Any) throws {
 				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 				
-				amount = dictionary["amount"] as? Float
-				balance = dictionary["balance"] as? Float
+				amount = dictionary["amount"] as? Double
+				balance = dictionary["balance"] as? Double
 				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
 				self.date = date
 				extraInfo = try? Wallet.WalletJournalItem.ExtraInfo(json: dictionary["extra_info"] as? [String: Any] ?? [:])
@@ -1525,8 +1538,8 @@ public extension ESI {
 				self.refType = refType
 				secondPartyID = dictionary["second_party_id"] as? Int
 				secondPartyType = Wallet.WalletJournalItem.PartyType(rawValue: dictionary["second_party_type"] as? String ?? "")
-				tax = dictionary["tax"] as? Float
-				taxRecieverID = dictionary["tax_reciever_id"] as? Int
+				tax = dictionary["tax"] as? Double
+				taxReceiverID = dictionary["tax_receiver_id"] as? Int
 				
 				super.init()
 			}
@@ -1540,8 +1553,8 @@ public extension ESI {
 			}
 			
 			public required init?(coder aDecoder: NSCoder) {
-				amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeFloat(forKey: "amount") : nil
-				balance = aDecoder.containsValue(forKey: "balance") ? aDecoder.decodeFloat(forKey: "balance") : nil
+				amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeDouble(forKey: "amount") : nil
+				balance = aDecoder.containsValue(forKey: "balance") ? aDecoder.decodeDouble(forKey: "balance") : nil
 				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
 				extraInfo = aDecoder.decodeObject(of: Wallet.WalletJournalItem.ExtraInfo.self, forKey: "extra_info") 
 				firstPartyID = aDecoder.containsValue(forKey: "first_party_id") ? aDecoder.decodeInteger(forKey: "first_party_id") : nil
@@ -1551,8 +1564,8 @@ public extension ESI {
 				refType = Wallet.WalletJournalItem.RefType(rawValue: aDecoder.decodeObject(forKey: "ref_type") as? String ?? "") ?? Wallet.WalletJournalItem.RefType()
 				secondPartyID = aDecoder.containsValue(forKey: "second_party_id") ? aDecoder.decodeInteger(forKey: "second_party_id") : nil
 				secondPartyType = Wallet.WalletJournalItem.PartyType(rawValue: aDecoder.decodeObject(forKey: "second_party_type") as? String ?? "")
-				tax = aDecoder.containsValue(forKey: "tax") ? aDecoder.decodeFloat(forKey: "tax") : nil
-				taxRecieverID = aDecoder.containsValue(forKey: "tax_reciever_id") ? aDecoder.decodeInteger(forKey: "tax_reciever_id") : nil
+				tax = aDecoder.containsValue(forKey: "tax") ? aDecoder.decodeDouble(forKey: "tax") : nil
+				taxReceiverID = aDecoder.containsValue(forKey: "tax_receiver_id") ? aDecoder.decodeInteger(forKey: "tax_receiver_id") : nil
 				
 				super.init()
 			}
@@ -1588,8 +1601,8 @@ public extension ESI {
 				if let v = tax {
 					aCoder.encode(v, forKey: "tax")
 				}
-				if let v = taxRecieverID {
-					aCoder.encode(v, forKey: "tax_reciever_id")
+				if let v = taxReceiverID {
+					aCoder.encode(v, forKey: "tax_receiver_id")
 				}
 			}
 			
@@ -1625,8 +1638,8 @@ public extension ESI {
 				if let v = tax?.json {
 					json["tax"] = v
 				}
-				if let v = taxRecieverID?.json {
-					json["tax_reciever_id"] = v
+				if let v = taxReceiverID?.json {
+					json["tax_receiver_id"] = v
 				}
 				return json
 			}
@@ -1645,7 +1658,7 @@ public extension ESI {
 				hashCombine(seed: &hash, value: self.secondPartyID?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.secondPartyType?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: self.tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.taxRecieverID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: self.taxReceiverID?.hashValue ?? 0)
 				return hash
 			}()
 			
@@ -1670,7 +1683,7 @@ public extension ESI {
 				secondPartyID = other.secondPartyID
 				secondPartyType = other.secondPartyType
 				tax = other.tax
-				taxRecieverID = other.taxRecieverID
+				taxReceiverID = other.taxReceiverID
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
