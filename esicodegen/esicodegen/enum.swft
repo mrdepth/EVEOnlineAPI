@@ -1,19 +1,6 @@
-public enum {enum}: String, JSONCoding, HTTPQueryable {
+public enum {enum}: String, Codable, HTTPQueryable {
 {cases}
 	
-	public init() {
-		self = .{default}
-	}
-			
-	public var json: Any {
-		return self.rawValue
-	}
-			
-	public init(json: Any) throws {
-		guard let s = json as? String, let v = {enum}(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-		self = v
-	}
-
 	public var httpQuery: String? {
 		return rawValue
 	}

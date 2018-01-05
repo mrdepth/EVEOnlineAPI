@@ -5,37 +5,7 @@ import PlaygroundSupport
 //import EVEAPI
 //import AFNetworking
 import ObjectiveC
-
-let json = """
-{
-\"attackers\": [
-{
-\"character_id1\": 95810944,
-\"corporation_id\": 1000179,
-\"damage_done\": 5745,
-\"faction_id\": 500003,
-\"final_blow\": true,
-\"security_status\": -0.3,
-\"ship_type_id\": 17841,
-\"killmail_time": "2016-10-22T17:13:36Z\",
-\"weapon_type_id\": 3074
-}
-]
-}
-"""
-
-//extension String: CodingKey {
-//	public init?(intValue: Int) {
-//		self = String(describing: intValue)
-//	}
-//
-//	public init?(stringValue: String) {
-//		self = stringValue
-//	}
-//
-//	public var stringValue: String {
-//	}
-//}
+//import Alamofire
 
 extension DateFormatter {
 	static var esiDateFormatter: DateFormatter {
@@ -55,49 +25,40 @@ extension DateFormatter {
 	}
 }
 
-class Kill: Codable {
-	class Attacker: Codable {
-		var character_id: Int?
-		var corporation_id: Int?
-		var damage_done: Int?
-		var faction_id: Int?
-		var final_blow: Bool?
-		var security_status: Float?
-		var ship_type_id: Int?
-		var weapon_type_id: Int?
-		private var killmail_timeString: String? {
-			set {
-				print("\(newValue)")
-			}
-			get {
-				return nil
-			}
-		}
-		var killmail_time: Date?
-		
-		enum CodingKeys: String, CodingKey {
-			case character_id = "character_id1"
-			case corporation_id
-			case killmail_time
-		}
-		
-		enum AdditionalCodingKeys: String, CodingKey {
-			case killmail_time
-		}
+let json = """
+{
+"start_time": "2018-01-04T11:05:25Z",
+"players": 19441,
+"server_version": "1226572"
+}
+"""
+
+extension Encodable {
+//	typealias Formats = CodingKey
+}
+
+struct Status: Codable {
+	var startTime: Date? = nil
+	var players: Int = 0
+	var serverVersion: String = ""
+	
+	enum CodingKeys: String, CodingKey {
+		case startTime = "start_time"
+		case serverVersion = "server_version"
+		case players
 	}
 	
-	var attackers: [Attacker]?
 }
 
 
-let data = json.data(using: .utf8)!
-let decoder = JSONDecoder()
-decoder.dateDecodingStrategy = .formatted(DateFormatter.esiDateTimeFormatter)
-decoder.dateDecodingStrategy = .custom { decoder -> Date in
-	print("\(decoder.userInfo)")
-	return Date()
+var s1 = Status()
+var s2 = s1
+
+//print("\(&s1)")
+
+withUnsafePointer(to: &s1) { (ptr) in
+	print("\(ptr)")
 }
-let kill = try! decoder.decode(Kill.self, from: data)
-
-print("\(kill.attackers![0].killmail_time)")
-
+withUnsafePointer(to: &s2) { (ptr) in
+	print("\(ptr)")
+}

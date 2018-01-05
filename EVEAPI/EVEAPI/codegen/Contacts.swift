@@ -21,7 +21,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.write_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: contactIds.json, options: [])
+			let body = try? JSONEncoder().encode(contactIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -62,7 +62,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.write_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: contactIds.json, options: [])
+			let body = try? JSONEncoder().encode(contactIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -270,26 +270,13 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIContactsGetAlliancesAllianceIDContactsOk) public class GetAlliancesAllianceIDContactsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetAlliancesAllianceIDContactsOk: Codable, Hashable {
 			
-			public enum GetAlliancesAllianceIDContactsContactType: String, JSONCoding, HTTPQueryable {
+			public enum GetAlliancesAllianceIDContactsContactType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetAlliancesAllianceIDContactsContactType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -297,119 +284,47 @@ public extension ESI {
 				
 			}
 			
-			public var contactID: Int = Int()
-			public var contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType = Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType()
-			public var labelID: Int64? = nil
-			public var standing: Float = Float()
+			public let contactID: Int
+			public let contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType
+			public let labelID: Int64?
+			public let standing: Float
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let contactID = dictionary["contact_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contactID = contactID
-				guard let contactType = Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType(rawValue: dictionary["contact_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contactType = contactType
-				labelID = dictionary["label_id"] as? Int64
-				guard let standing = dictionary["standing"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.standing = standing
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				contactID = aDecoder.decodeInteger(forKey: "contact_id")
-				contactType = Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType(rawValue: aDecoder.decodeObject(forKey: "contact_type") as? String ?? "") ?? Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType()
-				labelID = aDecoder.containsValue(forKey: "label_id") ? aDecoder.decodeInt64(forKey: "label_id") : nil
-				standing = aDecoder.decodeFloat(forKey: "standing")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(contactID, forKey: "contact_id")
-				aCoder.encode(contactType.rawValue, forKey: "contact_type")
-				if let v = labelID {
-					aCoder.encode(v, forKey: "label_id")
-				}
-				aCoder.encode(standing, forKey: "standing")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["contact_id"] = contactID.json
-				json["contact_type"] = contactType.json
-				if let v = labelID?.json {
-					json["label_id"] = v
-				}
-				json["standing"] = standing.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.contactID.hashValue)
-				hashCombine(seed: &hash, value: self.contactType.hashValue)
-				hashCombine(seed: &hash, value: self.labelID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.standing.hashValue)
+				hashCombine(seed: &hash, value: contactID.hashValue)
+				hashCombine(seed: &hash, value: contactType.hashValue)
+				hashCombine(seed: &hash, value: labelID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: standing.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Contacts.GetAlliancesAllianceIDContactsOk, rhs: Contacts.GetAlliancesAllianceIDContactsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Contacts.GetAlliancesAllianceIDContactsOk) {
-				contactID = other.contactID
-				contactType = other.contactType
-				labelID = other.labelID
-				standing = other.standing
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contactID = "contact_id"
+				case contactType = "contact_type"
+				case labelID = "label_id"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contacts.GetAlliancesAllianceIDContactsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetAlliancesAllianceIDContactsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIContactsGetCorporationsCorporationIDContactsOk) public class GetCorporationsCorporationIDContactsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDContactsOk: Codable, Hashable {
 			
-			public enum GetCorporationsCorporationIDContactsContactType: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDContactsContactType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDContactsContactType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -417,130 +332,50 @@ public extension ESI {
 				
 			}
 			
-			public var contactID: Int = Int()
-			public var contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType = Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType()
-			public var isWatched: Bool? = nil
-			public var labelID: Int64? = nil
-			public var standing: Float = Float()
+			public let contactID: Int
+			public let contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType
+			public let isWatched: Bool?
+			public let labelID: Int64?
+			public let standing: Float
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let contactID = dictionary["contact_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contactID = contactID
-				guard let contactType = Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType(rawValue: dictionary["contact_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contactType = contactType
-				isWatched = dictionary["is_watched"] as? Bool
-				labelID = dictionary["label_id"] as? Int64
-				guard let standing = dictionary["standing"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.standing = standing
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				contactID = aDecoder.decodeInteger(forKey: "contact_id")
-				contactType = Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType(rawValue: aDecoder.decodeObject(forKey: "contact_type") as? String ?? "") ?? Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType()
-				isWatched = aDecoder.containsValue(forKey: "is_watched") ? aDecoder.decodeBool(forKey: "is_watched") : nil
-				labelID = aDecoder.containsValue(forKey: "label_id") ? aDecoder.decodeInt64(forKey: "label_id") : nil
-				standing = aDecoder.decodeFloat(forKey: "standing")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(contactID, forKey: "contact_id")
-				aCoder.encode(contactType.rawValue, forKey: "contact_type")
-				if let v = isWatched {
-					aCoder.encode(v, forKey: "is_watched")
-				}
-				if let v = labelID {
-					aCoder.encode(v, forKey: "label_id")
-				}
-				aCoder.encode(standing, forKey: "standing")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["contact_id"] = contactID.json
-				json["contact_type"] = contactType.json
-				if let v = isWatched?.json {
-					json["is_watched"] = v
-				}
-				if let v = labelID?.json {
-					json["label_id"] = v
-				}
-				json["standing"] = standing.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.contactID.hashValue)
-				hashCombine(seed: &hash, value: self.contactType.hashValue)
-				hashCombine(seed: &hash, value: self.isWatched?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.labelID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.standing.hashValue)
+				hashCombine(seed: &hash, value: contactID.hashValue)
+				hashCombine(seed: &hash, value: contactType.hashValue)
+				hashCombine(seed: &hash, value: isWatched?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: labelID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: standing.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Contacts.GetCorporationsCorporationIDContactsOk, rhs: Contacts.GetCorporationsCorporationIDContactsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Contacts.GetCorporationsCorporationIDContactsOk) {
-				contactID = other.contactID
-				contactType = other.contactType
-				isWatched = other.isWatched
-				labelID = other.labelID
-				standing = other.standing
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contactID = "contact_id"
+				case contactType = "contact_type"
+				case isWatched = "is_watched"
+				case labelID = "label_id"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contacts.GetCorporationsCorporationIDContactsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDContactsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIContactsContact) public class Contact: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Contact: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDContactsContactType: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDContactsContactType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDContactsContactType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -548,195 +383,74 @@ public extension ESI {
 				
 			}
 			
-			public var contactID: Int = Int()
-			public var contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType = Contacts.Contact.GetCharactersCharacterIDContactsContactType()
-			public var isBlocked: Bool? = nil
-			public var isWatched: Bool? = nil
-			public var labelID: Int64? = nil
-			public var standing: Float = Float()
+			public let contactID: Int
+			public let contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType
+			public let isBlocked: Bool?
+			public let isWatched: Bool?
+			public let labelID: Int64?
+			public let standing: Float
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let contactID = dictionary["contact_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contactID = contactID
-				guard let contactType = Contacts.Contact.GetCharactersCharacterIDContactsContactType(rawValue: dictionary["contact_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contactType = contactType
-				isBlocked = dictionary["is_blocked"] as? Bool
-				isWatched = dictionary["is_watched"] as? Bool
-				labelID = dictionary["label_id"] as? Int64
-				guard let standing = dictionary["standing"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.standing = standing
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				contactID = aDecoder.decodeInteger(forKey: "contact_id")
-				contactType = Contacts.Contact.GetCharactersCharacterIDContactsContactType(rawValue: aDecoder.decodeObject(forKey: "contact_type") as? String ?? "") ?? Contacts.Contact.GetCharactersCharacterIDContactsContactType()
-				isBlocked = aDecoder.containsValue(forKey: "is_blocked") ? aDecoder.decodeBool(forKey: "is_blocked") : nil
-				isWatched = aDecoder.containsValue(forKey: "is_watched") ? aDecoder.decodeBool(forKey: "is_watched") : nil
-				labelID = aDecoder.containsValue(forKey: "label_id") ? aDecoder.decodeInt64(forKey: "label_id") : nil
-				standing = aDecoder.decodeFloat(forKey: "standing")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(contactID, forKey: "contact_id")
-				aCoder.encode(contactType.rawValue, forKey: "contact_type")
-				if let v = isBlocked {
-					aCoder.encode(v, forKey: "is_blocked")
-				}
-				if let v = isWatched {
-					aCoder.encode(v, forKey: "is_watched")
-				}
-				if let v = labelID {
-					aCoder.encode(v, forKey: "label_id")
-				}
-				aCoder.encode(standing, forKey: "standing")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["contact_id"] = contactID.json
-				json["contact_type"] = contactType.json
-				if let v = isBlocked?.json {
-					json["is_blocked"] = v
-				}
-				if let v = isWatched?.json {
-					json["is_watched"] = v
-				}
-				if let v = labelID?.json {
-					json["label_id"] = v
-				}
-				json["standing"] = standing.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.contactID.hashValue)
-				hashCombine(seed: &hash, value: self.contactType.hashValue)
-				hashCombine(seed: &hash, value: self.isBlocked?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.isWatched?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.labelID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.standing.hashValue)
+				hashCombine(seed: &hash, value: contactID.hashValue)
+				hashCombine(seed: &hash, value: contactType.hashValue)
+				hashCombine(seed: &hash, value: isBlocked?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isWatched?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: labelID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: standing.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Contacts.Contact, rhs: Contacts.Contact) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Contacts.Contact) {
-				contactID = other.contactID
-				contactType = other.contactType
-				isBlocked = other.isBlocked
-				isWatched = other.isWatched
-				labelID = other.labelID
-				standing = other.standing
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contactID = "contact_id"
+				case contactType = "contact_type"
+				case isBlocked = "is_blocked"
+				case isWatched = "is_watched"
+				case labelID = "label_id"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contacts.Contact(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Contact)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIContactsLabel) public class Label: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Label: Codable, Hashable {
 			
 			
-			public var labelID: Int64 = Int64()
-			public var labelName: String = String()
+			public let labelID: Int64
+			public let labelName: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let labelID = dictionary["label_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.labelID = labelID
-				guard let labelName = dictionary["label_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.labelName = labelName
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				labelID = aDecoder.decodeInt64(forKey: "label_id")
-				labelName = aDecoder.decodeObject(forKey: "label_name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(labelID, forKey: "label_id")
-				aCoder.encode(labelName, forKey: "label_name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["label_id"] = labelID.json
-				json["label_name"] = labelName.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.labelID.hashValue)
-				hashCombine(seed: &hash, value: self.labelName.hashValue)
+				hashCombine(seed: &hash, value: labelID.hashValue)
+				hashCombine(seed: &hash, value: labelName.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Contacts.Label, rhs: Contacts.Label) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Contacts.Label) {
-				labelID = other.labelID
-				labelName = other.labelName
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case labelID = "label_id"
+				case labelName = "label_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Contacts.Label(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Label)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

@@ -12,8 +12,6 @@
 		1288F0081DEB5FBD00FD7FBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1288F0061DEB5FBD00FD7FBE /* Main.storyboard */; };
 		1288F00A1DEB5FBD00FD7FBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1288F0091DEB5FBD00FD7FBE /* Assets.xcassets */; };
 		1288F00D1DEB5FBD00FD7FBE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1288F00B1DEB5FBD00FD7FBE /* LaunchScreen.storyboard */; };
-		1288F0151DEB61FC00FD7FBE /* EVEAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */; };
-		1288F0161DEB61FC00FD7FBE /* EVEAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		12BC409A1DFDA13E00657D40 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12BC40991DFDA13E00657D40 /* Alamofire.framework */; };
 		12BC409B1DFDA13E00657D40 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12BC40991DFDA13E00657D40 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -25,7 +23,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1288F0161DEB61FC00FD7FBE /* EVEAPI.framework in Embed Frameworks */,
 				12BC409B1DFDA13E00657D40 /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -50,7 +47,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1288F0151DEB61FC00FD7FBE /* EVEAPI.framework in Frameworks */,
 				12BC409A1DFDA13E00657D40 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

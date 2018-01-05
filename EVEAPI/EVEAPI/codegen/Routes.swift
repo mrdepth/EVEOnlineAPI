@@ -55,23 +55,10 @@ public extension ESI {
 		}
 		
 		
-		public enum Flag: String, JSONCoding, HTTPQueryable {
+		public enum Flag: String, Codable, HTTPQueryable {
 			case insecure = "insecure"
 			case secure = "secure"
 			case shortest = "shortest"
-			
-			public init() {
-				self = .shortest
-			}
-			
-			public var json: Any {
-				return self.rawValue
-			}
-			
-			public init(json: Any) throws {
-				guard let s = json as? String, let v = Flag(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				self = v
-			}
 			
 			public var httpQuery: String? {
 				return rawValue
@@ -80,75 +67,31 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIRoutesGetRouteOriginDestinationNotFound) public class GetRouteOriginDestinationNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetRouteOriginDestinationNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Routes.GetRouteOriginDestinationNotFound, rhs: Routes.GetRouteOriginDestinationNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Routes.GetRouteOriginDestinationNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Routes.GetRouteOriginDestinationNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetRouteOriginDestinationNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

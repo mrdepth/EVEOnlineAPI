@@ -167,7 +167,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: newMail.json, options: [])
+			let body = try? JSONEncoder().encode(newMail)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -194,181 +194,71 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIUserInterfacePostUiOpenwindowNewmailUnprocessableEntity) public class PostUiOpenwindowNewmailUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostUiOpenwindowNewmailUnprocessableEntity: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: UserInterface.PostUiOpenwindowNewmailUnprocessableEntity, rhs: UserInterface.PostUiOpenwindowNewmailUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: UserInterface.PostUiOpenwindowNewmailUnprocessableEntity) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return UserInterface.PostUiOpenwindowNewmailUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostUiOpenwindowNewmailUnprocessableEntity)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIUserInterfaceNewMail) public class NewMail: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct NewMail: Codable, Hashable {
 			
 			
-			public var body: String = String()
-			public var recipients: [Int] = []
-			public var subject: String = String()
-			public var toCorpOrAllianceID: Int? = nil
-			public var toMailingListID: Int? = nil
+			public let body: String
+			public let recipients: [Int]
+			public let subject: String
+			public let toCorpOrAllianceID: Int?
+			public let toMailingListID: Int?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let body = dictionary["body"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.body = body
-				recipients = try (dictionary["recipients"] as? [Any])?.map {try Int(json: $0)} ?? []
-				guard let subject = dictionary["subject"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.subject = subject
-				toCorpOrAllianceID = dictionary["to_corp_or_alliance_id"] as? Int
-				toMailingListID = dictionary["to_mailing_list_id"] as? Int
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				body = aDecoder.decodeObject(forKey: "body") as? String ?? String()
-				recipients = aDecoder.decodeObject(forKey: "recipients") as? [Int] ?? []
-				subject = aDecoder.decodeObject(forKey: "subject") as? String ?? String()
-				toCorpOrAllianceID = aDecoder.containsValue(forKey: "to_corp_or_alliance_id") ? aDecoder.decodeInteger(forKey: "to_corp_or_alliance_id") : nil
-				toMailingListID = aDecoder.containsValue(forKey: "to_mailing_list_id") ? aDecoder.decodeInteger(forKey: "to_mailing_list_id") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(body, forKey: "body")
-				aCoder.encode(recipients, forKey: "recipients")
-				aCoder.encode(subject, forKey: "subject")
-				if let v = toCorpOrAllianceID {
-					aCoder.encode(v, forKey: "to_corp_or_alliance_id")
-				}
-				if let v = toMailingListID {
-					aCoder.encode(v, forKey: "to_mailing_list_id")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["body"] = body.json
-				json["recipients"] = recipients.json
-				json["subject"] = subject.json
-				if let v = toCorpOrAllianceID?.json {
-					json["to_corp_or_alliance_id"] = v
-				}
-				if let v = toMailingListID?.json {
-					json["to_mailing_list_id"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.body.hashValue)
+				hashCombine(seed: &hash, value: body.hashValue)
 				self.recipients.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.subject.hashValue)
-				hashCombine(seed: &hash, value: self.toCorpOrAllianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.toMailingListID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: subject.hashValue)
+				hashCombine(seed: &hash, value: toCorpOrAllianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: toMailingListID?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: UserInterface.NewMail, rhs: UserInterface.NewMail) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: UserInterface.NewMail) {
-				body = other.body
-				recipients = other.recipients.flatMap { $0 }
-				subject = other.subject
-				toCorpOrAllianceID = other.toCorpOrAllianceID
-				toMailingListID = other.toMailingListID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case body
+				case recipients
+				case subject
+				case toCorpOrAllianceID = "to_corp_or_alliance_id"
+				case toMailingListID = "to_mailing_list_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return UserInterface.NewMail(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? NewMail)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

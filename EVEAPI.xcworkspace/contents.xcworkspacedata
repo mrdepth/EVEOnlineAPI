@@ -14,9 +14,6 @@
       location = "group:Develop/Develop.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Playground.playground">
-   </FileRef>
-   <FileRef
       location = "group:ThirdParty/Alamofire/Alamofire.xcodeproj">
    </FileRef>
    <FileRef
@@ -24,5 +21,8 @@
    </FileRef>
    <FileRef
       location = "group:evecodegen/evecodegen.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Playground.playground">
    </FileRef>
 </Workspace>

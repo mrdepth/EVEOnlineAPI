@@ -57,12 +57,11 @@ class Parameter {
 	
 	var parameterString: String {
 		return isRequired ?
-		"let body = try? JSONSerialization.data(withJSONObject: \(parameterName).json, options: [])" :
-		"let body = \(parameterName) != nil ? (try? JSONSerialization.data(withJSONObject: \(parameterName)!.json, options: [])) : nil"
+		"let body = try? JSONEncoder().encode(\(parameterName))" :
+		"let body = \(parameterName) != nil ? try? JSONEncoder().encode(\(parameterName)) : nil"
 //		return isRequired ?
-//			"parameters[\"\(name)\"] = \(parameterName).json" :
-//			"if let v = \(parameterName) {\n" +
-//		"parameters[\"\(name)\"] = v.json\n}"
+//		"let body = try? JSONSerialization.data(withJSONObject: \(parameterName).json, options: [])" :
+//		"let body = \(parameterName) != nil ? (try? JSONSerialization.data(withJSONObject: \(parameterName)!.json, options: [])) : nil"
 	}
 	
 	var headerString: String {

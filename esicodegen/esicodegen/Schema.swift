@@ -159,7 +159,7 @@ class Schema: Namespace {
 		
 		var template = try! String(contentsOf: enumURL)
 		template = template.replacingOccurrences(of: "{enum}", with: typeName)
-		template.replaceSubrange(template.range(of: "{default}")!, with: caseName(e.default))
+//		template.replaceSubrange(template.range(of: "{default}")!, with: caseName(e.default))
 		
 		let s = cases.enumerated().map { "\tcase \($0.element) = \"\(e.cases[$0.offset])\"" }.joined(separator: "\n")
 		template.replaceSubrange(template.range(of: "{cases}")!, with: s)
@@ -178,6 +178,9 @@ class Schema: Namespace {
 		var nested = [String]()
 		var copy = [String]()
 		
+		var codingKeys = [String]()
+		var dateFormats = [String]()
+		
 		for value in properties ?? [] {
 			definitions.append(value.definition)
 			initializations.append(value.initialization)
@@ -187,6 +190,11 @@ class Schema: Namespace {
 //			defaults.append(value.defaultInitialization)
 			hashes.append(value.hash)
 			copy.append(value.copy)
+			
+			codingKeys.append(value.codingKey)
+			if let formatter = value.dateFormatter {
+				dateFormats.append(formatter)
+			}
 		}
 		
 		for subSchema in namespaces[self] ?? [] {
@@ -196,19 +204,20 @@ class Schema: Namespace {
 
 		
 		template = template.replacingOccurrences(of: "{className}", with: typeName)
-		template = template.replacingOccurrences(of: "{classIdentifier}", with: typeIdentifier)
+//		template = template.replacingOccurrences(of: "{classIdentifier}", with: typeIdentifier)
 		template = template.replacingOccurrences(of: "{class}", with: typeIdentifier)
 		template.replaceSubrange(template.range(of: "{definitions}")!, with: definitions.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
-//		template.replaceSubrange(template.range(of: "{defaults}")!, with: defaults.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{hash}")!, with: hashes.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{nested}")!, with: nested.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{copy}")!, with: copy.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{objcName}")!, with: typeIdentifier.replacingOccurrences(of: ".", with: ""))
+//		template.replaceSubrange(template.range(of: "{copy}")!, with: copy.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{objcName}")!, with: typeIdentifier.replacingOccurrences(of: ".", with: ""))
 		
+		template.replaceSubrange(template.range(of: "{codingKeys}")!, with: codingKeys.joined(separator: "\n"))
+		template.replaceSubrange(template.range(of: "{dateFormats}")!, with: dateFormats.joined(separator: "\n"))
 		return template
 	}
 	

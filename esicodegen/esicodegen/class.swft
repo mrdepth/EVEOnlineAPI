@@ -1,66 +1,26 @@
-@objc(ESI{objcName}) public class {className}: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+public struct {className}: Codable, Hashable {
 
 {nested}
 {definitions}
 
-
-	public required init(json: Any) throws {
-		guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-		
-{initializations}
-
-		super.init()
-	}
-	
-	override public init() {
-		super.init()
-	}
-
-	public static var supportsSecureCoding: Bool {
-		return true
-	}
-
-	public required init?(coder aDecoder: NSCoder) {
-{decodings}
-
-		super.init()
-	}
-	
-	public func encode(with aCoder: NSCoder) {
-{encodings}
-	}
-
-	public var json: Any {
-		var json = [String: Any]()
-{json}
-		return json
-	}
-
-	private lazy var _hashValue: Int = {
+	public var hashValue: Int {
 		var hash: Int = 0
 {hash}
 		return hash
-	}()
-
-	override public var hashValue: Int {
-		return _hashValue
 	}
 
 	public static func ==(lhs: {class}, rhs: {class}) -> Bool {
 		return lhs.hashValue == rhs.hashValue
 	}
 
-	init(_ other: {classIdentifier}) {
-{copy}
+	enum CodingKeys: String, CodingKey, DateFormatted {
+{codingKeys}
+
+		var dateFormatter: DateFormatter? {
+			switch self {
+{dateFormats}
+			default: return nil
+			}
+		}
 	}
-
-	public func copy(with zone: NSZone? = nil) -> Any {
-		return {classIdentifier}(self)
-	}
-
-
-	public override func isEqual(_ object: Any?) -> Bool {
-		return (object as? {className})?.hashValue == hashValue
-	}
-
 }

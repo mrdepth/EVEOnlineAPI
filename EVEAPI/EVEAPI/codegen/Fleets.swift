@@ -155,7 +155,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: naming.json, options: [])
+			let body = try? JSONEncoder().encode(naming)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -188,7 +188,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: invitation.json, options: [])
+			let body = try? JSONEncoder().encode(invitation)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -289,7 +289,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: movement.json, options: [])
+			let body = try? JSONEncoder().encode(movement)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -322,7 +322,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: newSettings.json, options: [])
+			let body = try? JSONEncoder().encode(newSettings)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -454,7 +454,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: naming.json, options: [])
+			let body = try? JSONEncoder().encode(naming)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -481,167 +481,69 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIFleetsWingCreated) public class WingCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct WingCreated: Codable, Hashable {
 			
 			
-			public var wingID: Int64 = Int64()
+			public let wingID: Int64
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.wingID = wingID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				wingID = aDecoder.decodeInt64(forKey: "wing_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(wingID, forKey: "wing_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["wing_id"] = wingID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.wingID.hashValue)
+				hashCombine(seed: &hash, value: wingID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.WingCreated, rhs: Fleets.WingCreated) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.WingCreated) {
-				wingID = other.wingID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.WingCreated(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? WingCreated)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPutFleetsFleetIDMembersMemberIDNotFound) public class PutFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PutFleetsFleetIDMembersMemberIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PutFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.PutFleetsFleetIDMembersMemberIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDMembersMemberIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDMembersMemberIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDMembersMemberIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsInvitation) public class Invitation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Invitation: Codable, Hashable {
 			
-			public enum PostFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
+			public enum PostFleetsFleetIDMembersRole: String, Codable, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
 				case squadCommander = "squad_commander"
 				case squadMember = "squad_member"
 				case wingCommander = "wing_commander"
-				
-				public init() {
-					self = .fleetCommander
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = PostFleetsFleetIDMembersRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -649,631 +551,246 @@ public extension ESI {
 				
 			}
 			
-			public var characterID: Int = Int()
-			public var role: Fleets.Invitation.PostFleetsFleetIDMembersRole = Fleets.Invitation.PostFleetsFleetIDMembersRole()
-			public var squadID: Int64? = nil
-			public var wingID: Int64? = nil
+			public let characterID: Int
+			public let role: Fleets.Invitation.PostFleetsFleetIDMembersRole
+			public let squadID: Int64?
+			public let wingID: Int64?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.characterID = characterID
-				guard let role = Fleets.Invitation.PostFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.role = role
-				squadID = dictionary["squad_id"] as? Int64
-				wingID = dictionary["wing_id"] as? Int64
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				characterID = aDecoder.decodeInteger(forKey: "character_id")
-				role = Fleets.Invitation.PostFleetsFleetIDMembersRole(rawValue: aDecoder.decodeObject(forKey: "role") as? String ?? "") ?? Fleets.Invitation.PostFleetsFleetIDMembersRole()
-				squadID = aDecoder.containsValue(forKey: "squad_id") ? aDecoder.decodeInt64(forKey: "squad_id") : nil
-				wingID = aDecoder.containsValue(forKey: "wing_id") ? aDecoder.decodeInt64(forKey: "wing_id") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(characterID, forKey: "character_id")
-				aCoder.encode(role.rawValue, forKey: "role")
-				if let v = squadID {
-					aCoder.encode(v, forKey: "squad_id")
-				}
-				if let v = wingID {
-					aCoder.encode(v, forKey: "wing_id")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["character_id"] = characterID.json
-				json["role"] = role.json
-				if let v = squadID?.json {
-					json["squad_id"] = v
-				}
-				if let v = wingID?.json {
-					json["wing_id"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.characterID.hashValue)
-				hashCombine(seed: &hash, value: self.role.hashValue)
-				hashCombine(seed: &hash, value: self.squadID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.wingID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: role.hashValue)
+				hashCombine(seed: &hash, value: squadID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: wingID?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.Invitation, rhs: Fleets.Invitation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.Invitation) {
-				characterID = other.characterID
-				role = other.role
-				squadID = other.squadID
-				wingID = other.wingID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case role
+				case squadID = "squad_id"
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.Invitation(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Invitation)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsGetFleetsFleetIDNotFound) public class GetFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetFleetsFleetIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.GetFleetsFleetIDNotFound, rhs: Fleets.GetFleetsFleetIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetFleetsFleetIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetFleetsFleetIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetFleetsFleetIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPutFleetsFleetIDBadRequest) public class PutFleetsFleetIDBadRequest: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PutFleetsFleetIDBadRequest: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PutFleetsFleetIDBadRequest, rhs: Fleets.PutFleetsFleetIDBadRequest) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDBadRequest) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDBadRequest(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDBadRequest)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsNaming) public class Naming: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Naming: Codable, Hashable {
 			
 			
-			public var name: String = String()
+			public let name: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(name, forKey: "name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["name"] = name.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.Naming, rhs: Fleets.Naming) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.Naming) {
-				name = other.name
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.Naming(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Naming)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPostFleetsFleetIDWingsNotFound) public class PostFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostFleetsFleetIDWingsNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PostFleetsFleetIDWingsNotFound, rhs: Fleets.PostFleetsFleetIDWingsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PostFleetsFleetIDWingsNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PostFleetsFleetIDWingsNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostFleetsFleetIDWingsNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsSquadCreated) public class SquadCreated: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct SquadCreated: Codable, Hashable {
 			
 			
-			public var squadID: Int64 = Int64()
+			public let squadID: Int64
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.squadID = squadID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				squadID = aDecoder.decodeInt64(forKey: "squad_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(squadID, forKey: "squad_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["squad_id"] = squadID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.squadID.hashValue)
+				hashCombine(seed: &hash, value: squadID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.SquadCreated, rhs: Fleets.SquadCreated) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.SquadCreated) {
-				squadID = other.squadID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case squadID = "squad_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.SquadCreated(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? SquadCreated)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsDeleteFleetsFleetIDMembersMemberIDNotFound) public class DeleteFleetsFleetIDMembersMemberIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct DeleteFleetsFleetIDMembersMemberIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? DeleteFleetsFleetIDMembersMemberIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsFleetUpdate) public class FleetUpdate: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct FleetUpdate: Codable, Hashable {
 			
 			
-			public var isFreeMove: Bool? = nil
-			public var motd: String? = nil
+			public let isFreeMove: Bool?
+			public let motd: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				isFreeMove = dictionary["is_free_move"] as? Bool
-				motd = dictionary["motd"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				isFreeMove = aDecoder.containsValue(forKey: "is_free_move") ? aDecoder.decodeBool(forKey: "is_free_move") : nil
-				motd = aDecoder.decodeObject(forKey: "motd") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = isFreeMove {
-					aCoder.encode(v, forKey: "is_free_move")
-				}
-				if let v = motd {
-					aCoder.encode(v, forKey: "motd")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = isFreeMove?.json {
-					json["is_free_move"] = v
-				}
-				if let v = motd?.json {
-					json["motd"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.isFreeMove?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.motd?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isFreeMove?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: motd?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.FleetUpdate, rhs: Fleets.FleetUpdate) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.FleetUpdate) {
-				isFreeMove = other.isFreeMove
-				motd = other.motd
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case isFreeMove = "is_free_move"
+				case motd
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.FleetUpdate(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? FleetUpdate)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsMovement) public class Movement: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Movement: Codable, Hashable {
 			
-			public enum PutFleetsFleetIDMembersMemberIDRole: String, JSONCoding, HTTPQueryable {
+			public enum PutFleetsFleetIDMembersMemberIDRole: String, Codable, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
 				case squadCommander = "squad_commander"
 				case squadMember = "squad_member"
 				case wingCommander = "wing_commander"
-				
-				public init() {
-					self = .fleetCommander
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = PutFleetsFleetIDMembersMemberIDRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -1281,726 +798,284 @@ public extension ESI {
 				
 			}
 			
-			public var role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole = Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole()
-			public var squadID: Int64? = nil
-			public var wingID: Int64? = nil
+			public let role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole
+			public let squadID: Int64?
+			public let wingID: Int64?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let role = Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.role = role
-				squadID = dictionary["squad_id"] as? Int64
-				wingID = dictionary["wing_id"] as? Int64
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				role = Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole(rawValue: aDecoder.decodeObject(forKey: "role") as? String ?? "") ?? Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole()
-				squadID = aDecoder.containsValue(forKey: "squad_id") ? aDecoder.decodeInt64(forKey: "squad_id") : nil
-				wingID = aDecoder.containsValue(forKey: "wing_id") ? aDecoder.decodeInt64(forKey: "wing_id") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(role.rawValue, forKey: "role")
-				if let v = squadID {
-					aCoder.encode(v, forKey: "squad_id")
-				}
-				if let v = wingID {
-					aCoder.encode(v, forKey: "wing_id")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["role"] = role.json
-				if let v = squadID?.json {
-					json["squad_id"] = v
-				}
-				if let v = wingID?.json {
-					json["wing_id"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.role.hashValue)
-				hashCombine(seed: &hash, value: self.squadID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.wingID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: role.hashValue)
+				hashCombine(seed: &hash, value: squadID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: wingID?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.Movement, rhs: Fleets.Movement) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.Movement) {
-				role = other.role
-				squadID = other.squadID
-				wingID = other.wingID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case role
+				case squadID = "squad_id"
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.Movement(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Movement)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPutFleetsFleetIDSquadsSquadIDNotFound) public class PutFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PutFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound, rhs: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDSquadsSquadIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDSquadsSquadIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsGetFleetsFleetIDWingsOk) public class GetFleetsFleetIDWingsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetFleetsFleetIDWingsOk: Codable, Hashable {
 			
-			@objc(ESIFleetsGetFleetsFleetIDWingsOkGetFleetsFleetIDWingsSquads) public class GetFleetsFleetIDWingsSquads: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFleetsFleetIDWingsSquads: Codable, Hashable {
 				
 				
-				public var id: Int64 = Int64()
-				public var name: String = String()
+				public let id: Int64
+				public let name: String
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let id = dictionary["id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.id = id
-					guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.name = name
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					id = aDecoder.decodeInt64(forKey: "id")
-					name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(id, forKey: "id")
-					aCoder.encode(name, forKey: "name")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["id"] = id.json
-					json["name"] = name.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.id.hashValue)
-					hashCombine(seed: &hash, value: self.name.hashValue)
+					hashCombine(seed: &hash, value: id.hashValue)
+					hashCombine(seed: &hash, value: name.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads, rhs: Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads) {
-					id = other.id
-					name = other.name
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFleetsFleetIDWingsSquads)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var id: Int64 = Int64()
-			public var name: String = String()
-			public var squads: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads] = []
+			public let id: Int64
+			public let name: String
+			public let squads: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads]
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let id = dictionary["id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.id = id
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				squads = try (dictionary["squads"] as? [Any])?.map {try Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads(json: $0)} ?? []
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				id = aDecoder.decodeInt64(forKey: "id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				squads = aDecoder.decodeObject(of: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads.self], forKey: "squads") as? [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads] ?? []
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(id, forKey: "id")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(squads, forKey: "squads")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["id"] = id.json
-				json["name"] = name.json
-				json["squads"] = squads.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.id.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: id.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				self.squads.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.GetFleetsFleetIDWingsOk, rhs: Fleets.GetFleetsFleetIDWingsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetFleetsFleetIDWingsOk) {
-				id = other.id
-				name = other.name
-				squads = other.squads.flatMap { Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads($0) }
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case id
+				case name
+				case squads
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetFleetsFleetIDWingsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetFleetsFleetIDWingsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsDeleteFleetsFleetIDSquadsSquadIDNotFound) public class DeleteFleetsFleetIDSquadsSquadIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct DeleteFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound, rhs: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? DeleteFleetsFleetIDSquadsSquadIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsDeleteFleetsFleetIDWingsWingIDNotFound) public class DeleteFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct DeleteFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound, rhs: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.DeleteFleetsFleetIDWingsWingIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? DeleteFleetsFleetIDWingsWingIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsInformation) public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Information: Codable, Hashable {
 			
 			
-			public var isFreeMove: Bool = Bool()
-			public var isRegistered: Bool = Bool()
-			public var isVoiceEnabled: Bool = Bool()
-			public var motd: String = String()
+			public let isFreeMove: Bool
+			public let isRegistered: Bool
+			public let isVoiceEnabled: Bool
+			public let motd: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let isFreeMove = dictionary["is_free_move"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isFreeMove = isFreeMove
-				guard let isRegistered = dictionary["is_registered"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isRegistered = isRegistered
-				guard let isVoiceEnabled = dictionary["is_voice_enabled"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isVoiceEnabled = isVoiceEnabled
-				guard let motd = dictionary["motd"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.motd = motd
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				isFreeMove = aDecoder.decodeBool(forKey: "is_free_move")
-				isRegistered = aDecoder.decodeBool(forKey: "is_registered")
-				isVoiceEnabled = aDecoder.decodeBool(forKey: "is_voice_enabled")
-				motd = aDecoder.decodeObject(forKey: "motd") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(isFreeMove, forKey: "is_free_move")
-				aCoder.encode(isRegistered, forKey: "is_registered")
-				aCoder.encode(isVoiceEnabled, forKey: "is_voice_enabled")
-				aCoder.encode(motd, forKey: "motd")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["is_free_move"] = isFreeMove.json
-				json["is_registered"] = isRegistered.json
-				json["is_voice_enabled"] = isVoiceEnabled.json
-				json["motd"] = motd.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.isFreeMove.hashValue)
-				hashCombine(seed: &hash, value: self.isRegistered.hashValue)
-				hashCombine(seed: &hash, value: self.isVoiceEnabled.hashValue)
-				hashCombine(seed: &hash, value: self.motd.hashValue)
+				hashCombine(seed: &hash, value: isFreeMove.hashValue)
+				hashCombine(seed: &hash, value: isRegistered.hashValue)
+				hashCombine(seed: &hash, value: isVoiceEnabled.hashValue)
+				hashCombine(seed: &hash, value: motd.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.Information, rhs: Fleets.Information) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.Information) {
-				isFreeMove = other.isFreeMove
-				isRegistered = other.isRegistered
-				isVoiceEnabled = other.isVoiceEnabled
-				motd = other.motd
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case isFreeMove = "is_free_move"
+				case isRegistered = "is_registered"
+				case isVoiceEnabled = "is_voice_enabled"
+				case motd
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.Information(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Information)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsGetFleetsFleetIDWingsNotFound) public class GetFleetsFleetIDWingsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetFleetsFleetIDWingsNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.GetFleetsFleetIDWingsNotFound, rhs: Fleets.GetFleetsFleetIDWingsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetFleetsFleetIDWingsNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetFleetsFleetIDWingsNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetFleetsFleetIDWingsNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPutFleetsFleetIDWingsWingIDNotFound) public class PutFleetsFleetIDWingsWingIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PutFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PutFleetsFleetIDWingsWingIDNotFound, rhs: Fleets.PutFleetsFleetIDWingsWingIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDWingsWingIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDWingsWingIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDWingsWingIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsMember) public class Member: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Member: Codable, Hashable {
 			
-			public enum GetFleetsFleetIDMembersRole: String, JSONCoding, HTTPQueryable {
+			public enum GetFleetsFleetIDMembersRole: String, Codable, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
 				case squadCommander = "squad_commander"
 				case squadMember = "squad_member"
 				case wingCommander = "wing_commander"
-				
-				public init() {
-					self = .fleetCommander
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetFleetsFleetIDMembersRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -2008,383 +1083,149 @@ public extension ESI {
 				
 			}
 			
-			public var characterID: Int = Int()
-			public var joinTime: Date = Date()
-			public var role: Fleets.Member.GetFleetsFleetIDMembersRole = Fleets.Member.GetFleetsFleetIDMembersRole()
-			public var roleName: String = String()
-			public var shipTypeID: Int = Int()
-			public var solarSystemID: Int = Int()
-			public var squadID: Int64 = Int64()
-			public var stationID: Int64? = nil
-			public var takesFleetWarp: Bool = Bool()
-			public var wingID: Int64 = Int64()
+			public let characterID: Int
+			public let joinTime: Date
+			public let role: Fleets.Member.GetFleetsFleetIDMembersRole
+			public let roleName: String
+			public let shipTypeID: Int
+			public let solarSystemID: Int
+			public let squadID: Int64
+			public let stationID: Int64?
+			public let takesFleetWarp: Bool
+			public let wingID: Int64
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.characterID = characterID
-				guard let joinTime = DateFormatter.esiDateTimeFormatter.date(from: dictionary["join_time"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.joinTime = joinTime
-				guard let role = Fleets.Member.GetFleetsFleetIDMembersRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.role = role
-				guard let roleName = dictionary["role_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.roleName = roleName
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.shipTypeID = shipTypeID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.solarSystemID = solarSystemID
-				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.squadID = squadID
-				stationID = dictionary["station_id"] as? Int64
-				guard let takesFleetWarp = dictionary["takes_fleet_warp"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.takesFleetWarp = takesFleetWarp
-				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.wingID = wingID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				characterID = aDecoder.decodeInteger(forKey: "character_id")
-				joinTime = aDecoder.decodeObject(forKey: "join_time") as? Date ?? Date()
-				role = Fleets.Member.GetFleetsFleetIDMembersRole(rawValue: aDecoder.decodeObject(forKey: "role") as? String ?? "") ?? Fleets.Member.GetFleetsFleetIDMembersRole()
-				roleName = aDecoder.decodeObject(forKey: "role_name") as? String ?? String()
-				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
-				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				squadID = aDecoder.decodeInt64(forKey: "squad_id")
-				stationID = aDecoder.containsValue(forKey: "station_id") ? aDecoder.decodeInt64(forKey: "station_id") : nil
-				takesFleetWarp = aDecoder.decodeBool(forKey: "takes_fleet_warp")
-				wingID = aDecoder.decodeInt64(forKey: "wing_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(characterID, forKey: "character_id")
-				aCoder.encode(joinTime, forKey: "join_time")
-				aCoder.encode(role.rawValue, forKey: "role")
-				aCoder.encode(roleName, forKey: "role_name")
-				aCoder.encode(shipTypeID, forKey: "ship_type_id")
-				aCoder.encode(solarSystemID, forKey: "solar_system_id")
-				aCoder.encode(squadID, forKey: "squad_id")
-				if let v = stationID {
-					aCoder.encode(v, forKey: "station_id")
-				}
-				aCoder.encode(takesFleetWarp, forKey: "takes_fleet_warp")
-				aCoder.encode(wingID, forKey: "wing_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["character_id"] = characterID.json
-				json["join_time"] = joinTime.json
-				json["role"] = role.json
-				json["role_name"] = roleName.json
-				json["ship_type_id"] = shipTypeID.json
-				json["solar_system_id"] = solarSystemID.json
-				json["squad_id"] = squadID.json
-				if let v = stationID?.json {
-					json["station_id"] = v
-				}
-				json["takes_fleet_warp"] = takesFleetWarp.json
-				json["wing_id"] = wingID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.characterID.hashValue)
-				hashCombine(seed: &hash, value: self.joinTime.hashValue)
-				hashCombine(seed: &hash, value: self.role.hashValue)
-				hashCombine(seed: &hash, value: self.roleName.hashValue)
-				hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
-				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: self.squadID.hashValue)
-				hashCombine(seed: &hash, value: self.stationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.takesFleetWarp.hashValue)
-				hashCombine(seed: &hash, value: self.wingID.hashValue)
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: joinTime.hashValue)
+				hashCombine(seed: &hash, value: role.hashValue)
+				hashCombine(seed: &hash, value: roleName.hashValue)
+				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: squadID.hashValue)
+				hashCombine(seed: &hash, value: stationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: takesFleetWarp.hashValue)
+				hashCombine(seed: &hash, value: wingID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.Member, rhs: Fleets.Member) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.Member) {
-				characterID = other.characterID
-				joinTime = other.joinTime
-				role = other.role
-				roleName = other.roleName
-				shipTypeID = other.shipTypeID
-				solarSystemID = other.solarSystemID
-				squadID = other.squadID
-				stationID = other.stationID
-				takesFleetWarp = other.takesFleetWarp
-				wingID = other.wingID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case joinTime = "join_time"
+				case role
+				case roleName = "role_name"
+				case shipTypeID = "ship_type_id"
+				case solarSystemID = "solar_system_id"
+				case squadID = "squad_id"
+				case stationID = "station_id"
+				case takesFleetWarp = "takes_fleet_warp"
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .joinTime: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.Member(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Member)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPutFleetsFleetIDNotFound) public class PutFleetsFleetIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PutFleetsFleetIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PutFleetsFleetIDNotFound, rhs: Fleets.PutFleetsFleetIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsGetCharactersCharacterIDFleetNotFound) public class GetCharactersCharacterIDFleetNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDFleetNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.GetCharactersCharacterIDFleetNotFound, rhs: Fleets.GetCharactersCharacterIDFleetNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetCharactersCharacterIDFleetNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetCharactersCharacterIDFleetNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDFleetNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsGetFleetsFleetIDMembersNotFound) public class GetFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetFleetsFleetIDMembersNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.GetFleetsFleetIDMembersNotFound, rhs: Fleets.GetFleetsFleetIDMembersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetFleetsFleetIDMembersNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetFleetsFleetIDMembersNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetFleetsFleetIDMembersNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsGetCharactersCharacterIDFleetOk) public class GetCharactersCharacterIDFleetOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDFleetOk: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDFleetRole: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDFleetRole: String, Codable, HTTPQueryable {
 				case fleetCommander = "fleet_commander"
 				case squadCommander = "squad_commander"
 				case squadMember = "squad_member"
 				case wingCommander = "wing_commander"
-				
-				public init() {
-					self = .fleetCommander
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDFleetRole(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -2392,381 +1233,149 @@ public extension ESI {
 				
 			}
 			
-			public var fleetID: Int64 = Int64()
-			public var role: Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole = Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole()
-			public var squadID: Int64 = Int64()
-			public var wingID: Int64 = Int64()
+			public let fleetID: Int64
+			public let role: Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole
+			public let squadID: Int64
+			public let wingID: Int64
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let fleetID = dictionary["fleet_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.fleetID = fleetID
-				guard let role = Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole(rawValue: dictionary["role"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.role = role
-				guard let squadID = dictionary["squad_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.squadID = squadID
-				guard let wingID = dictionary["wing_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.wingID = wingID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				fleetID = aDecoder.decodeInt64(forKey: "fleet_id")
-				role = Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole(rawValue: aDecoder.decodeObject(forKey: "role") as? String ?? "") ?? Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole()
-				squadID = aDecoder.decodeInt64(forKey: "squad_id")
-				wingID = aDecoder.decodeInt64(forKey: "wing_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(fleetID, forKey: "fleet_id")
-				aCoder.encode(role.rawValue, forKey: "role")
-				aCoder.encode(squadID, forKey: "squad_id")
-				aCoder.encode(wingID, forKey: "wing_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["fleet_id"] = fleetID.json
-				json["role"] = role.json
-				json["squad_id"] = squadID.json
-				json["wing_id"] = wingID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.fleetID.hashValue)
-				hashCombine(seed: &hash, value: self.role.hashValue)
-				hashCombine(seed: &hash, value: self.squadID.hashValue)
-				hashCombine(seed: &hash, value: self.wingID.hashValue)
+				hashCombine(seed: &hash, value: fleetID.hashValue)
+				hashCombine(seed: &hash, value: role.hashValue)
+				hashCombine(seed: &hash, value: squadID.hashValue)
+				hashCombine(seed: &hash, value: wingID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.GetCharactersCharacterIDFleetOk, rhs: Fleets.GetCharactersCharacterIDFleetOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.GetCharactersCharacterIDFleetOk) {
-				fleetID = other.fleetID
-				role = other.role
-				squadID = other.squadID
-				wingID = other.wingID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fleetID = "fleet_id"
+				case role
+				case squadID = "squad_id"
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.GetCharactersCharacterIDFleetOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDFleetOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPostFleetsFleetIDMembersUnprocessableEntity) public class PostFleetsFleetIDMembersUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostFleetsFleetIDMembersUnprocessableEntity: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersUnprocessableEntity, rhs: Fleets.PostFleetsFleetIDMembersUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PostFleetsFleetIDMembersUnprocessableEntity) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PostFleetsFleetIDMembersUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostFleetsFleetIDMembersUnprocessableEntity)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPostFleetsFleetIDWingsWingIDSquadsNotFound) public class PostFleetsFleetIDWingsWingIDSquadsNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostFleetsFleetIDWingsWingIDSquadsNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound, rhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostFleetsFleetIDWingsWingIDSquadsNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPutFleetsFleetIDMembersMemberIDUnprocessableEntity) public class PutFleetsFleetIDMembersMemberIDUnprocessableEntity: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PutFleetsFleetIDMembersMemberIDUnprocessableEntity: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity, rhs: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PutFleetsFleetIDMembersMemberIDUnprocessableEntity)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFleetsPostFleetsFleetIDMembersNotFound) public class PostFleetsFleetIDMembersNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostFleetsFleetIDMembersNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersNotFound, rhs: Fleets.PostFleetsFleetIDMembersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fleets.PostFleetsFleetIDMembersNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fleets.PostFleetsFleetIDMembersNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostFleetsFleetIDMembersNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

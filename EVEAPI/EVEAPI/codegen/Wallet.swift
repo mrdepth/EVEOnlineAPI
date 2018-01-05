@@ -221,475 +221,176 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIWalletGetCorporationsCorporationIDWalletsDivisionTransactionsOk) public class GetCorporationsCorporationIDWalletsDivisionTransactionsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDWalletsDivisionTransactionsOk: Codable, Hashable {
 			
 			
-			public var clientID: Int = Int()
-			public var date: Date = Date()
-			public var isBuy: Bool = Bool()
-			public var journalRefID: Int64 = Int64()
-			public var locationID: Int64 = Int64()
-			public var quantity: Int = Int()
-			public var transactionID: Int64 = Int64()
-			public var typeID: Int = Int()
-			public var unitPrice: Double = Double()
+			public let clientID: Int
+			public let date: Date
+			public let isBuy: Bool
+			public let journalRefID: Int64
+			public let locationID: Int64
+			public let quantity: Int
+			public let transactionID: Int64
+			public let typeID: Int
+			public let unitPrice: Double
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let clientID = dictionary["client_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.clientID = clientID
-				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.date = date
-				guard let isBuy = dictionary["is_buy"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isBuy = isBuy
-				guard let journalRefID = dictionary["journal_ref_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.journalRefID = journalRefID
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				guard let transactionID = dictionary["transaction_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.transactionID = transactionID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				guard let unitPrice = dictionary["unit_price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.unitPrice = unitPrice
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				clientID = aDecoder.decodeInteger(forKey: "client_id")
-				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-				isBuy = aDecoder.decodeBool(forKey: "is_buy")
-				journalRefID = aDecoder.decodeInt64(forKey: "journal_ref_id")
-				locationID = aDecoder.decodeInt64(forKey: "location_id")
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				transactionID = aDecoder.decodeInt64(forKey: "transaction_id")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				unitPrice = aDecoder.decodeDouble(forKey: "unit_price")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(clientID, forKey: "client_id")
-				aCoder.encode(date, forKey: "date")
-				aCoder.encode(isBuy, forKey: "is_buy")
-				aCoder.encode(journalRefID, forKey: "journal_ref_id")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(transactionID, forKey: "transaction_id")
-				aCoder.encode(typeID, forKey: "type_id")
-				aCoder.encode(unitPrice, forKey: "unit_price")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["client_id"] = clientID.json
-				json["date"] = date.json
-				json["is_buy"] = isBuy.json
-				json["journal_ref_id"] = journalRefID.json
-				json["location_id"] = locationID.json
-				json["quantity"] = quantity.json
-				json["transaction_id"] = transactionID.json
-				json["type_id"] = typeID.json
-				json["unit_price"] = unitPrice.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.clientID.hashValue)
-				hashCombine(seed: &hash, value: self.date.hashValue)
-				hashCombine(seed: &hash, value: self.isBuy.hashValue)
-				hashCombine(seed: &hash, value: self.journalRefID.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
-				hashCombine(seed: &hash, value: self.transactionID.hashValue)
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
-				hashCombine(seed: &hash, value: self.unitPrice.hashValue)
+				hashCombine(seed: &hash, value: clientID.hashValue)
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: isBuy.hashValue)
+				hashCombine(seed: &hash, value: journalRefID.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: transactionID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: unitPrice.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk, rhs: Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk) {
-				clientID = other.clientID
-				date = other.date
-				isBuy = other.isBuy
-				journalRefID = other.journalRefID
-				locationID = other.locationID
-				quantity = other.quantity
-				transactionID = other.transactionID
-				typeID = other.typeID
-				unitPrice = other.unitPrice
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case clientID = "client_id"
+				case date
+				case isBuy = "is_buy"
+				case journalRefID = "journal_ref_id"
+				case locationID = "location_id"
+				case quantity
+				case transactionID = "transaction_id"
+				case typeID = "type_id"
+				case unitPrice = "unit_price"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDWalletsDivisionTransactionsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIWalletTransaction) public class Transaction: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Transaction: Codable, Hashable {
 			
 			
-			public var clientID: Int = Int()
-			public var date: Date = Date()
-			public var isBuy: Bool = Bool()
-			public var isPersonal: Bool = Bool()
-			public var journalRefID: Int64 = Int64()
-			public var locationID: Int64 = Int64()
-			public var quantity: Int = Int()
-			public var transactionID: Int64 = Int64()
-			public var typeID: Int = Int()
-			public var unitPrice: Double = Double()
+			public let clientID: Int
+			public let date: Date
+			public let isBuy: Bool
+			public let isPersonal: Bool
+			public let journalRefID: Int64
+			public let locationID: Int64
+			public let quantity: Int
+			public let transactionID: Int64
+			public let typeID: Int
+			public let unitPrice: Double
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let clientID = dictionary["client_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.clientID = clientID
-				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.date = date
-				guard let isBuy = dictionary["is_buy"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isBuy = isBuy
-				guard let isPersonal = dictionary["is_personal"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isPersonal = isPersonal
-				guard let journalRefID = dictionary["journal_ref_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.journalRefID = journalRefID
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				guard let transactionID = dictionary["transaction_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.transactionID = transactionID
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				guard let unitPrice = dictionary["unit_price"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.unitPrice = unitPrice
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				clientID = aDecoder.decodeInteger(forKey: "client_id")
-				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-				isBuy = aDecoder.decodeBool(forKey: "is_buy")
-				isPersonal = aDecoder.decodeBool(forKey: "is_personal")
-				journalRefID = aDecoder.decodeInt64(forKey: "journal_ref_id")
-				locationID = aDecoder.decodeInt64(forKey: "location_id")
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				transactionID = aDecoder.decodeInt64(forKey: "transaction_id")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				unitPrice = aDecoder.decodeDouble(forKey: "unit_price")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(clientID, forKey: "client_id")
-				aCoder.encode(date, forKey: "date")
-				aCoder.encode(isBuy, forKey: "is_buy")
-				aCoder.encode(isPersonal, forKey: "is_personal")
-				aCoder.encode(journalRefID, forKey: "journal_ref_id")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(transactionID, forKey: "transaction_id")
-				aCoder.encode(typeID, forKey: "type_id")
-				aCoder.encode(unitPrice, forKey: "unit_price")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["client_id"] = clientID.json
-				json["date"] = date.json
-				json["is_buy"] = isBuy.json
-				json["is_personal"] = isPersonal.json
-				json["journal_ref_id"] = journalRefID.json
-				json["location_id"] = locationID.json
-				json["quantity"] = quantity.json
-				json["transaction_id"] = transactionID.json
-				json["type_id"] = typeID.json
-				json["unit_price"] = unitPrice.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.clientID.hashValue)
-				hashCombine(seed: &hash, value: self.date.hashValue)
-				hashCombine(seed: &hash, value: self.isBuy.hashValue)
-				hashCombine(seed: &hash, value: self.isPersonal.hashValue)
-				hashCombine(seed: &hash, value: self.journalRefID.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
-				hashCombine(seed: &hash, value: self.transactionID.hashValue)
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
-				hashCombine(seed: &hash, value: self.unitPrice.hashValue)
+				hashCombine(seed: &hash, value: clientID.hashValue)
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: isBuy.hashValue)
+				hashCombine(seed: &hash, value: isPersonal.hashValue)
+				hashCombine(seed: &hash, value: journalRefID.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: transactionID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: unitPrice.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.Transaction, rhs: Wallet.Transaction) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wallet.Transaction) {
-				clientID = other.clientID
-				date = other.date
-				isBuy = other.isBuy
-				isPersonal = other.isPersonal
-				journalRefID = other.journalRefID
-				locationID = other.locationID
-				quantity = other.quantity
-				transactionID = other.transactionID
-				typeID = other.typeID
-				unitPrice = other.unitPrice
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case clientID = "client_id"
+				case date
+				case isBuy = "is_buy"
+				case isPersonal = "is_personal"
+				case journalRefID = "journal_ref_id"
+				case locationID = "location_id"
+				case quantity
+				case transactionID = "transaction_id"
+				case typeID = "type_id"
+				case unitPrice = "unit_price"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wallet.Transaction(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Transaction)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIWalletGetCorporationsCorporationIDWalletsDivisionJournalOk) public class GetCorporationsCorporationIDWalletsDivisionJournalOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDWalletsDivisionJournalOk: Codable, Hashable {
 			
-			@objc(ESIWalletGetCorporationsCorporationIDWalletsDivisionJournalOkGetCorporationsCorporationIDWalletsDivisionJournalExtraInfo) public class GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo: Codable, Hashable {
 				
 				
-				public var allianceID: Int? = nil
-				public var characterID: Int? = nil
-				public var contractID: Int? = nil
-				public var corporationID: Int? = nil
-				public var destroyedShipTypeID: Int? = nil
-				public var jobID: Int? = nil
-				public var locationID: Int64? = nil
-				public var npcID: Int? = nil
-				public var npcName: String? = nil
-				public var planetID: Int? = nil
-				public var systemID: Int? = nil
-				public var transactionID: Int64? = nil
+				public let allianceID: Int?
+				public let characterID: Int?
+				public let contractID: Int?
+				public let corporationID: Int?
+				public let destroyedShipTypeID: Int?
+				public let jobID: Int?
+				public let locationID: Int64?
+				public let npcID: Int?
+				public let npcName: String?
+				public let planetID: Int?
+				public let systemID: Int?
+				public let transactionID: Int64?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					allianceID = dictionary["alliance_id"] as? Int
-					characterID = dictionary["character_id"] as? Int
-					contractID = dictionary["contract_id"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					destroyedShipTypeID = dictionary["destroyed_ship_type_id"] as? Int
-					jobID = dictionary["job_id"] as? Int
-					locationID = dictionary["location_id"] as? Int64
-					npcID = dictionary["npc_id"] as? Int
-					npcName = dictionary["npc_name"] as? String
-					planetID = dictionary["planet_id"] as? Int
-					systemID = dictionary["system_id"] as? Int
-					transactionID = dictionary["transaction_id"] as? Int64
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
-					contractID = aDecoder.containsValue(forKey: "contract_id") ? aDecoder.decodeInteger(forKey: "contract_id") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					destroyedShipTypeID = aDecoder.containsValue(forKey: "destroyed_ship_type_id") ? aDecoder.decodeInteger(forKey: "destroyed_ship_type_id") : nil
-					jobID = aDecoder.containsValue(forKey: "job_id") ? aDecoder.decodeInteger(forKey: "job_id") : nil
-					locationID = aDecoder.containsValue(forKey: "location_id") ? aDecoder.decodeInt64(forKey: "location_id") : nil
-					npcID = aDecoder.containsValue(forKey: "npc_id") ? aDecoder.decodeInteger(forKey: "npc_id") : nil
-					npcName = aDecoder.decodeObject(forKey: "npc_name") as? String
-					planetID = aDecoder.containsValue(forKey: "planet_id") ? aDecoder.decodeInteger(forKey: "planet_id") : nil
-					systemID = aDecoder.containsValue(forKey: "system_id") ? aDecoder.decodeInteger(forKey: "system_id") : nil
-					transactionID = aDecoder.containsValue(forKey: "transaction_id") ? aDecoder.decodeInt64(forKey: "transaction_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = allianceID {
-						aCoder.encode(v, forKey: "alliance_id")
-					}
-					if let v = characterID {
-						aCoder.encode(v, forKey: "character_id")
-					}
-					if let v = contractID {
-						aCoder.encode(v, forKey: "contract_id")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-					if let v = destroyedShipTypeID {
-						aCoder.encode(v, forKey: "destroyed_ship_type_id")
-					}
-					if let v = jobID {
-						aCoder.encode(v, forKey: "job_id")
-					}
-					if let v = locationID {
-						aCoder.encode(v, forKey: "location_id")
-					}
-					if let v = npcID {
-						aCoder.encode(v, forKey: "npc_id")
-					}
-					if let v = npcName {
-						aCoder.encode(v, forKey: "npc_name")
-					}
-					if let v = planetID {
-						aCoder.encode(v, forKey: "planet_id")
-					}
-					if let v = systemID {
-						aCoder.encode(v, forKey: "system_id")
-					}
-					if let v = transactionID {
-						aCoder.encode(v, forKey: "transaction_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = allianceID?.json {
-						json["alliance_id"] = v
-					}
-					if let v = characterID?.json {
-						json["character_id"] = v
-					}
-					if let v = contractID?.json {
-						json["contract_id"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					if let v = destroyedShipTypeID?.json {
-						json["destroyed_ship_type_id"] = v
-					}
-					if let v = jobID?.json {
-						json["job_id"] = v
-					}
-					if let v = locationID?.json {
-						json["location_id"] = v
-					}
-					if let v = npcID?.json {
-						json["npc_id"] = v
-					}
-					if let v = npcName?.json {
-						json["npc_name"] = v
-					}
-					if let v = planetID?.json {
-						json["planet_id"] = v
-					}
-					if let v = systemID?.json {
-						json["system_id"] = v
-					}
-					if let v = transactionID?.json {
-						json["transaction_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.contractID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.destroyedShipTypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.jobID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.npcID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.npcName?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.planetID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.systemID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.transactionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: contractID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: destroyedShipTypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: npcID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: npcName?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: planetID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: systemID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: transactionID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo, rhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo) {
-					allianceID = other.allianceID
-					characterID = other.characterID
-					contractID = other.contractID
-					corporationID = other.corporationID
-					destroyedShipTypeID = other.destroyedShipTypeID
-					jobID = other.jobID
-					locationID = other.locationID
-					npcID = other.npcID
-					npcName = other.npcName
-					planetID = other.planetID
-					systemID = other.systemID
-					transactionID = other.transactionID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case characterID = "character_id"
+					case contractID = "contract_id"
+					case corporationID = "corporation_id"
+					case destroyedShipTypeID = "destroyed_ship_type_id"
+					case jobID = "job_id"
+					case locationID = "location_id"
+					case npcID = "npc_id"
+					case npcName = "npc_name"
+					case planetID = "planet_id"
+					case systemID = "system_id"
+					case transactionID = "transaction_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalRefType: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalRefType: String, Codable, HTTPQueryable {
 				case accelerationGateFee = "acceleration_gate_fee"
 				case advertisementListingFee = "advertisement_listing_fee"
 				case agentDonation = "agent_donation"
@@ -808,559 +509,198 @@ public extension ESI {
 				case warFee = "war_fee"
 				case warFeeSurrender = "war_fee_surrender"
 				
-				public init() {
-					self = .accelerationGateFee
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalRefType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
 				case system = "system"
 				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
 				case system = "system"
 				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var amount: Double? = nil
-			public var balance: Double? = nil
-			public var date: Date = Date()
-			public var extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo? = nil
-			public var firstPartyID: Int? = nil
-			public var firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType? = nil
-			public var reason: String? = nil
-			public var refID: Int64 = Int64()
-			public var refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType()
-			public var secondPartyID: Int? = nil
-			public var secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType? = nil
-			public var tax: Double? = nil
-			public var taxReceiverID: Int? = nil
+			public let amount: Double?
+			public let balance: Double?
+			public let date: Date
+			public let extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?
+			public let firstPartyID: Int?
+			public let firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?
+			public let reason: String?
+			public let refID: Int64
+			public let refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType
+			public let secondPartyID: Int?
+			public let secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?
+			public let tax: Double?
+			public let taxReceiverID: Int?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				amount = dictionary["amount"] as? Double
-				balance = dictionary["balance"] as? Double
-				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.date = date
-				extraInfo = try? Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo(json: dictionary["extra_info"] as? [String: Any] ?? [:])
-				firstPartyID = dictionary["first_party_id"] as? Int
-				firstPartyType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType(rawValue: dictionary["first_party_type"] as? String ?? "")
-				reason = dictionary["reason"] as? String
-				guard let refID = dictionary["ref_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.refID = refID
-				guard let refType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType(rawValue: dictionary["ref_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.refType = refType
-				secondPartyID = dictionary["second_party_id"] as? Int
-				secondPartyType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: dictionary["second_party_type"] as? String ?? "")
-				tax = dictionary["tax"] as? Double
-				taxReceiverID = dictionary["tax_receiver_id"] as? Int
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeDouble(forKey: "amount") : nil
-				balance = aDecoder.containsValue(forKey: "balance") ? aDecoder.decodeDouble(forKey: "balance") : nil
-				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-				extraInfo = aDecoder.decodeObject(of: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo.self, forKey: "extra_info") 
-				firstPartyID = aDecoder.containsValue(forKey: "first_party_id") ? aDecoder.decodeInteger(forKey: "first_party_id") : nil
-				firstPartyType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType(rawValue: aDecoder.decodeObject(forKey: "first_party_type") as? String ?? "")
-				reason = aDecoder.decodeObject(forKey: "reason") as? String
-				refID = aDecoder.decodeInt64(forKey: "ref_id")
-				refType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType(rawValue: aDecoder.decodeObject(forKey: "ref_type") as? String ?? "") ?? Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType()
-				secondPartyID = aDecoder.containsValue(forKey: "second_party_id") ? aDecoder.decodeInteger(forKey: "second_party_id") : nil
-				secondPartyType = Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType(rawValue: aDecoder.decodeObject(forKey: "second_party_type") as? String ?? "")
-				tax = aDecoder.containsValue(forKey: "tax") ? aDecoder.decodeDouble(forKey: "tax") : nil
-				taxReceiverID = aDecoder.containsValue(forKey: "tax_receiver_id") ? aDecoder.decodeInteger(forKey: "tax_receiver_id") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = amount {
-					aCoder.encode(v, forKey: "amount")
-				}
-				if let v = balance {
-					aCoder.encode(v, forKey: "balance")
-				}
-				aCoder.encode(date, forKey: "date")
-				if let v = extraInfo {
-					aCoder.encode(v, forKey: "extra_info")
-				}
-				if let v = firstPartyID {
-					aCoder.encode(v, forKey: "first_party_id")
-				}
-				if let v = firstPartyType {
-					aCoder.encode(v.rawValue, forKey: "first_party_type")
-				}
-				if let v = reason {
-					aCoder.encode(v, forKey: "reason")
-				}
-				aCoder.encode(refID, forKey: "ref_id")
-				aCoder.encode(refType.rawValue, forKey: "ref_type")
-				if let v = secondPartyID {
-					aCoder.encode(v, forKey: "second_party_id")
-				}
-				if let v = secondPartyType {
-					aCoder.encode(v.rawValue, forKey: "second_party_type")
-				}
-				if let v = tax {
-					aCoder.encode(v, forKey: "tax")
-				}
-				if let v = taxReceiverID {
-					aCoder.encode(v, forKey: "tax_receiver_id")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = amount?.json {
-					json["amount"] = v
-				}
-				if let v = balance?.json {
-					json["balance"] = v
-				}
-				json["date"] = date.json
-				if let v = extraInfo?.json {
-					json["extra_info"] = v
-				}
-				if let v = firstPartyID?.json {
-					json["first_party_id"] = v
-				}
-				if let v = firstPartyType?.json {
-					json["first_party_type"] = v
-				}
-				if let v = reason?.json {
-					json["reason"] = v
-				}
-				json["ref_id"] = refID.json
-				json["ref_type"] = refType.json
-				if let v = secondPartyID?.json {
-					json["second_party_id"] = v
-				}
-				if let v = secondPartyType?.json {
-					json["second_party_type"] = v
-				}
-				if let v = tax?.json {
-					json["tax"] = v
-				}
-				if let v = taxReceiverID?.json {
-					json["tax_receiver_id"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.balance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.date.hashValue)
-				hashCombine(seed: &hash, value: self.extraInfo?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.firstPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.firstPartyType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.refID.hashValue)
-				hashCombine(seed: &hash, value: self.refType.hashValue)
-				hashCombine(seed: &hash, value: self.secondPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.secondPartyType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.taxReceiverID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: balance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: extraInfo?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: firstPartyID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: firstPartyType?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: refID.hashValue)
+				hashCombine(seed: &hash, value: refType.hashValue)
+				hashCombine(seed: &hash, value: secondPartyID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: secondPartyType?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: taxReceiverID?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk, rhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk) {
-				amount = other.amount
-				balance = other.balance
-				date = other.date
-				extraInfo = other.extraInfo != nil ? Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo(other.extraInfo!) : nil
-				firstPartyID = other.firstPartyID
-				firstPartyType = other.firstPartyType
-				reason = other.reason
-				refID = other.refID
-				refType = other.refType
-				secondPartyID = other.secondPartyID
-				secondPartyType = other.secondPartyType
-				tax = other.tax
-				taxReceiverID = other.taxReceiverID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case amount
+				case balance
+				case date
+				case extraInfo = "extra_info"
+				case firstPartyID = "first_party_id"
+				case firstPartyType = "first_party_type"
+				case reason
+				case refID = "ref_id"
+				case refType = "ref_type"
+				case secondPartyID = "second_party_id"
+				case secondPartyType = "second_party_type"
+				case tax
+				case taxReceiverID = "tax_receiver_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDWalletsDivisionJournalOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIWalletBalance) public class Balance: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Balance: Codable, Hashable {
 			
 			
-			public var balance: Double = Double()
-			public var division: Int = Int()
+			public let balance: Double
+			public let division: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let balance = dictionary["balance"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.balance = balance
-				guard let division = dictionary["division"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.division = division
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				balance = aDecoder.decodeDouble(forKey: "balance")
-				division = aDecoder.decodeInteger(forKey: "division")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(balance, forKey: "balance")
-				aCoder.encode(division, forKey: "division")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["balance"] = balance.json
-				json["division"] = division.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.balance.hashValue)
-				hashCombine(seed: &hash, value: self.division.hashValue)
+				hashCombine(seed: &hash, value: balance.hashValue)
+				hashCombine(seed: &hash, value: division.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wallet.Balance) {
-				balance = other.balance
-				division = other.division
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case balance
+				case division
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wallet.Balance(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Balance)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIWalletWalletJournalItem) public class WalletJournalItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct WalletJournalItem: Codable, Hashable {
 			
-			@objc(ESIWalletWalletJournalItemExtraInfo) public class ExtraInfo: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct ExtraInfo: Codable, Hashable {
 				
 				
-				public var allianceID: Int? = nil
-				public var characterID: Int? = nil
-				public var contractID: Int? = nil
-				public var corporationID: Int? = nil
-				public var destroyedShipTypeID: Int? = nil
-				public var jobID: Int? = nil
-				public var locationID: Int64? = nil
-				public var npcID: Int? = nil
-				public var npcName: String? = nil
-				public var planetID: Int? = nil
-				public var systemID: Int? = nil
-				public var transactionID: Int64? = nil
+				public let allianceID: Int?
+				public let characterID: Int?
+				public let contractID: Int?
+				public let corporationID: Int?
+				public let destroyedShipTypeID: Int?
+				public let jobID: Int?
+				public let locationID: Int64?
+				public let npcID: Int?
+				public let npcName: String?
+				public let planetID: Int?
+				public let systemID: Int?
+				public let transactionID: Int64?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					allianceID = dictionary["alliance_id"] as? Int
-					characterID = dictionary["character_id"] as? Int
-					contractID = dictionary["contract_id"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					destroyedShipTypeID = dictionary["destroyed_ship_type_id"] as? Int
-					jobID = dictionary["job_id"] as? Int
-					locationID = dictionary["location_id"] as? Int64
-					npcID = dictionary["npc_id"] as? Int
-					npcName = dictionary["npc_name"] as? String
-					planetID = dictionary["planet_id"] as? Int
-					systemID = dictionary["system_id"] as? Int
-					transactionID = dictionary["transaction_id"] as? Int64
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
-					contractID = aDecoder.containsValue(forKey: "contract_id") ? aDecoder.decodeInteger(forKey: "contract_id") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					destroyedShipTypeID = aDecoder.containsValue(forKey: "destroyed_ship_type_id") ? aDecoder.decodeInteger(forKey: "destroyed_ship_type_id") : nil
-					jobID = aDecoder.containsValue(forKey: "job_id") ? aDecoder.decodeInteger(forKey: "job_id") : nil
-					locationID = aDecoder.containsValue(forKey: "location_id") ? aDecoder.decodeInt64(forKey: "location_id") : nil
-					npcID = aDecoder.containsValue(forKey: "npc_id") ? aDecoder.decodeInteger(forKey: "npc_id") : nil
-					npcName = aDecoder.decodeObject(forKey: "npc_name") as? String
-					planetID = aDecoder.containsValue(forKey: "planet_id") ? aDecoder.decodeInteger(forKey: "planet_id") : nil
-					systemID = aDecoder.containsValue(forKey: "system_id") ? aDecoder.decodeInteger(forKey: "system_id") : nil
-					transactionID = aDecoder.containsValue(forKey: "transaction_id") ? aDecoder.decodeInt64(forKey: "transaction_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = allianceID {
-						aCoder.encode(v, forKey: "alliance_id")
-					}
-					if let v = characterID {
-						aCoder.encode(v, forKey: "character_id")
-					}
-					if let v = contractID {
-						aCoder.encode(v, forKey: "contract_id")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-					if let v = destroyedShipTypeID {
-						aCoder.encode(v, forKey: "destroyed_ship_type_id")
-					}
-					if let v = jobID {
-						aCoder.encode(v, forKey: "job_id")
-					}
-					if let v = locationID {
-						aCoder.encode(v, forKey: "location_id")
-					}
-					if let v = npcID {
-						aCoder.encode(v, forKey: "npc_id")
-					}
-					if let v = npcName {
-						aCoder.encode(v, forKey: "npc_name")
-					}
-					if let v = planetID {
-						aCoder.encode(v, forKey: "planet_id")
-					}
-					if let v = systemID {
-						aCoder.encode(v, forKey: "system_id")
-					}
-					if let v = transactionID {
-						aCoder.encode(v, forKey: "transaction_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = allianceID?.json {
-						json["alliance_id"] = v
-					}
-					if let v = characterID?.json {
-						json["character_id"] = v
-					}
-					if let v = contractID?.json {
-						json["contract_id"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					if let v = destroyedShipTypeID?.json {
-						json["destroyed_ship_type_id"] = v
-					}
-					if let v = jobID?.json {
-						json["job_id"] = v
-					}
-					if let v = locationID?.json {
-						json["location_id"] = v
-					}
-					if let v = npcID?.json {
-						json["npc_id"] = v
-					}
-					if let v = npcName?.json {
-						json["npc_name"] = v
-					}
-					if let v = planetID?.json {
-						json["planet_id"] = v
-					}
-					if let v = systemID?.json {
-						json["system_id"] = v
-					}
-					if let v = transactionID?.json {
-						json["transaction_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.contractID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.destroyedShipTypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.jobID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.npcID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.npcName?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.planetID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.systemID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.transactionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: contractID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: destroyedShipTypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: npcID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: npcName?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: planetID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: systemID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: transactionID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Wallet.WalletJournalItem.ExtraInfo, rhs: Wallet.WalletJournalItem.ExtraInfo) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Wallet.WalletJournalItem.ExtraInfo) {
-					allianceID = other.allianceID
-					characterID = other.characterID
-					contractID = other.contractID
-					corporationID = other.corporationID
-					destroyedShipTypeID = other.destroyedShipTypeID
-					jobID = other.jobID
-					locationID = other.locationID
-					npcID = other.npcID
-					npcName = other.npcName
-					planetID = other.planetID
-					systemID = other.systemID
-					transactionID = other.transactionID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case characterID = "character_id"
+					case contractID = "contract_id"
+					case corporationID = "corporation_id"
+					case destroyedShipTypeID = "destroyed_ship_type_id"
+					case jobID = "job_id"
+					case locationID = "location_id"
+					case npcID = "npc_id"
+					case npcName = "npc_name"
+					case planetID = "planet_id"
+					case systemID = "system_id"
+					case transactionID = "transaction_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Wallet.WalletJournalItem.ExtraInfo(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? ExtraInfo)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public enum PartyType: String, JSONCoding, HTTPQueryable {
+			public enum PartyType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
 				case system = "system"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = PartyType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -1368,7 +708,7 @@ public extension ESI {
 				
 			}
 			
-			public enum RefType: String, JSONCoding, HTTPQueryable {
+			public enum RefType: String, Codable, HTTPQueryable {
 				case accelerationGateFee = "acceleration_gate_fee"
 				case advertisementListingFee = "advertisement_listing_fee"
 				case agentDonation = "agent_donation"
@@ -1487,214 +827,70 @@ public extension ESI {
 				case warFee = "war_fee"
 				case warFeeSurrender = "war_fee_surrender"
 				
-				public init() {
-					self = .accelerationGateFee
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = RefType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var amount: Double? = nil
-			public var balance: Double? = nil
-			public var date: Date = Date()
-			public var extraInfo: Wallet.WalletJournalItem.ExtraInfo? = nil
-			public var firstPartyID: Int? = nil
-			public var firstPartyType: Wallet.WalletJournalItem.PartyType? = nil
-			public var reason: String? = nil
-			public var refID: Int64 = Int64()
-			public var refType: Wallet.WalletJournalItem.RefType = Wallet.WalletJournalItem.RefType()
-			public var secondPartyID: Int? = nil
-			public var secondPartyType: Wallet.WalletJournalItem.PartyType? = nil
-			public var tax: Double? = nil
-			public var taxReceiverID: Int? = nil
+			public let amount: Double?
+			public let balance: Double?
+			public let date: Date
+			public let extraInfo: Wallet.WalletJournalItem.ExtraInfo?
+			public let firstPartyID: Int?
+			public let firstPartyType: Wallet.WalletJournalItem.PartyType?
+			public let reason: String?
+			public let refID: Int64
+			public let refType: Wallet.WalletJournalItem.RefType
+			public let secondPartyID: Int?
+			public let secondPartyType: Wallet.WalletJournalItem.PartyType?
+			public let tax: Double?
+			public let taxReceiverID: Int?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				amount = dictionary["amount"] as? Double
-				balance = dictionary["balance"] as? Double
-				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.date = date
-				extraInfo = try? Wallet.WalletJournalItem.ExtraInfo(json: dictionary["extra_info"] as? [String: Any] ?? [:])
-				firstPartyID = dictionary["first_party_id"] as? Int
-				firstPartyType = Wallet.WalletJournalItem.PartyType(rawValue: dictionary["first_party_type"] as? String ?? "")
-				reason = dictionary["reason"] as? String
-				guard let refID = dictionary["ref_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.refID = refID
-				guard let refType = Wallet.WalletJournalItem.RefType(rawValue: dictionary["ref_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.refType = refType
-				secondPartyID = dictionary["second_party_id"] as? Int
-				secondPartyType = Wallet.WalletJournalItem.PartyType(rawValue: dictionary["second_party_type"] as? String ?? "")
-				tax = dictionary["tax"] as? Double
-				taxReceiverID = dictionary["tax_receiver_id"] as? Int
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeDouble(forKey: "amount") : nil
-				balance = aDecoder.containsValue(forKey: "balance") ? aDecoder.decodeDouble(forKey: "balance") : nil
-				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-				extraInfo = aDecoder.decodeObject(of: Wallet.WalletJournalItem.ExtraInfo.self, forKey: "extra_info") 
-				firstPartyID = aDecoder.containsValue(forKey: "first_party_id") ? aDecoder.decodeInteger(forKey: "first_party_id") : nil
-				firstPartyType = Wallet.WalletJournalItem.PartyType(rawValue: aDecoder.decodeObject(forKey: "first_party_type") as? String ?? "")
-				reason = aDecoder.decodeObject(forKey: "reason") as? String
-				refID = aDecoder.decodeInt64(forKey: "ref_id")
-				refType = Wallet.WalletJournalItem.RefType(rawValue: aDecoder.decodeObject(forKey: "ref_type") as? String ?? "") ?? Wallet.WalletJournalItem.RefType()
-				secondPartyID = aDecoder.containsValue(forKey: "second_party_id") ? aDecoder.decodeInteger(forKey: "second_party_id") : nil
-				secondPartyType = Wallet.WalletJournalItem.PartyType(rawValue: aDecoder.decodeObject(forKey: "second_party_type") as? String ?? "")
-				tax = aDecoder.containsValue(forKey: "tax") ? aDecoder.decodeDouble(forKey: "tax") : nil
-				taxReceiverID = aDecoder.containsValue(forKey: "tax_receiver_id") ? aDecoder.decodeInteger(forKey: "tax_receiver_id") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = amount {
-					aCoder.encode(v, forKey: "amount")
-				}
-				if let v = balance {
-					aCoder.encode(v, forKey: "balance")
-				}
-				aCoder.encode(date, forKey: "date")
-				if let v = extraInfo {
-					aCoder.encode(v, forKey: "extra_info")
-				}
-				if let v = firstPartyID {
-					aCoder.encode(v, forKey: "first_party_id")
-				}
-				if let v = firstPartyType {
-					aCoder.encode(v.rawValue, forKey: "first_party_type")
-				}
-				if let v = reason {
-					aCoder.encode(v, forKey: "reason")
-				}
-				aCoder.encode(refID, forKey: "ref_id")
-				aCoder.encode(refType.rawValue, forKey: "ref_type")
-				if let v = secondPartyID {
-					aCoder.encode(v, forKey: "second_party_id")
-				}
-				if let v = secondPartyType {
-					aCoder.encode(v.rawValue, forKey: "second_party_type")
-				}
-				if let v = tax {
-					aCoder.encode(v, forKey: "tax")
-				}
-				if let v = taxReceiverID {
-					aCoder.encode(v, forKey: "tax_receiver_id")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = amount?.json {
-					json["amount"] = v
-				}
-				if let v = balance?.json {
-					json["balance"] = v
-				}
-				json["date"] = date.json
-				if let v = extraInfo?.json {
-					json["extra_info"] = v
-				}
-				if let v = firstPartyID?.json {
-					json["first_party_id"] = v
-				}
-				if let v = firstPartyType?.json {
-					json["first_party_type"] = v
-				}
-				if let v = reason?.json {
-					json["reason"] = v
-				}
-				json["ref_id"] = refID.json
-				json["ref_type"] = refType.json
-				if let v = secondPartyID?.json {
-					json["second_party_id"] = v
-				}
-				if let v = secondPartyType?.json {
-					json["second_party_type"] = v
-				}
-				if let v = tax?.json {
-					json["tax"] = v
-				}
-				if let v = taxReceiverID?.json {
-					json["tax_receiver_id"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.balance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.date.hashValue)
-				hashCombine(seed: &hash, value: self.extraInfo?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.firstPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.firstPartyType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.refID.hashValue)
-				hashCombine(seed: &hash, value: self.refType.hashValue)
-				hashCombine(seed: &hash, value: self.secondPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.secondPartyType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.taxReceiverID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: balance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: extraInfo?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: firstPartyID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: firstPartyType?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: refID.hashValue)
+				hashCombine(seed: &hash, value: refType.hashValue)
+				hashCombine(seed: &hash, value: secondPartyID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: secondPartyType?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: taxReceiverID?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Wallet.WalletJournalItem, rhs: Wallet.WalletJournalItem) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Wallet.WalletJournalItem) {
-				amount = other.amount
-				balance = other.balance
-				date = other.date
-				extraInfo = other.extraInfo != nil ? Wallet.WalletJournalItem.ExtraInfo(other.extraInfo!) : nil
-				firstPartyID = other.firstPartyID
-				firstPartyType = other.firstPartyType
-				reason = other.reason
-				refID = other.refID
-				refType = other.refType
-				secondPartyID = other.secondPartyID
-				secondPartyType = other.secondPartyType
-				tax = other.tax
-				taxReceiverID = other.taxReceiverID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case amount
+				case balance
+				case date
+				case extraInfo = "extra_info"
+				case firstPartyID = "first_party_id"
+				case firstPartyType = "first_party_type"
+				case reason
+				case refID = "ref_id"
+				case refType = "ref_type"
+				case secondPartyID = "second_party_id"
+				case secondPartyType = "second_party_type"
+				case tax
+				case taxReceiverID = "tax_receiver_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Wallet.WalletJournalItem(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? WalletJournalItem)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

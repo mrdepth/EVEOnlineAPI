@@ -155,770 +155,296 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIBookmarksBookmark) public class Bookmark: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Bookmark: Codable, Hashable {
 			
-			@objc(ESIBookmarksBookmarkGetCharactersCharacterIDBookmarksItem) public class GetCharactersCharacterIDBookmarksItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDBookmarksItem: Codable, Hashable {
 				
 				
-				public var itemID: Int64 = Int64()
-				public var typeID: Int = Int()
+				public let itemID: Int64
+				public let typeID: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.itemID = itemID
-					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.typeID = typeID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					itemID = aDecoder.decodeInt64(forKey: "item_id")
-					typeID = aDecoder.decodeInteger(forKey: "type_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(itemID, forKey: "item_id")
-					aCoder.encode(typeID, forKey: "type_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["item_id"] = itemID.json
-					json["type_id"] = typeID.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.itemID.hashValue)
-					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: itemID.hashValue)
+					hashCombine(seed: &hash, value: typeID.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem) {
-					itemID = other.itemID
-					typeID = other.typeID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case itemID = "item_id"
+					case typeID = "type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDBookmarksItem)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIBookmarksBookmarkGetCharactersCharacterIDBookmarksCoordinates) public class GetCharactersCharacterIDBookmarksCoordinates: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDBookmarksCoordinates: Codable, Hashable {
 				
 				
-				public var x: Double = Double()
-				public var y: Double = Double()
-				public var z: Double = Double()
+				public let x: Double
+				public let y: Double
+				public let z: Double
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeDouble(forKey: "x")
-					y = aDecoder.decodeDouble(forKey: "y")
-					z = aDecoder.decodeDouble(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates) {
-					x = other.x
-					y = other.y
-					z = other.z
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDBookmarksCoordinates)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var bookmarkID: Int = Int()
-			public var coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates? = nil
-			public var created: Date = Date()
-			public var creatorID: Int = Int()
-			public var folderID: Int? = nil
-			public var item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem? = nil
-			public var label: String = String()
-			public var locationID: Int = Int()
-			public var notes: String = String()
+			public let bookmarkID: Int
+			public let coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?
+			public let created: Date
+			public let creatorID: Int
+			public let folderID: Int?
+			public let item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?
+			public let label: String
+			public let locationID: Int
+			public let notes: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let bookmarkID = dictionary["bookmark_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.bookmarkID = bookmarkID
-				coordinates = try? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates(json: dictionary["coordinates"] as? [String: Any] ?? [:])
-				guard let created = DateFormatter.esiDateTimeFormatter.date(from: dictionary["created"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.created = created
-				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.creatorID = creatorID
-				folderID = dictionary["folder_id"] as? Int
-				item = try? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem(json: dictionary["item"] as? [String: Any] ?? [:])
-				guard let label = dictionary["label"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.label = label
-				guard let locationID = dictionary["location_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let notes = dictionary["notes"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.notes = notes
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				bookmarkID = aDecoder.decodeInteger(forKey: "bookmark_id")
-				coordinates = aDecoder.decodeObject(of: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates.self, forKey: "coordinates") 
-				created = aDecoder.decodeObject(forKey: "created") as? Date ?? Date()
-				creatorID = aDecoder.decodeInteger(forKey: "creator_id")
-				folderID = aDecoder.containsValue(forKey: "folder_id") ? aDecoder.decodeInteger(forKey: "folder_id") : nil
-				item = aDecoder.decodeObject(of: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem.self, forKey: "item") 
-				label = aDecoder.decodeObject(forKey: "label") as? String ?? String()
-				locationID = aDecoder.decodeInteger(forKey: "location_id")
-				notes = aDecoder.decodeObject(forKey: "notes") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(bookmarkID, forKey: "bookmark_id")
-				if let v = coordinates {
-					aCoder.encode(v, forKey: "coordinates")
-				}
-				aCoder.encode(created, forKey: "created")
-				aCoder.encode(creatorID, forKey: "creator_id")
-				if let v = folderID {
-					aCoder.encode(v, forKey: "folder_id")
-				}
-				if let v = item {
-					aCoder.encode(v, forKey: "item")
-				}
-				aCoder.encode(label, forKey: "label")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(notes, forKey: "notes")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["bookmark_id"] = bookmarkID.json
-				if let v = coordinates?.json {
-					json["coordinates"] = v
-				}
-				json["created"] = created.json
-				json["creator_id"] = creatorID.json
-				if let v = folderID?.json {
-					json["folder_id"] = v
-				}
-				if let v = item?.json {
-					json["item"] = v
-				}
-				json["label"] = label.json
-				json["location_id"] = locationID.json
-				json["notes"] = notes.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.bookmarkID.hashValue)
-				hashCombine(seed: &hash, value: self.coordinates?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.created.hashValue)
-				hashCombine(seed: &hash, value: self.creatorID.hashValue)
-				hashCombine(seed: &hash, value: self.folderID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.item?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.label.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.notes.hashValue)
+				hashCombine(seed: &hash, value: bookmarkID.hashValue)
+				hashCombine(seed: &hash, value: coordinates?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: created.hashValue)
+				hashCombine(seed: &hash, value: creatorID.hashValue)
+				hashCombine(seed: &hash, value: folderID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: item?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: label.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: notes.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Bookmarks.Bookmark, rhs: Bookmarks.Bookmark) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Bookmarks.Bookmark) {
-				bookmarkID = other.bookmarkID
-				coordinates = other.coordinates != nil ? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates(other.coordinates!) : nil
-				created = other.created
-				creatorID = other.creatorID
-				folderID = other.folderID
-				item = other.item != nil ? Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem(other.item!) : nil
-				label = other.label
-				locationID = other.locationID
-				notes = other.notes
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case bookmarkID = "bookmark_id"
+				case coordinates
+				case created
+				case creatorID = "creator_id"
+				case folderID = "folder_id"
+				case item
+				case label
+				case locationID = "location_id"
+				case notes
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .created: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Bookmarks.Bookmark(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Bookmark)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIBookmarksFolder) public class Folder: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Folder: Codable, Hashable {
 			
 			
-			public var folderID: Int = Int()
-			public var name: String = String()
+			public let folderID: Int
+			public let name: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let folderID = dictionary["folder_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.folderID = folderID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				folderID = aDecoder.decodeInteger(forKey: "folder_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(folderID, forKey: "folder_id")
-				aCoder.encode(name, forKey: "name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["folder_id"] = folderID.json
-				json["name"] = name.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.folderID.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: folderID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Bookmarks.Folder, rhs: Bookmarks.Folder) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Bookmarks.Folder) {
-				folderID = other.folderID
-				name = other.name
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case folderID = "folder_id"
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Bookmarks.Folder(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Folder)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIBookmarksGetCorporationsCorporationIDBookmarksFoldersOk) public class GetCorporationsCorporationIDBookmarksFoldersOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDBookmarksFoldersOk: Codable, Hashable {
 			
 			
-			public var creatorID: Int? = nil
-			public var folderID: Int = Int()
-			public var name: String = String()
+			public let creatorID: Int?
+			public let folderID: Int
+			public let name: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				creatorID = dictionary["creator_id"] as? Int
-				guard let folderID = dictionary["folder_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.folderID = folderID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				creatorID = aDecoder.containsValue(forKey: "creator_id") ? aDecoder.decodeInteger(forKey: "creator_id") : nil
-				folderID = aDecoder.decodeInteger(forKey: "folder_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = creatorID {
-					aCoder.encode(v, forKey: "creator_id")
-				}
-				aCoder.encode(folderID, forKey: "folder_id")
-				aCoder.encode(name, forKey: "name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = creatorID?.json {
-					json["creator_id"] = v
-				}
-				json["folder_id"] = folderID.json
-				json["name"] = name.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.creatorID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.folderID.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: creatorID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: folderID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk) {
-				creatorID = other.creatorID
-				folderID = other.folderID
-				name = other.name
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case creatorID = "creator_id"
+				case folderID = "folder_id"
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDBookmarksFoldersOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIBookmarksGetCorporationsCorporationIDBookmarksOk) public class GetCorporationsCorporationIDBookmarksOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDBookmarksOk: Codable, Hashable {
 			
-			@objc(ESIBookmarksGetCorporationsCorporationIDBookmarksOkGetCorporationsCorporationIDBookmarksItem) public class GetCorporationsCorporationIDBookmarksItem: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCorporationsCorporationIDBookmarksItem: Codable, Hashable {
 				
 				
-				public var itemID: Int64 = Int64()
-				public var typeID: Int = Int()
+				public let itemID: Int64
+				public let typeID: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.itemID = itemID
-					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.typeID = typeID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					itemID = aDecoder.decodeInt64(forKey: "item_id")
-					typeID = aDecoder.decodeInteger(forKey: "type_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(itemID, forKey: "item_id")
-					aCoder.encode(typeID, forKey: "type_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["item_id"] = itemID.json
-					json["type_id"] = typeID.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.itemID.hashValue)
-					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: itemID.hashValue)
+					hashCombine(seed: &hash, value: typeID.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem) {
-					itemID = other.itemID
-					typeID = other.typeID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case itemID = "item_id"
+					case typeID = "type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDBookmarksItem)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIBookmarksGetCorporationsCorporationIDBookmarksOkGetCorporationsCorporationIDBookmarksCoordinates) public class GetCorporationsCorporationIDBookmarksCoordinates: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCorporationsCorporationIDBookmarksCoordinates: Codable, Hashable {
 				
 				
-				public var x: Double = Double()
-				public var y: Double = Double()
-				public var z: Double = Double()
+				public let x: Double
+				public let y: Double
+				public let z: Double
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeDouble(forKey: "x")
-					y = aDecoder.decodeDouble(forKey: "y")
-					z = aDecoder.decodeDouble(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates) {
-					x = other.x
-					y = other.y
-					z = other.z
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDBookmarksCoordinates)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var bookmarkID: Int = Int()
-			public var coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates? = nil
-			public var created: Date = Date()
-			public var creatorID: Int = Int()
-			public var folderID: Int? = nil
-			public var item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem? = nil
-			public var label: String = String()
-			public var locationID: Int = Int()
-			public var notes: String = String()
+			public let bookmarkID: Int
+			public let coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?
+			public let created: Date
+			public let creatorID: Int
+			public let folderID: Int?
+			public let item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?
+			public let label: String
+			public let locationID: Int
+			public let notes: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let bookmarkID = dictionary["bookmark_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.bookmarkID = bookmarkID
-				coordinates = try? Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates(json: dictionary["coordinates"] as? [String: Any] ?? [:])
-				guard let created = DateFormatter.esiDateTimeFormatter.date(from: dictionary["created"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.created = created
-				guard let creatorID = dictionary["creator_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.creatorID = creatorID
-				folderID = dictionary["folder_id"] as? Int
-				item = try? Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem(json: dictionary["item"] as? [String: Any] ?? [:])
-				guard let label = dictionary["label"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.label = label
-				guard let locationID = dictionary["location_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let notes = dictionary["notes"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.notes = notes
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				bookmarkID = aDecoder.decodeInteger(forKey: "bookmark_id")
-				coordinates = aDecoder.decodeObject(of: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates.self, forKey: "coordinates") 
-				created = aDecoder.decodeObject(forKey: "created") as? Date ?? Date()
-				creatorID = aDecoder.decodeInteger(forKey: "creator_id")
-				folderID = aDecoder.containsValue(forKey: "folder_id") ? aDecoder.decodeInteger(forKey: "folder_id") : nil
-				item = aDecoder.decodeObject(of: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem.self, forKey: "item") 
-				label = aDecoder.decodeObject(forKey: "label") as? String ?? String()
-				locationID = aDecoder.decodeInteger(forKey: "location_id")
-				notes = aDecoder.decodeObject(forKey: "notes") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(bookmarkID, forKey: "bookmark_id")
-				if let v = coordinates {
-					aCoder.encode(v, forKey: "coordinates")
-				}
-				aCoder.encode(created, forKey: "created")
-				aCoder.encode(creatorID, forKey: "creator_id")
-				if let v = folderID {
-					aCoder.encode(v, forKey: "folder_id")
-				}
-				if let v = item {
-					aCoder.encode(v, forKey: "item")
-				}
-				aCoder.encode(label, forKey: "label")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(notes, forKey: "notes")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["bookmark_id"] = bookmarkID.json
-				if let v = coordinates?.json {
-					json["coordinates"] = v
-				}
-				json["created"] = created.json
-				json["creator_id"] = creatorID.json
-				if let v = folderID?.json {
-					json["folder_id"] = v
-				}
-				if let v = item?.json {
-					json["item"] = v
-				}
-				json["label"] = label.json
-				json["location_id"] = locationID.json
-				json["notes"] = notes.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.bookmarkID.hashValue)
-				hashCombine(seed: &hash, value: self.coordinates?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.created.hashValue)
-				hashCombine(seed: &hash, value: self.creatorID.hashValue)
-				hashCombine(seed: &hash, value: self.folderID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.item?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.label.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.notes.hashValue)
+				hashCombine(seed: &hash, value: bookmarkID.hashValue)
+				hashCombine(seed: &hash, value: coordinates?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: created.hashValue)
+				hashCombine(seed: &hash, value: creatorID.hashValue)
+				hashCombine(seed: &hash, value: folderID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: item?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: label.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: notes.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Bookmarks.GetCorporationsCorporationIDBookmarksOk) {
-				bookmarkID = other.bookmarkID
-				coordinates = other.coordinates != nil ? Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates(other.coordinates!) : nil
-				created = other.created
-				creatorID = other.creatorID
-				folderID = other.folderID
-				item = other.item != nil ? Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem(other.item!) : nil
-				label = other.label
-				locationID = other.locationID
-				notes = other.notes
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case bookmarkID = "bookmark_id"
+				case coordinates
+				case created
+				case creatorID = "creator_id"
+				case folderID = "folder_id"
+				case item
+				case label
+				case locationID = "location_id"
+				case notes
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .created: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Bookmarks.GetCorporationsCorporationIDBookmarksOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDBookmarksOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

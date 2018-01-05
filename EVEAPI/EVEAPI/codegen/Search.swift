@@ -102,139 +102,22 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESISearchCharacterSearchResult) public class CharacterSearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct CharacterSearchResult: Codable, Hashable {
 			
 			
-			public var agent: [Int]? = nil
-			public var alliance: [Int]? = nil
-			public var character: [Int]? = nil
-			public var constellation: [Int]? = nil
-			public var corporation: [Int]? = nil
-			public var faction: [Int]? = nil
-			public var inventoryType: [Int]? = nil
-			public var region: [Int]? = nil
-			public var solarSystem: [Int]? = nil
-			public var station: [Int]? = nil
-			public var structure: [Int64]? = nil
+			public let agent: [Int]?
+			public let alliance: [Int]?
+			public let character: [Int]?
+			public let constellation: [Int]?
+			public let corporation: [Int]?
+			public let faction: [Int]?
+			public let inventoryType: [Int]?
+			public let region: [Int]?
+			public let solarSystem: [Int]?
+			public let station: [Int]?
+			public let structure: [Int64]?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				agent = try (dictionary["agent"] as? [Any])?.map {try Int(json: $0)}
-				alliance = try (dictionary["alliance"] as? [Any])?.map {try Int(json: $0)}
-				character = try (dictionary["character"] as? [Any])?.map {try Int(json: $0)}
-				constellation = try (dictionary["constellation"] as? [Any])?.map {try Int(json: $0)}
-				corporation = try (dictionary["corporation"] as? [Any])?.map {try Int(json: $0)}
-				faction = try (dictionary["faction"] as? [Any])?.map {try Int(json: $0)}
-				inventoryType = try (dictionary["inventory_type"] as? [Any])?.map {try Int(json: $0)}
-				region = try (dictionary["region"] as? [Any])?.map {try Int(json: $0)}
-				solarSystem = try (dictionary["solar_system"] as? [Any])?.map {try Int(json: $0)}
-				station = try (dictionary["station"] as? [Any])?.map {try Int(json: $0)}
-				structure = try (dictionary["structure"] as? [Any])?.map {try Int64(json: $0)}
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				agent = aDecoder.decodeObject(forKey: "agent") as? [Int]
-				alliance = aDecoder.decodeObject(forKey: "alliance") as? [Int]
-				character = aDecoder.decodeObject(forKey: "character") as? [Int]
-				constellation = aDecoder.decodeObject(forKey: "constellation") as? [Int]
-				corporation = aDecoder.decodeObject(forKey: "corporation") as? [Int]
-				faction = aDecoder.decodeObject(forKey: "faction") as? [Int]
-				inventoryType = aDecoder.decodeObject(forKey: "inventory_type") as? [Int]
-				region = aDecoder.decodeObject(forKey: "region") as? [Int]
-				solarSystem = aDecoder.decodeObject(forKey: "solar_system") as? [Int]
-				station = aDecoder.decodeObject(forKey: "station") as? [Int]
-				structure = aDecoder.decodeObject(forKey: "structure") as? [Int64]
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = agent {
-					aCoder.encode(v, forKey: "agent")
-				}
-				if let v = alliance {
-					aCoder.encode(v, forKey: "alliance")
-				}
-				if let v = character {
-					aCoder.encode(v, forKey: "character")
-				}
-				if let v = constellation {
-					aCoder.encode(v, forKey: "constellation")
-				}
-				if let v = corporation {
-					aCoder.encode(v, forKey: "corporation")
-				}
-				if let v = faction {
-					aCoder.encode(v, forKey: "faction")
-				}
-				if let v = inventoryType {
-					aCoder.encode(v, forKey: "inventory_type")
-				}
-				if let v = region {
-					aCoder.encode(v, forKey: "region")
-				}
-				if let v = solarSystem {
-					aCoder.encode(v, forKey: "solar_system")
-				}
-				if let v = station {
-					aCoder.encode(v, forKey: "station")
-				}
-				if let v = structure {
-					aCoder.encode(v, forKey: "structure")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = agent?.json {
-					json["agent"] = v
-				}
-				if let v = alliance?.json {
-					json["alliance"] = v
-				}
-				if let v = character?.json {
-					json["character"] = v
-				}
-				if let v = constellation?.json {
-					json["constellation"] = v
-				}
-				if let v = corporation?.json {
-					json["corporation"] = v
-				}
-				if let v = faction?.json {
-					json["faction"] = v
-				}
-				if let v = inventoryType?.json {
-					json["inventory_type"] = v
-				}
-				if let v = region?.json {
-					json["region"] = v
-				}
-				if let v = solarSystem?.json {
-					json["solar_system"] = v
-				}
-				if let v = station?.json {
-					json["station"] = v
-				}
-				if let v = structure?.json {
-					json["structure"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
 				self.agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
@@ -248,43 +131,36 @@ public extension ESI {
 				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.structure?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Search.CharacterSearchResult, rhs: Search.CharacterSearchResult) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Search.CharacterSearchResult) {
-				agent = other.agent?.flatMap { $0 }
-				alliance = other.alliance?.flatMap { $0 }
-				character = other.character?.flatMap { $0 }
-				constellation = other.constellation?.flatMap { $0 }
-				corporation = other.corporation?.flatMap { $0 }
-				faction = other.faction?.flatMap { $0 }
-				inventoryType = other.inventoryType?.flatMap { $0 }
-				region = other.region?.flatMap { $0 }
-				solarSystem = other.solarSystem?.flatMap { $0 }
-				station = other.station?.flatMap { $0 }
-				structure = other.structure?.flatMap { $0 }
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case agent
+				case alliance
+				case character
+				case constellation
+				case corporation
+				case faction
+				case inventoryType = "inventory_type"
+				case region
+				case solarSystem = "solar_system"
+				case station
+				case structure
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.CharacterSearchResult(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CharacterSearchResult)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		public enum SearchCategories: String, JSONCoding, HTTPQueryable {
+		public enum SearchCategories: String, Codable, HTTPQueryable {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"
@@ -297,19 +173,6 @@ public extension ESI {
 			case station = "station"
 			case structure = "structure"
 			
-			public init() {
-				self = .agent
-			}
-			
-			public var json: Any {
-				return self.rawValue
-			}
-			
-			public init(json: Any) throws {
-				guard let s = json as? String, let v = SearchCategories(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				self = v
-			}
-			
 			public var httpQuery: String? {
 				return rawValue
 			}
@@ -317,130 +180,21 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESISearchSearchResult) public class SearchResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct SearchResult: Codable, Hashable {
 			
 			
-			public var agent: [Int]? = nil
-			public var alliance: [Int]? = nil
-			public var character: [Int]? = nil
-			public var constellation: [Int]? = nil
-			public var corporation: [Int]? = nil
-			public var faction: [Int]? = nil
-			public var inventoryType: [Int]? = nil
-			public var region: [Int]? = nil
-			public var solarSystem: [Int]? = nil
-			public var station: [Int]? = nil
+			public let agent: [Int]?
+			public let alliance: [Int]?
+			public let character: [Int]?
+			public let constellation: [Int]?
+			public let corporation: [Int]?
+			public let faction: [Int]?
+			public let inventoryType: [Int]?
+			public let region: [Int]?
+			public let solarSystem: [Int]?
+			public let station: [Int]?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				agent = try (dictionary["agent"] as? [Any])?.map {try Int(json: $0)}
-				alliance = try (dictionary["alliance"] as? [Any])?.map {try Int(json: $0)}
-				character = try (dictionary["character"] as? [Any])?.map {try Int(json: $0)}
-				constellation = try (dictionary["constellation"] as? [Any])?.map {try Int(json: $0)}
-				corporation = try (dictionary["corporation"] as? [Any])?.map {try Int(json: $0)}
-				faction = try (dictionary["faction"] as? [Any])?.map {try Int(json: $0)}
-				inventoryType = try (dictionary["inventory_type"] as? [Any])?.map {try Int(json: $0)}
-				region = try (dictionary["region"] as? [Any])?.map {try Int(json: $0)}
-				solarSystem = try (dictionary["solar_system"] as? [Any])?.map {try Int(json: $0)}
-				station = try (dictionary["station"] as? [Any])?.map {try Int(json: $0)}
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				agent = aDecoder.decodeObject(forKey: "agent") as? [Int]
-				alliance = aDecoder.decodeObject(forKey: "alliance") as? [Int]
-				character = aDecoder.decodeObject(forKey: "character") as? [Int]
-				constellation = aDecoder.decodeObject(forKey: "constellation") as? [Int]
-				corporation = aDecoder.decodeObject(forKey: "corporation") as? [Int]
-				faction = aDecoder.decodeObject(forKey: "faction") as? [Int]
-				inventoryType = aDecoder.decodeObject(forKey: "inventory_type") as? [Int]
-				region = aDecoder.decodeObject(forKey: "region") as? [Int]
-				solarSystem = aDecoder.decodeObject(forKey: "solar_system") as? [Int]
-				station = aDecoder.decodeObject(forKey: "station") as? [Int]
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = agent {
-					aCoder.encode(v, forKey: "agent")
-				}
-				if let v = alliance {
-					aCoder.encode(v, forKey: "alliance")
-				}
-				if let v = character {
-					aCoder.encode(v, forKey: "character")
-				}
-				if let v = constellation {
-					aCoder.encode(v, forKey: "constellation")
-				}
-				if let v = corporation {
-					aCoder.encode(v, forKey: "corporation")
-				}
-				if let v = faction {
-					aCoder.encode(v, forKey: "faction")
-				}
-				if let v = inventoryType {
-					aCoder.encode(v, forKey: "inventory_type")
-				}
-				if let v = region {
-					aCoder.encode(v, forKey: "region")
-				}
-				if let v = solarSystem {
-					aCoder.encode(v, forKey: "solar_system")
-				}
-				if let v = station {
-					aCoder.encode(v, forKey: "station")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = agent?.json {
-					json["agent"] = v
-				}
-				if let v = alliance?.json {
-					json["alliance"] = v
-				}
-				if let v = character?.json {
-					json["character"] = v
-				}
-				if let v = constellation?.json {
-					json["constellation"] = v
-				}
-				if let v = corporation?.json {
-					json["corporation"] = v
-				}
-				if let v = faction?.json {
-					json["faction"] = v
-				}
-				if let v = inventoryType?.json {
-					json["inventory_type"] = v
-				}
-				if let v = region?.json {
-					json["region"] = v
-				}
-				if let v = solarSystem?.json {
-					json["solar_system"] = v
-				}
-				if let v = station?.json {
-					json["station"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
 				self.agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
@@ -453,42 +207,35 @@ public extension ESI {
 				self.solarSystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Search.SearchResult, rhs: Search.SearchResult) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Search.SearchResult) {
-				agent = other.agent?.flatMap { $0 }
-				alliance = other.alliance?.flatMap { $0 }
-				character = other.character?.flatMap { $0 }
-				constellation = other.constellation?.flatMap { $0 }
-				corporation = other.corporation?.flatMap { $0 }
-				faction = other.faction?.flatMap { $0 }
-				inventoryType = other.inventoryType?.flatMap { $0 }
-				region = other.region?.flatMap { $0 }
-				solarSystem = other.solarSystem?.flatMap { $0 }
-				station = other.station?.flatMap { $0 }
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case agent
+				case alliance
+				case character
+				case constellation
+				case corporation
+				case faction
+				case inventoryType = "inventory_type"
+				case region
+				case solarSystem = "solar_system"
+				case station
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Search.SearchResult(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? SearchResult)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		public enum Categories: String, JSONCoding, HTTPQueryable {
+		public enum Categories: String, Codable, HTTPQueryable {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"
@@ -499,19 +246,6 @@ public extension ESI {
 			case region = "region"
 			case solarSystem = "solar_system"
 			case station = "station"
-			
-			public init() {
-				self = .agent
-			}
-			
-			public var json: Any {
-				return self.rawValue
-			}
-			
-			public init(json: Any) throws {
-				guard let s = json as? String, let v = Categories(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				self = v
-			}
 			
 			public var httpQuery: String? {
 				return rawValue

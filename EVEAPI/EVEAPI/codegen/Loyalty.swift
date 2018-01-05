@@ -80,263 +80,106 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESILoyaltyPoint) public class Point: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Point: Codable, Hashable {
 			
 			
-			public var corporationID: Int = Int()
-			public var loyaltyPoints: Int = Int()
+			public let corporationID: Int
+			public let loyaltyPoints: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationID = corporationID
-				guard let loyaltyPoints = dictionary["loyalty_points"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.loyaltyPoints = loyaltyPoints
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				loyaltyPoints = aDecoder.decodeInteger(forKey: "loyalty_points")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(corporationID, forKey: "corporation_id")
-				aCoder.encode(loyaltyPoints, forKey: "loyalty_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["corporation_id"] = corporationID.json
-				json["loyalty_points"] = loyaltyPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.corporationID.hashValue)
-				hashCombine(seed: &hash, value: self.loyaltyPoints.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Loyalty.Point) {
-				corporationID = other.corporationID
-				loyaltyPoints = other.loyaltyPoints
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case loyaltyPoints = "loyalty_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Loyalty.Point(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Point)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESILoyaltyOffer) public class Offer: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Offer: Codable, Hashable {
 			
-			@objc(ESILoyaltyOfferGetLoyaltyStoresCorporationIDOffersRequiredItems) public class GetLoyaltyStoresCorporationIDOffersRequiredItems: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetLoyaltyStoresCorporationIDOffersRequiredItems: Codable, Hashable {
 				
 				
-				public var quantity: Int = Int()
-				public var typeID: Int = Int()
+				public let quantity: Int
+				public let typeID: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.quantity = quantity
-					guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.typeID = typeID
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					quantity = aDecoder.decodeInteger(forKey: "quantity")
-					typeID = aDecoder.decodeInteger(forKey: "type_id")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(quantity, forKey: "quantity")
-					aCoder.encode(typeID, forKey: "type_id")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["quantity"] = quantity.json
-					json["type_id"] = typeID.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.quantity.hashValue)
-					hashCombine(seed: &hash, value: self.typeID.hashValue)
+					hashCombine(seed: &hash, value: quantity.hashValue)
+					hashCombine(seed: &hash, value: typeID.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems, rhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) {
-					quantity = other.quantity
-					typeID = other.typeID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case quantity
+					case typeID = "type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetLoyaltyStoresCorporationIDOffersRequiredItems)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var iskCost: Int = Int()
-			public var lpCost: Int = Int()
-			public var offerID: Int = Int()
-			public var quantity: Int = Int()
-			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems] = []
-			public var typeID: Int = Int()
+			public let iskCost: Int
+			public let lpCost: Int
+			public let offerID: Int
+			public let quantity: Int
+			public let requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems]
+			public let typeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let iskCost = dictionary["isk_cost"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.iskCost = iskCost
-				guard let lpCost = dictionary["lp_cost"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.lpCost = lpCost
-				guard let offerID = dictionary["offer_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.offerID = offerID
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				requiredItems = try (dictionary["required_items"] as? [Any])?.map {try Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems(json: $0)} ?? []
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				iskCost = aDecoder.decodeInteger(forKey: "isk_cost")
-				lpCost = aDecoder.decodeInteger(forKey: "lp_cost")
-				offerID = aDecoder.decodeInteger(forKey: "offer_id")
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				requiredItems = aDecoder.decodeObject(of: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems.self], forKey: "required_items") as? [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems] ?? []
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(iskCost, forKey: "isk_cost")
-				aCoder.encode(lpCost, forKey: "lp_cost")
-				aCoder.encode(offerID, forKey: "offer_id")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(requiredItems, forKey: "required_items")
-				aCoder.encode(typeID, forKey: "type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["isk_cost"] = iskCost.json
-				json["lp_cost"] = lpCost.json
-				json["offer_id"] = offerID.json
-				json["quantity"] = quantity.json
-				json["required_items"] = requiredItems.json
-				json["type_id"] = typeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.iskCost.hashValue)
-				hashCombine(seed: &hash, value: self.lpCost.hashValue)
-				hashCombine(seed: &hash, value: self.offerID.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
+				hashCombine(seed: &hash, value: iskCost.hashValue)
+				hashCombine(seed: &hash, value: lpCost.hashValue)
+				hashCombine(seed: &hash, value: offerID.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
 				self.requiredItems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Loyalty.Offer, rhs: Loyalty.Offer) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Loyalty.Offer) {
-				iskCost = other.iskCost
-				lpCost = other.lpCost
-				offerID = other.offerID
-				quantity = other.quantity
-				requiredItems = other.requiredItems.flatMap { Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems($0) }
-				typeID = other.typeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case iskCost = "isk_cost"
+				case lpCost = "lp_cost"
+				case offerID = "offer_id"
+				case quantity
+				case requiredItems = "required_items"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Loyalty.Offer(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Offer)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

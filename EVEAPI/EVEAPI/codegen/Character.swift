@@ -47,6 +47,39 @@ public extension ESI {
 			}
 		}
 		
+		public func yearlyAggregateStats(characterID: Int, completionBlock:((Result<[Character.GetCharactersCharacterIDStatsOk]>) -> Void)?) {
+			var session = sessionManager
+			guard session != nil else {return}
+			
+			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			guard scopes.contains("esi-characterstats.read.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/stats/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDStatsOk]>) in
+				completionBlock?(response.result)
+				session = nil
+			}
+		}
+		
 		public func getCharacterPortraits(characterID: Int, completionBlock:((Result<Character.Portrait>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
@@ -107,39 +140,6 @@ public extension ESI {
 			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
-				completionBlock?(response.result)
-				session = nil
-			}
-		}
-		
-		public func yearlyAggregateStats(characterID: Int, completionBlock:((Result<[Character.GetCharactersCharacterIDStatsOk]>) -> Void)?) {
-			var session = sessionManager
-			guard session != nil else {return}
-			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
-			guard scopes.contains("esi-characterstats.read.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/stats/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDStatsOk]>) in
 				completionBlock?(response.result)
 				session = nil
 			}
@@ -415,7 +415,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_contacts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: characters.json, options: [])
+			let body = try? JSONEncoder().encode(characters)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -548,7 +548,7 @@ public extension ESI {
 			
 			
 			
-			let body = try? JSONSerialization.data(withJSONObject: characters.json, options: [])
+			let body = try? JSONEncoder().encode(characters)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -575,397 +575,153 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESICharacterPortrait) public class Portrait: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Portrait: Codable, Hashable {
 			
 			
-			public var px128x128: String? = nil
-			public var px256x256: String? = nil
-			public var px512x512: String? = nil
-			public var px64x64: String? = nil
+			public let px128x128: String?
+			public let px256x256: String?
+			public let px512x512: String?
+			public let px64x64: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				px128x128 = dictionary["px128x128"] as? String
-				px256x256 = dictionary["px256x256"] as? String
-				px512x512 = dictionary["px512x512"] as? String
-				px64x64 = dictionary["px64x64"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				px128x128 = aDecoder.decodeObject(forKey: "px128x128") as? String
-				px256x256 = aDecoder.decodeObject(forKey: "px256x256") as? String
-				px512x512 = aDecoder.decodeObject(forKey: "px512x512") as? String
-				px64x64 = aDecoder.decodeObject(forKey: "px64x64") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = px128x128 {
-					aCoder.encode(v, forKey: "px128x128")
-				}
-				if let v = px256x256 {
-					aCoder.encode(v, forKey: "px256x256")
-				}
-				if let v = px512x512 {
-					aCoder.encode(v, forKey: "px512x512")
-				}
-				if let v = px64x64 {
-					aCoder.encode(v, forKey: "px64x64")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = px128x128?.json {
-					json["px128x128"] = v
-				}
-				if let v = px256x256?.json {
-					json["px256x256"] = v
-				}
-				if let v = px512x512?.json {
-					json["px512x512"] = v
-				}
-				if let v = px64x64?.json {
-					json["px64x64"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.px128x128?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.px256x256?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.px512x512?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.px64x64?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px256x256?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px512x512?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Portrait, rhs: Character.Portrait) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Portrait) {
-				px128x128 = other.px128x128
-				px256x256 = other.px256x256
-				px512x512 = other.px512x512
-				px64x64 = other.px64x64
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case px128x128
+				case px256x256
+				case px512x512
+				case px64x64
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Portrait(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Portrait)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterGetCharactersCharacterIDNotificationsContactsOk) public class GetCharactersCharacterIDNotificationsContactsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDNotificationsContactsOk: Codable, Hashable {
 			
 			
-			public var message: String = String()
-			public var notificationID: Int = Int()
-			public var sendDate: Date = Date()
-			public var senderCharacterID: Int = Int()
-			public var standingLevel: Float = Float()
+			public let message: String
+			public let notificationID: Int
+			public let sendDate: Date
+			public let senderCharacterID: Int
+			public let standingLevel: Float
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let message = dictionary["message"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.message = message
-				guard let notificationID = dictionary["notification_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.notificationID = notificationID
-				guard let sendDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["send_date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.sendDate = sendDate
-				guard let senderCharacterID = dictionary["sender_character_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.senderCharacterID = senderCharacterID
-				guard let standingLevel = dictionary["standing_level"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.standingLevel = standingLevel
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				message = aDecoder.decodeObject(forKey: "message") as? String ?? String()
-				notificationID = aDecoder.decodeInteger(forKey: "notification_id")
-				sendDate = aDecoder.decodeObject(forKey: "send_date") as? Date ?? Date()
-				senderCharacterID = aDecoder.decodeInteger(forKey: "sender_character_id")
-				standingLevel = aDecoder.decodeFloat(forKey: "standing_level")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(message, forKey: "message")
-				aCoder.encode(notificationID, forKey: "notification_id")
-				aCoder.encode(sendDate, forKey: "send_date")
-				aCoder.encode(senderCharacterID, forKey: "sender_character_id")
-				aCoder.encode(standingLevel, forKey: "standing_level")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["message"] = message.json
-				json["notification_id"] = notificationID.json
-				json["send_date"] = sendDate.json
-				json["sender_character_id"] = senderCharacterID.json
-				json["standing_level"] = standingLevel.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.message.hashValue)
-				hashCombine(seed: &hash, value: self.notificationID.hashValue)
-				hashCombine(seed: &hash, value: self.sendDate.hashValue)
-				hashCombine(seed: &hash, value: self.senderCharacterID.hashValue)
-				hashCombine(seed: &hash, value: self.standingLevel.hashValue)
+				hashCombine(seed: &hash, value: message.hashValue)
+				hashCombine(seed: &hash, value: notificationID.hashValue)
+				hashCombine(seed: &hash, value: sendDate.hashValue)
+				hashCombine(seed: &hash, value: senderCharacterID.hashValue)
+				hashCombine(seed: &hash, value: standingLevel.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDNotificationsContactsOk, rhs: Character.GetCharactersCharacterIDNotificationsContactsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.GetCharactersCharacterIDNotificationsContactsOk) {
-				message = other.message
-				notificationID = other.notificationID
-				sendDate = other.sendDate
-				senderCharacterID = other.senderCharacterID
-				standingLevel = other.standingLevel
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case message
+				case notificationID = "notification_id"
+				case sendDate = "send_date"
+				case senderCharacterID = "sender_character_id"
+				case standingLevel = "standing_level"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .sendDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDNotificationsContactsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDNotificationsContactsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterFatigue) public class Fatigue: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Fatigue: Codable, Hashable {
 			
 			
-			public var jumpFatigueExpireDate: Date? = nil
-			public var lastJumpDate: Date? = nil
-			public var lastUpdateDate: Date? = nil
+			public let jumpFatigueExpireDate: Date?
+			public let lastJumpDate: Date?
+			public let lastUpdateDate: Date?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				jumpFatigueExpireDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["jump_fatigue_expire_date"] as? String ?? "")
-				lastJumpDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_jump_date"] as? String ?? "")
-				lastUpdateDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["last_update_date"] as? String ?? "")
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				jumpFatigueExpireDate = aDecoder.decodeObject(forKey: "jump_fatigue_expire_date") as? Date
-				lastJumpDate = aDecoder.decodeObject(forKey: "last_jump_date") as? Date
-				lastUpdateDate = aDecoder.decodeObject(forKey: "last_update_date") as? Date
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = jumpFatigueExpireDate {
-					aCoder.encode(v, forKey: "jump_fatigue_expire_date")
-				}
-				if let v = lastJumpDate {
-					aCoder.encode(v, forKey: "last_jump_date")
-				}
-				if let v = lastUpdateDate {
-					aCoder.encode(v, forKey: "last_update_date")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = jumpFatigueExpireDate?.json {
-					json["jump_fatigue_expire_date"] = v
-				}
-				if let v = lastJumpDate?.json {
-					json["last_jump_date"] = v
-				}
-				if let v = lastUpdateDate?.json {
-					json["last_update_date"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.jumpFatigueExpireDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.lastJumpDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.lastUpdateDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: jumpFatigueExpireDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: lastJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: lastUpdateDate?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Fatigue, rhs: Character.Fatigue) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Fatigue) {
-				jumpFatigueExpireDate = other.jumpFatigueExpireDate
-				lastJumpDate = other.lastJumpDate
-				lastUpdateDate = other.lastUpdateDate
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case jumpFatigueExpireDate = "jump_fatigue_expire_date"
+				case lastJumpDate = "last_jump_date"
+				case lastUpdateDate = "last_update_date"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .jumpFatigueExpireDate: return DateFormatter.esiDateTimeFormatter
+						case .lastJumpDate: return DateFormatter.esiDateTimeFormatter
+						case .lastUpdateDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Fatigue(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Fatigue)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterGetCharactersCharacterIDNotFound) public class GetCharactersCharacterIDNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.GetCharactersCharacterIDNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterChatChannel) public class ChatChannel: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct ChatChannel: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDChatChannelsAccessorType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -973,507 +729,196 @@ public extension ESI {
 				
 			}
 			
-			@objc(ESICharacterChatChannelGetCharactersCharacterIDChatChannelsBlocked) public class GetCharactersCharacterIDChatChannelsBlocked: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDChatChannelsBlocked: Codable, Hashable {
 				
 				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-				public var endAt: Date? = nil
-				public var reason: String? = nil
+				public let accessorID: Int
+				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				public let endAt: Date?
+				public let reason: String?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorType = accessorType
-					endAt = DateFormatter.esiDateTimeFormatter.date(from: dictionary["end_at"] as? String ?? "")
-					reason = dictionary["reason"] as? String
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					endAt = aDecoder.decodeObject(forKey: "end_at") as? Date
-					reason = aDecoder.decodeObject(forKey: "reason") as? String
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-					if let v = endAt {
-						aCoder.encode(v, forKey: "end_at")
-					}
-					if let v = reason {
-						aCoder.encode(v, forKey: "reason")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					if let v = endAt?.json {
-						json["end_at"] = v
-					}
-					if let v = reason?.json {
-						json["reason"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.accessorID.hashValue)
-					hashCombine(seed: &hash, value: self.accessorType.hashValue)
-					hashCombine(seed: &hash, value: self.endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
+					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) {
-					accessorID = other.accessorID
-					accessorType = other.accessorType
-					endAt = other.endAt
-					reason = other.reason
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case accessorID = "accessor_id"
+					case accessorType = "accessor_type"
+					case endAt = "end_at"
+					case reason
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							case .endAt: return DateFormatter.esiDateTimeFormatter
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDChatChannelsBlocked)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESICharacterChatChannelGetCharactersCharacterIDChatChannelsOperators) public class GetCharactersCharacterIDChatChannelsOperators: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDChatChannelsOperators: Codable, Hashable {
 				
 				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+				public let accessorID: Int
+				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorType = accessorType
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.accessorID.hashValue)
-					hashCombine(seed: &hash, value: self.accessorType.hashValue)
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) {
-					accessorID = other.accessorID
-					accessorType = other.accessorType
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case accessorID = "accessor_id"
+					case accessorType = "accessor_type"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDChatChannelsOperators)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESICharacterChatChannelGetCharactersCharacterIDChatChannelsAllowed) public class GetCharactersCharacterIDChatChannelsAllowed: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDChatChannelsAllowed: Codable, Hashable {
 				
 				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
+				public let accessorID: Int
+				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorType = accessorType
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.accessorID.hashValue)
-					hashCombine(seed: &hash, value: self.accessorType.hashValue)
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) {
-					accessorID = other.accessorID
-					accessorType = other.accessorType
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case accessorID = "accessor_id"
+					case accessorType = "accessor_type"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDChatChannelsAllowed)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESICharacterChatChannelGetCharactersCharacterIDChatChannelsMuted) public class GetCharactersCharacterIDChatChannelsMuted: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDChatChannelsMuted: Codable, Hashable {
 				
 				
-				public var accessorID: Int = Int()
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-				public var endAt: Date? = nil
-				public var reason: String? = nil
+				public let accessorID: Int
+				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				public let endAt: Date?
+				public let reason: String?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let accessorID = dictionary["accessor_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorID = accessorID
-					guard let accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: dictionary["accessor_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.accessorType = accessorType
-					endAt = DateFormatter.esiDateTimeFormatter.date(from: dictionary["end_at"] as? String ?? "")
-					reason = dictionary["reason"] as? String
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					accessorID = aDecoder.decodeInteger(forKey: "accessor_id")
-					accessorType = Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType(rawValue: aDecoder.decodeObject(forKey: "accessor_type") as? String ?? "") ?? Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType()
-					endAt = aDecoder.decodeObject(forKey: "end_at") as? Date
-					reason = aDecoder.decodeObject(forKey: "reason") as? String
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(accessorID, forKey: "accessor_id")
-					aCoder.encode(accessorType.rawValue, forKey: "accessor_type")
-					if let v = endAt {
-						aCoder.encode(v, forKey: "end_at")
-					}
-					if let v = reason {
-						aCoder.encode(v, forKey: "reason")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["accessor_id"] = accessorID.json
-					json["accessor_type"] = accessorType.json
-					if let v = endAt?.json {
-						json["end_at"] = v
-					}
-					if let v = reason?.json {
-						json["reason"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.accessorID.hashValue)
-					hashCombine(seed: &hash, value: self.accessorType.hashValue)
-					hashCombine(seed: &hash, value: self.endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.reason?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: accessorID.hashValue)
+					hashCombine(seed: &hash, value: accessorType.hashValue)
+					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) {
-					accessorID = other.accessorID
-					accessorType = other.accessorType
-					endAt = other.endAt
-					reason = other.reason
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case accessorID = "accessor_id"
+					case accessorType = "accessor_type"
+					case endAt = "end_at"
+					case reason
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							case .endAt: return DateFormatter.esiDateTimeFormatter
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDChatChannelsMuted)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed] = []
-			public var blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked] = []
-			public var channelID: Int = Int()
-			public var comparisonKey: String = String()
-			public var hasPassword: Bool = Bool()
-			public var motd: String = String()
-			public var muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted] = []
-			public var name: String = String()
-			public var operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators] = []
-			public var ownerID: Int = Int()
+			public let allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed]
+			public let blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked]
+			public let channelID: Int
+			public let comparisonKey: String
+			public let hasPassword: Bool
+			public let motd: String
+			public let muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted]
+			public let name: String
+			public let operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators]
+			public let ownerID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				allowed = try (dictionary["allowed"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed(json: $0)} ?? []
-				blocked = try (dictionary["blocked"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked(json: $0)} ?? []
-				guard let channelID = dictionary["channel_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.channelID = channelID
-				guard let comparisonKey = dictionary["comparison_key"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.comparisonKey = comparisonKey
-				guard let hasPassword = dictionary["has_password"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.hasPassword = hasPassword
-				guard let motd = dictionary["motd"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.motd = motd
-				muted = try (dictionary["muted"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted(json: $0)} ?? []
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				operators = try (dictionary["operators"] as? [Any])?.map {try Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators(json: $0)} ?? []
-				guard let ownerID = dictionary["owner_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.ownerID = ownerID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allowed = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed.self], forKey: "allowed") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed] ?? []
-				blocked = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked.self], forKey: "blocked") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked] ?? []
-				channelID = aDecoder.decodeInteger(forKey: "channel_id")
-				comparisonKey = aDecoder.decodeObject(forKey: "comparison_key") as? String ?? String()
-				hasPassword = aDecoder.decodeBool(forKey: "has_password")
-				motd = aDecoder.decodeObject(forKey: "motd") as? String ?? String()
-				muted = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted.self], forKey: "muted") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted] ?? []
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				operators = aDecoder.decodeObject(of: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators.self], forKey: "operators") as? [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators] ?? []
-				ownerID = aDecoder.decodeInteger(forKey: "owner_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(allowed, forKey: "allowed")
-				aCoder.encode(blocked, forKey: "blocked")
-				aCoder.encode(channelID, forKey: "channel_id")
-				aCoder.encode(comparisonKey, forKey: "comparison_key")
-				aCoder.encode(hasPassword, forKey: "has_password")
-				aCoder.encode(motd, forKey: "motd")
-				aCoder.encode(muted, forKey: "muted")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(operators, forKey: "operators")
-				aCoder.encode(ownerID, forKey: "owner_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["allowed"] = allowed.json
-				json["blocked"] = blocked.json
-				json["channel_id"] = channelID.json
-				json["comparison_key"] = comparisonKey.json
-				json["has_password"] = hasPassword.json
-				json["motd"] = motd.json
-				json["muted"] = muted.json
-				json["name"] = name.json
-				json["operators"] = operators.json
-				json["owner_id"] = ownerID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
 				self.allowed.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.blocked.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.channelID.hashValue)
-				hashCombine(seed: &hash, value: self.comparisonKey.hashValue)
-				hashCombine(seed: &hash, value: self.hasPassword.hashValue)
-				hashCombine(seed: &hash, value: self.motd.hashValue)
+				hashCombine(seed: &hash, value: channelID.hashValue)
+				hashCombine(seed: &hash, value: comparisonKey.hashValue)
+				hashCombine(seed: &hash, value: hasPassword.hashValue)
+				hashCombine(seed: &hash, value: motd.hashValue)
 				self.muted.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				self.operators.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.ownerID.hashValue)
+				hashCombine(seed: &hash, value: ownerID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.ChatChannel, rhs: Character.ChatChannel) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.ChatChannel) {
-				allowed = other.allowed.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed($0) }
-				blocked = other.blocked.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked($0) }
-				channelID = other.channelID
-				comparisonKey = other.comparisonKey
-				hasPassword = other.hasPassword
-				motd = other.motd
-				muted = other.muted.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted($0) }
-				name = other.name
-				operators = other.operators.flatMap { Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators($0) }
-				ownerID = other.ownerID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allowed
+				case blocked
+				case channelID = "channel_id"
+				case comparisonKey = "comparison_key"
+				case hasPassword = "has_password"
+				case motd
+				case muted
+				case name
+				case operators
+				case ownerID = "owner_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.ChatChannel(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? ChatChannel)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterStanding) public class Standing: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Standing: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDStandingsFromType: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDStandingsFromType: String, Codable, HTTPQueryable {
 				case agent = "agent"
 				case faction = "faction"
 				case npcCorp = "npc_corp"
-				
-				public init() {
-					self = .agent
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDStandingsFromType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -1481,106 +926,42 @@ public extension ESI {
 				
 			}
 			
-			public var fromID: Int = Int()
-			public var fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType = Character.Standing.GetCharactersCharacterIDStandingsFromType()
-			public var standing: Float = Float()
+			public let fromID: Int
+			public let fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
+			public let standing: Float
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let fromID = dictionary["from_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.fromID = fromID
-				guard let fromType = Character.Standing.GetCharactersCharacterIDStandingsFromType(rawValue: dictionary["from_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.fromType = fromType
-				guard let standing = dictionary["standing"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.standing = standing
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				fromID = aDecoder.decodeInteger(forKey: "from_id")
-				fromType = Character.Standing.GetCharactersCharacterIDStandingsFromType(rawValue: aDecoder.decodeObject(forKey: "from_type") as? String ?? "") ?? Character.Standing.GetCharactersCharacterIDStandingsFromType()
-				standing = aDecoder.decodeFloat(forKey: "standing")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(fromID, forKey: "from_id")
-				aCoder.encode(fromType.rawValue, forKey: "from_type")
-				aCoder.encode(standing, forKey: "standing")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["from_id"] = fromID.json
-				json["from_type"] = fromType.json
-				json["standing"] = standing.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.fromID.hashValue)
-				hashCombine(seed: &hash, value: self.fromType.hashValue)
-				hashCombine(seed: &hash, value: self.standing.hashValue)
+				hashCombine(seed: &hash, value: fromID.hashValue)
+				hashCombine(seed: &hash, value: fromType.hashValue)
+				hashCombine(seed: &hash, value: standing.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Standing, rhs: Character.Standing) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Standing) {
-				fromID = other.fromID
-				fromType = other.fromType
-				standing = other.standing
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fromID = "from_id"
+				case fromType = "from_type"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Standing(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Standing)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterInformation) public class Information: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Information: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDGender: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDGender: String, Codable, HTTPQueryable {
 				case female = "female"
 				case male = "male"
-				
-				public init() {
-					self = .female
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDGender(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -1588,358 +969,134 @@ public extension ESI {
 				
 			}
 			
-			public var allianceID: Int? = nil
-			public var ancestryID: Int? = nil
-			public var birthday: Date = Date()
-			public var bloodlineID: Int = Int()
-			public var corporationID: Int = Int()
-			public var localizedDescription: String? = nil
-			public var factionID: Int? = nil
-			public var gender: Character.Information.GetCharactersCharacterIDGender = Character.Information.GetCharactersCharacterIDGender()
-			public var name: String = String()
-			public var raceID: Int = Int()
-			public var securityStatus: Float? = nil
+			public let allianceID: Int?
+			public let ancestryID: Int?
+			public let birthday: Date
+			public let bloodlineID: Int
+			public let corporationID: Int
+			public let localizedDescription: String?
+			public let factionID: Int?
+			public let gender: Character.Information.GetCharactersCharacterIDGender
+			public let name: String
+			public let raceID: Int
+			public let securityStatus: Float?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				allianceID = dictionary["alliance_id"] as? Int
-				ancestryID = dictionary["ancestry_id"] as? Int
-				guard let birthday = DateFormatter.esiDateTimeFormatter.date(from: dictionary["birthday"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.birthday = birthday
-				guard let bloodlineID = dictionary["bloodline_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.bloodlineID = bloodlineID
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationID = corporationID
-				localizedDescription = dictionary["description"] as? String
-				factionID = dictionary["faction_id"] as? Int
-				guard let gender = Character.Information.GetCharactersCharacterIDGender(rawValue: dictionary["gender"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.gender = gender
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				guard let raceID = dictionary["race_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.raceID = raceID
-				securityStatus = dictionary["security_status"] as? Float
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-				ancestryID = aDecoder.containsValue(forKey: "ancestry_id") ? aDecoder.decodeInteger(forKey: "ancestry_id") : nil
-				birthday = aDecoder.decodeObject(forKey: "birthday") as? Date ?? Date()
-				bloodlineID = aDecoder.decodeInteger(forKey: "bloodline_id")
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String
-				factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-				gender = Character.Information.GetCharactersCharacterIDGender(rawValue: aDecoder.decodeObject(forKey: "gender") as? String ?? "") ?? Character.Information.GetCharactersCharacterIDGender()
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				raceID = aDecoder.decodeInteger(forKey: "race_id")
-				securityStatus = aDecoder.containsValue(forKey: "security_status") ? aDecoder.decodeFloat(forKey: "security_status") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = allianceID {
-					aCoder.encode(v, forKey: "alliance_id")
-				}
-				if let v = ancestryID {
-					aCoder.encode(v, forKey: "ancestry_id")
-				}
-				aCoder.encode(birthday, forKey: "birthday")
-				aCoder.encode(bloodlineID, forKey: "bloodline_id")
-				aCoder.encode(corporationID, forKey: "corporation_id")
-				if let v = localizedDescription {
-					aCoder.encode(v, forKey: "description")
-				}
-				if let v = factionID {
-					aCoder.encode(v, forKey: "faction_id")
-				}
-				aCoder.encode(gender.rawValue, forKey: "gender")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(raceID, forKey: "race_id")
-				if let v = securityStatus {
-					aCoder.encode(v, forKey: "security_status")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = allianceID?.json {
-					json["alliance_id"] = v
-				}
-				if let v = ancestryID?.json {
-					json["ancestry_id"] = v
-				}
-				json["birthday"] = birthday.json
-				json["bloodline_id"] = bloodlineID.json
-				json["corporation_id"] = corporationID.json
-				if let v = localizedDescription?.json {
-					json["description"] = v
-				}
-				if let v = factionID?.json {
-					json["faction_id"] = v
-				}
-				json["gender"] = gender.json
-				json["name"] = name.json
-				json["race_id"] = raceID.json
-				if let v = securityStatus?.json {
-					json["security_status"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.ancestryID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.birthday.hashValue)
-				hashCombine(seed: &hash, value: self.bloodlineID.hashValue)
-				hashCombine(seed: &hash, value: self.corporationID.hashValue)
-				hashCombine(seed: &hash, value: self.localizedDescription?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.gender.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
-				hashCombine(seed: &hash, value: self.raceID.hashValue)
-				hashCombine(seed: &hash, value: self.securityStatus?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: ancestryID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: birthday.hashValue)
+				hashCombine(seed: &hash, value: bloodlineID.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: gender.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: raceID.hashValue)
+				hashCombine(seed: &hash, value: securityStatus?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Information, rhs: Character.Information) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Information) {
-				allianceID = other.allianceID
-				ancestryID = other.ancestryID
-				birthday = other.birthday
-				bloodlineID = other.bloodlineID
-				corporationID = other.corporationID
-				localizedDescription = other.localizedDescription
-				factionID = other.factionID
-				gender = other.gender
-				name = other.name
-				raceID = other.raceID
-				securityStatus = other.securityStatus
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case ancestryID = "ancestry_id"
+				case birthday
+				case bloodlineID = "bloodline_id"
+				case corporationID = "corporation_id"
+				case localizedDescription = "description"
+				case factionID = "faction_id"
+				case gender
+				case name
+				case raceID = "race_id"
+				case securityStatus = "security_status"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .birthday: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Information(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Information)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterGetCharactersCharacterIDPortraitNotFound) public class GetCharactersCharacterIDPortraitNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDPortraitNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDPortraitNotFound, rhs: Character.GetCharactersCharacterIDPortraitNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.GetCharactersCharacterIDPortraitNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDPortraitNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDPortraitNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterResearch) public class Research: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Research: Codable, Hashable {
 			
 			
-			public var agentID: Int = Int()
-			public var pointsPerDay: Float = Float()
-			public var remainderPoints: Float = Float()
-			public var skillTypeID: Int = Int()
-			public var startedAt: Date = Date()
+			public let agentID: Int
+			public let pointsPerDay: Float
+			public let remainderPoints: Float
+			public let skillTypeID: Int
+			public let startedAt: Date
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let agentID = dictionary["agent_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.agentID = agentID
-				guard let pointsPerDay = dictionary["points_per_day"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.pointsPerDay = pointsPerDay
-				guard let remainderPoints = dictionary["remainder_points"] as? Float else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.remainderPoints = remainderPoints
-				guard let skillTypeID = dictionary["skill_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.skillTypeID = skillTypeID
-				guard let startedAt = DateFormatter.esiDateTimeFormatter.date(from: dictionary["started_at"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.startedAt = startedAt
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				agentID = aDecoder.decodeInteger(forKey: "agent_id")
-				pointsPerDay = aDecoder.decodeFloat(forKey: "points_per_day")
-				remainderPoints = aDecoder.decodeFloat(forKey: "remainder_points")
-				skillTypeID = aDecoder.decodeInteger(forKey: "skill_type_id")
-				startedAt = aDecoder.decodeObject(forKey: "started_at") as? Date ?? Date()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(agentID, forKey: "agent_id")
-				aCoder.encode(pointsPerDay, forKey: "points_per_day")
-				aCoder.encode(remainderPoints, forKey: "remainder_points")
-				aCoder.encode(skillTypeID, forKey: "skill_type_id")
-				aCoder.encode(startedAt, forKey: "started_at")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["agent_id"] = agentID.json
-				json["points_per_day"] = pointsPerDay.json
-				json["remainder_points"] = remainderPoints.json
-				json["skill_type_id"] = skillTypeID.json
-				json["started_at"] = startedAt.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.agentID.hashValue)
-				hashCombine(seed: &hash, value: self.pointsPerDay.hashValue)
-				hashCombine(seed: &hash, value: self.remainderPoints.hashValue)
-				hashCombine(seed: &hash, value: self.skillTypeID.hashValue)
-				hashCombine(seed: &hash, value: self.startedAt.hashValue)
+				hashCombine(seed: &hash, value: agentID.hashValue)
+				hashCombine(seed: &hash, value: pointsPerDay.hashValue)
+				hashCombine(seed: &hash, value: remainderPoints.hashValue)
+				hashCombine(seed: &hash, value: skillTypeID.hashValue)
+				hashCombine(seed: &hash, value: startedAt.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Research, rhs: Character.Research) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Research) {
-				agentID = other.agentID
-				pointsPerDay = other.pointsPerDay
-				remainderPoints = other.remainderPoints
-				skillTypeID = other.skillTypeID
-				startedAt = other.startedAt
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case agentID = "agent_id"
+				case pointsPerDay = "points_per_day"
+				case remainderPoints = "remainder_points"
+				case skillTypeID = "skill_type_id"
+				case startedAt = "started_at"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .startedAt: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Research(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Research)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterMedal) public class Medal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Medal: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDMedalsStatus: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDMedalsStatus: String, Codable, HTTPQueryable {
 				case `private` = "private"
 				case `public` = "public"
-				
-				public init() {
-					self = .`public`
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDMedalsStatus(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -1947,3831 +1104,1445 @@ public extension ESI {
 				
 			}
 			
-			@objc(ESICharacterMedalGetCharactersCharacterIDMedalsGraphics) public class GetCharactersCharacterIDMedalsGraphics: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDMedalsGraphics: Codable, Hashable {
 				
 				
-				public var color: Int? = nil
-				public var graphic: String = String()
-				public var layer: Int = Int()
-				public var part: Int = Int()
+				public let color: Int?
+				public let graphic: String
+				public let layer: Int
+				public let part: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					color = dictionary["color"] as? Int
-					guard let graphic = dictionary["graphic"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.graphic = graphic
-					guard let layer = dictionary["layer"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.layer = layer
-					guard let part = dictionary["part"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.part = part
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					color = aDecoder.containsValue(forKey: "color") ? aDecoder.decodeInteger(forKey: "color") : nil
-					graphic = aDecoder.decodeObject(forKey: "graphic") as? String ?? String()
-					layer = aDecoder.decodeInteger(forKey: "layer")
-					part = aDecoder.decodeInteger(forKey: "part")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = color {
-						aCoder.encode(v, forKey: "color")
-					}
-					aCoder.encode(graphic, forKey: "graphic")
-					aCoder.encode(layer, forKey: "layer")
-					aCoder.encode(part, forKey: "part")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = color?.json {
-						json["color"] = v
-					}
-					json["graphic"] = graphic.json
-					json["layer"] = layer.json
-					json["part"] = part.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.color?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.graphic.hashValue)
-					hashCombine(seed: &hash, value: self.layer.hashValue)
-					hashCombine(seed: &hash, value: self.part.hashValue)
+					hashCombine(seed: &hash, value: color?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: graphic.hashValue)
+					hashCombine(seed: &hash, value: layer.hashValue)
+					hashCombine(seed: &hash, value: part.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics, rhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Character.Medal.GetCharactersCharacterIDMedalsGraphics) {
-					color = other.color
-					graphic = other.graphic
-					layer = other.layer
-					part = other.part
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case color
+					case graphic
+					case layer
+					case part
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Character.Medal.GetCharactersCharacterIDMedalsGraphics(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDMedalsGraphics)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var corporationID: Int = Int()
-			public var date: Date = Date()
-			public var localizedDescription: String = String()
-			public var graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics] = []
-			public var issuerID: Int = Int()
-			public var medalID: Int = Int()
-			public var reason: String = String()
-			public var status: Character.Medal.GetCharactersCharacterIDMedalsStatus = Character.Medal.GetCharactersCharacterIDMedalsStatus()
-			public var title: String = String()
+			public let corporationID: Int
+			public let date: Date
+			public let localizedDescription: String
+			public let graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
+			public let issuerID: Int
+			public let medalID: Int
+			public let reason: String
+			public let status: Character.Medal.GetCharactersCharacterIDMedalsStatus
+			public let title: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationID = corporationID
-				guard let date = DateFormatter.esiDateTimeFormatter.date(from: dictionary["date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.date = date
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.localizedDescription = localizedDescription
-				graphics = try (dictionary["graphics"] as? [Any])?.map {try Character.Medal.GetCharactersCharacterIDMedalsGraphics(json: $0)} ?? []
-				guard let issuerID = dictionary["issuer_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.issuerID = issuerID
-				guard let medalID = dictionary["medal_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.medalID = medalID
-				guard let reason = dictionary["reason"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.reason = reason
-				guard let status = Character.Medal.GetCharactersCharacterIDMedalsStatus(rawValue: dictionary["status"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.status = status
-				guard let title = dictionary["title"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.title = title
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				date = aDecoder.decodeObject(forKey: "date") as? Date ?? Date()
-				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
-				graphics = aDecoder.decodeObject(of: [Character.Medal.GetCharactersCharacterIDMedalsGraphics.self], forKey: "graphics") as? [Character.Medal.GetCharactersCharacterIDMedalsGraphics] ?? []
-				issuerID = aDecoder.decodeInteger(forKey: "issuer_id")
-				medalID = aDecoder.decodeInteger(forKey: "medal_id")
-				reason = aDecoder.decodeObject(forKey: "reason") as? String ?? String()
-				status = Character.Medal.GetCharactersCharacterIDMedalsStatus(rawValue: aDecoder.decodeObject(forKey: "status") as? String ?? "") ?? Character.Medal.GetCharactersCharacterIDMedalsStatus()
-				title = aDecoder.decodeObject(forKey: "title") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(corporationID, forKey: "corporation_id")
-				aCoder.encode(date, forKey: "date")
-				aCoder.encode(localizedDescription, forKey: "description")
-				aCoder.encode(graphics, forKey: "graphics")
-				aCoder.encode(issuerID, forKey: "issuer_id")
-				aCoder.encode(medalID, forKey: "medal_id")
-				aCoder.encode(reason, forKey: "reason")
-				aCoder.encode(status.rawValue, forKey: "status")
-				aCoder.encode(title, forKey: "title")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["corporation_id"] = corporationID.json
-				json["date"] = date.json
-				json["description"] = localizedDescription.json
-				json["graphics"] = graphics.json
-				json["issuer_id"] = issuerID.json
-				json["medal_id"] = medalID.json
-				json["reason"] = reason.json
-				json["status"] = status.json
-				json["title"] = title.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.corporationID.hashValue)
-				hashCombine(seed: &hash, value: self.date.hashValue)
-				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
 				self.graphics.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.issuerID.hashValue)
-				hashCombine(seed: &hash, value: self.medalID.hashValue)
-				hashCombine(seed: &hash, value: self.reason.hashValue)
-				hashCombine(seed: &hash, value: self.status.hashValue)
-				hashCombine(seed: &hash, value: self.title.hashValue)
+				hashCombine(seed: &hash, value: issuerID.hashValue)
+				hashCombine(seed: &hash, value: medalID.hashValue)
+				hashCombine(seed: &hash, value: reason.hashValue)
+				hashCombine(seed: &hash, value: status.hashValue)
+				hashCombine(seed: &hash, value: title.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Medal, rhs: Character.Medal) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Medal) {
-				corporationID = other.corporationID
-				date = other.date
-				localizedDescription = other.localizedDescription
-				graphics = other.graphics.flatMap { Character.Medal.GetCharactersCharacterIDMedalsGraphics($0) }
-				issuerID = other.issuerID
-				medalID = other.medalID
-				reason = other.reason
-				status = other.status
-				title = other.title
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case date
+				case localizedDescription = "description"
+				case graphics
+				case issuerID = "issuer_id"
+				case medalID = "medal_id"
+				case reason
+				case status
+				case title
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Medal(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Medal)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterPostCharactersAffiliationNotFound) public class PostCharactersAffiliationNotFound: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostCharactersAffiliationNotFound: Codable, Hashable {
 			
 			
-			public var error: String? = nil
+			public let error: String?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				error = dictionary["error"] as? String
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				error = aDecoder.decodeObject(forKey: "error") as? String
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = error {
-					aCoder.encode(v, forKey: "error")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = error?.json {
-					json["error"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.PostCharactersAffiliationNotFound, rhs: Character.PostCharactersAffiliationNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.PostCharactersAffiliationNotFound) {
-				error = other.error
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.PostCharactersAffiliationNotFound(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCharactersAffiliationNotFound)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterCorporationHistory) public class CorporationHistory: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct CorporationHistory: Codable, Hashable {
 			
 			
-			public var corporationID: Int = Int()
-			public var isDeleted: Bool? = nil
-			public var recordID: Int = Int()
-			public var startDate: Date = Date()
+			public let corporationID: Int
+			public let isDeleted: Bool?
+			public let recordID: Int
+			public let startDate: Date
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationID = corporationID
-				isDeleted = dictionary["is_deleted"] as? Bool
-				guard let recordID = dictionary["record_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.recordID = recordID
-				guard let startDate = DateFormatter.esiDateTimeFormatter.date(from: dictionary["start_date"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.startDate = startDate
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				isDeleted = aDecoder.containsValue(forKey: "is_deleted") ? aDecoder.decodeBool(forKey: "is_deleted") : nil
-				recordID = aDecoder.decodeInteger(forKey: "record_id")
-				startDate = aDecoder.decodeObject(forKey: "start_date") as? Date ?? Date()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(corporationID, forKey: "corporation_id")
-				if let v = isDeleted {
-					aCoder.encode(v, forKey: "is_deleted")
-				}
-				aCoder.encode(recordID, forKey: "record_id")
-				aCoder.encode(startDate, forKey: "start_date")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["corporation_id"] = corporationID.json
-				if let v = isDeleted?.json {
-					json["is_deleted"] = v
-				}
-				json["record_id"] = recordID.json
-				json["start_date"] = startDate.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.corporationID.hashValue)
-				hashCombine(seed: &hash, value: self.isDeleted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.recordID.hashValue)
-				hashCombine(seed: &hash, value: self.startDate.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: isDeleted?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: recordID.hashValue)
+				hashCombine(seed: &hash, value: startDate.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.CorporationHistory, rhs: Character.CorporationHistory) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.CorporationHistory) {
-				corporationID = other.corporationID
-				isDeleted = other.isDeleted
-				recordID = other.recordID
-				startDate = other.startDate
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case isDeleted = "is_deleted"
+				case recordID = "record_id"
+				case startDate = "start_date"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .startDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.CorporationHistory(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CorporationHistory)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterGetCharactersCharacterIDStatsOk) public class GetCharactersCharacterIDStatsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Name: Codable, Hashable {
 			
 			
-			public var characterMinutes: Int64? = nil
-			public var characterSessionsStarted: Int64? = nil
-			public var combatCapDrainedbyNpc: Int64? = nil
-			public var combatCapDrainedbyPc: Int64? = nil
-			public var combatCapDrainingPc: Int64? = nil
-			public var combatCriminalFlagSet: Int64? = nil
-			public var combatDamageFromNpCsAmount: Int64? = nil
-			public var combatDamageFromNpCsNumShots: Int64? = nil
-			public var combatDamageFromPlayersBombAmount: Int64? = nil
-			public var combatDamageFromPlayersBombNumShots: Int64? = nil
-			public var combatDamageFromPlayersCombatDroneAmount: Int64? = nil
-			public var combatDamageFromPlayersCombatDroneNumShots: Int64? = nil
-			public var combatDamageFromPlayersEnergyAmount: Int64? = nil
-			public var combatDamageFromPlayersEnergyNumShots: Int64? = nil
-			public var combatDamageFromPlayersFighterBomberAmount: Int64? = nil
-			public var combatDamageFromPlayersFighterBomberNumShots: Int64? = nil
-			public var combatDamageFromPlayersFighterDroneAmount: Int64? = nil
-			public var combatDamageFromPlayersFighterDroneNumShots: Int64? = nil
-			public var combatDamageFromPlayersHybridAmount: Int64? = nil
-			public var combatDamageFromPlayersHybridNumShots: Int64? = nil
-			public var combatDamageFromPlayersMissileAmount: Int64? = nil
-			public var combatDamageFromPlayersMissileNumShots: Int64? = nil
-			public var combatDamageFromPlayersProjectileAmount: Int64? = nil
-			public var combatDamageFromPlayersProjectileNumShots: Int64? = nil
-			public var combatDamageFromPlayersSmartBombAmount: Int64? = nil
-			public var combatDamageFromPlayersSmartBombNumShots: Int64? = nil
-			public var combatDamageFromPlayersSuperAmount: Int64? = nil
-			public var combatDamageFromPlayersSuperNumShots: Int64? = nil
-			public var combatDamageFromStructuresTotalAmount: Int64? = nil
-			public var combatDamageFromStructuresTotalNumShots: Int64? = nil
-			public var combatDamageToPlayersBombAmount: Int64? = nil
-			public var combatDamageToPlayersBombNumShots: Int64? = nil
-			public var combatDamageToPlayersCombatDroneAmount: Int64? = nil
-			public var combatDamageToPlayersCombatDroneNumShots: Int64? = nil
-			public var combatDamageToPlayersEnergyAmount: Int64? = nil
-			public var combatDamageToPlayersEnergyNumShots: Int64? = nil
-			public var combatDamageToPlayersFighterBomberAmount: Int64? = nil
-			public var combatDamageToPlayersFighterBomberNumShots: Int64? = nil
-			public var combatDamageToPlayersFighterDroneAmount: Int64? = nil
-			public var combatDamageToPlayersFighterDroneNumShots: Int64? = nil
-			public var combatDamageToPlayersHybridAmount: Int64? = nil
-			public var combatDamageToPlayersHybridNumShots: Int64? = nil
-			public var combatDamageToPlayersMissileAmount: Int64? = nil
-			public var combatDamageToPlayersMissileNumShots: Int64? = nil
-			public var combatDamageToPlayersProjectileAmount: Int64? = nil
-			public var combatDamageToPlayersProjectileNumShots: Int64? = nil
-			public var combatDamageToPlayersSmartBombAmount: Int64? = nil
-			public var combatDamageToPlayersSmartBombNumShots: Int64? = nil
-			public var combatDamageToPlayersSuperAmount: Int64? = nil
-			public var combatDamageToPlayersSuperNumShots: Int64? = nil
-			public var combatDamageToStructuresTotalAmount: Int64? = nil
-			public var combatDamageToStructuresTotalNumShots: Int64? = nil
-			public var combatDeathsHighSec: Int64? = nil
-			public var combatDeathsLowSec: Int64? = nil
-			public var combatDeathsNullSec: Int64? = nil
-			public var combatDeathsPodHighSec: Int64? = nil
-			public var combatDeathsPodLowSec: Int64? = nil
-			public var combatDeathsPodNullSec: Int64? = nil
-			public var combatDeathsPodWormhole: Int64? = nil
-			public var combatDeathsWormhole: Int64? = nil
-			public var combatDroneEngage: Int64? = nil
-			public var combatDuelRequested: Int64? = nil
-			public var combatEngagementRegister: Int64? = nil
-			public var combatKillsAssists: Int64? = nil
-			public var combatKillsHighSec: Int64? = nil
-			public var combatKillsLowSec: Int64? = nil
-			public var combatKillsNullSec: Int64? = nil
-			public var combatKillsPodHighSec: Int64? = nil
-			public var combatKillsPodLowSec: Int64? = nil
-			public var combatKillsPodNullSec: Int64? = nil
-			public var combatKillsPodWormhole: Int64? = nil
-			public var combatKillsWormhole: Int64? = nil
-			public var combatNpcFlagSet: Int64? = nil
-			public var combatPvpFlagSet: Int64? = nil
-			public var combatRepairArmorByRemoteAmount: Int64? = nil
-			public var combatRepairArmorRemoteAmount: Int64? = nil
-			public var combatRepairArmorSelfAmount: Int64? = nil
-			public var combatRepairCapacitorByRemoteAmount: Int64? = nil
-			public var combatRepairCapacitorRemoteAmount: Int64? = nil
-			public var combatRepairCapacitorSelfAmount: Int64? = nil
-			public var combatRepairHullByRemoteAmount: Int64? = nil
-			public var combatRepairHullRemoteAmount: Int64? = nil
-			public var combatRepairHullSelfAmount: Int64? = nil
-			public var combatRepairShieldByRemoteAmount: Int64? = nil
-			public var combatRepairShieldRemoteAmount: Int64? = nil
-			public var combatRepairShieldSelfAmount: Int64? = nil
-			public var combatSelfDestructs: Int64? = nil
-			public var combatWarpScramblePc: Int64? = nil
-			public var combatWarpScrambledbyNpc: Int64? = nil
-			public var combatWarpScrambledbyPc: Int64? = nil
-			public var combatWeaponFlagSet: Int64? = nil
-			public var combatWebifiedbyNpc: Int64? = nil
-			public var combatWebifiedbyPc: Int64? = nil
-			public var combatWebifyingPc: Int64? = nil
-			public var daysOfActivity: Int64? = nil
-			public var genericConeScans: Int64? = nil
-			public var genericRequestScans: Int64? = nil
-			public var industryHackingSuccesses: Int64? = nil
-			public var industryJobsCancelled: Int64? = nil
-			public var industryJobsCompletedCopyBlueprint: Int64? = nil
-			public var industryJobsCompletedInvention: Int64? = nil
-			public var industryJobsCompletedManufacture: Int64? = nil
-			public var industryJobsCompletedManufactureAsteroid: Int64? = nil
-			public var industryJobsCompletedManufactureAsteroidQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureCharge: Int64? = nil
-			public var industryJobsCompletedManufactureChargeQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureCommodity: Int64? = nil
-			public var industryJobsCompletedManufactureCommodityQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureDeployable: Int64? = nil
-			public var industryJobsCompletedManufactureDeployableQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureDrone: Int64? = nil
-			public var industryJobsCompletedManufactureDroneQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureImplant: Int64? = nil
-			public var industryJobsCompletedManufactureImplantQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureModule: Int64? = nil
-			public var industryJobsCompletedManufactureModuleQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureOther: Int64? = nil
-			public var industryJobsCompletedManufactureOtherQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureShip: Int64? = nil
-			public var industryJobsCompletedManufactureShipQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureStructure: Int64? = nil
-			public var industryJobsCompletedManufactureStructureQuantity: Int64? = nil
-			public var industryJobsCompletedManufactureSubsystem: Int64? = nil
-			public var industryJobsCompletedManufactureSubsystemQuantity: Int64? = nil
-			public var industryJobsCompletedMaterialProductivity: Int64? = nil
-			public var industryJobsCompletedTimeProductivity: Int64? = nil
-			public var industryJobsStartedCopyBlueprint: Int64? = nil
-			public var industryJobsStartedInvention: Int64? = nil
-			public var industryJobsStartedManufacture: Int64? = nil
-			public var industryJobsStartedMaterialProductivity: Int64? = nil
-			public var industryJobsStartedTimeProductivity: Int64? = nil
-			public var industryReprocessItem: Int64? = nil
-			public var industryReprocessItemQuantity: Int64? = nil
-			public var inventoryAbandonLootQuantity: Int64? = nil
-			public var inventoryTrashItemQuantity: Int64? = nil
-			public var iskIn: Int64? = nil
-			public var iskOut: Int64? = nil
-			public var marketAcceptContractsCourier: Int64? = nil
-			public var marketAcceptContractsItemExchange: Int64? = nil
-			public var marketBuyOrdersPlaced: Int64? = nil
-			public var marketCancelMarketOrder: Int64? = nil
-			public var marketCreateContractsAuction: Int64? = nil
-			public var marketCreateContractsCourier: Int64? = nil
-			public var marketCreateContractsItemExchange: Int64? = nil
-			public var marketDeliverCourierContract: Int64? = nil
-			public var marketIskGained: Int64? = nil
-			public var marketIskSpent: Int64? = nil
-			public var marketModifyMarketOrder: Int64? = nil
-			public var marketSearchContracts: Int64? = nil
-			public var marketSellOrdersPlaced: Int64? = nil
-			public var miningDroneMine: Int64? = nil
-			public var miningOreArkonor: Int64? = nil
-			public var miningOreBistot: Int64? = nil
-			public var miningOreCrokite: Int64? = nil
-			public var miningOreDarkOchre: Int64? = nil
-			public var miningOreGneiss: Int64? = nil
-			public var miningOreHarvestableCloud: Int64? = nil
-			public var miningOreHedbergite: Int64? = nil
-			public var miningOreHemorphite: Int64? = nil
-			public var miningOreIce: Int64? = nil
-			public var miningOreJaspet: Int64? = nil
-			public var miningOreKernite: Int64? = nil
-			public var miningOreMercoxit: Int64? = nil
-			public var miningOreOmber: Int64? = nil
-			public var miningOrePlagioclase: Int64? = nil
-			public var miningOrePyroxeres: Int64? = nil
-			public var miningOreScordite: Int64? = nil
-			public var miningOreSpodumain: Int64? = nil
-			public var miningOreVeldspar: Int64? = nil
-			public var moduleActivationsArmorHardener: Int64? = nil
-			public var moduleActivationsArmorRepairUnit: Int64? = nil
-			public var moduleActivationsArmorResistanceShiftHardener: Int64? = nil
-			public var moduleActivationsAutomatedTargetingSystem: Int64? = nil
-			public var moduleActivationsBastion: Int64? = nil
-			public var moduleActivationsBombLauncher: Int64? = nil
-			public var moduleActivationsCapacitorBooster: Int64? = nil
-			public var moduleActivationsCargoScanner: Int64? = nil
-			public var moduleActivationsCloakingDevice: Int64? = nil
-			public var moduleActivationsCloneVatBay: Int64? = nil
-			public var moduleActivationsCynosuralField: Int64? = nil
-			public var moduleActivationsDamageControl: Int64? = nil
-			public var moduleActivationsDataMiners: Int64? = nil
-			public var moduleActivationsDroneControlUnit: Int64? = nil
-			public var moduleActivationsDroneTrackingModules: Int64? = nil
-			public var moduleActivationsEccm: Int64? = nil
-			public var moduleActivationsEcm: Int64? = nil
-			public var moduleActivationsEcmBurst: Int64? = nil
-			public var moduleActivationsEnergyDestabilizer: Int64? = nil
-			public var moduleActivationsEnergyVampire: Int64? = nil
-			public var moduleActivationsEnergyWeapon: Int64? = nil
-			public var moduleActivationsFestivalLauncher: Int64? = nil
-			public var moduleActivationsFrequencyMiningLaser: Int64? = nil
-			public var moduleActivationsFueledArmorRepairer: Int64? = nil
-			public var moduleActivationsFueledShieldBooster: Int64? = nil
-			public var moduleActivationsGangCoordinator: Int64? = nil
-			public var moduleActivationsGasCloudHarvester: Int64? = nil
-			public var moduleActivationsHullRepairUnit: Int64? = nil
-			public var moduleActivationsHybridWeapon: Int64? = nil
-			public var moduleActivationsIndustrialCore: Int64? = nil
-			public var moduleActivationsInterdictionSphereLauncher: Int64? = nil
-			public var moduleActivationsMicroJumpDrive: Int64? = nil
-			public var moduleActivationsMiningLaser: Int64? = nil
-			public var moduleActivationsMissileLauncher: Int64? = nil
-			public var moduleActivationsPassiveTargetingSystem: Int64? = nil
-			public var moduleActivationsProbeLauncher: Int64? = nil
-			public var moduleActivationsProjectedEccm: Int64? = nil
-			public var moduleActivationsProjectileWeapon: Int64? = nil
-			public var moduleActivationsPropulsionModule: Int64? = nil
-			public var moduleActivationsRemoteArmorRepairer: Int64? = nil
-			public var moduleActivationsRemoteCapacitorTransmitter: Int64? = nil
-			public var moduleActivationsRemoteEcmBurst: Int64? = nil
-			public var moduleActivationsRemoteHullRepairer: Int64? = nil
-			public var moduleActivationsRemoteSensorBooster: Int64? = nil
-			public var moduleActivationsRemoteSensorDamper: Int64? = nil
-			public var moduleActivationsRemoteShieldBooster: Int64? = nil
-			public var moduleActivationsRemoteTrackingComputer: Int64? = nil
-			public var moduleActivationsSalvager: Int64? = nil
-			public var moduleActivationsSensorBooster: Int64? = nil
-			public var moduleActivationsShieldBooster: Int64? = nil
-			public var moduleActivationsShieldHardener: Int64? = nil
-			public var moduleActivationsShipScanner: Int64? = nil
-			public var moduleActivationsSiege: Int64? = nil
-			public var moduleActivationsSmartBomb: Int64? = nil
-			public var moduleActivationsStasisWeb: Int64? = nil
-			public var moduleActivationsStripMiner: Int64? = nil
-			public var moduleActivationsSuperWeapon: Int64? = nil
-			public var moduleActivationsSurveyScanner: Int64? = nil
-			public var moduleActivationsTargetBreaker: Int64? = nil
-			public var moduleActivationsTargetPainter: Int64? = nil
-			public var moduleActivationsTrackingComputer: Int64? = nil
-			public var moduleActivationsTrackingDisruptor: Int64? = nil
-			public var moduleActivationsTractorBeam: Int64? = nil
-			public var moduleActivationsTriage: Int64? = nil
-			public var moduleActivationsWarpDisruptFieldGenerator: Int64? = nil
-			public var moduleActivationsWarpScrambler: Int64? = nil
-			public var moduleLinkWeapons: Int64? = nil
-			public var moduleOverload: Int64? = nil
-			public var moduleRepairs: Int64? = nil
-			public var orbitalStrikeCharactersKilled: Int64? = nil
-			public var orbitalStrikeDamageToPlayersArmorAmount: Int64? = nil
-			public var orbitalStrikeDamageToPlayersShieldAmount: Int64? = nil
-			public var pveDungeonsCompletedAgent: Int64? = nil
-			public var pveDungeonsCompletedDistribution: Int64? = nil
-			public var pveMissionsSucceeded: Int64? = nil
-			public var pveMissionsSucceededEpicArc: Int64? = nil
-			public var socialAddContactBad: Int64? = nil
-			public var socialAddContactGood: Int64? = nil
-			public var socialAddContactHigh: Int64? = nil
-			public var socialAddContactHorrible: Int64? = nil
-			public var socialAddContactNeutral: Int64? = nil
-			public var socialAddNote: Int64? = nil
-			public var socialAddedAsContactBad: Int64? = nil
-			public var socialAddedAsContactGood: Int64? = nil
-			public var socialAddedAsContactHigh: Int64? = nil
-			public var socialAddedAsContactHorrible: Int64? = nil
-			public var socialAddedAsContactNeutral: Int64? = nil
-			public var socialCalendarEventCreated: Int64? = nil
-			public var socialChatMessagesAlliance: Int64? = nil
-			public var socialChatMessagesConstellation: Int64? = nil
-			public var socialChatMessagesCorporation: Int64? = nil
-			public var socialChatMessagesFleet: Int64? = nil
-			public var socialChatMessagesRegion: Int64? = nil
-			public var socialChatMessagesSolarsystem: Int64? = nil
-			public var socialChatMessagesWarfaction: Int64? = nil
-			public var socialChatTotalMessageLength: Int64? = nil
-			public var socialDirectTrades: Int64? = nil
-			public var socialFleetBroadcasts: Int64? = nil
-			public var socialFleetJoins: Int64? = nil
-			public var socialMailsReceived: Int64? = nil
-			public var socialMailsSent: Int64? = nil
-			public var travelAccelerationGateActivations: Int64? = nil
-			public var travelAlignTo: Int64? = nil
-			public var travelDistanceWarpedHighSec: Int64? = nil
-			public var travelDistanceWarpedLowSec: Int64? = nil
-			public var travelDistanceWarpedNullSec: Int64? = nil
-			public var travelDistanceWarpedWormhole: Int64? = nil
-			public var travelDocksHighSec: Int64? = nil
-			public var travelDocksLowSec: Int64? = nil
-			public var travelDocksNullSec: Int64? = nil
-			public var travelJumpsStargateHighSec: Int64? = nil
-			public var travelJumpsStargateLowSec: Int64? = nil
-			public var travelJumpsStargateNullSec: Int64? = nil
-			public var travelJumpsWormhole: Int64? = nil
-			public var travelWarpsHighSec: Int64? = nil
-			public var travelWarpsLowSec: Int64? = nil
-			public var travelWarpsNullSec: Int64? = nil
-			public var travelWarpsToBookmark: Int64? = nil
-			public var travelWarpsToCelestial: Int64? = nil
-			public var travelWarpsToFleetMember: Int64? = nil
-			public var travelWarpsToScanResult: Int64? = nil
-			public var travelWarpsWormhole: Int64? = nil
-			public var year: Int = Int()
+			public let characterID: Int64
+			public let characterName: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				characterMinutes = dictionary["character_minutes"] as? Int64
-				characterSessionsStarted = dictionary["character_sessions_started"] as? Int64
-				combatCapDrainedbyNpc = dictionary["combat_cap_drainedby_npc"] as? Int64
-				combatCapDrainedbyPc = dictionary["combat_cap_drainedby_pc"] as? Int64
-				combatCapDrainingPc = dictionary["combat_cap_draining_pc"] as? Int64
-				combatCriminalFlagSet = dictionary["combat_criminal_flag_set"] as? Int64
-				combatDamageFromNpCsAmount = dictionary["combat_damage_from_np_cs_amount"] as? Int64
-				combatDamageFromNpCsNumShots = dictionary["combat_damage_from_np_cs_num_shots"] as? Int64
-				combatDamageFromPlayersBombAmount = dictionary["combat_damage_from_players_bomb_amount"] as? Int64
-				combatDamageFromPlayersBombNumShots = dictionary["combat_damage_from_players_bomb_num_shots"] as? Int64
-				combatDamageFromPlayersCombatDroneAmount = dictionary["combat_damage_from_players_combat_drone_amount"] as? Int64
-				combatDamageFromPlayersCombatDroneNumShots = dictionary["combat_damage_from_players_combat_drone_num_shots"] as? Int64
-				combatDamageFromPlayersEnergyAmount = dictionary["combat_damage_from_players_energy_amount"] as? Int64
-				combatDamageFromPlayersEnergyNumShots = dictionary["combat_damage_from_players_energy_num_shots"] as? Int64
-				combatDamageFromPlayersFighterBomberAmount = dictionary["combat_damage_from_players_fighter_bomber_amount"] as? Int64
-				combatDamageFromPlayersFighterBomberNumShots = dictionary["combat_damage_from_players_fighter_bomber_num_shots"] as? Int64
-				combatDamageFromPlayersFighterDroneAmount = dictionary["combat_damage_from_players_fighter_drone_amount"] as? Int64
-				combatDamageFromPlayersFighterDroneNumShots = dictionary["combat_damage_from_players_fighter_drone_num_shots"] as? Int64
-				combatDamageFromPlayersHybridAmount = dictionary["combat_damage_from_players_hybrid_amount"] as? Int64
-				combatDamageFromPlayersHybridNumShots = dictionary["combat_damage_from_players_hybrid_num_shots"] as? Int64
-				combatDamageFromPlayersMissileAmount = dictionary["combat_damage_from_players_missile_amount"] as? Int64
-				combatDamageFromPlayersMissileNumShots = dictionary["combat_damage_from_players_missile_num_shots"] as? Int64
-				combatDamageFromPlayersProjectileAmount = dictionary["combat_damage_from_players_projectile_amount"] as? Int64
-				combatDamageFromPlayersProjectileNumShots = dictionary["combat_damage_from_players_projectile_num_shots"] as? Int64
-				combatDamageFromPlayersSmartBombAmount = dictionary["combat_damage_from_players_smart_bomb_amount"] as? Int64
-				combatDamageFromPlayersSmartBombNumShots = dictionary["combat_damage_from_players_smart_bomb_num_shots"] as? Int64
-				combatDamageFromPlayersSuperAmount = dictionary["combat_damage_from_players_super_amount"] as? Int64
-				combatDamageFromPlayersSuperNumShots = dictionary["combat_damage_from_players_super_num_shots"] as? Int64
-				combatDamageFromStructuresTotalAmount = dictionary["combat_damage_from_structures_total_amount"] as? Int64
-				combatDamageFromStructuresTotalNumShots = dictionary["combat_damage_from_structures_total_num_shots"] as? Int64
-				combatDamageToPlayersBombAmount = dictionary["combat_damage_to_players_bomb_amount"] as? Int64
-				combatDamageToPlayersBombNumShots = dictionary["combat_damage_to_players_bomb_num_shots"] as? Int64
-				combatDamageToPlayersCombatDroneAmount = dictionary["combat_damage_to_players_combat_drone_amount"] as? Int64
-				combatDamageToPlayersCombatDroneNumShots = dictionary["combat_damage_to_players_combat_drone_num_shots"] as? Int64
-				combatDamageToPlayersEnergyAmount = dictionary["combat_damage_to_players_energy_amount"] as? Int64
-				combatDamageToPlayersEnergyNumShots = dictionary["combat_damage_to_players_energy_num_shots"] as? Int64
-				combatDamageToPlayersFighterBomberAmount = dictionary["combat_damage_to_players_fighter_bomber_amount"] as? Int64
-				combatDamageToPlayersFighterBomberNumShots = dictionary["combat_damage_to_players_fighter_bomber_num_shots"] as? Int64
-				combatDamageToPlayersFighterDroneAmount = dictionary["combat_damage_to_players_fighter_drone_amount"] as? Int64
-				combatDamageToPlayersFighterDroneNumShots = dictionary["combat_damage_to_players_fighter_drone_num_shots"] as? Int64
-				combatDamageToPlayersHybridAmount = dictionary["combat_damage_to_players_hybrid_amount"] as? Int64
-				combatDamageToPlayersHybridNumShots = dictionary["combat_damage_to_players_hybrid_num_shots"] as? Int64
-				combatDamageToPlayersMissileAmount = dictionary["combat_damage_to_players_missile_amount"] as? Int64
-				combatDamageToPlayersMissileNumShots = dictionary["combat_damage_to_players_missile_num_shots"] as? Int64
-				combatDamageToPlayersProjectileAmount = dictionary["combat_damage_to_players_projectile_amount"] as? Int64
-				combatDamageToPlayersProjectileNumShots = dictionary["combat_damage_to_players_projectile_num_shots"] as? Int64
-				combatDamageToPlayersSmartBombAmount = dictionary["combat_damage_to_players_smart_bomb_amount"] as? Int64
-				combatDamageToPlayersSmartBombNumShots = dictionary["combat_damage_to_players_smart_bomb_num_shots"] as? Int64
-				combatDamageToPlayersSuperAmount = dictionary["combat_damage_to_players_super_amount"] as? Int64
-				combatDamageToPlayersSuperNumShots = dictionary["combat_damage_to_players_super_num_shots"] as? Int64
-				combatDamageToStructuresTotalAmount = dictionary["combat_damage_to_structures_total_amount"] as? Int64
-				combatDamageToStructuresTotalNumShots = dictionary["combat_damage_to_structures_total_num_shots"] as? Int64
-				combatDeathsHighSec = dictionary["combat_deaths_high_sec"] as? Int64
-				combatDeathsLowSec = dictionary["combat_deaths_low_sec"] as? Int64
-				combatDeathsNullSec = dictionary["combat_deaths_null_sec"] as? Int64
-				combatDeathsPodHighSec = dictionary["combat_deaths_pod_high_sec"] as? Int64
-				combatDeathsPodLowSec = dictionary["combat_deaths_pod_low_sec"] as? Int64
-				combatDeathsPodNullSec = dictionary["combat_deaths_pod_null_sec"] as? Int64
-				combatDeathsPodWormhole = dictionary["combat_deaths_pod_wormhole"] as? Int64
-				combatDeathsWormhole = dictionary["combat_deaths_wormhole"] as? Int64
-				combatDroneEngage = dictionary["combat_drone_engage"] as? Int64
-				combatDuelRequested = dictionary["combat_duel_requested"] as? Int64
-				combatEngagementRegister = dictionary["combat_engagement_register"] as? Int64
-				combatKillsAssists = dictionary["combat_kills_assists"] as? Int64
-				combatKillsHighSec = dictionary["combat_kills_high_sec"] as? Int64
-				combatKillsLowSec = dictionary["combat_kills_low_sec"] as? Int64
-				combatKillsNullSec = dictionary["combat_kills_null_sec"] as? Int64
-				combatKillsPodHighSec = dictionary["combat_kills_pod_high_sec"] as? Int64
-				combatKillsPodLowSec = dictionary["combat_kills_pod_low_sec"] as? Int64
-				combatKillsPodNullSec = dictionary["combat_kills_pod_null_sec"] as? Int64
-				combatKillsPodWormhole = dictionary["combat_kills_pod_wormhole"] as? Int64
-				combatKillsWormhole = dictionary["combat_kills_wormhole"] as? Int64
-				combatNpcFlagSet = dictionary["combat_npc_flag_set"] as? Int64
-				combatPvpFlagSet = dictionary["combat_pvp_flag_set"] as? Int64
-				combatRepairArmorByRemoteAmount = dictionary["combat_repair_armor_by_remote_amount"] as? Int64
-				combatRepairArmorRemoteAmount = dictionary["combat_repair_armor_remote_amount"] as? Int64
-				combatRepairArmorSelfAmount = dictionary["combat_repair_armor_self_amount"] as? Int64
-				combatRepairCapacitorByRemoteAmount = dictionary["combat_repair_capacitor_by_remote_amount"] as? Int64
-				combatRepairCapacitorRemoteAmount = dictionary["combat_repair_capacitor_remote_amount"] as? Int64
-				combatRepairCapacitorSelfAmount = dictionary["combat_repair_capacitor_self_amount"] as? Int64
-				combatRepairHullByRemoteAmount = dictionary["combat_repair_hull_by_remote_amount"] as? Int64
-				combatRepairHullRemoteAmount = dictionary["combat_repair_hull_remote_amount"] as? Int64
-				combatRepairHullSelfAmount = dictionary["combat_repair_hull_self_amount"] as? Int64
-				combatRepairShieldByRemoteAmount = dictionary["combat_repair_shield_by_remote_amount"] as? Int64
-				combatRepairShieldRemoteAmount = dictionary["combat_repair_shield_remote_amount"] as? Int64
-				combatRepairShieldSelfAmount = dictionary["combat_repair_shield_self_amount"] as? Int64
-				combatSelfDestructs = dictionary["combat_self_destructs"] as? Int64
-				combatWarpScramblePc = dictionary["combat_warp_scramble_pc"] as? Int64
-				combatWarpScrambledbyNpc = dictionary["combat_warp_scrambledby_npc"] as? Int64
-				combatWarpScrambledbyPc = dictionary["combat_warp_scrambledby_pc"] as? Int64
-				combatWeaponFlagSet = dictionary["combat_weapon_flag_set"] as? Int64
-				combatWebifiedbyNpc = dictionary["combat_webifiedby_npc"] as? Int64
-				combatWebifiedbyPc = dictionary["combat_webifiedby_pc"] as? Int64
-				combatWebifyingPc = dictionary["combat_webifying_pc"] as? Int64
-				daysOfActivity = dictionary["days_of_activity"] as? Int64
-				genericConeScans = dictionary["generic_cone_scans"] as? Int64
-				genericRequestScans = dictionary["generic_request_scans"] as? Int64
-				industryHackingSuccesses = dictionary["industry_hacking_successes"] as? Int64
-				industryJobsCancelled = dictionary["industry_jobs_cancelled"] as? Int64
-				industryJobsCompletedCopyBlueprint = dictionary["industry_jobs_completed_copy_blueprint"] as? Int64
-				industryJobsCompletedInvention = dictionary["industry_jobs_completed_invention"] as? Int64
-				industryJobsCompletedManufacture = dictionary["industry_jobs_completed_manufacture"] as? Int64
-				industryJobsCompletedManufactureAsteroid = dictionary["industry_jobs_completed_manufacture_asteroid"] as? Int64
-				industryJobsCompletedManufactureAsteroidQuantity = dictionary["industry_jobs_completed_manufacture_asteroid_quantity"] as? Int64
-				industryJobsCompletedManufactureCharge = dictionary["industry_jobs_completed_manufacture_charge"] as? Int64
-				industryJobsCompletedManufactureChargeQuantity = dictionary["industry_jobs_completed_manufacture_charge_quantity"] as? Int64
-				industryJobsCompletedManufactureCommodity = dictionary["industry_jobs_completed_manufacture_commodity"] as? Int64
-				industryJobsCompletedManufactureCommodityQuantity = dictionary["industry_jobs_completed_manufacture_commodity_quantity"] as? Int64
-				industryJobsCompletedManufactureDeployable = dictionary["industry_jobs_completed_manufacture_deployable"] as? Int64
-				industryJobsCompletedManufactureDeployableQuantity = dictionary["industry_jobs_completed_manufacture_deployable_quantity"] as? Int64
-				industryJobsCompletedManufactureDrone = dictionary["industry_jobs_completed_manufacture_drone"] as? Int64
-				industryJobsCompletedManufactureDroneQuantity = dictionary["industry_jobs_completed_manufacture_drone_quantity"] as? Int64
-				industryJobsCompletedManufactureImplant = dictionary["industry_jobs_completed_manufacture_implant"] as? Int64
-				industryJobsCompletedManufactureImplantQuantity = dictionary["industry_jobs_completed_manufacture_implant_quantity"] as? Int64
-				industryJobsCompletedManufactureModule = dictionary["industry_jobs_completed_manufacture_module"] as? Int64
-				industryJobsCompletedManufactureModuleQuantity = dictionary["industry_jobs_completed_manufacture_module_quantity"] as? Int64
-				industryJobsCompletedManufactureOther = dictionary["industry_jobs_completed_manufacture_other"] as? Int64
-				industryJobsCompletedManufactureOtherQuantity = dictionary["industry_jobs_completed_manufacture_other_quantity"] as? Int64
-				industryJobsCompletedManufactureShip = dictionary["industry_jobs_completed_manufacture_ship"] as? Int64
-				industryJobsCompletedManufactureShipQuantity = dictionary["industry_jobs_completed_manufacture_ship_quantity"] as? Int64
-				industryJobsCompletedManufactureStructure = dictionary["industry_jobs_completed_manufacture_structure"] as? Int64
-				industryJobsCompletedManufactureStructureQuantity = dictionary["industry_jobs_completed_manufacture_structure_quantity"] as? Int64
-				industryJobsCompletedManufactureSubsystem = dictionary["industry_jobs_completed_manufacture_subsystem"] as? Int64
-				industryJobsCompletedManufactureSubsystemQuantity = dictionary["industry_jobs_completed_manufacture_subsystem_quantity"] as? Int64
-				industryJobsCompletedMaterialProductivity = dictionary["industry_jobs_completed_material_productivity"] as? Int64
-				industryJobsCompletedTimeProductivity = dictionary["industry_jobs_completed_time_productivity"] as? Int64
-				industryJobsStartedCopyBlueprint = dictionary["industry_jobs_started_copy_blueprint"] as? Int64
-				industryJobsStartedInvention = dictionary["industry_jobs_started_invention"] as? Int64
-				industryJobsStartedManufacture = dictionary["industry_jobs_started_manufacture"] as? Int64
-				industryJobsStartedMaterialProductivity = dictionary["industry_jobs_started_material_productivity"] as? Int64
-				industryJobsStartedTimeProductivity = dictionary["industry_jobs_started_time_productivity"] as? Int64
-				industryReprocessItem = dictionary["industry_reprocess_item"] as? Int64
-				industryReprocessItemQuantity = dictionary["industry_reprocess_item_quantity"] as? Int64
-				inventoryAbandonLootQuantity = dictionary["inventory_abandon_loot_quantity"] as? Int64
-				inventoryTrashItemQuantity = dictionary["inventory_trash_item_quantity"] as? Int64
-				iskIn = dictionary["isk_in"] as? Int64
-				iskOut = dictionary["isk_out"] as? Int64
-				marketAcceptContractsCourier = dictionary["market_accept_contracts_courier"] as? Int64
-				marketAcceptContractsItemExchange = dictionary["market_accept_contracts_item_exchange"] as? Int64
-				marketBuyOrdersPlaced = dictionary["market_buy_orders_placed"] as? Int64
-				marketCancelMarketOrder = dictionary["market_cancel_market_order"] as? Int64
-				marketCreateContractsAuction = dictionary["market_create_contracts_auction"] as? Int64
-				marketCreateContractsCourier = dictionary["market_create_contracts_courier"] as? Int64
-				marketCreateContractsItemExchange = dictionary["market_create_contracts_item_exchange"] as? Int64
-				marketDeliverCourierContract = dictionary["market_deliver_courier_contract"] as? Int64
-				marketIskGained = dictionary["market_isk_gained"] as? Int64
-				marketIskSpent = dictionary["market_isk_spent"] as? Int64
-				marketModifyMarketOrder = dictionary["market_modify_market_order"] as? Int64
-				marketSearchContracts = dictionary["market_search_contracts"] as? Int64
-				marketSellOrdersPlaced = dictionary["market_sell_orders_placed"] as? Int64
-				miningDroneMine = dictionary["mining_drone_mine"] as? Int64
-				miningOreArkonor = dictionary["mining_ore_arkonor"] as? Int64
-				miningOreBistot = dictionary["mining_ore_bistot"] as? Int64
-				miningOreCrokite = dictionary["mining_ore_crokite"] as? Int64
-				miningOreDarkOchre = dictionary["mining_ore_dark_ochre"] as? Int64
-				miningOreGneiss = dictionary["mining_ore_gneiss"] as? Int64
-				miningOreHarvestableCloud = dictionary["mining_ore_harvestable_cloud"] as? Int64
-				miningOreHedbergite = dictionary["mining_ore_hedbergite"] as? Int64
-				miningOreHemorphite = dictionary["mining_ore_hemorphite"] as? Int64
-				miningOreIce = dictionary["mining_ore_ice"] as? Int64
-				miningOreJaspet = dictionary["mining_ore_jaspet"] as? Int64
-				miningOreKernite = dictionary["mining_ore_kernite"] as? Int64
-				miningOreMercoxit = dictionary["mining_ore_mercoxit"] as? Int64
-				miningOreOmber = dictionary["mining_ore_omber"] as? Int64
-				miningOrePlagioclase = dictionary["mining_ore_plagioclase"] as? Int64
-				miningOrePyroxeres = dictionary["mining_ore_pyroxeres"] as? Int64
-				miningOreScordite = dictionary["mining_ore_scordite"] as? Int64
-				miningOreSpodumain = dictionary["mining_ore_spodumain"] as? Int64
-				miningOreVeldspar = dictionary["mining_ore_veldspar"] as? Int64
-				moduleActivationsArmorHardener = dictionary["module_activations_armor_hardener"] as? Int64
-				moduleActivationsArmorRepairUnit = dictionary["module_activations_armor_repair_unit"] as? Int64
-				moduleActivationsArmorResistanceShiftHardener = dictionary["module_activations_armor_resistance_shift_hardener"] as? Int64
-				moduleActivationsAutomatedTargetingSystem = dictionary["module_activations_automated_targeting_system"] as? Int64
-				moduleActivationsBastion = dictionary["module_activations_bastion"] as? Int64
-				moduleActivationsBombLauncher = dictionary["module_activations_bomb_launcher"] as? Int64
-				moduleActivationsCapacitorBooster = dictionary["module_activations_capacitor_booster"] as? Int64
-				moduleActivationsCargoScanner = dictionary["module_activations_cargo_scanner"] as? Int64
-				moduleActivationsCloakingDevice = dictionary["module_activations_cloaking_device"] as? Int64
-				moduleActivationsCloneVatBay = dictionary["module_activations_clone_vat_bay"] as? Int64
-				moduleActivationsCynosuralField = dictionary["module_activations_cynosural_field"] as? Int64
-				moduleActivationsDamageControl = dictionary["module_activations_damage_control"] as? Int64
-				moduleActivationsDataMiners = dictionary["module_activations_data_miners"] as? Int64
-				moduleActivationsDroneControlUnit = dictionary["module_activations_drone_control_unit"] as? Int64
-				moduleActivationsDroneTrackingModules = dictionary["module_activations_drone_tracking_modules"] as? Int64
-				moduleActivationsEccm = dictionary["module_activations_eccm"] as? Int64
-				moduleActivationsEcm = dictionary["module_activations_ecm"] as? Int64
-				moduleActivationsEcmBurst = dictionary["module_activations_ecm_burst"] as? Int64
-				moduleActivationsEnergyDestabilizer = dictionary["module_activations_energy_destabilizer"] as? Int64
-				moduleActivationsEnergyVampire = dictionary["module_activations_energy_vampire"] as? Int64
-				moduleActivationsEnergyWeapon = dictionary["module_activations_energy_weapon"] as? Int64
-				moduleActivationsFestivalLauncher = dictionary["module_activations_festival_launcher"] as? Int64
-				moduleActivationsFrequencyMiningLaser = dictionary["module_activations_frequency_mining_laser"] as? Int64
-				moduleActivationsFueledArmorRepairer = dictionary["module_activations_fueled_armor_repairer"] as? Int64
-				moduleActivationsFueledShieldBooster = dictionary["module_activations_fueled_shield_booster"] as? Int64
-				moduleActivationsGangCoordinator = dictionary["module_activations_gang_coordinator"] as? Int64
-				moduleActivationsGasCloudHarvester = dictionary["module_activations_gas_cloud_harvester"] as? Int64
-				moduleActivationsHullRepairUnit = dictionary["module_activations_hull_repair_unit"] as? Int64
-				moduleActivationsHybridWeapon = dictionary["module_activations_hybrid_weapon"] as? Int64
-				moduleActivationsIndustrialCore = dictionary["module_activations_industrial_core"] as? Int64
-				moduleActivationsInterdictionSphereLauncher = dictionary["module_activations_interdiction_sphere_launcher"] as? Int64
-				moduleActivationsMicroJumpDrive = dictionary["module_activations_micro_jump_drive"] as? Int64
-				moduleActivationsMiningLaser = dictionary["module_activations_mining_laser"] as? Int64
-				moduleActivationsMissileLauncher = dictionary["module_activations_missile_launcher"] as? Int64
-				moduleActivationsPassiveTargetingSystem = dictionary["module_activations_passive_targeting_system"] as? Int64
-				moduleActivationsProbeLauncher = dictionary["module_activations_probe_launcher"] as? Int64
-				moduleActivationsProjectedEccm = dictionary["module_activations_projected_eccm"] as? Int64
-				moduleActivationsProjectileWeapon = dictionary["module_activations_projectile_weapon"] as? Int64
-				moduleActivationsPropulsionModule = dictionary["module_activations_propulsion_module"] as? Int64
-				moduleActivationsRemoteArmorRepairer = dictionary["module_activations_remote_armor_repairer"] as? Int64
-				moduleActivationsRemoteCapacitorTransmitter = dictionary["module_activations_remote_capacitor_transmitter"] as? Int64
-				moduleActivationsRemoteEcmBurst = dictionary["module_activations_remote_ecm_burst"] as? Int64
-				moduleActivationsRemoteHullRepairer = dictionary["module_activations_remote_hull_repairer"] as? Int64
-				moduleActivationsRemoteSensorBooster = dictionary["module_activations_remote_sensor_booster"] as? Int64
-				moduleActivationsRemoteSensorDamper = dictionary["module_activations_remote_sensor_damper"] as? Int64
-				moduleActivationsRemoteShieldBooster = dictionary["module_activations_remote_shield_booster"] as? Int64
-				moduleActivationsRemoteTrackingComputer = dictionary["module_activations_remote_tracking_computer"] as? Int64
-				moduleActivationsSalvager = dictionary["module_activations_salvager"] as? Int64
-				moduleActivationsSensorBooster = dictionary["module_activations_sensor_booster"] as? Int64
-				moduleActivationsShieldBooster = dictionary["module_activations_shield_booster"] as? Int64
-				moduleActivationsShieldHardener = dictionary["module_activations_shield_hardener"] as? Int64
-				moduleActivationsShipScanner = dictionary["module_activations_ship_scanner"] as? Int64
-				moduleActivationsSiege = dictionary["module_activations_siege"] as? Int64
-				moduleActivationsSmartBomb = dictionary["module_activations_smart_bomb"] as? Int64
-				moduleActivationsStasisWeb = dictionary["module_activations_stasis_web"] as? Int64
-				moduleActivationsStripMiner = dictionary["module_activations_strip_miner"] as? Int64
-				moduleActivationsSuperWeapon = dictionary["module_activations_super_weapon"] as? Int64
-				moduleActivationsSurveyScanner = dictionary["module_activations_survey_scanner"] as? Int64
-				moduleActivationsTargetBreaker = dictionary["module_activations_target_breaker"] as? Int64
-				moduleActivationsTargetPainter = dictionary["module_activations_target_painter"] as? Int64
-				moduleActivationsTrackingComputer = dictionary["module_activations_tracking_computer"] as? Int64
-				moduleActivationsTrackingDisruptor = dictionary["module_activations_tracking_disruptor"] as? Int64
-				moduleActivationsTractorBeam = dictionary["module_activations_tractor_beam"] as? Int64
-				moduleActivationsTriage = dictionary["module_activations_triage"] as? Int64
-				moduleActivationsWarpDisruptFieldGenerator = dictionary["module_activations_warp_disrupt_field_generator"] as? Int64
-				moduleActivationsWarpScrambler = dictionary["module_activations_warp_scrambler"] as? Int64
-				moduleLinkWeapons = dictionary["module_link_weapons"] as? Int64
-				moduleOverload = dictionary["module_overload"] as? Int64
-				moduleRepairs = dictionary["module_repairs"] as? Int64
-				orbitalStrikeCharactersKilled = dictionary["orbital_strike_characters_killed"] as? Int64
-				orbitalStrikeDamageToPlayersArmorAmount = dictionary["orbital_strike_damage_to_players_armor_amount"] as? Int64
-				orbitalStrikeDamageToPlayersShieldAmount = dictionary["orbital_strike_damage_to_players_shield_amount"] as? Int64
-				pveDungeonsCompletedAgent = dictionary["pve_dungeons_completed_agent"] as? Int64
-				pveDungeonsCompletedDistribution = dictionary["pve_dungeons_completed_distribution"] as? Int64
-				pveMissionsSucceeded = dictionary["pve_missions_succeeded"] as? Int64
-				pveMissionsSucceededEpicArc = dictionary["pve_missions_succeeded_epic_arc"] as? Int64
-				socialAddContactBad = dictionary["social_add_contact_bad"] as? Int64
-				socialAddContactGood = dictionary["social_add_contact_good"] as? Int64
-				socialAddContactHigh = dictionary["social_add_contact_high"] as? Int64
-				socialAddContactHorrible = dictionary["social_add_contact_horrible"] as? Int64
-				socialAddContactNeutral = dictionary["social_add_contact_neutral"] as? Int64
-				socialAddNote = dictionary["social_add_note"] as? Int64
-				socialAddedAsContactBad = dictionary["social_added_as_contact_bad"] as? Int64
-				socialAddedAsContactGood = dictionary["social_added_as_contact_good"] as? Int64
-				socialAddedAsContactHigh = dictionary["social_added_as_contact_high"] as? Int64
-				socialAddedAsContactHorrible = dictionary["social_added_as_contact_horrible"] as? Int64
-				socialAddedAsContactNeutral = dictionary["social_added_as_contact_neutral"] as? Int64
-				socialCalendarEventCreated = dictionary["social_calendar_event_created"] as? Int64
-				socialChatMessagesAlliance = dictionary["social_chat_messages_alliance"] as? Int64
-				socialChatMessagesConstellation = dictionary["social_chat_messages_constellation"] as? Int64
-				socialChatMessagesCorporation = dictionary["social_chat_messages_corporation"] as? Int64
-				socialChatMessagesFleet = dictionary["social_chat_messages_fleet"] as? Int64
-				socialChatMessagesRegion = dictionary["social_chat_messages_region"] as? Int64
-				socialChatMessagesSolarsystem = dictionary["social_chat_messages_solarsystem"] as? Int64
-				socialChatMessagesWarfaction = dictionary["social_chat_messages_warfaction"] as? Int64
-				socialChatTotalMessageLength = dictionary["social_chat_total_message_length"] as? Int64
-				socialDirectTrades = dictionary["social_direct_trades"] as? Int64
-				socialFleetBroadcasts = dictionary["social_fleet_broadcasts"] as? Int64
-				socialFleetJoins = dictionary["social_fleet_joins"] as? Int64
-				socialMailsReceived = dictionary["social_mails_received"] as? Int64
-				socialMailsSent = dictionary["social_mails_sent"] as? Int64
-				travelAccelerationGateActivations = dictionary["travel_acceleration_gate_activations"] as? Int64
-				travelAlignTo = dictionary["travel_align_to"] as? Int64
-				travelDistanceWarpedHighSec = dictionary["travel_distance_warped_high_sec"] as? Int64
-				travelDistanceWarpedLowSec = dictionary["travel_distance_warped_low_sec"] as? Int64
-				travelDistanceWarpedNullSec = dictionary["travel_distance_warped_null_sec"] as? Int64
-				travelDistanceWarpedWormhole = dictionary["travel_distance_warped_wormhole"] as? Int64
-				travelDocksHighSec = dictionary["travel_docks_high_sec"] as? Int64
-				travelDocksLowSec = dictionary["travel_docks_low_sec"] as? Int64
-				travelDocksNullSec = dictionary["travel_docks_null_sec"] as? Int64
-				travelJumpsStargateHighSec = dictionary["travel_jumps_stargate_high_sec"] as? Int64
-				travelJumpsStargateLowSec = dictionary["travel_jumps_stargate_low_sec"] as? Int64
-				travelJumpsStargateNullSec = dictionary["travel_jumps_stargate_null_sec"] as? Int64
-				travelJumpsWormhole = dictionary["travel_jumps_wormhole"] as? Int64
-				travelWarpsHighSec = dictionary["travel_warps_high_sec"] as? Int64
-				travelWarpsLowSec = dictionary["travel_warps_low_sec"] as? Int64
-				travelWarpsNullSec = dictionary["travel_warps_null_sec"] as? Int64
-				travelWarpsToBookmark = dictionary["travel_warps_to_bookmark"] as? Int64
-				travelWarpsToCelestial = dictionary["travel_warps_to_celestial"] as? Int64
-				travelWarpsToFleetMember = dictionary["travel_warps_to_fleet_member"] as? Int64
-				travelWarpsToScanResult = dictionary["travel_warps_to_scan_result"] as? Int64
-				travelWarpsWormhole = dictionary["travel_warps_wormhole"] as? Int64
-				guard let year = dictionary["year"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.year = year
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				characterMinutes = aDecoder.containsValue(forKey: "character_minutes") ? aDecoder.decodeInt64(forKey: "character_minutes") : nil
-				characterSessionsStarted = aDecoder.containsValue(forKey: "character_sessions_started") ? aDecoder.decodeInt64(forKey: "character_sessions_started") : nil
-				combatCapDrainedbyNpc = aDecoder.containsValue(forKey: "combat_cap_drainedby_npc") ? aDecoder.decodeInt64(forKey: "combat_cap_drainedby_npc") : nil
-				combatCapDrainedbyPc = aDecoder.containsValue(forKey: "combat_cap_drainedby_pc") ? aDecoder.decodeInt64(forKey: "combat_cap_drainedby_pc") : nil
-				combatCapDrainingPc = aDecoder.containsValue(forKey: "combat_cap_draining_pc") ? aDecoder.decodeInt64(forKey: "combat_cap_draining_pc") : nil
-				combatCriminalFlagSet = aDecoder.containsValue(forKey: "combat_criminal_flag_set") ? aDecoder.decodeInt64(forKey: "combat_criminal_flag_set") : nil
-				combatDamageFromNpCsAmount = aDecoder.containsValue(forKey: "combat_damage_from_np_cs_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_np_cs_amount") : nil
-				combatDamageFromNpCsNumShots = aDecoder.containsValue(forKey: "combat_damage_from_np_cs_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_np_cs_num_shots") : nil
-				combatDamageFromPlayersBombAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_bomb_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_bomb_amount") : nil
-				combatDamageFromPlayersBombNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_bomb_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_bomb_num_shots") : nil
-				combatDamageFromPlayersCombatDroneAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_combat_drone_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_combat_drone_amount") : nil
-				combatDamageFromPlayersCombatDroneNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_combat_drone_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_combat_drone_num_shots") : nil
-				combatDamageFromPlayersEnergyAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_energy_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_energy_amount") : nil
-				combatDamageFromPlayersEnergyNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_energy_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_energy_num_shots") : nil
-				combatDamageFromPlayersFighterBomberAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_fighter_bomber_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_fighter_bomber_amount") : nil
-				combatDamageFromPlayersFighterBomberNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_fighter_bomber_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_fighter_bomber_num_shots") : nil
-				combatDamageFromPlayersFighterDroneAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_fighter_drone_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_fighter_drone_amount") : nil
-				combatDamageFromPlayersFighterDroneNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_fighter_drone_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_fighter_drone_num_shots") : nil
-				combatDamageFromPlayersHybridAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_hybrid_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_hybrid_amount") : nil
-				combatDamageFromPlayersHybridNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_hybrid_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_hybrid_num_shots") : nil
-				combatDamageFromPlayersMissileAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_missile_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_missile_amount") : nil
-				combatDamageFromPlayersMissileNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_missile_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_missile_num_shots") : nil
-				combatDamageFromPlayersProjectileAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_projectile_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_projectile_amount") : nil
-				combatDamageFromPlayersProjectileNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_projectile_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_projectile_num_shots") : nil
-				combatDamageFromPlayersSmartBombAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_smart_bomb_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_smart_bomb_amount") : nil
-				combatDamageFromPlayersSmartBombNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_smart_bomb_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_smart_bomb_num_shots") : nil
-				combatDamageFromPlayersSuperAmount = aDecoder.containsValue(forKey: "combat_damage_from_players_super_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_super_amount") : nil
-				combatDamageFromPlayersSuperNumShots = aDecoder.containsValue(forKey: "combat_damage_from_players_super_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_players_super_num_shots") : nil
-				combatDamageFromStructuresTotalAmount = aDecoder.containsValue(forKey: "combat_damage_from_structures_total_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_from_structures_total_amount") : nil
-				combatDamageFromStructuresTotalNumShots = aDecoder.containsValue(forKey: "combat_damage_from_structures_total_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_from_structures_total_num_shots") : nil
-				combatDamageToPlayersBombAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_bomb_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_bomb_amount") : nil
-				combatDamageToPlayersBombNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_bomb_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_bomb_num_shots") : nil
-				combatDamageToPlayersCombatDroneAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_combat_drone_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_combat_drone_amount") : nil
-				combatDamageToPlayersCombatDroneNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_combat_drone_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_combat_drone_num_shots") : nil
-				combatDamageToPlayersEnergyAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_energy_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_energy_amount") : nil
-				combatDamageToPlayersEnergyNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_energy_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_energy_num_shots") : nil
-				combatDamageToPlayersFighterBomberAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_fighter_bomber_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_fighter_bomber_amount") : nil
-				combatDamageToPlayersFighterBomberNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_fighter_bomber_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_fighter_bomber_num_shots") : nil
-				combatDamageToPlayersFighterDroneAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_fighter_drone_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_fighter_drone_amount") : nil
-				combatDamageToPlayersFighterDroneNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_fighter_drone_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_fighter_drone_num_shots") : nil
-				combatDamageToPlayersHybridAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_hybrid_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_hybrid_amount") : nil
-				combatDamageToPlayersHybridNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_hybrid_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_hybrid_num_shots") : nil
-				combatDamageToPlayersMissileAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_missile_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_missile_amount") : nil
-				combatDamageToPlayersMissileNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_missile_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_missile_num_shots") : nil
-				combatDamageToPlayersProjectileAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_projectile_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_projectile_amount") : nil
-				combatDamageToPlayersProjectileNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_projectile_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_projectile_num_shots") : nil
-				combatDamageToPlayersSmartBombAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_smart_bomb_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_smart_bomb_amount") : nil
-				combatDamageToPlayersSmartBombNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_smart_bomb_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_smart_bomb_num_shots") : nil
-				combatDamageToPlayersSuperAmount = aDecoder.containsValue(forKey: "combat_damage_to_players_super_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_super_amount") : nil
-				combatDamageToPlayersSuperNumShots = aDecoder.containsValue(forKey: "combat_damage_to_players_super_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_players_super_num_shots") : nil
-				combatDamageToStructuresTotalAmount = aDecoder.containsValue(forKey: "combat_damage_to_structures_total_amount") ? aDecoder.decodeInt64(forKey: "combat_damage_to_structures_total_amount") : nil
-				combatDamageToStructuresTotalNumShots = aDecoder.containsValue(forKey: "combat_damage_to_structures_total_num_shots") ? aDecoder.decodeInt64(forKey: "combat_damage_to_structures_total_num_shots") : nil
-				combatDeathsHighSec = aDecoder.containsValue(forKey: "combat_deaths_high_sec") ? aDecoder.decodeInt64(forKey: "combat_deaths_high_sec") : nil
-				combatDeathsLowSec = aDecoder.containsValue(forKey: "combat_deaths_low_sec") ? aDecoder.decodeInt64(forKey: "combat_deaths_low_sec") : nil
-				combatDeathsNullSec = aDecoder.containsValue(forKey: "combat_deaths_null_sec") ? aDecoder.decodeInt64(forKey: "combat_deaths_null_sec") : nil
-				combatDeathsPodHighSec = aDecoder.containsValue(forKey: "combat_deaths_pod_high_sec") ? aDecoder.decodeInt64(forKey: "combat_deaths_pod_high_sec") : nil
-				combatDeathsPodLowSec = aDecoder.containsValue(forKey: "combat_deaths_pod_low_sec") ? aDecoder.decodeInt64(forKey: "combat_deaths_pod_low_sec") : nil
-				combatDeathsPodNullSec = aDecoder.containsValue(forKey: "combat_deaths_pod_null_sec") ? aDecoder.decodeInt64(forKey: "combat_deaths_pod_null_sec") : nil
-				combatDeathsPodWormhole = aDecoder.containsValue(forKey: "combat_deaths_pod_wormhole") ? aDecoder.decodeInt64(forKey: "combat_deaths_pod_wormhole") : nil
-				combatDeathsWormhole = aDecoder.containsValue(forKey: "combat_deaths_wormhole") ? aDecoder.decodeInt64(forKey: "combat_deaths_wormhole") : nil
-				combatDroneEngage = aDecoder.containsValue(forKey: "combat_drone_engage") ? aDecoder.decodeInt64(forKey: "combat_drone_engage") : nil
-				combatDuelRequested = aDecoder.containsValue(forKey: "combat_duel_requested") ? aDecoder.decodeInt64(forKey: "combat_duel_requested") : nil
-				combatEngagementRegister = aDecoder.containsValue(forKey: "combat_engagement_register") ? aDecoder.decodeInt64(forKey: "combat_engagement_register") : nil
-				combatKillsAssists = aDecoder.containsValue(forKey: "combat_kills_assists") ? aDecoder.decodeInt64(forKey: "combat_kills_assists") : nil
-				combatKillsHighSec = aDecoder.containsValue(forKey: "combat_kills_high_sec") ? aDecoder.decodeInt64(forKey: "combat_kills_high_sec") : nil
-				combatKillsLowSec = aDecoder.containsValue(forKey: "combat_kills_low_sec") ? aDecoder.decodeInt64(forKey: "combat_kills_low_sec") : nil
-				combatKillsNullSec = aDecoder.containsValue(forKey: "combat_kills_null_sec") ? aDecoder.decodeInt64(forKey: "combat_kills_null_sec") : nil
-				combatKillsPodHighSec = aDecoder.containsValue(forKey: "combat_kills_pod_high_sec") ? aDecoder.decodeInt64(forKey: "combat_kills_pod_high_sec") : nil
-				combatKillsPodLowSec = aDecoder.containsValue(forKey: "combat_kills_pod_low_sec") ? aDecoder.decodeInt64(forKey: "combat_kills_pod_low_sec") : nil
-				combatKillsPodNullSec = aDecoder.containsValue(forKey: "combat_kills_pod_null_sec") ? aDecoder.decodeInt64(forKey: "combat_kills_pod_null_sec") : nil
-				combatKillsPodWormhole = aDecoder.containsValue(forKey: "combat_kills_pod_wormhole") ? aDecoder.decodeInt64(forKey: "combat_kills_pod_wormhole") : nil
-				combatKillsWormhole = aDecoder.containsValue(forKey: "combat_kills_wormhole") ? aDecoder.decodeInt64(forKey: "combat_kills_wormhole") : nil
-				combatNpcFlagSet = aDecoder.containsValue(forKey: "combat_npc_flag_set") ? aDecoder.decodeInt64(forKey: "combat_npc_flag_set") : nil
-				combatPvpFlagSet = aDecoder.containsValue(forKey: "combat_pvp_flag_set") ? aDecoder.decodeInt64(forKey: "combat_pvp_flag_set") : nil
-				combatRepairArmorByRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_armor_by_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_armor_by_remote_amount") : nil
-				combatRepairArmorRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_armor_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_armor_remote_amount") : nil
-				combatRepairArmorSelfAmount = aDecoder.containsValue(forKey: "combat_repair_armor_self_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_armor_self_amount") : nil
-				combatRepairCapacitorByRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_capacitor_by_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_capacitor_by_remote_amount") : nil
-				combatRepairCapacitorRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_capacitor_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_capacitor_remote_amount") : nil
-				combatRepairCapacitorSelfAmount = aDecoder.containsValue(forKey: "combat_repair_capacitor_self_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_capacitor_self_amount") : nil
-				combatRepairHullByRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_hull_by_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_hull_by_remote_amount") : nil
-				combatRepairHullRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_hull_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_hull_remote_amount") : nil
-				combatRepairHullSelfAmount = aDecoder.containsValue(forKey: "combat_repair_hull_self_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_hull_self_amount") : nil
-				combatRepairShieldByRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_shield_by_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_shield_by_remote_amount") : nil
-				combatRepairShieldRemoteAmount = aDecoder.containsValue(forKey: "combat_repair_shield_remote_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_shield_remote_amount") : nil
-				combatRepairShieldSelfAmount = aDecoder.containsValue(forKey: "combat_repair_shield_self_amount") ? aDecoder.decodeInt64(forKey: "combat_repair_shield_self_amount") : nil
-				combatSelfDestructs = aDecoder.containsValue(forKey: "combat_self_destructs") ? aDecoder.decodeInt64(forKey: "combat_self_destructs") : nil
-				combatWarpScramblePc = aDecoder.containsValue(forKey: "combat_warp_scramble_pc") ? aDecoder.decodeInt64(forKey: "combat_warp_scramble_pc") : nil
-				combatWarpScrambledbyNpc = aDecoder.containsValue(forKey: "combat_warp_scrambledby_npc") ? aDecoder.decodeInt64(forKey: "combat_warp_scrambledby_npc") : nil
-				combatWarpScrambledbyPc = aDecoder.containsValue(forKey: "combat_warp_scrambledby_pc") ? aDecoder.decodeInt64(forKey: "combat_warp_scrambledby_pc") : nil
-				combatWeaponFlagSet = aDecoder.containsValue(forKey: "combat_weapon_flag_set") ? aDecoder.decodeInt64(forKey: "combat_weapon_flag_set") : nil
-				combatWebifiedbyNpc = aDecoder.containsValue(forKey: "combat_webifiedby_npc") ? aDecoder.decodeInt64(forKey: "combat_webifiedby_npc") : nil
-				combatWebifiedbyPc = aDecoder.containsValue(forKey: "combat_webifiedby_pc") ? aDecoder.decodeInt64(forKey: "combat_webifiedby_pc") : nil
-				combatWebifyingPc = aDecoder.containsValue(forKey: "combat_webifying_pc") ? aDecoder.decodeInt64(forKey: "combat_webifying_pc") : nil
-				daysOfActivity = aDecoder.containsValue(forKey: "days_of_activity") ? aDecoder.decodeInt64(forKey: "days_of_activity") : nil
-				genericConeScans = aDecoder.containsValue(forKey: "generic_cone_scans") ? aDecoder.decodeInt64(forKey: "generic_cone_scans") : nil
-				genericRequestScans = aDecoder.containsValue(forKey: "generic_request_scans") ? aDecoder.decodeInt64(forKey: "generic_request_scans") : nil
-				industryHackingSuccesses = aDecoder.containsValue(forKey: "industry_hacking_successes") ? aDecoder.decodeInt64(forKey: "industry_hacking_successes") : nil
-				industryJobsCancelled = aDecoder.containsValue(forKey: "industry_jobs_cancelled") ? aDecoder.decodeInt64(forKey: "industry_jobs_cancelled") : nil
-				industryJobsCompletedCopyBlueprint = aDecoder.containsValue(forKey: "industry_jobs_completed_copy_blueprint") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_copy_blueprint") : nil
-				industryJobsCompletedInvention = aDecoder.containsValue(forKey: "industry_jobs_completed_invention") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_invention") : nil
-				industryJobsCompletedManufacture = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture") : nil
-				industryJobsCompletedManufactureAsteroid = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_asteroid") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_asteroid") : nil
-				industryJobsCompletedManufactureAsteroidQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_asteroid_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_asteroid_quantity") : nil
-				industryJobsCompletedManufactureCharge = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_charge") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_charge") : nil
-				industryJobsCompletedManufactureChargeQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_charge_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_charge_quantity") : nil
-				industryJobsCompletedManufactureCommodity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_commodity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_commodity") : nil
-				industryJobsCompletedManufactureCommodityQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_commodity_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_commodity_quantity") : nil
-				industryJobsCompletedManufactureDeployable = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_deployable") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_deployable") : nil
-				industryJobsCompletedManufactureDeployableQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_deployable_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_deployable_quantity") : nil
-				industryJobsCompletedManufactureDrone = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_drone") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_drone") : nil
-				industryJobsCompletedManufactureDroneQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_drone_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_drone_quantity") : nil
-				industryJobsCompletedManufactureImplant = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_implant") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_implant") : nil
-				industryJobsCompletedManufactureImplantQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_implant_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_implant_quantity") : nil
-				industryJobsCompletedManufactureModule = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_module") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_module") : nil
-				industryJobsCompletedManufactureModuleQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_module_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_module_quantity") : nil
-				industryJobsCompletedManufactureOther = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_other") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_other") : nil
-				industryJobsCompletedManufactureOtherQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_other_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_other_quantity") : nil
-				industryJobsCompletedManufactureShip = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_ship") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_ship") : nil
-				industryJobsCompletedManufactureShipQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_ship_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_ship_quantity") : nil
-				industryJobsCompletedManufactureStructure = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_structure") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_structure") : nil
-				industryJobsCompletedManufactureStructureQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_structure_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_structure_quantity") : nil
-				industryJobsCompletedManufactureSubsystem = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_subsystem") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_subsystem") : nil
-				industryJobsCompletedManufactureSubsystemQuantity = aDecoder.containsValue(forKey: "industry_jobs_completed_manufacture_subsystem_quantity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_manufacture_subsystem_quantity") : nil
-				industryJobsCompletedMaterialProductivity = aDecoder.containsValue(forKey: "industry_jobs_completed_material_productivity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_material_productivity") : nil
-				industryJobsCompletedTimeProductivity = aDecoder.containsValue(forKey: "industry_jobs_completed_time_productivity") ? aDecoder.decodeInt64(forKey: "industry_jobs_completed_time_productivity") : nil
-				industryJobsStartedCopyBlueprint = aDecoder.containsValue(forKey: "industry_jobs_started_copy_blueprint") ? aDecoder.decodeInt64(forKey: "industry_jobs_started_copy_blueprint") : nil
-				industryJobsStartedInvention = aDecoder.containsValue(forKey: "industry_jobs_started_invention") ? aDecoder.decodeInt64(forKey: "industry_jobs_started_invention") : nil
-				industryJobsStartedManufacture = aDecoder.containsValue(forKey: "industry_jobs_started_manufacture") ? aDecoder.decodeInt64(forKey: "industry_jobs_started_manufacture") : nil
-				industryJobsStartedMaterialProductivity = aDecoder.containsValue(forKey: "industry_jobs_started_material_productivity") ? aDecoder.decodeInt64(forKey: "industry_jobs_started_material_productivity") : nil
-				industryJobsStartedTimeProductivity = aDecoder.containsValue(forKey: "industry_jobs_started_time_productivity") ? aDecoder.decodeInt64(forKey: "industry_jobs_started_time_productivity") : nil
-				industryReprocessItem = aDecoder.containsValue(forKey: "industry_reprocess_item") ? aDecoder.decodeInt64(forKey: "industry_reprocess_item") : nil
-				industryReprocessItemQuantity = aDecoder.containsValue(forKey: "industry_reprocess_item_quantity") ? aDecoder.decodeInt64(forKey: "industry_reprocess_item_quantity") : nil
-				inventoryAbandonLootQuantity = aDecoder.containsValue(forKey: "inventory_abandon_loot_quantity") ? aDecoder.decodeInt64(forKey: "inventory_abandon_loot_quantity") : nil
-				inventoryTrashItemQuantity = aDecoder.containsValue(forKey: "inventory_trash_item_quantity") ? aDecoder.decodeInt64(forKey: "inventory_trash_item_quantity") : nil
-				iskIn = aDecoder.containsValue(forKey: "isk_in") ? aDecoder.decodeInt64(forKey: "isk_in") : nil
-				iskOut = aDecoder.containsValue(forKey: "isk_out") ? aDecoder.decodeInt64(forKey: "isk_out") : nil
-				marketAcceptContractsCourier = aDecoder.containsValue(forKey: "market_accept_contracts_courier") ? aDecoder.decodeInt64(forKey: "market_accept_contracts_courier") : nil
-				marketAcceptContractsItemExchange = aDecoder.containsValue(forKey: "market_accept_contracts_item_exchange") ? aDecoder.decodeInt64(forKey: "market_accept_contracts_item_exchange") : nil
-				marketBuyOrdersPlaced = aDecoder.containsValue(forKey: "market_buy_orders_placed") ? aDecoder.decodeInt64(forKey: "market_buy_orders_placed") : nil
-				marketCancelMarketOrder = aDecoder.containsValue(forKey: "market_cancel_market_order") ? aDecoder.decodeInt64(forKey: "market_cancel_market_order") : nil
-				marketCreateContractsAuction = aDecoder.containsValue(forKey: "market_create_contracts_auction") ? aDecoder.decodeInt64(forKey: "market_create_contracts_auction") : nil
-				marketCreateContractsCourier = aDecoder.containsValue(forKey: "market_create_contracts_courier") ? aDecoder.decodeInt64(forKey: "market_create_contracts_courier") : nil
-				marketCreateContractsItemExchange = aDecoder.containsValue(forKey: "market_create_contracts_item_exchange") ? aDecoder.decodeInt64(forKey: "market_create_contracts_item_exchange") : nil
-				marketDeliverCourierContract = aDecoder.containsValue(forKey: "market_deliver_courier_contract") ? aDecoder.decodeInt64(forKey: "market_deliver_courier_contract") : nil
-				marketIskGained = aDecoder.containsValue(forKey: "market_isk_gained") ? aDecoder.decodeInt64(forKey: "market_isk_gained") : nil
-				marketIskSpent = aDecoder.containsValue(forKey: "market_isk_spent") ? aDecoder.decodeInt64(forKey: "market_isk_spent") : nil
-				marketModifyMarketOrder = aDecoder.containsValue(forKey: "market_modify_market_order") ? aDecoder.decodeInt64(forKey: "market_modify_market_order") : nil
-				marketSearchContracts = aDecoder.containsValue(forKey: "market_search_contracts") ? aDecoder.decodeInt64(forKey: "market_search_contracts") : nil
-				marketSellOrdersPlaced = aDecoder.containsValue(forKey: "market_sell_orders_placed") ? aDecoder.decodeInt64(forKey: "market_sell_orders_placed") : nil
-				miningDroneMine = aDecoder.containsValue(forKey: "mining_drone_mine") ? aDecoder.decodeInt64(forKey: "mining_drone_mine") : nil
-				miningOreArkonor = aDecoder.containsValue(forKey: "mining_ore_arkonor") ? aDecoder.decodeInt64(forKey: "mining_ore_arkonor") : nil
-				miningOreBistot = aDecoder.containsValue(forKey: "mining_ore_bistot") ? aDecoder.decodeInt64(forKey: "mining_ore_bistot") : nil
-				miningOreCrokite = aDecoder.containsValue(forKey: "mining_ore_crokite") ? aDecoder.decodeInt64(forKey: "mining_ore_crokite") : nil
-				miningOreDarkOchre = aDecoder.containsValue(forKey: "mining_ore_dark_ochre") ? aDecoder.decodeInt64(forKey: "mining_ore_dark_ochre") : nil
-				miningOreGneiss = aDecoder.containsValue(forKey: "mining_ore_gneiss") ? aDecoder.decodeInt64(forKey: "mining_ore_gneiss") : nil
-				miningOreHarvestableCloud = aDecoder.containsValue(forKey: "mining_ore_harvestable_cloud") ? aDecoder.decodeInt64(forKey: "mining_ore_harvestable_cloud") : nil
-				miningOreHedbergite = aDecoder.containsValue(forKey: "mining_ore_hedbergite") ? aDecoder.decodeInt64(forKey: "mining_ore_hedbergite") : nil
-				miningOreHemorphite = aDecoder.containsValue(forKey: "mining_ore_hemorphite") ? aDecoder.decodeInt64(forKey: "mining_ore_hemorphite") : nil
-				miningOreIce = aDecoder.containsValue(forKey: "mining_ore_ice") ? aDecoder.decodeInt64(forKey: "mining_ore_ice") : nil
-				miningOreJaspet = aDecoder.containsValue(forKey: "mining_ore_jaspet") ? aDecoder.decodeInt64(forKey: "mining_ore_jaspet") : nil
-				miningOreKernite = aDecoder.containsValue(forKey: "mining_ore_kernite") ? aDecoder.decodeInt64(forKey: "mining_ore_kernite") : nil
-				miningOreMercoxit = aDecoder.containsValue(forKey: "mining_ore_mercoxit") ? aDecoder.decodeInt64(forKey: "mining_ore_mercoxit") : nil
-				miningOreOmber = aDecoder.containsValue(forKey: "mining_ore_omber") ? aDecoder.decodeInt64(forKey: "mining_ore_omber") : nil
-				miningOrePlagioclase = aDecoder.containsValue(forKey: "mining_ore_plagioclase") ? aDecoder.decodeInt64(forKey: "mining_ore_plagioclase") : nil
-				miningOrePyroxeres = aDecoder.containsValue(forKey: "mining_ore_pyroxeres") ? aDecoder.decodeInt64(forKey: "mining_ore_pyroxeres") : nil
-				miningOreScordite = aDecoder.containsValue(forKey: "mining_ore_scordite") ? aDecoder.decodeInt64(forKey: "mining_ore_scordite") : nil
-				miningOreSpodumain = aDecoder.containsValue(forKey: "mining_ore_spodumain") ? aDecoder.decodeInt64(forKey: "mining_ore_spodumain") : nil
-				miningOreVeldspar = aDecoder.containsValue(forKey: "mining_ore_veldspar") ? aDecoder.decodeInt64(forKey: "mining_ore_veldspar") : nil
-				moduleActivationsArmorHardener = aDecoder.containsValue(forKey: "module_activations_armor_hardener") ? aDecoder.decodeInt64(forKey: "module_activations_armor_hardener") : nil
-				moduleActivationsArmorRepairUnit = aDecoder.containsValue(forKey: "module_activations_armor_repair_unit") ? aDecoder.decodeInt64(forKey: "module_activations_armor_repair_unit") : nil
-				moduleActivationsArmorResistanceShiftHardener = aDecoder.containsValue(forKey: "module_activations_armor_resistance_shift_hardener") ? aDecoder.decodeInt64(forKey: "module_activations_armor_resistance_shift_hardener") : nil
-				moduleActivationsAutomatedTargetingSystem = aDecoder.containsValue(forKey: "module_activations_automated_targeting_system") ? aDecoder.decodeInt64(forKey: "module_activations_automated_targeting_system") : nil
-				moduleActivationsBastion = aDecoder.containsValue(forKey: "module_activations_bastion") ? aDecoder.decodeInt64(forKey: "module_activations_bastion") : nil
-				moduleActivationsBombLauncher = aDecoder.containsValue(forKey: "module_activations_bomb_launcher") ? aDecoder.decodeInt64(forKey: "module_activations_bomb_launcher") : nil
-				moduleActivationsCapacitorBooster = aDecoder.containsValue(forKey: "module_activations_capacitor_booster") ? aDecoder.decodeInt64(forKey: "module_activations_capacitor_booster") : nil
-				moduleActivationsCargoScanner = aDecoder.containsValue(forKey: "module_activations_cargo_scanner") ? aDecoder.decodeInt64(forKey: "module_activations_cargo_scanner") : nil
-				moduleActivationsCloakingDevice = aDecoder.containsValue(forKey: "module_activations_cloaking_device") ? aDecoder.decodeInt64(forKey: "module_activations_cloaking_device") : nil
-				moduleActivationsCloneVatBay = aDecoder.containsValue(forKey: "module_activations_clone_vat_bay") ? aDecoder.decodeInt64(forKey: "module_activations_clone_vat_bay") : nil
-				moduleActivationsCynosuralField = aDecoder.containsValue(forKey: "module_activations_cynosural_field") ? aDecoder.decodeInt64(forKey: "module_activations_cynosural_field") : nil
-				moduleActivationsDamageControl = aDecoder.containsValue(forKey: "module_activations_damage_control") ? aDecoder.decodeInt64(forKey: "module_activations_damage_control") : nil
-				moduleActivationsDataMiners = aDecoder.containsValue(forKey: "module_activations_data_miners") ? aDecoder.decodeInt64(forKey: "module_activations_data_miners") : nil
-				moduleActivationsDroneControlUnit = aDecoder.containsValue(forKey: "module_activations_drone_control_unit") ? aDecoder.decodeInt64(forKey: "module_activations_drone_control_unit") : nil
-				moduleActivationsDroneTrackingModules = aDecoder.containsValue(forKey: "module_activations_drone_tracking_modules") ? aDecoder.decodeInt64(forKey: "module_activations_drone_tracking_modules") : nil
-				moduleActivationsEccm = aDecoder.containsValue(forKey: "module_activations_eccm") ? aDecoder.decodeInt64(forKey: "module_activations_eccm") : nil
-				moduleActivationsEcm = aDecoder.containsValue(forKey: "module_activations_ecm") ? aDecoder.decodeInt64(forKey: "module_activations_ecm") : nil
-				moduleActivationsEcmBurst = aDecoder.containsValue(forKey: "module_activations_ecm_burst") ? aDecoder.decodeInt64(forKey: "module_activations_ecm_burst") : nil
-				moduleActivationsEnergyDestabilizer = aDecoder.containsValue(forKey: "module_activations_energy_destabilizer") ? aDecoder.decodeInt64(forKey: "module_activations_energy_destabilizer") : nil
-				moduleActivationsEnergyVampire = aDecoder.containsValue(forKey: "module_activations_energy_vampire") ? aDecoder.decodeInt64(forKey: "module_activations_energy_vampire") : nil
-				moduleActivationsEnergyWeapon = aDecoder.containsValue(forKey: "module_activations_energy_weapon") ? aDecoder.decodeInt64(forKey: "module_activations_energy_weapon") : nil
-				moduleActivationsFestivalLauncher = aDecoder.containsValue(forKey: "module_activations_festival_launcher") ? aDecoder.decodeInt64(forKey: "module_activations_festival_launcher") : nil
-				moduleActivationsFrequencyMiningLaser = aDecoder.containsValue(forKey: "module_activations_frequency_mining_laser") ? aDecoder.decodeInt64(forKey: "module_activations_frequency_mining_laser") : nil
-				moduleActivationsFueledArmorRepairer = aDecoder.containsValue(forKey: "module_activations_fueled_armor_repairer") ? aDecoder.decodeInt64(forKey: "module_activations_fueled_armor_repairer") : nil
-				moduleActivationsFueledShieldBooster = aDecoder.containsValue(forKey: "module_activations_fueled_shield_booster") ? aDecoder.decodeInt64(forKey: "module_activations_fueled_shield_booster") : nil
-				moduleActivationsGangCoordinator = aDecoder.containsValue(forKey: "module_activations_gang_coordinator") ? aDecoder.decodeInt64(forKey: "module_activations_gang_coordinator") : nil
-				moduleActivationsGasCloudHarvester = aDecoder.containsValue(forKey: "module_activations_gas_cloud_harvester") ? aDecoder.decodeInt64(forKey: "module_activations_gas_cloud_harvester") : nil
-				moduleActivationsHullRepairUnit = aDecoder.containsValue(forKey: "module_activations_hull_repair_unit") ? aDecoder.decodeInt64(forKey: "module_activations_hull_repair_unit") : nil
-				moduleActivationsHybridWeapon = aDecoder.containsValue(forKey: "module_activations_hybrid_weapon") ? aDecoder.decodeInt64(forKey: "module_activations_hybrid_weapon") : nil
-				moduleActivationsIndustrialCore = aDecoder.containsValue(forKey: "module_activations_industrial_core") ? aDecoder.decodeInt64(forKey: "module_activations_industrial_core") : nil
-				moduleActivationsInterdictionSphereLauncher = aDecoder.containsValue(forKey: "module_activations_interdiction_sphere_launcher") ? aDecoder.decodeInt64(forKey: "module_activations_interdiction_sphere_launcher") : nil
-				moduleActivationsMicroJumpDrive = aDecoder.containsValue(forKey: "module_activations_micro_jump_drive") ? aDecoder.decodeInt64(forKey: "module_activations_micro_jump_drive") : nil
-				moduleActivationsMiningLaser = aDecoder.containsValue(forKey: "module_activations_mining_laser") ? aDecoder.decodeInt64(forKey: "module_activations_mining_laser") : nil
-				moduleActivationsMissileLauncher = aDecoder.containsValue(forKey: "module_activations_missile_launcher") ? aDecoder.decodeInt64(forKey: "module_activations_missile_launcher") : nil
-				moduleActivationsPassiveTargetingSystem = aDecoder.containsValue(forKey: "module_activations_passive_targeting_system") ? aDecoder.decodeInt64(forKey: "module_activations_passive_targeting_system") : nil
-				moduleActivationsProbeLauncher = aDecoder.containsValue(forKey: "module_activations_probe_launcher") ? aDecoder.decodeInt64(forKey: "module_activations_probe_launcher") : nil
-				moduleActivationsProjectedEccm = aDecoder.containsValue(forKey: "module_activations_projected_eccm") ? aDecoder.decodeInt64(forKey: "module_activations_projected_eccm") : nil
-				moduleActivationsProjectileWeapon = aDecoder.containsValue(forKey: "module_activations_projectile_weapon") ? aDecoder.decodeInt64(forKey: "module_activations_projectile_weapon") : nil
-				moduleActivationsPropulsionModule = aDecoder.containsValue(forKey: "module_activations_propulsion_module") ? aDecoder.decodeInt64(forKey: "module_activations_propulsion_module") : nil
-				moduleActivationsRemoteArmorRepairer = aDecoder.containsValue(forKey: "module_activations_remote_armor_repairer") ? aDecoder.decodeInt64(forKey: "module_activations_remote_armor_repairer") : nil
-				moduleActivationsRemoteCapacitorTransmitter = aDecoder.containsValue(forKey: "module_activations_remote_capacitor_transmitter") ? aDecoder.decodeInt64(forKey: "module_activations_remote_capacitor_transmitter") : nil
-				moduleActivationsRemoteEcmBurst = aDecoder.containsValue(forKey: "module_activations_remote_ecm_burst") ? aDecoder.decodeInt64(forKey: "module_activations_remote_ecm_burst") : nil
-				moduleActivationsRemoteHullRepairer = aDecoder.containsValue(forKey: "module_activations_remote_hull_repairer") ? aDecoder.decodeInt64(forKey: "module_activations_remote_hull_repairer") : nil
-				moduleActivationsRemoteSensorBooster = aDecoder.containsValue(forKey: "module_activations_remote_sensor_booster") ? aDecoder.decodeInt64(forKey: "module_activations_remote_sensor_booster") : nil
-				moduleActivationsRemoteSensorDamper = aDecoder.containsValue(forKey: "module_activations_remote_sensor_damper") ? aDecoder.decodeInt64(forKey: "module_activations_remote_sensor_damper") : nil
-				moduleActivationsRemoteShieldBooster = aDecoder.containsValue(forKey: "module_activations_remote_shield_booster") ? aDecoder.decodeInt64(forKey: "module_activations_remote_shield_booster") : nil
-				moduleActivationsRemoteTrackingComputer = aDecoder.containsValue(forKey: "module_activations_remote_tracking_computer") ? aDecoder.decodeInt64(forKey: "module_activations_remote_tracking_computer") : nil
-				moduleActivationsSalvager = aDecoder.containsValue(forKey: "module_activations_salvager") ? aDecoder.decodeInt64(forKey: "module_activations_salvager") : nil
-				moduleActivationsSensorBooster = aDecoder.containsValue(forKey: "module_activations_sensor_booster") ? aDecoder.decodeInt64(forKey: "module_activations_sensor_booster") : nil
-				moduleActivationsShieldBooster = aDecoder.containsValue(forKey: "module_activations_shield_booster") ? aDecoder.decodeInt64(forKey: "module_activations_shield_booster") : nil
-				moduleActivationsShieldHardener = aDecoder.containsValue(forKey: "module_activations_shield_hardener") ? aDecoder.decodeInt64(forKey: "module_activations_shield_hardener") : nil
-				moduleActivationsShipScanner = aDecoder.containsValue(forKey: "module_activations_ship_scanner") ? aDecoder.decodeInt64(forKey: "module_activations_ship_scanner") : nil
-				moduleActivationsSiege = aDecoder.containsValue(forKey: "module_activations_siege") ? aDecoder.decodeInt64(forKey: "module_activations_siege") : nil
-				moduleActivationsSmartBomb = aDecoder.containsValue(forKey: "module_activations_smart_bomb") ? aDecoder.decodeInt64(forKey: "module_activations_smart_bomb") : nil
-				moduleActivationsStasisWeb = aDecoder.containsValue(forKey: "module_activations_stasis_web") ? aDecoder.decodeInt64(forKey: "module_activations_stasis_web") : nil
-				moduleActivationsStripMiner = aDecoder.containsValue(forKey: "module_activations_strip_miner") ? aDecoder.decodeInt64(forKey: "module_activations_strip_miner") : nil
-				moduleActivationsSuperWeapon = aDecoder.containsValue(forKey: "module_activations_super_weapon") ? aDecoder.decodeInt64(forKey: "module_activations_super_weapon") : nil
-				moduleActivationsSurveyScanner = aDecoder.containsValue(forKey: "module_activations_survey_scanner") ? aDecoder.decodeInt64(forKey: "module_activations_survey_scanner") : nil
-				moduleActivationsTargetBreaker = aDecoder.containsValue(forKey: "module_activations_target_breaker") ? aDecoder.decodeInt64(forKey: "module_activations_target_breaker") : nil
-				moduleActivationsTargetPainter = aDecoder.containsValue(forKey: "module_activations_target_painter") ? aDecoder.decodeInt64(forKey: "module_activations_target_painter") : nil
-				moduleActivationsTrackingComputer = aDecoder.containsValue(forKey: "module_activations_tracking_computer") ? aDecoder.decodeInt64(forKey: "module_activations_tracking_computer") : nil
-				moduleActivationsTrackingDisruptor = aDecoder.containsValue(forKey: "module_activations_tracking_disruptor") ? aDecoder.decodeInt64(forKey: "module_activations_tracking_disruptor") : nil
-				moduleActivationsTractorBeam = aDecoder.containsValue(forKey: "module_activations_tractor_beam") ? aDecoder.decodeInt64(forKey: "module_activations_tractor_beam") : nil
-				moduleActivationsTriage = aDecoder.containsValue(forKey: "module_activations_triage") ? aDecoder.decodeInt64(forKey: "module_activations_triage") : nil
-				moduleActivationsWarpDisruptFieldGenerator = aDecoder.containsValue(forKey: "module_activations_warp_disrupt_field_generator") ? aDecoder.decodeInt64(forKey: "module_activations_warp_disrupt_field_generator") : nil
-				moduleActivationsWarpScrambler = aDecoder.containsValue(forKey: "module_activations_warp_scrambler") ? aDecoder.decodeInt64(forKey: "module_activations_warp_scrambler") : nil
-				moduleLinkWeapons = aDecoder.containsValue(forKey: "module_link_weapons") ? aDecoder.decodeInt64(forKey: "module_link_weapons") : nil
-				moduleOverload = aDecoder.containsValue(forKey: "module_overload") ? aDecoder.decodeInt64(forKey: "module_overload") : nil
-				moduleRepairs = aDecoder.containsValue(forKey: "module_repairs") ? aDecoder.decodeInt64(forKey: "module_repairs") : nil
-				orbitalStrikeCharactersKilled = aDecoder.containsValue(forKey: "orbital_strike_characters_killed") ? aDecoder.decodeInt64(forKey: "orbital_strike_characters_killed") : nil
-				orbitalStrikeDamageToPlayersArmorAmount = aDecoder.containsValue(forKey: "orbital_strike_damage_to_players_armor_amount") ? aDecoder.decodeInt64(forKey: "orbital_strike_damage_to_players_armor_amount") : nil
-				orbitalStrikeDamageToPlayersShieldAmount = aDecoder.containsValue(forKey: "orbital_strike_damage_to_players_shield_amount") ? aDecoder.decodeInt64(forKey: "orbital_strike_damage_to_players_shield_amount") : nil
-				pveDungeonsCompletedAgent = aDecoder.containsValue(forKey: "pve_dungeons_completed_agent") ? aDecoder.decodeInt64(forKey: "pve_dungeons_completed_agent") : nil
-				pveDungeonsCompletedDistribution = aDecoder.containsValue(forKey: "pve_dungeons_completed_distribution") ? aDecoder.decodeInt64(forKey: "pve_dungeons_completed_distribution") : nil
-				pveMissionsSucceeded = aDecoder.containsValue(forKey: "pve_missions_succeeded") ? aDecoder.decodeInt64(forKey: "pve_missions_succeeded") : nil
-				pveMissionsSucceededEpicArc = aDecoder.containsValue(forKey: "pve_missions_succeeded_epic_arc") ? aDecoder.decodeInt64(forKey: "pve_missions_succeeded_epic_arc") : nil
-				socialAddContactBad = aDecoder.containsValue(forKey: "social_add_contact_bad") ? aDecoder.decodeInt64(forKey: "social_add_contact_bad") : nil
-				socialAddContactGood = aDecoder.containsValue(forKey: "social_add_contact_good") ? aDecoder.decodeInt64(forKey: "social_add_contact_good") : nil
-				socialAddContactHigh = aDecoder.containsValue(forKey: "social_add_contact_high") ? aDecoder.decodeInt64(forKey: "social_add_contact_high") : nil
-				socialAddContactHorrible = aDecoder.containsValue(forKey: "social_add_contact_horrible") ? aDecoder.decodeInt64(forKey: "social_add_contact_horrible") : nil
-				socialAddContactNeutral = aDecoder.containsValue(forKey: "social_add_contact_neutral") ? aDecoder.decodeInt64(forKey: "social_add_contact_neutral") : nil
-				socialAddNote = aDecoder.containsValue(forKey: "social_add_note") ? aDecoder.decodeInt64(forKey: "social_add_note") : nil
-				socialAddedAsContactBad = aDecoder.containsValue(forKey: "social_added_as_contact_bad") ? aDecoder.decodeInt64(forKey: "social_added_as_contact_bad") : nil
-				socialAddedAsContactGood = aDecoder.containsValue(forKey: "social_added_as_contact_good") ? aDecoder.decodeInt64(forKey: "social_added_as_contact_good") : nil
-				socialAddedAsContactHigh = aDecoder.containsValue(forKey: "social_added_as_contact_high") ? aDecoder.decodeInt64(forKey: "social_added_as_contact_high") : nil
-				socialAddedAsContactHorrible = aDecoder.containsValue(forKey: "social_added_as_contact_horrible") ? aDecoder.decodeInt64(forKey: "social_added_as_contact_horrible") : nil
-				socialAddedAsContactNeutral = aDecoder.containsValue(forKey: "social_added_as_contact_neutral") ? aDecoder.decodeInt64(forKey: "social_added_as_contact_neutral") : nil
-				socialCalendarEventCreated = aDecoder.containsValue(forKey: "social_calendar_event_created") ? aDecoder.decodeInt64(forKey: "social_calendar_event_created") : nil
-				socialChatMessagesAlliance = aDecoder.containsValue(forKey: "social_chat_messages_alliance") ? aDecoder.decodeInt64(forKey: "social_chat_messages_alliance") : nil
-				socialChatMessagesConstellation = aDecoder.containsValue(forKey: "social_chat_messages_constellation") ? aDecoder.decodeInt64(forKey: "social_chat_messages_constellation") : nil
-				socialChatMessagesCorporation = aDecoder.containsValue(forKey: "social_chat_messages_corporation") ? aDecoder.decodeInt64(forKey: "social_chat_messages_corporation") : nil
-				socialChatMessagesFleet = aDecoder.containsValue(forKey: "social_chat_messages_fleet") ? aDecoder.decodeInt64(forKey: "social_chat_messages_fleet") : nil
-				socialChatMessagesRegion = aDecoder.containsValue(forKey: "social_chat_messages_region") ? aDecoder.decodeInt64(forKey: "social_chat_messages_region") : nil
-				socialChatMessagesSolarsystem = aDecoder.containsValue(forKey: "social_chat_messages_solarsystem") ? aDecoder.decodeInt64(forKey: "social_chat_messages_solarsystem") : nil
-				socialChatMessagesWarfaction = aDecoder.containsValue(forKey: "social_chat_messages_warfaction") ? aDecoder.decodeInt64(forKey: "social_chat_messages_warfaction") : nil
-				socialChatTotalMessageLength = aDecoder.containsValue(forKey: "social_chat_total_message_length") ? aDecoder.decodeInt64(forKey: "social_chat_total_message_length") : nil
-				socialDirectTrades = aDecoder.containsValue(forKey: "social_direct_trades") ? aDecoder.decodeInt64(forKey: "social_direct_trades") : nil
-				socialFleetBroadcasts = aDecoder.containsValue(forKey: "social_fleet_broadcasts") ? aDecoder.decodeInt64(forKey: "social_fleet_broadcasts") : nil
-				socialFleetJoins = aDecoder.containsValue(forKey: "social_fleet_joins") ? aDecoder.decodeInt64(forKey: "social_fleet_joins") : nil
-				socialMailsReceived = aDecoder.containsValue(forKey: "social_mails_received") ? aDecoder.decodeInt64(forKey: "social_mails_received") : nil
-				socialMailsSent = aDecoder.containsValue(forKey: "social_mails_sent") ? aDecoder.decodeInt64(forKey: "social_mails_sent") : nil
-				travelAccelerationGateActivations = aDecoder.containsValue(forKey: "travel_acceleration_gate_activations") ? aDecoder.decodeInt64(forKey: "travel_acceleration_gate_activations") : nil
-				travelAlignTo = aDecoder.containsValue(forKey: "travel_align_to") ? aDecoder.decodeInt64(forKey: "travel_align_to") : nil
-				travelDistanceWarpedHighSec = aDecoder.containsValue(forKey: "travel_distance_warped_high_sec") ? aDecoder.decodeInt64(forKey: "travel_distance_warped_high_sec") : nil
-				travelDistanceWarpedLowSec = aDecoder.containsValue(forKey: "travel_distance_warped_low_sec") ? aDecoder.decodeInt64(forKey: "travel_distance_warped_low_sec") : nil
-				travelDistanceWarpedNullSec = aDecoder.containsValue(forKey: "travel_distance_warped_null_sec") ? aDecoder.decodeInt64(forKey: "travel_distance_warped_null_sec") : nil
-				travelDistanceWarpedWormhole = aDecoder.containsValue(forKey: "travel_distance_warped_wormhole") ? aDecoder.decodeInt64(forKey: "travel_distance_warped_wormhole") : nil
-				travelDocksHighSec = aDecoder.containsValue(forKey: "travel_docks_high_sec") ? aDecoder.decodeInt64(forKey: "travel_docks_high_sec") : nil
-				travelDocksLowSec = aDecoder.containsValue(forKey: "travel_docks_low_sec") ? aDecoder.decodeInt64(forKey: "travel_docks_low_sec") : nil
-				travelDocksNullSec = aDecoder.containsValue(forKey: "travel_docks_null_sec") ? aDecoder.decodeInt64(forKey: "travel_docks_null_sec") : nil
-				travelJumpsStargateHighSec = aDecoder.containsValue(forKey: "travel_jumps_stargate_high_sec") ? aDecoder.decodeInt64(forKey: "travel_jumps_stargate_high_sec") : nil
-				travelJumpsStargateLowSec = aDecoder.containsValue(forKey: "travel_jumps_stargate_low_sec") ? aDecoder.decodeInt64(forKey: "travel_jumps_stargate_low_sec") : nil
-				travelJumpsStargateNullSec = aDecoder.containsValue(forKey: "travel_jumps_stargate_null_sec") ? aDecoder.decodeInt64(forKey: "travel_jumps_stargate_null_sec") : nil
-				travelJumpsWormhole = aDecoder.containsValue(forKey: "travel_jumps_wormhole") ? aDecoder.decodeInt64(forKey: "travel_jumps_wormhole") : nil
-				travelWarpsHighSec = aDecoder.containsValue(forKey: "travel_warps_high_sec") ? aDecoder.decodeInt64(forKey: "travel_warps_high_sec") : nil
-				travelWarpsLowSec = aDecoder.containsValue(forKey: "travel_warps_low_sec") ? aDecoder.decodeInt64(forKey: "travel_warps_low_sec") : nil
-				travelWarpsNullSec = aDecoder.containsValue(forKey: "travel_warps_null_sec") ? aDecoder.decodeInt64(forKey: "travel_warps_null_sec") : nil
-				travelWarpsToBookmark = aDecoder.containsValue(forKey: "travel_warps_to_bookmark") ? aDecoder.decodeInt64(forKey: "travel_warps_to_bookmark") : nil
-				travelWarpsToCelestial = aDecoder.containsValue(forKey: "travel_warps_to_celestial") ? aDecoder.decodeInt64(forKey: "travel_warps_to_celestial") : nil
-				travelWarpsToFleetMember = aDecoder.containsValue(forKey: "travel_warps_to_fleet_member") ? aDecoder.decodeInt64(forKey: "travel_warps_to_fleet_member") : nil
-				travelWarpsToScanResult = aDecoder.containsValue(forKey: "travel_warps_to_scan_result") ? aDecoder.decodeInt64(forKey: "travel_warps_to_scan_result") : nil
-				travelWarpsWormhole = aDecoder.containsValue(forKey: "travel_warps_wormhole") ? aDecoder.decodeInt64(forKey: "travel_warps_wormhole") : nil
-				year = aDecoder.decodeInteger(forKey: "year")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = characterMinutes {
-					aCoder.encode(v, forKey: "character_minutes")
-				}
-				if let v = characterSessionsStarted {
-					aCoder.encode(v, forKey: "character_sessions_started")
-				}
-				if let v = combatCapDrainedbyNpc {
-					aCoder.encode(v, forKey: "combat_cap_drainedby_npc")
-				}
-				if let v = combatCapDrainedbyPc {
-					aCoder.encode(v, forKey: "combat_cap_drainedby_pc")
-				}
-				if let v = combatCapDrainingPc {
-					aCoder.encode(v, forKey: "combat_cap_draining_pc")
-				}
-				if let v = combatCriminalFlagSet {
-					aCoder.encode(v, forKey: "combat_criminal_flag_set")
-				}
-				if let v = combatDamageFromNpCsAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_np_cs_amount")
-				}
-				if let v = combatDamageFromNpCsNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_np_cs_num_shots")
-				}
-				if let v = combatDamageFromPlayersBombAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_bomb_amount")
-				}
-				if let v = combatDamageFromPlayersBombNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_bomb_num_shots")
-				}
-				if let v = combatDamageFromPlayersCombatDroneAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_combat_drone_amount")
-				}
-				if let v = combatDamageFromPlayersCombatDroneNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_combat_drone_num_shots")
-				}
-				if let v = combatDamageFromPlayersEnergyAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_energy_amount")
-				}
-				if let v = combatDamageFromPlayersEnergyNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_energy_num_shots")
-				}
-				if let v = combatDamageFromPlayersFighterBomberAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_fighter_bomber_amount")
-				}
-				if let v = combatDamageFromPlayersFighterBomberNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_fighter_bomber_num_shots")
-				}
-				if let v = combatDamageFromPlayersFighterDroneAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_fighter_drone_amount")
-				}
-				if let v = combatDamageFromPlayersFighterDroneNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_fighter_drone_num_shots")
-				}
-				if let v = combatDamageFromPlayersHybridAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_hybrid_amount")
-				}
-				if let v = combatDamageFromPlayersHybridNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_hybrid_num_shots")
-				}
-				if let v = combatDamageFromPlayersMissileAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_missile_amount")
-				}
-				if let v = combatDamageFromPlayersMissileNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_missile_num_shots")
-				}
-				if let v = combatDamageFromPlayersProjectileAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_projectile_amount")
-				}
-				if let v = combatDamageFromPlayersProjectileNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_projectile_num_shots")
-				}
-				if let v = combatDamageFromPlayersSmartBombAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_smart_bomb_amount")
-				}
-				if let v = combatDamageFromPlayersSmartBombNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_smart_bomb_num_shots")
-				}
-				if let v = combatDamageFromPlayersSuperAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_players_super_amount")
-				}
-				if let v = combatDamageFromPlayersSuperNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_players_super_num_shots")
-				}
-				if let v = combatDamageFromStructuresTotalAmount {
-					aCoder.encode(v, forKey: "combat_damage_from_structures_total_amount")
-				}
-				if let v = combatDamageFromStructuresTotalNumShots {
-					aCoder.encode(v, forKey: "combat_damage_from_structures_total_num_shots")
-				}
-				if let v = combatDamageToPlayersBombAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_bomb_amount")
-				}
-				if let v = combatDamageToPlayersBombNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_bomb_num_shots")
-				}
-				if let v = combatDamageToPlayersCombatDroneAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_combat_drone_amount")
-				}
-				if let v = combatDamageToPlayersCombatDroneNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_combat_drone_num_shots")
-				}
-				if let v = combatDamageToPlayersEnergyAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_energy_amount")
-				}
-				if let v = combatDamageToPlayersEnergyNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_energy_num_shots")
-				}
-				if let v = combatDamageToPlayersFighterBomberAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_fighter_bomber_amount")
-				}
-				if let v = combatDamageToPlayersFighterBomberNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_fighter_bomber_num_shots")
-				}
-				if let v = combatDamageToPlayersFighterDroneAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_fighter_drone_amount")
-				}
-				if let v = combatDamageToPlayersFighterDroneNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_fighter_drone_num_shots")
-				}
-				if let v = combatDamageToPlayersHybridAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_hybrid_amount")
-				}
-				if let v = combatDamageToPlayersHybridNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_hybrid_num_shots")
-				}
-				if let v = combatDamageToPlayersMissileAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_missile_amount")
-				}
-				if let v = combatDamageToPlayersMissileNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_missile_num_shots")
-				}
-				if let v = combatDamageToPlayersProjectileAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_projectile_amount")
-				}
-				if let v = combatDamageToPlayersProjectileNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_projectile_num_shots")
-				}
-				if let v = combatDamageToPlayersSmartBombAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_smart_bomb_amount")
-				}
-				if let v = combatDamageToPlayersSmartBombNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_smart_bomb_num_shots")
-				}
-				if let v = combatDamageToPlayersSuperAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_players_super_amount")
-				}
-				if let v = combatDamageToPlayersSuperNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_players_super_num_shots")
-				}
-				if let v = combatDamageToStructuresTotalAmount {
-					aCoder.encode(v, forKey: "combat_damage_to_structures_total_amount")
-				}
-				if let v = combatDamageToStructuresTotalNumShots {
-					aCoder.encode(v, forKey: "combat_damage_to_structures_total_num_shots")
-				}
-				if let v = combatDeathsHighSec {
-					aCoder.encode(v, forKey: "combat_deaths_high_sec")
-				}
-				if let v = combatDeathsLowSec {
-					aCoder.encode(v, forKey: "combat_deaths_low_sec")
-				}
-				if let v = combatDeathsNullSec {
-					aCoder.encode(v, forKey: "combat_deaths_null_sec")
-				}
-				if let v = combatDeathsPodHighSec {
-					aCoder.encode(v, forKey: "combat_deaths_pod_high_sec")
-				}
-				if let v = combatDeathsPodLowSec {
-					aCoder.encode(v, forKey: "combat_deaths_pod_low_sec")
-				}
-				if let v = combatDeathsPodNullSec {
-					aCoder.encode(v, forKey: "combat_deaths_pod_null_sec")
-				}
-				if let v = combatDeathsPodWormhole {
-					aCoder.encode(v, forKey: "combat_deaths_pod_wormhole")
-				}
-				if let v = combatDeathsWormhole {
-					aCoder.encode(v, forKey: "combat_deaths_wormhole")
-				}
-				if let v = combatDroneEngage {
-					aCoder.encode(v, forKey: "combat_drone_engage")
-				}
-				if let v = combatDuelRequested {
-					aCoder.encode(v, forKey: "combat_duel_requested")
-				}
-				if let v = combatEngagementRegister {
-					aCoder.encode(v, forKey: "combat_engagement_register")
-				}
-				if let v = combatKillsAssists {
-					aCoder.encode(v, forKey: "combat_kills_assists")
-				}
-				if let v = combatKillsHighSec {
-					aCoder.encode(v, forKey: "combat_kills_high_sec")
-				}
-				if let v = combatKillsLowSec {
-					aCoder.encode(v, forKey: "combat_kills_low_sec")
-				}
-				if let v = combatKillsNullSec {
-					aCoder.encode(v, forKey: "combat_kills_null_sec")
-				}
-				if let v = combatKillsPodHighSec {
-					aCoder.encode(v, forKey: "combat_kills_pod_high_sec")
-				}
-				if let v = combatKillsPodLowSec {
-					aCoder.encode(v, forKey: "combat_kills_pod_low_sec")
-				}
-				if let v = combatKillsPodNullSec {
-					aCoder.encode(v, forKey: "combat_kills_pod_null_sec")
-				}
-				if let v = combatKillsPodWormhole {
-					aCoder.encode(v, forKey: "combat_kills_pod_wormhole")
-				}
-				if let v = combatKillsWormhole {
-					aCoder.encode(v, forKey: "combat_kills_wormhole")
-				}
-				if let v = combatNpcFlagSet {
-					aCoder.encode(v, forKey: "combat_npc_flag_set")
-				}
-				if let v = combatPvpFlagSet {
-					aCoder.encode(v, forKey: "combat_pvp_flag_set")
-				}
-				if let v = combatRepairArmorByRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_armor_by_remote_amount")
-				}
-				if let v = combatRepairArmorRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_armor_remote_amount")
-				}
-				if let v = combatRepairArmorSelfAmount {
-					aCoder.encode(v, forKey: "combat_repair_armor_self_amount")
-				}
-				if let v = combatRepairCapacitorByRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_capacitor_by_remote_amount")
-				}
-				if let v = combatRepairCapacitorRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_capacitor_remote_amount")
-				}
-				if let v = combatRepairCapacitorSelfAmount {
-					aCoder.encode(v, forKey: "combat_repair_capacitor_self_amount")
-				}
-				if let v = combatRepairHullByRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_hull_by_remote_amount")
-				}
-				if let v = combatRepairHullRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_hull_remote_amount")
-				}
-				if let v = combatRepairHullSelfAmount {
-					aCoder.encode(v, forKey: "combat_repair_hull_self_amount")
-				}
-				if let v = combatRepairShieldByRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_shield_by_remote_amount")
-				}
-				if let v = combatRepairShieldRemoteAmount {
-					aCoder.encode(v, forKey: "combat_repair_shield_remote_amount")
-				}
-				if let v = combatRepairShieldSelfAmount {
-					aCoder.encode(v, forKey: "combat_repair_shield_self_amount")
-				}
-				if let v = combatSelfDestructs {
-					aCoder.encode(v, forKey: "combat_self_destructs")
-				}
-				if let v = combatWarpScramblePc {
-					aCoder.encode(v, forKey: "combat_warp_scramble_pc")
-				}
-				if let v = combatWarpScrambledbyNpc {
-					aCoder.encode(v, forKey: "combat_warp_scrambledby_npc")
-				}
-				if let v = combatWarpScrambledbyPc {
-					aCoder.encode(v, forKey: "combat_warp_scrambledby_pc")
-				}
-				if let v = combatWeaponFlagSet {
-					aCoder.encode(v, forKey: "combat_weapon_flag_set")
-				}
-				if let v = combatWebifiedbyNpc {
-					aCoder.encode(v, forKey: "combat_webifiedby_npc")
-				}
-				if let v = combatWebifiedbyPc {
-					aCoder.encode(v, forKey: "combat_webifiedby_pc")
-				}
-				if let v = combatWebifyingPc {
-					aCoder.encode(v, forKey: "combat_webifying_pc")
-				}
-				if let v = daysOfActivity {
-					aCoder.encode(v, forKey: "days_of_activity")
-				}
-				if let v = genericConeScans {
-					aCoder.encode(v, forKey: "generic_cone_scans")
-				}
-				if let v = genericRequestScans {
-					aCoder.encode(v, forKey: "generic_request_scans")
-				}
-				if let v = industryHackingSuccesses {
-					aCoder.encode(v, forKey: "industry_hacking_successes")
-				}
-				if let v = industryJobsCancelled {
-					aCoder.encode(v, forKey: "industry_jobs_cancelled")
-				}
-				if let v = industryJobsCompletedCopyBlueprint {
-					aCoder.encode(v, forKey: "industry_jobs_completed_copy_blueprint")
-				}
-				if let v = industryJobsCompletedInvention {
-					aCoder.encode(v, forKey: "industry_jobs_completed_invention")
-				}
-				if let v = industryJobsCompletedManufacture {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture")
-				}
-				if let v = industryJobsCompletedManufactureAsteroid {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_asteroid")
-				}
-				if let v = industryJobsCompletedManufactureAsteroidQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_asteroid_quantity")
-				}
-				if let v = industryJobsCompletedManufactureCharge {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_charge")
-				}
-				if let v = industryJobsCompletedManufactureChargeQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_charge_quantity")
-				}
-				if let v = industryJobsCompletedManufactureCommodity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_commodity")
-				}
-				if let v = industryJobsCompletedManufactureCommodityQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_commodity_quantity")
-				}
-				if let v = industryJobsCompletedManufactureDeployable {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_deployable")
-				}
-				if let v = industryJobsCompletedManufactureDeployableQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_deployable_quantity")
-				}
-				if let v = industryJobsCompletedManufactureDrone {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_drone")
-				}
-				if let v = industryJobsCompletedManufactureDroneQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_drone_quantity")
-				}
-				if let v = industryJobsCompletedManufactureImplant {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_implant")
-				}
-				if let v = industryJobsCompletedManufactureImplantQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_implant_quantity")
-				}
-				if let v = industryJobsCompletedManufactureModule {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_module")
-				}
-				if let v = industryJobsCompletedManufactureModuleQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_module_quantity")
-				}
-				if let v = industryJobsCompletedManufactureOther {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_other")
-				}
-				if let v = industryJobsCompletedManufactureOtherQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_other_quantity")
-				}
-				if let v = industryJobsCompletedManufactureShip {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_ship")
-				}
-				if let v = industryJobsCompletedManufactureShipQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_ship_quantity")
-				}
-				if let v = industryJobsCompletedManufactureStructure {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_structure")
-				}
-				if let v = industryJobsCompletedManufactureStructureQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_structure_quantity")
-				}
-				if let v = industryJobsCompletedManufactureSubsystem {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_subsystem")
-				}
-				if let v = industryJobsCompletedManufactureSubsystemQuantity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_manufacture_subsystem_quantity")
-				}
-				if let v = industryJobsCompletedMaterialProductivity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_material_productivity")
-				}
-				if let v = industryJobsCompletedTimeProductivity {
-					aCoder.encode(v, forKey: "industry_jobs_completed_time_productivity")
-				}
-				if let v = industryJobsStartedCopyBlueprint {
-					aCoder.encode(v, forKey: "industry_jobs_started_copy_blueprint")
-				}
-				if let v = industryJobsStartedInvention {
-					aCoder.encode(v, forKey: "industry_jobs_started_invention")
-				}
-				if let v = industryJobsStartedManufacture {
-					aCoder.encode(v, forKey: "industry_jobs_started_manufacture")
-				}
-				if let v = industryJobsStartedMaterialProductivity {
-					aCoder.encode(v, forKey: "industry_jobs_started_material_productivity")
-				}
-				if let v = industryJobsStartedTimeProductivity {
-					aCoder.encode(v, forKey: "industry_jobs_started_time_productivity")
-				}
-				if let v = industryReprocessItem {
-					aCoder.encode(v, forKey: "industry_reprocess_item")
-				}
-				if let v = industryReprocessItemQuantity {
-					aCoder.encode(v, forKey: "industry_reprocess_item_quantity")
-				}
-				if let v = inventoryAbandonLootQuantity {
-					aCoder.encode(v, forKey: "inventory_abandon_loot_quantity")
-				}
-				if let v = inventoryTrashItemQuantity {
-					aCoder.encode(v, forKey: "inventory_trash_item_quantity")
-				}
-				if let v = iskIn {
-					aCoder.encode(v, forKey: "isk_in")
-				}
-				if let v = iskOut {
-					aCoder.encode(v, forKey: "isk_out")
-				}
-				if let v = marketAcceptContractsCourier {
-					aCoder.encode(v, forKey: "market_accept_contracts_courier")
-				}
-				if let v = marketAcceptContractsItemExchange {
-					aCoder.encode(v, forKey: "market_accept_contracts_item_exchange")
-				}
-				if let v = marketBuyOrdersPlaced {
-					aCoder.encode(v, forKey: "market_buy_orders_placed")
-				}
-				if let v = marketCancelMarketOrder {
-					aCoder.encode(v, forKey: "market_cancel_market_order")
-				}
-				if let v = marketCreateContractsAuction {
-					aCoder.encode(v, forKey: "market_create_contracts_auction")
-				}
-				if let v = marketCreateContractsCourier {
-					aCoder.encode(v, forKey: "market_create_contracts_courier")
-				}
-				if let v = marketCreateContractsItemExchange {
-					aCoder.encode(v, forKey: "market_create_contracts_item_exchange")
-				}
-				if let v = marketDeliverCourierContract {
-					aCoder.encode(v, forKey: "market_deliver_courier_contract")
-				}
-				if let v = marketIskGained {
-					aCoder.encode(v, forKey: "market_isk_gained")
-				}
-				if let v = marketIskSpent {
-					aCoder.encode(v, forKey: "market_isk_spent")
-				}
-				if let v = marketModifyMarketOrder {
-					aCoder.encode(v, forKey: "market_modify_market_order")
-				}
-				if let v = marketSearchContracts {
-					aCoder.encode(v, forKey: "market_search_contracts")
-				}
-				if let v = marketSellOrdersPlaced {
-					aCoder.encode(v, forKey: "market_sell_orders_placed")
-				}
-				if let v = miningDroneMine {
-					aCoder.encode(v, forKey: "mining_drone_mine")
-				}
-				if let v = miningOreArkonor {
-					aCoder.encode(v, forKey: "mining_ore_arkonor")
-				}
-				if let v = miningOreBistot {
-					aCoder.encode(v, forKey: "mining_ore_bistot")
-				}
-				if let v = miningOreCrokite {
-					aCoder.encode(v, forKey: "mining_ore_crokite")
-				}
-				if let v = miningOreDarkOchre {
-					aCoder.encode(v, forKey: "mining_ore_dark_ochre")
-				}
-				if let v = miningOreGneiss {
-					aCoder.encode(v, forKey: "mining_ore_gneiss")
-				}
-				if let v = miningOreHarvestableCloud {
-					aCoder.encode(v, forKey: "mining_ore_harvestable_cloud")
-				}
-				if let v = miningOreHedbergite {
-					aCoder.encode(v, forKey: "mining_ore_hedbergite")
-				}
-				if let v = miningOreHemorphite {
-					aCoder.encode(v, forKey: "mining_ore_hemorphite")
-				}
-				if let v = miningOreIce {
-					aCoder.encode(v, forKey: "mining_ore_ice")
-				}
-				if let v = miningOreJaspet {
-					aCoder.encode(v, forKey: "mining_ore_jaspet")
-				}
-				if let v = miningOreKernite {
-					aCoder.encode(v, forKey: "mining_ore_kernite")
-				}
-				if let v = miningOreMercoxit {
-					aCoder.encode(v, forKey: "mining_ore_mercoxit")
-				}
-				if let v = miningOreOmber {
-					aCoder.encode(v, forKey: "mining_ore_omber")
-				}
-				if let v = miningOrePlagioclase {
-					aCoder.encode(v, forKey: "mining_ore_plagioclase")
-				}
-				if let v = miningOrePyroxeres {
-					aCoder.encode(v, forKey: "mining_ore_pyroxeres")
-				}
-				if let v = miningOreScordite {
-					aCoder.encode(v, forKey: "mining_ore_scordite")
-				}
-				if let v = miningOreSpodumain {
-					aCoder.encode(v, forKey: "mining_ore_spodumain")
-				}
-				if let v = miningOreVeldspar {
-					aCoder.encode(v, forKey: "mining_ore_veldspar")
-				}
-				if let v = moduleActivationsArmorHardener {
-					aCoder.encode(v, forKey: "module_activations_armor_hardener")
-				}
-				if let v = moduleActivationsArmorRepairUnit {
-					aCoder.encode(v, forKey: "module_activations_armor_repair_unit")
-				}
-				if let v = moduleActivationsArmorResistanceShiftHardener {
-					aCoder.encode(v, forKey: "module_activations_armor_resistance_shift_hardener")
-				}
-				if let v = moduleActivationsAutomatedTargetingSystem {
-					aCoder.encode(v, forKey: "module_activations_automated_targeting_system")
-				}
-				if let v = moduleActivationsBastion {
-					aCoder.encode(v, forKey: "module_activations_bastion")
-				}
-				if let v = moduleActivationsBombLauncher {
-					aCoder.encode(v, forKey: "module_activations_bomb_launcher")
-				}
-				if let v = moduleActivationsCapacitorBooster {
-					aCoder.encode(v, forKey: "module_activations_capacitor_booster")
-				}
-				if let v = moduleActivationsCargoScanner {
-					aCoder.encode(v, forKey: "module_activations_cargo_scanner")
-				}
-				if let v = moduleActivationsCloakingDevice {
-					aCoder.encode(v, forKey: "module_activations_cloaking_device")
-				}
-				if let v = moduleActivationsCloneVatBay {
-					aCoder.encode(v, forKey: "module_activations_clone_vat_bay")
-				}
-				if let v = moduleActivationsCynosuralField {
-					aCoder.encode(v, forKey: "module_activations_cynosural_field")
-				}
-				if let v = moduleActivationsDamageControl {
-					aCoder.encode(v, forKey: "module_activations_damage_control")
-				}
-				if let v = moduleActivationsDataMiners {
-					aCoder.encode(v, forKey: "module_activations_data_miners")
-				}
-				if let v = moduleActivationsDroneControlUnit {
-					aCoder.encode(v, forKey: "module_activations_drone_control_unit")
-				}
-				if let v = moduleActivationsDroneTrackingModules {
-					aCoder.encode(v, forKey: "module_activations_drone_tracking_modules")
-				}
-				if let v = moduleActivationsEccm {
-					aCoder.encode(v, forKey: "module_activations_eccm")
-				}
-				if let v = moduleActivationsEcm {
-					aCoder.encode(v, forKey: "module_activations_ecm")
-				}
-				if let v = moduleActivationsEcmBurst {
-					aCoder.encode(v, forKey: "module_activations_ecm_burst")
-				}
-				if let v = moduleActivationsEnergyDestabilizer {
-					aCoder.encode(v, forKey: "module_activations_energy_destabilizer")
-				}
-				if let v = moduleActivationsEnergyVampire {
-					aCoder.encode(v, forKey: "module_activations_energy_vampire")
-				}
-				if let v = moduleActivationsEnergyWeapon {
-					aCoder.encode(v, forKey: "module_activations_energy_weapon")
-				}
-				if let v = moduleActivationsFestivalLauncher {
-					aCoder.encode(v, forKey: "module_activations_festival_launcher")
-				}
-				if let v = moduleActivationsFrequencyMiningLaser {
-					aCoder.encode(v, forKey: "module_activations_frequency_mining_laser")
-				}
-				if let v = moduleActivationsFueledArmorRepairer {
-					aCoder.encode(v, forKey: "module_activations_fueled_armor_repairer")
-				}
-				if let v = moduleActivationsFueledShieldBooster {
-					aCoder.encode(v, forKey: "module_activations_fueled_shield_booster")
-				}
-				if let v = moduleActivationsGangCoordinator {
-					aCoder.encode(v, forKey: "module_activations_gang_coordinator")
-				}
-				if let v = moduleActivationsGasCloudHarvester {
-					aCoder.encode(v, forKey: "module_activations_gas_cloud_harvester")
-				}
-				if let v = moduleActivationsHullRepairUnit {
-					aCoder.encode(v, forKey: "module_activations_hull_repair_unit")
-				}
-				if let v = moduleActivationsHybridWeapon {
-					aCoder.encode(v, forKey: "module_activations_hybrid_weapon")
-				}
-				if let v = moduleActivationsIndustrialCore {
-					aCoder.encode(v, forKey: "module_activations_industrial_core")
-				}
-				if let v = moduleActivationsInterdictionSphereLauncher {
-					aCoder.encode(v, forKey: "module_activations_interdiction_sphere_launcher")
-				}
-				if let v = moduleActivationsMicroJumpDrive {
-					aCoder.encode(v, forKey: "module_activations_micro_jump_drive")
-				}
-				if let v = moduleActivationsMiningLaser {
-					aCoder.encode(v, forKey: "module_activations_mining_laser")
-				}
-				if let v = moduleActivationsMissileLauncher {
-					aCoder.encode(v, forKey: "module_activations_missile_launcher")
-				}
-				if let v = moduleActivationsPassiveTargetingSystem {
-					aCoder.encode(v, forKey: "module_activations_passive_targeting_system")
-				}
-				if let v = moduleActivationsProbeLauncher {
-					aCoder.encode(v, forKey: "module_activations_probe_launcher")
-				}
-				if let v = moduleActivationsProjectedEccm {
-					aCoder.encode(v, forKey: "module_activations_projected_eccm")
-				}
-				if let v = moduleActivationsProjectileWeapon {
-					aCoder.encode(v, forKey: "module_activations_projectile_weapon")
-				}
-				if let v = moduleActivationsPropulsionModule {
-					aCoder.encode(v, forKey: "module_activations_propulsion_module")
-				}
-				if let v = moduleActivationsRemoteArmorRepairer {
-					aCoder.encode(v, forKey: "module_activations_remote_armor_repairer")
-				}
-				if let v = moduleActivationsRemoteCapacitorTransmitter {
-					aCoder.encode(v, forKey: "module_activations_remote_capacitor_transmitter")
-				}
-				if let v = moduleActivationsRemoteEcmBurst {
-					aCoder.encode(v, forKey: "module_activations_remote_ecm_burst")
-				}
-				if let v = moduleActivationsRemoteHullRepairer {
-					aCoder.encode(v, forKey: "module_activations_remote_hull_repairer")
-				}
-				if let v = moduleActivationsRemoteSensorBooster {
-					aCoder.encode(v, forKey: "module_activations_remote_sensor_booster")
-				}
-				if let v = moduleActivationsRemoteSensorDamper {
-					aCoder.encode(v, forKey: "module_activations_remote_sensor_damper")
-				}
-				if let v = moduleActivationsRemoteShieldBooster {
-					aCoder.encode(v, forKey: "module_activations_remote_shield_booster")
-				}
-				if let v = moduleActivationsRemoteTrackingComputer {
-					aCoder.encode(v, forKey: "module_activations_remote_tracking_computer")
-				}
-				if let v = moduleActivationsSalvager {
-					aCoder.encode(v, forKey: "module_activations_salvager")
-				}
-				if let v = moduleActivationsSensorBooster {
-					aCoder.encode(v, forKey: "module_activations_sensor_booster")
-				}
-				if let v = moduleActivationsShieldBooster {
-					aCoder.encode(v, forKey: "module_activations_shield_booster")
-				}
-				if let v = moduleActivationsShieldHardener {
-					aCoder.encode(v, forKey: "module_activations_shield_hardener")
-				}
-				if let v = moduleActivationsShipScanner {
-					aCoder.encode(v, forKey: "module_activations_ship_scanner")
-				}
-				if let v = moduleActivationsSiege {
-					aCoder.encode(v, forKey: "module_activations_siege")
-				}
-				if let v = moduleActivationsSmartBomb {
-					aCoder.encode(v, forKey: "module_activations_smart_bomb")
-				}
-				if let v = moduleActivationsStasisWeb {
-					aCoder.encode(v, forKey: "module_activations_stasis_web")
-				}
-				if let v = moduleActivationsStripMiner {
-					aCoder.encode(v, forKey: "module_activations_strip_miner")
-				}
-				if let v = moduleActivationsSuperWeapon {
-					aCoder.encode(v, forKey: "module_activations_super_weapon")
-				}
-				if let v = moduleActivationsSurveyScanner {
-					aCoder.encode(v, forKey: "module_activations_survey_scanner")
-				}
-				if let v = moduleActivationsTargetBreaker {
-					aCoder.encode(v, forKey: "module_activations_target_breaker")
-				}
-				if let v = moduleActivationsTargetPainter {
-					aCoder.encode(v, forKey: "module_activations_target_painter")
-				}
-				if let v = moduleActivationsTrackingComputer {
-					aCoder.encode(v, forKey: "module_activations_tracking_computer")
-				}
-				if let v = moduleActivationsTrackingDisruptor {
-					aCoder.encode(v, forKey: "module_activations_tracking_disruptor")
-				}
-				if let v = moduleActivationsTractorBeam {
-					aCoder.encode(v, forKey: "module_activations_tractor_beam")
-				}
-				if let v = moduleActivationsTriage {
-					aCoder.encode(v, forKey: "module_activations_triage")
-				}
-				if let v = moduleActivationsWarpDisruptFieldGenerator {
-					aCoder.encode(v, forKey: "module_activations_warp_disrupt_field_generator")
-				}
-				if let v = moduleActivationsWarpScrambler {
-					aCoder.encode(v, forKey: "module_activations_warp_scrambler")
-				}
-				if let v = moduleLinkWeapons {
-					aCoder.encode(v, forKey: "module_link_weapons")
-				}
-				if let v = moduleOverload {
-					aCoder.encode(v, forKey: "module_overload")
-				}
-				if let v = moduleRepairs {
-					aCoder.encode(v, forKey: "module_repairs")
-				}
-				if let v = orbitalStrikeCharactersKilled {
-					aCoder.encode(v, forKey: "orbital_strike_characters_killed")
-				}
-				if let v = orbitalStrikeDamageToPlayersArmorAmount {
-					aCoder.encode(v, forKey: "orbital_strike_damage_to_players_armor_amount")
-				}
-				if let v = orbitalStrikeDamageToPlayersShieldAmount {
-					aCoder.encode(v, forKey: "orbital_strike_damage_to_players_shield_amount")
-				}
-				if let v = pveDungeonsCompletedAgent {
-					aCoder.encode(v, forKey: "pve_dungeons_completed_agent")
-				}
-				if let v = pveDungeonsCompletedDistribution {
-					aCoder.encode(v, forKey: "pve_dungeons_completed_distribution")
-				}
-				if let v = pveMissionsSucceeded {
-					aCoder.encode(v, forKey: "pve_missions_succeeded")
-				}
-				if let v = pveMissionsSucceededEpicArc {
-					aCoder.encode(v, forKey: "pve_missions_succeeded_epic_arc")
-				}
-				if let v = socialAddContactBad {
-					aCoder.encode(v, forKey: "social_add_contact_bad")
-				}
-				if let v = socialAddContactGood {
-					aCoder.encode(v, forKey: "social_add_contact_good")
-				}
-				if let v = socialAddContactHigh {
-					aCoder.encode(v, forKey: "social_add_contact_high")
-				}
-				if let v = socialAddContactHorrible {
-					aCoder.encode(v, forKey: "social_add_contact_horrible")
-				}
-				if let v = socialAddContactNeutral {
-					aCoder.encode(v, forKey: "social_add_contact_neutral")
-				}
-				if let v = socialAddNote {
-					aCoder.encode(v, forKey: "social_add_note")
-				}
-				if let v = socialAddedAsContactBad {
-					aCoder.encode(v, forKey: "social_added_as_contact_bad")
-				}
-				if let v = socialAddedAsContactGood {
-					aCoder.encode(v, forKey: "social_added_as_contact_good")
-				}
-				if let v = socialAddedAsContactHigh {
-					aCoder.encode(v, forKey: "social_added_as_contact_high")
-				}
-				if let v = socialAddedAsContactHorrible {
-					aCoder.encode(v, forKey: "social_added_as_contact_horrible")
-				}
-				if let v = socialAddedAsContactNeutral {
-					aCoder.encode(v, forKey: "social_added_as_contact_neutral")
-				}
-				if let v = socialCalendarEventCreated {
-					aCoder.encode(v, forKey: "social_calendar_event_created")
-				}
-				if let v = socialChatMessagesAlliance {
-					aCoder.encode(v, forKey: "social_chat_messages_alliance")
-				}
-				if let v = socialChatMessagesConstellation {
-					aCoder.encode(v, forKey: "social_chat_messages_constellation")
-				}
-				if let v = socialChatMessagesCorporation {
-					aCoder.encode(v, forKey: "social_chat_messages_corporation")
-				}
-				if let v = socialChatMessagesFleet {
-					aCoder.encode(v, forKey: "social_chat_messages_fleet")
-				}
-				if let v = socialChatMessagesRegion {
-					aCoder.encode(v, forKey: "social_chat_messages_region")
-				}
-				if let v = socialChatMessagesSolarsystem {
-					aCoder.encode(v, forKey: "social_chat_messages_solarsystem")
-				}
-				if let v = socialChatMessagesWarfaction {
-					aCoder.encode(v, forKey: "social_chat_messages_warfaction")
-				}
-				if let v = socialChatTotalMessageLength {
-					aCoder.encode(v, forKey: "social_chat_total_message_length")
-				}
-				if let v = socialDirectTrades {
-					aCoder.encode(v, forKey: "social_direct_trades")
-				}
-				if let v = socialFleetBroadcasts {
-					aCoder.encode(v, forKey: "social_fleet_broadcasts")
-				}
-				if let v = socialFleetJoins {
-					aCoder.encode(v, forKey: "social_fleet_joins")
-				}
-				if let v = socialMailsReceived {
-					aCoder.encode(v, forKey: "social_mails_received")
-				}
-				if let v = socialMailsSent {
-					aCoder.encode(v, forKey: "social_mails_sent")
-				}
-				if let v = travelAccelerationGateActivations {
-					aCoder.encode(v, forKey: "travel_acceleration_gate_activations")
-				}
-				if let v = travelAlignTo {
-					aCoder.encode(v, forKey: "travel_align_to")
-				}
-				if let v = travelDistanceWarpedHighSec {
-					aCoder.encode(v, forKey: "travel_distance_warped_high_sec")
-				}
-				if let v = travelDistanceWarpedLowSec {
-					aCoder.encode(v, forKey: "travel_distance_warped_low_sec")
-				}
-				if let v = travelDistanceWarpedNullSec {
-					aCoder.encode(v, forKey: "travel_distance_warped_null_sec")
-				}
-				if let v = travelDistanceWarpedWormhole {
-					aCoder.encode(v, forKey: "travel_distance_warped_wormhole")
-				}
-				if let v = travelDocksHighSec {
-					aCoder.encode(v, forKey: "travel_docks_high_sec")
-				}
-				if let v = travelDocksLowSec {
-					aCoder.encode(v, forKey: "travel_docks_low_sec")
-				}
-				if let v = travelDocksNullSec {
-					aCoder.encode(v, forKey: "travel_docks_null_sec")
-				}
-				if let v = travelJumpsStargateHighSec {
-					aCoder.encode(v, forKey: "travel_jumps_stargate_high_sec")
-				}
-				if let v = travelJumpsStargateLowSec {
-					aCoder.encode(v, forKey: "travel_jumps_stargate_low_sec")
-				}
-				if let v = travelJumpsStargateNullSec {
-					aCoder.encode(v, forKey: "travel_jumps_stargate_null_sec")
-				}
-				if let v = travelJumpsWormhole {
-					aCoder.encode(v, forKey: "travel_jumps_wormhole")
-				}
-				if let v = travelWarpsHighSec {
-					aCoder.encode(v, forKey: "travel_warps_high_sec")
-				}
-				if let v = travelWarpsLowSec {
-					aCoder.encode(v, forKey: "travel_warps_low_sec")
-				}
-				if let v = travelWarpsNullSec {
-					aCoder.encode(v, forKey: "travel_warps_null_sec")
-				}
-				if let v = travelWarpsToBookmark {
-					aCoder.encode(v, forKey: "travel_warps_to_bookmark")
-				}
-				if let v = travelWarpsToCelestial {
-					aCoder.encode(v, forKey: "travel_warps_to_celestial")
-				}
-				if let v = travelWarpsToFleetMember {
-					aCoder.encode(v, forKey: "travel_warps_to_fleet_member")
-				}
-				if let v = travelWarpsToScanResult {
-					aCoder.encode(v, forKey: "travel_warps_to_scan_result")
-				}
-				if let v = travelWarpsWormhole {
-					aCoder.encode(v, forKey: "travel_warps_wormhole")
-				}
-				aCoder.encode(year, forKey: "year")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = characterMinutes?.json {
-					json["character_minutes"] = v
-				}
-				if let v = characterSessionsStarted?.json {
-					json["character_sessions_started"] = v
-				}
-				if let v = combatCapDrainedbyNpc?.json {
-					json["combat_cap_drainedby_npc"] = v
-				}
-				if let v = combatCapDrainedbyPc?.json {
-					json["combat_cap_drainedby_pc"] = v
-				}
-				if let v = combatCapDrainingPc?.json {
-					json["combat_cap_draining_pc"] = v
-				}
-				if let v = combatCriminalFlagSet?.json {
-					json["combat_criminal_flag_set"] = v
-				}
-				if let v = combatDamageFromNpCsAmount?.json {
-					json["combat_damage_from_np_cs_amount"] = v
-				}
-				if let v = combatDamageFromNpCsNumShots?.json {
-					json["combat_damage_from_np_cs_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersBombAmount?.json {
-					json["combat_damage_from_players_bomb_amount"] = v
-				}
-				if let v = combatDamageFromPlayersBombNumShots?.json {
-					json["combat_damage_from_players_bomb_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersCombatDroneAmount?.json {
-					json["combat_damage_from_players_combat_drone_amount"] = v
-				}
-				if let v = combatDamageFromPlayersCombatDroneNumShots?.json {
-					json["combat_damage_from_players_combat_drone_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersEnergyAmount?.json {
-					json["combat_damage_from_players_energy_amount"] = v
-				}
-				if let v = combatDamageFromPlayersEnergyNumShots?.json {
-					json["combat_damage_from_players_energy_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersFighterBomberAmount?.json {
-					json["combat_damage_from_players_fighter_bomber_amount"] = v
-				}
-				if let v = combatDamageFromPlayersFighterBomberNumShots?.json {
-					json["combat_damage_from_players_fighter_bomber_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersFighterDroneAmount?.json {
-					json["combat_damage_from_players_fighter_drone_amount"] = v
-				}
-				if let v = combatDamageFromPlayersFighterDroneNumShots?.json {
-					json["combat_damage_from_players_fighter_drone_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersHybridAmount?.json {
-					json["combat_damage_from_players_hybrid_amount"] = v
-				}
-				if let v = combatDamageFromPlayersHybridNumShots?.json {
-					json["combat_damage_from_players_hybrid_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersMissileAmount?.json {
-					json["combat_damage_from_players_missile_amount"] = v
-				}
-				if let v = combatDamageFromPlayersMissileNumShots?.json {
-					json["combat_damage_from_players_missile_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersProjectileAmount?.json {
-					json["combat_damage_from_players_projectile_amount"] = v
-				}
-				if let v = combatDamageFromPlayersProjectileNumShots?.json {
-					json["combat_damage_from_players_projectile_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersSmartBombAmount?.json {
-					json["combat_damage_from_players_smart_bomb_amount"] = v
-				}
-				if let v = combatDamageFromPlayersSmartBombNumShots?.json {
-					json["combat_damage_from_players_smart_bomb_num_shots"] = v
-				}
-				if let v = combatDamageFromPlayersSuperAmount?.json {
-					json["combat_damage_from_players_super_amount"] = v
-				}
-				if let v = combatDamageFromPlayersSuperNumShots?.json {
-					json["combat_damage_from_players_super_num_shots"] = v
-				}
-				if let v = combatDamageFromStructuresTotalAmount?.json {
-					json["combat_damage_from_structures_total_amount"] = v
-				}
-				if let v = combatDamageFromStructuresTotalNumShots?.json {
-					json["combat_damage_from_structures_total_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersBombAmount?.json {
-					json["combat_damage_to_players_bomb_amount"] = v
-				}
-				if let v = combatDamageToPlayersBombNumShots?.json {
-					json["combat_damage_to_players_bomb_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersCombatDroneAmount?.json {
-					json["combat_damage_to_players_combat_drone_amount"] = v
-				}
-				if let v = combatDamageToPlayersCombatDroneNumShots?.json {
-					json["combat_damage_to_players_combat_drone_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersEnergyAmount?.json {
-					json["combat_damage_to_players_energy_amount"] = v
-				}
-				if let v = combatDamageToPlayersEnergyNumShots?.json {
-					json["combat_damage_to_players_energy_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersFighterBomberAmount?.json {
-					json["combat_damage_to_players_fighter_bomber_amount"] = v
-				}
-				if let v = combatDamageToPlayersFighterBomberNumShots?.json {
-					json["combat_damage_to_players_fighter_bomber_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersFighterDroneAmount?.json {
-					json["combat_damage_to_players_fighter_drone_amount"] = v
-				}
-				if let v = combatDamageToPlayersFighterDroneNumShots?.json {
-					json["combat_damage_to_players_fighter_drone_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersHybridAmount?.json {
-					json["combat_damage_to_players_hybrid_amount"] = v
-				}
-				if let v = combatDamageToPlayersHybridNumShots?.json {
-					json["combat_damage_to_players_hybrid_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersMissileAmount?.json {
-					json["combat_damage_to_players_missile_amount"] = v
-				}
-				if let v = combatDamageToPlayersMissileNumShots?.json {
-					json["combat_damage_to_players_missile_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersProjectileAmount?.json {
-					json["combat_damage_to_players_projectile_amount"] = v
-				}
-				if let v = combatDamageToPlayersProjectileNumShots?.json {
-					json["combat_damage_to_players_projectile_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersSmartBombAmount?.json {
-					json["combat_damage_to_players_smart_bomb_amount"] = v
-				}
-				if let v = combatDamageToPlayersSmartBombNumShots?.json {
-					json["combat_damage_to_players_smart_bomb_num_shots"] = v
-				}
-				if let v = combatDamageToPlayersSuperAmount?.json {
-					json["combat_damage_to_players_super_amount"] = v
-				}
-				if let v = combatDamageToPlayersSuperNumShots?.json {
-					json["combat_damage_to_players_super_num_shots"] = v
-				}
-				if let v = combatDamageToStructuresTotalAmount?.json {
-					json["combat_damage_to_structures_total_amount"] = v
-				}
-				if let v = combatDamageToStructuresTotalNumShots?.json {
-					json["combat_damage_to_structures_total_num_shots"] = v
-				}
-				if let v = combatDeathsHighSec?.json {
-					json["combat_deaths_high_sec"] = v
-				}
-				if let v = combatDeathsLowSec?.json {
-					json["combat_deaths_low_sec"] = v
-				}
-				if let v = combatDeathsNullSec?.json {
-					json["combat_deaths_null_sec"] = v
-				}
-				if let v = combatDeathsPodHighSec?.json {
-					json["combat_deaths_pod_high_sec"] = v
-				}
-				if let v = combatDeathsPodLowSec?.json {
-					json["combat_deaths_pod_low_sec"] = v
-				}
-				if let v = combatDeathsPodNullSec?.json {
-					json["combat_deaths_pod_null_sec"] = v
-				}
-				if let v = combatDeathsPodWormhole?.json {
-					json["combat_deaths_pod_wormhole"] = v
-				}
-				if let v = combatDeathsWormhole?.json {
-					json["combat_deaths_wormhole"] = v
-				}
-				if let v = combatDroneEngage?.json {
-					json["combat_drone_engage"] = v
-				}
-				if let v = combatDuelRequested?.json {
-					json["combat_duel_requested"] = v
-				}
-				if let v = combatEngagementRegister?.json {
-					json["combat_engagement_register"] = v
-				}
-				if let v = combatKillsAssists?.json {
-					json["combat_kills_assists"] = v
-				}
-				if let v = combatKillsHighSec?.json {
-					json["combat_kills_high_sec"] = v
-				}
-				if let v = combatKillsLowSec?.json {
-					json["combat_kills_low_sec"] = v
-				}
-				if let v = combatKillsNullSec?.json {
-					json["combat_kills_null_sec"] = v
-				}
-				if let v = combatKillsPodHighSec?.json {
-					json["combat_kills_pod_high_sec"] = v
-				}
-				if let v = combatKillsPodLowSec?.json {
-					json["combat_kills_pod_low_sec"] = v
-				}
-				if let v = combatKillsPodNullSec?.json {
-					json["combat_kills_pod_null_sec"] = v
-				}
-				if let v = combatKillsPodWormhole?.json {
-					json["combat_kills_pod_wormhole"] = v
-				}
-				if let v = combatKillsWormhole?.json {
-					json["combat_kills_wormhole"] = v
-				}
-				if let v = combatNpcFlagSet?.json {
-					json["combat_npc_flag_set"] = v
-				}
-				if let v = combatPvpFlagSet?.json {
-					json["combat_pvp_flag_set"] = v
-				}
-				if let v = combatRepairArmorByRemoteAmount?.json {
-					json["combat_repair_armor_by_remote_amount"] = v
-				}
-				if let v = combatRepairArmorRemoteAmount?.json {
-					json["combat_repair_armor_remote_amount"] = v
-				}
-				if let v = combatRepairArmorSelfAmount?.json {
-					json["combat_repair_armor_self_amount"] = v
-				}
-				if let v = combatRepairCapacitorByRemoteAmount?.json {
-					json["combat_repair_capacitor_by_remote_amount"] = v
-				}
-				if let v = combatRepairCapacitorRemoteAmount?.json {
-					json["combat_repair_capacitor_remote_amount"] = v
-				}
-				if let v = combatRepairCapacitorSelfAmount?.json {
-					json["combat_repair_capacitor_self_amount"] = v
-				}
-				if let v = combatRepairHullByRemoteAmount?.json {
-					json["combat_repair_hull_by_remote_amount"] = v
-				}
-				if let v = combatRepairHullRemoteAmount?.json {
-					json["combat_repair_hull_remote_amount"] = v
-				}
-				if let v = combatRepairHullSelfAmount?.json {
-					json["combat_repair_hull_self_amount"] = v
-				}
-				if let v = combatRepairShieldByRemoteAmount?.json {
-					json["combat_repair_shield_by_remote_amount"] = v
-				}
-				if let v = combatRepairShieldRemoteAmount?.json {
-					json["combat_repair_shield_remote_amount"] = v
-				}
-				if let v = combatRepairShieldSelfAmount?.json {
-					json["combat_repair_shield_self_amount"] = v
-				}
-				if let v = combatSelfDestructs?.json {
-					json["combat_self_destructs"] = v
-				}
-				if let v = combatWarpScramblePc?.json {
-					json["combat_warp_scramble_pc"] = v
-				}
-				if let v = combatWarpScrambledbyNpc?.json {
-					json["combat_warp_scrambledby_npc"] = v
-				}
-				if let v = combatWarpScrambledbyPc?.json {
-					json["combat_warp_scrambledby_pc"] = v
-				}
-				if let v = combatWeaponFlagSet?.json {
-					json["combat_weapon_flag_set"] = v
-				}
-				if let v = combatWebifiedbyNpc?.json {
-					json["combat_webifiedby_npc"] = v
-				}
-				if let v = combatWebifiedbyPc?.json {
-					json["combat_webifiedby_pc"] = v
-				}
-				if let v = combatWebifyingPc?.json {
-					json["combat_webifying_pc"] = v
-				}
-				if let v = daysOfActivity?.json {
-					json["days_of_activity"] = v
-				}
-				if let v = genericConeScans?.json {
-					json["generic_cone_scans"] = v
-				}
-				if let v = genericRequestScans?.json {
-					json["generic_request_scans"] = v
-				}
-				if let v = industryHackingSuccesses?.json {
-					json["industry_hacking_successes"] = v
-				}
-				if let v = industryJobsCancelled?.json {
-					json["industry_jobs_cancelled"] = v
-				}
-				if let v = industryJobsCompletedCopyBlueprint?.json {
-					json["industry_jobs_completed_copy_blueprint"] = v
-				}
-				if let v = industryJobsCompletedInvention?.json {
-					json["industry_jobs_completed_invention"] = v
-				}
-				if let v = industryJobsCompletedManufacture?.json {
-					json["industry_jobs_completed_manufacture"] = v
-				}
-				if let v = industryJobsCompletedManufactureAsteroid?.json {
-					json["industry_jobs_completed_manufacture_asteroid"] = v
-				}
-				if let v = industryJobsCompletedManufactureAsteroidQuantity?.json {
-					json["industry_jobs_completed_manufacture_asteroid_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureCharge?.json {
-					json["industry_jobs_completed_manufacture_charge"] = v
-				}
-				if let v = industryJobsCompletedManufactureChargeQuantity?.json {
-					json["industry_jobs_completed_manufacture_charge_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureCommodity?.json {
-					json["industry_jobs_completed_manufacture_commodity"] = v
-				}
-				if let v = industryJobsCompletedManufactureCommodityQuantity?.json {
-					json["industry_jobs_completed_manufacture_commodity_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureDeployable?.json {
-					json["industry_jobs_completed_manufacture_deployable"] = v
-				}
-				if let v = industryJobsCompletedManufactureDeployableQuantity?.json {
-					json["industry_jobs_completed_manufacture_deployable_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureDrone?.json {
-					json["industry_jobs_completed_manufacture_drone"] = v
-				}
-				if let v = industryJobsCompletedManufactureDroneQuantity?.json {
-					json["industry_jobs_completed_manufacture_drone_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureImplant?.json {
-					json["industry_jobs_completed_manufacture_implant"] = v
-				}
-				if let v = industryJobsCompletedManufactureImplantQuantity?.json {
-					json["industry_jobs_completed_manufacture_implant_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureModule?.json {
-					json["industry_jobs_completed_manufacture_module"] = v
-				}
-				if let v = industryJobsCompletedManufactureModuleQuantity?.json {
-					json["industry_jobs_completed_manufacture_module_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureOther?.json {
-					json["industry_jobs_completed_manufacture_other"] = v
-				}
-				if let v = industryJobsCompletedManufactureOtherQuantity?.json {
-					json["industry_jobs_completed_manufacture_other_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureShip?.json {
-					json["industry_jobs_completed_manufacture_ship"] = v
-				}
-				if let v = industryJobsCompletedManufactureShipQuantity?.json {
-					json["industry_jobs_completed_manufacture_ship_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureStructure?.json {
-					json["industry_jobs_completed_manufacture_structure"] = v
-				}
-				if let v = industryJobsCompletedManufactureStructureQuantity?.json {
-					json["industry_jobs_completed_manufacture_structure_quantity"] = v
-				}
-				if let v = industryJobsCompletedManufactureSubsystem?.json {
-					json["industry_jobs_completed_manufacture_subsystem"] = v
-				}
-				if let v = industryJobsCompletedManufactureSubsystemQuantity?.json {
-					json["industry_jobs_completed_manufacture_subsystem_quantity"] = v
-				}
-				if let v = industryJobsCompletedMaterialProductivity?.json {
-					json["industry_jobs_completed_material_productivity"] = v
-				}
-				if let v = industryJobsCompletedTimeProductivity?.json {
-					json["industry_jobs_completed_time_productivity"] = v
-				}
-				if let v = industryJobsStartedCopyBlueprint?.json {
-					json["industry_jobs_started_copy_blueprint"] = v
-				}
-				if let v = industryJobsStartedInvention?.json {
-					json["industry_jobs_started_invention"] = v
-				}
-				if let v = industryJobsStartedManufacture?.json {
-					json["industry_jobs_started_manufacture"] = v
-				}
-				if let v = industryJobsStartedMaterialProductivity?.json {
-					json["industry_jobs_started_material_productivity"] = v
-				}
-				if let v = industryJobsStartedTimeProductivity?.json {
-					json["industry_jobs_started_time_productivity"] = v
-				}
-				if let v = industryReprocessItem?.json {
-					json["industry_reprocess_item"] = v
-				}
-				if let v = industryReprocessItemQuantity?.json {
-					json["industry_reprocess_item_quantity"] = v
-				}
-				if let v = inventoryAbandonLootQuantity?.json {
-					json["inventory_abandon_loot_quantity"] = v
-				}
-				if let v = inventoryTrashItemQuantity?.json {
-					json["inventory_trash_item_quantity"] = v
-				}
-				if let v = iskIn?.json {
-					json["isk_in"] = v
-				}
-				if let v = iskOut?.json {
-					json["isk_out"] = v
-				}
-				if let v = marketAcceptContractsCourier?.json {
-					json["market_accept_contracts_courier"] = v
-				}
-				if let v = marketAcceptContractsItemExchange?.json {
-					json["market_accept_contracts_item_exchange"] = v
-				}
-				if let v = marketBuyOrdersPlaced?.json {
-					json["market_buy_orders_placed"] = v
-				}
-				if let v = marketCancelMarketOrder?.json {
-					json["market_cancel_market_order"] = v
-				}
-				if let v = marketCreateContractsAuction?.json {
-					json["market_create_contracts_auction"] = v
-				}
-				if let v = marketCreateContractsCourier?.json {
-					json["market_create_contracts_courier"] = v
-				}
-				if let v = marketCreateContractsItemExchange?.json {
-					json["market_create_contracts_item_exchange"] = v
-				}
-				if let v = marketDeliverCourierContract?.json {
-					json["market_deliver_courier_contract"] = v
-				}
-				if let v = marketIskGained?.json {
-					json["market_isk_gained"] = v
-				}
-				if let v = marketIskSpent?.json {
-					json["market_isk_spent"] = v
-				}
-				if let v = marketModifyMarketOrder?.json {
-					json["market_modify_market_order"] = v
-				}
-				if let v = marketSearchContracts?.json {
-					json["market_search_contracts"] = v
-				}
-				if let v = marketSellOrdersPlaced?.json {
-					json["market_sell_orders_placed"] = v
-				}
-				if let v = miningDroneMine?.json {
-					json["mining_drone_mine"] = v
-				}
-				if let v = miningOreArkonor?.json {
-					json["mining_ore_arkonor"] = v
-				}
-				if let v = miningOreBistot?.json {
-					json["mining_ore_bistot"] = v
-				}
-				if let v = miningOreCrokite?.json {
-					json["mining_ore_crokite"] = v
-				}
-				if let v = miningOreDarkOchre?.json {
-					json["mining_ore_dark_ochre"] = v
-				}
-				if let v = miningOreGneiss?.json {
-					json["mining_ore_gneiss"] = v
-				}
-				if let v = miningOreHarvestableCloud?.json {
-					json["mining_ore_harvestable_cloud"] = v
-				}
-				if let v = miningOreHedbergite?.json {
-					json["mining_ore_hedbergite"] = v
-				}
-				if let v = miningOreHemorphite?.json {
-					json["mining_ore_hemorphite"] = v
-				}
-				if let v = miningOreIce?.json {
-					json["mining_ore_ice"] = v
-				}
-				if let v = miningOreJaspet?.json {
-					json["mining_ore_jaspet"] = v
-				}
-				if let v = miningOreKernite?.json {
-					json["mining_ore_kernite"] = v
-				}
-				if let v = miningOreMercoxit?.json {
-					json["mining_ore_mercoxit"] = v
-				}
-				if let v = miningOreOmber?.json {
-					json["mining_ore_omber"] = v
-				}
-				if let v = miningOrePlagioclase?.json {
-					json["mining_ore_plagioclase"] = v
-				}
-				if let v = miningOrePyroxeres?.json {
-					json["mining_ore_pyroxeres"] = v
-				}
-				if let v = miningOreScordite?.json {
-					json["mining_ore_scordite"] = v
-				}
-				if let v = miningOreSpodumain?.json {
-					json["mining_ore_spodumain"] = v
-				}
-				if let v = miningOreVeldspar?.json {
-					json["mining_ore_veldspar"] = v
-				}
-				if let v = moduleActivationsArmorHardener?.json {
-					json["module_activations_armor_hardener"] = v
-				}
-				if let v = moduleActivationsArmorRepairUnit?.json {
-					json["module_activations_armor_repair_unit"] = v
-				}
-				if let v = moduleActivationsArmorResistanceShiftHardener?.json {
-					json["module_activations_armor_resistance_shift_hardener"] = v
-				}
-				if let v = moduleActivationsAutomatedTargetingSystem?.json {
-					json["module_activations_automated_targeting_system"] = v
-				}
-				if let v = moduleActivationsBastion?.json {
-					json["module_activations_bastion"] = v
-				}
-				if let v = moduleActivationsBombLauncher?.json {
-					json["module_activations_bomb_launcher"] = v
-				}
-				if let v = moduleActivationsCapacitorBooster?.json {
-					json["module_activations_capacitor_booster"] = v
-				}
-				if let v = moduleActivationsCargoScanner?.json {
-					json["module_activations_cargo_scanner"] = v
-				}
-				if let v = moduleActivationsCloakingDevice?.json {
-					json["module_activations_cloaking_device"] = v
-				}
-				if let v = moduleActivationsCloneVatBay?.json {
-					json["module_activations_clone_vat_bay"] = v
-				}
-				if let v = moduleActivationsCynosuralField?.json {
-					json["module_activations_cynosural_field"] = v
-				}
-				if let v = moduleActivationsDamageControl?.json {
-					json["module_activations_damage_control"] = v
-				}
-				if let v = moduleActivationsDataMiners?.json {
-					json["module_activations_data_miners"] = v
-				}
-				if let v = moduleActivationsDroneControlUnit?.json {
-					json["module_activations_drone_control_unit"] = v
-				}
-				if let v = moduleActivationsDroneTrackingModules?.json {
-					json["module_activations_drone_tracking_modules"] = v
-				}
-				if let v = moduleActivationsEccm?.json {
-					json["module_activations_eccm"] = v
-				}
-				if let v = moduleActivationsEcm?.json {
-					json["module_activations_ecm"] = v
-				}
-				if let v = moduleActivationsEcmBurst?.json {
-					json["module_activations_ecm_burst"] = v
-				}
-				if let v = moduleActivationsEnergyDestabilizer?.json {
-					json["module_activations_energy_destabilizer"] = v
-				}
-				if let v = moduleActivationsEnergyVampire?.json {
-					json["module_activations_energy_vampire"] = v
-				}
-				if let v = moduleActivationsEnergyWeapon?.json {
-					json["module_activations_energy_weapon"] = v
-				}
-				if let v = moduleActivationsFestivalLauncher?.json {
-					json["module_activations_festival_launcher"] = v
-				}
-				if let v = moduleActivationsFrequencyMiningLaser?.json {
-					json["module_activations_frequency_mining_laser"] = v
-				}
-				if let v = moduleActivationsFueledArmorRepairer?.json {
-					json["module_activations_fueled_armor_repairer"] = v
-				}
-				if let v = moduleActivationsFueledShieldBooster?.json {
-					json["module_activations_fueled_shield_booster"] = v
-				}
-				if let v = moduleActivationsGangCoordinator?.json {
-					json["module_activations_gang_coordinator"] = v
-				}
-				if let v = moduleActivationsGasCloudHarvester?.json {
-					json["module_activations_gas_cloud_harvester"] = v
-				}
-				if let v = moduleActivationsHullRepairUnit?.json {
-					json["module_activations_hull_repair_unit"] = v
-				}
-				if let v = moduleActivationsHybridWeapon?.json {
-					json["module_activations_hybrid_weapon"] = v
-				}
-				if let v = moduleActivationsIndustrialCore?.json {
-					json["module_activations_industrial_core"] = v
-				}
-				if let v = moduleActivationsInterdictionSphereLauncher?.json {
-					json["module_activations_interdiction_sphere_launcher"] = v
-				}
-				if let v = moduleActivationsMicroJumpDrive?.json {
-					json["module_activations_micro_jump_drive"] = v
-				}
-				if let v = moduleActivationsMiningLaser?.json {
-					json["module_activations_mining_laser"] = v
-				}
-				if let v = moduleActivationsMissileLauncher?.json {
-					json["module_activations_missile_launcher"] = v
-				}
-				if let v = moduleActivationsPassiveTargetingSystem?.json {
-					json["module_activations_passive_targeting_system"] = v
-				}
-				if let v = moduleActivationsProbeLauncher?.json {
-					json["module_activations_probe_launcher"] = v
-				}
-				if let v = moduleActivationsProjectedEccm?.json {
-					json["module_activations_projected_eccm"] = v
-				}
-				if let v = moduleActivationsProjectileWeapon?.json {
-					json["module_activations_projectile_weapon"] = v
-				}
-				if let v = moduleActivationsPropulsionModule?.json {
-					json["module_activations_propulsion_module"] = v
-				}
-				if let v = moduleActivationsRemoteArmorRepairer?.json {
-					json["module_activations_remote_armor_repairer"] = v
-				}
-				if let v = moduleActivationsRemoteCapacitorTransmitter?.json {
-					json["module_activations_remote_capacitor_transmitter"] = v
-				}
-				if let v = moduleActivationsRemoteEcmBurst?.json {
-					json["module_activations_remote_ecm_burst"] = v
-				}
-				if let v = moduleActivationsRemoteHullRepairer?.json {
-					json["module_activations_remote_hull_repairer"] = v
-				}
-				if let v = moduleActivationsRemoteSensorBooster?.json {
-					json["module_activations_remote_sensor_booster"] = v
-				}
-				if let v = moduleActivationsRemoteSensorDamper?.json {
-					json["module_activations_remote_sensor_damper"] = v
-				}
-				if let v = moduleActivationsRemoteShieldBooster?.json {
-					json["module_activations_remote_shield_booster"] = v
-				}
-				if let v = moduleActivationsRemoteTrackingComputer?.json {
-					json["module_activations_remote_tracking_computer"] = v
-				}
-				if let v = moduleActivationsSalvager?.json {
-					json["module_activations_salvager"] = v
-				}
-				if let v = moduleActivationsSensorBooster?.json {
-					json["module_activations_sensor_booster"] = v
-				}
-				if let v = moduleActivationsShieldBooster?.json {
-					json["module_activations_shield_booster"] = v
-				}
-				if let v = moduleActivationsShieldHardener?.json {
-					json["module_activations_shield_hardener"] = v
-				}
-				if let v = moduleActivationsShipScanner?.json {
-					json["module_activations_ship_scanner"] = v
-				}
-				if let v = moduleActivationsSiege?.json {
-					json["module_activations_siege"] = v
-				}
-				if let v = moduleActivationsSmartBomb?.json {
-					json["module_activations_smart_bomb"] = v
-				}
-				if let v = moduleActivationsStasisWeb?.json {
-					json["module_activations_stasis_web"] = v
-				}
-				if let v = moduleActivationsStripMiner?.json {
-					json["module_activations_strip_miner"] = v
-				}
-				if let v = moduleActivationsSuperWeapon?.json {
-					json["module_activations_super_weapon"] = v
-				}
-				if let v = moduleActivationsSurveyScanner?.json {
-					json["module_activations_survey_scanner"] = v
-				}
-				if let v = moduleActivationsTargetBreaker?.json {
-					json["module_activations_target_breaker"] = v
-				}
-				if let v = moduleActivationsTargetPainter?.json {
-					json["module_activations_target_painter"] = v
-				}
-				if let v = moduleActivationsTrackingComputer?.json {
-					json["module_activations_tracking_computer"] = v
-				}
-				if let v = moduleActivationsTrackingDisruptor?.json {
-					json["module_activations_tracking_disruptor"] = v
-				}
-				if let v = moduleActivationsTractorBeam?.json {
-					json["module_activations_tractor_beam"] = v
-				}
-				if let v = moduleActivationsTriage?.json {
-					json["module_activations_triage"] = v
-				}
-				if let v = moduleActivationsWarpDisruptFieldGenerator?.json {
-					json["module_activations_warp_disrupt_field_generator"] = v
-				}
-				if let v = moduleActivationsWarpScrambler?.json {
-					json["module_activations_warp_scrambler"] = v
-				}
-				if let v = moduleLinkWeapons?.json {
-					json["module_link_weapons"] = v
-				}
-				if let v = moduleOverload?.json {
-					json["module_overload"] = v
-				}
-				if let v = moduleRepairs?.json {
-					json["module_repairs"] = v
-				}
-				if let v = orbitalStrikeCharactersKilled?.json {
-					json["orbital_strike_characters_killed"] = v
-				}
-				if let v = orbitalStrikeDamageToPlayersArmorAmount?.json {
-					json["orbital_strike_damage_to_players_armor_amount"] = v
-				}
-				if let v = orbitalStrikeDamageToPlayersShieldAmount?.json {
-					json["orbital_strike_damage_to_players_shield_amount"] = v
-				}
-				if let v = pveDungeonsCompletedAgent?.json {
-					json["pve_dungeons_completed_agent"] = v
-				}
-				if let v = pveDungeonsCompletedDistribution?.json {
-					json["pve_dungeons_completed_distribution"] = v
-				}
-				if let v = pveMissionsSucceeded?.json {
-					json["pve_missions_succeeded"] = v
-				}
-				if let v = pveMissionsSucceededEpicArc?.json {
-					json["pve_missions_succeeded_epic_arc"] = v
-				}
-				if let v = socialAddContactBad?.json {
-					json["social_add_contact_bad"] = v
-				}
-				if let v = socialAddContactGood?.json {
-					json["social_add_contact_good"] = v
-				}
-				if let v = socialAddContactHigh?.json {
-					json["social_add_contact_high"] = v
-				}
-				if let v = socialAddContactHorrible?.json {
-					json["social_add_contact_horrible"] = v
-				}
-				if let v = socialAddContactNeutral?.json {
-					json["social_add_contact_neutral"] = v
-				}
-				if let v = socialAddNote?.json {
-					json["social_add_note"] = v
-				}
-				if let v = socialAddedAsContactBad?.json {
-					json["social_added_as_contact_bad"] = v
-				}
-				if let v = socialAddedAsContactGood?.json {
-					json["social_added_as_contact_good"] = v
-				}
-				if let v = socialAddedAsContactHigh?.json {
-					json["social_added_as_contact_high"] = v
-				}
-				if let v = socialAddedAsContactHorrible?.json {
-					json["social_added_as_contact_horrible"] = v
-				}
-				if let v = socialAddedAsContactNeutral?.json {
-					json["social_added_as_contact_neutral"] = v
-				}
-				if let v = socialCalendarEventCreated?.json {
-					json["social_calendar_event_created"] = v
-				}
-				if let v = socialChatMessagesAlliance?.json {
-					json["social_chat_messages_alliance"] = v
-				}
-				if let v = socialChatMessagesConstellation?.json {
-					json["social_chat_messages_constellation"] = v
-				}
-				if let v = socialChatMessagesCorporation?.json {
-					json["social_chat_messages_corporation"] = v
-				}
-				if let v = socialChatMessagesFleet?.json {
-					json["social_chat_messages_fleet"] = v
-				}
-				if let v = socialChatMessagesRegion?.json {
-					json["social_chat_messages_region"] = v
-				}
-				if let v = socialChatMessagesSolarsystem?.json {
-					json["social_chat_messages_solarsystem"] = v
-				}
-				if let v = socialChatMessagesWarfaction?.json {
-					json["social_chat_messages_warfaction"] = v
-				}
-				if let v = socialChatTotalMessageLength?.json {
-					json["social_chat_total_message_length"] = v
-				}
-				if let v = socialDirectTrades?.json {
-					json["social_direct_trades"] = v
-				}
-				if let v = socialFleetBroadcasts?.json {
-					json["social_fleet_broadcasts"] = v
-				}
-				if let v = socialFleetJoins?.json {
-					json["social_fleet_joins"] = v
-				}
-				if let v = socialMailsReceived?.json {
-					json["social_mails_received"] = v
-				}
-				if let v = socialMailsSent?.json {
-					json["social_mails_sent"] = v
-				}
-				if let v = travelAccelerationGateActivations?.json {
-					json["travel_acceleration_gate_activations"] = v
-				}
-				if let v = travelAlignTo?.json {
-					json["travel_align_to"] = v
-				}
-				if let v = travelDistanceWarpedHighSec?.json {
-					json["travel_distance_warped_high_sec"] = v
-				}
-				if let v = travelDistanceWarpedLowSec?.json {
-					json["travel_distance_warped_low_sec"] = v
-				}
-				if let v = travelDistanceWarpedNullSec?.json {
-					json["travel_distance_warped_null_sec"] = v
-				}
-				if let v = travelDistanceWarpedWormhole?.json {
-					json["travel_distance_warped_wormhole"] = v
-				}
-				if let v = travelDocksHighSec?.json {
-					json["travel_docks_high_sec"] = v
-				}
-				if let v = travelDocksLowSec?.json {
-					json["travel_docks_low_sec"] = v
-				}
-				if let v = travelDocksNullSec?.json {
-					json["travel_docks_null_sec"] = v
-				}
-				if let v = travelJumpsStargateHighSec?.json {
-					json["travel_jumps_stargate_high_sec"] = v
-				}
-				if let v = travelJumpsStargateLowSec?.json {
-					json["travel_jumps_stargate_low_sec"] = v
-				}
-				if let v = travelJumpsStargateNullSec?.json {
-					json["travel_jumps_stargate_null_sec"] = v
-				}
-				if let v = travelJumpsWormhole?.json {
-					json["travel_jumps_wormhole"] = v
-				}
-				if let v = travelWarpsHighSec?.json {
-					json["travel_warps_high_sec"] = v
-				}
-				if let v = travelWarpsLowSec?.json {
-					json["travel_warps_low_sec"] = v
-				}
-				if let v = travelWarpsNullSec?.json {
-					json["travel_warps_null_sec"] = v
-				}
-				if let v = travelWarpsToBookmark?.json {
-					json["travel_warps_to_bookmark"] = v
-				}
-				if let v = travelWarpsToCelestial?.json {
-					json["travel_warps_to_celestial"] = v
-				}
-				if let v = travelWarpsToFleetMember?.json {
-					json["travel_warps_to_fleet_member"] = v
-				}
-				if let v = travelWarpsToScanResult?.json {
-					json["travel_warps_to_scan_result"] = v
-				}
-				if let v = travelWarpsWormhole?.json {
-					json["travel_warps_wormhole"] = v
-				}
-				json["year"] = year.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.characterMinutes?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.characterSessionsStarted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatCapDrainedbyNpc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatCapDrainedbyPc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatCapDrainingPc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatCriminalFlagSet?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromNpCsAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromNpCsNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersBombAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersBombNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersCombatDroneAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersCombatDroneNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersEnergyAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersEnergyNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersFighterBomberAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersFighterBomberNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersFighterDroneAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersFighterDroneNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersHybridAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersHybridNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersMissileAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersMissileNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersProjectileAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersProjectileNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersSmartBombAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersSmartBombNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersSuperAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromPlayersSuperNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromStructuresTotalAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageFromStructuresTotalNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersBombAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersBombNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersCombatDroneAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersCombatDroneNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersEnergyAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersEnergyNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersFighterBomberAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersFighterBomberNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersFighterDroneAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersFighterDroneNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersHybridAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersHybridNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersMissileAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersMissileNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersProjectileAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersProjectileNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersSmartBombAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersSmartBombNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersSuperAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToPlayersSuperNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToStructuresTotalAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDamageToStructuresTotalNumShots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsPodHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsPodLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsPodNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsPodWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDeathsWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDroneEngage?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatDuelRequested?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatEngagementRegister?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsAssists?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsPodHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsPodLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsPodNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsPodWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatKillsWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatNpcFlagSet?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatPvpFlagSet?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairArmorByRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairArmorRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairArmorSelfAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairCapacitorByRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairCapacitorRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairCapacitorSelfAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairHullByRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairHullRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairHullSelfAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairShieldByRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairShieldRemoteAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatRepairShieldSelfAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatSelfDestructs?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWarpScramblePc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWarpScrambledbyNpc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWarpScrambledbyPc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWeaponFlagSet?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWebifiedbyNpc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWebifiedbyPc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.combatWebifyingPc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.daysOfActivity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.genericConeScans?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.genericRequestScans?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryHackingSuccesses?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCancelled?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedCopyBlueprint?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedInvention?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufacture?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureAsteroid?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureAsteroidQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureCharge?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureChargeQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureCommodity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureCommodityQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureDeployable?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureDeployableQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureDrone?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureDroneQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureImplant?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureImplantQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureModule?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureModuleQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureOther?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureOtherQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureShip?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureShipQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureStructure?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureStructureQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureSubsystem?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedManufactureSubsystemQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedMaterialProductivity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsCompletedTimeProductivity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsStartedCopyBlueprint?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsStartedInvention?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsStartedManufacture?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsStartedMaterialProductivity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryJobsStartedTimeProductivity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryReprocessItem?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.industryReprocessItemQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.inventoryAbandonLootQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.inventoryTrashItemQuantity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.iskIn?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.iskOut?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketAcceptContractsCourier?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketAcceptContractsItemExchange?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketBuyOrdersPlaced?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketCancelMarketOrder?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketCreateContractsAuction?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketCreateContractsCourier?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketCreateContractsItemExchange?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketDeliverCourierContract?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketIskGained?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketIskSpent?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketModifyMarketOrder?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketSearchContracts?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.marketSellOrdersPlaced?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningDroneMine?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreArkonor?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreBistot?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreCrokite?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreDarkOchre?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreGneiss?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreHarvestableCloud?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreHedbergite?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreHemorphite?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreIce?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreJaspet?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreKernite?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreMercoxit?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreOmber?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOrePlagioclase?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOrePyroxeres?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreScordite?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreSpodumain?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.miningOreVeldspar?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsArmorHardener?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsArmorRepairUnit?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsArmorResistanceShiftHardener?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsAutomatedTargetingSystem?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsBastion?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsBombLauncher?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsCapacitorBooster?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsCargoScanner?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsCloakingDevice?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsCloneVatBay?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsCynosuralField?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsDamageControl?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsDataMiners?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsDroneControlUnit?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsDroneTrackingModules?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsEccm?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsEcm?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsEcmBurst?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsEnergyDestabilizer?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsEnergyVampire?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsEnergyWeapon?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsFestivalLauncher?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsFrequencyMiningLaser?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsFueledArmorRepairer?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsFueledShieldBooster?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsGangCoordinator?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsGasCloudHarvester?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsHullRepairUnit?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsHybridWeapon?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsIndustrialCore?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsInterdictionSphereLauncher?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsMicroJumpDrive?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsMiningLaser?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsMissileLauncher?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsPassiveTargetingSystem?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsProbeLauncher?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsProjectedEccm?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsProjectileWeapon?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsPropulsionModule?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteArmorRepairer?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteCapacitorTransmitter?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteEcmBurst?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteHullRepairer?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteSensorBooster?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteSensorDamper?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteShieldBooster?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsRemoteTrackingComputer?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsSalvager?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsSensorBooster?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsShieldBooster?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsShieldHardener?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsShipScanner?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsSiege?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsSmartBomb?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsStasisWeb?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsStripMiner?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsSuperWeapon?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsSurveyScanner?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsTargetBreaker?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsTargetPainter?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsTrackingComputer?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsTrackingDisruptor?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsTractorBeam?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsTriage?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsWarpDisruptFieldGenerator?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleActivationsWarpScrambler?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleLinkWeapons?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleOverload?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.moduleRepairs?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.orbitalStrikeCharactersKilled?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.orbitalStrikeDamageToPlayersArmorAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.orbitalStrikeDamageToPlayersShieldAmount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.pveDungeonsCompletedAgent?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.pveDungeonsCompletedDistribution?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.pveMissionsSucceeded?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.pveMissionsSucceededEpicArc?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddContactBad?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddContactGood?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddContactHigh?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddContactHorrible?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddContactNeutral?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddNote?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddedAsContactBad?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddedAsContactGood?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddedAsContactHigh?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddedAsContactHorrible?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialAddedAsContactNeutral?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialCalendarEventCreated?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesAlliance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesConstellation?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesCorporation?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesFleet?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesRegion?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesSolarsystem?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatMessagesWarfaction?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialChatTotalMessageLength?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialDirectTrades?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialFleetBroadcasts?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialFleetJoins?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialMailsReceived?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.socialMailsSent?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelAccelerationGateActivations?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelAlignTo?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDistanceWarpedHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDistanceWarpedLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDistanceWarpedNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDistanceWarpedWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDocksHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDocksLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelDocksNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelJumpsStargateHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelJumpsStargateLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelJumpsStargateNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelJumpsWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsHighSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsLowSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsNullSec?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsToBookmark?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsToCelestial?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsToFleetMember?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsToScanResult?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.travelWarpsWormhole?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.year.hashValue)
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: characterName.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk, rhs: Character.GetCharactersCharacterIDStatsOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			init(_ other: Character.GetCharactersCharacterIDStatsOk) {
-				characterMinutes = other.characterMinutes
-				characterSessionsStarted = other.characterSessionsStarted
-				combatCapDrainedbyNpc = other.combatCapDrainedbyNpc
-				combatCapDrainedbyPc = other.combatCapDrainedbyPc
-				combatCapDrainingPc = other.combatCapDrainingPc
-				combatCriminalFlagSet = other.combatCriminalFlagSet
-				combatDamageFromNpCsAmount = other.combatDamageFromNpCsAmount
-				combatDamageFromNpCsNumShots = other.combatDamageFromNpCsNumShots
-				combatDamageFromPlayersBombAmount = other.combatDamageFromPlayersBombAmount
-				combatDamageFromPlayersBombNumShots = other.combatDamageFromPlayersBombNumShots
-				combatDamageFromPlayersCombatDroneAmount = other.combatDamageFromPlayersCombatDroneAmount
-				combatDamageFromPlayersCombatDroneNumShots = other.combatDamageFromPlayersCombatDroneNumShots
-				combatDamageFromPlayersEnergyAmount = other.combatDamageFromPlayersEnergyAmount
-				combatDamageFromPlayersEnergyNumShots = other.combatDamageFromPlayersEnergyNumShots
-				combatDamageFromPlayersFighterBomberAmount = other.combatDamageFromPlayersFighterBomberAmount
-				combatDamageFromPlayersFighterBomberNumShots = other.combatDamageFromPlayersFighterBomberNumShots
-				combatDamageFromPlayersFighterDroneAmount = other.combatDamageFromPlayersFighterDroneAmount
-				combatDamageFromPlayersFighterDroneNumShots = other.combatDamageFromPlayersFighterDroneNumShots
-				combatDamageFromPlayersHybridAmount = other.combatDamageFromPlayersHybridAmount
-				combatDamageFromPlayersHybridNumShots = other.combatDamageFromPlayersHybridNumShots
-				combatDamageFromPlayersMissileAmount = other.combatDamageFromPlayersMissileAmount
-				combatDamageFromPlayersMissileNumShots = other.combatDamageFromPlayersMissileNumShots
-				combatDamageFromPlayersProjectileAmount = other.combatDamageFromPlayersProjectileAmount
-				combatDamageFromPlayersProjectileNumShots = other.combatDamageFromPlayersProjectileNumShots
-				combatDamageFromPlayersSmartBombAmount = other.combatDamageFromPlayersSmartBombAmount
-				combatDamageFromPlayersSmartBombNumShots = other.combatDamageFromPlayersSmartBombNumShots
-				combatDamageFromPlayersSuperAmount = other.combatDamageFromPlayersSuperAmount
-				combatDamageFromPlayersSuperNumShots = other.combatDamageFromPlayersSuperNumShots
-				combatDamageFromStructuresTotalAmount = other.combatDamageFromStructuresTotalAmount
-				combatDamageFromStructuresTotalNumShots = other.combatDamageFromStructuresTotalNumShots
-				combatDamageToPlayersBombAmount = other.combatDamageToPlayersBombAmount
-				combatDamageToPlayersBombNumShots = other.combatDamageToPlayersBombNumShots
-				combatDamageToPlayersCombatDroneAmount = other.combatDamageToPlayersCombatDroneAmount
-				combatDamageToPlayersCombatDroneNumShots = other.combatDamageToPlayersCombatDroneNumShots
-				combatDamageToPlayersEnergyAmount = other.combatDamageToPlayersEnergyAmount
-				combatDamageToPlayersEnergyNumShots = other.combatDamageToPlayersEnergyNumShots
-				combatDamageToPlayersFighterBomberAmount = other.combatDamageToPlayersFighterBomberAmount
-				combatDamageToPlayersFighterBomberNumShots = other.combatDamageToPlayersFighterBomberNumShots
-				combatDamageToPlayersFighterDroneAmount = other.combatDamageToPlayersFighterDroneAmount
-				combatDamageToPlayersFighterDroneNumShots = other.combatDamageToPlayersFighterDroneNumShots
-				combatDamageToPlayersHybridAmount = other.combatDamageToPlayersHybridAmount
-				combatDamageToPlayersHybridNumShots = other.combatDamageToPlayersHybridNumShots
-				combatDamageToPlayersMissileAmount = other.combatDamageToPlayersMissileAmount
-				combatDamageToPlayersMissileNumShots = other.combatDamageToPlayersMissileNumShots
-				combatDamageToPlayersProjectileAmount = other.combatDamageToPlayersProjectileAmount
-				combatDamageToPlayersProjectileNumShots = other.combatDamageToPlayersProjectileNumShots
-				combatDamageToPlayersSmartBombAmount = other.combatDamageToPlayersSmartBombAmount
-				combatDamageToPlayersSmartBombNumShots = other.combatDamageToPlayersSmartBombNumShots
-				combatDamageToPlayersSuperAmount = other.combatDamageToPlayersSuperAmount
-				combatDamageToPlayersSuperNumShots = other.combatDamageToPlayersSuperNumShots
-				combatDamageToStructuresTotalAmount = other.combatDamageToStructuresTotalAmount
-				combatDamageToStructuresTotalNumShots = other.combatDamageToStructuresTotalNumShots
-				combatDeathsHighSec = other.combatDeathsHighSec
-				combatDeathsLowSec = other.combatDeathsLowSec
-				combatDeathsNullSec = other.combatDeathsNullSec
-				combatDeathsPodHighSec = other.combatDeathsPodHighSec
-				combatDeathsPodLowSec = other.combatDeathsPodLowSec
-				combatDeathsPodNullSec = other.combatDeathsPodNullSec
-				combatDeathsPodWormhole = other.combatDeathsPodWormhole
-				combatDeathsWormhole = other.combatDeathsWormhole
-				combatDroneEngage = other.combatDroneEngage
-				combatDuelRequested = other.combatDuelRequested
-				combatEngagementRegister = other.combatEngagementRegister
-				combatKillsAssists = other.combatKillsAssists
-				combatKillsHighSec = other.combatKillsHighSec
-				combatKillsLowSec = other.combatKillsLowSec
-				combatKillsNullSec = other.combatKillsNullSec
-				combatKillsPodHighSec = other.combatKillsPodHighSec
-				combatKillsPodLowSec = other.combatKillsPodLowSec
-				combatKillsPodNullSec = other.combatKillsPodNullSec
-				combatKillsPodWormhole = other.combatKillsPodWormhole
-				combatKillsWormhole = other.combatKillsWormhole
-				combatNpcFlagSet = other.combatNpcFlagSet
-				combatPvpFlagSet = other.combatPvpFlagSet
-				combatRepairArmorByRemoteAmount = other.combatRepairArmorByRemoteAmount
-				combatRepairArmorRemoteAmount = other.combatRepairArmorRemoteAmount
-				combatRepairArmorSelfAmount = other.combatRepairArmorSelfAmount
-				combatRepairCapacitorByRemoteAmount = other.combatRepairCapacitorByRemoteAmount
-				combatRepairCapacitorRemoteAmount = other.combatRepairCapacitorRemoteAmount
-				combatRepairCapacitorSelfAmount = other.combatRepairCapacitorSelfAmount
-				combatRepairHullByRemoteAmount = other.combatRepairHullByRemoteAmount
-				combatRepairHullRemoteAmount = other.combatRepairHullRemoteAmount
-				combatRepairHullSelfAmount = other.combatRepairHullSelfAmount
-				combatRepairShieldByRemoteAmount = other.combatRepairShieldByRemoteAmount
-				combatRepairShieldRemoteAmount = other.combatRepairShieldRemoteAmount
-				combatRepairShieldSelfAmount = other.combatRepairShieldSelfAmount
-				combatSelfDestructs = other.combatSelfDestructs
-				combatWarpScramblePc = other.combatWarpScramblePc
-				combatWarpScrambledbyNpc = other.combatWarpScrambledbyNpc
-				combatWarpScrambledbyPc = other.combatWarpScrambledbyPc
-				combatWeaponFlagSet = other.combatWeaponFlagSet
-				combatWebifiedbyNpc = other.combatWebifiedbyNpc
-				combatWebifiedbyPc = other.combatWebifiedbyPc
-				combatWebifyingPc = other.combatWebifyingPc
-				daysOfActivity = other.daysOfActivity
-				genericConeScans = other.genericConeScans
-				genericRequestScans = other.genericRequestScans
-				industryHackingSuccesses = other.industryHackingSuccesses
-				industryJobsCancelled = other.industryJobsCancelled
-				industryJobsCompletedCopyBlueprint = other.industryJobsCompletedCopyBlueprint
-				industryJobsCompletedInvention = other.industryJobsCompletedInvention
-				industryJobsCompletedManufacture = other.industryJobsCompletedManufacture
-				industryJobsCompletedManufactureAsteroid = other.industryJobsCompletedManufactureAsteroid
-				industryJobsCompletedManufactureAsteroidQuantity = other.industryJobsCompletedManufactureAsteroidQuantity
-				industryJobsCompletedManufactureCharge = other.industryJobsCompletedManufactureCharge
-				industryJobsCompletedManufactureChargeQuantity = other.industryJobsCompletedManufactureChargeQuantity
-				industryJobsCompletedManufactureCommodity = other.industryJobsCompletedManufactureCommodity
-				industryJobsCompletedManufactureCommodityQuantity = other.industryJobsCompletedManufactureCommodityQuantity
-				industryJobsCompletedManufactureDeployable = other.industryJobsCompletedManufactureDeployable
-				industryJobsCompletedManufactureDeployableQuantity = other.industryJobsCompletedManufactureDeployableQuantity
-				industryJobsCompletedManufactureDrone = other.industryJobsCompletedManufactureDrone
-				industryJobsCompletedManufactureDroneQuantity = other.industryJobsCompletedManufactureDroneQuantity
-				industryJobsCompletedManufactureImplant = other.industryJobsCompletedManufactureImplant
-				industryJobsCompletedManufactureImplantQuantity = other.industryJobsCompletedManufactureImplantQuantity
-				industryJobsCompletedManufactureModule = other.industryJobsCompletedManufactureModule
-				industryJobsCompletedManufactureModuleQuantity = other.industryJobsCompletedManufactureModuleQuantity
-				industryJobsCompletedManufactureOther = other.industryJobsCompletedManufactureOther
-				industryJobsCompletedManufactureOtherQuantity = other.industryJobsCompletedManufactureOtherQuantity
-				industryJobsCompletedManufactureShip = other.industryJobsCompletedManufactureShip
-				industryJobsCompletedManufactureShipQuantity = other.industryJobsCompletedManufactureShipQuantity
-				industryJobsCompletedManufactureStructure = other.industryJobsCompletedManufactureStructure
-				industryJobsCompletedManufactureStructureQuantity = other.industryJobsCompletedManufactureStructureQuantity
-				industryJobsCompletedManufactureSubsystem = other.industryJobsCompletedManufactureSubsystem
-				industryJobsCompletedManufactureSubsystemQuantity = other.industryJobsCompletedManufactureSubsystemQuantity
-				industryJobsCompletedMaterialProductivity = other.industryJobsCompletedMaterialProductivity
-				industryJobsCompletedTimeProductivity = other.industryJobsCompletedTimeProductivity
-				industryJobsStartedCopyBlueprint = other.industryJobsStartedCopyBlueprint
-				industryJobsStartedInvention = other.industryJobsStartedInvention
-				industryJobsStartedManufacture = other.industryJobsStartedManufacture
-				industryJobsStartedMaterialProductivity = other.industryJobsStartedMaterialProductivity
-				industryJobsStartedTimeProductivity = other.industryJobsStartedTimeProductivity
-				industryReprocessItem = other.industryReprocessItem
-				industryReprocessItemQuantity = other.industryReprocessItemQuantity
-				inventoryAbandonLootQuantity = other.inventoryAbandonLootQuantity
-				inventoryTrashItemQuantity = other.inventoryTrashItemQuantity
-				iskIn = other.iskIn
-				iskOut = other.iskOut
-				marketAcceptContractsCourier = other.marketAcceptContractsCourier
-				marketAcceptContractsItemExchange = other.marketAcceptContractsItemExchange
-				marketBuyOrdersPlaced = other.marketBuyOrdersPlaced
-				marketCancelMarketOrder = other.marketCancelMarketOrder
-				marketCreateContractsAuction = other.marketCreateContractsAuction
-				marketCreateContractsCourier = other.marketCreateContractsCourier
-				marketCreateContractsItemExchange = other.marketCreateContractsItemExchange
-				marketDeliverCourierContract = other.marketDeliverCourierContract
-				marketIskGained = other.marketIskGained
-				marketIskSpent = other.marketIskSpent
-				marketModifyMarketOrder = other.marketModifyMarketOrder
-				marketSearchContracts = other.marketSearchContracts
-				marketSellOrdersPlaced = other.marketSellOrdersPlaced
-				miningDroneMine = other.miningDroneMine
-				miningOreArkonor = other.miningOreArkonor
-				miningOreBistot = other.miningOreBistot
-				miningOreCrokite = other.miningOreCrokite
-				miningOreDarkOchre = other.miningOreDarkOchre
-				miningOreGneiss = other.miningOreGneiss
-				miningOreHarvestableCloud = other.miningOreHarvestableCloud
-				miningOreHedbergite = other.miningOreHedbergite
-				miningOreHemorphite = other.miningOreHemorphite
-				miningOreIce = other.miningOreIce
-				miningOreJaspet = other.miningOreJaspet
-				miningOreKernite = other.miningOreKernite
-				miningOreMercoxit = other.miningOreMercoxit
-				miningOreOmber = other.miningOreOmber
-				miningOrePlagioclase = other.miningOrePlagioclase
-				miningOrePyroxeres = other.miningOrePyroxeres
-				miningOreScordite = other.miningOreScordite
-				miningOreSpodumain = other.miningOreSpodumain
-				miningOreVeldspar = other.miningOreVeldspar
-				moduleActivationsArmorHardener = other.moduleActivationsArmorHardener
-				moduleActivationsArmorRepairUnit = other.moduleActivationsArmorRepairUnit
-				moduleActivationsArmorResistanceShiftHardener = other.moduleActivationsArmorResistanceShiftHardener
-				moduleActivationsAutomatedTargetingSystem = other.moduleActivationsAutomatedTargetingSystem
-				moduleActivationsBastion = other.moduleActivationsBastion
-				moduleActivationsBombLauncher = other.moduleActivationsBombLauncher
-				moduleActivationsCapacitorBooster = other.moduleActivationsCapacitorBooster
-				moduleActivationsCargoScanner = other.moduleActivationsCargoScanner
-				moduleActivationsCloakingDevice = other.moduleActivationsCloakingDevice
-				moduleActivationsCloneVatBay = other.moduleActivationsCloneVatBay
-				moduleActivationsCynosuralField = other.moduleActivationsCynosuralField
-				moduleActivationsDamageControl = other.moduleActivationsDamageControl
-				moduleActivationsDataMiners = other.moduleActivationsDataMiners
-				moduleActivationsDroneControlUnit = other.moduleActivationsDroneControlUnit
-				moduleActivationsDroneTrackingModules = other.moduleActivationsDroneTrackingModules
-				moduleActivationsEccm = other.moduleActivationsEccm
-				moduleActivationsEcm = other.moduleActivationsEcm
-				moduleActivationsEcmBurst = other.moduleActivationsEcmBurst
-				moduleActivationsEnergyDestabilizer = other.moduleActivationsEnergyDestabilizer
-				moduleActivationsEnergyVampire = other.moduleActivationsEnergyVampire
-				moduleActivationsEnergyWeapon = other.moduleActivationsEnergyWeapon
-				moduleActivationsFestivalLauncher = other.moduleActivationsFestivalLauncher
-				moduleActivationsFrequencyMiningLaser = other.moduleActivationsFrequencyMiningLaser
-				moduleActivationsFueledArmorRepairer = other.moduleActivationsFueledArmorRepairer
-				moduleActivationsFueledShieldBooster = other.moduleActivationsFueledShieldBooster
-				moduleActivationsGangCoordinator = other.moduleActivationsGangCoordinator
-				moduleActivationsGasCloudHarvester = other.moduleActivationsGasCloudHarvester
-				moduleActivationsHullRepairUnit = other.moduleActivationsHullRepairUnit
-				moduleActivationsHybridWeapon = other.moduleActivationsHybridWeapon
-				moduleActivationsIndustrialCore = other.moduleActivationsIndustrialCore
-				moduleActivationsInterdictionSphereLauncher = other.moduleActivationsInterdictionSphereLauncher
-				moduleActivationsMicroJumpDrive = other.moduleActivationsMicroJumpDrive
-				moduleActivationsMiningLaser = other.moduleActivationsMiningLaser
-				moduleActivationsMissileLauncher = other.moduleActivationsMissileLauncher
-				moduleActivationsPassiveTargetingSystem = other.moduleActivationsPassiveTargetingSystem
-				moduleActivationsProbeLauncher = other.moduleActivationsProbeLauncher
-				moduleActivationsProjectedEccm = other.moduleActivationsProjectedEccm
-				moduleActivationsProjectileWeapon = other.moduleActivationsProjectileWeapon
-				moduleActivationsPropulsionModule = other.moduleActivationsPropulsionModule
-				moduleActivationsRemoteArmorRepairer = other.moduleActivationsRemoteArmorRepairer
-				moduleActivationsRemoteCapacitorTransmitter = other.moduleActivationsRemoteCapacitorTransmitter
-				moduleActivationsRemoteEcmBurst = other.moduleActivationsRemoteEcmBurst
-				moduleActivationsRemoteHullRepairer = other.moduleActivationsRemoteHullRepairer
-				moduleActivationsRemoteSensorBooster = other.moduleActivationsRemoteSensorBooster
-				moduleActivationsRemoteSensorDamper = other.moduleActivationsRemoteSensorDamper
-				moduleActivationsRemoteShieldBooster = other.moduleActivationsRemoteShieldBooster
-				moduleActivationsRemoteTrackingComputer = other.moduleActivationsRemoteTrackingComputer
-				moduleActivationsSalvager = other.moduleActivationsSalvager
-				moduleActivationsSensorBooster = other.moduleActivationsSensorBooster
-				moduleActivationsShieldBooster = other.moduleActivationsShieldBooster
-				moduleActivationsShieldHardener = other.moduleActivationsShieldHardener
-				moduleActivationsShipScanner = other.moduleActivationsShipScanner
-				moduleActivationsSiege = other.moduleActivationsSiege
-				moduleActivationsSmartBomb = other.moduleActivationsSmartBomb
-				moduleActivationsStasisWeb = other.moduleActivationsStasisWeb
-				moduleActivationsStripMiner = other.moduleActivationsStripMiner
-				moduleActivationsSuperWeapon = other.moduleActivationsSuperWeapon
-				moduleActivationsSurveyScanner = other.moduleActivationsSurveyScanner
-				moduleActivationsTargetBreaker = other.moduleActivationsTargetBreaker
-				moduleActivationsTargetPainter = other.moduleActivationsTargetPainter
-				moduleActivationsTrackingComputer = other.moduleActivationsTrackingComputer
-				moduleActivationsTrackingDisruptor = other.moduleActivationsTrackingDisruptor
-				moduleActivationsTractorBeam = other.moduleActivationsTractorBeam
-				moduleActivationsTriage = other.moduleActivationsTriage
-				moduleActivationsWarpDisruptFieldGenerator = other.moduleActivationsWarpDisruptFieldGenerator
-				moduleActivationsWarpScrambler = other.moduleActivationsWarpScrambler
-				moduleLinkWeapons = other.moduleLinkWeapons
-				moduleOverload = other.moduleOverload
-				moduleRepairs = other.moduleRepairs
-				orbitalStrikeCharactersKilled = other.orbitalStrikeCharactersKilled
-				orbitalStrikeDamageToPlayersArmorAmount = other.orbitalStrikeDamageToPlayersArmorAmount
-				orbitalStrikeDamageToPlayersShieldAmount = other.orbitalStrikeDamageToPlayersShieldAmount
-				pveDungeonsCompletedAgent = other.pveDungeonsCompletedAgent
-				pveDungeonsCompletedDistribution = other.pveDungeonsCompletedDistribution
-				pveMissionsSucceeded = other.pveMissionsSucceeded
-				pveMissionsSucceededEpicArc = other.pveMissionsSucceededEpicArc
-				socialAddContactBad = other.socialAddContactBad
-				socialAddContactGood = other.socialAddContactGood
-				socialAddContactHigh = other.socialAddContactHigh
-				socialAddContactHorrible = other.socialAddContactHorrible
-				socialAddContactNeutral = other.socialAddContactNeutral
-				socialAddNote = other.socialAddNote
-				socialAddedAsContactBad = other.socialAddedAsContactBad
-				socialAddedAsContactGood = other.socialAddedAsContactGood
-				socialAddedAsContactHigh = other.socialAddedAsContactHigh
-				socialAddedAsContactHorrible = other.socialAddedAsContactHorrible
-				socialAddedAsContactNeutral = other.socialAddedAsContactNeutral
-				socialCalendarEventCreated = other.socialCalendarEventCreated
-				socialChatMessagesAlliance = other.socialChatMessagesAlliance
-				socialChatMessagesConstellation = other.socialChatMessagesConstellation
-				socialChatMessagesCorporation = other.socialChatMessagesCorporation
-				socialChatMessagesFleet = other.socialChatMessagesFleet
-				socialChatMessagesRegion = other.socialChatMessagesRegion
-				socialChatMessagesSolarsystem = other.socialChatMessagesSolarsystem
-				socialChatMessagesWarfaction = other.socialChatMessagesWarfaction
-				socialChatTotalMessageLength = other.socialChatTotalMessageLength
-				socialDirectTrades = other.socialDirectTrades
-				socialFleetBroadcasts = other.socialFleetBroadcasts
-				socialFleetJoins = other.socialFleetJoins
-				socialMailsReceived = other.socialMailsReceived
-				socialMailsSent = other.socialMailsSent
-				travelAccelerationGateActivations = other.travelAccelerationGateActivations
-				travelAlignTo = other.travelAlignTo
-				travelDistanceWarpedHighSec = other.travelDistanceWarpedHighSec
-				travelDistanceWarpedLowSec = other.travelDistanceWarpedLowSec
-				travelDistanceWarpedNullSec = other.travelDistanceWarpedNullSec
-				travelDistanceWarpedWormhole = other.travelDistanceWarpedWormhole
-				travelDocksHighSec = other.travelDocksHighSec
-				travelDocksLowSec = other.travelDocksLowSec
-				travelDocksNullSec = other.travelDocksNullSec
-				travelJumpsStargateHighSec = other.travelJumpsStargateHighSec
-				travelJumpsStargateLowSec = other.travelJumpsStargateLowSec
-				travelJumpsStargateNullSec = other.travelJumpsStargateNullSec
-				travelJumpsWormhole = other.travelJumpsWormhole
-				travelWarpsHighSec = other.travelWarpsHighSec
-				travelWarpsLowSec = other.travelWarpsLowSec
-				travelWarpsNullSec = other.travelWarpsNullSec
-				travelWarpsToBookmark = other.travelWarpsToBookmark
-				travelWarpsToCelestial = other.travelWarpsToCelestial
-				travelWarpsToFleetMember = other.travelWarpsToFleetMember
-				travelWarpsToScanResult = other.travelWarpsToScanResult
-				travelWarpsWormhole = other.travelWarpsWormhole
-				year = other.year
-			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDStatsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDStatsOk)?.hashValue == hashValue
-			}
-			
-		}
-		
-		
-		@objc(ESICharacterName) public class Name: NSObject, NSSecureCoding, NSCopying, JSONCoding {
-			
-			
-			public var characterID: Int64 = Int64()
-			public var characterName: String = String()
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let characterID = dictionary["character_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.characterID = characterID
-				guard let characterName = dictionary["character_name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.characterName = characterName
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				characterID = aDecoder.decodeInt64(forKey: "character_id")
-				characterName = aDecoder.decodeObject(forKey: "character_name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(characterID, forKey: "character_id")
-				aCoder.encode(characterName, forKey: "character_name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["character_id"] = characterID.json
-				json["character_name"] = characterName.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.characterID.hashValue)
-				hashCombine(seed: &hash, value: self.characterName.hashValue)
-				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Name, rhs: Character.Name) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Name) {
-				characterID = other.characterID
-				characterName = other.characterName
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case characterName = "character_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Name(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Name)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterGetCharactersCharacterIDTitlesOk) public class GetCharactersCharacterIDTitlesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDStatsOk: Codable, Hashable {
 			
-			
-			public var name: String? = nil
-			public var titleID: Int? = nil
-			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
+			public struct GetCharactersCharacterIDStatsPve: Codable, Hashable {
 				
-				name = dictionary["name"] as? String
-				titleID = dictionary["title_id"] as? Int
 				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				name = aDecoder.decodeObject(forKey: "name") as? String
-				titleID = aDecoder.containsValue(forKey: "title_id") ? aDecoder.decodeInteger(forKey: "title_id") : nil
+				public let dungeonsCompletedAgent: Int64?
+				public let dungeonsCompletedDistribution: Int64?
+				public let missionsSucceeded: Int64?
+				public let missionsSucceededEpicArc: Int64?
 				
-				super.init()
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: dungeonsCompletedAgent?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: dungeonsCompletedDistribution?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: missionsSucceeded?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: missionsSucceededEpicArc?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case dungeonsCompletedAgent = "dungeons_completed_agent"
+					case dungeonsCompletedDistribution = "dungeons_completed_distribution"
+					case missionsSucceeded = "missions_succeeded"
+					case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
 			}
 			
-			public func encode(with aCoder: NSCoder) {
-				if let v = name {
-					aCoder.encode(v, forKey: "name")
+			public struct GetCharactersCharacterIDStatsInventory: Codable, Hashable {
+				
+				
+				public let abandonLootQuantity: Int64?
+				public let trashItemQuantity: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: abandonLootQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: trashItemQuantity?.hashValue ?? 0)
+					return hash
 				}
-				if let v = titleID {
-					aCoder.encode(v, forKey: "title_id")
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case abandonLootQuantity = "abandon_loot_quantity"
+					case trashItemQuantity = "trash_item_quantity"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
 			}
 			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = name?.json {
-					json["name"] = v
+			public struct GetCharactersCharacterIDStatsCharacter: Codable, Hashable {
+				
+				
+				public let daysOfActivity: Int64?
+				public let minutes: Int64?
+				public let sessionsStarted: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: daysOfActivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: minutes?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: sessionsStarted?.hashValue ?? 0)
+					return hash
 				}
-				if let v = titleID?.json {
-					json["title_id"] = v
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter) -> Bool {
+					return lhs.hashValue == rhs.hashValue
 				}
-				return json
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case daysOfActivity = "days_of_activity"
+					case minutes
+					case sessionsStarted = "sessions_started"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
 			}
 			
-			private lazy var _hashValue: Int = {
+			public struct GetCharactersCharacterIDStatsMining: Codable, Hashable {
+				
+				
+				public let droneMine: Int64?
+				public let oreArkonor: Int64?
+				public let oreBistot: Int64?
+				public let oreCrokite: Int64?
+				public let oreDarkOchre: Int64?
+				public let oreGneiss: Int64?
+				public let oreHarvestableCloud: Int64?
+				public let oreHedbergite: Int64?
+				public let oreHemorphite: Int64?
+				public let oreIce: Int64?
+				public let oreJaspet: Int64?
+				public let oreKernite: Int64?
+				public let oreMercoxit: Int64?
+				public let oreOmber: Int64?
+				public let orePlagioclase: Int64?
+				public let orePyroxeres: Int64?
+				public let oreScordite: Int64?
+				public let oreSpodumain: Int64?
+				public let oreVeldspar: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: droneMine?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreArkonor?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreBistot?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreCrokite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreDarkOchre?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreGneiss?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreHarvestableCloud?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreHedbergite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreHemorphite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreIce?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreJaspet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreKernite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreMercoxit?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreOmber?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: orePlagioclase?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: orePyroxeres?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreScordite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreSpodumain?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreVeldspar?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case droneMine = "drone_mine"
+					case oreArkonor = "ore_arkonor"
+					case oreBistot = "ore_bistot"
+					case oreCrokite = "ore_crokite"
+					case oreDarkOchre = "ore_dark_ochre"
+					case oreGneiss = "ore_gneiss"
+					case oreHarvestableCloud = "ore_harvestable_cloud"
+					case oreHedbergite = "ore_hedbergite"
+					case oreHemorphite = "ore_hemorphite"
+					case oreIce = "ore_ice"
+					case oreJaspet = "ore_jaspet"
+					case oreKernite = "ore_kernite"
+					case oreMercoxit = "ore_mercoxit"
+					case oreOmber = "ore_omber"
+					case orePlagioclase = "ore_plagioclase"
+					case orePyroxeres = "ore_pyroxeres"
+					case oreScordite = "ore_scordite"
+					case oreSpodumain = "ore_spodumain"
+					case oreVeldspar = "ore_veldspar"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsCombat: Codable, Hashable {
+				
+				
+				public let capDrainedbyNpc: Int64?
+				public let capDrainedbyPc: Int64?
+				public let capDrainingPc: Int64?
+				public let criminalFlagSet: Int64?
+				public let damageFromNpCsAmount: Int64?
+				public let damageFromNpCsNumShots: Int64?
+				public let damageFromPlayersBombAmount: Int64?
+				public let damageFromPlayersBombNumShots: Int64?
+				public let damageFromPlayersCombatDroneAmount: Int64?
+				public let damageFromPlayersCombatDroneNumShots: Int64?
+				public let damageFromPlayersEnergyAmount: Int64?
+				public let damageFromPlayersEnergyNumShots: Int64?
+				public let damageFromPlayersFighterBomberAmount: Int64?
+				public let damageFromPlayersFighterBomberNumShots: Int64?
+				public let damageFromPlayersFighterDroneAmount: Int64?
+				public let damageFromPlayersFighterDroneNumShots: Int64?
+				public let damageFromPlayersHybridAmount: Int64?
+				public let damageFromPlayersHybridNumShots: Int64?
+				public let damageFromPlayersMissileAmount: Int64?
+				public let damageFromPlayersMissileNumShots: Int64?
+				public let damageFromPlayersProjectileAmount: Int64?
+				public let damageFromPlayersProjectileNumShots: Int64?
+				public let damageFromPlayersSmartBombAmount: Int64?
+				public let damageFromPlayersSmartBombNumShots: Int64?
+				public let damageFromPlayersSuperAmount: Int64?
+				public let damageFromPlayersSuperNumShots: Int64?
+				public let damageFromStructuresTotalAmount: Int64?
+				public let damageFromStructuresTotalNumShots: Int64?
+				public let damageToPlayersBombAmount: Int64?
+				public let damageToPlayersBombNumShots: Int64?
+				public let damageToPlayersCombatDroneAmount: Int64?
+				public let damageToPlayersCombatDroneNumShots: Int64?
+				public let damageToPlayersEnergyAmount: Int64?
+				public let damageToPlayersEnergyNumShots: Int64?
+				public let damageToPlayersFighterBomberAmount: Int64?
+				public let damageToPlayersFighterBomberNumShots: Int64?
+				public let damageToPlayersFighterDroneAmount: Int64?
+				public let damageToPlayersFighterDroneNumShots: Int64?
+				public let damageToPlayersHybridAmount: Int64?
+				public let damageToPlayersHybridNumShots: Int64?
+				public let damageToPlayersMissileAmount: Int64?
+				public let damageToPlayersMissileNumShots: Int64?
+				public let damageToPlayersProjectileAmount: Int64?
+				public let damageToPlayersProjectileNumShots: Int64?
+				public let damageToPlayersSmartBombAmount: Int64?
+				public let damageToPlayersSmartBombNumShots: Int64?
+				public let damageToPlayersSuperAmount: Int64?
+				public let damageToPlayersSuperNumShots: Int64?
+				public let damageToStructuresTotalAmount: Int64?
+				public let damageToStructuresTotalNumShots: Int64?
+				public let deathsHighSec: Int64?
+				public let deathsLowSec: Int64?
+				public let deathsNullSec: Int64?
+				public let deathsPodHighSec: Int64?
+				public let deathsPodLowSec: Int64?
+				public let deathsPodNullSec: Int64?
+				public let deathsPodWormhole: Int64?
+				public let deathsWormhole: Int64?
+				public let droneEngage: Int64?
+				public let dscans: Int64?
+				public let duelRequested: Int64?
+				public let engagementRegister: Int64?
+				public let killsAssists: Int64?
+				public let killsHighSec: Int64?
+				public let killsLowSec: Int64?
+				public let killsNullSec: Int64?
+				public let killsPodHighSec: Int64?
+				public let killsPodLowSec: Int64?
+				public let killsPodNullSec: Int64?
+				public let killsPodWormhole: Int64?
+				public let killsWormhole: Int64?
+				public let npcFlagSet: Int64?
+				public let probeScans: Int64?
+				public let pvpFlagSet: Int64?
+				public let repairArmorByRemoteAmount: Int64?
+				public let repairArmorRemoteAmount: Int64?
+				public let repairArmorSelfAmount: Int64?
+				public let repairCapacitorByRemoteAmount: Int64?
+				public let repairCapacitorRemoteAmount: Int64?
+				public let repairCapacitorSelfAmount: Int64?
+				public let repairHullByRemoteAmount: Int64?
+				public let repairHullRemoteAmount: Int64?
+				public let repairHullSelfAmount: Int64?
+				public let repairShieldByRemoteAmount: Int64?
+				public let repairShieldRemoteAmount: Int64?
+				public let repairShieldSelfAmount: Int64?
+				public let selfDestructs: Int64?
+				public let warpScramblePc: Int64?
+				public let warpScrambledbyNpc: Int64?
+				public let warpScrambledbyPc: Int64?
+				public let weaponFlagSet: Int64?
+				public let webifiedbyNpc: Int64?
+				public let webifiedbyPc: Int64?
+				public let webifyingPc: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: capDrainedbyNpc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: capDrainedbyPc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: capDrainingPc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: criminalFlagSet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromNpCsAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromNpCsNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersBombAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersBombNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersCombatDroneAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersCombatDroneNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersEnergyAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersEnergyNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersFighterBomberAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersFighterBomberNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersFighterDroneAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersFighterDroneNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersHybridAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersHybridNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersMissileAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersMissileNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersProjectileAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersProjectileNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersSmartBombAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersSmartBombNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersSuperAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromPlayersSuperNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromStructuresTotalAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageFromStructuresTotalNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersBombAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersBombNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersCombatDroneAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersCombatDroneNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersEnergyAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersEnergyNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersFighterBomberAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersFighterBomberNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersFighterDroneAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersFighterDroneNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersHybridAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersHybridNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersMissileAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersMissileNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersProjectileAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersProjectileNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersSmartBombAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersSmartBombNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersSuperAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToPlayersSuperNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToStructuresTotalAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageToStructuresTotalNumShots?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsPodHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsPodLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsPodNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsPodWormhole?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deathsWormhole?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: droneEngage?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: dscans?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: duelRequested?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: engagementRegister?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsAssists?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsPodHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsPodLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsPodNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsPodWormhole?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: killsWormhole?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: npcFlagSet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: probeScans?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: pvpFlagSet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairArmorByRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairArmorRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairArmorSelfAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairCapacitorByRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairCapacitorRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairCapacitorSelfAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairHullByRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairHullRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairHullSelfAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairShieldByRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairShieldRemoteAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairShieldSelfAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: selfDestructs?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpScramblePc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpScrambledbyNpc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpScrambledbyPc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: weaponFlagSet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: webifiedbyNpc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: webifiedbyPc?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: webifyingPc?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case capDrainedbyNpc = "cap_drainedby_npc"
+					case capDrainedbyPc = "cap_drainedby_pc"
+					case capDrainingPc = "cap_draining_pc"
+					case criminalFlagSet = "criminal_flag_set"
+					case damageFromNpCsAmount = "damage_from_np_cs_amount"
+					case damageFromNpCsNumShots = "damage_from_np_cs_num_shots"
+					case damageFromPlayersBombAmount = "damage_from_players_bomb_amount"
+					case damageFromPlayersBombNumShots = "damage_from_players_bomb_num_shots"
+					case damageFromPlayersCombatDroneAmount = "damage_from_players_combat_drone_amount"
+					case damageFromPlayersCombatDroneNumShots = "damage_from_players_combat_drone_num_shots"
+					case damageFromPlayersEnergyAmount = "damage_from_players_energy_amount"
+					case damageFromPlayersEnergyNumShots = "damage_from_players_energy_num_shots"
+					case damageFromPlayersFighterBomberAmount = "damage_from_players_fighter_bomber_amount"
+					case damageFromPlayersFighterBomberNumShots = "damage_from_players_fighter_bomber_num_shots"
+					case damageFromPlayersFighterDroneAmount = "damage_from_players_fighter_drone_amount"
+					case damageFromPlayersFighterDroneNumShots = "damage_from_players_fighter_drone_num_shots"
+					case damageFromPlayersHybridAmount = "damage_from_players_hybrid_amount"
+					case damageFromPlayersHybridNumShots = "damage_from_players_hybrid_num_shots"
+					case damageFromPlayersMissileAmount = "damage_from_players_missile_amount"
+					case damageFromPlayersMissileNumShots = "damage_from_players_missile_num_shots"
+					case damageFromPlayersProjectileAmount = "damage_from_players_projectile_amount"
+					case damageFromPlayersProjectileNumShots = "damage_from_players_projectile_num_shots"
+					case damageFromPlayersSmartBombAmount = "damage_from_players_smart_bomb_amount"
+					case damageFromPlayersSmartBombNumShots = "damage_from_players_smart_bomb_num_shots"
+					case damageFromPlayersSuperAmount = "damage_from_players_super_amount"
+					case damageFromPlayersSuperNumShots = "damage_from_players_super_num_shots"
+					case damageFromStructuresTotalAmount = "damage_from_structures_total_amount"
+					case damageFromStructuresTotalNumShots = "damage_from_structures_total_num_shots"
+					case damageToPlayersBombAmount = "damage_to_players_bomb_amount"
+					case damageToPlayersBombNumShots = "damage_to_players_bomb_num_shots"
+					case damageToPlayersCombatDroneAmount = "damage_to_players_combat_drone_amount"
+					case damageToPlayersCombatDroneNumShots = "damage_to_players_combat_drone_num_shots"
+					case damageToPlayersEnergyAmount = "damage_to_players_energy_amount"
+					case damageToPlayersEnergyNumShots = "damage_to_players_energy_num_shots"
+					case damageToPlayersFighterBomberAmount = "damage_to_players_fighter_bomber_amount"
+					case damageToPlayersFighterBomberNumShots = "damage_to_players_fighter_bomber_num_shots"
+					case damageToPlayersFighterDroneAmount = "damage_to_players_fighter_drone_amount"
+					case damageToPlayersFighterDroneNumShots = "damage_to_players_fighter_drone_num_shots"
+					case damageToPlayersHybridAmount = "damage_to_players_hybrid_amount"
+					case damageToPlayersHybridNumShots = "damage_to_players_hybrid_num_shots"
+					case damageToPlayersMissileAmount = "damage_to_players_missile_amount"
+					case damageToPlayersMissileNumShots = "damage_to_players_missile_num_shots"
+					case damageToPlayersProjectileAmount = "damage_to_players_projectile_amount"
+					case damageToPlayersProjectileNumShots = "damage_to_players_projectile_num_shots"
+					case damageToPlayersSmartBombAmount = "damage_to_players_smart_bomb_amount"
+					case damageToPlayersSmartBombNumShots = "damage_to_players_smart_bomb_num_shots"
+					case damageToPlayersSuperAmount = "damage_to_players_super_amount"
+					case damageToPlayersSuperNumShots = "damage_to_players_super_num_shots"
+					case damageToStructuresTotalAmount = "damage_to_structures_total_amount"
+					case damageToStructuresTotalNumShots = "damage_to_structures_total_num_shots"
+					case deathsHighSec = "deaths_high_sec"
+					case deathsLowSec = "deaths_low_sec"
+					case deathsNullSec = "deaths_null_sec"
+					case deathsPodHighSec = "deaths_pod_high_sec"
+					case deathsPodLowSec = "deaths_pod_low_sec"
+					case deathsPodNullSec = "deaths_pod_null_sec"
+					case deathsPodWormhole = "deaths_pod_wormhole"
+					case deathsWormhole = "deaths_wormhole"
+					case droneEngage = "drone_engage"
+					case dscans
+					case duelRequested = "duel_requested"
+					case engagementRegister = "engagement_register"
+					case killsAssists = "kills_assists"
+					case killsHighSec = "kills_high_sec"
+					case killsLowSec = "kills_low_sec"
+					case killsNullSec = "kills_null_sec"
+					case killsPodHighSec = "kills_pod_high_sec"
+					case killsPodLowSec = "kills_pod_low_sec"
+					case killsPodNullSec = "kills_pod_null_sec"
+					case killsPodWormhole = "kills_pod_wormhole"
+					case killsWormhole = "kills_wormhole"
+					case npcFlagSet = "npc_flag_set"
+					case probeScans = "probe_scans"
+					case pvpFlagSet = "pvp_flag_set"
+					case repairArmorByRemoteAmount = "repair_armor_by_remote_amount"
+					case repairArmorRemoteAmount = "repair_armor_remote_amount"
+					case repairArmorSelfAmount = "repair_armor_self_amount"
+					case repairCapacitorByRemoteAmount = "repair_capacitor_by_remote_amount"
+					case repairCapacitorRemoteAmount = "repair_capacitor_remote_amount"
+					case repairCapacitorSelfAmount = "repair_capacitor_self_amount"
+					case repairHullByRemoteAmount = "repair_hull_by_remote_amount"
+					case repairHullRemoteAmount = "repair_hull_remote_amount"
+					case repairHullSelfAmount = "repair_hull_self_amount"
+					case repairShieldByRemoteAmount = "repair_shield_by_remote_amount"
+					case repairShieldRemoteAmount = "repair_shield_remote_amount"
+					case repairShieldSelfAmount = "repair_shield_self_amount"
+					case selfDestructs = "self_destructs"
+					case warpScramblePc = "warp_scramble_pc"
+					case warpScrambledbyNpc = "warp_scrambledby_npc"
+					case warpScrambledbyPc = "warp_scrambledby_pc"
+					case weaponFlagSet = "weapon_flag_set"
+					case webifiedbyNpc = "webifiedby_npc"
+					case webifiedbyPc = "webifiedby_pc"
+					case webifyingPc = "webifying_pc"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsTravel: Codable, Hashable {
+				
+				
+				public let accelerationGateActivations: Int64?
+				public let alignTo: Int64?
+				public let distanceWarpedHighSec: Int64?
+				public let distanceWarpedLowSec: Int64?
+				public let distanceWarpedNullSec: Int64?
+				public let distanceWarpedWormhole: Int64?
+				public let docksHighSec: Int64?
+				public let docksLowSec: Int64?
+				public let docksNullSec: Int64?
+				public let jumpsStargateHighSec: Int64?
+				public let jumpsStargateLowSec: Int64?
+				public let jumpsStargateNullSec: Int64?
+				public let jumpsWormhole: Int64?
+				public let warpsHighSec: Int64?
+				public let warpsLowSec: Int64?
+				public let warpsNullSec: Int64?
+				public let warpsToBookmark: Int64?
+				public let warpsToCelestial: Int64?
+				public let warpsToFleetMember: Int64?
+				public let warpsToScanResult: Int64?
+				public let warpsWormhole: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: accelerationGateActivations?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: alignTo?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: distanceWarpedHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: distanceWarpedLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: distanceWarpedNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: distanceWarpedWormhole?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: docksHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: docksLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: docksNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jumpsStargateHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jumpsStargateLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jumpsStargateNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jumpsWormhole?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsHighSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsLowSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsNullSec?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsToBookmark?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsToCelestial?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsToFleetMember?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsToScanResult?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: warpsWormhole?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsTravel, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsTravel) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case accelerationGateActivations = "acceleration_gate_activations"
+					case alignTo = "align_to"
+					case distanceWarpedHighSec = "distance_warped_high_sec"
+					case distanceWarpedLowSec = "distance_warped_low_sec"
+					case distanceWarpedNullSec = "distance_warped_null_sec"
+					case distanceWarpedWormhole = "distance_warped_wormhole"
+					case docksHighSec = "docks_high_sec"
+					case docksLowSec = "docks_low_sec"
+					case docksNullSec = "docks_null_sec"
+					case jumpsStargateHighSec = "jumps_stargate_high_sec"
+					case jumpsStargateLowSec = "jumps_stargate_low_sec"
+					case jumpsStargateNullSec = "jumps_stargate_null_sec"
+					case jumpsWormhole = "jumps_wormhole"
+					case warpsHighSec = "warps_high_sec"
+					case warpsLowSec = "warps_low_sec"
+					case warpsNullSec = "warps_null_sec"
+					case warpsToBookmark = "warps_to_bookmark"
+					case warpsToCelestial = "warps_to_celestial"
+					case warpsToFleetMember = "warps_to_fleet_member"
+					case warpsToScanResult = "warps_to_scan_result"
+					case warpsWormhole = "warps_wormhole"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsSocial: Codable, Hashable {
+				
+				
+				public let addContactBad: Int64?
+				public let addContactGood: Int64?
+				public let addContactHigh: Int64?
+				public let addContactHorrible: Int64?
+				public let addContactNeutral: Int64?
+				public let addNote: Int64?
+				public let addedAsContactBad: Int64?
+				public let addedAsContactGood: Int64?
+				public let addedAsContactHigh: Int64?
+				public let addedAsContactHorrible: Int64?
+				public let addedAsContactNeutral: Int64?
+				public let calendarEventCreated: Int64?
+				public let chatMessagesAlliance: Int64?
+				public let chatMessagesConstellation: Int64?
+				public let chatMessagesCorporation: Int64?
+				public let chatMessagesFleet: Int64?
+				public let chatMessagesRegion: Int64?
+				public let chatMessagesSolarsystem: Int64?
+				public let chatMessagesWarfaction: Int64?
+				public let chatTotalMessageLength: Int64?
+				public let directTrades: Int64?
+				public let fleetBroadcasts: Int64?
+				public let fleetJoins: Int64?
+				public let mailsReceived: Int64?
+				public let mailsSent: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: addContactBad?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addContactGood?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addContactHigh?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addContactHorrible?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addContactNeutral?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addNote?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addedAsContactBad?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addedAsContactGood?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addedAsContactHigh?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addedAsContactHorrible?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: addedAsContactNeutral?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: calendarEventCreated?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesAlliance?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesConstellation?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesCorporation?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesFleet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesRegion?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesSolarsystem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatMessagesWarfaction?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: chatTotalMessageLength?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: directTrades?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: fleetBroadcasts?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: fleetJoins?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: mailsReceived?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: mailsSent?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsSocial, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsSocial) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case addContactBad = "add_contact_bad"
+					case addContactGood = "add_contact_good"
+					case addContactHigh = "add_contact_high"
+					case addContactHorrible = "add_contact_horrible"
+					case addContactNeutral = "add_contact_neutral"
+					case addNote = "add_note"
+					case addedAsContactBad = "added_as_contact_bad"
+					case addedAsContactGood = "added_as_contact_good"
+					case addedAsContactHigh = "added_as_contact_high"
+					case addedAsContactHorrible = "added_as_contact_horrible"
+					case addedAsContactNeutral = "added_as_contact_neutral"
+					case calendarEventCreated = "calendar_event_created"
+					case chatMessagesAlliance = "chat_messages_alliance"
+					case chatMessagesConstellation = "chat_messages_constellation"
+					case chatMessagesCorporation = "chat_messages_corporation"
+					case chatMessagesFleet = "chat_messages_fleet"
+					case chatMessagesRegion = "chat_messages_region"
+					case chatMessagesSolarsystem = "chat_messages_solarsystem"
+					case chatMessagesWarfaction = "chat_messages_warfaction"
+					case chatTotalMessageLength = "chat_total_message_length"
+					case directTrades = "direct_trades"
+					case fleetBroadcasts = "fleet_broadcasts"
+					case fleetJoins = "fleet_joins"
+					case mailsReceived = "mails_received"
+					case mailsSent = "mails_sent"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsOrbital: Codable, Hashable {
+				
+				
+				public let strikeCharactersKilled: Int64?
+				public let strikeDamageToPlayersArmorAmount: Int64?
+				public let strikeDamageToPlayersShieldAmount: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: strikeCharactersKilled?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: strikeDamageToPlayersArmorAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: strikeDamageToPlayersShieldAmount?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case strikeCharactersKilled = "strike_characters_killed"
+					case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
+					case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsModule: Codable, Hashable {
+				
+				
+				public let activationsArmorHardener: Int64?
+				public let activationsArmorRepairUnit: Int64?
+				public let activationsArmorResistanceShiftHardener: Int64?
+				public let activationsAutomatedTargetingSystem: Int64?
+				public let activationsBastion: Int64?
+				public let activationsBombLauncher: Int64?
+				public let activationsCapacitorBooster: Int64?
+				public let activationsCargoScanner: Int64?
+				public let activationsCloakingDevice: Int64?
+				public let activationsCloneVatBay: Int64?
+				public let activationsCynosuralField: Int64?
+				public let activationsDamageControl: Int64?
+				public let activationsDataMiners: Int64?
+				public let activationsDroneControlUnit: Int64?
+				public let activationsDroneTrackingModules: Int64?
+				public let activationsEccm: Int64?
+				public let activationsEcm: Int64?
+				public let activationsEcmBurst: Int64?
+				public let activationsEnergyDestabilizer: Int64?
+				public let activationsEnergyVampire: Int64?
+				public let activationsEnergyWeapon: Int64?
+				public let activationsFestivalLauncher: Int64?
+				public let activationsFrequencyMiningLaser: Int64?
+				public let activationsFueledArmorRepairer: Int64?
+				public let activationsFueledShieldBooster: Int64?
+				public let activationsGangCoordinator: Int64?
+				public let activationsGasCloudHarvester: Int64?
+				public let activationsHullRepairUnit: Int64?
+				public let activationsHybridWeapon: Int64?
+				public let activationsIndustrialCore: Int64?
+				public let activationsInterdictionSphereLauncher: Int64?
+				public let activationsMicroJumpDrive: Int64?
+				public let activationsMiningLaser: Int64?
+				public let activationsMissileLauncher: Int64?
+				public let activationsPassiveTargetingSystem: Int64?
+				public let activationsProbeLauncher: Int64?
+				public let activationsProjectedEccm: Int64?
+				public let activationsProjectileWeapon: Int64?
+				public let activationsPropulsionModule: Int64?
+				public let activationsRemoteArmorRepairer: Int64?
+				public let activationsRemoteCapacitorTransmitter: Int64?
+				public let activationsRemoteEcmBurst: Int64?
+				public let activationsRemoteHullRepairer: Int64?
+				public let activationsRemoteSensorBooster: Int64?
+				public let activationsRemoteSensorDamper: Int64?
+				public let activationsRemoteShieldBooster: Int64?
+				public let activationsRemoteTrackingComputer: Int64?
+				public let activationsSalvager: Int64?
+				public let activationsSensorBooster: Int64?
+				public let activationsShieldBooster: Int64?
+				public let activationsShieldHardener: Int64?
+				public let activationsShipScanner: Int64?
+				public let activationsSiege: Int64?
+				public let activationsSmartBomb: Int64?
+				public let activationsStasisWeb: Int64?
+				public let activationsStripMiner: Int64?
+				public let activationsSuperWeapon: Int64?
+				public let activationsSurveyScanner: Int64?
+				public let activationsTargetBreaker: Int64?
+				public let activationsTargetPainter: Int64?
+				public let activationsTrackingComputer: Int64?
+				public let activationsTrackingDisruptor: Int64?
+				public let activationsTractorBeam: Int64?
+				public let activationsTriage: Int64?
+				public let activationsWarpDisruptFieldGenerator: Int64?
+				public let activationsWarpScrambler: Int64?
+				public let linkWeapons: Int64?
+				public let overload: Int64?
+				public let repairs: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: activationsArmorHardener?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsArmorRepairUnit?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsArmorResistanceShiftHardener?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsAutomatedTargetingSystem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsBastion?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsBombLauncher?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsCapacitorBooster?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsCargoScanner?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsCloakingDevice?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsCloneVatBay?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsCynosuralField?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsDamageControl?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsDataMiners?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsDroneControlUnit?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsDroneTrackingModules?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsEccm?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsEcm?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsEcmBurst?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsEnergyDestabilizer?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsEnergyVampire?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsEnergyWeapon?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsFestivalLauncher?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsFrequencyMiningLaser?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsFueledArmorRepairer?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsFueledShieldBooster?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsGangCoordinator?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsGasCloudHarvester?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsHullRepairUnit?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsHybridWeapon?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsIndustrialCore?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsInterdictionSphereLauncher?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsMicroJumpDrive?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsMiningLaser?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsMissileLauncher?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsPassiveTargetingSystem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsProbeLauncher?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsProjectedEccm?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsProjectileWeapon?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsPropulsionModule?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteArmorRepairer?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteCapacitorTransmitter?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteEcmBurst?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteHullRepairer?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteSensorBooster?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteSensorDamper?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteShieldBooster?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsRemoteTrackingComputer?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsSalvager?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsSensorBooster?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsShieldBooster?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsShieldHardener?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsShipScanner?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsSiege?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsSmartBomb?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsStasisWeb?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsStripMiner?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsSuperWeapon?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsSurveyScanner?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsTargetBreaker?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsTargetPainter?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsTrackingComputer?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsTrackingDisruptor?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsTractorBeam?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsTriage?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsWarpDisruptFieldGenerator?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: activationsWarpScrambler?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: linkWeapons?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: overload?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: repairs?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsModule, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsModule) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activationsArmorHardener = "activations_armor_hardener"
+					case activationsArmorRepairUnit = "activations_armor_repair_unit"
+					case activationsArmorResistanceShiftHardener = "activations_armor_resistance_shift_hardener"
+					case activationsAutomatedTargetingSystem = "activations_automated_targeting_system"
+					case activationsBastion = "activations_bastion"
+					case activationsBombLauncher = "activations_bomb_launcher"
+					case activationsCapacitorBooster = "activations_capacitor_booster"
+					case activationsCargoScanner = "activations_cargo_scanner"
+					case activationsCloakingDevice = "activations_cloaking_device"
+					case activationsCloneVatBay = "activations_clone_vat_bay"
+					case activationsCynosuralField = "activations_cynosural_field"
+					case activationsDamageControl = "activations_damage_control"
+					case activationsDataMiners = "activations_data_miners"
+					case activationsDroneControlUnit = "activations_drone_control_unit"
+					case activationsDroneTrackingModules = "activations_drone_tracking_modules"
+					case activationsEccm = "activations_eccm"
+					case activationsEcm = "activations_ecm"
+					case activationsEcmBurst = "activations_ecm_burst"
+					case activationsEnergyDestabilizer = "activations_energy_destabilizer"
+					case activationsEnergyVampire = "activations_energy_vampire"
+					case activationsEnergyWeapon = "activations_energy_weapon"
+					case activationsFestivalLauncher = "activations_festival_launcher"
+					case activationsFrequencyMiningLaser = "activations_frequency_mining_laser"
+					case activationsFueledArmorRepairer = "activations_fueled_armor_repairer"
+					case activationsFueledShieldBooster = "activations_fueled_shield_booster"
+					case activationsGangCoordinator = "activations_gang_coordinator"
+					case activationsGasCloudHarvester = "activations_gas_cloud_harvester"
+					case activationsHullRepairUnit = "activations_hull_repair_unit"
+					case activationsHybridWeapon = "activations_hybrid_weapon"
+					case activationsIndustrialCore = "activations_industrial_core"
+					case activationsInterdictionSphereLauncher = "activations_interdiction_sphere_launcher"
+					case activationsMicroJumpDrive = "activations_micro_jump_drive"
+					case activationsMiningLaser = "activations_mining_laser"
+					case activationsMissileLauncher = "activations_missile_launcher"
+					case activationsPassiveTargetingSystem = "activations_passive_targeting_system"
+					case activationsProbeLauncher = "activations_probe_launcher"
+					case activationsProjectedEccm = "activations_projected_eccm"
+					case activationsProjectileWeapon = "activations_projectile_weapon"
+					case activationsPropulsionModule = "activations_propulsion_module"
+					case activationsRemoteArmorRepairer = "activations_remote_armor_repairer"
+					case activationsRemoteCapacitorTransmitter = "activations_remote_capacitor_transmitter"
+					case activationsRemoteEcmBurst = "activations_remote_ecm_burst"
+					case activationsRemoteHullRepairer = "activations_remote_hull_repairer"
+					case activationsRemoteSensorBooster = "activations_remote_sensor_booster"
+					case activationsRemoteSensorDamper = "activations_remote_sensor_damper"
+					case activationsRemoteShieldBooster = "activations_remote_shield_booster"
+					case activationsRemoteTrackingComputer = "activations_remote_tracking_computer"
+					case activationsSalvager = "activations_salvager"
+					case activationsSensorBooster = "activations_sensor_booster"
+					case activationsShieldBooster = "activations_shield_booster"
+					case activationsShieldHardener = "activations_shield_hardener"
+					case activationsShipScanner = "activations_ship_scanner"
+					case activationsSiege = "activations_siege"
+					case activationsSmartBomb = "activations_smart_bomb"
+					case activationsStasisWeb = "activations_stasis_web"
+					case activationsStripMiner = "activations_strip_miner"
+					case activationsSuperWeapon = "activations_super_weapon"
+					case activationsSurveyScanner = "activations_survey_scanner"
+					case activationsTargetBreaker = "activations_target_breaker"
+					case activationsTargetPainter = "activations_target_painter"
+					case activationsTrackingComputer = "activations_tracking_computer"
+					case activationsTrackingDisruptor = "activations_tracking_disruptor"
+					case activationsTractorBeam = "activations_tractor_beam"
+					case activationsTriage = "activations_triage"
+					case activationsWarpDisruptFieldGenerator = "activations_warp_disrupt_field_generator"
+					case activationsWarpScrambler = "activations_warp_scrambler"
+					case linkWeapons = "link_weapons"
+					case overload
+					case repairs
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsIndustry: Codable, Hashable {
+				
+				
+				public let hackingSuccesses: Int64?
+				public let jobsCancelled: Int64?
+				public let jobsCompletedCopyBlueprint: Int64?
+				public let jobsCompletedInvention: Int64?
+				public let jobsCompletedManufacture: Int64?
+				public let jobsCompletedManufactureAsteroid: Int64?
+				public let jobsCompletedManufactureAsteroidQuantity: Int64?
+				public let jobsCompletedManufactureCharge: Int64?
+				public let jobsCompletedManufactureChargeQuantity: Int64?
+				public let jobsCompletedManufactureCommodity: Int64?
+				public let jobsCompletedManufactureCommodityQuantity: Int64?
+				public let jobsCompletedManufactureDeployable: Int64?
+				public let jobsCompletedManufactureDeployableQuantity: Int64?
+				public let jobsCompletedManufactureDrone: Int64?
+				public let jobsCompletedManufactureDroneQuantity: Int64?
+				public let jobsCompletedManufactureImplant: Int64?
+				public let jobsCompletedManufactureImplantQuantity: Int64?
+				public let jobsCompletedManufactureModule: Int64?
+				public let jobsCompletedManufactureModuleQuantity: Int64?
+				public let jobsCompletedManufactureOther: Int64?
+				public let jobsCompletedManufactureOtherQuantity: Int64?
+				public let jobsCompletedManufactureShip: Int64?
+				public let jobsCompletedManufactureShipQuantity: Int64?
+				public let jobsCompletedManufactureStructure: Int64?
+				public let jobsCompletedManufactureStructureQuantity: Int64?
+				public let jobsCompletedManufactureSubsystem: Int64?
+				public let jobsCompletedManufactureSubsystemQuantity: Int64?
+				public let jobsCompletedMaterialProductivity: Int64?
+				public let jobsCompletedTimeProductivity: Int64?
+				public let jobsStartedCopyBlueprint: Int64?
+				public let jobsStartedInvention: Int64?
+				public let jobsStartedManufacture: Int64?
+				public let jobsStartedMaterialProductivity: Int64?
+				public let jobsStartedTimeProductivity: Int64?
+				public let reprocessItem: Int64?
+				public let reprocessItemQuantity: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: hackingSuccesses?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCancelled?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedCopyBlueprint?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedInvention?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufacture?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureAsteroid?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureAsteroidQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureCharge?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureChargeQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureCommodity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureCommodityQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDeployable?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDeployableQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDrone?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDroneQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureImplant?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureImplantQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureModule?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureModuleQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureOther?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureOtherQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureShip?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureShipQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureStructure?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureStructureQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureSubsystem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureSubsystemQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedMaterialProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedTimeProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedCopyBlueprint?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedInvention?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedManufacture?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedMaterialProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedTimeProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reprocessItem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reprocessItemQuantity?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case hackingSuccesses = "hacking_successes"
+					case jobsCancelled = "jobs_cancelled"
+					case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
+					case jobsCompletedInvention = "jobs_completed_invention"
+					case jobsCompletedManufacture = "jobs_completed_manufacture"
+					case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
+					case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
+					case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
+					case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
+					case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
+					case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
+					case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
+					case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
+					case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
+					case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
+					case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
+					case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
+					case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
+					case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
+					case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
+					case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
+					case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
+					case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
+					case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
+					case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
+					case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
+					case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
+					case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
+					case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
+					case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
+					case jobsStartedInvention = "jobs_started_invention"
+					case jobsStartedManufacture = "jobs_started_manufacture"
+					case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
+					case jobsStartedTimeProductivity = "jobs_started_time_productivity"
+					case reprocessItem = "reprocess_item"
+					case reprocessItemQuantity = "reprocess_item_quantity"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsMarket: Codable, Hashable {
+				
+				
+				public let acceptContractsCourier: Int64?
+				public let acceptContractsItemExchange: Int64?
+				public let buyOrdersPlaced: Int64?
+				public let cancelMarketOrder: Int64?
+				public let createContractsAuction: Int64?
+				public let createContractsCourier: Int64?
+				public let createContractsItemExchange: Int64?
+				public let deliverCourierContract: Int64?
+				public let iskGained: Int64?
+				public let iskSpent: Int64?
+				public let modifyMarketOrder: Int64?
+				public let searchContracts: Int64?
+				public let sellOrdersPlaced: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: acceptContractsCourier?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: acceptContractsItemExchange?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: buyOrdersPlaced?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: cancelMarketOrder?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: createContractsAuction?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: createContractsCourier?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: createContractsItemExchange?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deliverCourierContract?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: iskGained?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: iskSpent?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: modifyMarketOrder?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: searchContracts?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: sellOrdersPlaced?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case acceptContractsCourier = "accept_contracts_courier"
+					case acceptContractsItemExchange = "accept_contracts_item_exchange"
+					case buyOrdersPlaced = "buy_orders_placed"
+					case cancelMarketOrder = "cancel_market_order"
+					case createContractsAuction = "create_contracts_auction"
+					case createContractsCourier = "create_contracts_courier"
+					case createContractsItemExchange = "create_contracts_item_exchange"
+					case deliverCourierContract = "deliver_courier_contract"
+					case iskGained = "isk_gained"
+					case iskSpent = "isk_spent"
+					case modifyMarketOrder = "modify_market_order"
+					case searchContracts = "search_contracts"
+					case sellOrdersPlaced = "sell_orders_placed"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsIsk: Codable, Hashable {
+				
+				
+				public let `in`: Int64?
+				public let out: Int64?
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: `in`?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: out?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case `in` = "in"
+					case out
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public let character: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter?
+			public let combat: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat?
+			public let industry: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry?
+			public let inventory: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory?
+			public let isk: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk?
+			public let market: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket?
+			public let mining: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining?
+			public let module: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsModule?
+			public let orbital: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital?
+			public let pve: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve?
+			public let social: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsSocial?
+			public let travel: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsTravel?
+			public let year: Int
+			
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.name?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.titleID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: character?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: combat?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: industry?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: inventory?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isk?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: market?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: mining?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: module?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: orbital?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: pve?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: social?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: travel?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: year.hashValue)
 				return hash
-			}()
+			}
 			
-			override public var hashValue: Int {
-				return _hashValue
+			public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk, rhs: Character.GetCharactersCharacterIDStatsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case character
+				case combat
+				case industry
+				case inventory
+				case isk
+				case market
+				case mining
+				case module
+				case orbital
+				case pve
+				case social
+				case travel
+				case year
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
+			
+			
+			public let name: String?
+			public let titleID: Int?
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: titleID?.hashValue ?? 0)
+				return hash
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDTitlesOk, rhs: Character.GetCharactersCharacterIDTitlesOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.GetCharactersCharacterIDTitlesOk) {
-				name = other.name
-				titleID = other.titleID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				case titleID = "title_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDTitlesOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDTitlesOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterRole) public class Role: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Role: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDRolesRolesAtBase: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDRolesRolesAtBase: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -5823,26 +2594,13 @@ public extension ESI {
 				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
 				case trader = "Trader"
 				
-				public init() {
-					self = .accountTake1
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDRolesRolesAtBase(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public enum GetCharactersCharacterIDRolesRolesAtHq: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDRolesRolesAtHq: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -5894,26 +2652,13 @@ public extension ESI {
 				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
 				case trader = "Trader"
 				
-				public init() {
-					self = .accountTake1
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDRolesRolesAtHq(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public enum GetCharactersCharacterIDRolesRoles: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDRolesRoles: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -5965,26 +2710,13 @@ public extension ESI {
 				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
 				case trader = "Trader"
 				
-				public init() {
-					self = .accountTake1
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDRolesRoles(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public enum GetCharactersCharacterIDRolesRolesAtOther: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDRolesRolesAtOther: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -6036,148 +2768,54 @@ public extension ESI {
 				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
 				case trader = "Trader"
 				
-				public init() {
-					self = .accountTake1
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDRolesRolesAtOther(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var roles: [Character.Role.GetCharactersCharacterIDRolesRoles]? = nil
-			public var rolesAtBase: [Character.Role.GetCharactersCharacterIDRolesRolesAtBase]? = nil
-			public var rolesAtHq: [Character.Role.GetCharactersCharacterIDRolesRolesAtHq]? = nil
-			public var rolesAtOther: [Character.Role.GetCharactersCharacterIDRolesRolesAtOther]? = nil
+			public let roles: [Character.Role.GetCharactersCharacterIDRolesRoles]?
+			public let rolesAtBase: [Character.Role.GetCharactersCharacterIDRolesRolesAtBase]?
+			public let rolesAtHq: [Character.Role.GetCharactersCharacterIDRolesRolesAtHq]?
+			public let rolesAtOther: [Character.Role.GetCharactersCharacterIDRolesRolesAtOther]?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				roles = try (dictionary["roles"] as? [Any])?.map {try Character.Role.GetCharactersCharacterIDRolesRoles(json: $0)}
-				rolesAtBase = try (dictionary["roles_at_base"] as? [Any])?.map {try Character.Role.GetCharactersCharacterIDRolesRolesAtBase(json: $0)}
-				rolesAtHq = try (dictionary["roles_at_hq"] as? [Any])?.map {try Character.Role.GetCharactersCharacterIDRolesRolesAtHq(json: $0)}
-				rolesAtOther = try (dictionary["roles_at_other"] as? [Any])?.map {try Character.Role.GetCharactersCharacterIDRolesRolesAtOther(json: $0)}
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				roles = aDecoder.decodeObject(forKey: "roles") as? [Character.Role.GetCharactersCharacterIDRolesRoles]
-				rolesAtBase = aDecoder.decodeObject(forKey: "roles_at_base") as? [Character.Role.GetCharactersCharacterIDRolesRolesAtBase]
-				rolesAtHq = aDecoder.decodeObject(forKey: "roles_at_hq") as? [Character.Role.GetCharactersCharacterIDRolesRolesAtHq]
-				rolesAtOther = aDecoder.decodeObject(forKey: "roles_at_other") as? [Character.Role.GetCharactersCharacterIDRolesRolesAtOther]
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = roles {
-					aCoder.encode(v, forKey: "roles")
-				}
-				if let v = rolesAtBase {
-					aCoder.encode(v, forKey: "roles_at_base")
-				}
-				if let v = rolesAtHq {
-					aCoder.encode(v, forKey: "roles_at_hq")
-				}
-				if let v = rolesAtOther {
-					aCoder.encode(v, forKey: "roles_at_other")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = roles?.json {
-					json["roles"] = v
-				}
-				if let v = rolesAtBase?.json {
-					json["roles_at_base"] = v
-				}
-				if let v = rolesAtHq?.json {
-					json["roles_at_hq"] = v
-				}
-				if let v = rolesAtOther?.json {
-					json["roles_at_other"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
 				self.roles?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.rolesAtBase?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.rolesAtHq?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				self.rolesAtOther?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Role, rhs: Character.Role) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Role) {
-				roles = other.roles?.flatMap { $0 }
-				rolesAtBase = other.rolesAtBase?.flatMap { $0 }
-				rolesAtHq = other.rolesAtHq?.flatMap { $0 }
-				rolesAtOther = other.rolesAtOther?.flatMap { $0 }
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case roles
+				case rolesAtBase = "roles_at_base"
+				case rolesAtHq = "roles_at_hq"
+				case rolesAtOther = "roles_at_other"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Role(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Role)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterGetCharactersCharacterIDNotificationsOk) public class GetCharactersCharacterIDNotificationsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDNotificationsOk: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDNotificationsSenderType: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDNotificationsSenderType: String, Codable, HTTPQueryable {
 				case alliance = "alliance"
 				case character = "character"
 				case corporation = "corporation"
 				case faction = "faction"
 				case other = "other"
-				
-				public init() {
-					self = .character
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDNotificationsSenderType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -6185,7 +2823,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCharactersCharacterIDNotificationsType: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDNotificationsType: String, Codable, HTTPQueryable {
 				case acceptedAlly = "AcceptedAlly"
 				case acceptedSurrender = "AcceptedSurrender"
 				case allAnchoringMsg = "AllAnchoringMsg"
@@ -6363,247 +3001,95 @@ public extension ESI {
 				case warSurrenderOfferMsg = "WarSurrenderOfferMsg"
 				case notificationTypeMoonminingExtractionStarted = "notificationTypeMoonminingExtractionStarted"
 				
-				public init() {
-					self = .acceptedAlly
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDNotificationsType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var isRead: Bool? = nil
-			public var notificationID: Int64 = Int64()
-			public var senderID: Int = Int()
-			public var senderType: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType = Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType()
-			public var text: String? = nil
-			public var timestamp: Date = Date()
-			public var type: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType = Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType()
+			public let isRead: Bool?
+			public let notificationID: Int64
+			public let senderID: Int
+			public let senderType: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType
+			public let text: String?
+			public let timestamp: Date
+			public let type: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				isRead = dictionary["is_read"] as? Bool
-				guard let notificationID = dictionary["notification_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.notificationID = notificationID
-				guard let senderID = dictionary["sender_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.senderID = senderID
-				guard let senderType = Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType(rawValue: dictionary["sender_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.senderType = senderType
-				text = dictionary["text"] as? String
-				guard let timestamp = DateFormatter.esiDateTimeFormatter.date(from: dictionary["timestamp"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.timestamp = timestamp
-				guard let type = Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType(rawValue: dictionary["type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.type = type
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				isRead = aDecoder.containsValue(forKey: "is_read") ? aDecoder.decodeBool(forKey: "is_read") : nil
-				notificationID = aDecoder.decodeInt64(forKey: "notification_id")
-				senderID = aDecoder.decodeInteger(forKey: "sender_id")
-				senderType = Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType(rawValue: aDecoder.decodeObject(forKey: "sender_type") as? String ?? "") ?? Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType()
-				text = aDecoder.decodeObject(forKey: "text") as? String
-				timestamp = aDecoder.decodeObject(forKey: "timestamp") as? Date ?? Date()
-				type = Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType(rawValue: aDecoder.decodeObject(forKey: "type") as? String ?? "") ?? Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = isRead {
-					aCoder.encode(v, forKey: "is_read")
-				}
-				aCoder.encode(notificationID, forKey: "notification_id")
-				aCoder.encode(senderID, forKey: "sender_id")
-				aCoder.encode(senderType.rawValue, forKey: "sender_type")
-				if let v = text {
-					aCoder.encode(v, forKey: "text")
-				}
-				aCoder.encode(timestamp, forKey: "timestamp")
-				aCoder.encode(type.rawValue, forKey: "type")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = isRead?.json {
-					json["is_read"] = v
-				}
-				json["notification_id"] = notificationID.json
-				json["sender_id"] = senderID.json
-				json["sender_type"] = senderType.json
-				if let v = text?.json {
-					json["text"] = v
-				}
-				json["timestamp"] = timestamp.json
-				json["type"] = type.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.isRead?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.notificationID.hashValue)
-				hashCombine(seed: &hash, value: self.senderID.hashValue)
-				hashCombine(seed: &hash, value: self.senderType.hashValue)
-				hashCombine(seed: &hash, value: self.text?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.timestamp.hashValue)
-				hashCombine(seed: &hash, value: self.type.hashValue)
+				hashCombine(seed: &hash, value: isRead?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: notificationID.hashValue)
+				hashCombine(seed: &hash, value: senderID.hashValue)
+				hashCombine(seed: &hash, value: senderType.hashValue)
+				hashCombine(seed: &hash, value: text?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: timestamp.hashValue)
+				hashCombine(seed: &hash, value: type.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.GetCharactersCharacterIDNotificationsOk, rhs: Character.GetCharactersCharacterIDNotificationsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.GetCharactersCharacterIDNotificationsOk) {
-				isRead = other.isRead
-				notificationID = other.notificationID
-				senderID = other.senderID
-				senderType = other.senderType
-				text = other.text
-				timestamp = other.timestamp
-				type = other.type
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case isRead = "is_read"
+				case notificationID = "notification_id"
+				case senderID = "sender_id"
+				case senderType = "sender_type"
+				case text
+				case timestamp
+				case type
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .timestamp: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.GetCharactersCharacterIDNotificationsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDNotificationsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterAffiliation) public class Affiliation: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Affiliation: Codable, Hashable {
 			
 			
-			public var allianceID: Int? = nil
-			public var characterID: Int = Int()
-			public var corporationID: Int = Int()
-			public var factionID: Int? = nil
+			public let allianceID: Int?
+			public let characterID: Int
+			public let corporationID: Int
+			public let factionID: Int?
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				allianceID = dictionary["alliance_id"] as? Int
-				guard let characterID = dictionary["character_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.characterID = characterID
-				guard let corporationID = dictionary["corporation_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.corporationID = corporationID
-				factionID = dictionary["faction_id"] as? Int
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				allianceID = aDecoder.containsValue(forKey: "alliance_id") ? aDecoder.decodeInteger(forKey: "alliance_id") : nil
-				characterID = aDecoder.decodeInteger(forKey: "character_id")
-				corporationID = aDecoder.decodeInteger(forKey: "corporation_id")
-				factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = allianceID {
-					aCoder.encode(v, forKey: "alliance_id")
-				}
-				aCoder.encode(characterID, forKey: "character_id")
-				aCoder.encode(corporationID, forKey: "corporation_id")
-				if let v = factionID {
-					aCoder.encode(v, forKey: "faction_id")
-				}
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = allianceID?.json {
-					json["alliance_id"] = v
-				}
-				json["character_id"] = characterID.json
-				json["corporation_id"] = corporationID.json
-				if let v = factionID?.json {
-					json["faction_id"] = v
-				}
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.characterID.hashValue)
-				hashCombine(seed: &hash, value: self.corporationID.hashValue)
-				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Affiliation, rhs: Character.Affiliation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Affiliation) {
-				allianceID = other.allianceID
-				characterID = other.characterID
-				corporationID = other.corporationID
-				factionID = other.factionID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case characterID = "character_id"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Affiliation(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Affiliation)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESICharacterBlueprint) public class Blueprint: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Blueprint: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDBlueprintsLocationFlag: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDBlueprintsLocationFlag: String, Codable, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case cargo = "Cargo"
@@ -6681,144 +3167,55 @@ public extension ESI {
 				case subSystemSlot7 = "SubSystemSlot7"
 				case unlocked = "Unlocked"
 				
-				public init() {
-					self = .autoFit
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDBlueprintsLocationFlag(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var itemID: Int64 = Int64()
-			public var locationFlag: Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag = Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag()
-			public var locationID: Int64 = Int64()
-			public var materialEfficiency: Int = Int()
-			public var quantity: Int = Int()
-			public var runs: Int = Int()
-			public var timeEfficiency: Int = Int()
-			public var typeID: Int = Int()
+			public let itemID: Int64
+			public let locationFlag: Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag
+			public let locationID: Int64
+			public let materialEfficiency: Int
+			public let quantity: Int
+			public let runs: Int
+			public let timeEfficiency: Int
+			public let typeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				guard let locationFlag = Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationFlag = locationFlag
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let materialEfficiency = dictionary["material_efficiency"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.materialEfficiency = materialEfficiency
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				guard let runs = dictionary["runs"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.runs = runs
-				guard let timeEfficiency = dictionary["time_efficiency"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.timeEfficiency = timeEfficiency
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				locationFlag = Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag()
-				locationID = aDecoder.decodeInt64(forKey: "location_id")
-				materialEfficiency = aDecoder.decodeInteger(forKey: "material_efficiency")
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				runs = aDecoder.decodeInteger(forKey: "runs")
-				timeEfficiency = aDecoder.decodeInteger(forKey: "time_efficiency")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(materialEfficiency, forKey: "material_efficiency")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(runs, forKey: "runs")
-				aCoder.encode(timeEfficiency, forKey: "time_efficiency")
-				aCoder.encode(typeID, forKey: "type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["item_id"] = itemID.json
-				json["location_flag"] = locationFlag.json
-				json["location_id"] = locationID.json
-				json["material_efficiency"] = materialEfficiency.json
-				json["quantity"] = quantity.json
-				json["runs"] = runs.json
-				json["time_efficiency"] = timeEfficiency.json
-				json["type_id"] = typeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.materialEfficiency.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
-				hashCombine(seed: &hash, value: self.runs.hashValue)
-				hashCombine(seed: &hash, value: self.timeEfficiency.hashValue)
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: locationFlag.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: materialEfficiency.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: runs.hashValue)
+				hashCombine(seed: &hash, value: timeEfficiency.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Character.Blueprint, rhs: Character.Blueprint) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Character.Blueprint) {
-				itemID = other.itemID
-				locationFlag = other.locationFlag
-				locationID = other.locationID
-				materialEfficiency = other.materialEfficiency
-				quantity = other.quantity
-				runs = other.runs
-				timeEfficiency = other.timeEfficiency
-				typeID = other.typeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case locationFlag = "location_flag"
+				case locationID = "location_id"
+				case materialEfficiency = "material_efficiency"
+				case quantity
+				case runs
+				case timeEfficiency = "time_efficiency"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Character.Blueprint(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Blueprint)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

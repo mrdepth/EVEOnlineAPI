@@ -142,7 +142,7 @@ public class OAuth2 {
 			Alamofire.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
-			                  headers:["Authorization":"Basic \(auth!)"]).validate().responseOAuth2 {response in
+							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<[String: String]>) in
 								switch(response.result) {
 								case let .success(value):
 									do {
@@ -257,7 +257,7 @@ public class OAuth2Retrier: RequestRetrier {
 		Alamofire.request(OAuthBaseURL + "token",
 		                  method: .post,
 		                  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
-		                  headers:["Authorization":"Basic \(auth!)"]).validate().responseOAuth2 {[weak self] response in
+		                  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseOAuth2 {[weak self] response in
 							guard let strongSelf = self else { return }
 							
 							switch(response.result) {
@@ -292,7 +292,21 @@ public class OAuth2Retrier: RequestRetrier {
 }
 
 extension DataRequest {
-	static func oauth2ResponseSerializer() -> DataResponseSerializer<Any> {
+	@discardableResult
+	public func validateOAuth2() -> Self {
+		let statusCode = IndexSet(200..<300)
+		
+		return validate() {(request, response, data) -> ValidationResult in
+			if statusCode.contains(response.statusCode) {
+				return .success
+			}
+			else {
+				return .success
+			}
+			}.validate(statusCode: statusCode)
+	}
+	
+	/*static func oauth2ResponseSerializer() -> DataResponseSerializer {
 		return DataResponseSerializer { request, response, data, error in
 			switch jsonResponseSerializer().serializeResponse(request, response, data, error) {
 			case let .success(value):
@@ -320,6 +334,6 @@ extension DataRequest {
 			responseSerializer: DataRequest.oauth2ResponseSerializer(),
 			completionHandler: completionHandler
 		)
-	}
+	}*/
 	
 }

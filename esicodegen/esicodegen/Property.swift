@@ -31,6 +31,8 @@ class Property: Schema {
 			return "localizedDescription"
 		case "id":
 			return "id"
+		case "in":
+			return "`in`"
 		default:
 			return propertyName
 		}
@@ -47,7 +49,7 @@ class Property: Schema {
 	}
 
 	var definition: String {
-		return "public var \(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "") = \(isRequired ? defaultValue : "nil")"
+		return "public let \(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "")"
 	}
 
 	var initialization: String {
@@ -161,8 +163,8 @@ class Property: Schema {
 			return "self.\(propertyName)\(isRequired ? "" : "?").forEach {hashCombine(seed: &hash, value: $0.hashValue)}"
 		default:
 			return isRequired ?
-				"hashCombine(seed: &hash, value: self.\(propertyName).hashValue)" :
-			"hashCombine(seed: &hash, value: self.\(propertyName)?.hashValue ?? 0)"
+				"hashCombine(seed: &hash, value: \(propertyName).hashValue)" :
+			"hashCombine(seed: &hash, value: \(propertyName)?.hashValue ?? 0)"
 		}
 	}
 	
@@ -170,4 +172,21 @@ class Property: Schema {
 		return "\(propertyName) = \(copy(from: "other." + propertyName, isRequired: isRequired))"
 	}
 
+	var codingKey: String {
+		
+		return propertyName == name ?
+			"case \(propertyName)" :
+			"case \(propertyName) = \"\(name)\""
+	}
+	
+	var dateFormatter: String? {
+		switch type {
+		case .date:
+			return "case .\(propertyName): return DateFormatter.esiDateFormatter"
+		case .dateTime:
+			return "case .\(propertyName): return DateFormatter.esiDateTimeFormatter"
+		default:
+			return nil
+		}
+	}
 }

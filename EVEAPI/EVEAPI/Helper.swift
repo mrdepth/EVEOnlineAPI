@@ -69,6 +69,10 @@ public enum ESIError: LocalizedError {
 	
 }
 
+protocol DateFormatted {
+	var dateFormatter: DateFormatter? {get}
+}
+
 
 public protocol JSONCoding {
 	var json: Any {get}

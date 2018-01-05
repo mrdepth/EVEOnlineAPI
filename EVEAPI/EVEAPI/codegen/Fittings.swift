@@ -54,7 +54,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = fitting != nil ? (try? JSONSerialization.data(withJSONObject: fitting!.json, options: [])) : nil
+			let body = fitting != nil ? try? JSONEncoder().encode(fitting) : nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -114,349 +114,142 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIFittingsItem) public class Item: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Item: Codable, Hashable {
 			
 			
-			public var flag: Int = Int()
-			public var quantity: Int = Int()
-			public var typeID: Int = Int()
+			public let flag: Int
+			public let quantity: Int
+			public let typeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let flag = dictionary["flag"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.flag = flag
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				flag = aDecoder.decodeInteger(forKey: "flag")
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(flag, forKey: "flag")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(typeID, forKey: "type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["flag"] = flag.json
-				json["quantity"] = quantity.json
-				json["type_id"] = typeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.flag.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: flag.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.Item, rhs: Fittings.Item) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fittings.Item) {
-				flag = other.flag
-				quantity = other.quantity
-				typeID = other.typeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case flag
+				case quantity
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fittings.Item(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Item)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFittingsFitting) public class Fitting: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Fitting: Codable, Hashable {
 			
 			
-			public var localizedDescription: String = String()
-			public var fittingID: Int = Int()
-			public var items: [Fittings.Item] = []
-			public var name: String = String()
-			public var shipTypeID: Int = Int()
+			public let localizedDescription: String
+			public let fittingID: Int
+			public let items: [Fittings.Item]
+			public let name: String
+			public let shipTypeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.localizedDescription = localizedDescription
-				guard let fittingID = dictionary["fitting_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.fittingID = fittingID
-				items = try (dictionary["items"] as? [Any])?.map {try Fittings.Item(json: $0)} ?? []
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.shipTypeID = shipTypeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
-				fittingID = aDecoder.decodeInteger(forKey: "fitting_id")
-				items = aDecoder.decodeObject(of: [Fittings.Item.self], forKey: "items") as? [Fittings.Item] ?? []
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(localizedDescription, forKey: "description")
-				aCoder.encode(fittingID, forKey: "fitting_id")
-				aCoder.encode(items, forKey: "items")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(shipTypeID, forKey: "ship_type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["description"] = localizedDescription.json
-				json["fitting_id"] = fittingID.json
-				json["items"] = items.json
-				json["name"] = name.json
-				json["ship_type_id"] = shipTypeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: self.fittingID.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: fittingID.hashValue)
 				self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.name.hashValue)
-				hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: shipTypeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.Fitting, rhs: Fittings.Fitting) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fittings.Fitting) {
-				localizedDescription = other.localizedDescription
-				fittingID = other.fittingID
-				items = other.items.flatMap { Fittings.Item($0) }
-				name = other.name
-				shipTypeID = other.shipTypeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case localizedDescription = "description"
+				case fittingID = "fitting_id"
+				case items
+				case name
+				case shipTypeID = "ship_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fittings.Fitting(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Fitting)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFittingsCreateFittingResult) public class CreateFittingResult: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct CreateFittingResult: Codable, Hashable {
 			
 			
-			public var fittingID: Int = Int()
+			public let fittingID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let fittingID = dictionary["fitting_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.fittingID = fittingID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				fittingID = aDecoder.decodeInteger(forKey: "fitting_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(fittingID, forKey: "fitting_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["fitting_id"] = fittingID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.fittingID.hashValue)
+				hashCombine(seed: &hash, value: fittingID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fittings.CreateFittingResult) {
-				fittingID = other.fittingID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fittingID = "fitting_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fittings.CreateFittingResult(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? CreateFittingResult)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFittingsMutableFitting) public class MutableFitting: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct MutableFitting: Codable, Hashable {
 			
 			
-			public var localizedDescription: String = String()
-			public var items: [Fittings.Item] = []
-			public var name: String = String()
-			public var shipTypeID: Int = Int()
+			public let localizedDescription: String
+			public let items: [Fittings.Item]
+			public let name: String
+			public let shipTypeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let localizedDescription = dictionary["description"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.localizedDescription = localizedDescription
-				items = try (dictionary["items"] as? [Any])?.map {try Fittings.Item(json: $0)} ?? []
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				guard let shipTypeID = dictionary["ship_type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.shipTypeID = shipTypeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				localizedDescription = aDecoder.decodeObject(forKey: "description") as? String ?? String()
-				items = aDecoder.decodeObject(of: [Fittings.Item.self], forKey: "items") as? [Fittings.Item] ?? []
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				shipTypeID = aDecoder.decodeInteger(forKey: "ship_type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(localizedDescription, forKey: "description")
-				aCoder.encode(items, forKey: "items")
-				aCoder.encode(name, forKey: "name")
-				aCoder.encode(shipTypeID, forKey: "ship_type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["description"] = localizedDescription.json
-				json["items"] = items.json
-				json["name"] = name.json
-				json["ship_type_id"] = shipTypeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
 				self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: self.name.hashValue)
-				hashCombine(seed: &hash, value: self.shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: shipTypeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Fittings.MutableFitting, rhs: Fittings.MutableFitting) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Fittings.MutableFitting) {
-				localizedDescription = other.localizedDescription
-				items = other.items.flatMap { Fittings.Item($0) }
-				name = other.name
-				shipTypeID = other.shipTypeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case localizedDescription = "description"
+				case items
+				case name
+				case shipTypeID = "ship_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Fittings.MutableFitting(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? MutableFitting)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

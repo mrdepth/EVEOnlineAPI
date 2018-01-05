@@ -9,16 +9,17 @@
 import Foundation
 import Alamofire
 
-public enum ESServer: String {
-	case tranquility = "tranquility"
-	case singularity = "singularity"
-}
 
 public class ESI: SessionManager {
+	public enum Server: String {
+		case tranquility = "tranquility"
+		case singularity = "singularity"
+	}
+
 	let baseURL = "https://esi.tech.ccp.is"
-	let server: ESServer
+	let server: Server
 	
-	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Adapter? = nil, retrier: OAuth2Retrier? = nil) {
+	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Adapter? = nil, retrier: OAuth2Retrier? = nil) {
 		self.server = server
 		let configuration = URLSessionConfiguration.default
 		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
@@ -32,10 +33,10 @@ public class ESI: SessionManager {
 		}
 	}
 	
-	public class func initialize() {
-		loadClassess()
-	}
-
+//	public class func initialize() {
+//		loadClassess()
+//	}
+//
 	public func image(characterID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
 		let dimensions = [32, 64, 128, 256, 512, 1024]
 		var bestDimension = dimensions.last!
@@ -154,12 +155,13 @@ extension DataRequest {
 	
 
 	@discardableResult
-	public func responseESI<T: JSONCoding>(queue: DispatchQueue? = nil,
-		options: JSONSerialization.ReadingOptions = .allowFragments,
+	public func responseESI<T: Decodable>(queue: DispatchQueue? = nil,
 		completionHandler: @escaping (DataResponse<T>) -> Void)
 		-> Self
 	{
-		let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
+		let decoder = JSONDecoder()
+		return responseJSONDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
+		/*let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
 			let result = DataRequest.jsonResponseSerializer().serializeResponse(request, response, data, error)
 			switch result {
 			case let .success(value):
@@ -178,7 +180,7 @@ extension DataRequest {
 			queue: queue,
 			responseSerializer: serializer,
 			completionHandler: completionHandler
-		)
+		)*/
 	}
 }
 

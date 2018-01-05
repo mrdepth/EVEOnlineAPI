@@ -273,2462 +273,953 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIFactionWarfareGetCharactersCharacterIDFwStatsOk) public class GetCharactersCharacterIDFwStatsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCharactersCharacterIDFwStatsOk: Codable, Hashable {
 			
-			@objc(ESIFactionWarfareGetCharactersCharacterIDFwStatsOkGetCharactersCharacterIDFwStatsVictoryPoints) public class GetCharactersCharacterIDFwStatsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDFwStatsVictoryPoints: Codable, Hashable {
 				
 				
-				public var lastWeek: Int = Int()
-				public var total: Int = Int()
-				public var yesterday: Int = Int()
+				public let lastWeek: Int
+				public let total: Int
+				public let yesterday: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.yesterday = yesterday
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					lastWeek = aDecoder.decodeInteger(forKey: "last_week")
-					total = aDecoder.decodeInteger(forKey: "total")
-					yesterday = aDecoder.decodeInteger(forKey: "yesterday")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(total, forKey: "total")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["last_week"] = lastWeek.json
-					json["total"] = total.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.lastWeek.hashValue)
-					hashCombine(seed: &hash, value: self.total.hashValue)
-					hashCombine(seed: &hash, value: self.yesterday.hashValue)
+					hashCombine(seed: &hash, value: lastWeek.hashValue)
+					hashCombine(seed: &hash, value: total.hashValue)
+					hashCombine(seed: &hash, value: yesterday.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints, rhs: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints) {
-					lastWeek = other.lastWeek
-					total = other.total
-					yesterday = other.yesterday
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDFwStatsVictoryPoints)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareGetCharactersCharacterIDFwStatsOkGetCharactersCharacterIDFwStatsKills) public class GetCharactersCharacterIDFwStatsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCharactersCharacterIDFwStatsKills: Codable, Hashable {
 				
 				
-				public var lastWeek: Int = Int()
-				public var total: Int = Int()
-				public var yesterday: Int = Int()
+				public let lastWeek: Int
+				public let total: Int
+				public let yesterday: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.yesterday = yesterday
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					lastWeek = aDecoder.decodeInteger(forKey: "last_week")
-					total = aDecoder.decodeInteger(forKey: "total")
-					yesterday = aDecoder.decodeInteger(forKey: "yesterday")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(total, forKey: "total")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["last_week"] = lastWeek.json
-					json["total"] = total.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.lastWeek.hashValue)
-					hashCombine(seed: &hash, value: self.total.hashValue)
-					hashCombine(seed: &hash, value: self.yesterday.hashValue)
+					hashCombine(seed: &hash, value: lastWeek.hashValue)
+					hashCombine(seed: &hash, value: total.hashValue)
+					hashCombine(seed: &hash, value: yesterday.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills, rhs: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills) {
-					lastWeek = other.lastWeek
-					total = other.total
-					yesterday = other.yesterday
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCharactersCharacterIDFwStatsKills)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var currentRank: Int? = nil
-			public var enlistedOn: Date? = nil
-			public var factionID: Int? = nil
-			public var highestRank: Int? = nil
-			public var kills: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills = FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills()
-			public var victoryPoints: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints = FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints()
+			public let currentRank: Int?
+			public let enlistedOn: Date?
+			public let factionID: Int?
+			public let highestRank: Int?
+			public let kills: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills
+			public let victoryPoints: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				currentRank = dictionary["current_rank"] as? Int
-				enlistedOn = DateFormatter.esiDateTimeFormatter.date(from: dictionary["enlisted_on"] as? String ?? "")
-				factionID = dictionary["faction_id"] as? Int
-				highestRank = dictionary["highest_rank"] as? Int
-				kills = try FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				victoryPoints = try FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				currentRank = aDecoder.containsValue(forKey: "current_rank") ? aDecoder.decodeInteger(forKey: "current_rank") : nil
-				enlistedOn = aDecoder.decodeObject(forKey: "enlisted_on") as? Date
-				factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-				highestRank = aDecoder.containsValue(forKey: "highest_rank") ? aDecoder.decodeInteger(forKey: "highest_rank") : nil
-				kills = aDecoder.decodeObject(of: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills.self, forKey: "kills")  ?? FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills()
-				victoryPoints = aDecoder.decodeObject(of: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints.self, forKey: "victory_points")  ?? FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = currentRank {
-					aCoder.encode(v, forKey: "current_rank")
-				}
-				if let v = enlistedOn {
-					aCoder.encode(v, forKey: "enlisted_on")
-				}
-				if let v = factionID {
-					aCoder.encode(v, forKey: "faction_id")
-				}
-				if let v = highestRank {
-					aCoder.encode(v, forKey: "highest_rank")
-				}
-				aCoder.encode(kills, forKey: "kills")
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = currentRank?.json {
-					json["current_rank"] = v
-				}
-				if let v = enlistedOn?.json {
-					json["enlisted_on"] = v
-				}
-				if let v = factionID?.json {
-					json["faction_id"] = v
-				}
-				if let v = highestRank?.json {
-					json["highest_rank"] = v
-				}
-				json["kills"] = kills.json
-				json["victory_points"] = victoryPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.currentRank?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.enlistedOn?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.highestRank?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.kills.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: currentRank?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: enlistedOn?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: highestRank?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: kills.hashValue)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.GetCharactersCharacterIDFwStatsOk, rhs: FactionWarfare.GetCharactersCharacterIDFwStatsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.GetCharactersCharacterIDFwStatsOk) {
-				currentRank = other.currentRank
-				enlistedOn = other.enlistedOn
-				factionID = other.factionID
-				highestRank = other.highestRank
-				kills = FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills(other.kills)
-				victoryPoints = FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints(other.victoryPoints)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case currentRank = "current_rank"
+				case enlistedOn = "enlisted_on"
+				case factionID = "faction_id"
+				case highestRank = "highest_rank"
+				case kills
+				case victoryPoints = "victory_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .enlistedOn: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.GetCharactersCharacterIDFwStatsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCharactersCharacterIDFwStatsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareGetCorporationsCorporationIDFwStatsOk) public class GetCorporationsCorporationIDFwStatsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDFwStatsOk: Codable, Hashable {
 			
-			@objc(ESIFactionWarfareGetCorporationsCorporationIDFwStatsOkGetCorporationsCorporationIDFwStatsVictoryPoints) public class GetCorporationsCorporationIDFwStatsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCorporationsCorporationIDFwStatsVictoryPoints: Codable, Hashable {
 				
 				
-				public var lastWeek: Int = Int()
-				public var total: Int = Int()
-				public var yesterday: Int = Int()
+				public let lastWeek: Int
+				public let total: Int
+				public let yesterday: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.yesterday = yesterday
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					lastWeek = aDecoder.decodeInteger(forKey: "last_week")
-					total = aDecoder.decodeInteger(forKey: "total")
-					yesterday = aDecoder.decodeInteger(forKey: "yesterday")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(total, forKey: "total")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["last_week"] = lastWeek.json
-					json["total"] = total.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.lastWeek.hashValue)
-					hashCombine(seed: &hash, value: self.total.hashValue)
-					hashCombine(seed: &hash, value: self.yesterday.hashValue)
+					hashCombine(seed: &hash, value: lastWeek.hashValue)
+					hashCombine(seed: &hash, value: total.hashValue)
+					hashCombine(seed: &hash, value: yesterday.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints, rhs: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints) {
-					lastWeek = other.lastWeek
-					total = other.total
-					yesterday = other.yesterday
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDFwStatsVictoryPoints)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareGetCorporationsCorporationIDFwStatsOkGetCorporationsCorporationIDFwStatsKills) public class GetCorporationsCorporationIDFwStatsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetCorporationsCorporationIDFwStatsKills: Codable, Hashable {
 				
 				
-				public var lastWeek: Int = Int()
-				public var total: Int = Int()
-				public var yesterday: Int = Int()
+				public let lastWeek: Int
+				public let total: Int
+				public let yesterday: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.yesterday = yesterday
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					lastWeek = aDecoder.decodeInteger(forKey: "last_week")
-					total = aDecoder.decodeInteger(forKey: "total")
-					yesterday = aDecoder.decodeInteger(forKey: "yesterday")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(total, forKey: "total")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["last_week"] = lastWeek.json
-					json["total"] = total.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.lastWeek.hashValue)
-					hashCombine(seed: &hash, value: self.total.hashValue)
-					hashCombine(seed: &hash, value: self.yesterday.hashValue)
+					hashCombine(seed: &hash, value: lastWeek.hashValue)
+					hashCombine(seed: &hash, value: total.hashValue)
+					hashCombine(seed: &hash, value: yesterday.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills, rhs: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills) {
-					lastWeek = other.lastWeek
-					total = other.total
-					yesterday = other.yesterday
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetCorporationsCorporationIDFwStatsKills)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var enlistedOn: Date? = nil
-			public var factionID: Int? = nil
-			public var kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills = FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills()
-			public var pilots: Int? = nil
-			public var victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints = FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints()
+			public let enlistedOn: Date?
+			public let factionID: Int?
+			public let kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills
+			public let pilots: Int?
+			public let victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				enlistedOn = DateFormatter.esiDateTimeFormatter.date(from: dictionary["enlisted_on"] as? String ?? "")
-				factionID = dictionary["faction_id"] as? Int
-				kills = try FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				pilots = dictionary["pilots"] as? Int
-				victoryPoints = try FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				enlistedOn = aDecoder.decodeObject(forKey: "enlisted_on") as? Date
-				factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-				kills = aDecoder.decodeObject(of: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills.self, forKey: "kills")  ?? FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills()
-				pilots = aDecoder.containsValue(forKey: "pilots") ? aDecoder.decodeInteger(forKey: "pilots") : nil
-				victoryPoints = aDecoder.decodeObject(of: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints.self, forKey: "victory_points")  ?? FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				if let v = enlistedOn {
-					aCoder.encode(v, forKey: "enlisted_on")
-				}
-				if let v = factionID {
-					aCoder.encode(v, forKey: "faction_id")
-				}
-				aCoder.encode(kills, forKey: "kills")
-				if let v = pilots {
-					aCoder.encode(v, forKey: "pilots")
-				}
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				if let v = enlistedOn?.json {
-					json["enlisted_on"] = v
-				}
-				if let v = factionID?.json {
-					json["faction_id"] = v
-				}
-				json["kills"] = kills.json
-				if let v = pilots?.json {
-					json["pilots"] = v
-				}
-				json["victory_points"] = victoryPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.enlistedOn?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.kills.hashValue)
-				hashCombine(seed: &hash, value: self.pilots?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: enlistedOn?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: kills.hashValue)
+				hashCombine(seed: &hash, value: pilots?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.GetCorporationsCorporationIDFwStatsOk, rhs: FactionWarfare.GetCorporationsCorporationIDFwStatsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.GetCorporationsCorporationIDFwStatsOk) {
-				enlistedOn = other.enlistedOn
-				factionID = other.factionID
-				kills = FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills(other.kills)
-				pilots = other.pilots
-				victoryPoints = FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints(other.victoryPoints)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case enlistedOn = "enlisted_on"
+				case factionID = "faction_id"
+				case kills
+				case pilots
+				case victoryPoints = "victory_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .enlistedOn: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.GetCorporationsCorporationIDFwStatsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDFwStatsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareFactionWar) public class FactionWar: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct FactionWar: Codable, Hashable {
 			
 			
-			public var againstID: Int = Int()
-			public var factionID: Int = Int()
+			public let againstID: Int
+			public let factionID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let againstID = dictionary["against_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.againstID = againstID
-				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.factionID = factionID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				againstID = aDecoder.decodeInteger(forKey: "against_id")
-				factionID = aDecoder.decodeInteger(forKey: "faction_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(againstID, forKey: "against_id")
-				aCoder.encode(factionID, forKey: "faction_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["against_id"] = againstID.json
-				json["faction_id"] = factionID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.againstID.hashValue)
-				hashCombine(seed: &hash, value: self.factionID.hashValue)
+				hashCombine(seed: &hash, value: againstID.hashValue)
+				hashCombine(seed: &hash, value: factionID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.FactionWar, rhs: FactionWarfare.FactionWar) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.FactionWar) {
-				againstID = other.againstID
-				factionID = other.factionID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case againstID = "against_id"
+				case factionID = "faction_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.FactionWar(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? FactionWar)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareFactionStats) public class FactionStats: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct FactionStats: Codable, Hashable {
 			
-			@objc(ESIFactionWarfareFactionStatsGetFwStatsVictoryPoints) public class GetFwStatsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwStatsVictoryPoints: Codable, Hashable {
 				
 				
-				public var lastWeek: Int = Int()
-				public var total: Int = Int()
-				public var yesterday: Int = Int()
+				public let lastWeek: Int
+				public let total: Int
+				public let yesterday: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.yesterday = yesterday
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					lastWeek = aDecoder.decodeInteger(forKey: "last_week")
-					total = aDecoder.decodeInteger(forKey: "total")
-					yesterday = aDecoder.decodeInteger(forKey: "yesterday")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(total, forKey: "total")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["last_week"] = lastWeek.json
-					json["total"] = total.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.lastWeek.hashValue)
-					hashCombine(seed: &hash, value: self.total.hashValue)
-					hashCombine(seed: &hash, value: self.yesterday.hashValue)
+					hashCombine(seed: &hash, value: lastWeek.hashValue)
+					hashCombine(seed: &hash, value: total.hashValue)
+					hashCombine(seed: &hash, value: yesterday.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.FactionStats.GetFwStatsVictoryPoints, rhs: FactionWarfare.FactionStats.GetFwStatsVictoryPoints) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.FactionStats.GetFwStatsVictoryPoints) {
-					lastWeek = other.lastWeek
-					total = other.total
-					yesterday = other.yesterday
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.FactionStats.GetFwStatsVictoryPoints(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwStatsVictoryPoints)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareFactionStatsGetFwStatsKills) public class GetFwStatsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwStatsKills: Codable, Hashable {
 				
 				
-				public var lastWeek: Int = Int()
-				public var total: Int = Int()
-				public var yesterday: Int = Int()
+				public let lastWeek: Int
+				public let total: Int
+				public let yesterday: Int
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let lastWeek = dictionary["last_week"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.lastWeek = lastWeek
-					guard let total = dictionary["total"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.total = total
-					guard let yesterday = dictionary["yesterday"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.yesterday = yesterday
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					lastWeek = aDecoder.decodeInteger(forKey: "last_week")
-					total = aDecoder.decodeInteger(forKey: "total")
-					yesterday = aDecoder.decodeInteger(forKey: "yesterday")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(total, forKey: "total")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["last_week"] = lastWeek.json
-					json["total"] = total.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.lastWeek.hashValue)
-					hashCombine(seed: &hash, value: self.total.hashValue)
-					hashCombine(seed: &hash, value: self.yesterday.hashValue)
+					hashCombine(seed: &hash, value: lastWeek.hashValue)
+					hashCombine(seed: &hash, value: total.hashValue)
+					hashCombine(seed: &hash, value: yesterday.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.FactionStats.GetFwStatsKills, rhs: FactionWarfare.FactionStats.GetFwStatsKills) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.FactionStats.GetFwStatsKills) {
-					lastWeek = other.lastWeek
-					total = other.total
-					yesterday = other.yesterday
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.FactionStats.GetFwStatsKills(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwStatsKills)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var factionID: Int = Int()
-			public var kills: FactionWarfare.FactionStats.GetFwStatsKills = FactionWarfare.FactionStats.GetFwStatsKills()
-			public var pilots: Int = Int()
-			public var systemsControlled: Int = Int()
-			public var victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints = FactionWarfare.FactionStats.GetFwStatsVictoryPoints()
+			public let factionID: Int
+			public let kills: FactionWarfare.FactionStats.GetFwStatsKills
+			public let pilots: Int
+			public let systemsControlled: Int
+			public let victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let factionID = dictionary["faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.factionID = factionID
-				kills = try FactionWarfare.FactionStats.GetFwStatsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				guard let pilots = dictionary["pilots"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.pilots = pilots
-				guard let systemsControlled = dictionary["systems_controlled"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.systemsControlled = systemsControlled
-				victoryPoints = try FactionWarfare.FactionStats.GetFwStatsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				factionID = aDecoder.decodeInteger(forKey: "faction_id")
-				kills = aDecoder.decodeObject(of: FactionWarfare.FactionStats.GetFwStatsKills.self, forKey: "kills")  ?? FactionWarfare.FactionStats.GetFwStatsKills()
-				pilots = aDecoder.decodeInteger(forKey: "pilots")
-				systemsControlled = aDecoder.decodeInteger(forKey: "systems_controlled")
-				victoryPoints = aDecoder.decodeObject(of: FactionWarfare.FactionStats.GetFwStatsVictoryPoints.self, forKey: "victory_points")  ?? FactionWarfare.FactionStats.GetFwStatsVictoryPoints()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(factionID, forKey: "faction_id")
-				aCoder.encode(kills, forKey: "kills")
-				aCoder.encode(pilots, forKey: "pilots")
-				aCoder.encode(systemsControlled, forKey: "systems_controlled")
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["faction_id"] = factionID.json
-				json["kills"] = kills.json
-				json["pilots"] = pilots.json
-				json["systems_controlled"] = systemsControlled.json
-				json["victory_points"] = victoryPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.factionID.hashValue)
-				hashCombine(seed: &hash, value: self.kills.hashValue)
-				hashCombine(seed: &hash, value: self.pilots.hashValue)
-				hashCombine(seed: &hash, value: self.systemsControlled.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: factionID.hashValue)
+				hashCombine(seed: &hash, value: kills.hashValue)
+				hashCombine(seed: &hash, value: pilots.hashValue)
+				hashCombine(seed: &hash, value: systemsControlled.hashValue)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.FactionStats, rhs: FactionWarfare.FactionStats) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.FactionStats) {
-				factionID = other.factionID
-				kills = FactionWarfare.FactionStats.GetFwStatsKills(other.kills)
-				pilots = other.pilots
-				systemsControlled = other.systemsControlled
-				victoryPoints = FactionWarfare.FactionStats.GetFwStatsVictoryPoints(other.victoryPoints)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case factionID = "faction_id"
+				case kills
+				case pilots
+				case systemsControlled = "systems_controlled"
+				case victoryPoints = "victory_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.FactionStats(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? FactionStats)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareCharacters) public class Characters: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Characters: Codable, Hashable {
 			
-			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersYesterday) public class GetFwLeaderboardsCharactersYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCharactersYesterday: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var characterID: Int? = nil
+				public let amount: Int?
+				public let characterID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					characterID = dictionary["character_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = characterID {
-						aCoder.encode(v, forKey: "character_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = characterID?.json {
-						json["character_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday, rhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday) {
-					amount = other.amount
-					characterID = other.characterID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case characterID = "character_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCharactersYesterday)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersVictoryPoints) public class GetFwLeaderboardsCharactersVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCharactersVictoryPoints: Codable, Hashable {
 				
 				
-				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal] = []
-				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek] = []
-				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday] = []
+				public let activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal]
+				public let lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek]
+				public let yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal(json: $0)} ?? []
-					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek(json: $0)} ?? []
-					yesterday = try (dictionary["yesterday"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday(json: $0)} ?? []
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activeTotal = aDecoder.decodeObject(of: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal.self], forKey: "active_total") as? [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal] ?? []
-					lastWeek = aDecoder.decodeObject(of: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek.self], forKey: "last_week") as? [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek] ?? []
-					yesterday = aDecoder.decodeObject(of: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday.self], forKey: "yesterday") as? [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday] ?? []
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activeTotal, forKey: "active_total")
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["active_total"] = activeTotal.json
-					json["last_week"] = lastWeek.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
 					self.activeTotal.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.lastWeek.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.yesterday.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints, rhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints) {
-					activeTotal = other.activeTotal.flatMap { FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal($0) }
-					lastWeek = other.lastWeek.flatMap { FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek($0) }
-					yesterday = other.yesterday.flatMap { FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday($0) }
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCharactersVictoryPoints)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersLastWeek) public class GetFwLeaderboardsCharactersLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCharactersLastWeek: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var characterID: Int? = nil
+				public let amount: Int?
+				public let characterID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					characterID = dictionary["character_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = characterID {
-						aCoder.encode(v, forKey: "character_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = characterID?.json {
-						json["character_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek, rhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek) {
-					amount = other.amount
-					characterID = other.characterID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case characterID = "character_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCharactersLastWeek)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersKills) public class GetFwLeaderboardsCharactersKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCharactersKills: Codable, Hashable {
 				
 				
-				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal] = []
-				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek] = []
-				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday] = []
+				public let activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal]
+				public let lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek]
+				public let yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal(json: $0)} ?? []
-					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek(json: $0)} ?? []
-					yesterday = try (dictionary["yesterday"] as? [Any])?.map {try FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday(json: $0)} ?? []
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activeTotal = aDecoder.decodeObject(of: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal.self], forKey: "active_total") as? [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal] ?? []
-					lastWeek = aDecoder.decodeObject(of: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek.self], forKey: "last_week") as? [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek] ?? []
-					yesterday = aDecoder.decodeObject(of: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday.self], forKey: "yesterday") as? [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday] ?? []
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activeTotal, forKey: "active_total")
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["active_total"] = activeTotal.json
-					json["last_week"] = lastWeek.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
 					self.activeTotal.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.lastWeek.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.yesterday.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills, rhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills) {
-					activeTotal = other.activeTotal.flatMap { FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal($0) }
-					lastWeek = other.lastWeek.flatMap { FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek($0) }
-					yesterday = other.yesterday.flatMap { FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday($0) }
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Characters.GetFwLeaderboardsCharactersKills(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCharactersKills)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCharactersGetFwLeaderboardsCharactersActiveTotal) public class GetFwLeaderboardsCharactersActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCharactersActiveTotal: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var characterID: Int? = nil
+				public let amount: Int?
+				public let characterID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					characterID = dictionary["character_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					characterID = aDecoder.containsValue(forKey: "character_id") ? aDecoder.decodeInteger(forKey: "character_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = characterID {
-						aCoder.encode(v, forKey: "character_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = characterID?.json {
-						json["character_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal, rhs: FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal) {
-					amount = other.amount
-					characterID = other.characterID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case characterID = "character_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCharactersActiveTotal)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills = FactionWarfare.Characters.GetFwLeaderboardsCharactersKills()
-			public var victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints = FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints()
+			public let kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills
+			public let victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				kills = try FactionWarfare.Characters.GetFwLeaderboardsCharactersKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				victoryPoints = try FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				kills = aDecoder.decodeObject(of: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.self, forKey: "kills")  ?? FactionWarfare.Characters.GetFwLeaderboardsCharactersKills()
-				victoryPoints = aDecoder.decodeObject(of: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.self, forKey: "victory_points")  ?? FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(kills, forKey: "kills")
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["kills"] = kills.json
-				json["victory_points"] = victoryPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.kills.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: kills.hashValue)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.Characters, rhs: FactionWarfare.Characters) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.Characters) {
-				kills = FactionWarfare.Characters.GetFwLeaderboardsCharactersKills(other.kills)
-				victoryPoints = FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints(other.victoryPoints)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case kills
+				case victoryPoints = "victory_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.Characters(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Characters)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareCorporations) public class Corporations: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Corporations: Codable, Hashable {
 			
-			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsActiveTotal) public class GetFwLeaderboardsCorporationsActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCorporationsActiveTotal: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var corporationID: Int? = nil
+				public let amount: Int?
+				public let corporationID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal, rhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal) {
-					amount = other.amount
-					corporationID = other.corporationID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case corporationID = "corporation_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCorporationsActiveTotal)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsKills) public class GetFwLeaderboardsCorporationsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCorporationsKills: Codable, Hashable {
 				
 				
-				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal] = []
-				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek] = []
-				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday] = []
+				public let activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal]
+				public let lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek]
+				public let yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal(json: $0)} ?? []
-					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek(json: $0)} ?? []
-					yesterday = try (dictionary["yesterday"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday(json: $0)} ?? []
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activeTotal = aDecoder.decodeObject(of: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal.self], forKey: "active_total") as? [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal] ?? []
-					lastWeek = aDecoder.decodeObject(of: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek.self], forKey: "last_week") as? [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek] ?? []
-					yesterday = aDecoder.decodeObject(of: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday.self], forKey: "yesterday") as? [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday] ?? []
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activeTotal, forKey: "active_total")
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["active_total"] = activeTotal.json
-					json["last_week"] = lastWeek.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
 					self.activeTotal.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.lastWeek.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.yesterday.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills, rhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills) {
-					activeTotal = other.activeTotal.flatMap { FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal($0) }
-					lastWeek = other.lastWeek.flatMap { FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek($0) }
-					yesterday = other.yesterday.flatMap { FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday($0) }
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCorporationsKills)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsYesterday) public class GetFwLeaderboardsCorporationsYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCorporationsYesterday: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var corporationID: Int? = nil
+				public let amount: Int?
+				public let corporationID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday, rhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday) {
-					amount = other.amount
-					corporationID = other.corporationID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case corporationID = "corporation_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCorporationsYesterday)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsVictoryPoints) public class GetFwLeaderboardsCorporationsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCorporationsVictoryPoints: Codable, Hashable {
 				
 				
-				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal] = []
-				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek] = []
-				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday] = []
+				public let activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal]
+				public let lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek]
+				public let yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal(json: $0)} ?? []
-					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek(json: $0)} ?? []
-					yesterday = try (dictionary["yesterday"] as? [Any])?.map {try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday(json: $0)} ?? []
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activeTotal = aDecoder.decodeObject(of: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal.self], forKey: "active_total") as? [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal] ?? []
-					lastWeek = aDecoder.decodeObject(of: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek.self], forKey: "last_week") as? [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek] ?? []
-					yesterday = aDecoder.decodeObject(of: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday.self], forKey: "yesterday") as? [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday] ?? []
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activeTotal, forKey: "active_total")
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["active_total"] = activeTotal.json
-					json["last_week"] = lastWeek.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
 					self.activeTotal.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.lastWeek.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.yesterday.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints, rhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints) {
-					activeTotal = other.activeTotal.flatMap { FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal($0) }
-					lastWeek = other.lastWeek.flatMap { FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek($0) }
-					yesterday = other.yesterday.flatMap { FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday($0) }
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCorporationsVictoryPoints)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareCorporationsGetFwLeaderboardsCorporationsLastWeek) public class GetFwLeaderboardsCorporationsLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsCorporationsLastWeek: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var corporationID: Int? = nil
+				public let amount: Int?
+				public let corporationID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					corporationID = dictionary["corporation_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					corporationID = aDecoder.containsValue(forKey: "corporation_id") ? aDecoder.decodeInteger(forKey: "corporation_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = corporationID {
-						aCoder.encode(v, forKey: "corporation_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = corporationID?.json {
-						json["corporation_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek, rhs: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek) {
-					amount = other.amount
-					corporationID = other.corporationID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case corporationID = "corporation_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsCorporationsLastWeek)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills = FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills()
-			public var victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints = FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints()
+			public let kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills
+			public let victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				kills = try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				victoryPoints = try FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				kills = aDecoder.decodeObject(of: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.self, forKey: "kills")  ?? FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills()
-				victoryPoints = aDecoder.decodeObject(of: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.self, forKey: "victory_points")  ?? FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(kills, forKey: "kills")
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["kills"] = kills.json
-				json["victory_points"] = victoryPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.kills.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: kills.hashValue)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.Corporations, rhs: FactionWarfare.Corporations) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.Corporations) {
-				kills = FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills(other.kills)
-				victoryPoints = FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints(other.victoryPoints)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case kills
+				case victoryPoints = "victory_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.Corporations(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Corporations)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareSystem) public class System: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct System: Codable, Hashable {
 			
 			
-			public var contested: Bool = Bool()
-			public var occupierFactionID: Int = Int()
-			public var ownerFactionID: Int = Int()
-			public var solarSystemID: Int = Int()
-			public var victoryPoints: Int = Int()
-			public var victoryPointsThreshold: Int = Int()
+			public let contested: Bool
+			public let occupierFactionID: Int
+			public let ownerFactionID: Int
+			public let solarSystemID: Int
+			public let victoryPoints: Int
+			public let victoryPointsThreshold: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let contested = dictionary["contested"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.contested = contested
-				guard let occupierFactionID = dictionary["occupier_faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.occupierFactionID = occupierFactionID
-				guard let ownerFactionID = dictionary["owner_faction_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.ownerFactionID = ownerFactionID
-				guard let solarSystemID = dictionary["solar_system_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.solarSystemID = solarSystemID
-				guard let victoryPoints = dictionary["victory_points"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.victoryPoints = victoryPoints
-				guard let victoryPointsThreshold = dictionary["victory_points_threshold"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.victoryPointsThreshold = victoryPointsThreshold
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				contested = aDecoder.decodeBool(forKey: "contested")
-				occupierFactionID = aDecoder.decodeInteger(forKey: "occupier_faction_id")
-				ownerFactionID = aDecoder.decodeInteger(forKey: "owner_faction_id")
-				solarSystemID = aDecoder.decodeInteger(forKey: "solar_system_id")
-				victoryPoints = aDecoder.decodeInteger(forKey: "victory_points")
-				victoryPointsThreshold = aDecoder.decodeInteger(forKey: "victory_points_threshold")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(contested, forKey: "contested")
-				aCoder.encode(occupierFactionID, forKey: "occupier_faction_id")
-				aCoder.encode(ownerFactionID, forKey: "owner_faction_id")
-				aCoder.encode(solarSystemID, forKey: "solar_system_id")
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-				aCoder.encode(victoryPointsThreshold, forKey: "victory_points_threshold")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["contested"] = contested.json
-				json["occupier_faction_id"] = occupierFactionID.json
-				json["owner_faction_id"] = ownerFactionID.json
-				json["solar_system_id"] = solarSystemID.json
-				json["victory_points"] = victoryPoints.json
-				json["victory_points_threshold"] = victoryPointsThreshold.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.contested.hashValue)
-				hashCombine(seed: &hash, value: self.occupierFactionID.hashValue)
-				hashCombine(seed: &hash, value: self.ownerFactionID.hashValue)
-				hashCombine(seed: &hash, value: self.solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPointsThreshold.hashValue)
+				hashCombine(seed: &hash, value: contested.hashValue)
+				hashCombine(seed: &hash, value: occupierFactionID.hashValue)
+				hashCombine(seed: &hash, value: ownerFactionID.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: victoryPointsThreshold.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.System, rhs: FactionWarfare.System) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.System) {
-				contested = other.contested
-				occupierFactionID = other.occupierFactionID
-				ownerFactionID = other.ownerFactionID
-				solarSystemID = other.solarSystemID
-				victoryPoints = other.victoryPoints
-				victoryPointsThreshold = other.victoryPointsThreshold
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contested
+				case occupierFactionID = "occupier_faction_id"
+				case ownerFactionID = "owner_faction_id"
+				case solarSystemID = "solar_system_id"
+				case victoryPoints = "victory_points"
+				case victoryPointsThreshold = "victory_points_threshold"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.System(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? System)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIFactionWarfareLeaderboards) public class Leaderboards: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Leaderboards: Codable, Hashable {
 			
-			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsYesterday) public class GetFwLeaderboardsYesterday: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsYesterday: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var factionID: Int? = nil
+				public let amount: Int?
+				public let factionID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					factionID = dictionary["faction_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = factionID {
-						aCoder.encode(v, forKey: "faction_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = factionID?.json {
-						json["faction_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday, rhs: FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday) {
-					amount = other.amount
-					factionID = other.factionID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case factionID = "faction_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsYesterday)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsVictoryPoints) public class GetFwLeaderboardsVictoryPoints: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsVictoryPoints: Codable, Hashable {
 				
 				
-				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal] = []
-				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek] = []
-				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday] = []
+				public let activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal]
+				public let lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek]
+				public let yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal(json: $0)} ?? []
-					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek(json: $0)} ?? []
-					yesterday = try (dictionary["yesterday"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday(json: $0)} ?? []
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activeTotal = aDecoder.decodeObject(of: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal.self], forKey: "active_total") as? [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal] ?? []
-					lastWeek = aDecoder.decodeObject(of: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek.self], forKey: "last_week") as? [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek] ?? []
-					yesterday = aDecoder.decodeObject(of: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday.self], forKey: "yesterday") as? [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday] ?? []
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activeTotal, forKey: "active_total")
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["active_total"] = activeTotal.json
-					json["last_week"] = lastWeek.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
 					self.activeTotal.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.lastWeek.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.yesterday.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints, rhs: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints) {
-					activeTotal = other.activeTotal.flatMap { FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal($0) }
-					lastWeek = other.lastWeek.flatMap { FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek($0) }
-					yesterday = other.yesterday.flatMap { FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday($0) }
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsVictoryPoints)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsKills) public class GetFwLeaderboardsKills: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsKills: Codable, Hashable {
 				
 				
-				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal] = []
-				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek] = []
-				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday] = []
+				public let activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal]
+				public let lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek]
+				public let yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					activeTotal = try (dictionary["active_total"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal(json: $0)} ?? []
-					lastWeek = try (dictionary["last_week"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek(json: $0)} ?? []
-					yesterday = try (dictionary["yesterday"] as? [Any])?.map {try FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday(json: $0)} ?? []
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					activeTotal = aDecoder.decodeObject(of: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal.self], forKey: "active_total") as? [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal] ?? []
-					lastWeek = aDecoder.decodeObject(of: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek.self], forKey: "last_week") as? [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek] ?? []
-					yesterday = aDecoder.decodeObject(of: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday.self], forKey: "yesterday") as? [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday] ?? []
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(activeTotal, forKey: "active_total")
-					aCoder.encode(lastWeek, forKey: "last_week")
-					aCoder.encode(yesterday, forKey: "yesterday")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["active_total"] = activeTotal.json
-					json["last_week"] = lastWeek.json
-					json["yesterday"] = yesterday.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
 					self.activeTotal.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.lastWeek.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.yesterday.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Leaderboards.GetFwLeaderboardsKills, rhs: FactionWarfare.Leaderboards.GetFwLeaderboardsKills) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Leaderboards.GetFwLeaderboardsKills) {
-					activeTotal = other.activeTotal.flatMap { FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal($0) }
-					lastWeek = other.lastWeek.flatMap { FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek($0) }
-					yesterday = other.yesterday.flatMap { FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday($0) }
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Leaderboards.GetFwLeaderboardsKills(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsKills)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsActiveTotal) public class GetFwLeaderboardsActiveTotal: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsActiveTotal: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var factionID: Int? = nil
+				public let amount: Int?
+				public let factionID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					factionID = dictionary["faction_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = factionID {
-						aCoder.encode(v, forKey: "faction_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = factionID?.json {
-						json["faction_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal, rhs: FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal) {
-					amount = other.amount
-					factionID = other.factionID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case factionID = "faction_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsActiveTotal)?.hashValue == hashValue
-				}
-				
 			}
 			
-			@objc(ESIFactionWarfareLeaderboardsGetFwLeaderboardsLastWeek) public class GetFwLeaderboardsLastWeek: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct GetFwLeaderboardsLastWeek: Codable, Hashable {
 				
 				
-				public var amount: Int? = nil
-				public var factionID: Int? = nil
+				public let amount: Int?
+				public let factionID: Int?
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					amount = dictionary["amount"] as? Int
-					factionID = dictionary["faction_id"] as? Int
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					amount = aDecoder.containsValue(forKey: "amount") ? aDecoder.decodeInteger(forKey: "amount") : nil
-					factionID = aDecoder.containsValue(forKey: "faction_id") ? aDecoder.decodeInteger(forKey: "faction_id") : nil
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					if let v = amount {
-						aCoder.encode(v, forKey: "amount")
-					}
-					if let v = factionID {
-						aCoder.encode(v, forKey: "faction_id")
-					}
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					if let v = amount?.json {
-						json["amount"] = v
-					}
-					if let v = factionID?.json {
-						json["faction_id"] = v
-					}
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.amount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: self.factionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek, rhs: FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek) {
-					amount = other.amount
-					factionID = other.factionID
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case amount
+					case factionID = "faction_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? GetFwLeaderboardsLastWeek)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills = FactionWarfare.Leaderboards.GetFwLeaderboardsKills()
-			public var victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints = FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints()
+			public let kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills
+			public let victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				kills = try FactionWarfare.Leaderboards.GetFwLeaderboardsKills(json: dictionary["kills"] as? [String: Any] ?? [:])
-				victoryPoints = try FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints(json: dictionary["victory_points"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				kills = aDecoder.decodeObject(of: FactionWarfare.Leaderboards.GetFwLeaderboardsKills.self, forKey: "kills")  ?? FactionWarfare.Leaderboards.GetFwLeaderboardsKills()
-				victoryPoints = aDecoder.decodeObject(of: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints.self, forKey: "victory_points")  ?? FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(kills, forKey: "kills")
-				aCoder.encode(victoryPoints, forKey: "victory_points")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["kills"] = kills.json
-				json["victory_points"] = victoryPoints.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.kills.hashValue)
-				hashCombine(seed: &hash, value: self.victoryPoints.hashValue)
+				hashCombine(seed: &hash, value: kills.hashValue)
+				hashCombine(seed: &hash, value: victoryPoints.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: FactionWarfare.Leaderboards, rhs: FactionWarfare.Leaderboards) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: FactionWarfare.Leaderboards) {
-				kills = FactionWarfare.Leaderboards.GetFwLeaderboardsKills(other.kills)
-				victoryPoints = FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints(other.victoryPoints)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case kills
+				case victoryPoints = "victory_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return FactionWarfare.Leaderboards(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Leaderboards)?.hashValue == hashValue
-			}
-			
 		}
 		
 		

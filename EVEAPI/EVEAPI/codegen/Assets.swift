@@ -21,7 +21,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -89,7 +89,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -122,7 +122,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -155,7 +155,7 @@ public extension ESI {
 			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
-			let body = try? JSONSerialization.data(withJSONObject: itemIds.json, options: [])
+			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
@@ -217,25 +217,12 @@ public extension ESI {
 		}
 		
 		
-		@objc(ESIAssetsGetCorporationsCorporationIDAssetsOk) public class GetCorporationsCorporationIDAssetsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct GetCorporationsCorporationIDAssetsOk: Codable, Hashable {
 			
-			public enum GetCorporationsCorporationIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDAssetsLocationType: String, Codable, HTTPQueryable {
 				case other = "other"
 				case solarSystem = "solar_system"
 				case station = "station"
-				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -243,7 +230,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCorporationsCorporationIDAssetsLocationFlag: String, JSONCoding, HTTPQueryable {
+			public enum GetCorporationsCorporationIDAssetsLocationFlag: String, Codable, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case bonus = "Bonus"
@@ -360,142 +347,58 @@ public extension ESI {
 				case wallet = "Wallet"
 				case wardrobe = "Wardrobe"
 				
-				public init() {
-					self = .assetSafety
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCorporationsCorporationIDAssetsLocationFlag(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var isSingleton: Bool = Bool()
-			public var itemID: Int64 = Int64()
-			public var locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag()
-			public var locationID: Int64 = Int64()
-			public var locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType()
-			public var quantity: Int = Int()
-			public var typeID: Int = Int()
+			public let isSingleton: Bool
+			public let itemID: Int64
+			public let locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag
+			public let locationID: Int64
+			public let locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType
+			public let quantity: Int
+			public let typeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let isSingleton = dictionary["is_singleton"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isSingleton = isSingleton
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				guard let locationFlag = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationFlag = locationFlag
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let locationType = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType(rawValue: dictionary["location_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationType = locationType
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				isSingleton = aDecoder.decodeBool(forKey: "is_singleton")
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				locationFlag = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag()
-				locationID = aDecoder.decodeInt64(forKey: "location_id")
-				locationType = Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "") ?? Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType()
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(isSingleton, forKey: "is_singleton")
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(locationType.rawValue, forKey: "location_type")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(typeID, forKey: "type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["is_singleton"] = isSingleton.json
-				json["item_id"] = itemID.json
-				json["location_flag"] = locationFlag.json
-				json["location_id"] = locationID.json
-				json["location_type"] = locationType.json
-				json["quantity"] = quantity.json
-				json["type_id"] = typeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.isSingleton.hashValue)
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.locationType.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: isSingleton.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: locationFlag.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: locationType.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.GetCorporationsCorporationIDAssetsOk, rhs: Assets.GetCorporationsCorporationIDAssetsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Assets.GetCorporationsCorporationIDAssetsOk) {
-				isSingleton = other.isSingleton
-				itemID = other.itemID
-				locationFlag = other.locationFlag
-				locationID = other.locationID
-				locationType = other.locationType
-				quantity = other.quantity
-				typeID = other.typeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case isSingleton = "is_singleton"
+				case itemID = "item_id"
+				case locationFlag = "location_flag"
+				case locationID = "location_id"
+				case locationType = "location_type"
+				case quantity
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.GetCorporationsCorporationIDAssetsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? GetCorporationsCorporationIDAssetsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIAssetsAsset) public class Asset: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct Asset: Codable, Hashable {
 			
-			public enum Flag: String, JSONCoding, HTTPQueryable {
+			public enum Flag: String, Codable, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case cargo = "Cargo"
@@ -584,632 +487,251 @@ public extension ESI {
 				case unlocked = "Unlocked"
 				case wardrobe = "Wardrobe"
 				
-				public init() {
-					self = .assetSafety
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = Flag(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public enum GetCharactersCharacterIDAssetsLocationType: String, JSONCoding, HTTPQueryable {
+			public enum GetCharactersCharacterIDAssetsLocationType: String, Codable, HTTPQueryable {
 				case other = "other"
 				case solarSystem = "solar_system"
 				case station = "station"
 				
-				public init() {
-					self = .station
-				}
-				
-				public var json: Any {
-					return self.rawValue
-				}
-				
-				public init(json: Any) throws {
-					guard let s = json as? String, let v = GetCharactersCharacterIDAssetsLocationType(rawValue: s) else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					self = v
-				}
-				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
 			
-			public var isSingleton: Bool = Bool()
-			public var itemID: Int64 = Int64()
-			public var locationFlag: Assets.Asset.Flag = Assets.Asset.Flag()
-			public var locationID: Int64 = Int64()
-			public var locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
-			public var quantity: Int = Int()
-			public var typeID: Int = Int()
+			public let isSingleton: Bool
+			public let itemID: Int64
+			public let locationFlag: Assets.Asset.Flag
+			public let locationID: Int64
+			public let locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType
+			public let quantity: Int
+			public let typeID: Int
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let isSingleton = dictionary["is_singleton"] as? Bool else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.isSingleton = isSingleton
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				guard let locationFlag = Assets.Asset.Flag(rawValue: dictionary["location_flag"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationFlag = locationFlag
-				guard let locationID = dictionary["location_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationID = locationID
-				guard let locationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType(rawValue: dictionary["location_type"] as? String ?? "") else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.locationType = locationType
-				guard let quantity = dictionary["quantity"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.quantity = quantity
-				guard let typeID = dictionary["type_id"] as? Int else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.typeID = typeID
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				isSingleton = aDecoder.decodeBool(forKey: "is_singleton")
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				locationFlag = Assets.Asset.Flag(rawValue: aDecoder.decodeObject(forKey: "location_flag") as? String ?? "") ?? Assets.Asset.Flag()
-				locationID = aDecoder.decodeInt64(forKey: "location_id")
-				locationType = Assets.Asset.GetCharactersCharacterIDAssetsLocationType(rawValue: aDecoder.decodeObject(forKey: "location_type") as? String ?? "") ?? Assets.Asset.GetCharactersCharacterIDAssetsLocationType()
-				quantity = aDecoder.decodeInteger(forKey: "quantity")
-				typeID = aDecoder.decodeInteger(forKey: "type_id")
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(isSingleton, forKey: "is_singleton")
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(locationFlag.rawValue, forKey: "location_flag")
-				aCoder.encode(locationID, forKey: "location_id")
-				aCoder.encode(locationType.rawValue, forKey: "location_type")
-				aCoder.encode(quantity, forKey: "quantity")
-				aCoder.encode(typeID, forKey: "type_id")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["is_singleton"] = isSingleton.json
-				json["item_id"] = itemID.json
-				json["location_flag"] = locationFlag.json
-				json["location_id"] = locationID.json
-				json["location_type"] = locationType.json
-				json["quantity"] = quantity.json
-				json["type_id"] = typeID.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.isSingleton.hashValue)
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.locationFlag.hashValue)
-				hashCombine(seed: &hash, value: self.locationID.hashValue)
-				hashCombine(seed: &hash, value: self.locationType.hashValue)
-				hashCombine(seed: &hash, value: self.quantity.hashValue)
-				hashCombine(seed: &hash, value: self.typeID.hashValue)
+				hashCombine(seed: &hash, value: isSingleton.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: locationFlag.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: locationType.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.Asset, rhs: Assets.Asset) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Assets.Asset) {
-				isSingleton = other.isSingleton
-				itemID = other.itemID
-				locationFlag = other.locationFlag
-				locationID = other.locationID
-				locationType = other.locationType
-				quantity = other.quantity
-				typeID = other.typeID
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case isSingleton = "is_singleton"
+				case itemID = "item_id"
+				case locationFlag = "location_flag"
+				case locationID = "location_id"
+				case locationType = "location_type"
+				case quantity
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.Asset(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? Asset)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIAssetsPostCharactersCharacterIDAssetsLocationsOk) public class PostCharactersCharacterIDAssetsLocationsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostCharactersCharacterIDAssetsLocationsOk: Codable, Hashable {
 			
-			@objc(ESIAssetsPostCharactersCharacterIDAssetsLocationsOkPostCharactersCharacterIDAssetsLocationsPosition) public class PostCharactersCharacterIDAssetsLocationsPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct PostCharactersCharacterIDAssetsLocationsPosition: Codable, Hashable {
 				
 				
-				public var x: Double = Double()
-				public var y: Double = Double()
-				public var z: Double = Double()
+				public let x: Double
+				public let y: Double
+				public let z: Double
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeDouble(forKey: "x")
-					y = aDecoder.decodeDouble(forKey: "y")
-					z = aDecoder.decodeDouble(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition, rhs: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) {
-					x = other.x
-					y = other.y
-					z = other.z
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? PostCharactersCharacterIDAssetsLocationsPosition)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var itemID: Int64 = Int64()
-			public var position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition = Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition()
+			public let itemID: Int64
+			public let position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				position = try Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				position = aDecoder.decodeObject(of: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition.self, forKey: "position")  ?? Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(position, forKey: "position")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["item_id"] = itemID.json
-				json["position"] = position.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.position.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.PostCharactersCharacterIDAssetsLocationsOk, rhs: Assets.PostCharactersCharacterIDAssetsLocationsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Assets.PostCharactersCharacterIDAssetsLocationsOk) {
-				itemID = other.itemID
-				position = Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition(other.position)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case position
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.PostCharactersCharacterIDAssetsLocationsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCharactersCharacterIDAssetsLocationsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIAssetsPostCorporationsCorporationIDAssetsLocationsOk) public class PostCorporationsCorporationIDAssetsLocationsOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostCorporationsCorporationIDAssetsLocationsOk: Codable, Hashable {
 			
-			@objc(ESIAssetsPostCorporationsCorporationIDAssetsLocationsOkPostCorporationsCorporationIDAssetsLocationsPosition) public class PostCorporationsCorporationIDAssetsLocationsPosition: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+			public struct PostCorporationsCorporationIDAssetsLocationsPosition: Codable, Hashable {
 				
 				
-				public var x: Double = Double()
-				public var y: Double = Double()
-				public var z: Double = Double()
+				public let x: Double
+				public let y: Double
+				public let z: Double
 				
-				
-				public required init(json: Any) throws {
-					guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-					
-					guard let x = dictionary["x"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.x = x
-					guard let y = dictionary["y"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.y = y
-					guard let z = dictionary["z"] as? Double else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-					self.z = z
-					
-					super.init()
-				}
-				
-				override public init() {
-					super.init()
-				}
-				
-				public static var supportsSecureCoding: Bool {
-					return true
-				}
-				
-				public required init?(coder aDecoder: NSCoder) {
-					x = aDecoder.decodeDouble(forKey: "x")
-					y = aDecoder.decodeDouble(forKey: "y")
-					z = aDecoder.decodeDouble(forKey: "z")
-					
-					super.init()
-				}
-				
-				public func encode(with aCoder: NSCoder) {
-					aCoder.encode(x, forKey: "x")
-					aCoder.encode(y, forKey: "y")
-					aCoder.encode(z, forKey: "z")
-				}
-				
-				public var json: Any {
-					var json = [String: Any]()
-					json["x"] = x.json
-					json["y"] = y.json
-					json["z"] = z.json
-					return json
-				}
-				
-				private lazy var _hashValue: Int = {
+				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: self.x.hashValue)
-					hashCombine(seed: &hash, value: self.y.hashValue)
-					hashCombine(seed: &hash, value: self.z.hashValue)
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
 					return hash
-				}()
-				
-				override public var hashValue: Int {
-					return _hashValue
 				}
 				
 				public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
-				init(_ other: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
-					x = other.x
-					y = other.y
-					z = other.z
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
-				
-				public func copy(with zone: NSZone? = nil) -> Any {
-					return Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition(self)
-				}
-				
-				
-				public override func isEqual(_ object: Any?) -> Bool {
-					return (object as? PostCorporationsCorporationIDAssetsLocationsPosition)?.hashValue == hashValue
-				}
-				
 			}
 			
-			public var itemID: Int64 = Int64()
-			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition = Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition()
+			public let itemID: Int64
+			public let position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				position = try Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition(json: dictionary["position"] as? [String: Any] ?? [:])
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				position = aDecoder.decodeObject(of: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition.self, forKey: "position")  ?? Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(position, forKey: "position")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["item_id"] = itemID.json
-				json["position"] = position.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.position.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Assets.PostCorporationsCorporationIDAssetsLocationsOk) {
-				itemID = other.itemID
-				position = Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition(other.position)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case position
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.PostCorporationsCorporationIDAssetsLocationsOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCorporationsCorporationIDAssetsLocationsOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIAssetsPostCharactersCharacterIDAssetsNamesOk) public class PostCharactersCharacterIDAssetsNamesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostCharactersCharacterIDAssetsNamesOk: Codable, Hashable {
 			
 			
-			public var itemID: Int64 = Int64()
-			public var name: String = String()
+			public let itemID: Int64
+			public let name: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(name, forKey: "name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["item_id"] = itemID.json
-				json["name"] = name.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.PostCharactersCharacterIDAssetsNamesOk, rhs: Assets.PostCharactersCharacterIDAssetsNamesOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Assets.PostCharactersCharacterIDAssetsNamesOk) {
-				itemID = other.itemID
-				name = other.name
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.PostCharactersCharacterIDAssetsNamesOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCharactersCharacterIDAssetsNamesOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
-		@objc(ESIAssetsPostCorporationsCorporationIDAssetsNamesOk) public class PostCorporationsCorporationIDAssetsNamesOk: NSObject, NSSecureCoding, NSCopying, JSONCoding {
+		public struct PostCorporationsCorporationIDAssetsNamesOk: Codable, Hashable {
 			
 			
-			public var itemID: Int64 = Int64()
-			public var name: String = String()
+			public let itemID: Int64
+			public let name: String
 			
-			
-			public required init(json: Any) throws {
-				guard let dictionary = json as? [String: Any] else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
-				
-				guard let itemID = dictionary["item_id"] as? Int64 else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.itemID = itemID
-				guard let name = dictionary["name"] as? String else {throw ESIError.invalidFormat(Swift.type(of: self), dictionary)}
-				self.name = name
-				
-				super.init()
-			}
-			
-			override public init() {
-				super.init()
-			}
-			
-			public static var supportsSecureCoding: Bool {
-				return true
-			}
-			
-			public required init?(coder aDecoder: NSCoder) {
-				itemID = aDecoder.decodeInt64(forKey: "item_id")
-				name = aDecoder.decodeObject(forKey: "name") as? String ?? String()
-				
-				super.init()
-			}
-			
-			public func encode(with aCoder: NSCoder) {
-				aCoder.encode(itemID, forKey: "item_id")
-				aCoder.encode(name, forKey: "name")
-			}
-			
-			public var json: Any {
-				var json = [String: Any]()
-				json["item_id"] = itemID.json
-				json["name"] = name.json
-				return json
-			}
-			
-			private lazy var _hashValue: Int = {
+			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: self.itemID.hashValue)
-				hashCombine(seed: &hash, value: self.name.hashValue)
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
 				return hash
-			}()
-			
-			override public var hashValue: Int {
-				return _hashValue
 			}
 			
 			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsNamesOk, rhs: Assets.PostCorporationsCorporationIDAssetsNamesOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
-			init(_ other: Assets.PostCorporationsCorporationIDAssetsNamesOk) {
-				itemID = other.itemID
-				name = other.name
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			
-			public func copy(with zone: NSZone? = nil) -> Any {
-				return Assets.PostCorporationsCorporationIDAssetsNamesOk(self)
-			}
-			
-			
-			public override func isEqual(_ object: Any?) -> Bool {
-				return (object as? PostCorporationsCorporationIDAssetsNamesOk)?.hashValue == hashValue
-			}
-			
 		}
 		
 		
