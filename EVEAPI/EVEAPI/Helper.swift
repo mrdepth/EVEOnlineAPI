@@ -55,7 +55,8 @@ public enum ESIError: LocalizedError {
 	case forbidden
 	case invalidFormat(Any.Type, Any)
 	case objectSerialization(reason: String)
-
+	case dateFormatError
+	
 	public var errorDescription: String? {
 		switch self {
 		case let .server(error, ssoStatus?):

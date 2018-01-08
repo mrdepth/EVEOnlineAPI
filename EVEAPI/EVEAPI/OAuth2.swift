@@ -21,6 +21,42 @@ public extension Notification.Name {
 	public static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
 }
 
+fileprivate struct Token: Decodable {
+	var accessToken: String
+	var refreshToken: String
+	var tokenType: String
+	var expiresIn: Double
+	
+	enum CodingKeys: String, CodingKey {
+		case accessToken = "access_token"
+		case refreshToken = "refresh_token"
+		case tokenType = "token_type"
+		case expiresIn = "expires_in"
+	}
+}
+
+fileprivate struct TokenVerify: Decodable {
+	var characterID: Int64
+	var characterName: String
+	var scopes: [String]
+	var expiresOn: Date?
+	
+	enum CodingKeys: String, CodingKey {
+		case characterID = "CharacterID"
+		case characterName = "CharacterName"
+		case scopes = "Scopes"
+		case expiresOn = "ExpiresOn"
+	}
+	
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		characterID = try container.decode(Int64.self, forKey: .characterID)
+		characterName = try container.decode(String.self, forKey: .characterName)
+		scopes = try container.decode(String.self, forKey: .scopes).components(separatedBy: .whitespaces)
+		try? expiresOn = OAuth2Retrier.dateFormatter.date(from: container.decode(String.self, forKey: .expiresOn))
+	}
+}
+
 public class OAuth2Token: NSObject, NSSecureCoding {
 	public var accessToken: String
 	public var refreshToken: String
@@ -142,53 +178,22 @@ public class OAuth2 {
 			Alamofire.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
-							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<[String: String]>) in
+							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<Token>) in
 								switch(response.result) {
-								case let .success(value):
-									do {
-										guard let result = value as? [String: Any] else {throw OAuth2Error.invalidServerResponse(response: response)}
-										guard let accessToken = result["access_token"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-										guard let refreshToken = result["refresh_token"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-										guard let tokenType = result["token_type"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-										guard let expiresIn = result["expires_in"] as? Double else {throw OAuth2Error.invalidServerResponse(response: response)}
-										let expiresOn = Date.init(timeIntervalSinceNow: expiresIn)
-										Alamofire.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(tokenType) \(accessToken)"]).validate().responseOAuth2 {response in
-											switch(response.result) {
-											case let .success(value):
-												do {
-													guard let result = value as? [String: Any] else {throw OAuth2Error.invalidServerResponse(response: response)}
-													guard let characterID = result["CharacterID"] as? Int64 else {throw OAuth2Error.invalidServerResponse(response: response)}
-													guard let characterName = result["CharacterName"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-													guard let scopes = (result["Scopes"] as? String)?.components(separatedBy: CharacterSet.whitespaces) else {throw OAuth2Error.invalidServerResponse(response: response)}
-													
-													let token = OAuth2Token(accessToken: accessToken, refreshToken: refreshToken, tokenType: tokenType, scopes: scopes, characterID: characterID, characterName: characterName, realm: state)
-													
-													if let expiresOn = result["ExpiresOn"] as? String, let date = OAuth2Retrier.dateFormatter.date(from: expiresOn) {
-														token.expiresOn = date
-													}
-													else {
-														token.expiresOn = expiresOn
-													}
-													
-													completionHandler(.success(token))
-												}
-												catch {
-													completionHandler(.failure(error))
-												}
-												break
-											case let .failure(err):
-												completionHandler(.failure(err))
-												break
-											}
+								case let .success(token):
+									let date = Date(timeIntervalSinceNow: token.expiresIn)
+									Alamofire.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenVerify>) in
+										switch(response.result) {
+										case let .success(verify):
+											let oauth2Token = OAuth2Token(accessToken: token.accessToken, refreshToken: token.refreshToken, tokenType: token.tokenType, scopes: verify.scopes, characterID: verify.characterID, characterName: verify.characterName, realm: state)
+											oauth2Token.expiresOn = verify.expiresOn ?? date
+											completionHandler(.success(oauth2Token))
+										case let .failure(error):
+											completionHandler(.failure(error))
 										}
 									}
-									catch {
-										completionHandler(.failure(error))
-									}
-									break
-								case let .failure(err):
-									completionHandler(.failure(err))
-									break
+								case let .failure(error):
+									completionHandler(.failure(error))
 								}
 			}
 			return true
@@ -257,30 +262,19 @@ public class OAuth2Retrier: RequestRetrier {
 		Alamofire.request(OAuthBaseURL + "token",
 		                  method: .post,
 		                  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
-		                  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseOAuth2 {[weak self] response in
+		                  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable {[weak self] (response: DataResponse<Token>) in
 							guard let strongSelf = self else { return }
 							
 							switch(response.result) {
 							case let .success(value):
-								do {
-									
-									guard let result = value as? [String: Any] else {throw OAuth2Error.invalidServerResponse(response: response)}
-									guard let accessToken = result["access_token"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-									guard let refreshToken = result["refresh_token"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-									guard let tokenType = result["token_type"] as? String else {throw OAuth2Error.invalidServerResponse(response: response)}
-									guard let expiresIn = result["expires_in"] as? Double else {throw OAuth2Error.invalidServerResponse(response: response)}
-									let expiresOn = Date.init(timeIntervalSinceNow: expiresIn)
-									let token = strongSelf.token
-									token.accessToken = accessToken
-									token.refreshToken = refreshToken
-									token.tokenType = tokenType
-									token.expiresOn = expiresOn
-									NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
-									completion(nil)
-								}
-								catch {
-									completion(error)
-								}
+								let expiresOn = Date(timeIntervalSinceNow: value.expiresIn)
+								let token = strongSelf.token
+								token.accessToken = value.accessToken
+								token.refreshToken = value.refreshToken
+								token.tokenType = value.tokenType
+								token.expiresOn = expiresOn
+								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
+								completion(nil)
 							case let .failure(error):
 								completion(error)
 							}
@@ -288,6 +282,16 @@ public class OAuth2Retrier: RequestRetrier {
 							strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
 							strongSelf.isRefreshing = false
 		}
+	}
+}
+
+fileprivate struct OAuth2ServerError: Codable {
+	var error: String
+	var errorDescription: String
+	
+	enum CodingKeys: String, CodingKey {
+		case error
+		case errorDescription = "error_description"
 	}
 }
 
@@ -300,40 +304,12 @@ extension DataRequest {
 			if statusCode.contains(response.statusCode) {
 				return .success
 			}
+			else if let data = data, let error = try? JSONDecoder().decode(OAuth2ServerError.self, from: data) {
+				return .failure(OAuth2Error.server(message: error.errorDescription))
+			}
 			else {
 				return .success
 			}
-			}.validate(statusCode: statusCode)
+		}.validate(statusCode: statusCode)
 	}
-	
-	/*static func oauth2ResponseSerializer() -> DataResponseSerializer {
-		return DataResponseSerializer { request, response, data, error in
-			switch jsonResponseSerializer().serializeResponse(request, response, data, error) {
-			case let .success(value):
-				guard let result = value as? [String: Any] else {return .success(value)}
-				if let errorDescription = result["error_description"] as? String {
-					return .failure(OAuth2Error.server(message: errorDescription))
-				}
-				
-				return .success(value)
-			case let .failure(error):
-				return .failure(error)
-			}
-		}
-	}
-	
-	@discardableResult
-	public func responseOAuth2(
-		queue: DispatchQueue? = nil,
-		options: JSONSerialization.ReadingOptions = .allowFragments,
-		completionHandler: @escaping (DataResponse<Any>) -> Void)
-		-> Self
-	{
-		return response(
-			queue: queue,
-			responseSerializer: DataRequest.oauth2ResponseSerializer(),
-			completionHandler: completionHandler
-		)
-	}*/
-	
 }

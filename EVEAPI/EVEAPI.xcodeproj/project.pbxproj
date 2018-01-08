@@ -42,6 +42,8 @@
 		126296171EEAD16C00796B27 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F81EEAD16C00796B27 /* Wallet.swift */; };
 		126296181EEAD16C00796B27 /* Wars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F91EEAD16C00796B27 /* Wars.swift */; };
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
+		12809FE420034D35006AE91F /* ZKillboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203E8721F017D82009ADF8D /* ZKillboard.swift */; };
+		12809FE5200352C5006AE91F /* rss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CFDAF81F053D6700CC0762 /* rss.swift */; };
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */; };
 		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
@@ -671,6 +673,7 @@
 			files = (
 				1262960C1EEAD16C00796B27 /* Mail.swift in Sources */,
 				126296141EEAD16C00796B27 /* Status.swift in Sources */,
+				12809FE420034D35006AE91F /* ZKillboard.swift in Sources */,
 				1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */,
 				126296091EEAD16C00796B27 /* Killmails.swift in Sources */,
 				1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */,
@@ -692,6 +695,7 @@
 				126296101EEAD16C00796B27 /* Routes.swift in Sources */,
 				126296081EEAD16C00796B27 /* Insurance.swift in Sources */,
 				126296161EEAD16C00796B27 /* UserInterface.swift in Sources */,
+				12809FE5200352C5006AE91F /* rss.swift in Sources */,
 				12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */,
 				1262960E1EEAD16C00796B27 /* Opportunities.swift in Sources */,
 				126295FF1EEAD16C00796B27 /* Clones.swift in Sources */,

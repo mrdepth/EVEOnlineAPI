@@ -9,8 +9,23 @@
 import Foundation
 import Alamofire
 
-
 public class ESI: SessionManager {
+	fileprivate class CachePolicyAdapter: RequestAdapter {
+		let cachePolicy: URLRequest.CachePolicy
+		let next: RequestAdapter?
+		init(cachePolicy: URLRequest.CachePolicy, next: RequestAdapter?) {
+			self.cachePolicy = cachePolicy
+			self.next = next
+		}
+		
+		public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+			var request = urlRequest
+			request.cachePolicy = cachePolicy
+			return try next?.adapt(request) ?? request
+		}
+	}
+
+	
 	public enum Server: String {
 		case tranquility = "tranquility"
 		case singularity = "singularity"
@@ -121,6 +136,15 @@ public class ESI: SessionManager {
 	}
 }
 
+struct SSOError: Codable {
+	var error: String?
+	var status: Int?
+	
+	enum CodingKeys: String, CodingKey {
+		case error
+		case status = "sso_status"
+	}
+}
 
 extension DataRequest {
 	
@@ -134,18 +158,16 @@ extension DataRequest {
 				return .success
 			}
 			else {
-				let (error, ssoStatus): (String?, Int?) = {
-					guard let data = data,
-						let dic = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [String: Any] else {return (nil, nil)}
-					return (dic["error"] as? String, dic["sso_status"] as? Int)
+				let error: SSOError? = {
+					guard let data = data else {return nil}
+					return try? JSONDecoder().decode(SSOError.self, from: data)
 				}()
-				switch (response.statusCode, error, ssoStatus) {
-//				case (403, "Forbidden"?, _), (403, _, 200?):
-//					return .failure(ESIError.forbidden)
+				
+				switch (response.statusCode, error?.error, error?.status) {
 				case (403, "expired"?, _), (403, _, 400?):
 					return .failure(OAuth2Error.tokenExpired)
-				case let (_, error?, _):
-					return .failure(ESIError.server(error: error, ssoStatus: ssoStatus))
+				case let (_, error?, status):
+					return .failure(ESIError.server(error: error, ssoStatus: status))
 				default:
 					return .success
 				}
@@ -160,6 +182,16 @@ extension DataRequest {
 		-> Self
 	{
 		let decoder = JSONDecoder()
+		decoder.dateDecodingStrategy = .custom { (decoder) -> Date in
+			if let formatter = (decoder.codingPath.last as? DateFormatted)?.dateFormatter {
+				guard let date = try formatter.date(from: decoder.singleValueContainer().decode(String.self)) else {throw ESIError.dateFormatError}
+				return date
+			}
+			else {
+				return try Date(from: decoder)
+			}
+		}
+		
 		return responseJSONDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
 		/*let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
 			let result = DataRequest.jsonResponseSerializer().serializeResponse(request, response, data, error)

@@ -37,7 +37,7 @@ public enum RSS {
 		}
 	}()
 	
-	@objc(RSSFeed) public class Feed: NSObject, NSSecureCoding, JSONCoding {
+	public struct Feed: JSONCoding, Codable, Hashable {
 		public var title: String?
 		public var feedDescription: String?
 		public var copyright: String?
@@ -48,11 +48,23 @@ public enum RSS {
 		public var image: Image?
 		public var items: [Item]?
 		
+		enum CodingKeys: String, CodingKey {
+			case title
+			case feedDescription
+			case copyright
+			case language
+			case link
+			case publisher
+			case updated
+			case image
+			case items
+		}
+		
 		public static var supportsSecureCoding: Bool {
 			return true
 		}
 		
-		public required convenience init(json: Any) throws {
+		public init(json: Any) throws {
 			guard let dic = json as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), json)}
 			if let rdf = dic["RDF"] {
 				try self.init(rdf: rdf)
@@ -64,7 +76,7 @@ public enum RSS {
 				try self.init(atom: feed)
 			}
 			else {
-				self.init()
+				throw RSSError.invalidFormat(type(of: self), json)
 			}
 		}
 		
@@ -86,8 +98,6 @@ public enum RSS {
 			else {
 				self.items = nil
 			}
-
-			super.init()
 		}
 		
 		public init(rdf: Any) throws {
@@ -107,7 +117,6 @@ public enum RSS {
 			else {
 				self.items = nil
 			}
-			super.init()
 		}
 		
 		public init(atom: Any) throws {
@@ -128,44 +137,13 @@ public enum RSS {
 			else {
 				self.items = nil
 			}
-			super.init()
-		}
-		
-		override public init() {
-			super.init()
-		}
-		
-		public required init?(coder aDecoder: NSCoder) {
-			title = aDecoder.decodeObject(forKey: "title") as? String
-			feedDescription = aDecoder.decodeObject(forKey: "feedDescription") as? String
-			copyright = aDecoder.decodeObject(forKey: "copyright") as? String
-			language = aDecoder.decodeObject(forKey: "language") as? String
-			link = aDecoder.decodeObject(forKey: "link") as? URL
-			publisher = aDecoder.decodeObject(forKey: "publisher") as? String
-			updated = aDecoder.decodeObject(forKey: "updated") as? Date
-			image = aDecoder.decodeObject(of: Image.self, forKey: "image")
-			items = aDecoder.decodeObject(of: [Item.self], forKey: "items") as? [Item]
-
-			super.init()
-		}
-		
-		public func encode(with aCoder: NSCoder) {
-			aCoder.encode(title, forKey: "title")
-			aCoder.encode(feedDescription, forKey: "feedDescription")
-			aCoder.encode(copyright, forKey: "copyright")
-			aCoder.encode(language, forKey: "language")
-			aCoder.encode(link, forKey: "link")
-			aCoder.encode(publisher, forKey: "publisher")
-			aCoder.encode(updated, forKey: "updated")
-			aCoder.encode(image, forKey: "image")
-			aCoder.encode(items, forKey: "items")
 		}
 		
 		public var json: Any {
 			return ""
 		}
 		
-		override public var hashValue: Int {
+		public var hashValue: Int {
 			var hash: Int = 0
 			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
 			hashCombine(seed: &hash, value: feedDescription?.hashValue ?? 0)
@@ -182,40 +160,24 @@ public enum RSS {
 		public static func ==(lhs: Feed, rhs: Feed) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
-		
-		init(_ other: Feed) {
-			title = other.title
-			feedDescription = other.feedDescription
-			copyright = other.copyright
-			link = other.link
-			publisher = other.publisher
-			updated = other.updated
-			image = other.image
-			items = other.items
-		}
-		
-		public func copy(with zone: NSZone? = nil) -> Any {
-			return Feed(self)
-		}
-		
-		
-		public override func isEqual(_ object: Any?) -> Bool {
-			return (object as? Feed)?.hashValue == hashValue
-		}
-		
 	}
 	
-	@objc(RSSImage) public class Image: NSObject, NSSecureCoding {
+	public struct Image: Codable, Hashable {
 		public var title: String?
 		public var link: URL?
 		public var url: URL?
+		
+		enum CodingKeys: String, CodingKey {
+			case title
+			case link
+			case url
+		}
 		
 		public init(rss: Any) throws {
 			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
 			title = dic["title"] as? String
 			link = URL(string: dic["link"] as? String)
 			url = URL(string: dic["url"] as? String)
-			super.init()
 		}
 		
 		public init(rdf: Any) throws {
@@ -223,34 +185,15 @@ public enum RSS {
 			title = dic["title"] as? String
 			link = URL(string: dic["link"] as? String)
 			url = URL(string: dic["url"] as? String)
-			super.init()
 		}
 		
 		public init(atom: Any) throws {
 			guard let s = atom as? String else {throw RSSError.invalidFormat(type(of: self), atom)}
 			link = URL(string: s)
 			url = URL(string: s)
-			super.init()
 		}
 		
-		public static var supportsSecureCoding: Bool {
-			return true
-		}
-		
-		public required init?(coder aDecoder: NSCoder) {
-			title = aDecoder.decodeObject(forKey: "title") as? String
-			link = aDecoder.decodeObject(forKey: "link") as? URL
-			url = aDecoder.decodeObject(forKey: "url") as? URL
-			super.init()
-		}
-		
-		public func encode(with aCoder: NSCoder) {
-			aCoder.encode(title, forKey: "title")
-			aCoder.encode(link, forKey: "link")
-			aCoder.encode(url, forKey: "url")
-		}
-
-		override public var hashValue: Int {
+		public var hashValue: Int {
 			var hash: Int = 0
 			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
 			hashCombine(seed: &hash, value: link?.hashValue ?? 0)
@@ -263,17 +206,22 @@ public enum RSS {
 		}
 	}
 	
-	@objc(RSSEnclosure) public class Enclosure: NSObject, NSSecureCoding {
+	public struct Enclosure: Codable, Hashable {
 		public var url: URL?
 		public var length: Int?
 		public var type: String?
+		
+		enum CodingKeys: String, CodingKey {
+			case url
+			case length
+			case type
+		}
 		
 		public init(rss: Any) throws {
 			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(Swift.type(of: self), rss)}
 			url = URL(string: dic["url"] as? String)
 			length = dic["length"] as? Int
 			type = dic["type"] as? String
-			super.init()
 		}
 		
 		public init(rdf: Any) throws {
@@ -281,7 +229,6 @@ public enum RSS {
 			url = URL(string: dic["url"] as? String)
 			length = dic["length"] as? Int
 			type = dic["type"] as? String
-			super.init()
 		}
 		
 		public init(atom: Any) throws {
@@ -289,27 +236,10 @@ public enum RSS {
 			url = URL(string: dic["href"] as? String)
 			length = dic["length"] as? Int
 			type = dic["type"] as? String
-			super.init()
 		}
 		
-		public static var supportsSecureCoding: Bool {
-			return true
-		}
-		
-		public required init?(coder aDecoder: NSCoder) {
-			url = aDecoder.decodeObject(forKey: "url") as? URL
-			length = aDecoder.decodeObject(forKey: "length") as? Int
-			type = aDecoder.decodeObject(forKey: "type") as? String
-			super.init()
-		}
-		
-		public func encode(with aCoder: NSCoder) {
-			aCoder.encode(url, forKey: "url")
-			aCoder.encode(length, forKey: "length")
-			aCoder.encode(type, forKey: "type")
-		}
-		
-		override public var hashValue: Int {
+
+		public var hashValue: Int {
 			var hash: Int = 0
 			hashCombine(seed: &hash, value: url?.hashValue ?? 0)
 			hashCombine(seed: &hash, value: length?.hashValue ?? 0)
@@ -322,7 +252,7 @@ public enum RSS {
 		}
 	}
 	
-	@objc(RSSItem) public class Item: NSObject, NSSecureCoding {
+	public struct Item: Codable, Hashable {
 		public var title: String?
 		public var link: URL?
 		public var summary: String?
@@ -332,6 +262,18 @@ public enum RSS {
 		public var updated: Date?
 		public var source: Source?
 		public var enclosure: Enclosure?
+		
+		enum CodingKeys: String, CodingKey {
+			case title
+			case link
+			case summary
+			case author
+			case category
+			case guid
+			case updated
+			case source
+			case enclosure
+		}
 		
 		public init(rss: Any) throws {
 			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
@@ -345,7 +287,6 @@ public enum RSS {
 			if let enclosure = dic["enclosure"] {
 				self.enclosure = try? Enclosure(rss: enclosure)
 			}
-			super.init()
 		}
 		
 		public init(rdf: Any) throws {
@@ -354,7 +295,6 @@ public enum RSS {
 			link = URL(string: dic["url"] as? String)
 			summary = dic["description"] as? String
 			updated = DateFormatter.rfc822DateFormatter.date(from: dic["pubDate"] as? String ?? "")
-			super.init()
 		}
 		
 		public init(atom: Any) throws {
@@ -398,39 +338,9 @@ public enum RSS {
 			if let enclosure = dic["enclosure"] {
 				self.enclosure = try? Enclosure(rss: enclosure)
 			}
-			super.init()
 		}
 		
-		public static var supportsSecureCoding: Bool {
-			return true
-		}
-		
-		public required init?(coder aDecoder: NSCoder) {
-			title = aDecoder.decodeObject(forKey: "title") as? String
-			link = aDecoder.decodeObject(forKey: "link") as? URL
-			summary = aDecoder.decodeObject(forKey: "summary") as? String
-			author = aDecoder.decodeObject(forKey: "author") as? String
-			category = aDecoder.decodeObject(forKey: "category") as? String
-			guid = aDecoder.decodeObject(forKey: "guid") as? String
-			updated = aDecoder.decodeObject(forKey: "updated") as? Date
-			source = aDecoder.decodeObject(of: Source.self, forKey: "source")
-			enclosure = aDecoder.decodeObject(of: Enclosure.self, forKey: "enclosure")
-			super.init()
-		}
-		
-		public func encode(with aCoder: NSCoder) {
-			aCoder.encode(title, forKey: "title")
-			aCoder.encode(link, forKey: "link")
-			aCoder.encode(summary, forKey: "summary")
-			aCoder.encode(author, forKey: "author")
-			aCoder.encode(category, forKey: "category")
-			aCoder.encode(guid, forKey: "guid")
-			aCoder.encode(updated, forKey: "updated")
-			aCoder.encode(source, forKey: "source")
-			aCoder.encode(enclosure, forKey: "enclosure")
-		}
-		
-		override public var hashValue: Int {
+		public var hashValue: Int {
 			var hash: Int = 0
 			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
 			hashCombine(seed: &hash, value: link?.hashValue ?? 0)
@@ -449,48 +359,35 @@ public enum RSS {
 		}
 	}
 	
-	@objc(RSSSource) public class Source: NSObject, NSSecureCoding {
+	public struct Source: Codable, Hashable {
 		var title: String?
 		var url: URL?
+		
+		enum CodingKeys: String, CodingKey {
+			case title
+			case url
+		}
 		
 		public init(rss: Any) throws {
 			guard let dic = rss as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rss)}
 			url = URL(string: dic["url"] as? String)
 			title = dic["title"] as? String
-			super.init()
 		}
 		
 		public init(rdf: Any) throws {
 			guard let dic = rdf as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), rdf)}
 			url = URL(string: dic["url"] as? String)
 			title = dic["title"] as? String
-			super.init()
 		}
 		
 		public init(atom: Any) throws {
 			guard let dic = atom as? [String: Any] else {throw RSSError.invalidFormat(type(of: self), atom)}
 			url = URL(string: dic["href"] as? String)
 			title = dic["title"] as? String
-			super.init()
 		}
 		
 		
-		public static var supportsSecureCoding: Bool {
-			return true
-		}
-		
-		public required init?(coder aDecoder: NSCoder) {
-			title = aDecoder.decodeObject(forKey: "title") as? String
-			url = aDecoder.decodeObject(forKey: "url") as? URL
-			super.init()
-		}
-		
-		public func encode(with aCoder: NSCoder) {
-			aCoder.encode(title, forKey: "title")
-			aCoder.encode(url, forKey: "url")
-		}
-		
-		override public var hashValue: Int {
+		public var hashValue: Int {
 			var hash: Int = 0
 			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
 			hashCombine(seed: &hash, value: url?.hashValue ?? 0)
@@ -506,21 +403,20 @@ public enum RSS {
 
 extension DataRequest {
 	
+	class RSSSerializer<T: JSONCoding>: DataResponseSerializerProtocol {
+		typealias SerializedObject = T
+		func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> T {
+			guard let data = data,
+				let value = try XMLParser.xmlObject(data: data) as? [String: Any] else {throw ESIError.objectSerialization(reason: "No XML Data")}
+			return try T(json: value)
+		}
+	}
+	
 	@discardableResult
 	public func responseRSS<T: JSONCoding>(queue: DispatchQueue? = nil,
 	                        options: JSONSerialization.ReadingOptions = .allowFragments,
-	                        completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
-	{
-		let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
-			do {
-				guard let data = data,
-					let value = try XMLParser.xmlObject(data: data) as? [String: Any] else {throw ESIError.objectSerialization(reason: "No XML Data")}
-				return .success(try T(json: value))
-			}
-			catch {
-				return .failure(error)
-			}
-		}
+	                        completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
+		let serializer = RSSSerializer<T>()
 		
 		return response(
 			queue: queue,

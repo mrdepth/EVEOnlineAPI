@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12809FE220034C33006AE91F /* EVEAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12809FE120034C33006AE91F /* EVEAPI.framework */; };
+		12809FE320034C33006AE91F /* EVEAPI.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12809FE120034C33006AE91F /* EVEAPI.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1288F0031DEB5FBD00FD7FBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0021DEB5FBD00FD7FBE /* AppDelegate.swift */; };
 		1288F0051DEB5FBD00FD7FBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0041DEB5FBD00FD7FBE /* ViewController.swift */; };
 		1288F0081DEB5FBD00FD7FBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1288F0061DEB5FBD00FD7FBE /* Main.storyboard */; };
@@ -23,6 +25,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				12809FE320034C33006AE91F /* EVEAPI.framework in Embed Frameworks */,
 				12BC409B1DFDA13E00657D40 /* Alamofire.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -31,6 +34,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		12809FE120034C33006AE91F /* EVEAPI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EVEAPI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1288EFFF1DEB5FBD00FD7FBE /* Develop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Develop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1288F0021DEB5FBD00FD7FBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1288F0041DEB5FBD00FD7FBE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -47,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12809FE220034C33006AE91F /* EVEAPI.framework in Frameworks */,
 				12BC409A1DFDA13E00657D40 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -57,6 +62,7 @@
 		1288EFF61DEB5FBD00FD7FBE = {
 			isa = PBXGroup;
 			children = (
+				12809FE120034C33006AE91F /* EVEAPI.framework */,
 				12BC40991DFDA13E00657D40 /* Alamofire.framework */,
 				1288F0141DEB61FC00FD7FBE /* EVEAPI.framework */,
 				1288F0011DEB5FBD00FD7FBE /* Develop */,

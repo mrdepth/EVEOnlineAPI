@@ -7,6 +7,18 @@
 //
 
 import UIKit
+import EVEAPI
+import Alamofire
+
+public class Adapter: RequestAdapter {
+	
+	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+		var request = urlRequest
+		request.cachePolicy = .returnCacheDataDontLoad
+		return request
+	}
+}
+
 
 class ViewController: UIViewController {
 
@@ -14,7 +26,25 @@ class ViewController: UIViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
 	}
-
+	var session: URLSession?
+	
+	@IBAction func onButton(_ sender: Any) {
+		let configuration = URLSessionConfiguration.default
+		configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
+		
+		/*session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+		let task = session!.dataTask(with: URL(string: "http://refreshyourcache.com/cache-test/test.php")!)
+		task.resume()*/
+		
+		var session: SessionManager? = SessionManager(configuration: configuration)
+		session?.adapter = Adapter()
+		let request = session?.request("http://refreshyourcache.com/cache-test/test.php").responseString(completionHandler: { (response) in
+			let image = UIImage(data: response.data!)
+			print("\(response.timeline.description)")
+			session = nil
+		})
+	}
+	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
@@ -23,3 +53,14 @@ class ViewController: UIViewController {
 
 }
 
+
+extension ViewController: URLSessionDataDelegate {
+	func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+		let image = UIImage(data: data)
+		print("\(image)")
+	}
+	
+	func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+		print("\(error)")
+	}
+}
