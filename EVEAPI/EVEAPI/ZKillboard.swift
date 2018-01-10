@@ -193,10 +193,10 @@ extension ZKillboard {
 		
 		public struct Attacker: Codable, Hashable {
 
-			public var characterID: Int64?
-			public var corporationID: Int64?
-			public var allianceID: Int64?
-			public var factionID: Int64?
+			public var characterID: Int?
+			public var corporationID: Int?
+			public var allianceID: Int?
+			public var factionID: Int?
 			public var securityStatus: Float
 			public var damageDone: Int
 			public var finalBlow: Bool
@@ -236,10 +236,10 @@ extension ZKillboard {
 		
 		public struct Victim: Codable, Hashable {
 			
-			public var characterID: Int64?
-			public var corporationID: Int64?
-			public var allianceID: Int64?
-			public var factionID: Int64?
+			public var characterID: Int?
+			public var corporationID: Int?
+			public var allianceID: Int?
+			public var factionID: Int?
 			public var damageTaken: Int
 			public var shipTypeID: Int
 			public var items: [Killmail.Item]? = nil

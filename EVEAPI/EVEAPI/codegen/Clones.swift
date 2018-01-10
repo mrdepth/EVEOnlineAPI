@@ -86,8 +86,13 @@ public extension ESI {
 			public struct Location: Codable, Hashable {
 				
 				
-				public let locationID: Int64?
-				public let locationType: Clones.JumpClones.LocationType?
+				public var locationID: Int64?
+				public var locationType: Clones.JumpClones.LocationType?
+				
+				public init(locationID: Int64?, locationType: Clones.JumpClones.LocationType?) {
+					self.locationID = locationID
+					self.locationType = locationType
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -126,11 +131,19 @@ public extension ESI {
 			public struct JumpClone: Codable, Hashable {
 				
 				
-				public let implants: [Int]
-				public let jumpCloneID: Int
-				public let locationID: Int64
-				public let locationType: Clones.JumpClones.LocationType
-				public let name: String?
+				public var implants: [Int]
+				public var jumpCloneID: Int
+				public var locationID: Int64
+				public var locationType: Clones.JumpClones.LocationType
+				public var name: String?
+				
+				public init(implants: [Int], jumpCloneID: Int, locationID: Int64, locationType: Clones.JumpClones.LocationType, name: String?) {
+					self.implants = implants
+					self.jumpCloneID = jumpCloneID
+					self.locationID = locationID
+					self.locationType = locationType
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -162,10 +175,17 @@ public extension ESI {
 				}
 			}
 			
-			public let homeLocation: Clones.JumpClones.Location?
-			public let jumpClones: [Clones.JumpClones.JumpClone]
-			public let lastCloneJumpDate: Date?
-			public let lastStationChangeDate: Date?
+			public var homeLocation: Clones.JumpClones.Location?
+			public var jumpClones: [Clones.JumpClones.JumpClone]
+			public var lastCloneJumpDate: Date?
+			public var lastStationChangeDate: Date?
+			
+			public init(homeLocation: Clones.JumpClones.Location?, jumpClones: [Clones.JumpClones.JumpClone], lastCloneJumpDate: Date?, lastStationChangeDate: Date?) {
+				self.homeLocation = homeLocation
+				self.jumpClones = jumpClones
+				self.lastCloneJumpDate = lastCloneJumpDate
+				self.lastStationChangeDate = lastStationChangeDate
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

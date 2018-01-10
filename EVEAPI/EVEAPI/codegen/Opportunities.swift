@@ -181,10 +181,17 @@ public extension ESI {
 		public struct OpportunitiesTask: Codable, Hashable {
 			
 			
-			public let localizedDescription: String
-			public let name: String
-			public let notification: String
-			public let taskID: Int
+			public var localizedDescription: String
+			public var name: String
+			public var notification: String
+			public var taskID: Int
+			
+			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.notification = notification
+				self.taskID = taskID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -218,8 +225,13 @@ public extension ESI {
 		public struct CompletedTask: Codable, Hashable {
 			
 			
-			public let completedAt: Date
-			public let taskID: Int
+			public var completedAt: Date
+			public var taskID: Int
+			
+			public init(completedAt: Date, taskID: Int) {
+				self.completedAt = completedAt
+				self.taskID = taskID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -249,12 +261,21 @@ public extension ESI {
 		public struct Group: Codable, Hashable {
 			
 			
-			public let connectedGroups: [Int]
-			public let localizedDescription: String
-			public let groupID: Int
-			public let name: String
-			public let notification: String
-			public let requiredTasks: [Int]
+			public var connectedGroups: [Int]
+			public var localizedDescription: String
+			public var groupID: Int
+			public var name: String
+			public var notification: String
+			public var requiredTasks: [Int]
+			
+			public init(connectedGroups: [Int], localizedDescription: String, groupID: Int, name: String, notification: String, requiredTasks: [Int]) {
+				self.connectedGroups = connectedGroups
+				self.localizedDescription = localizedDescription
+				self.groupID = groupID
+				self.name = name
+				self.notification = notification
+				self.requiredTasks = requiredTasks
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

@@ -197,7 +197,11 @@ public extension ESI {
 		public struct PostUiOpenwindowNewmailUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -225,11 +229,19 @@ public extension ESI {
 		public struct NewMail: Codable, Hashable {
 			
 			
-			public let body: String
-			public let recipients: [Int]
-			public let subject: String
-			public let toCorpOrAllianceID: Int?
-			public let toMailingListID: Int?
+			public var body: String
+			public var recipients: [Int]
+			public var subject: String
+			public var toCorpOrAllianceID: Int?
+			public var toMailingListID: Int?
+			
+			public init(body: String, recipients: [Int], subject: String, toCorpOrAllianceID: Int?, toMailingListID: Int?) {
+				self.body = body
+				self.recipients = recipients
+				self.subject = subject
+				self.toCorpOrAllianceID = toCorpOrAllianceID
+				self.toMailingListID = toMailingListID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

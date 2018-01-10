@@ -293,10 +293,17 @@ public extension ESI {
 		public struct GetCharactersCharacterIDMiningOk: Codable, Hashable {
 			
 			
-			public let date: Date
-			public let quantity: Int64
-			public let solarSystemID: Int
-			public let typeID: Int
+			public var date: Date
+			public var quantity: Int64
+			public var solarSystemID: Int
+			public var typeID: Int
+			
+			public init(date: Date, quantity: Int64, solarSystemID: Int, typeID: Int) {
+				self.date = date
+				self.quantity = quantity
+				self.solarSystemID = solarSystemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -338,9 +345,15 @@ public extension ESI {
 				
 			}
 			
-			public let lastUpdated: Date
-			public let observerID: Int64
-			public let observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType
+			public var lastUpdated: Date
+			public var observerID: Int64
+			public var observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType
+			
+			public init(lastUpdated: Date, observerID: Int64, observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType) {
+				self.lastUpdated = lastUpdated
+				self.observerID = observerID
+				self.observerType = observerType
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -391,8 +404,13 @@ public extension ESI {
 					
 				}
 				
-				public let activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity
-				public let costIndex: Float
+				public var activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity
+				public var costIndex: Float
+				
+				public init(activity: Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices.GetIndustrySystemsActivity, costIndex: Float) {
+					self.activity = activity
+					self.costIndex = costIndex
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -418,8 +436,13 @@ public extension ESI {
 				}
 			}
 			
-			public let costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices]
-			public let solarSystemID: Int
+			public var costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices]
+			public var solarSystemID: Int
+			
+			public init(costIndices: [Industry.SolarSystemCostIndices.GetIndustrySystemsCostIndices], solarSystemID: Int) {
+				self.costIndices = costIndices
+				self.solarSystemID = solarSystemID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -449,11 +472,19 @@ public extension ESI {
 		public struct GetCorporationCorporationIDMiningExtractionsOk: Codable, Hashable {
 			
 			
-			public let chunkArrivalTime: Date
-			public let extractionStartTime: Date
-			public let moonID: Int
-			public let naturalDecayTime: Date
-			public let structureID: Int64
+			public var chunkArrivalTime: Date
+			public var extractionStartTime: Date
+			public var moonID: Int
+			public var naturalDecayTime: Date
+			public var structureID: Int64
+			
+			public init(chunkArrivalTime: Date, extractionStartTime: Date, moonID: Int, naturalDecayTime: Date, structureID: Int64) {
+				self.chunkArrivalTime = chunkArrivalTime
+				self.extractionStartTime = extractionStartTime
+				self.moonID = moonID
+				self.naturalDecayTime = naturalDecayTime
+				self.structureID = structureID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -491,12 +522,21 @@ public extension ESI {
 		public struct Facilities: Codable, Hashable {
 			
 			
-			public let facilityID: Int64
-			public let ownerID: Int
-			public let regionID: Int
-			public let solarSystemID: Int
-			public let tax: Float?
-			public let typeID: Int
+			public var facilityID: Int64
+			public var ownerID: Int
+			public var regionID: Int
+			public var solarSystemID: Int
+			public var tax: Float?
+			public var typeID: Int
+			
+			public init(facilityID: Int64, ownerID: Int, regionID: Int, solarSystemID: Int, tax: Float?, typeID: Int) {
+				self.facilityID = facilityID
+				self.ownerID = ownerID
+				self.regionID = regionID
+				self.solarSystemID = solarSystemID
+				self.tax = tax
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -547,28 +587,53 @@ public extension ESI {
 				
 			}
 			
-			public let activityID: Int
-			public let blueprintID: Int64
-			public let blueprintLocationID: Int64
-			public let blueprintTypeID: Int
-			public let completedCharacterID: Int?
-			public let completedDate: Date?
-			public let cost: Double?
-			public let duration: Int
-			public let endDate: Date
-			public let facilityID: Int64
-			public let installerID: Int
-			public let jobID: Int
-			public let licensedRuns: Int?
-			public let locationID: Int64
-			public let outputLocationID: Int64
-			public let pauseDate: Date?
-			public let probability: Float?
-			public let productTypeID: Int?
-			public let runs: Int
-			public let startDate: Date
-			public let status: Industry.GetCorporationsCorporationIDIndustryJobsOk.GetCorporationsCorporationIDIndustryJobsStatus
-			public let successfulRuns: Int?
+			public var activityID: Int
+			public var blueprintID: Int64
+			public var blueprintLocationID: Int64
+			public var blueprintTypeID: Int
+			public var completedCharacterID: Int?
+			public var completedDate: Date?
+			public var cost: Double?
+			public var duration: Int
+			public var endDate: Date
+			public var facilityID: Int64
+			public var installerID: Int
+			public var jobID: Int
+			public var licensedRuns: Int?
+			public var locationID: Int64
+			public var outputLocationID: Int64
+			public var pauseDate: Date?
+			public var probability: Float?
+			public var productTypeID: Int?
+			public var runs: Int
+			public var startDate: Date
+			public var status: Industry.GetCorporationsCorporationIDIndustryJobsOk.GetCorporationsCorporationIDIndustryJobsStatus
+			public var successfulRuns: Int?
+			
+			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, locationID: Int64, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, status: Industry.GetCorporationsCorporationIDIndustryJobsOk.GetCorporationsCorporationIDIndustryJobsStatus, successfulRuns: Int?) {
+				self.activityID = activityID
+				self.blueprintID = blueprintID
+				self.blueprintLocationID = blueprintLocationID
+				self.blueprintTypeID = blueprintTypeID
+				self.completedCharacterID = completedCharacterID
+				self.completedDate = completedDate
+				self.cost = cost
+				self.duration = duration
+				self.endDate = endDate
+				self.facilityID = facilityID
+				self.installerID = installerID
+				self.jobID = jobID
+				self.licensedRuns = licensedRuns
+				self.locationID = locationID
+				self.outputLocationID = outputLocationID
+				self.pauseDate = pauseDate
+				self.probability = probability
+				self.productTypeID = productTypeID
+				self.runs = runs
+				self.startDate = startDate
+				self.status = status
+				self.successfulRuns = successfulRuns
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -641,11 +706,19 @@ public extension ESI {
 		public struct GetCorporationCorporationIDMiningObserversObserverIDOk: Codable, Hashable {
 			
 			
-			public let characterID: Int
-			public let lastUpdated: Date
-			public let quantity: Int64
-			public let recordedCorporationID: Int
-			public let typeID: Int
+			public var characterID: Int
+			public var lastUpdated: Date
+			public var quantity: Int64
+			public var recordedCorporationID: Int
+			public var typeID: Int
+			
+			public init(characterID: Int, lastUpdated: Date, quantity: Int64, recordedCorporationID: Int, typeID: Int) {
+				self.characterID = characterID
+				self.lastUpdated = lastUpdated
+				self.quantity = quantity
+				self.recordedCorporationID = recordedCorporationID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -694,28 +767,53 @@ public extension ESI {
 				
 			}
 			
-			public let activityID: Int
-			public let blueprintID: Int64
-			public let blueprintLocationID: Int64
-			public let blueprintTypeID: Int
-			public let completedCharacterID: Int?
-			public let completedDate: Date?
-			public let cost: Double?
-			public let duration: Int
-			public let endDate: Date
-			public let facilityID: Int64
-			public let installerID: Int
-			public let jobID: Int
-			public let licensedRuns: Int?
-			public let outputLocationID: Int64
-			public let pauseDate: Date?
-			public let probability: Float?
-			public let productTypeID: Int?
-			public let runs: Int
-			public let startDate: Date
-			public let stationID: Int64
-			public let status: Industry.Job.Status
-			public let successfulRuns: Int?
+			public var activityID: Int
+			public var blueprintID: Int64
+			public var blueprintLocationID: Int64
+			public var blueprintTypeID: Int
+			public var completedCharacterID: Int?
+			public var completedDate: Date?
+			public var cost: Double?
+			public var duration: Int
+			public var endDate: Date
+			public var facilityID: Int64
+			public var installerID: Int
+			public var jobID: Int
+			public var licensedRuns: Int?
+			public var outputLocationID: Int64
+			public var pauseDate: Date?
+			public var probability: Float?
+			public var productTypeID: Int?
+			public var runs: Int
+			public var startDate: Date
+			public var stationID: Int64
+			public var status: Industry.Job.Status
+			public var successfulRuns: Int?
+			
+			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: Industry.Job.Status, successfulRuns: Int?) {
+				self.activityID = activityID
+				self.blueprintID = blueprintID
+				self.blueprintLocationID = blueprintLocationID
+				self.blueprintTypeID = blueprintTypeID
+				self.completedCharacterID = completedCharacterID
+				self.completedDate = completedDate
+				self.cost = cost
+				self.duration = duration
+				self.endDate = endDate
+				self.facilityID = facilityID
+				self.installerID = installerID
+				self.jobID = jobID
+				self.licensedRuns = licensedRuns
+				self.outputLocationID = outputLocationID
+				self.pauseDate = pauseDate
+				self.probability = probability
+				self.productTypeID = productTypeID
+				self.runs = runs
+				self.startDate = startDate
+				self.stationID = stationID
+				self.status = status
+				self.successfulRuns = successfulRuns
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

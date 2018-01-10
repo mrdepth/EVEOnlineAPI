@@ -114,10 +114,17 @@ public extension ESI {
 		public struct System: Codable, Hashable {
 			
 			
-			public let allianceID: Int?
-			public let corporationID: Int?
-			public let factionID: Int?
-			public let systemID: Int
+			public var allianceID: Int?
+			public var corporationID: Int?
+			public var factionID: Int?
+			public var systemID: Int
+			
+			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+				self.allianceID = allianceID
+				self.corporationID = corporationID
+				self.factionID = factionID
+				self.systemID = systemID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -151,13 +158,23 @@ public extension ESI {
 		public struct Structure: Codable, Hashable {
 			
 			
-			public let allianceID: Int
-			public let solarSystemID: Int
-			public let structureID: Int64
-			public let structureTypeID: Int
-			public let vulnerabilityOccupancyLevel: Float?
-			public let vulnerableEndTime: Date?
-			public let vulnerableStartTime: Date?
+			public var allianceID: Int
+			public var solarSystemID: Int
+			public var structureID: Int64
+			public var structureTypeID: Int
+			public var vulnerabilityOccupancyLevel: Float?
+			public var vulnerableEndTime: Date?
+			public var vulnerableStartTime: Date?
+			
+			public init(allianceID: Int, solarSystemID: Int, structureID: Int64, structureTypeID: Int, vulnerabilityOccupancyLevel: Float?, vulnerableEndTime: Date?, vulnerableStartTime: Date?) {
+				self.allianceID = allianceID
+				self.solarSystemID = solarSystemID
+				self.structureID = structureID
+				self.structureTypeID = structureTypeID
+				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
+				self.vulnerableEndTime = vulnerableEndTime
+				self.vulnerableStartTime = vulnerableStartTime
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -212,8 +229,13 @@ public extension ESI {
 			public struct GetSovereigntyCampaignsParticipants: Codable, Hashable {
 				
 				
-				public let allianceID: Int
-				public let score: Float
+				public var allianceID: Int
+				public var score: Float
+				
+				public init(allianceID: Int, score: Float) {
+					self.allianceID = allianceID
+					self.score = score
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -239,16 +261,29 @@ public extension ESI {
 				}
 			}
 			
-			public let attackersScore: Float?
-			public let campaignID: Int
-			public let constellationID: Int
-			public let defenderID: Int?
-			public let defenderScore: Float?
-			public let eventType: Sovereignty.Campaign.GetSovereigntyCampaignsEventType
-			public let participants: [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]?
-			public let solarSystemID: Int
-			public let startTime: Date
-			public let structureID: Int64
+			public var attackersScore: Float?
+			public var campaignID: Int
+			public var constellationID: Int
+			public var defenderID: Int?
+			public var defenderScore: Float?
+			public var eventType: Sovereignty.Campaign.GetSovereigntyCampaignsEventType
+			public var participants: [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]?
+			public var solarSystemID: Int
+			public var startTime: Date
+			public var structureID: Int64
+			
+			public init(attackersScore: Float?, campaignID: Int, constellationID: Int, defenderID: Int?, defenderScore: Float?, eventType: Sovereignty.Campaign.GetSovereigntyCampaignsEventType, participants: [Sovereignty.Campaign.GetSovereigntyCampaignsParticipants]?, solarSystemID: Int, startTime: Date, structureID: Int64) {
+				self.attackersScore = attackersScore
+				self.campaignID = campaignID
+				self.constellationID = constellationID
+				self.defenderID = defenderID
+				self.defenderScore = defenderScore
+				self.eventType = eventType
+				self.participants = participants
+				self.solarSystemID = solarSystemID
+				self.startTime = startTime
+				self.structureID = structureID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

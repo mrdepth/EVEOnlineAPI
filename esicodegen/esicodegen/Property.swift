@@ -49,10 +49,18 @@ class Property: Schema {
 	}
 
 	var definition: String {
-		return "public let \(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "")"
+		return "public var \(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "")"
 	}
 
+	var parameter: String {
+		return "\(propertyName): \(typeIdentifier)\(!isRequired ? "?" : "")"
+	}
+	
 	var initialization: String {
+		return "self.\(propertyName) = \(propertyName)"
+	}
+
+	/*var initialization: String {
 		switch type {
 		case .array:
 			return "\(propertyName) = try (dictionary[\"\(name)\"] as? [Any])?.map {try \(array!.typeIdentifier)(json: $0)}\(isRequired ? " ?? \(defaultValue)" : "")"
@@ -84,7 +92,7 @@ class Property: Schema {
 			"\(propertyName) = dictionary[\"\(name)\"] as? \(typeIdentifier)"
 		}
 		return ""
-	}
+	}*/
 	
 //	var defaultInitialization: String {
 //		return "\(propertyName) = \(isRequired ? defaultValue : "nil")"

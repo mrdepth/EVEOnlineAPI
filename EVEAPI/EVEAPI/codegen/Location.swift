@@ -117,9 +117,15 @@ public extension ESI {
 		public struct CharacterShip: Codable, Hashable {
 			
 			
-			public let shipItemID: Int64
-			public let shipName: String
-			public let shipTypeID: Int
+			public var shipItemID: Int64
+			public var shipName: String
+			public var shipTypeID: Int
+			
+			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
+				self.shipItemID = shipItemID
+				self.shipName = shipName
+				self.shipTypeID = shipTypeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -151,10 +157,17 @@ public extension ESI {
 		public struct GetCharactersCharacterIDOnlineOk: Codable, Hashable {
 			
 			
-			public let lastLogin: Date?
-			public let lastLogout: Date?
-			public let logins: Int?
-			public let online: Bool
+			public var lastLogin: Date?
+			public var lastLogout: Date?
+			public var logins: Int?
+			public var online: Bool
+			
+			public init(lastLogin: Date?, lastLogout: Date?, logins: Int?, online: Bool) {
+				self.lastLogin = lastLogin
+				self.lastLogout = lastLogout
+				self.logins = logins
+				self.online = online
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -189,9 +202,15 @@ public extension ESI {
 		public struct CharacterLocation: Codable, Hashable {
 			
 			
-			public let solarSystemID: Int
-			public let stationID: Int?
-			public let structureID: Int64?
+			public var solarSystemID: Int
+			public var stationID: Int?
+			public var structureID: Int64?
+			
+			public init(solarSystemID: Int, stationID: Int?, structureID: Int64?) {
+				self.solarSystemID = solarSystemID
+				self.stationID = stationID
+				self.structureID = structureID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

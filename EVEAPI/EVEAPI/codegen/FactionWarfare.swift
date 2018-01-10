@@ -278,9 +278,15 @@ public extension ESI {
 			public struct GetCharactersCharacterIDFwStatsVictoryPoints: Codable, Hashable {
 				
 				
-				public let lastWeek: Int
-				public let total: Int
-				public let yesterday: Int
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -311,9 +317,15 @@ public extension ESI {
 			public struct GetCharactersCharacterIDFwStatsKills: Codable, Hashable {
 				
 				
-				public let lastWeek: Int
-				public let total: Int
-				public let yesterday: Int
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -341,12 +353,21 @@ public extension ESI {
 				}
 			}
 			
-			public let currentRank: Int?
-			public let enlistedOn: Date?
-			public let factionID: Int?
-			public let highestRank: Int?
-			public let kills: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills
-			public let victoryPoints: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints
+			public var currentRank: Int?
+			public var enlistedOn: Date?
+			public var factionID: Int?
+			public var highestRank: Int?
+			public var kills: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills
+			public var victoryPoints: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints
+			
+			public init(currentRank: Int?, enlistedOn: Date?, factionID: Int?, highestRank: Int?, kills: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsKills, victoryPoints: FactionWarfare.GetCharactersCharacterIDFwStatsOk.GetCharactersCharacterIDFwStatsVictoryPoints) {
+				self.currentRank = currentRank
+				self.enlistedOn = enlistedOn
+				self.factionID = factionID
+				self.highestRank = highestRank
+				self.kills = kills
+				self.victoryPoints = victoryPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -386,9 +407,15 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDFwStatsVictoryPoints: Codable, Hashable {
 				
 				
-				public let lastWeek: Int
-				public let total: Int
-				public let yesterday: Int
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -419,9 +446,15 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDFwStatsKills: Codable, Hashable {
 				
 				
-				public let lastWeek: Int
-				public let total: Int
-				public let yesterday: Int
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -449,11 +482,19 @@ public extension ESI {
 				}
 			}
 			
-			public let enlistedOn: Date?
-			public let factionID: Int?
-			public let kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills
-			public let pilots: Int?
-			public let victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints
+			public var enlistedOn: Date?
+			public var factionID: Int?
+			public var kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills
+			public var pilots: Int?
+			public var victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints
+			
+			public init(enlistedOn: Date?, factionID: Int?, kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills, pilots: Int?, victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints) {
+				self.enlistedOn = enlistedOn
+				self.factionID = factionID
+				self.kills = kills
+				self.pilots = pilots
+				self.victoryPoints = victoryPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -489,8 +530,13 @@ public extension ESI {
 		public struct FactionWar: Codable, Hashable {
 			
 			
-			public let againstID: Int
-			public let factionID: Int
+			public var againstID: Int
+			public var factionID: Int
+			
+			public init(againstID: Int, factionID: Int) {
+				self.againstID = againstID
+				self.factionID = factionID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -522,9 +568,15 @@ public extension ESI {
 			public struct GetFwStatsVictoryPoints: Codable, Hashable {
 				
 				
-				public let lastWeek: Int
-				public let total: Int
-				public let yesterday: Int
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -555,9 +607,15 @@ public extension ESI {
 			public struct GetFwStatsKills: Codable, Hashable {
 				
 				
-				public let lastWeek: Int
-				public let total: Int
-				public let yesterday: Int
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -585,11 +643,19 @@ public extension ESI {
 				}
 			}
 			
-			public let factionID: Int
-			public let kills: FactionWarfare.FactionStats.GetFwStatsKills
-			public let pilots: Int
-			public let systemsControlled: Int
-			public let victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints
+			public var factionID: Int
+			public var kills: FactionWarfare.FactionStats.GetFwStatsKills
+			public var pilots: Int
+			public var systemsControlled: Int
+			public var victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints
+			
+			public init(factionID: Int, kills: FactionWarfare.FactionStats.GetFwStatsKills, pilots: Int, systemsControlled: Int, victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints) {
+				self.factionID = factionID
+				self.kills = kills
+				self.pilots = pilots
+				self.systemsControlled = systemsControlled
+				self.victoryPoints = victoryPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -627,8 +693,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsCharactersYesterday: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let characterID: Int?
+				public var amount: Int?
+				public var characterID: Int?
+				
+				public init(amount: Int?, characterID: Int?) {
+					self.amount = amount
+					self.characterID = characterID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -657,9 +728,15 @@ public extension ESI {
 			public struct GetFwLeaderboardsCharactersVictoryPoints: Codable, Hashable {
 				
 				
-				public let activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal]
-				public let lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek]
-				public let yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]
+				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal]
+				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek]
+				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal], lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek], yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -690,8 +767,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsCharactersLastWeek: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let characterID: Int?
+				public var amount: Int?
+				public var characterID: Int?
+				
+				public init(amount: Int?, characterID: Int?) {
+					self.amount = amount
+					self.characterID = characterID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -720,9 +802,15 @@ public extension ESI {
 			public struct GetFwLeaderboardsCharactersKills: Codable, Hashable {
 				
 				
-				public let activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal]
-				public let lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek]
-				public let yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]
+				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal]
+				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek]
+				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersActiveTotal], lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersLastWeek], yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -753,8 +841,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsCharactersActiveTotal: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let characterID: Int?
+				public var amount: Int?
+				public var characterID: Int?
+				
+				public init(amount: Int?, characterID: Int?) {
+					self.amount = amount
+					self.characterID = characterID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -780,8 +873,13 @@ public extension ESI {
 				}
 			}
 			
-			public let kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills
-			public let victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints
+			public var kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills
+			public var victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints
+			
+			public init(kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills, victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints) {
+				self.kills = kills
+				self.victoryPoints = victoryPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -813,8 +911,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsCorporationsActiveTotal: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let corporationID: Int?
+				public var amount: Int?
+				public var corporationID: Int?
+				
+				public init(amount: Int?, corporationID: Int?) {
+					self.amount = amount
+					self.corporationID = corporationID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -843,9 +946,15 @@ public extension ESI {
 			public struct GetFwLeaderboardsCorporationsKills: Codable, Hashable {
 				
 				
-				public let activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal]
-				public let lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek]
-				public let yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]
+				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal]
+				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek]
+				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal], lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek], yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -876,8 +985,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsCorporationsYesterday: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let corporationID: Int?
+				public var amount: Int?
+				public var corporationID: Int?
+				
+				public init(amount: Int?, corporationID: Int?) {
+					self.amount = amount
+					self.corporationID = corporationID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -906,9 +1020,15 @@ public extension ESI {
 			public struct GetFwLeaderboardsCorporationsVictoryPoints: Codable, Hashable {
 				
 				
-				public let activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal]
-				public let lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek]
-				public let yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]
+				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal]
+				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek]
+				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsActiveTotal], lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsLastWeek], yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -939,8 +1059,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsCorporationsLastWeek: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let corporationID: Int?
+				public var amount: Int?
+				public var corporationID: Int?
+				
+				public init(amount: Int?, corporationID: Int?) {
+					self.amount = amount
+					self.corporationID = corporationID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -966,8 +1091,13 @@ public extension ESI {
 				}
 			}
 			
-			public let kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills
-			public let victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints
+			public var kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills
+			public var victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints
+			
+			public init(kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills, victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints) {
+				self.kills = kills
+				self.victoryPoints = victoryPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -997,12 +1127,21 @@ public extension ESI {
 		public struct System: Codable, Hashable {
 			
 			
-			public let contested: Bool
-			public let occupierFactionID: Int
-			public let ownerFactionID: Int
-			public let solarSystemID: Int
-			public let victoryPoints: Int
-			public let victoryPointsThreshold: Int
+			public var contested: Bool
+			public var occupierFactionID: Int
+			public var ownerFactionID: Int
+			public var solarSystemID: Int
+			public var victoryPoints: Int
+			public var victoryPointsThreshold: Int
+			
+			public init(contested: Bool, occupierFactionID: Int, ownerFactionID: Int, solarSystemID: Int, victoryPoints: Int, victoryPointsThreshold: Int) {
+				self.contested = contested
+				self.occupierFactionID = occupierFactionID
+				self.ownerFactionID = ownerFactionID
+				self.solarSystemID = solarSystemID
+				self.victoryPoints = victoryPoints
+				self.victoryPointsThreshold = victoryPointsThreshold
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1042,8 +1181,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsYesterday: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let factionID: Int?
+				public var amount: Int?
+				public var factionID: Int?
+				
+				public init(amount: Int?, factionID: Int?) {
+					self.amount = amount
+					self.factionID = factionID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1072,9 +1216,15 @@ public extension ESI {
 			public struct GetFwLeaderboardsVictoryPoints: Codable, Hashable {
 				
 				
-				public let activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal]
-				public let lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek]
-				public let yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]
+				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal]
+				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek]
+				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal], lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek], yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1105,9 +1255,15 @@ public extension ESI {
 			public struct GetFwLeaderboardsKills: Codable, Hashable {
 				
 				
-				public let activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal]
-				public let lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek]
-				public let yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]
+				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal]
+				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek]
+				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsActiveTotal], lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsLastWeek], yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1138,8 +1294,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsActiveTotal: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let factionID: Int?
+				public var amount: Int?
+				public var factionID: Int?
+				
+				public init(amount: Int?, factionID: Int?) {
+					self.amount = amount
+					self.factionID = factionID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1168,8 +1329,13 @@ public extension ESI {
 			public struct GetFwLeaderboardsLastWeek: Codable, Hashable {
 				
 				
-				public let amount: Int?
-				public let factionID: Int?
+				public var amount: Int?
+				public var factionID: Int?
+				
+				public init(amount: Int?, factionID: Int?) {
+					self.amount = amount
+					self.factionID = factionID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1195,8 +1361,13 @@ public extension ESI {
 				}
 			}
 			
-			public let kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills
-			public let victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints
+			public var kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills
+			public var victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints
+			
+			public init(kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills, victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints) {
+				self.kills = kills
+				self.victoryPoints = victoryPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

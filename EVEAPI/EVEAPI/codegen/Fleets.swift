@@ -484,7 +484,11 @@ public extension ESI {
 		public struct WingCreated: Codable, Hashable {
 			
 			
-			public let wingID: Int64
+			public var wingID: Int64
+			
+			public init(wingID: Int64) {
+				self.wingID = wingID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -512,7 +516,11 @@ public extension ESI {
 		public struct PutFleetsFleetIDMembersMemberIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -551,10 +559,17 @@ public extension ESI {
 				
 			}
 			
-			public let characterID: Int
-			public let role: Fleets.Invitation.PostFleetsFleetIDMembersRole
-			public let squadID: Int64?
-			public let wingID: Int64?
+			public var characterID: Int
+			public var role: Fleets.Invitation.PostFleetsFleetIDMembersRole
+			public var squadID: Int64?
+			public var wingID: Int64?
+			
+			public init(characterID: Int, role: Fleets.Invitation.PostFleetsFleetIDMembersRole, squadID: Int64?, wingID: Int64?) {
+				self.characterID = characterID
+				self.role = role
+				self.squadID = squadID
+				self.wingID = wingID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -588,7 +603,11 @@ public extension ESI {
 		public struct GetFleetsFleetIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -616,7 +635,11 @@ public extension ESI {
 		public struct PutFleetsFleetIDBadRequest: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -644,7 +667,11 @@ public extension ESI {
 		public struct Naming: Codable, Hashable {
 			
 			
-			public let name: String
+			public var name: String
+			
+			public init(name: String) {
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -672,7 +699,11 @@ public extension ESI {
 		public struct PostFleetsFleetIDWingsNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -700,7 +731,11 @@ public extension ESI {
 		public struct SquadCreated: Codable, Hashable {
 			
 			
-			public let squadID: Int64
+			public var squadID: Int64
+			
+			public init(squadID: Int64) {
+				self.squadID = squadID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -728,7 +763,11 @@ public extension ESI {
 		public struct DeleteFleetsFleetIDMembersMemberIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -756,8 +795,13 @@ public extension ESI {
 		public struct FleetUpdate: Codable, Hashable {
 			
 			
-			public let isFreeMove: Bool?
-			public let motd: String?
+			public var isFreeMove: Bool?
+			public var motd: String?
+			
+			public init(isFreeMove: Bool?, motd: String?) {
+				self.isFreeMove = isFreeMove
+				self.motd = motd
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -798,9 +842,15 @@ public extension ESI {
 				
 			}
 			
-			public let role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole
-			public let squadID: Int64?
-			public let wingID: Int64?
+			public var role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole
+			public var squadID: Int64?
+			public var wingID: Int64?
+			
+			public init(role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole, squadID: Int64?, wingID: Int64?) {
+				self.role = role
+				self.squadID = squadID
+				self.wingID = wingID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -832,7 +882,11 @@ public extension ESI {
 		public struct PutFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -862,8 +916,13 @@ public extension ESI {
 			public struct GetFleetsFleetIDWingsSquads: Codable, Hashable {
 				
 				
-				public let id: Int64
-				public let name: String
+				public var id: Int64
+				public var name: String
+				
+				public init(id: Int64, name: String) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -889,9 +948,15 @@ public extension ESI {
 				}
 			}
 			
-			public let id: Int64
-			public let name: String
-			public let squads: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads]
+			public var id: Int64
+			public var name: String
+			public var squads: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads]
+			
+			public init(id: Int64, name: String, squads: [Fleets.GetFleetsFleetIDWingsOk.GetFleetsFleetIDWingsSquads]) {
+				self.id = id
+				self.name = name
+				self.squads = squads
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -923,7 +988,11 @@ public extension ESI {
 		public struct DeleteFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -951,7 +1020,11 @@ public extension ESI {
 		public struct DeleteFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -979,10 +1052,17 @@ public extension ESI {
 		public struct Information: Codable, Hashable {
 			
 			
-			public let isFreeMove: Bool
-			public let isRegistered: Bool
-			public let isVoiceEnabled: Bool
-			public let motd: String
+			public var isFreeMove: Bool
+			public var isRegistered: Bool
+			public var isVoiceEnabled: Bool
+			public var motd: String
+			
+			public init(isFreeMove: Bool, isRegistered: Bool, isVoiceEnabled: Bool, motd: String) {
+				self.isFreeMove = isFreeMove
+				self.isRegistered = isRegistered
+				self.isVoiceEnabled = isVoiceEnabled
+				self.motd = motd
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1016,7 +1096,11 @@ public extension ESI {
 		public struct GetFleetsFleetIDWingsNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1044,7 +1128,11 @@ public extension ESI {
 		public struct PutFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1083,16 +1171,29 @@ public extension ESI {
 				
 			}
 			
-			public let characterID: Int
-			public let joinTime: Date
-			public let role: Fleets.Member.GetFleetsFleetIDMembersRole
-			public let roleName: String
-			public let shipTypeID: Int
-			public let solarSystemID: Int
-			public let squadID: Int64
-			public let stationID: Int64?
-			public let takesFleetWarp: Bool
-			public let wingID: Int64
+			public var characterID: Int
+			public var joinTime: Date
+			public var role: Fleets.Member.GetFleetsFleetIDMembersRole
+			public var roleName: String
+			public var shipTypeID: Int
+			public var solarSystemID: Int
+			public var squadID: Int64
+			public var stationID: Int64?
+			public var takesFleetWarp: Bool
+			public var wingID: Int64
+			
+			public init(characterID: Int, joinTime: Date, role: Fleets.Member.GetFleetsFleetIDMembersRole, roleName: String, shipTypeID: Int, solarSystemID: Int, squadID: Int64, stationID: Int64?, takesFleetWarp: Bool, wingID: Int64) {
+				self.characterID = characterID
+				self.joinTime = joinTime
+				self.role = role
+				self.roleName = roleName
+				self.shipTypeID = shipTypeID
+				self.solarSystemID = solarSystemID
+				self.squadID = squadID
+				self.stationID = stationID
+				self.takesFleetWarp = takesFleetWarp
+				self.wingID = wingID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1138,7 +1239,11 @@ public extension ESI {
 		public struct PutFleetsFleetIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1166,7 +1271,11 @@ public extension ESI {
 		public struct GetCharactersCharacterIDFleetNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1194,7 +1303,11 @@ public extension ESI {
 		public struct GetFleetsFleetIDMembersNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1233,10 +1346,17 @@ public extension ESI {
 				
 			}
 			
-			public let fleetID: Int64
-			public let role: Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole
-			public let squadID: Int64
-			public let wingID: Int64
+			public var fleetID: Int64
+			public var role: Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole
+			public var squadID: Int64
+			public var wingID: Int64
+			
+			public init(fleetID: Int64, role: Fleets.GetCharactersCharacterIDFleetOk.GetCharactersCharacterIDFleetRole, squadID: Int64, wingID: Int64) {
+				self.fleetID = fleetID
+				self.role = role
+				self.squadID = squadID
+				self.wingID = wingID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1270,7 +1390,11 @@ public extension ESI {
 		public struct PostFleetsFleetIDMembersUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1298,7 +1422,11 @@ public extension ESI {
 		public struct PostFleetsFleetIDWingsWingIDSquadsNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1326,7 +1454,11 @@ public extension ESI {
 		public struct PutFleetsFleetIDMembersMemberIDUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1354,7 +1486,11 @@ public extension ESI {
 		public struct PostFleetsFleetIDMembersNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

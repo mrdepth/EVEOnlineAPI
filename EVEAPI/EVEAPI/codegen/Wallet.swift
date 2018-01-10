@@ -224,15 +224,27 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDWalletsDivisionTransactionsOk: Codable, Hashable {
 			
 			
-			public let clientID: Int
-			public let date: Date
-			public let isBuy: Bool
-			public let journalRefID: Int64
-			public let locationID: Int64
-			public let quantity: Int
-			public let transactionID: Int64
-			public let typeID: Int
-			public let unitPrice: Double
+			public var clientID: Int
+			public var date: Date
+			public var isBuy: Bool
+			public var journalRefID: Int64
+			public var locationID: Int64
+			public var quantity: Int
+			public var transactionID: Int64
+			public var typeID: Int
+			public var unitPrice: Double
+			
+			public init(clientID: Int, date: Date, isBuy: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
+				self.clientID = clientID
+				self.date = date
+				self.isBuy = isBuy
+				self.journalRefID = journalRefID
+				self.locationID = locationID
+				self.quantity = quantity
+				self.transactionID = transactionID
+				self.typeID = typeID
+				self.unitPrice = unitPrice
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -276,16 +288,29 @@ public extension ESI {
 		public struct Transaction: Codable, Hashable {
 			
 			
-			public let clientID: Int
-			public let date: Date
-			public let isBuy: Bool
-			public let isPersonal: Bool
-			public let journalRefID: Int64
-			public let locationID: Int64
-			public let quantity: Int
-			public let transactionID: Int64
-			public let typeID: Int
-			public let unitPrice: Double
+			public var clientID: Int
+			public var date: Date
+			public var isBuy: Bool
+			public var isPersonal: Bool
+			public var journalRefID: Int64
+			public var locationID: Int64
+			public var quantity: Int
+			public var transactionID: Int64
+			public var typeID: Int
+			public var unitPrice: Double
+			
+			public init(clientID: Int, date: Date, isBuy: Bool, isPersonal: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
+				self.clientID = clientID
+				self.date = date
+				self.isBuy = isBuy
+				self.isPersonal = isPersonal
+				self.journalRefID = journalRefID
+				self.locationID = locationID
+				self.quantity = quantity
+				self.transactionID = transactionID
+				self.typeID = typeID
+				self.unitPrice = unitPrice
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -333,18 +358,33 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let characterID: Int?
-				public let contractID: Int?
-				public let corporationID: Int?
-				public let destroyedShipTypeID: Int?
-				public let jobID: Int?
-				public let locationID: Int64?
-				public let npcID: Int?
-				public let npcName: String?
-				public let planetID: Int?
-				public let systemID: Int?
-				public let transactionID: Int64?
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var contractID: Int?
+				public var corporationID: Int?
+				public var destroyedShipTypeID: Int?
+				public var jobID: Int?
+				public var locationID: Int64?
+				public var npcID: Int?
+				public var npcName: String?
+				public var planetID: Int?
+				public var systemID: Int?
+				public var transactionID: Int64?
+				
+				public init(allianceID: Int?, characterID: Int?, contractID: Int?, corporationID: Int?, destroyedShipTypeID: Int?, jobID: Int?, locationID: Int64?, npcID: Int?, npcName: String?, planetID: Int?, systemID: Int?, transactionID: Int64?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.contractID = contractID
+					self.corporationID = corporationID
+					self.destroyedShipTypeID = destroyedShipTypeID
+					self.jobID = jobID
+					self.locationID = locationID
+					self.npcID = npcID
+					self.npcName = npcName
+					self.planetID = planetID
+					self.systemID = systemID
+					self.transactionID = transactionID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -541,19 +581,35 @@ public extension ESI {
 				
 			}
 			
-			public let amount: Double?
-			public let balance: Double?
-			public let date: Date
-			public let extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?
-			public let firstPartyID: Int?
-			public let firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?
-			public let reason: String?
-			public let refID: Int64
-			public let refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType
-			public let secondPartyID: Int?
-			public let secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?
-			public let tax: Double?
-			public let taxReceiverID: Int?
+			public var amount: Double?
+			public var balance: Double?
+			public var date: Date
+			public var extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?
+			public var firstPartyID: Int?
+			public var firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?
+			public var reason: String?
+			public var refID: Int64
+			public var refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType
+			public var secondPartyID: Int?
+			public var secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?
+			public var tax: Double?
+			public var taxReceiverID: Int?
+			
+			public init(amount: Double?, balance: Double?, date: Date, extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?, firstPartyID: Int?, firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?, reason: String?, refID: Int64, refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType, secondPartyID: Int?, secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?, tax: Double?, taxReceiverID: Int?) {
+				self.amount = amount
+				self.balance = balance
+				self.date = date
+				self.extraInfo = extraInfo
+				self.firstPartyID = firstPartyID
+				self.firstPartyType = firstPartyType
+				self.reason = reason
+				self.refID = refID
+				self.refType = refType
+				self.secondPartyID = secondPartyID
+				self.secondPartyType = secondPartyType
+				self.tax = tax
+				self.taxReceiverID = taxReceiverID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -605,8 +661,13 @@ public extension ESI {
 		public struct Balance: Codable, Hashable {
 			
 			
-			public let balance: Double
-			public let division: Int
+			public var balance: Double
+			public var division: Int
+			
+			public init(balance: Double, division: Int) {
+				self.balance = balance
+				self.division = division
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -638,18 +699,33 @@ public extension ESI {
 			public struct ExtraInfo: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let characterID: Int?
-				public let contractID: Int?
-				public let corporationID: Int?
-				public let destroyedShipTypeID: Int?
-				public let jobID: Int?
-				public let locationID: Int64?
-				public let npcID: Int?
-				public let npcName: String?
-				public let planetID: Int?
-				public let systemID: Int?
-				public let transactionID: Int64?
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var contractID: Int?
+				public var corporationID: Int?
+				public var destroyedShipTypeID: Int?
+				public var jobID: Int?
+				public var locationID: Int64?
+				public var npcID: Int?
+				public var npcName: String?
+				public var planetID: Int?
+				public var systemID: Int?
+				public var transactionID: Int64?
+				
+				public init(allianceID: Int?, characterID: Int?, contractID: Int?, corporationID: Int?, destroyedShipTypeID: Int?, jobID: Int?, locationID: Int64?, npcID: Int?, npcName: String?, planetID: Int?, systemID: Int?, transactionID: Int64?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.contractID = contractID
+					self.corporationID = corporationID
+					self.destroyedShipTypeID = destroyedShipTypeID
+					self.jobID = jobID
+					self.locationID = locationID
+					self.npcID = npcID
+					self.npcName = npcName
+					self.planetID = planetID
+					self.systemID = systemID
+					self.transactionID = transactionID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -833,19 +909,35 @@ public extension ESI {
 				
 			}
 			
-			public let amount: Double?
-			public let balance: Double?
-			public let date: Date
-			public let extraInfo: Wallet.WalletJournalItem.ExtraInfo?
-			public let firstPartyID: Int?
-			public let firstPartyType: Wallet.WalletJournalItem.PartyType?
-			public let reason: String?
-			public let refID: Int64
-			public let refType: Wallet.WalletJournalItem.RefType
-			public let secondPartyID: Int?
-			public let secondPartyType: Wallet.WalletJournalItem.PartyType?
-			public let tax: Double?
-			public let taxReceiverID: Int?
+			public var amount: Double?
+			public var balance: Double?
+			public var date: Date
+			public var extraInfo: Wallet.WalletJournalItem.ExtraInfo?
+			public var firstPartyID: Int?
+			public var firstPartyType: Wallet.WalletJournalItem.PartyType?
+			public var reason: String?
+			public var refID: Int64
+			public var refType: Wallet.WalletJournalItem.RefType
+			public var secondPartyID: Int?
+			public var secondPartyType: Wallet.WalletJournalItem.PartyType?
+			public var tax: Double?
+			public var taxReceiverID: Int?
+			
+			public init(amount: Double?, balance: Double?, date: Date, extraInfo: Wallet.WalletJournalItem.ExtraInfo?, firstPartyID: Int?, firstPartyType: Wallet.WalletJournalItem.PartyType?, reason: String?, refID: Int64, refType: Wallet.WalletJournalItem.RefType, secondPartyID: Int?, secondPartyType: Wallet.WalletJournalItem.PartyType?, tax: Double?, taxReceiverID: Int?) {
+				self.amount = amount
+				self.balance = balance
+				self.date = date
+				self.extraInfo = extraInfo
+				self.firstPartyID = firstPartyID
+				self.firstPartyType = firstPartyType
+				self.reason = reason
+				self.refID = refID
+				self.refType = refType
+				self.secondPartyID = secondPartyID
+				self.secondPartyType = secondPartyType
+				self.tax = tax
+				self.taxReceiverID = taxReceiverID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

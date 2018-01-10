@@ -148,12 +148,21 @@ public extension ESI {
 			public struct GetDogmaEffectsEffectIDModifiers: Codable, Hashable {
 				
 				
-				public let domain: String?
-				public let effectID: Int?
-				public let `func`: String
-				public let modifiedAttributeID: Int?
-				public let modifyingAttributeID: Int?
-				public let `operator`: Int?
+				public var domain: String?
+				public var effectID: Int?
+				public var `func`: String
+				public var modifiedAttributeID: Int?
+				public var modifyingAttributeID: Int?
+				public var `operator`: Int?
+				
+				public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
+					self.domain = domain
+					self.effectID = effectID
+					self.`func` = `func`
+					self.modifiedAttributeID = modifiedAttributeID
+					self.modifyingAttributeID = modifyingAttributeID
+					self.`operator` = `operator`
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -187,27 +196,51 @@ public extension ESI {
 				}
 			}
 			
-			public let localizedDescription: String?
-			public let disallowAutoRepeat: Bool?
-			public let dischargeAttributeID: Int?
-			public let displayName: String?
-			public let durationAttributeID: Int?
-			public let effectCategory: Int?
-			public let effectID: Int
-			public let electronicChance: Bool?
-			public let falloffAttributeID: Int?
-			public let iconID: Int?
-			public let isAssistance: Bool?
-			public let isOffensive: Bool?
-			public let isWarpSafe: Bool?
-			public let modifiers: [Dogma.Effect.GetDogmaEffectsEffectIDModifiers]?
-			public let name: String?
-			public let postExpression: Int?
-			public let preExpression: Int?
-			public let published: Bool?
-			public let rangeAttributeID: Int?
-			public let rangeChance: Bool?
-			public let trackingSpeedAttributeID: Int?
+			public var localizedDescription: String?
+			public var disallowAutoRepeat: Bool?
+			public var dischargeAttributeID: Int?
+			public var displayName: String?
+			public var durationAttributeID: Int?
+			public var effectCategory: Int?
+			public var effectID: Int
+			public var electronicChance: Bool?
+			public var falloffAttributeID: Int?
+			public var iconID: Int?
+			public var isAssistance: Bool?
+			public var isOffensive: Bool?
+			public var isWarpSafe: Bool?
+			public var modifiers: [Dogma.Effect.GetDogmaEffectsEffectIDModifiers]?
+			public var name: String?
+			public var postExpression: Int?
+			public var preExpression: Int?
+			public var published: Bool?
+			public var rangeAttributeID: Int?
+			public var rangeChance: Bool?
+			public var trackingSpeedAttributeID: Int?
+			
+			public init(localizedDescription: String?, disallowAutoRepeat: Bool?, dischargeAttributeID: Int?, displayName: String?, durationAttributeID: Int?, effectCategory: Int?, effectID: Int, electronicChance: Bool?, falloffAttributeID: Int?, iconID: Int?, isAssistance: Bool?, isOffensive: Bool?, isWarpSafe: Bool?, modifiers: [Dogma.Effect.GetDogmaEffectsEffectIDModifiers]?, name: String?, postExpression: Int?, preExpression: Int?, published: Bool?, rangeAttributeID: Int?, rangeChance: Bool?, trackingSpeedAttributeID: Int?) {
+				self.localizedDescription = localizedDescription
+				self.disallowAutoRepeat = disallowAutoRepeat
+				self.dischargeAttributeID = dischargeAttributeID
+				self.displayName = displayName
+				self.durationAttributeID = durationAttributeID
+				self.effectCategory = effectCategory
+				self.effectID = effectID
+				self.electronicChance = electronicChance
+				self.falloffAttributeID = falloffAttributeID
+				self.iconID = iconID
+				self.isAssistance = isAssistance
+				self.isOffensive = isOffensive
+				self.isWarpSafe = isWarpSafe
+				self.modifiers = modifiers
+				self.name = name
+				self.postExpression = postExpression
+				self.preExpression = preExpression
+				self.published = published
+				self.rangeAttributeID = rangeAttributeID
+				self.rangeChance = rangeChance
+				self.trackingSpeedAttributeID = trackingSpeedAttributeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -275,7 +308,11 @@ public extension ESI {
 		public struct GetDogmaAttributesAttributeIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -303,16 +340,29 @@ public extension ESI {
 		public struct Attribute: Codable, Hashable {
 			
 			
-			public let attributeID: Int
-			public let defaultValue: Float?
-			public let localizedDescription: String?
-			public let displayName: String?
-			public let highIsGood: Bool?
-			public let iconID: Int?
-			public let name: String?
-			public let published: Bool?
-			public let stackable: Bool?
-			public let unitID: Int?
+			public var attributeID: Int
+			public var defaultValue: Float?
+			public var localizedDescription: String?
+			public var displayName: String?
+			public var highIsGood: Bool?
+			public var iconID: Int?
+			public var name: String?
+			public var published: Bool?
+			public var stackable: Bool?
+			public var unitID: Int?
+			
+			public init(attributeID: Int, defaultValue: Float?, localizedDescription: String?, displayName: String?, highIsGood: Bool?, iconID: Int?, name: String?, published: Bool?, stackable: Bool?, unitID: Int?) {
+				self.attributeID = attributeID
+				self.defaultValue = defaultValue
+				self.localizedDescription = localizedDescription
+				self.displayName = displayName
+				self.highIsGood = highIsGood
+				self.iconID = iconID
+				self.name = name
+				self.published = published
+				self.stackable = stackable
+				self.unitID = unitID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -358,7 +408,11 @@ public extension ESI {
 		public struct GetDogmaEffectsEffectIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

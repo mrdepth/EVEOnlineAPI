@@ -346,17 +346,31 @@ public extension ESI {
 				
 			}
 			
-			public let duration: Int
-			public let isBuyOrder: Bool
-			public let issued: Date
-			public let locationID: Int64
-			public let minVolume: Int
-			public let orderID: Int64
-			public let price: Double
-			public let range: Market.Structure.GetMarketsStructuresStructureIDRange
-			public let typeID: Int
-			public let volumeRemain: Int
-			public let volumeTotal: Int
+			public var duration: Int
+			public var isBuyOrder: Bool
+			public var issued: Date
+			public var locationID: Int64
+			public var minVolume: Int
+			public var orderID: Int64
+			public var price: Double
+			public var range: Market.Structure.GetMarketsStructuresStructureIDRange
+			public var typeID: Int
+			public var volumeRemain: Int
+			public var volumeTotal: Int
+			
+			public init(duration: Int, isBuyOrder: Bool, issued: Date, locationID: Int64, minVolume: Int, orderID: Int64, price: Double, range: Market.Structure.GetMarketsStructuresStructureIDRange, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+				self.duration = duration
+				self.isBuyOrder = isBuyOrder
+				self.issued = issued
+				self.locationID = locationID
+				self.minVolume = minVolume
+				self.orderID = orderID
+				self.price = price
+				self.range = range
+				self.typeID = typeID
+				self.volumeRemain = volumeRemain
+				self.volumeTotal = volumeTotal
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -404,7 +418,11 @@ public extension ESI {
 		public struct GetMarketsRegionIDOrdersUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -432,11 +450,19 @@ public extension ESI {
 		public struct ItemGroupInformation: Codable, Hashable {
 			
 			
-			public let localizedDescription: String
-			public let marketGroupID: Int
-			public let name: String
-			public let parentGroupID: Int?
-			public let types: [Int]
+			public var localizedDescription: String
+			public var marketGroupID: Int
+			public var name: String
+			public var parentGroupID: Int?
+			public var types: [Int]
+			
+			public init(localizedDescription: String, marketGroupID: Int, name: String, parentGroupID: Int?, types: [Int]) {
+				self.localizedDescription = localizedDescription
+				self.marketGroupID = marketGroupID
+				self.name = name
+				self.parentGroupID = parentGroupID
+				self.types = types
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -472,12 +498,21 @@ public extension ESI {
 		public struct History: Codable, Hashable {
 			
 			
-			public let average: Double
-			public let date: Date
-			public let highest: Double
-			public let lowest: Double
-			public let orderCount: Int64
-			public let volume: Int64
+			public var average: Double
+			public var date: Date
+			public var highest: Double
+			public var lowest: Double
+			public var orderCount: Int64
+			public var volume: Int64
+			
+			public init(average: Double, date: Date, highest: Double, lowest: Double, orderCount: Int64, volume: Int64) {
+				self.average = average
+				self.date = date
+				self.highest = highest
+				self.lowest = lowest
+				self.orderCount = orderCount
+				self.volume = volume
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -515,9 +550,15 @@ public extension ESI {
 		public struct Price: Codable, Hashable {
 			
 			
-			public let adjustedPrice: Double?
-			public let averagePrice: Double?
-			public let typeID: Int
+			public var adjustedPrice: Double?
+			public var averagePrice: Double?
+			public var typeID: Int
+			
+			public init(adjustedPrice: Double?, averagePrice: Double?, typeID: Int) {
+				self.adjustedPrice = adjustedPrice
+				self.averagePrice = averagePrice
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -549,7 +590,11 @@ public extension ESI {
 		public struct GetMarketsGroupsMarketGroupIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -610,21 +655,39 @@ public extension ESI {
 				
 			}
 			
-			public let duration: Int
-			public let escrow: Double
-			public let isBuyOrder: Bool
-			public let issued: Date
-			public let locationID: Int64
-			public let minVolume: Int
-			public let orderID: Int64
-			public let price: Double
-			public let range: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange
-			public let regionID: Int
-			public let state: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState
-			public let typeID: Int
-			public let volumeRemain: Int
-			public let volumeTotal: Int
-			public let walletDivision: Int
+			public var duration: Int
+			public var escrow: Double
+			public var isBuyOrder: Bool
+			public var issued: Date
+			public var locationID: Int64
+			public var minVolume: Int
+			public var orderID: Int64
+			public var price: Double
+			public var range: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange
+			public var regionID: Int
+			public var state: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState
+			public var typeID: Int
+			public var volumeRemain: Int
+			public var volumeTotal: Int
+			public var walletDivision: Int
+			
+			public init(duration: Int, escrow: Double, isBuyOrder: Bool, issued: Date, locationID: Int64, minVolume: Int, orderID: Int64, price: Double, range: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersRange, regionID: Int, state: Market.GetCorporationsCorporationIDOrdersOk.GetCorporationsCorporationIDOrdersState, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
+				self.duration = duration
+				self.escrow = escrow
+				self.isBuyOrder = isBuyOrder
+				self.issued = issued
+				self.locationID = locationID
+				self.minVolume = minVolume
+				self.orderID = orderID
+				self.price = price
+				self.range = range
+				self.regionID = regionID
+				self.state = state
+				self.typeID = typeID
+				self.volumeRemain = volumeRemain
+				self.volumeTotal = volumeTotal
+				self.walletDivision = walletDivision
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -699,17 +762,31 @@ public extension ESI {
 				
 			}
 			
-			public let duration: Int
-			public let isBuyOrder: Bool
-			public let issued: Date
-			public let locationID: Int64
-			public let minVolume: Int
-			public let orderID: Int64
-			public let price: Double
-			public let range: Market.Order.GetMarketsRegionIDOrdersRange
-			public let typeID: Int
-			public let volumeRemain: Int
-			public let volumeTotal: Int
+			public var duration: Int
+			public var isBuyOrder: Bool
+			public var issued: Date
+			public var locationID: Int64
+			public var minVolume: Int
+			public var orderID: Int64
+			public var price: Double
+			public var range: Market.Order.GetMarketsRegionIDOrdersRange
+			public var typeID: Int
+			public var volumeRemain: Int
+			public var volumeTotal: Int
+			
+			public init(duration: Int, isBuyOrder: Bool, issued: Date, locationID: Int64, minVolume: Int, orderID: Int64, price: Double, range: Market.Order.GetMarketsRegionIDOrdersRange, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+				self.duration = duration
+				self.isBuyOrder = isBuyOrder
+				self.issued = issued
+				self.locationID = locationID
+				self.minVolume = minVolume
+				self.orderID = orderID
+				self.price = price
+				self.range = range
+				self.typeID = typeID
+				self.volumeRemain = volumeRemain
+				self.volumeTotal = volumeTotal
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -802,22 +879,41 @@ public extension ESI {
 				
 			}
 			
-			public let accountID: Int
-			public let duration: Int
-			public let escrow: Double
-			public let isBuyOrder: Bool
-			public let isCorp: Bool
-			public let issued: Date
-			public let locationID: Int64
-			public let minVolume: Int
-			public let orderID: Int64
-			public let price: Double
-			public let range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange
-			public let regionID: Int
-			public let state: Market.CharacterOrder.GetCharactersCharacterIDOrdersState
-			public let typeID: Int
-			public let volumeRemain: Int
-			public let volumeTotal: Int
+			public var accountID: Int
+			public var duration: Int
+			public var escrow: Double
+			public var isBuyOrder: Bool
+			public var isCorp: Bool
+			public var issued: Date
+			public var locationID: Int64
+			public var minVolume: Int
+			public var orderID: Int64
+			public var price: Double
+			public var range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange
+			public var regionID: Int
+			public var state: Market.CharacterOrder.GetCharactersCharacterIDOrdersState
+			public var typeID: Int
+			public var volumeRemain: Int
+			public var volumeTotal: Int
+			
+			public init(accountID: Int, duration: Int, escrow: Double, isBuyOrder: Bool, isCorp: Bool, issued: Date, locationID: Int64, minVolume: Int, orderID: Int64, price: Double, range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange, regionID: Int, state: Market.CharacterOrder.GetCharactersCharacterIDOrdersState, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+				self.accountID = accountID
+				self.duration = duration
+				self.escrow = escrow
+				self.isBuyOrder = isBuyOrder
+				self.isCorp = isCorp
+				self.issued = issued
+				self.locationID = locationID
+				self.minVolume = minVolume
+				self.orderID = orderID
+				self.price = price
+				self.range = range
+				self.regionID = regionID
+				self.state = state
+				self.typeID = typeID
+				self.volumeRemain = volumeRemain
+				self.volumeTotal = volumeTotal
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -875,7 +971,11 @@ public extension ESI {
 		public struct GetMarketsRegionIDHistoryUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

@@ -160,8 +160,13 @@ public extension ESI {
 			public struct GetCharactersCharacterIDBookmarksItem: Codable, Hashable {
 				
 				
-				public let itemID: Int64
-				public let typeID: Int
+				public var itemID: Int64
+				public var typeID: Int
+				
+				public init(itemID: Int64, typeID: Int) {
+					self.itemID = itemID
+					self.typeID = typeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -190,9 +195,15 @@ public extension ESI {
 			public struct GetCharactersCharacterIDBookmarksCoordinates: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -220,15 +231,27 @@ public extension ESI {
 				}
 			}
 			
-			public let bookmarkID: Int
-			public let coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?
-			public let created: Date
-			public let creatorID: Int
-			public let folderID: Int?
-			public let item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?
-			public let label: String
-			public let locationID: Int
-			public let notes: String
+			public var bookmarkID: Int
+			public var coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?
+			public var created: Date
+			public var creatorID: Int
+			public var folderID: Int?
+			public var item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?
+			public var label: String
+			public var locationID: Int
+			public var notes: String
+			
+			public init(bookmarkID: Int, coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?, created: Date, creatorID: Int, folderID: Int?, item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?, label: String, locationID: Int, notes: String) {
+				self.bookmarkID = bookmarkID
+				self.coordinates = coordinates
+				self.created = created
+				self.creatorID = creatorID
+				self.folderID = folderID
+				self.item = item
+				self.label = label
+				self.locationID = locationID
+				self.notes = notes
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -272,8 +295,13 @@ public extension ESI {
 		public struct Folder: Codable, Hashable {
 			
 			
-			public let folderID: Int
-			public let name: String
+			public var folderID: Int
+			public var name: String
+			
+			public init(folderID: Int, name: String) {
+				self.folderID = folderID
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -303,9 +331,15 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDBookmarksFoldersOk: Codable, Hashable {
 			
 			
-			public let creatorID: Int?
-			public let folderID: Int
-			public let name: String
+			public var creatorID: Int?
+			public var folderID: Int
+			public var name: String
+			
+			public init(creatorID: Int?, folderID: Int, name: String) {
+				self.creatorID = creatorID
+				self.folderID = folderID
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -339,8 +373,13 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDBookmarksItem: Codable, Hashable {
 				
 				
-				public let itemID: Int64
-				public let typeID: Int
+				public var itemID: Int64
+				public var typeID: Int
+				
+				public init(itemID: Int64, typeID: Int) {
+					self.itemID = itemID
+					self.typeID = typeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -369,9 +408,15 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDBookmarksCoordinates: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -399,15 +444,27 @@ public extension ESI {
 				}
 			}
 			
-			public let bookmarkID: Int
-			public let coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?
-			public let created: Date
-			public let creatorID: Int
-			public let folderID: Int?
-			public let item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?
-			public let label: String
-			public let locationID: Int
-			public let notes: String
+			public var bookmarkID: Int
+			public var coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?
+			public var created: Date
+			public var creatorID: Int
+			public var folderID: Int?
+			public var item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?
+			public var label: String
+			public var locationID: Int
+			public var notes: String
+			
+			public init(bookmarkID: Int, coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?, created: Date, creatorID: Int, folderID: Int?, item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?, label: String, locationID: Int, notes: String) {
+				self.bookmarkID = bookmarkID
+				self.coordinates = coordinates
+				self.created = created
+				self.creatorID = creatorID
+				self.folderID = folderID
+				self.item = item
+				self.label = label
+				self.locationID = locationID
+				self.notes = notes
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

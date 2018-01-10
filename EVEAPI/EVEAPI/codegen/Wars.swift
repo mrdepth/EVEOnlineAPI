@@ -118,8 +118,13 @@ public extension ESI {
 		public struct Kills: Codable, Hashable {
 			
 			
-			public let killmailHash: String
-			public let killmailID: Int
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -151,10 +156,17 @@ public extension ESI {
 			public struct GetWarsWarIDDefender: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let corporationID: Int?
-				public let iskDestroyed: Float
-				public let shipsKilled: Int
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Float
+				public var shipsKilled: Int
+				
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Float, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -187,8 +199,13 @@ public extension ESI {
 			public struct GetWarsWarIDAllies: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let corporationID: Int?
+				public var allianceID: Int?
+				public var corporationID: Int?
+				
+				public init(allianceID: Int?, corporationID: Int?) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -217,10 +234,17 @@ public extension ESI {
 			public struct GetWarsWarIDAggressor: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let corporationID: Int?
-				public let iskDestroyed: Float
-				public let shipsKilled: Int
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Float
+				public var shipsKilled: Int
+				
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Float, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -250,16 +274,29 @@ public extension ESI {
 				}
 			}
 			
-			public let aggressor: Wars.WarInformation.GetWarsWarIDAggressor
-			public let allies: [Wars.WarInformation.GetWarsWarIDAllies]?
-			public let declared: Date
-			public let defender: Wars.WarInformation.GetWarsWarIDDefender
-			public let finished: Date?
-			public let id: Int
-			public let mutual: Bool
-			public let openForAllies: Bool
-			public let retracted: Date?
-			public let started: Date?
+			public var aggressor: Wars.WarInformation.GetWarsWarIDAggressor
+			public var allies: [Wars.WarInformation.GetWarsWarIDAllies]?
+			public var declared: Date
+			public var defender: Wars.WarInformation.GetWarsWarIDDefender
+			public var finished: Date?
+			public var id: Int
+			public var mutual: Bool
+			public var openForAllies: Bool
+			public var retracted: Date?
+			public var started: Date?
+			
+			public init(aggressor: Wars.WarInformation.GetWarsWarIDAggressor, allies: [Wars.WarInformation.GetWarsWarIDAllies]?, declared: Date, defender: Wars.WarInformation.GetWarsWarIDDefender, finished: Date?, id: Int, mutual: Bool, openForAllies: Bool, retracted: Date?, started: Date?) {
+				self.aggressor = aggressor
+				self.allies = allies
+				self.declared = declared
+				self.defender = defender
+				self.finished = finished
+				self.id = id
+				self.mutual = mutual
+				self.openForAllies = openForAllies
+				self.retracted = retracted
+				self.started = started
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -308,7 +345,11 @@ public extension ESI {
 		public struct GetWarsWarIDUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -336,7 +377,11 @@ public extension ESI {
 		public struct GetWarsWarIDKillmailsUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

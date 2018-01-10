@@ -83,8 +83,13 @@ public extension ESI {
 		public struct Point: Codable, Hashable {
 			
 			
-			public let corporationID: Int
-			public let loyaltyPoints: Int
+			public var corporationID: Int
+			public var loyaltyPoints: Int
+			
+			public init(corporationID: Int, loyaltyPoints: Int) {
+				self.corporationID = corporationID
+				self.loyaltyPoints = loyaltyPoints
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -116,8 +121,13 @@ public extension ESI {
 			public struct GetLoyaltyStoresCorporationIDOffersRequiredItems: Codable, Hashable {
 				
 				
-				public let quantity: Int
-				public let typeID: Int
+				public var quantity: Int
+				public var typeID: Int
+				
+				public init(quantity: Int, typeID: Int) {
+					self.quantity = quantity
+					self.typeID = typeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -143,12 +153,21 @@ public extension ESI {
 				}
 			}
 			
-			public let iskCost: Int
-			public let lpCost: Int
-			public let offerID: Int
-			public let quantity: Int
-			public let requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems]
-			public let typeID: Int
+			public var iskCost: Int
+			public var lpCost: Int
+			public var offerID: Int
+			public var quantity: Int
+			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems]
+			public var typeID: Int
+			
+			public init(iskCost: Int, lpCost: Int, offerID: Int, quantity: Int, requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems], typeID: Int) {
+				self.iskCost = iskCost
+				self.lpCost = lpCost
+				self.offerID = offerID
+				self.quantity = quantity
+				self.requiredItems = requiredItems
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

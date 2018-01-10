@@ -123,8 +123,13 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDKillmailsRecentOk: Codable, Hashable {
 			
 			
-			public let killmailHash: String
-			public let killmailID: Int
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -154,7 +159,11 @@ public extension ESI {
 		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -188,11 +197,19 @@ public extension ESI {
 					public struct Item: Codable, Hashable {
 						
 						
-						public let flag: Int
-						public let itemTypeID: Int
-						public let quantityDestroyed: Int64?
-						public let quantityDropped: Int64?
-						public let singleton: Int
+						public var flag: Int
+						public var itemTypeID: Int
+						public var quantityDestroyed: Int64?
+						public var quantityDropped: Int64?
+						public var singleton: Int
+						
+						public init(flag: Int, itemTypeID: Int, quantityDestroyed: Int64?, quantityDropped: Int64?, singleton: Int) {
+							self.flag = flag
+							self.itemTypeID = itemTypeID
+							self.quantityDestroyed = quantityDestroyed
+							self.quantityDropped = quantityDropped
+							self.singleton = singleton
+						}
 						
 						public var hashValue: Int {
 							var hash: Int = 0
@@ -224,12 +241,21 @@ public extension ESI {
 						}
 					}
 					
-					public let flag: Int
-					public let itemTypeID: Int
-					public let items: [Killmails.Killmail.Victim.Item.Item]?
-					public let quantityDestroyed: Int64?
-					public let quantityDropped: Int64?
-					public let singleton: Int
+					public var flag: Int
+					public var itemTypeID: Int
+					public var items: [Killmails.Killmail.Victim.Item.Item]?
+					public var quantityDestroyed: Int64?
+					public var quantityDropped: Int64?
+					public var singleton: Int
+					
+					public init(flag: Int, itemTypeID: Int, items: [Killmails.Killmail.Victim.Item.Item]?, quantityDestroyed: Int64?, quantityDropped: Int64?, singleton: Int) {
+						self.flag = flag
+						self.itemTypeID = itemTypeID
+						self.items = items
+						self.quantityDestroyed = quantityDestroyed
+						self.quantityDropped = quantityDropped
+						self.singleton = singleton
+					}
 					
 					public var hashValue: Int {
 						var hash: Int = 0
@@ -266,9 +292,15 @@ public extension ESI {
 				public struct GetKillmailsKillmailIDKillmailHashPosition: Codable, Hashable {
 					
 					
-					public let x: Double
-					public let y: Double
-					public let z: Double
+					public var x: Double
+					public var y: Double
+					public var z: Double
+					
+					public init(x: Double, y: Double, z: Double) {
+						self.x = x
+						self.y = y
+						self.z = z
+					}
 					
 					public var hashValue: Int {
 						var hash: Int = 0
@@ -296,14 +328,25 @@ public extension ESI {
 					}
 				}
 				
-				public let allianceID: Int?
-				public let characterID: Int?
-				public let corporationID: Int?
-				public let damageTaken: Int
-				public let factionID: Int?
-				public let items: [Killmails.Killmail.Victim.Item]?
-				public let position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition?
-				public let shipTypeID: Int
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var corporationID: Int?
+				public var damageTaken: Int
+				public var factionID: Int?
+				public var items: [Killmails.Killmail.Victim.Item]?
+				public var position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition?
+				public var shipTypeID: Int
+				
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [Killmails.Killmail.Victim.Item]?, position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition?, shipTypeID: Int) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.corporationID = corporationID
+					self.damageTaken = damageTaken
+					self.factionID = factionID
+					self.items = items
+					self.position = position
+					self.shipTypeID = shipTypeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -344,15 +387,27 @@ public extension ESI {
 			public struct Attacker: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let characterID: Int?
-				public let corporationID: Int?
-				public let damageDone: Int
-				public let factionID: Int?
-				public let finalBlow: Bool
-				public let securityStatus: Float
-				public let shipTypeID: Int?
-				public let weaponTypeID: Int?
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var corporationID: Int?
+				public var damageDone: Int
+				public var factionID: Int?
+				public var finalBlow: Bool
+				public var securityStatus: Float
+				public var shipTypeID: Int?
+				public var weaponTypeID: Int?
+				
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.corporationID = corporationID
+					self.damageDone = damageDone
+					self.factionID = factionID
+					self.finalBlow = finalBlow
+					self.securityStatus = securityStatus
+					self.shipTypeID = shipTypeID
+					self.weaponTypeID = weaponTypeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -392,13 +447,23 @@ public extension ESI {
 				}
 			}
 			
-			public let attackers: [Killmails.Killmail.Attacker]
-			public let killmailID: Int
-			public let killmailTime: Date
-			public let moonID: Int?
-			public let solarSystemID: Int
-			public let victim: Killmails.Killmail.Victim
-			public let warID: Int?
+			public var attackers: [Killmails.Killmail.Attacker]
+			public var killmailID: Int
+			public var killmailTime: Date
+			public var moonID: Int?
+			public var solarSystemID: Int
+			public var victim: Killmails.Killmail.Victim
+			public var warID: Int?
+			
+			public init(attackers: [Killmails.Killmail.Attacker], killmailID: Int, killmailTime: Date, moonID: Int?, solarSystemID: Int, victim: Killmails.Killmail.Victim, warID: Int?) {
+				self.attackers = attackers
+				self.killmailID = killmailID
+				self.killmailTime = killmailTime
+				self.moonID = moonID
+				self.solarSystemID = solarSystemID
+				self.victim = victim
+				self.warID = warID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -438,8 +503,13 @@ public extension ESI {
 		public struct Recent: Codable, Hashable {
 			
 			
-			public let killmailHash: String
-			public let killmailID: Int
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

@@ -60,14 +60,25 @@ public extension ESI {
 				
 			}
 			
-			public let constellationID: Int
-			public let factionID: Int
-			public let hasBoss: Bool
-			public let infestedSolarSystems: [Int]
-			public let influence: Float
-			public let stagingSolarSystemID: Int
-			public let state: Incursions.Incursion.State
-			public let type: String
+			public var constellationID: Int
+			public var factionID: Int
+			public var hasBoss: Bool
+			public var infestedSolarSystems: [Int]
+			public var influence: Float
+			public var stagingSolarSystemID: Int
+			public var state: Incursions.Incursion.State
+			public var type: String
+			
+			public init(constellationID: Int, factionID: Int, hasBoss: Bool, infestedSolarSystems: [Int], influence: Float, stagingSolarSystemID: Int, state: Incursions.Incursion.State, type: String) {
+				self.constellationID = constellationID
+				self.factionID = factionID
+				self.hasBoss = hasBoss
+				self.infestedSolarSystems = infestedSolarSystems
+				self.influence = influence
+				self.stagingSolarSystemID = stagingSolarSystemID
+				self.state = state
+				self.type = type
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

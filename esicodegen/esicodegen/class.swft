@@ -3,6 +3,10 @@ public struct {className}: Codable, Hashable {
 {nested}
 {definitions}
 
+	public init({parameters}) {
+{initializations}
+	}
+
 	public var hashValue: Int {
 		var hash: Int = 0
 {hash}

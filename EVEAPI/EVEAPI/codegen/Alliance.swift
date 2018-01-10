@@ -180,13 +180,23 @@ public extension ESI {
 		public struct Information: Codable, Hashable {
 			
 			
-			public let creatorCorporationID: Int
-			public let creatorID: Int
-			public let dateFounded: Date
-			public let executorCorporationID: Int?
-			public let factionID: Int?
-			public let name: String
-			public let ticker: String
+			public var creatorCorporationID: Int
+			public var creatorID: Int
+			public var dateFounded: Date
+			public var executorCorporationID: Int?
+			public var factionID: Int?
+			public var name: String
+			public var ticker: String
+			
+			public init(creatorCorporationID: Int, creatorID: Int, dateFounded: Date, executorCorporationID: Int?, factionID: Int?, name: String, ticker: String) {
+				self.creatorCorporationID = creatorCorporationID
+				self.creatorID = creatorID
+				self.dateFounded = dateFounded
+				self.executorCorporationID = executorCorporationID
+				self.factionID = factionID
+				self.name = name
+				self.ticker = ticker
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -226,8 +236,13 @@ public extension ESI {
 		public struct Icon: Codable, Hashable {
 			
 			
-			public let px128x128: String?
-			public let px64x64: String?
+			public var px128x128: String?
+			public var px64x64: String?
+			
+			public init(px128x128: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px64x64 = px64x64
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -257,8 +272,13 @@ public extension ESI {
 		public struct Name: Codable, Hashable {
 			
 			
-			public let allianceID: Int
-			public let allianceName: String
+			public var allianceID: Int
+			public var allianceName: String
+			
+			public init(allianceID: Int, allianceName: String) {
+				self.allianceID = allianceID
+				self.allianceName = allianceName
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -288,7 +308,11 @@ public extension ESI {
 		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -316,7 +340,11 @@ public extension ESI {
 		public struct GetAlliancesAllianceIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

@@ -177,6 +177,7 @@ class Schema: Namespace {
 		var hashes = [String]()
 		var nested = [String]()
 		var copy = [String]()
+		var parameters = [String]()
 		
 		var codingKeys = [String]()
 		var dateFormats = [String]()
@@ -190,6 +191,7 @@ class Schema: Namespace {
 //			defaults.append(value.defaultInitialization)
 			hashes.append(value.hash)
 			copy.append(value.copy)
+			parameters.append(value.parameter)
 			
 			codingKeys.append(value.codingKey)
 			if let formatter = value.dateFormatter {
@@ -207,7 +209,7 @@ class Schema: Namespace {
 //		template = template.replacingOccurrences(of: "{classIdentifier}", with: typeIdentifier)
 		template = template.replacingOccurrences(of: "{class}", with: typeIdentifier)
 		template.replaceSubrange(template.range(of: "{definitions}")!, with: definitions.joined(separator: "\n"))
-//		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
+		template.replaceSubrange(template.range(of: "{initializations}")!, with: initializations.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))
@@ -218,6 +220,7 @@ class Schema: Namespace {
 		
 		template.replaceSubrange(template.range(of: "{codingKeys}")!, with: codingKeys.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{dateFormats}")!, with: dateFormats.joined(separator: "\n"))
+		template.replaceSubrange(template.range(of: "{parameters}")!, with: parameters.joined(separator: ", "))
 		return template
 	}
 	

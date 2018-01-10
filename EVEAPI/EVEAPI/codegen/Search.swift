@@ -105,17 +105,31 @@ public extension ESI {
 		public struct CharacterSearchResult: Codable, Hashable {
 			
 			
-			public let agent: [Int]?
-			public let alliance: [Int]?
-			public let character: [Int]?
-			public let constellation: [Int]?
-			public let corporation: [Int]?
-			public let faction: [Int]?
-			public let inventoryType: [Int]?
-			public let region: [Int]?
-			public let solarSystem: [Int]?
-			public let station: [Int]?
-			public let structure: [Int64]?
+			public var agent: [Int]?
+			public var alliance: [Int]?
+			public var character: [Int]?
+			public var constellation: [Int]?
+			public var corporation: [Int]?
+			public var faction: [Int]?
+			public var inventoryType: [Int]?
+			public var region: [Int]?
+			public var solarSystem: [Int]?
+			public var station: [Int]?
+			public var structure: [Int64]?
+			
+			public init(agent: [Int]?, alliance: [Int]?, character: [Int]?, constellation: [Int]?, corporation: [Int]?, faction: [Int]?, inventoryType: [Int]?, region: [Int]?, solarSystem: [Int]?, station: [Int]?, structure: [Int64]?) {
+				self.agent = agent
+				self.alliance = alliance
+				self.character = character
+				self.constellation = constellation
+				self.corporation = corporation
+				self.faction = faction
+				self.inventoryType = inventoryType
+				self.region = region
+				self.solarSystem = solarSystem
+				self.station = station
+				self.structure = structure
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -183,16 +197,29 @@ public extension ESI {
 		public struct SearchResult: Codable, Hashable {
 			
 			
-			public let agent: [Int]?
-			public let alliance: [Int]?
-			public let character: [Int]?
-			public let constellation: [Int]?
-			public let corporation: [Int]?
-			public let faction: [Int]?
-			public let inventoryType: [Int]?
-			public let region: [Int]?
-			public let solarSystem: [Int]?
-			public let station: [Int]?
+			public var agent: [Int]?
+			public var alliance: [Int]?
+			public var character: [Int]?
+			public var constellation: [Int]?
+			public var corporation: [Int]?
+			public var faction: [Int]?
+			public var inventoryType: [Int]?
+			public var region: [Int]?
+			public var solarSystem: [Int]?
+			public var station: [Int]?
+			
+			public init(agent: [Int]?, alliance: [Int]?, character: [Int]?, constellation: [Int]?, corporation: [Int]?, faction: [Int]?, inventoryType: [Int]?, region: [Int]?, solarSystem: [Int]?, station: [Int]?) {
+				self.agent = agent
+				self.alliance = alliance
+				self.character = character
+				self.constellation = constellation
+				self.corporation = corporation
+				self.faction = faction
+				self.inventoryType = inventoryType
+				self.region = region
+				self.solarSystem = solarSystem
+				self.station = station
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

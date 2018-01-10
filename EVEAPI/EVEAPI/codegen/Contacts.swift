@@ -284,10 +284,17 @@ public extension ESI {
 				
 			}
 			
-			public let contactID: Int
-			public let contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType
-			public let labelID: Int64?
-			public let standing: Float
+			public var contactID: Int
+			public var contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType
+			public var labelID: Int64?
+			public var standing: Float
+			
+			public init(contactID: Int, contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType, labelID: Int64?, standing: Float) {
+				self.contactID = contactID
+				self.contactType = contactType
+				self.labelID = labelID
+				self.standing = standing
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -332,11 +339,19 @@ public extension ESI {
 				
 			}
 			
-			public let contactID: Int
-			public let contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType
-			public let isWatched: Bool?
-			public let labelID: Int64?
-			public let standing: Float
+			public var contactID: Int
+			public var contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType
+			public var isWatched: Bool?
+			public var labelID: Int64?
+			public var standing: Float
+			
+			public init(contactID: Int, contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType, isWatched: Bool?, labelID: Int64?, standing: Float) {
+				self.contactID = contactID
+				self.contactType = contactType
+				self.isWatched = isWatched
+				self.labelID = labelID
+				self.standing = standing
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -383,12 +398,21 @@ public extension ESI {
 				
 			}
 			
-			public let contactID: Int
-			public let contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType
-			public let isBlocked: Bool?
-			public let isWatched: Bool?
-			public let labelID: Int64?
-			public let standing: Float
+			public var contactID: Int
+			public var contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType
+			public var isBlocked: Bool?
+			public var isWatched: Bool?
+			public var labelID: Int64?
+			public var standing: Float
+			
+			public init(contactID: Int, contactType: Contacts.Contact.GetCharactersCharacterIDContactsContactType, isBlocked: Bool?, isWatched: Bool?, labelID: Int64?, standing: Float) {
+				self.contactID = contactID
+				self.contactType = contactType
+				self.isBlocked = isBlocked
+				self.isWatched = isWatched
+				self.labelID = labelID
+				self.standing = standing
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -426,8 +450,13 @@ public extension ESI {
 		public struct Label: Codable, Hashable {
 			
 			
-			public let labelID: Int64
-			public let labelName: String
+			public var labelID: Int64
+			public var labelName: String
+			
+			public init(labelID: Int64, labelName: String) {
+				self.labelID = labelID
+				self.labelName = labelName
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

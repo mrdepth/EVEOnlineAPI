@@ -901,13 +901,23 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDMembertrackingOk: Codable, Hashable {
 			
 			
-			public let baseID: Int?
-			public let characterID: Int
-			public let locationID: Int64?
-			public let logoffDate: Date?
-			public let logonDate: Date?
-			public let shipTypeID: Int?
-			public let startDate: Date?
+			public var baseID: Int?
+			public var characterID: Int
+			public var locationID: Int64?
+			public var logoffDate: Date?
+			public var logonDate: Date?
+			public var shipTypeID: Int?
+			public var startDate: Date?
+			
+			public init(baseID: Int?, characterID: Int, locationID: Int64?, logoffDate: Date?, logonDate: Date?, shipTypeID: Int?, startDate: Date?) {
+				self.baseID = baseID
+				self.characterID = characterID
+				self.locationID = locationID
+				self.logoffDate = logoffDate
+				self.logonDate = logonDate
+				self.shipTypeID = shipTypeID
+				self.startDate = startDate
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -959,9 +969,15 @@ public extension ESI {
 				
 			}
 			
-			public let fromID: Int
-			public let fromType: Corporation.GetCorporationsCorporationIDStandingsOk.GetCorporationsCorporationIDStandingsFromType
-			public let standing: Float
+			public var fromID: Int
+			public var fromType: Corporation.GetCorporationsCorporationIDStandingsOk.GetCorporationsCorporationIDStandingsFromType
+			public var standing: Float
+			
+			public init(fromID: Int, fromType: Corporation.GetCorporationsCorporationIDStandingsOk.GetCorporationsCorporationIDStandingsFromType, standing: Float) {
+				self.fromID = fromID
+				self.fromType = fromType
+				self.standing = standing
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1031,8 +1047,13 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDStarbasesStarbaseIDFuels: Codable, Hashable {
 				
 				
-				public let quantity: Int
-				public let typeID: Int
+				public var quantity: Int
+				public var typeID: Int
+				
+				public init(quantity: Int, typeID: Int) {
+					self.quantity = quantity
+					self.typeID = typeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1094,20 +1115,37 @@ public extension ESI {
 				
 			}
 			
-			public let allowAllianceMembers: Bool
-			public let allowCorporationMembers: Bool
-			public let anchor: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDAnchor
-			public let attackIfAtWar: Bool
-			public let attackIfOtherSecurityStatusDropping: Bool
-			public let attackSecurityStatusThreshold: Float?
-			public let attackStandingThreshold: Float?
-			public let fuelBayTake: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuelBayTake
-			public let fuelBayView: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuelBayView
-			public let fuels: [Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuels]?
-			public let offline: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDOffline
-			public let online: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDOnline
-			public let unanchor: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDUnanchor
-			public let useAllianceStandings: Bool
+			public var allowAllianceMembers: Bool
+			public var allowCorporationMembers: Bool
+			public var anchor: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDAnchor
+			public var attackIfAtWar: Bool
+			public var attackIfOtherSecurityStatusDropping: Bool
+			public var attackSecurityStatusThreshold: Float?
+			public var attackStandingThreshold: Float?
+			public var fuelBayTake: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuelBayTake
+			public var fuelBayView: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuelBayView
+			public var fuels: [Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuels]?
+			public var offline: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDOffline
+			public var online: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDOnline
+			public var unanchor: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDUnanchor
+			public var useAllianceStandings: Bool
+			
+			public init(allowAllianceMembers: Bool, allowCorporationMembers: Bool, anchor: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDAnchor, attackIfAtWar: Bool, attackIfOtherSecurityStatusDropping: Bool, attackSecurityStatusThreshold: Float?, attackStandingThreshold: Float?, fuelBayTake: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuelBayTake, fuelBayView: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuelBayView, fuels: [Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDFuels]?, offline: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDOffline, online: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDOnline, unanchor: Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk.GetCorporationsCorporationIDStarbasesStarbaseIDUnanchor, useAllianceStandings: Bool) {
+				self.allowAllianceMembers = allowAllianceMembers
+				self.allowCorporationMembers = allowCorporationMembers
+				self.anchor = anchor
+				self.attackIfAtWar = attackIfAtWar
+				self.attackIfOtherSecurityStatusDropping = attackIfOtherSecurityStatusDropping
+				self.attackSecurityStatusThreshold = attackSecurityStatusThreshold
+				self.attackStandingThreshold = attackStandingThreshold
+				self.fuelBayTake = fuelBayTake
+				self.fuelBayView = fuelBayView
+				self.fuels = fuels
+				self.offline = offline
+				self.online = online
+				self.unanchor = unanchor
+				self.useAllianceStandings = useAllianceStandings
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1161,7 +1199,11 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1320,12 +1362,21 @@ public extension ESI {
 				
 			}
 			
-			public let changedAt: Date
-			public let characterID: Int
-			public let issuerID: Int
-			public let newRoles: [Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryNewRoles]
-			public let oldRoles: [Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryOldRoles]
-			public let roleType: Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryRoleType
+			public var changedAt: Date
+			public var characterID: Int
+			public var issuerID: Int
+			public var newRoles: [Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryNewRoles]
+			public var oldRoles: [Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryOldRoles]
+			public var roleType: Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryRoleType
+			
+			public init(changedAt: Date, characterID: Int, issuerID: Int, newRoles: [Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryNewRoles], oldRoles: [Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryOldRoles], roleType: Corporation.GetCorporationsCorporationIDRolesHistoryOk.GetCorporationsCorporationIDRolesHistoryRoleType) {
+				self.changedAt = changedAt
+				self.characterID = characterID
+				self.issuerID = issuerID
+				self.newRoles = newRoles
+				self.oldRoles = oldRoles
+				self.roleType = roleType
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1826,16 +1877,29 @@ public extension ESI {
 				
 			}
 			
-			public let grantableRoles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRoles]?
-			public let grantableRolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtBase]?
-			public let grantableRolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtHq]?
-			public let grantableRolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtOther]?
-			public let name: String?
-			public let roles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRoles]?
-			public let rolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtBase]?
-			public let rolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtHq]?
-			public let rolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtOther]?
-			public let titleID: Int?
+			public var grantableRoles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRoles]?
+			public var grantableRolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtBase]?
+			public var grantableRolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtHq]?
+			public var grantableRolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtOther]?
+			public var name: String?
+			public var roles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRoles]?
+			public var rolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtBase]?
+			public var rolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtHq]?
+			public var rolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtOther]?
+			public var titleID: Int?
+			
+			public init(grantableRoles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRoles]?, grantableRolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtBase]?, grantableRolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtHq]?, grantableRolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesGrantableRolesAtOther]?, name: String?, roles: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRoles]?, rolesAtBase: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtBase]?, rolesAtHq: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtHq]?, rolesAtOther: [Corporation.GetCorporationsCorporationIDTitlesOk.GetCorporationsCorporationIDTitlesRolesAtOther]?, titleID: Int?) {
+				self.grantableRoles = grantableRoles
+				self.grantableRolesAtBase = grantableRolesAtBase
+				self.grantableRolesAtHq = grantableRolesAtHq
+				self.grantableRolesAtOther = grantableRolesAtOther
+				self.name = name
+				self.roles = roles
+				self.rolesAtBase = rolesAtBase
+				self.rolesAtHq = rolesAtHq
+				self.rolesAtOther = rolesAtOther
+				self.titleID = titleID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1881,9 +1945,15 @@ public extension ESI {
 		public struct Icon: Codable, Hashable {
 			
 			
-			public let px128x128: String?
-			public let px256x256: String?
-			public let px64x64: String?
+			public var px128x128: String?
+			public var px256x256: String?
+			public var px64x64: String?
+			
+			public init(px128x128: String?, px256x256: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px256x256 = px256x256
+				self.px64x64 = px64x64
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2065,18 +2135,33 @@ public extension ESI {
 				
 			}
 			
-			public let action: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsAction
-			public let characterID: Int
-			public let containerID: Int64
-			public let containerTypeID: Int
-			public let locationFlag: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsLocationFlag
-			public let locationID: Int64
-			public let loggedAt: Date
-			public let newConfigBitmask: Int?
-			public let oldConfigBitmask: Int?
-			public let passwordType: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsPasswordType?
-			public let quantity: Int?
-			public let typeID: Int?
+			public var action: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsAction
+			public var characterID: Int
+			public var containerID: Int64
+			public var containerTypeID: Int
+			public var locationFlag: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsLocationFlag
+			public var locationID: Int64
+			public var loggedAt: Date
+			public var newConfigBitmask: Int?
+			public var oldConfigBitmask: Int?
+			public var passwordType: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsPasswordType?
+			public var quantity: Int?
+			public var typeID: Int?
+			
+			public init(action: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsAction, characterID: Int, containerID: Int64, containerTypeID: Int, locationFlag: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsLocationFlag, locationID: Int64, loggedAt: Date, newConfigBitmask: Int?, oldConfigBitmask: Int?, passwordType: Corporation.GetCorporationsCorporationIDContainersLogsOk.GetCorporationsCorporationIDContainersLogsPasswordType?, quantity: Int?, typeID: Int?) {
+				self.action = action
+				self.characterID = characterID
+				self.containerID = containerID
+				self.containerTypeID = containerTypeID
+				self.locationFlag = locationFlag
+				self.locationID = locationID
+				self.loggedAt = loggedAt
+				self.newConfigBitmask = newConfigBitmask
+				self.oldConfigBitmask = oldConfigBitmask
+				self.passwordType = passwordType
+				self.quantity = quantity
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2128,9 +2213,15 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDOutpostsOutpostIDCoordinates: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2195,10 +2286,17 @@ public extension ESI {
 					
 				}
 				
-				public let discountPerGoodStanding: Double
-				public let minimumStanding: Double
-				public let serviceName: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices.GetCorporationsCorporationIDOutpostsOutpostIDServiceName
-				public let surchargePerBadStanding: Double
+				public var discountPerGoodStanding: Double
+				public var minimumStanding: Double
+				public var serviceName: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices.GetCorporationsCorporationIDOutpostsOutpostIDServiceName
+				public var surchargePerBadStanding: Double
+				
+				public init(discountPerGoodStanding: Double, minimumStanding: Double, serviceName: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices.GetCorporationsCorporationIDOutpostsOutpostIDServiceName, surchargePerBadStanding: Double) {
+					self.discountPerGoodStanding = discountPerGoodStanding
+					self.minimumStanding = minimumStanding
+					self.serviceName = serviceName
+					self.surchargePerBadStanding = surchargePerBadStanding
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2228,16 +2326,29 @@ public extension ESI {
 				}
 			}
 			
-			public let coordinates: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates
-			public let dockingCostPerShipVolume: Float
-			public let officeRentalCost: Int64
-			public let ownerID: Int
-			public let reprocessingEfficiency: Float
-			public let reprocessingStationTake: Float
-			public let services: [Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices]
-			public let standingOwnerID: Int
-			public let systemID: Int
-			public let typeID: Int
+			public var coordinates: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates
+			public var dockingCostPerShipVolume: Float
+			public var officeRentalCost: Int64
+			public var ownerID: Int
+			public var reprocessingEfficiency: Float
+			public var reprocessingStationTake: Float
+			public var services: [Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices]
+			public var standingOwnerID: Int
+			public var systemID: Int
+			public var typeID: Int
+			
+			public init(coordinates: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates, dockingCostPerShipVolume: Float, officeRentalCost: Int64, ownerID: Int, reprocessingEfficiency: Float, reprocessingStationTake: Float, services: [Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices], standingOwnerID: Int, systemID: Int, typeID: Int) {
+				self.coordinates = coordinates
+				self.dockingCostPerShipVolume = dockingCostPerShipVolume
+				self.officeRentalCost = officeRentalCost
+				self.ownerID = ownerID
+				self.reprocessingEfficiency = reprocessingEfficiency
+				self.reprocessingStationTake = reprocessingStationTake
+				self.services = services
+				self.standingOwnerID = standingOwnerID
+				self.systemID = systemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2292,12 +2403,21 @@ public extension ESI {
 				
 			}
 			
-			public let characterID: Int
-			public let issuedAt: Date
-			public let issuerID: Int
-			public let medalID: Int
-			public let reason: String
-			public let status: Corporation.GetCorporationsCorporationIDMedalsIssuedOk.GetCorporationsCorporationIDMedalsIssuedStatus
+			public var characterID: Int
+			public var issuedAt: Date
+			public var issuerID: Int
+			public var medalID: Int
+			public var reason: String
+			public var status: Corporation.GetCorporationsCorporationIDMedalsIssuedOk.GetCorporationsCorporationIDMedalsIssuedStatus
+			
+			public init(characterID: Int, issuedAt: Date, issuerID: Int, medalID: Int, reason: String, status: Corporation.GetCorporationsCorporationIDMedalsIssuedOk.GetCorporationsCorporationIDMedalsIssuedStatus) {
+				self.characterID = characterID
+				self.issuedAt = issuedAt
+				self.issuerID = issuerID
+				self.medalID = medalID
+				self.reason = reason
+				self.status = status
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2335,19 +2455,35 @@ public extension ESI {
 		public struct Information: Codable, Hashable {
 			
 			
-			public let allianceID: Int?
-			public let ceoID: Int
-			public let creatorID: Int
-			public let dateFounded: Date?
-			public let localizedDescription: String?
-			public let factionID: Int?
-			public let homeStationID: Int?
-			public let memberCount: Int
-			public let name: String
-			public let shares: Int64?
-			public let taxRate: Float
-			public let ticker: String
-			public let url: String?
+			public var allianceID: Int?
+			public var ceoID: Int
+			public var creatorID: Int
+			public var dateFounded: Date?
+			public var localizedDescription: String?
+			public var factionID: Int?
+			public var homeStationID: Int?
+			public var memberCount: Int
+			public var name: String
+			public var shares: Int64?
+			public var taxRate: Float
+			public var ticker: String
+			public var url: String?
+			
+			public init(allianceID: Int?, ceoID: Int, creatorID: Int, dateFounded: Date?, localizedDescription: String?, factionID: Int?, homeStationID: Int?, memberCount: Int, name: String, shares: Int64?, taxRate: Float, ticker: String, url: String?) {
+				self.allianceID = allianceID
+				self.ceoID = ceoID
+				self.creatorID = creatorID
+				self.dateFounded = dateFounded
+				self.localizedDescription = localizedDescription
+				self.factionID = factionID
+				self.homeStationID = homeStationID
+				self.memberCount = memberCount
+				self.name = name
+				self.shares = shares
+				self.taxRate = taxRate
+				self.ticker = ticker
+				self.url = url
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2408,9 +2544,15 @@ public extension ESI {
 				
 			}
 			
-			public let shareCount: Int64
-			public let shareholderID: Int
-			public let shareholderType: Corporation.GetCorporationsCorporationIDShareholdersOk.GetCorporationsCorporationIDShareholdersShareholderType
+			public var shareCount: Int64
+			public var shareholderID: Int
+			public var shareholderType: Corporation.GetCorporationsCorporationIDShareholdersOk.GetCorporationsCorporationIDShareholdersShareholderType
+			
+			public init(shareCount: Int64, shareholderID: Int, shareholderType: Corporation.GetCorporationsCorporationIDShareholdersOk.GetCorporationsCorporationIDShareholdersShareholderType) {
+				self.shareCount = shareCount
+				self.shareholderID = shareholderID
+				self.shareholderType = shareholderType
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2442,8 +2584,13 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDMembersTitlesOk: Codable, Hashable {
 			
 			
-			public let characterID: Int
-			public let titles: [Int]
+			public var characterID: Int
+			public var titles: [Int]
+			
+			public init(characterID: Int, titles: [Int]) {
+				self.characterID = characterID
+				self.titles = titles
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2473,7 +2620,11 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDIconsNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2501,8 +2652,13 @@ public extension ESI {
 		public struct Name: Codable, Hashable {
 			
 			
-			public let corporationID: Int
-			public let corporationName: String
+			public var corporationID: Int
+			public var corporationName: String
+			
+			public init(corporationID: Int, corporationName: String) {
+				self.corporationID = corporationID
+				self.corporationName = corporationName
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2532,10 +2688,17 @@ public extension ESI {
 		public struct History: Codable, Hashable {
 			
 			
-			public let allianceID: Int?
-			public let isDeleted: Bool?
-			public let recordID: Int
-			public let startDate: Date
+			public var allianceID: Int?
+			public var isDeleted: Bool?
+			public var recordID: Int
+			public var startDate: Date
+			
+			public init(allianceID: Int?, isDeleted: Bool?, recordID: Int, startDate: Date) {
+				self.allianceID = allianceID
+				self.isDeleted = isDeleted
+				self.recordID = recordID
+				self.startDate = startDate
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2569,8 +2732,13 @@ public extension ESI {
 		public struct VulnerabilitySchedule: Codable, Hashable {
 			
 			
-			public let day: Int
-			public let hour: Int
+			public var day: Int
+			public var hour: Int
+			
+			public init(day: Int, hour: Int) {
+				self.day = day
+				self.hour = hour
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3063,15 +3231,27 @@ public extension ESI {
 				
 			}
 			
-			public let characterID: Int
-			public let grantableRoles: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRoles]?
-			public let grantableRolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtBase]?
-			public let grantableRolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtHq]?
-			public let grantableRolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtOther]?
-			public let roles: [Corporation.Role.GetCorporationsCorporationIDRolesRoles]?
-			public let rolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtBase]?
-			public let rolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtHq]?
-			public let rolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtOther]?
+			public var characterID: Int
+			public var grantableRoles: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRoles]?
+			public var grantableRolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtBase]?
+			public var grantableRolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtHq]?
+			public var grantableRolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtOther]?
+			public var roles: [Corporation.Role.GetCorporationsCorporationIDRolesRoles]?
+			public var rolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtBase]?
+			public var rolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtHq]?
+			public var rolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtOther]?
+			
+			public init(characterID: Int, grantableRoles: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRoles]?, grantableRolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtBase]?, grantableRolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtHq]?, grantableRolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesGrantableRolesAtOther]?, roles: [Corporation.Role.GetCorporationsCorporationIDRolesRoles]?, rolesAtBase: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtBase]?, rolesAtHq: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtHq]?, rolesAtOther: [Corporation.Role.GetCorporationsCorporationIDRolesRolesAtOther]?) {
+				self.characterID = characterID
+				self.grantableRoles = grantableRoles
+				self.grantableRolesAtBase = grantableRolesAtBase
+				self.grantableRolesAtHq = grantableRolesAtHq
+				self.grantableRolesAtOther = grantableRolesAtOther
+				self.roles = roles
+				self.rolesAtBase = rolesAtBase
+				self.rolesAtHq = rolesAtHq
+				self.rolesAtOther = rolesAtOther
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3115,9 +3295,15 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDFacilitiesOk: Codable, Hashable {
 			
 			
-			public let facilityID: Int64
-			public let systemID: Int
-			public let typeID: Int
+			public var facilityID: Int64
+			public var systemID: Int
+			public var typeID: Int
+			
+			public init(facilityID: Int64, systemID: Int, typeID: Int) {
+				self.facilityID = facilityID
+				self.systemID = systemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3149,11 +3335,19 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDMedalsOk: Codable, Hashable {
 			
 			
-			public let createdAt: Date
-			public let creatorID: Int
-			public let localizedDescription: String
-			public let medalID: Int
-			public let title: String
+			public var createdAt: Date
+			public var creatorID: Int
+			public var localizedDescription: String
+			public var medalID: Int
+			public var title: String
+			
+			public init(createdAt: Date, creatorID: Int, localizedDescription: String, medalID: Int, title: String) {
+				self.createdAt = createdAt
+				self.creatorID = creatorID
+				self.localizedDescription = localizedDescription
+				self.medalID = medalID
+				self.title = title
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3311,14 +3505,25 @@ public extension ESI {
 				
 			}
 			
-			public let itemID: Int64
-			public let locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag
-			public let locationID: Int64
-			public let materialEfficiency: Int
-			public let quantity: Int
-			public let runs: Int
-			public let timeEfficiency: Int
-			public let typeID: Int
+			public var itemID: Int64
+			public var locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag
+			public var locationID: Int64
+			public var materialEfficiency: Int
+			public var quantity: Int
+			public var runs: Int
+			public var timeEfficiency: Int
+			public var typeID: Int
+			
+			public init(itemID: Int64, locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag, locationID: Int64, materialEfficiency: Int, quantity: Int, runs: Int, timeEfficiency: Int, typeID: Int) {
+				self.itemID = itemID
+				self.locationFlag = locationFlag
+				self.locationID = locationID
+				self.materialEfficiency = materialEfficiency
+				self.quantity = quantity
+				self.runs = runs
+				self.timeEfficiency = timeEfficiency
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3362,8 +3567,13 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDDivisionsWallet: Codable, Hashable {
 				
 				
-				public let division: Int?
-				public let name: String?
+				public var division: Int?
+				public var name: String?
+				
+				public init(division: Int?, name: String?) {
+					self.division = division
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -3392,8 +3602,13 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDDivisionsHangar: Codable, Hashable {
 				
 				
-				public let division: Int?
-				public let name: String?
+				public var division: Int?
+				public var name: String?
+				
+				public init(division: Int?, name: String?) {
+					self.division = division
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -3419,8 +3634,13 @@ public extension ESI {
 				}
 			}
 			
-			public let hangar: [Corporation.GetCorporationsCorporationIDDivisionsOk.GetCorporationsCorporationIDDivisionsHangar]?
-			public let wallet: [Corporation.GetCorporationsCorporationIDDivisionsOk.GetCorporationsCorporationIDDivisionsWallet]?
+			public var hangar: [Corporation.GetCorporationsCorporationIDDivisionsOk.GetCorporationsCorporationIDDivisionsHangar]?
+			public var wallet: [Corporation.GetCorporationsCorporationIDDivisionsOk.GetCorporationsCorporationIDDivisionsWallet]?
+			
+			public init(hangar: [Corporation.GetCorporationsCorporationIDDivisionsOk.GetCorporationsCorporationIDDivisionsHangar]?, wallet: [Corporation.GetCorporationsCorporationIDDivisionsOk.GetCorporationsCorporationIDDivisionsWallet]?) {
+				self.hangar = hangar
+				self.wallet = wallet
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3462,8 +3682,13 @@ public extension ESI {
 					
 				}
 				
-				public let name: String
-				public let state: Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState
+				public var name: String
+				public var state: Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState
+				
+				public init(name: String, state: Corporation.Structure.GetCorporationsCorporationIDStructuresServices.GetCorporationsCorporationIDStructuresState) {
+					self.name = name
+					self.state = state
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -3492,8 +3717,13 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDStructuresNextVul: Codable, Hashable {
 				
 				
-				public let day: Int
-				public let hour: Int
+				public var day: Int
+				public var hour: Int
+				
+				public init(day: Int, hour: Int) {
+					self.day = day
+					self.hour = hour
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -3522,8 +3752,13 @@ public extension ESI {
 			public struct GetCorporationsCorporationIDStructuresCurrentVul: Codable, Hashable {
 				
 				
-				public let day: Int
-				public let hour: Int
+				public var day: Int
+				public var hour: Int
+				
+				public init(day: Int, hour: Int) {
+					self.day = day
+					self.hour = hour
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -3549,18 +3784,33 @@ public extension ESI {
 				}
 			}
 			
-			public let corporationID: Int
-			public let currentVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul]
-			public let fuelExpires: Date?
-			public let nextVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul]
-			public let profileID: Int
-			public let services: [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]?
-			public let stateTimerEnd: Date?
-			public let stateTimerStart: Date?
-			public let structureID: Int64
-			public let systemID: Int
-			public let typeID: Int
-			public let unanchorsAt: Date?
+			public var corporationID: Int
+			public var currentVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul]
+			public var fuelExpires: Date?
+			public var nextVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul]
+			public var profileID: Int
+			public var services: [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]?
+			public var stateTimerEnd: Date?
+			public var stateTimerStart: Date?
+			public var structureID: Int64
+			public var systemID: Int
+			public var typeID: Int
+			public var unanchorsAt: Date?
+			
+			public init(corporationID: Int, currentVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresCurrentVul], fuelExpires: Date?, nextVul: [Corporation.Structure.GetCorporationsCorporationIDStructuresNextVul], profileID: Int, services: [Corporation.Structure.GetCorporationsCorporationIDStructuresServices]?, stateTimerEnd: Date?, stateTimerStart: Date?, structureID: Int64, systemID: Int, typeID: Int, unanchorsAt: Date?) {
+				self.corporationID = corporationID
+				self.currentVul = currentVul
+				self.fuelExpires = fuelExpires
+				self.nextVul = nextVul
+				self.profileID = profileID
+				self.services = services
+				self.stateTimerEnd = stateTimerEnd
+				self.stateTimerStart = stateTimerStart
+				self.structureID = structureID
+				self.systemID = systemID
+				self.typeID = typeID
+				self.unanchorsAt = unanchorsAt
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3625,14 +3875,25 @@ public extension ESI {
 				
 			}
 			
-			public let moonID: Int?
-			public let onlinedSince: Date?
-			public let reinforcedUntil: Date?
-			public let starbaseID: Int64
-			public let state: Corporation.GetCorporationsCorporationIDStarbasesOk.GetCorporationsCorporationIDStarbasesState?
-			public let systemID: Int
-			public let typeID: Int
-			public let unanchorAt: Date?
+			public var moonID: Int?
+			public var onlinedSince: Date?
+			public var reinforcedUntil: Date?
+			public var starbaseID: Int64
+			public var state: Corporation.GetCorporationsCorporationIDStarbasesOk.GetCorporationsCorporationIDStarbasesState?
+			public var systemID: Int
+			public var typeID: Int
+			public var unanchorAt: Date?
+			
+			public init(moonID: Int?, onlinedSince: Date?, reinforcedUntil: Date?, starbaseID: Int64, state: Corporation.GetCorporationsCorporationIDStarbasesOk.GetCorporationsCorporationIDStarbasesState?, systemID: Int, typeID: Int, unanchorAt: Date?) {
+				self.moonID = moonID
+				self.onlinedSince = onlinedSince
+				self.reinforcedUntil = reinforcedUntil
+				self.starbaseID = starbaseID
+				self.state = state
+				self.systemID = systemID
+				self.typeID = typeID
+				self.unanchorAt = unanchorAt
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

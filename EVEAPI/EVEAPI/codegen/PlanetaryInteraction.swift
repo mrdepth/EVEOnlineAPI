@@ -151,7 +151,11 @@ public extension ESI {
 		public struct GetCharactersCharacterIDPlanetsPlanetIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -179,7 +183,11 @@ public extension ESI {
 		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -222,13 +230,23 @@ public extension ESI {
 				
 			}
 			
-			public let lastUpdate: Date
-			public let numPins: Int
-			public let ownerID: Int
-			public let planetID: Int
-			public let planetType: PlanetaryInteraction.Colony.PlanetType
-			public let solarSystemID: Int
-			public let upgradeLevel: Int
+			public var lastUpdate: Date
+			public var numPins: Int
+			public var ownerID: Int
+			public var planetID: Int
+			public var planetType: PlanetaryInteraction.Colony.PlanetType
+			public var solarSystemID: Int
+			public var upgradeLevel: Int
+			
+			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
+				self.lastUpdate = lastUpdate
+				self.numPins = numPins
+				self.ownerID = ownerID
+				self.planetID = planetID
+				self.planetType = planetType
+				self.solarSystemID = solarSystemID
+				self.upgradeLevel = upgradeLevel
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -274,9 +292,15 @@ public extension ESI {
 					public struct Head: Codable, Hashable {
 						
 						
-						public let headID: Int
-						public let latitude: Float
-						public let longitude: Float
+						public var headID: Int
+						public var latitude: Float
+						public var longitude: Float
+						
+						public init(headID: Int, latitude: Float, longitude: Float) {
+							self.headID = headID
+							self.latitude = latitude
+							self.longitude = longitude
+						}
 						
 						public var hashValue: Int {
 							var hash: Int = 0
@@ -304,11 +328,19 @@ public extension ESI {
 						}
 					}
 					
-					public let cycleTime: Int?
-					public let headRadius: Float?
-					public let heads: [PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head]
-					public let productTypeID: Int?
-					public let qtyPerCycle: Int?
+					public var cycleTime: Int?
+					public var headRadius: Float?
+					public var heads: [PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head]
+					public var productTypeID: Int?
+					public var qtyPerCycle: Int?
+					
+					public init(cycleTime: Int?, headRadius: Float?, heads: [PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails.Head], productTypeID: Int?, qtyPerCycle: Int?) {
+						self.cycleTime = cycleTime
+						self.headRadius = headRadius
+						self.heads = heads
+						self.productTypeID = productTypeID
+						self.qtyPerCycle = qtyPerCycle
+					}
 					
 					public var hashValue: Int {
 						var hash: Int = 0
@@ -343,8 +375,13 @@ public extension ESI {
 				public struct Contents: Codable, Hashable {
 					
 					
-					public let amount: Int64
-					public let typeID: Int
+					public var amount: Int64
+					public var typeID: Int
+					
+					public init(amount: Int64, typeID: Int) {
+						self.amount = amount
+						self.typeID = typeID
+					}
 					
 					public var hashValue: Int {
 						var hash: Int = 0
@@ -373,7 +410,11 @@ public extension ESI {
 				public struct FactoryDetails: Codable, Hashable {
 					
 					
-					public let schematicID: Int
+					public var schematicID: Int
+					
+					public init(schematicID: Int) {
+						self.schematicID = schematicID
+					}
 					
 					public var hashValue: Int {
 						var hash: Int = 0
@@ -397,17 +438,31 @@ public extension ESI {
 					}
 				}
 				
-				public let contents: [PlanetaryInteraction.ColonyLayout.Pin.Contents]?
-				public let expiryTime: Date?
-				public let extractorDetails: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails?
-				public let factoryDetails: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails?
-				public let installTime: Date?
-				public let lastCycleStart: Date?
-				public let latitude: Float
-				public let longitude: Float
-				public let pinID: Int64
-				public let schematicID: Int?
-				public let typeID: Int
+				public var contents: [PlanetaryInteraction.ColonyLayout.Pin.Contents]?
+				public var expiryTime: Date?
+				public var extractorDetails: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails?
+				public var factoryDetails: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails?
+				public var installTime: Date?
+				public var lastCycleStart: Date?
+				public var latitude: Float
+				public var longitude: Float
+				public var pinID: Int64
+				public var schematicID: Int?
+				public var typeID: Int
+				
+				public init(contents: [PlanetaryInteraction.ColonyLayout.Pin.Contents]?, expiryTime: Date?, extractorDetails: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails?, factoryDetails: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails?, installTime: Date?, lastCycleStart: Date?, latitude: Float, longitude: Float, pinID: Int64, schematicID: Int?, typeID: Int) {
+					self.contents = contents
+					self.expiryTime = expiryTime
+					self.extractorDetails = extractorDetails
+					self.factoryDetails = factoryDetails
+					self.installTime = installTime
+					self.lastCycleStart = lastCycleStart
+					self.latitude = latitude
+					self.longitude = longitude
+					self.pinID = pinID
+					self.schematicID = schematicID
+					self.typeID = typeID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -456,9 +511,15 @@ public extension ESI {
 			public struct Link: Codable, Hashable {
 				
 				
-				public let destinationPinID: Int64
-				public let linkLevel: Int
-				public let sourcePinID: Int64
+				public var destinationPinID: Int64
+				public var linkLevel: Int
+				public var sourcePinID: Int64
+				
+				public init(destinationPinID: Int64, linkLevel: Int, sourcePinID: Int64) {
+					self.destinationPinID = destinationPinID
+					self.linkLevel = linkLevel
+					self.sourcePinID = sourcePinID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -489,12 +550,21 @@ public extension ESI {
 			public struct Route: Codable, Hashable {
 				
 				
-				public let contentTypeID: Int
-				public let destinationPinID: Int64
-				public let quantity: Float
-				public let routeID: Int64
-				public let sourcePinID: Int64
-				public let waypoints: [Int64]?
+				public var contentTypeID: Int
+				public var destinationPinID: Int64
+				public var quantity: Float
+				public var routeID: Int64
+				public var sourcePinID: Int64
+				public var waypoints: [Int64]?
+				
+				public init(contentTypeID: Int, destinationPinID: Int64, quantity: Float, routeID: Int64, sourcePinID: Int64, waypoints: [Int64]?) {
+					self.contentTypeID = contentTypeID
+					self.destinationPinID = destinationPinID
+					self.quantity = quantity
+					self.routeID = routeID
+					self.sourcePinID = sourcePinID
+					self.waypoints = waypoints
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -528,9 +598,15 @@ public extension ESI {
 				}
 			}
 			
-			public let links: [PlanetaryInteraction.ColonyLayout.Link]
-			public let pins: [PlanetaryInteraction.ColonyLayout.Pin]
-			public let routes: [PlanetaryInteraction.ColonyLayout.Route]
+			public var links: [PlanetaryInteraction.ColonyLayout.Link]
+			public var pins: [PlanetaryInteraction.ColonyLayout.Pin]
+			public var routes: [PlanetaryInteraction.ColonyLayout.Route]
+			
+			public init(links: [PlanetaryInteraction.ColonyLayout.Link], pins: [PlanetaryInteraction.ColonyLayout.Pin], routes: [PlanetaryInteraction.ColonyLayout.Route]) {
+				self.links = links
+				self.pins = pins
+				self.routes = routes
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -562,8 +638,13 @@ public extension ESI {
 		public struct SchematicInformation: Codable, Hashable {
 			
 			
-			public let cycleTime: Int
-			public let schematicName: String
+			public var cycleTime: Int
+			public var schematicName: String
+			
+			public init(cycleTime: Int, schematicName: String) {
+				self.cycleTime = cycleTime
+				self.schematicName = schematicName
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -605,20 +686,37 @@ public extension ESI {
 				
 			}
 			
-			public let allianceTaxRate: Float?
-			public let allowAccessWithStandings: Bool
-			public let allowAllianceAccess: Bool
-			public let badStandingTaxRate: Float?
-			public let corporationTaxRate: Float?
-			public let excellentStandingTaxRate: Float?
-			public let goodStandingTaxRate: Float?
-			public let neutralStandingTaxRate: Float?
-			public let officeID: Int64
-			public let reinforceExitEnd: Int
-			public let reinforceExitStart: Int
-			public let standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?
-			public let systemID: Int
-			public let terribleStandingTaxRate: Float?
+			public var allianceTaxRate: Float?
+			public var allowAccessWithStandings: Bool
+			public var allowAllianceAccess: Bool
+			public var badStandingTaxRate: Float?
+			public var corporationTaxRate: Float?
+			public var excellentStandingTaxRate: Float?
+			public var goodStandingTaxRate: Float?
+			public var neutralStandingTaxRate: Float?
+			public var officeID: Int64
+			public var reinforceExitEnd: Int
+			public var reinforceExitStart: Int
+			public var standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?
+			public var systemID: Int
+			public var terribleStandingTaxRate: Float?
+			
+			public init(allianceTaxRate: Float?, allowAccessWithStandings: Bool, allowAllianceAccess: Bool, badStandingTaxRate: Float?, corporationTaxRate: Float?, excellentStandingTaxRate: Float?, goodStandingTaxRate: Float?, neutralStandingTaxRate: Float?, officeID: Int64, reinforceExitEnd: Int, reinforceExitStart: Int, standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?, systemID: Int, terribleStandingTaxRate: Float?) {
+				self.allianceTaxRate = allianceTaxRate
+				self.allowAccessWithStandings = allowAccessWithStandings
+				self.allowAllianceAccess = allowAllianceAccess
+				self.badStandingTaxRate = badStandingTaxRate
+				self.corporationTaxRate = corporationTaxRate
+				self.excellentStandingTaxRate = excellentStandingTaxRate
+				self.goodStandingTaxRate = goodStandingTaxRate
+				self.neutralStandingTaxRate = neutralStandingTaxRate
+				self.officeID = officeID
+				self.reinforceExitEnd = reinforceExitEnd
+				self.reinforceExitStart = reinforceExitStart
+				self.standingLevel = standingLevel
+				self.systemID = systemID
+				self.terribleStandingTaxRate = terribleStandingTaxRate
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

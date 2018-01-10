@@ -939,10 +939,17 @@ public extension ESI {
 		public struct SystemKills: Codable, Hashable {
 			
 			
-			public let npcKills: Int
-			public let podKills: Int
-			public let shipKills: Int
-			public let systemID: Int
+			public var npcKills: Int
+			public var podKills: Int
+			public var shipKills: Int
+			public var systemID: Int
+			
+			public init(npcKills: Int, podKills: Int, shipKills: Int, systemID: Int) {
+				self.npcKills = npcKills
+				self.podKills = podKills
+				self.shipKills = shipKills
+				self.systemID = systemID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -976,7 +983,11 @@ public extension ESI {
 		public struct PostUniverseNamesNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1004,17 +1015,31 @@ public extension ESI {
 		public struct Bloodline: Codable, Hashable {
 			
 			
-			public let bloodlineID: Int
-			public let charisma: Int
-			public let corporationID: Int
-			public let localizedDescription: String
-			public let intelligence: Int
-			public let memory: Int
-			public let name: String
-			public let perception: Int
-			public let raceID: Int
-			public let shipTypeID: Int
-			public let willpower: Int
+			public var bloodlineID: Int
+			public var charisma: Int
+			public var corporationID: Int
+			public var localizedDescription: String
+			public var intelligence: Int
+			public var memory: Int
+			public var name: String
+			public var perception: Int
+			public var raceID: Int
+			public var shipTypeID: Int
+			public var willpower: Int
+			
+			public init(bloodlineID: Int, charisma: Int, corporationID: Int, localizedDescription: String, intelligence: Int, memory: Int, name: String, perception: Int, raceID: Int, shipTypeID: Int, willpower: Int) {
+				self.bloodlineID = bloodlineID
+				self.charisma = charisma
+				self.corporationID = corporationID
+				self.localizedDescription = localizedDescription
+				self.intelligence = intelligence
+				self.memory = memory
+				self.name = name
+				self.perception = perception
+				self.raceID = raceID
+				self.shipTypeID = shipTypeID
+				self.willpower = willpower
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1062,10 +1087,17 @@ public extension ESI {
 		public struct Race: Codable, Hashable {
 			
 			
-			public let allianceID: Int
-			public let localizedDescription: String
-			public let name: String
-			public let raceID: Int
+			public var allianceID: Int
+			public var localizedDescription: String
+			public var name: String
+			public var raceID: Int
+			
+			public init(allianceID: Int, localizedDescription: String, name: String, raceID: Int) {
+				self.allianceID = allianceID
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.raceID = raceID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1099,7 +1131,11 @@ public extension ESI {
 		public struct GetUniverseStructuresStructureIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1127,7 +1163,11 @@ public extension ESI {
 		public struct GetUniversePlanetsPlanetIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1155,7 +1195,11 @@ public extension ESI {
 		public struct GetUniverseTypesTypeIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1183,10 +1227,17 @@ public extension ESI {
 		public struct RegionInformation: Codable, Hashable {
 			
 			
-			public let constellations: [Int]
-			public let localizedDescription: String?
-			public let name: String
-			public let regionID: Int
+			public var constellations: [Int]
+			public var localizedDescription: String?
+			public var name: String
+			public var regionID: Int
+			
+			public init(constellations: [Int], localizedDescription: String?, name: String, regionID: Int) {
+				self.constellations = constellations
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.regionID = regionID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1222,8 +1273,13 @@ public extension ESI {
 			public struct GetUniverseTypesTypeIDDogmaEffects: Codable, Hashable {
 				
 				
-				public let effectID: Int
-				public let isDefault: Bool
+				public var effectID: Int
+				public var isDefault: Bool
+				
+				public init(effectID: Int, isDefault: Bool) {
+					self.effectID = effectID
+					self.isDefault = isDefault
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1252,8 +1308,13 @@ public extension ESI {
 			public struct GetUniverseTypesTypeIDDogmaAttributes: Codable, Hashable {
 				
 				
-				public let attributeID: Int
-				public let value: Float
+				public var attributeID: Int
+				public var value: Float
+				
+				public init(attributeID: Int, value: Float) {
+					self.attributeID = attributeID
+					self.value = value
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1279,22 +1340,41 @@ public extension ESI {
 				}
 			}
 			
-			public let capacity: Float?
-			public let localizedDescription: String
-			public let dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?
-			public let dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?
-			public let graphicID: Int?
-			public let groupID: Int
-			public let iconID: Int?
-			public let marketGroupID: Int?
-			public let mass: Float?
-			public let name: String
-			public let packagedVolume: Float?
-			public let portionSize: Int?
-			public let published: Bool
-			public let radius: Float?
-			public let typeID: Int
-			public let volume: Float?
+			public var capacity: Float?
+			public var localizedDescription: String
+			public var dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?
+			public var dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?
+			public var graphicID: Int?
+			public var groupID: Int
+			public var iconID: Int?
+			public var marketGroupID: Int?
+			public var mass: Float?
+			public var name: String
+			public var packagedVolume: Float?
+			public var portionSize: Int?
+			public var published: Bool
+			public var radius: Float?
+			public var typeID: Int
+			public var volume: Float?
+			
+			public init(capacity: Float?, localizedDescription: String, dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?, dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Float?, name: String, packagedVolume: Float?, portionSize: Int?, published: Bool, radius: Float?, typeID: Int, volume: Float?) {
+				self.capacity = capacity
+				self.localizedDescription = localizedDescription
+				self.dogmaAttributes = dogmaAttributes
+				self.dogmaEffects = dogmaEffects
+				self.graphicID = graphicID
+				self.groupID = groupID
+				self.iconID = iconID
+				self.marketGroupID = marketGroupID
+				self.mass = mass
+				self.name = name
+				self.packagedVolume = packagedVolume
+				self.portionSize = portionSize
+				self.published = published
+				self.radius = radius
+				self.typeID = typeID
+				self.volume = volume
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1367,9 +1447,15 @@ public extension ESI {
 				
 			}
 			
-			public let category: Universe.Name.Category
-			public let id: Int
-			public let name: String
+			public var category: Universe.Name.Category
+			public var id: Int
+			public var name: String
+			
+			public init(category: Universe.Name.Category, id: Int, name: String) {
+				self.category = category
+				self.id = id
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1401,7 +1487,11 @@ public extension ESI {
 		public struct GetUniverseStargatesStargateIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1429,7 +1519,11 @@ public extension ESI {
 		public struct GetUniverseStationsStationIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1459,9 +1553,15 @@ public extension ESI {
 			public struct GetUniverseStargatesStargateIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1492,8 +1592,13 @@ public extension ESI {
 			public struct GetUniverseStargatesStargateIDDestination: Codable, Hashable {
 				
 				
-				public let stargateID: Int
-				public let systemID: Int
+				public var stargateID: Int
+				public var systemID: Int
+				
+				public init(stargateID: Int, systemID: Int) {
+					self.stargateID = stargateID
+					self.systemID = systemID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1519,12 +1624,21 @@ public extension ESI {
 				}
 			}
 			
-			public let destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination
-			public let name: String
-			public let position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition
-			public let stargateID: Int
-			public let systemID: Int
-			public let typeID: Int
+			public var destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination
+			public var name: String
+			public var position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition
+			public var stargateID: Int
+			public var systemID: Int
+			public var typeID: Int
+			
+			public init(destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, name: String, position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, stargateID: Int, systemID: Int, typeID: Int) {
+				self.destination = destination
+				self.name = name
+				self.position = position
+				self.stargateID = stargateID
+				self.systemID = systemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1658,14 +1772,25 @@ public extension ESI {
 				
 			}
 			
-			public let age: Int64
-			public let luminosity: Float
-			public let name: String
-			public let radius: Int64
-			public let solarSystemID: Int
-			public let spectralClass: Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass
-			public let temperature: Int
-			public let typeID: Int
+			public var age: Int64
+			public var luminosity: Float
+			public var name: String
+			public var radius: Int64
+			public var solarSystemID: Int
+			public var spectralClass: Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass
+			public var temperature: Int
+			public var typeID: Int
+			
+			public init(age: Int64, luminosity: Float, name: String, radius: Int64, solarSystemID: Int, spectralClass: Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass, temperature: Int, typeID: Int) {
+				self.age = age
+				self.luminosity = luminosity
+				self.name = name
+				self.radius = radius
+				self.solarSystemID = solarSystemID
+				self.spectralClass = spectralClass
+				self.temperature = temperature
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1707,10 +1832,17 @@ public extension ESI {
 		public struct ItemCategoryInformation: Codable, Hashable {
 			
 			
-			public let categoryID: Int
-			public let groups: [Int]
-			public let name: String
-			public let published: Bool
+			public var categoryID: Int
+			public var groups: [Int]
+			public var name: String
+			public var published: Bool
+			
+			public init(categoryID: Int, groups: [Int], name: String, published: Bool) {
+				self.categoryID = categoryID
+				self.groups = groups
+				self.name = name
+				self.published = published
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1744,7 +1876,11 @@ public extension ESI {
 		public struct GetUniverseGroupsGroupIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1772,14 +1908,25 @@ public extension ESI {
 		public struct GraphicInformation: Codable, Hashable {
 			
 			
-			public let collisionFile: String?
-			public let graphicFile: String?
-			public let graphicID: Int
-			public let iconFolder: String?
-			public let sofDna: String?
-			public let sofFationName: String?
-			public let sofHullName: String?
-			public let sofRaceName: String?
+			public var collisionFile: String?
+			public var graphicFile: String?
+			public var graphicID: Int
+			public var iconFolder: String?
+			public var sofDna: String?
+			public var sofFationName: String?
+			public var sofHullName: String?
+			public var sofRaceName: String?
+			
+			public init(collisionFile: String?, graphicFile: String?, graphicID: Int, iconFolder: String?, sofDna: String?, sofFationName: String?, sofHullName: String?, sofRaceName: String?) {
+				self.collisionFile = collisionFile
+				self.graphicFile = graphicFile
+				self.graphicID = graphicID
+				self.iconFolder = iconFolder
+				self.sofDna = sofDna
+				self.sofFationName = sofFationName
+				self.sofHullName = sofHullName
+				self.sofRaceName = sofRaceName
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1821,7 +1968,11 @@ public extension ESI {
 		public struct PostUniverseIdsServiceUnavailable: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1849,8 +2000,13 @@ public extension ESI {
 		public struct Jump: Codable, Hashable {
 			
 			
-			public let shipJumps: Int
-			public let systemID: Int
+			public var shipJumps: Int
+			public var systemID: Int
+			
+			public init(shipJumps: Int, systemID: Int) {
+				self.shipJumps = shipJumps
+				self.systemID = systemID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1880,7 +2036,11 @@ public extension ESI {
 		public struct GetUniverseRegionsRegionIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1908,7 +2068,11 @@ public extension ESI {
 		public struct GetUniverseGraphicsGraphicIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1938,8 +2102,13 @@ public extension ESI {
 			public struct PostUniverseIdsCharacters: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1968,8 +2137,13 @@ public extension ESI {
 			public struct PostUniverseIdsAlliances: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1998,8 +2172,13 @@ public extension ESI {
 			public struct PostUniverseIdsConstellations: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2028,8 +2207,13 @@ public extension ESI {
 			public struct PostUniverseIdsInventoryTypes: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2058,8 +2242,13 @@ public extension ESI {
 			public struct PostUniverseIdsSystems: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2088,8 +2277,13 @@ public extension ESI {
 			public struct PostUniverseIdsStations: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2118,8 +2312,13 @@ public extension ESI {
 			public struct PostUniverseIdsRegions: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2148,8 +2347,13 @@ public extension ESI {
 			public struct PostUniverseIdsAgents: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2178,8 +2382,13 @@ public extension ESI {
 			public struct PostUniverseIdsFactions: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2208,8 +2417,13 @@ public extension ESI {
 			public struct PostUniverseIdsCorporations: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2235,16 +2449,29 @@ public extension ESI {
 				}
 			}
 			
-			public let agents: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]?
-			public let alliances: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]?
-			public let characters: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]?
-			public let constellations: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]?
-			public let corporations: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]?
-			public let factions: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]?
-			public let inventoryTypes: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]?
-			public let regions: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]?
-			public let stations: [Universe.PostUniverseIdsOk.PostUniverseIdsStations]?
-			public let systems: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]?
+			public var agents: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]?
+			public var alliances: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]?
+			public var characters: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]?
+			public var constellations: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]?
+			public var corporations: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]?
+			public var factions: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]?
+			public var inventoryTypes: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]?
+			public var regions: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]?
+			public var stations: [Universe.PostUniverseIdsOk.PostUniverseIdsStations]?
+			public var systems: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]?
+			
+			public init(agents: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]?, alliances: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]?, characters: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]?, constellations: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]?, corporations: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]?, factions: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]?, inventoryTypes: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]?, regions: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]?, stations: [Universe.PostUniverseIdsOk.PostUniverseIdsStations]?, systems: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]?) {
+				self.agents = agents
+				self.alliances = alliances
+				self.characters = characters
+				self.constellations = constellations
+				self.corporations = corporations
+				self.factions = factions
+				self.inventoryTypes = inventoryTypes
+				self.regions = regions
+				self.stations = stations
+				self.systems = systems
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2290,7 +2517,11 @@ public extension ESI {
 		public struct GetUniverseCategoriesCategoryIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2320,9 +2551,15 @@ public extension ESI {
 			public struct GetUniverseConstellationsConstellationIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2350,11 +2587,19 @@ public extension ESI {
 				}
 			}
 			
-			public let constellationID: Int
-			public let name: String
-			public let position: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition
-			public let regionID: Int
-			public let systems: [Int]
+			public var constellationID: Int
+			public var name: String
+			public var position: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition
+			public var regionID: Int
+			public var systems: [Int]
+			
+			public init(constellationID: Int, name: String, position: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition, regionID: Int, systems: [Int]) {
+				self.constellationID = constellationID
+				self.name = name
+				self.position = position
+				self.regionID = regionID
+				self.systems = systems
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2392,9 +2637,15 @@ public extension ESI {
 			public struct GetUniverseMoonsMoonIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2422,10 +2673,17 @@ public extension ESI {
 				}
 			}
 			
-			public let moonID: Int
-			public let name: String
-			public let position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition
-			public let systemID: Int
+			public var moonID: Int
+			public var name: String
+			public var position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition
+			public var systemID: Int
+			
+			public init(moonID: Int, name: String, position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, systemID: Int) {
+				self.moonID = moonID
+				self.name = name
+				self.position = position
+				self.systemID = systemID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2461,9 +2719,15 @@ public extension ESI {
 			public struct GetUniverseStructuresStructureIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2491,10 +2755,17 @@ public extension ESI {
 				}
 			}
 			
-			public let name: String
-			public let position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?
-			public let solarSystemID: Int
-			public let typeID: Int?
+			public var name: String
+			public var position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?
+			public var solarSystemID: Int
+			public var typeID: Int?
+			
+			public init(name: String, position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?, solarSystemID: Int, typeID: Int?) {
+				self.name = name
+				self.position = position
+				self.solarSystemID = solarSystemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2528,11 +2799,19 @@ public extension ESI {
 		public struct ItemGroupInformation: Codable, Hashable {
 			
 			
-			public let categoryID: Int
-			public let groupID: Int
-			public let name: String
-			public let published: Bool
-			public let types: [Int]
+			public var categoryID: Int
+			public var groupID: Int
+			public var name: String
+			public var published: Bool
+			public var types: [Int]
+			
+			public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
+				self.categoryID = categoryID
+				self.groupID = groupID
+				self.name = name
+				self.published = published
+				self.types = types
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2568,7 +2847,11 @@ public extension ESI {
 		public struct GetUniverseMoonsMoonIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2598,9 +2881,15 @@ public extension ESI {
 			public struct GetUniverseSystemsSystemIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2631,8 +2920,13 @@ public extension ESI {
 			public struct GetUniverseSystemsSystemIDPlanets: Codable, Hashable {
 				
 				
-				public let moons: [Int]?
-				public let planetID: Int
+				public var moons: [Int]?
+				public var planetID: Int
+				
+				public init(moons: [Int]?, planetID: Int) {
+					self.moons = moons
+					self.planetID = planetID
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2658,16 +2952,29 @@ public extension ESI {
 				}
 			}
 			
-			public let constellationID: Int
-			public let name: String
-			public let planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]
-			public let position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition
-			public let securityClass: String?
-			public let securityStatus: Float
-			public let starID: Int
-			public let stargates: [Int]?
-			public let stations: [Int]?
-			public let systemID: Int
+			public var constellationID: Int
+			public var name: String
+			public var planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]
+			public var position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition
+			public var securityClass: String?
+			public var securityStatus: Float
+			public var starID: Int
+			public var stargates: [Int]?
+			public var stations: [Int]?
+			public var systemID: Int
+			
+			public init(constellationID: Int, name: String, planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets], position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, securityClass: String?, securityStatus: Float, starID: Int, stargates: [Int]?, stations: [Int]?, systemID: Int) {
+				self.constellationID = constellationID
+				self.name = name
+				self.planets = planets
+				self.position = position
+				self.securityClass = securityClass
+				self.securityStatus = securityStatus
+				self.starID = starID
+				self.stargates = stargates
+				self.stations = stations
+				self.systemID = systemID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2715,9 +3022,15 @@ public extension ESI {
 			public struct GetUniversePlanetsPlanetIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2745,11 +3058,19 @@ public extension ESI {
 				}
 			}
 			
-			public let name: String
-			public let planetID: Int
-			public let position: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition
-			public let systemID: Int
-			public let typeID: Int
+			public var name: String
+			public var planetID: Int
+			public var position: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition
+			public var systemID: Int
+			public var typeID: Int
+			
+			public init(name: String, planetID: Int, position: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition, systemID: Int, typeID: Int) {
+				self.name = name
+				self.planetID = planetID
+				self.position = position
+				self.systemID = systemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2822,9 +3143,15 @@ public extension ESI {
 			public struct GetUniverseStationsStationIDPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2852,18 +3179,33 @@ public extension ESI {
 				}
 			}
 			
-			public let maxDockableShipVolume: Float
-			public let name: String
-			public let officeRentalCost: Float
-			public let owner: Int?
-			public let position: Universe.StationInformation.GetUniverseStationsStationIDPosition
-			public let raceID: Int?
-			public let reprocessingEfficiency: Float
-			public let reprocessingStationsTake: Float
-			public let services: [Universe.StationInformation.GetUniverseStationsStationIDServices]
-			public let stationID: Int
-			public let systemID: Int
-			public let typeID: Int
+			public var maxDockableShipVolume: Float
+			public var name: String
+			public var officeRentalCost: Float
+			public var owner: Int?
+			public var position: Universe.StationInformation.GetUniverseStationsStationIDPosition
+			public var raceID: Int?
+			public var reprocessingEfficiency: Float
+			public var reprocessingStationsTake: Float
+			public var services: [Universe.StationInformation.GetUniverseStationsStationIDServices]
+			public var stationID: Int
+			public var systemID: Int
+			public var typeID: Int
+			
+			public init(maxDockableShipVolume: Float, name: String, officeRentalCost: Float, owner: Int?, position: Universe.StationInformation.GetUniverseStationsStationIDPosition, raceID: Int?, reprocessingEfficiency: Float, reprocessingStationsTake: Float, services: [Universe.StationInformation.GetUniverseStationsStationIDServices], stationID: Int, systemID: Int, typeID: Int) {
+				self.maxDockableShipVolume = maxDockableShipVolume
+				self.name = name
+				self.officeRentalCost = officeRentalCost
+				self.owner = owner
+				self.position = position
+				self.raceID = raceID
+				self.reprocessingEfficiency = reprocessingEfficiency
+				self.reprocessingStationsTake = reprocessingStationsTake
+				self.services = services
+				self.stationID = stationID
+				self.systemID = systemID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2913,7 +3255,11 @@ public extension ESI {
 		public struct GetUniverseConstellationsConstellationIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2941,7 +3287,11 @@ public extension ESI {
 		public struct GetUniverseSystemsSystemIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2969,16 +3319,29 @@ public extension ESI {
 		public struct Faction: Codable, Hashable {
 			
 			
-			public let corporationID: Int?
-			public let localizedDescription: String
-			public let factionID: Int
-			public let isUnique: Bool
-			public let militiaCorporationID: Int?
-			public let name: String
-			public let sizeFactor: Float
-			public let solarSystemID: Int?
-			public let stationCount: Int
-			public let stationSystemCount: Int
+			public var corporationID: Int?
+			public var localizedDescription: String
+			public var factionID: Int
+			public var isUnique: Bool
+			public var militiaCorporationID: Int?
+			public var name: String
+			public var sizeFactor: Float
+			public var solarSystemID: Int?
+			public var stationCount: Int
+			public var stationSystemCount: Int
+			
+			public init(corporationID: Int?, localizedDescription: String, factionID: Int, isUnique: Bool, militiaCorporationID: Int?, name: String, sizeFactor: Float, solarSystemID: Int?, stationCount: Int, stationSystemCount: Int) {
+				self.corporationID = corporationID
+				self.localizedDescription = localizedDescription
+				self.factionID = factionID
+				self.isUnique = isUnique
+				self.militiaCorporationID = militiaCorporationID
+				self.name = name
+				self.sizeFactor = sizeFactor
+				self.solarSystemID = solarSystemID
+				self.stationCount = stationCount
+				self.stationSystemCount = stationSystemCount
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

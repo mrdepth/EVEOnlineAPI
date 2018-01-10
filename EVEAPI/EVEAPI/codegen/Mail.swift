@@ -331,8 +331,13 @@ public extension ESI {
 				
 			}
 			
-			public let recipientID: Int
-			public let recipientType: Mail.Recipient.RecipientType
+			public var recipientID: Int
+			public var recipientType: Mail.Recipient.RecipientType
+			
+			public init(recipientID: Int, recipientType: Mail.Recipient.RecipientType) {
+				self.recipientID = recipientID
+				self.recipientType = recipientType
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -362,7 +367,11 @@ public extension ESI {
 		public struct PutCharactersCharacterIDMailMailIDBadRequest: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -390,7 +399,11 @@ public extension ESI {
 		public struct GetCharactersCharacterIDMailMailIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -418,8 +431,13 @@ public extension ESI {
 		public struct UpdateContents: Codable, Hashable {
 			
 			
-			public let labels: [Int64]?
-			public let read: Bool?
+			public var labels: [Int64]?
+			public var read: Bool?
+			
+			public init(labels: [Int64]?, read: Bool?) {
+				self.labels = labels
+				self.read = read
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -449,7 +467,11 @@ public extension ESI {
 		public struct DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -477,10 +499,17 @@ public extension ESI {
 		public struct NewMail: Codable, Hashable {
 			
 			
-			public let approvedCost: Int64?
-			public let body: String
-			public let recipients: [Mail.Recipient]
-			public let subject: String
+			public var approvedCost: Int64?
+			public var body: String
+			public var recipients: [Mail.Recipient]
+			public var subject: String
+			
+			public init(approvedCost: Int64?, body: String, recipients: [Mail.Recipient], subject: String) {
+				self.approvedCost = approvedCost
+				self.body = body
+				self.recipients = recipients
+				self.subject = subject
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -541,10 +570,17 @@ public extension ESI {
 					
 				}
 				
-				public let color: Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor?
-				public let labelID: Int?
-				public let name: String?
-				public let unreadCount: Int?
+				public var color: Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor?
+				public var labelID: Int?
+				public var name: String?
+				public var unreadCount: Int?
+				
+				public init(color: Mail.MailLabelsAndUnreadCounts.Label.GetCharactersCharacterIDMailLabelsColor?, labelID: Int?, name: String?, unreadCount: Int?) {
+					self.color = color
+					self.labelID = labelID
+					self.name = name
+					self.unreadCount = unreadCount
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -574,8 +610,13 @@ public extension ESI {
 				}
 			}
 			
-			public let labels: [Mail.MailLabelsAndUnreadCounts.Label]?
-			public let totalUnreadCount: Int?
+			public var labels: [Mail.MailLabelsAndUnreadCounts.Label]?
+			public var totalUnreadCount: Int?
+			
+			public init(labels: [Mail.MailLabelsAndUnreadCounts.Label]?, totalUnreadCount: Int?) {
+				self.labels = labels
+				self.totalUnreadCount = totalUnreadCount
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -605,8 +646,13 @@ public extension ESI {
 		public struct Subscription: Codable, Hashable {
 			
 			
-			public let mailingListID: Int
-			public let name: String
+			public var mailingListID: Int
+			public var name: String
+			
+			public init(mailingListID: Int, name: String) {
+				self.mailingListID = mailingListID
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -636,7 +682,11 @@ public extension ESI {
 		public struct PostCharactersCharacterIDMailBadRequest: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -664,13 +714,23 @@ public extension ESI {
 		public struct MailBody: Codable, Hashable {
 			
 			
-			public let body: String?
-			public let from: Int?
-			public let labels: [Int64]?
-			public let read: Bool?
-			public let recipients: [Mail.Recipient]?
-			public let subject: String?
-			public let timestamp: Date?
+			public var body: String?
+			public var from: Int?
+			public var labels: [Int64]?
+			public var read: Bool?
+			public var recipients: [Mail.Recipient]?
+			public var subject: String?
+			public var timestamp: Date?
+			
+			public init(body: String?, from: Int?, labels: [Int64]?, read: Bool?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
+				self.body = body
+				self.from = from
+				self.labels = labels
+				self.read = read
+				self.recipients = recipients
+				self.subject = subject
+				self.timestamp = timestamp
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -710,13 +770,23 @@ public extension ESI {
 		public struct Header: Codable, Hashable {
 			
 			
-			public let from: Int?
-			public let isRead: Bool?
-			public let labels: [Int64]?
-			public let mailID: Int64?
-			public let recipients: [Mail.Recipient]?
-			public let subject: String?
-			public let timestamp: Date?
+			public var from: Int?
+			public var isRead: Bool?
+			public var labels: [Int64]?
+			public var mailID: Int64?
+			public var recipients: [Mail.Recipient]?
+			public var subject: String?
+			public var timestamp: Date?
+			
+			public init(from: Int?, isRead: Bool?, labels: [Int64]?, mailID: Int64?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
+				self.from = from
+				self.isRead = isRead
+				self.labels = labels
+				self.mailID = mailID
+				self.recipients = recipients
+				self.subject = subject
+				self.timestamp = timestamp
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -781,8 +851,13 @@ public extension ESI {
 				
 			}
 			
-			public let color: Mail.Label.PostCharactersCharacterIDMailLabelsColor?
-			public let name: String
+			public var color: Mail.Label.PostCharactersCharacterIDMailLabelsColor?
+			public var name: String
+			
+			public init(color: Mail.Label.PostCharactersCharacterIDMailLabelsColor?, name: String) {
+				self.color = color
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

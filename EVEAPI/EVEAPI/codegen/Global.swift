@@ -6,8 +6,13 @@ public extension ESI {
 	public struct Forbidden: Codable, Hashable {
 		
 		
-		public let error: String
-		public let ssoStatus: Int?
+		public var error: String
+		public var ssoStatus: Int?
+		
+		public init(error: String, ssoStatus: Int?) {
+			self.error = error
+			self.ssoStatus = ssoStatus
+		}
 		
 		public var hashValue: Int {
 			var hash: Int = 0
@@ -37,7 +42,11 @@ public extension ESI {
 	public struct InternalServerError: Codable, Hashable {
 		
 		
-		public let error: String
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
 		
 		public var hashValue: Int {
 			var hash: Int = 0

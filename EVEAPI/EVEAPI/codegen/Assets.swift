@@ -353,13 +353,23 @@ public extension ESI {
 				
 			}
 			
-			public let isSingleton: Bool
-			public let itemID: Int64
-			public let locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag
-			public let locationID: Int64
-			public let locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType
-			public let quantity: Int
-			public let typeID: Int
+			public var isSingleton: Bool
+			public var itemID: Int64
+			public var locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag
+			public var locationID: Int64
+			public var locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType
+			public var quantity: Int
+			public var typeID: Int
+			
+			public init(isSingleton: Bool, itemID: Int64, locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag, locationID: Int64, locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType, quantity: Int, typeID: Int) {
+				self.isSingleton = isSingleton
+				self.itemID = itemID
+				self.locationFlag = locationFlag
+				self.locationID = locationID
+				self.locationType = locationType
+				self.quantity = quantity
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -504,13 +514,23 @@ public extension ESI {
 				
 			}
 			
-			public let isSingleton: Bool
-			public let itemID: Int64
-			public let locationFlag: Assets.Asset.Flag
-			public let locationID: Int64
-			public let locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType
-			public let quantity: Int
-			public let typeID: Int
+			public var isSingleton: Bool
+			public var itemID: Int64
+			public var locationFlag: Assets.Asset.Flag
+			public var locationID: Int64
+			public var locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType
+			public var quantity: Int
+			public var typeID: Int
+			
+			public init(isSingleton: Bool, itemID: Int64, locationFlag: Assets.Asset.Flag, locationID: Int64, locationType: Assets.Asset.GetCharactersCharacterIDAssetsLocationType, quantity: Int, typeID: Int) {
+				self.isSingleton = isSingleton
+				self.itemID = itemID
+				self.locationFlag = locationFlag
+				self.locationID = locationID
+				self.locationType = locationType
+				self.quantity = quantity
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -552,9 +572,15 @@ public extension ESI {
 			public struct PostCharactersCharacterIDAssetsLocationsPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -582,8 +608,13 @@ public extension ESI {
 				}
 			}
 			
-			public let itemID: Int64
-			public let position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition
+			public var itemID: Int64
+			public var position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition
+			
+			public init(itemID: Int64, position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) {
+				self.itemID = itemID
+				self.position = position
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -615,9 +646,15 @@ public extension ESI {
 			public struct PostCorporationsCorporationIDAssetsLocationsPosition: Codable, Hashable {
 				
 				
-				public let x: Double
-				public let y: Double
-				public let z: Double
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -645,8 +682,13 @@ public extension ESI {
 				}
 			}
 			
-			public let itemID: Int64
-			public let position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
+			public var itemID: Int64
+			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
+			
+			public init(itemID: Int64, position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
+				self.itemID = itemID
+				self.position = position
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -676,8 +718,13 @@ public extension ESI {
 		public struct PostCharactersCharacterIDAssetsNamesOk: Codable, Hashable {
 			
 			
-			public let itemID: Int64
-			public let name: String
+			public var itemID: Int64
+			public var name: String
+			
+			public init(itemID: Int64, name: String) {
+				self.itemID = itemID
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -707,8 +754,13 @@ public extension ESI {
 		public struct PostCorporationsCorporationIDAssetsNamesOk: Codable, Hashable {
 			
 			
-			public let itemID: Int64
-			public let name: String
+			public var itemID: Int64
+			public var name: String
+			
+			public init(itemID: Int64, name: String) {
+				self.itemID = itemID
+				self.name = name
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

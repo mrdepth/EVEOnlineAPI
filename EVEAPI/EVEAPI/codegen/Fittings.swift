@@ -117,9 +117,15 @@ public extension ESI {
 		public struct Item: Codable, Hashable {
 			
 			
-			public let flag: Int
-			public let quantity: Int
-			public let typeID: Int
+			public var flag: Int
+			public var quantity: Int
+			public var typeID: Int
+			
+			public init(flag: Int, quantity: Int, typeID: Int) {
+				self.flag = flag
+				self.quantity = quantity
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -151,11 +157,19 @@ public extension ESI {
 		public struct Fitting: Codable, Hashable {
 			
 			
-			public let localizedDescription: String
-			public let fittingID: Int
-			public let items: [Fittings.Item]
-			public let name: String
-			public let shipTypeID: Int
+			public var localizedDescription: String
+			public var fittingID: Int
+			public var items: [Fittings.Item]
+			public var name: String
+			public var shipTypeID: Int
+			
+			public init(localizedDescription: String, fittingID: Int, items: [Fittings.Item], name: String, shipTypeID: Int) {
+				self.localizedDescription = localizedDescription
+				self.fittingID = fittingID
+				self.items = items
+				self.name = name
+				self.shipTypeID = shipTypeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -191,7 +205,11 @@ public extension ESI {
 		public struct CreateFittingResult: Codable, Hashable {
 			
 			
-			public let fittingID: Int
+			public var fittingID: Int
+			
+			public init(fittingID: Int) {
+				self.fittingID = fittingID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -219,10 +237,17 @@ public extension ESI {
 		public struct MutableFitting: Codable, Hashable {
 			
 			
-			public let localizedDescription: String
-			public let items: [Fittings.Item]
-			public let name: String
-			public let shipTypeID: Int
+			public var localizedDescription: String
+			public var items: [Fittings.Item]
+			public var name: String
+			public var shipTypeID: Int
+			
+			public init(localizedDescription: String, items: [Fittings.Item], name: String, shipTypeID: Int) {
+				self.localizedDescription = localizedDescription
+				self.items = items
+				self.name = name
+				self.shipTypeID = shipTypeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

@@ -224,6 +224,58 @@ struct SSOError: Codable {
 
 extension DataRequest {
 	
+	class NumberResponseSerializer {
+
+		func number(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> NSDecimalNumber {
+			guard error == nil else { throw error! }
+			
+			guard let validData = data, validData.count > 0 else {
+				throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
+			}
+			
+			do {
+				guard let s = String(data: validData, encoding: .utf8), let d = Decimal(string: s, locale: nil) else {
+					throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
+				}
+				return NSDecimalNumber(decimal: d)
+			} catch {
+				throw error
+			}
+		}
+	}
+	
+	final class DoubleResponseSerializer: NumberResponseSerializer, DataResponseSerializerProtocol {
+		public typealias SerializedObject = Double
+		
+		public func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> Double {
+			return try number(request: request, response: response, data: data, error: error).doubleValue
+		}
+	}
+	
+	final class FloatResponseSerializer: NumberResponseSerializer, DataResponseSerializerProtocol {
+		public typealias SerializedObject = Float
+		
+		public func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> Float {
+			return try number(request: request, response: response, data: data, error: error).floatValue
+		}
+	}
+
+	final class IntResponseSerializer: NumberResponseSerializer, DataResponseSerializerProtocol {
+		public typealias SerializedObject = Int
+		
+		public func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> Int {
+			return try number(request: request, response: response, data: data, error: error).intValue
+		}
+	}
+
+	final class Int64ResponseSerializer: NumberResponseSerializer, DataResponseSerializerProtocol {
+		public typealias SerializedObject = Int64
+		
+		public func serialize(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> Int64 {
+			return try number(request: request, response: response, data: data, error: error).int64Value
+		}
+	}
+
 	
 	@discardableResult
 	public func validateESI() -> Self {
@@ -255,8 +307,7 @@ extension DataRequest {
 	@discardableResult
 	public func responseESI<T: Decodable>(queue: DispatchQueue? = nil,
 		completionHandler: @escaping (DataResponse<T>) -> Void)
-		-> Self
-	{
+		-> Self {
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = .custom { (decoder) -> Date in
 			if let formatter = (decoder.codingPath.last as? DateFormatted)?.dateFormatter {
@@ -269,27 +320,32 @@ extension DataRequest {
 		}
 		
 		return responseJSONDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
-		/*let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
-			let result = DataRequest.jsonResponseSerializer().serializeResponse(request, response, data, error)
-			switch result {
-			case let .success(value):
-				do {
-					return .success(try T(json: value))
-				}
-				catch {
-					return .failure(error)
-				}
-			case let .failure(error):
-				return .failure(error)
-			}
-		}
-		
-		return response(
-			queue: queue,
-			responseSerializer: serializer,
-			completionHandler: completionHandler
-		)*/
 	}
+	
+	@discardableResult
+	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Double>) -> Void)
+		-> Self {
+			return response(queue: queue, responseSerializer: DoubleResponseSerializer(), completionHandler: completionHandler)
+	}
+	
+	@discardableResult
+	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Float>) -> Void)
+		-> Self {
+			return response(queue: queue, responseSerializer: FloatResponseSerializer(), completionHandler: completionHandler)
+	}
+
+	@discardableResult
+	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Int>) -> Void)
+		-> Self {
+			return response(queue: queue, responseSerializer: IntResponseSerializer(), completionHandler: completionHandler)
+	}
+
+	@discardableResult
+	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Int64>) -> Void)
+		-> Self {
+			return response(queue: queue, responseSerializer: Int64ResponseSerializer(), completionHandler: completionHandler)
+	}
+
 }
 
 public extension ESI.Scope {

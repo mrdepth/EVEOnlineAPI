@@ -70,7 +70,11 @@ public extension ESI {
 		public struct GetRouteOriginDestinationNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

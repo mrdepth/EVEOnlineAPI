@@ -54,9 +54,15 @@ public extension ESI {
 			public struct GetInsurancePricesLevels: Codable, Hashable {
 				
 				
-				public let cost: Float
-				public let name: String
-				public let payout: Float
+				public var cost: Float
+				public var name: String
+				public var payout: Float
+				
+				public init(cost: Float, name: String, payout: Float) {
+					self.cost = cost
+					self.name = name
+					self.payout = payout
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -84,8 +90,13 @@ public extension ESI {
 				}
 			}
 			
-			public let levels: [Insurance.Price.GetInsurancePricesLevels]
-			public let typeID: Int
+			public var levels: [Insurance.Price.GetInsurancePricesLevels]
+			public var typeID: Int
+			
+			public init(levels: [Insurance.Price.GetInsurancePricesLevels], typeID: Int) {
+				self.levels = levels
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

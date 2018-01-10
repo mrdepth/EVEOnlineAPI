@@ -82,6 +82,17 @@ public struct OAuth2Token: Codable {
 		case realm
 		case scopes
 	}
+	
+	public init (accessToken: String, refreshToken: String, tokenType: String, expiresOn: Date, characterID: Int64, characterName: String, realm: String, scopes: [String]) {
+		self.accessToken = accessToken
+		self.refreshToken = refreshToken
+		self.tokenType = tokenType
+		self.expiresOn = expiresOn
+		self.characterID = characterID
+		self.characterName = characterName
+		self.realm = realm
+		self.scopes = scopes
+	}
 }
 
 public class OAuth2Helper: RequestAdapter, RequestRetrier {

@@ -163,11 +163,19 @@ public extension ESI {
 				
 			}
 			
-			public let eventDate: Date?
-			public let eventID: Int?
-			public let eventResponse: Calendar.Summary.Response?
-			public let importance: Int?
-			public let title: String?
+			public var eventDate: Date?
+			public var eventID: Int?
+			public var eventResponse: Calendar.Summary.Response?
+			public var importance: Int?
+			public var title: String?
+			
+			public init(eventDate: Date?, eventID: Int?, eventResponse: Calendar.Summary.Response?, importance: Int?, title: String?) {
+				self.eventDate = eventDate
+				self.eventID = eventID
+				self.eventResponse = eventResponse
+				self.importance = importance
+				self.title = title
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -214,8 +222,13 @@ public extension ESI {
 				
 			}
 			
-			public let characterID: Int?
-			public let eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?
+			public var characterID: Int?
+			public var eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?
+			
+			public init(characterID: Int?, eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?) {
+				self.characterID = characterID
+				self.eventResponse = eventResponse
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -257,16 +270,29 @@ public extension ESI {
 				
 			}
 			
-			public let date: Date
-			public let duration: Int
-			public let eventID: Int
-			public let importance: Int
-			public let ownerID: Int
-			public let ownerName: String
-			public let ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType
-			public let response: String
-			public let text: String
-			public let title: String
+			public var date: Date
+			public var duration: Int
+			public var eventID: Int
+			public var importance: Int
+			public var ownerID: Int
+			public var ownerName: String
+			public var ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType
+			public var response: String
+			public var text: String
+			public var title: String
+			
+			public init(date: Date, duration: Int, eventID: Int, importance: Int, ownerID: Int, ownerName: String, ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType, response: String, text: String, title: String) {
+				self.date = date
+				self.duration = duration
+				self.eventID = eventID
+				self.importance = importance
+				self.ownerID = ownerID
+				self.ownerName = ownerName
+				self.ownerType = ownerType
+				self.response = response
+				self.text = text
+				self.title = title
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -322,7 +348,11 @@ public extension ESI {
 				
 			}
 			
-			public let response: Calendar.Response.Response
+			public var response: Calendar.Response.Response
+			
+			public init(response: Calendar.Response.Response) {
+				self.response = response
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

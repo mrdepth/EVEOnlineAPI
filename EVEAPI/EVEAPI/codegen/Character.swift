@@ -578,10 +578,17 @@ public extension ESI {
 		public struct Portrait: Codable, Hashable {
 			
 			
-			public let px128x128: String?
-			public let px256x256: String?
-			public let px512x512: String?
-			public let px64x64: String?
+			public var px128x128: String?
+			public var px256x256: String?
+			public var px512x512: String?
+			public var px64x64: String?
+			
+			public init(px128x128: String?, px256x256: String?, px512x512: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px256x256 = px256x256
+				self.px512x512 = px512x512
+				self.px64x64 = px64x64
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -615,11 +622,19 @@ public extension ESI {
 		public struct GetCharactersCharacterIDNotificationsContactsOk: Codable, Hashable {
 			
 			
-			public let message: String
-			public let notificationID: Int
-			public let sendDate: Date
-			public let senderCharacterID: Int
-			public let standingLevel: Float
+			public var message: String
+			public var notificationID: Int
+			public var sendDate: Date
+			public var senderCharacterID: Int
+			public var standingLevel: Float
+			
+			public init(message: String, notificationID: Int, sendDate: Date, senderCharacterID: Int, standingLevel: Float) {
+				self.message = message
+				self.notificationID = notificationID
+				self.sendDate = sendDate
+				self.senderCharacterID = senderCharacterID
+				self.standingLevel = standingLevel
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -655,9 +670,15 @@ public extension ESI {
 		public struct Fatigue: Codable, Hashable {
 			
 			
-			public let jumpFatigueExpireDate: Date?
-			public let lastJumpDate: Date?
-			public let lastUpdateDate: Date?
+			public var jumpFatigueExpireDate: Date?
+			public var lastJumpDate: Date?
+			public var lastUpdateDate: Date?
+			
+			public init(jumpFatigueExpireDate: Date?, lastJumpDate: Date?, lastUpdateDate: Date?) {
+				self.jumpFatigueExpireDate = jumpFatigueExpireDate
+				self.lastJumpDate = lastJumpDate
+				self.lastUpdateDate = lastUpdateDate
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -691,7 +712,11 @@ public extension ESI {
 		public struct GetCharactersCharacterIDNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -732,10 +757,17 @@ public extension ESI {
 			public struct GetCharactersCharacterIDChatChannelsBlocked: Codable, Hashable {
 				
 				
-				public let accessorID: Int
-				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
-				public let endAt: Date?
-				public let reason: String?
+				public var accessorID: Int
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				public var endAt: Date?
+				public var reason: String?
+				
+				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType, endAt: Date?, reason: String?) {
+					self.accessorID = accessorID
+					self.accessorType = accessorType
+					self.endAt = endAt
+					self.reason = reason
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -768,8 +800,13 @@ public extension ESI {
 			public struct GetCharactersCharacterIDChatChannelsOperators: Codable, Hashable {
 				
 				
-				public let accessorID: Int
-				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				public var accessorID: Int
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				
+				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType) {
+					self.accessorID = accessorID
+					self.accessorType = accessorType
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -798,8 +835,13 @@ public extension ESI {
 			public struct GetCharactersCharacterIDChatChannelsAllowed: Codable, Hashable {
 				
 				
-				public let accessorID: Int
-				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				public var accessorID: Int
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				
+				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType) {
+					self.accessorID = accessorID
+					self.accessorType = accessorType
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -828,10 +870,17 @@ public extension ESI {
 			public struct GetCharactersCharacterIDChatChannelsMuted: Codable, Hashable {
 				
 				
-				public let accessorID: Int
-				public let accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
-				public let endAt: Date?
-				public let reason: String?
+				public var accessorID: Int
+				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
+				public var endAt: Date?
+				public var reason: String?
+				
+				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType, endAt: Date?, reason: String?) {
+					self.accessorID = accessorID
+					self.accessorType = accessorType
+					self.endAt = endAt
+					self.reason = reason
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -861,16 +910,29 @@ public extension ESI {
 				}
 			}
 			
-			public let allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed]
-			public let blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked]
-			public let channelID: Int
-			public let comparisonKey: String
-			public let hasPassword: Bool
-			public let motd: String
-			public let muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted]
-			public let name: String
-			public let operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators]
-			public let ownerID: Int
+			public var allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed]
+			public var blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked]
+			public var channelID: Int
+			public var comparisonKey: String
+			public var hasPassword: Bool
+			public var motd: String
+			public var muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted]
+			public var name: String
+			public var operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators]
+			public var ownerID: Int
+			
+			public init(allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed], blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked], channelID: Int, comparisonKey: String, hasPassword: Bool, motd: String, muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted], name: String, operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators], ownerID: Int) {
+				self.allowed = allowed
+				self.blocked = blocked
+				self.channelID = channelID
+				self.comparisonKey = comparisonKey
+				self.hasPassword = hasPassword
+				self.motd = motd
+				self.muted = muted
+				self.name = name
+				self.operators = operators
+				self.ownerID = ownerID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -926,9 +988,15 @@ public extension ESI {
 				
 			}
 			
-			public let fromID: Int
-			public let fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
-			public let standing: Float
+			public var fromID: Int
+			public var fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
+			public var standing: Float
+			
+			public init(fromID: Int, fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType, standing: Float) {
+				self.fromID = fromID
+				self.fromType = fromType
+				self.standing = standing
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -969,17 +1037,31 @@ public extension ESI {
 				
 			}
 			
-			public let allianceID: Int?
-			public let ancestryID: Int?
-			public let birthday: Date
-			public let bloodlineID: Int
-			public let corporationID: Int
-			public let localizedDescription: String?
-			public let factionID: Int?
-			public let gender: Character.Information.GetCharactersCharacterIDGender
-			public let name: String
-			public let raceID: Int
-			public let securityStatus: Float?
+			public var allianceID: Int?
+			public var ancestryID: Int?
+			public var birthday: Date
+			public var bloodlineID: Int
+			public var corporationID: Int
+			public var localizedDescription: String?
+			public var factionID: Int?
+			public var gender: Character.Information.GetCharactersCharacterIDGender
+			public var name: String
+			public var raceID: Int
+			public var securityStatus: Float?
+			
+			public init(allianceID: Int?, ancestryID: Int?, birthday: Date, bloodlineID: Int, corporationID: Int, localizedDescription: String?, factionID: Int?, gender: Character.Information.GetCharactersCharacterIDGender, name: String, raceID: Int, securityStatus: Float?) {
+				self.allianceID = allianceID
+				self.ancestryID = ancestryID
+				self.birthday = birthday
+				self.bloodlineID = bloodlineID
+				self.corporationID = corporationID
+				self.localizedDescription = localizedDescription
+				self.factionID = factionID
+				self.gender = gender
+				self.name = name
+				self.raceID = raceID
+				self.securityStatus = securityStatus
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1027,7 +1109,11 @@ public extension ESI {
 		public struct GetCharactersCharacterIDPortraitNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1055,11 +1141,19 @@ public extension ESI {
 		public struct Research: Codable, Hashable {
 			
 			
-			public let agentID: Int
-			public let pointsPerDay: Float
-			public let remainderPoints: Float
-			public let skillTypeID: Int
-			public let startedAt: Date
+			public var agentID: Int
+			public var pointsPerDay: Float
+			public var remainderPoints: Float
+			public var skillTypeID: Int
+			public var startedAt: Date
+			
+			public init(agentID: Int, pointsPerDay: Float, remainderPoints: Float, skillTypeID: Int, startedAt: Date) {
+				self.agentID = agentID
+				self.pointsPerDay = pointsPerDay
+				self.remainderPoints = remainderPoints
+				self.skillTypeID = skillTypeID
+				self.startedAt = startedAt
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1107,10 +1201,17 @@ public extension ESI {
 			public struct GetCharactersCharacterIDMedalsGraphics: Codable, Hashable {
 				
 				
-				public let color: Int?
-				public let graphic: String
-				public let layer: Int
-				public let part: Int
+				public var color: Int?
+				public var graphic: String
+				public var layer: Int
+				public var part: Int
+				
+				public init(color: Int?, graphic: String, layer: Int, part: Int) {
+					self.color = color
+					self.graphic = graphic
+					self.layer = layer
+					self.part = part
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1140,15 +1241,27 @@ public extension ESI {
 				}
 			}
 			
-			public let corporationID: Int
-			public let date: Date
-			public let localizedDescription: String
-			public let graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
-			public let issuerID: Int
-			public let medalID: Int
-			public let reason: String
-			public let status: Character.Medal.GetCharactersCharacterIDMedalsStatus
-			public let title: String
+			public var corporationID: Int
+			public var date: Date
+			public var localizedDescription: String
+			public var graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
+			public var issuerID: Int
+			public var medalID: Int
+			public var reason: String
+			public var status: Character.Medal.GetCharactersCharacterIDMedalsStatus
+			public var title: String
+			
+			public init(corporationID: Int, date: Date, localizedDescription: String, graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics], issuerID: Int, medalID: Int, reason: String, status: Character.Medal.GetCharactersCharacterIDMedalsStatus, title: String) {
+				self.corporationID = corporationID
+				self.date = date
+				self.localizedDescription = localizedDescription
+				self.graphics = graphics
+				self.issuerID = issuerID
+				self.medalID = medalID
+				self.reason = reason
+				self.status = status
+				self.title = title
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1192,7 +1305,11 @@ public extension ESI {
 		public struct PostCharactersAffiliationNotFound: Codable, Hashable {
 			
 			
-			public let error: String?
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1220,10 +1337,17 @@ public extension ESI {
 		public struct CorporationHistory: Codable, Hashable {
 			
 			
-			public let corporationID: Int
-			public let isDeleted: Bool?
-			public let recordID: Int
-			public let startDate: Date
+			public var corporationID: Int
+			public var isDeleted: Bool?
+			public var recordID: Int
+			public var startDate: Date
+			
+			public init(corporationID: Int, isDeleted: Bool?, recordID: Int, startDate: Date) {
+				self.corporationID = corporationID
+				self.isDeleted = isDeleted
+				self.recordID = recordID
+				self.startDate = startDate
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1257,8 +1381,13 @@ public extension ESI {
 		public struct Name: Codable, Hashable {
 			
 			
-			public let characterID: Int64
-			public let characterName: String
+			public var characterID: Int64
+			public var characterName: String
+			
+			public init(characterID: Int64, characterName: String) {
+				self.characterID = characterID
+				self.characterName = characterName
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -1290,10 +1419,17 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsPve: Codable, Hashable {
 				
 				
-				public let dungeonsCompletedAgent: Int64?
-				public let dungeonsCompletedDistribution: Int64?
-				public let missionsSucceeded: Int64?
-				public let missionsSucceededEpicArc: Int64?
+				public var dungeonsCompletedAgent: Int64?
+				public var dungeonsCompletedDistribution: Int64?
+				public var missionsSucceeded: Int64?
+				public var missionsSucceededEpicArc: Int64?
+				
+				public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
+					self.dungeonsCompletedAgent = dungeonsCompletedAgent
+					self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
+					self.missionsSucceeded = missionsSucceeded
+					self.missionsSucceededEpicArc = missionsSucceededEpicArc
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1326,8 +1462,13 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsInventory: Codable, Hashable {
 				
 				
-				public let abandonLootQuantity: Int64?
-				public let trashItemQuantity: Int64?
+				public var abandonLootQuantity: Int64?
+				public var trashItemQuantity: Int64?
+				
+				public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
+					self.abandonLootQuantity = abandonLootQuantity
+					self.trashItemQuantity = trashItemQuantity
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1356,9 +1497,15 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsCharacter: Codable, Hashable {
 				
 				
-				public let daysOfActivity: Int64?
-				public let minutes: Int64?
-				public let sessionsStarted: Int64?
+				public var daysOfActivity: Int64?
+				public var minutes: Int64?
+				public var sessionsStarted: Int64?
+				
+				public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
+					self.daysOfActivity = daysOfActivity
+					self.minutes = minutes
+					self.sessionsStarted = sessionsStarted
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1389,25 +1536,47 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsMining: Codable, Hashable {
 				
 				
-				public let droneMine: Int64?
-				public let oreArkonor: Int64?
-				public let oreBistot: Int64?
-				public let oreCrokite: Int64?
-				public let oreDarkOchre: Int64?
-				public let oreGneiss: Int64?
-				public let oreHarvestableCloud: Int64?
-				public let oreHedbergite: Int64?
-				public let oreHemorphite: Int64?
-				public let oreIce: Int64?
-				public let oreJaspet: Int64?
-				public let oreKernite: Int64?
-				public let oreMercoxit: Int64?
-				public let oreOmber: Int64?
-				public let orePlagioclase: Int64?
-				public let orePyroxeres: Int64?
-				public let oreScordite: Int64?
-				public let oreSpodumain: Int64?
-				public let oreVeldspar: Int64?
+				public var droneMine: Int64?
+				public var oreArkonor: Int64?
+				public var oreBistot: Int64?
+				public var oreCrokite: Int64?
+				public var oreDarkOchre: Int64?
+				public var oreGneiss: Int64?
+				public var oreHarvestableCloud: Int64?
+				public var oreHedbergite: Int64?
+				public var oreHemorphite: Int64?
+				public var oreIce: Int64?
+				public var oreJaspet: Int64?
+				public var oreKernite: Int64?
+				public var oreMercoxit: Int64?
+				public var oreOmber: Int64?
+				public var orePlagioclase: Int64?
+				public var orePyroxeres: Int64?
+				public var oreScordite: Int64?
+				public var oreSpodumain: Int64?
+				public var oreVeldspar: Int64?
+				
+				public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
+					self.droneMine = droneMine
+					self.oreArkonor = oreArkonor
+					self.oreBistot = oreBistot
+					self.oreCrokite = oreCrokite
+					self.oreDarkOchre = oreDarkOchre
+					self.oreGneiss = oreGneiss
+					self.oreHarvestableCloud = oreHarvestableCloud
+					self.oreHedbergite = oreHedbergite
+					self.oreHemorphite = oreHemorphite
+					self.oreIce = oreIce
+					self.oreJaspet = oreJaspet
+					self.oreKernite = oreKernite
+					self.oreMercoxit = oreMercoxit
+					self.oreOmber = oreOmber
+					self.orePlagioclase = orePlagioclase
+					self.orePyroxeres = orePyroxeres
+					self.oreScordite = oreScordite
+					self.oreSpodumain = oreSpodumain
+					self.oreVeldspar = oreVeldspar
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1470,100 +1639,197 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsCombat: Codable, Hashable {
 				
 				
-				public let capDrainedbyNpc: Int64?
-				public let capDrainedbyPc: Int64?
-				public let capDrainingPc: Int64?
-				public let criminalFlagSet: Int64?
-				public let damageFromNpCsAmount: Int64?
-				public let damageFromNpCsNumShots: Int64?
-				public let damageFromPlayersBombAmount: Int64?
-				public let damageFromPlayersBombNumShots: Int64?
-				public let damageFromPlayersCombatDroneAmount: Int64?
-				public let damageFromPlayersCombatDroneNumShots: Int64?
-				public let damageFromPlayersEnergyAmount: Int64?
-				public let damageFromPlayersEnergyNumShots: Int64?
-				public let damageFromPlayersFighterBomberAmount: Int64?
-				public let damageFromPlayersFighterBomberNumShots: Int64?
-				public let damageFromPlayersFighterDroneAmount: Int64?
-				public let damageFromPlayersFighterDroneNumShots: Int64?
-				public let damageFromPlayersHybridAmount: Int64?
-				public let damageFromPlayersHybridNumShots: Int64?
-				public let damageFromPlayersMissileAmount: Int64?
-				public let damageFromPlayersMissileNumShots: Int64?
-				public let damageFromPlayersProjectileAmount: Int64?
-				public let damageFromPlayersProjectileNumShots: Int64?
-				public let damageFromPlayersSmartBombAmount: Int64?
-				public let damageFromPlayersSmartBombNumShots: Int64?
-				public let damageFromPlayersSuperAmount: Int64?
-				public let damageFromPlayersSuperNumShots: Int64?
-				public let damageFromStructuresTotalAmount: Int64?
-				public let damageFromStructuresTotalNumShots: Int64?
-				public let damageToPlayersBombAmount: Int64?
-				public let damageToPlayersBombNumShots: Int64?
-				public let damageToPlayersCombatDroneAmount: Int64?
-				public let damageToPlayersCombatDroneNumShots: Int64?
-				public let damageToPlayersEnergyAmount: Int64?
-				public let damageToPlayersEnergyNumShots: Int64?
-				public let damageToPlayersFighterBomberAmount: Int64?
-				public let damageToPlayersFighterBomberNumShots: Int64?
-				public let damageToPlayersFighterDroneAmount: Int64?
-				public let damageToPlayersFighterDroneNumShots: Int64?
-				public let damageToPlayersHybridAmount: Int64?
-				public let damageToPlayersHybridNumShots: Int64?
-				public let damageToPlayersMissileAmount: Int64?
-				public let damageToPlayersMissileNumShots: Int64?
-				public let damageToPlayersProjectileAmount: Int64?
-				public let damageToPlayersProjectileNumShots: Int64?
-				public let damageToPlayersSmartBombAmount: Int64?
-				public let damageToPlayersSmartBombNumShots: Int64?
-				public let damageToPlayersSuperAmount: Int64?
-				public let damageToPlayersSuperNumShots: Int64?
-				public let damageToStructuresTotalAmount: Int64?
-				public let damageToStructuresTotalNumShots: Int64?
-				public let deathsHighSec: Int64?
-				public let deathsLowSec: Int64?
-				public let deathsNullSec: Int64?
-				public let deathsPodHighSec: Int64?
-				public let deathsPodLowSec: Int64?
-				public let deathsPodNullSec: Int64?
-				public let deathsPodWormhole: Int64?
-				public let deathsWormhole: Int64?
-				public let droneEngage: Int64?
-				public let dscans: Int64?
-				public let duelRequested: Int64?
-				public let engagementRegister: Int64?
-				public let killsAssists: Int64?
-				public let killsHighSec: Int64?
-				public let killsLowSec: Int64?
-				public let killsNullSec: Int64?
-				public let killsPodHighSec: Int64?
-				public let killsPodLowSec: Int64?
-				public let killsPodNullSec: Int64?
-				public let killsPodWormhole: Int64?
-				public let killsWormhole: Int64?
-				public let npcFlagSet: Int64?
-				public let probeScans: Int64?
-				public let pvpFlagSet: Int64?
-				public let repairArmorByRemoteAmount: Int64?
-				public let repairArmorRemoteAmount: Int64?
-				public let repairArmorSelfAmount: Int64?
-				public let repairCapacitorByRemoteAmount: Int64?
-				public let repairCapacitorRemoteAmount: Int64?
-				public let repairCapacitorSelfAmount: Int64?
-				public let repairHullByRemoteAmount: Int64?
-				public let repairHullRemoteAmount: Int64?
-				public let repairHullSelfAmount: Int64?
-				public let repairShieldByRemoteAmount: Int64?
-				public let repairShieldRemoteAmount: Int64?
-				public let repairShieldSelfAmount: Int64?
-				public let selfDestructs: Int64?
-				public let warpScramblePc: Int64?
-				public let warpScrambledbyNpc: Int64?
-				public let warpScrambledbyPc: Int64?
-				public let weaponFlagSet: Int64?
-				public let webifiedbyNpc: Int64?
-				public let webifiedbyPc: Int64?
-				public let webifyingPc: Int64?
+				public var capDrainedbyNpc: Int64?
+				public var capDrainedbyPc: Int64?
+				public var capDrainingPc: Int64?
+				public var criminalFlagSet: Int64?
+				public var damageFromNpCsAmount: Int64?
+				public var damageFromNpCsNumShots: Int64?
+				public var damageFromPlayersBombAmount: Int64?
+				public var damageFromPlayersBombNumShots: Int64?
+				public var damageFromPlayersCombatDroneAmount: Int64?
+				public var damageFromPlayersCombatDroneNumShots: Int64?
+				public var damageFromPlayersEnergyAmount: Int64?
+				public var damageFromPlayersEnergyNumShots: Int64?
+				public var damageFromPlayersFighterBomberAmount: Int64?
+				public var damageFromPlayersFighterBomberNumShots: Int64?
+				public var damageFromPlayersFighterDroneAmount: Int64?
+				public var damageFromPlayersFighterDroneNumShots: Int64?
+				public var damageFromPlayersHybridAmount: Int64?
+				public var damageFromPlayersHybridNumShots: Int64?
+				public var damageFromPlayersMissileAmount: Int64?
+				public var damageFromPlayersMissileNumShots: Int64?
+				public var damageFromPlayersProjectileAmount: Int64?
+				public var damageFromPlayersProjectileNumShots: Int64?
+				public var damageFromPlayersSmartBombAmount: Int64?
+				public var damageFromPlayersSmartBombNumShots: Int64?
+				public var damageFromPlayersSuperAmount: Int64?
+				public var damageFromPlayersSuperNumShots: Int64?
+				public var damageFromStructuresTotalAmount: Int64?
+				public var damageFromStructuresTotalNumShots: Int64?
+				public var damageToPlayersBombAmount: Int64?
+				public var damageToPlayersBombNumShots: Int64?
+				public var damageToPlayersCombatDroneAmount: Int64?
+				public var damageToPlayersCombatDroneNumShots: Int64?
+				public var damageToPlayersEnergyAmount: Int64?
+				public var damageToPlayersEnergyNumShots: Int64?
+				public var damageToPlayersFighterBomberAmount: Int64?
+				public var damageToPlayersFighterBomberNumShots: Int64?
+				public var damageToPlayersFighterDroneAmount: Int64?
+				public var damageToPlayersFighterDroneNumShots: Int64?
+				public var damageToPlayersHybridAmount: Int64?
+				public var damageToPlayersHybridNumShots: Int64?
+				public var damageToPlayersMissileAmount: Int64?
+				public var damageToPlayersMissileNumShots: Int64?
+				public var damageToPlayersProjectileAmount: Int64?
+				public var damageToPlayersProjectileNumShots: Int64?
+				public var damageToPlayersSmartBombAmount: Int64?
+				public var damageToPlayersSmartBombNumShots: Int64?
+				public var damageToPlayersSuperAmount: Int64?
+				public var damageToPlayersSuperNumShots: Int64?
+				public var damageToStructuresTotalAmount: Int64?
+				public var damageToStructuresTotalNumShots: Int64?
+				public var deathsHighSec: Int64?
+				public var deathsLowSec: Int64?
+				public var deathsNullSec: Int64?
+				public var deathsPodHighSec: Int64?
+				public var deathsPodLowSec: Int64?
+				public var deathsPodNullSec: Int64?
+				public var deathsPodWormhole: Int64?
+				public var deathsWormhole: Int64?
+				public var droneEngage: Int64?
+				public var dscans: Int64?
+				public var duelRequested: Int64?
+				public var engagementRegister: Int64?
+				public var killsAssists: Int64?
+				public var killsHighSec: Int64?
+				public var killsLowSec: Int64?
+				public var killsNullSec: Int64?
+				public var killsPodHighSec: Int64?
+				public var killsPodLowSec: Int64?
+				public var killsPodNullSec: Int64?
+				public var killsPodWormhole: Int64?
+				public var killsWormhole: Int64?
+				public var npcFlagSet: Int64?
+				public var probeScans: Int64?
+				public var pvpFlagSet: Int64?
+				public var repairArmorByRemoteAmount: Int64?
+				public var repairArmorRemoteAmount: Int64?
+				public var repairArmorSelfAmount: Int64?
+				public var repairCapacitorByRemoteAmount: Int64?
+				public var repairCapacitorRemoteAmount: Int64?
+				public var repairCapacitorSelfAmount: Int64?
+				public var repairHullByRemoteAmount: Int64?
+				public var repairHullRemoteAmount: Int64?
+				public var repairHullSelfAmount: Int64?
+				public var repairShieldByRemoteAmount: Int64?
+				public var repairShieldRemoteAmount: Int64?
+				public var repairShieldSelfAmount: Int64?
+				public var selfDestructs: Int64?
+				public var warpScramblePc: Int64?
+				public var warpScrambledbyNpc: Int64?
+				public var warpScrambledbyPc: Int64?
+				public var weaponFlagSet: Int64?
+				public var webifiedbyNpc: Int64?
+				public var webifiedbyPc: Int64?
+				public var webifyingPc: Int64?
+				
+				public init(capDrainedbyNpc: Int64?, capDrainedbyPc: Int64?, capDrainingPc: Int64?, criminalFlagSet: Int64?, damageFromNpCsAmount: Int64?, damageFromNpCsNumShots: Int64?, damageFromPlayersBombAmount: Int64?, damageFromPlayersBombNumShots: Int64?, damageFromPlayersCombatDroneAmount: Int64?, damageFromPlayersCombatDroneNumShots: Int64?, damageFromPlayersEnergyAmount: Int64?, damageFromPlayersEnergyNumShots: Int64?, damageFromPlayersFighterBomberAmount: Int64?, damageFromPlayersFighterBomberNumShots: Int64?, damageFromPlayersFighterDroneAmount: Int64?, damageFromPlayersFighterDroneNumShots: Int64?, damageFromPlayersHybridAmount: Int64?, damageFromPlayersHybridNumShots: Int64?, damageFromPlayersMissileAmount: Int64?, damageFromPlayersMissileNumShots: Int64?, damageFromPlayersProjectileAmount: Int64?, damageFromPlayersProjectileNumShots: Int64?, damageFromPlayersSmartBombAmount: Int64?, damageFromPlayersSmartBombNumShots: Int64?, damageFromPlayersSuperAmount: Int64?, damageFromPlayersSuperNumShots: Int64?, damageFromStructuresTotalAmount: Int64?, damageFromStructuresTotalNumShots: Int64?, damageToPlayersBombAmount: Int64?, damageToPlayersBombNumShots: Int64?, damageToPlayersCombatDroneAmount: Int64?, damageToPlayersCombatDroneNumShots: Int64?, damageToPlayersEnergyAmount: Int64?, damageToPlayersEnergyNumShots: Int64?, damageToPlayersFighterBomberAmount: Int64?, damageToPlayersFighterBomberNumShots: Int64?, damageToPlayersFighterDroneAmount: Int64?, damageToPlayersFighterDroneNumShots: Int64?, damageToPlayersHybridAmount: Int64?, damageToPlayersHybridNumShots: Int64?, damageToPlayersMissileAmount: Int64?, damageToPlayersMissileNumShots: Int64?, damageToPlayersProjectileAmount: Int64?, damageToPlayersProjectileNumShots: Int64?, damageToPlayersSmartBombAmount: Int64?, damageToPlayersSmartBombNumShots: Int64?, damageToPlayersSuperAmount: Int64?, damageToPlayersSuperNumShots: Int64?, damageToStructuresTotalAmount: Int64?, damageToStructuresTotalNumShots: Int64?, deathsHighSec: Int64?, deathsLowSec: Int64?, deathsNullSec: Int64?, deathsPodHighSec: Int64?, deathsPodLowSec: Int64?, deathsPodNullSec: Int64?, deathsPodWormhole: Int64?, deathsWormhole: Int64?, droneEngage: Int64?, dscans: Int64?, duelRequested: Int64?, engagementRegister: Int64?, killsAssists: Int64?, killsHighSec: Int64?, killsLowSec: Int64?, killsNullSec: Int64?, killsPodHighSec: Int64?, killsPodLowSec: Int64?, killsPodNullSec: Int64?, killsPodWormhole: Int64?, killsWormhole: Int64?, npcFlagSet: Int64?, probeScans: Int64?, pvpFlagSet: Int64?, repairArmorByRemoteAmount: Int64?, repairArmorRemoteAmount: Int64?, repairArmorSelfAmount: Int64?, repairCapacitorByRemoteAmount: Int64?, repairCapacitorRemoteAmount: Int64?, repairCapacitorSelfAmount: Int64?, repairHullByRemoteAmount: Int64?, repairHullRemoteAmount: Int64?, repairHullSelfAmount: Int64?, repairShieldByRemoteAmount: Int64?, repairShieldRemoteAmount: Int64?, repairShieldSelfAmount: Int64?, selfDestructs: Int64?, warpScramblePc: Int64?, warpScrambledbyNpc: Int64?, warpScrambledbyPc: Int64?, weaponFlagSet: Int64?, webifiedbyNpc: Int64?, webifiedbyPc: Int64?, webifyingPc: Int64?) {
+					self.capDrainedbyNpc = capDrainedbyNpc
+					self.capDrainedbyPc = capDrainedbyPc
+					self.capDrainingPc = capDrainingPc
+					self.criminalFlagSet = criminalFlagSet
+					self.damageFromNpCsAmount = damageFromNpCsAmount
+					self.damageFromNpCsNumShots = damageFromNpCsNumShots
+					self.damageFromPlayersBombAmount = damageFromPlayersBombAmount
+					self.damageFromPlayersBombNumShots = damageFromPlayersBombNumShots
+					self.damageFromPlayersCombatDroneAmount = damageFromPlayersCombatDroneAmount
+					self.damageFromPlayersCombatDroneNumShots = damageFromPlayersCombatDroneNumShots
+					self.damageFromPlayersEnergyAmount = damageFromPlayersEnergyAmount
+					self.damageFromPlayersEnergyNumShots = damageFromPlayersEnergyNumShots
+					self.damageFromPlayersFighterBomberAmount = damageFromPlayersFighterBomberAmount
+					self.damageFromPlayersFighterBomberNumShots = damageFromPlayersFighterBomberNumShots
+					self.damageFromPlayersFighterDroneAmount = damageFromPlayersFighterDroneAmount
+					self.damageFromPlayersFighterDroneNumShots = damageFromPlayersFighterDroneNumShots
+					self.damageFromPlayersHybridAmount = damageFromPlayersHybridAmount
+					self.damageFromPlayersHybridNumShots = damageFromPlayersHybridNumShots
+					self.damageFromPlayersMissileAmount = damageFromPlayersMissileAmount
+					self.damageFromPlayersMissileNumShots = damageFromPlayersMissileNumShots
+					self.damageFromPlayersProjectileAmount = damageFromPlayersProjectileAmount
+					self.damageFromPlayersProjectileNumShots = damageFromPlayersProjectileNumShots
+					self.damageFromPlayersSmartBombAmount = damageFromPlayersSmartBombAmount
+					self.damageFromPlayersSmartBombNumShots = damageFromPlayersSmartBombNumShots
+					self.damageFromPlayersSuperAmount = damageFromPlayersSuperAmount
+					self.damageFromPlayersSuperNumShots = damageFromPlayersSuperNumShots
+					self.damageFromStructuresTotalAmount = damageFromStructuresTotalAmount
+					self.damageFromStructuresTotalNumShots = damageFromStructuresTotalNumShots
+					self.damageToPlayersBombAmount = damageToPlayersBombAmount
+					self.damageToPlayersBombNumShots = damageToPlayersBombNumShots
+					self.damageToPlayersCombatDroneAmount = damageToPlayersCombatDroneAmount
+					self.damageToPlayersCombatDroneNumShots = damageToPlayersCombatDroneNumShots
+					self.damageToPlayersEnergyAmount = damageToPlayersEnergyAmount
+					self.damageToPlayersEnergyNumShots = damageToPlayersEnergyNumShots
+					self.damageToPlayersFighterBomberAmount = damageToPlayersFighterBomberAmount
+					self.damageToPlayersFighterBomberNumShots = damageToPlayersFighterBomberNumShots
+					self.damageToPlayersFighterDroneAmount = damageToPlayersFighterDroneAmount
+					self.damageToPlayersFighterDroneNumShots = damageToPlayersFighterDroneNumShots
+					self.damageToPlayersHybridAmount = damageToPlayersHybridAmount
+					self.damageToPlayersHybridNumShots = damageToPlayersHybridNumShots
+					self.damageToPlayersMissileAmount = damageToPlayersMissileAmount
+					self.damageToPlayersMissileNumShots = damageToPlayersMissileNumShots
+					self.damageToPlayersProjectileAmount = damageToPlayersProjectileAmount
+					self.damageToPlayersProjectileNumShots = damageToPlayersProjectileNumShots
+					self.damageToPlayersSmartBombAmount = damageToPlayersSmartBombAmount
+					self.damageToPlayersSmartBombNumShots = damageToPlayersSmartBombNumShots
+					self.damageToPlayersSuperAmount = damageToPlayersSuperAmount
+					self.damageToPlayersSuperNumShots = damageToPlayersSuperNumShots
+					self.damageToStructuresTotalAmount = damageToStructuresTotalAmount
+					self.damageToStructuresTotalNumShots = damageToStructuresTotalNumShots
+					self.deathsHighSec = deathsHighSec
+					self.deathsLowSec = deathsLowSec
+					self.deathsNullSec = deathsNullSec
+					self.deathsPodHighSec = deathsPodHighSec
+					self.deathsPodLowSec = deathsPodLowSec
+					self.deathsPodNullSec = deathsPodNullSec
+					self.deathsPodWormhole = deathsPodWormhole
+					self.deathsWormhole = deathsWormhole
+					self.droneEngage = droneEngage
+					self.dscans = dscans
+					self.duelRequested = duelRequested
+					self.engagementRegister = engagementRegister
+					self.killsAssists = killsAssists
+					self.killsHighSec = killsHighSec
+					self.killsLowSec = killsLowSec
+					self.killsNullSec = killsNullSec
+					self.killsPodHighSec = killsPodHighSec
+					self.killsPodLowSec = killsPodLowSec
+					self.killsPodNullSec = killsPodNullSec
+					self.killsPodWormhole = killsPodWormhole
+					self.killsWormhole = killsWormhole
+					self.npcFlagSet = npcFlagSet
+					self.probeScans = probeScans
+					self.pvpFlagSet = pvpFlagSet
+					self.repairArmorByRemoteAmount = repairArmorByRemoteAmount
+					self.repairArmorRemoteAmount = repairArmorRemoteAmount
+					self.repairArmorSelfAmount = repairArmorSelfAmount
+					self.repairCapacitorByRemoteAmount = repairCapacitorByRemoteAmount
+					self.repairCapacitorRemoteAmount = repairCapacitorRemoteAmount
+					self.repairCapacitorSelfAmount = repairCapacitorSelfAmount
+					self.repairHullByRemoteAmount = repairHullByRemoteAmount
+					self.repairHullRemoteAmount = repairHullRemoteAmount
+					self.repairHullSelfAmount = repairHullSelfAmount
+					self.repairShieldByRemoteAmount = repairShieldByRemoteAmount
+					self.repairShieldRemoteAmount = repairShieldRemoteAmount
+					self.repairShieldSelfAmount = repairShieldSelfAmount
+					self.selfDestructs = selfDestructs
+					self.warpScramblePc = warpScramblePc
+					self.warpScrambledbyNpc = warpScrambledbyNpc
+					self.warpScrambledbyPc = warpScrambledbyPc
+					self.weaponFlagSet = weaponFlagSet
+					self.webifiedbyNpc = webifiedbyNpc
+					self.webifiedbyPc = webifiedbyPc
+					self.webifyingPc = webifyingPc
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1776,27 +2042,51 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsTravel: Codable, Hashable {
 				
 				
-				public let accelerationGateActivations: Int64?
-				public let alignTo: Int64?
-				public let distanceWarpedHighSec: Int64?
-				public let distanceWarpedLowSec: Int64?
-				public let distanceWarpedNullSec: Int64?
-				public let distanceWarpedWormhole: Int64?
-				public let docksHighSec: Int64?
-				public let docksLowSec: Int64?
-				public let docksNullSec: Int64?
-				public let jumpsStargateHighSec: Int64?
-				public let jumpsStargateLowSec: Int64?
-				public let jumpsStargateNullSec: Int64?
-				public let jumpsWormhole: Int64?
-				public let warpsHighSec: Int64?
-				public let warpsLowSec: Int64?
-				public let warpsNullSec: Int64?
-				public let warpsToBookmark: Int64?
-				public let warpsToCelestial: Int64?
-				public let warpsToFleetMember: Int64?
-				public let warpsToScanResult: Int64?
-				public let warpsWormhole: Int64?
+				public var accelerationGateActivations: Int64?
+				public var alignTo: Int64?
+				public var distanceWarpedHighSec: Int64?
+				public var distanceWarpedLowSec: Int64?
+				public var distanceWarpedNullSec: Int64?
+				public var distanceWarpedWormhole: Int64?
+				public var docksHighSec: Int64?
+				public var docksLowSec: Int64?
+				public var docksNullSec: Int64?
+				public var jumpsStargateHighSec: Int64?
+				public var jumpsStargateLowSec: Int64?
+				public var jumpsStargateNullSec: Int64?
+				public var jumpsWormhole: Int64?
+				public var warpsHighSec: Int64?
+				public var warpsLowSec: Int64?
+				public var warpsNullSec: Int64?
+				public var warpsToBookmark: Int64?
+				public var warpsToCelestial: Int64?
+				public var warpsToFleetMember: Int64?
+				public var warpsToScanResult: Int64?
+				public var warpsWormhole: Int64?
+				
+				public init(accelerationGateActivations: Int64?, alignTo: Int64?, distanceWarpedHighSec: Int64?, distanceWarpedLowSec: Int64?, distanceWarpedNullSec: Int64?, distanceWarpedWormhole: Int64?, docksHighSec: Int64?, docksLowSec: Int64?, docksNullSec: Int64?, jumpsStargateHighSec: Int64?, jumpsStargateLowSec: Int64?, jumpsStargateNullSec: Int64?, jumpsWormhole: Int64?, warpsHighSec: Int64?, warpsLowSec: Int64?, warpsNullSec: Int64?, warpsToBookmark: Int64?, warpsToCelestial: Int64?, warpsToFleetMember: Int64?, warpsToScanResult: Int64?, warpsWormhole: Int64?) {
+					self.accelerationGateActivations = accelerationGateActivations
+					self.alignTo = alignTo
+					self.distanceWarpedHighSec = distanceWarpedHighSec
+					self.distanceWarpedLowSec = distanceWarpedLowSec
+					self.distanceWarpedNullSec = distanceWarpedNullSec
+					self.distanceWarpedWormhole = distanceWarpedWormhole
+					self.docksHighSec = docksHighSec
+					self.docksLowSec = docksLowSec
+					self.docksNullSec = docksNullSec
+					self.jumpsStargateHighSec = jumpsStargateHighSec
+					self.jumpsStargateLowSec = jumpsStargateLowSec
+					self.jumpsStargateNullSec = jumpsStargateNullSec
+					self.jumpsWormhole = jumpsWormhole
+					self.warpsHighSec = warpsHighSec
+					self.warpsLowSec = warpsLowSec
+					self.warpsNullSec = warpsNullSec
+					self.warpsToBookmark = warpsToBookmark
+					self.warpsToCelestial = warpsToCelestial
+					self.warpsToFleetMember = warpsToFleetMember
+					self.warpsToScanResult = warpsToScanResult
+					self.warpsWormhole = warpsWormhole
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1863,31 +2153,59 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsSocial: Codable, Hashable {
 				
 				
-				public let addContactBad: Int64?
-				public let addContactGood: Int64?
-				public let addContactHigh: Int64?
-				public let addContactHorrible: Int64?
-				public let addContactNeutral: Int64?
-				public let addNote: Int64?
-				public let addedAsContactBad: Int64?
-				public let addedAsContactGood: Int64?
-				public let addedAsContactHigh: Int64?
-				public let addedAsContactHorrible: Int64?
-				public let addedAsContactNeutral: Int64?
-				public let calendarEventCreated: Int64?
-				public let chatMessagesAlliance: Int64?
-				public let chatMessagesConstellation: Int64?
-				public let chatMessagesCorporation: Int64?
-				public let chatMessagesFleet: Int64?
-				public let chatMessagesRegion: Int64?
-				public let chatMessagesSolarsystem: Int64?
-				public let chatMessagesWarfaction: Int64?
-				public let chatTotalMessageLength: Int64?
-				public let directTrades: Int64?
-				public let fleetBroadcasts: Int64?
-				public let fleetJoins: Int64?
-				public let mailsReceived: Int64?
-				public let mailsSent: Int64?
+				public var addContactBad: Int64?
+				public var addContactGood: Int64?
+				public var addContactHigh: Int64?
+				public var addContactHorrible: Int64?
+				public var addContactNeutral: Int64?
+				public var addNote: Int64?
+				public var addedAsContactBad: Int64?
+				public var addedAsContactGood: Int64?
+				public var addedAsContactHigh: Int64?
+				public var addedAsContactHorrible: Int64?
+				public var addedAsContactNeutral: Int64?
+				public var calendarEventCreated: Int64?
+				public var chatMessagesAlliance: Int64?
+				public var chatMessagesConstellation: Int64?
+				public var chatMessagesCorporation: Int64?
+				public var chatMessagesFleet: Int64?
+				public var chatMessagesRegion: Int64?
+				public var chatMessagesSolarsystem: Int64?
+				public var chatMessagesWarfaction: Int64?
+				public var chatTotalMessageLength: Int64?
+				public var directTrades: Int64?
+				public var fleetBroadcasts: Int64?
+				public var fleetJoins: Int64?
+				public var mailsReceived: Int64?
+				public var mailsSent: Int64?
+				
+				public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
+					self.addContactBad = addContactBad
+					self.addContactGood = addContactGood
+					self.addContactHigh = addContactHigh
+					self.addContactHorrible = addContactHorrible
+					self.addContactNeutral = addContactNeutral
+					self.addNote = addNote
+					self.addedAsContactBad = addedAsContactBad
+					self.addedAsContactGood = addedAsContactGood
+					self.addedAsContactHigh = addedAsContactHigh
+					self.addedAsContactHorrible = addedAsContactHorrible
+					self.addedAsContactNeutral = addedAsContactNeutral
+					self.calendarEventCreated = calendarEventCreated
+					self.chatMessagesAlliance = chatMessagesAlliance
+					self.chatMessagesConstellation = chatMessagesConstellation
+					self.chatMessagesCorporation = chatMessagesCorporation
+					self.chatMessagesFleet = chatMessagesFleet
+					self.chatMessagesRegion = chatMessagesRegion
+					self.chatMessagesSolarsystem = chatMessagesSolarsystem
+					self.chatMessagesWarfaction = chatMessagesWarfaction
+					self.chatTotalMessageLength = chatTotalMessageLength
+					self.directTrades = directTrades
+					self.fleetBroadcasts = fleetBroadcasts
+					self.fleetJoins = fleetJoins
+					self.mailsReceived = mailsReceived
+					self.mailsSent = mailsSent
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1962,9 +2280,15 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsOrbital: Codable, Hashable {
 				
 				
-				public let strikeCharactersKilled: Int64?
-				public let strikeDamageToPlayersArmorAmount: Int64?
-				public let strikeDamageToPlayersShieldAmount: Int64?
+				public var strikeCharactersKilled: Int64?
+				public var strikeDamageToPlayersArmorAmount: Int64?
+				public var strikeDamageToPlayersShieldAmount: Int64?
+				
+				public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
+					self.strikeCharactersKilled = strikeCharactersKilled
+					self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
+					self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -1995,75 +2319,147 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsModule: Codable, Hashable {
 				
 				
-				public let activationsArmorHardener: Int64?
-				public let activationsArmorRepairUnit: Int64?
-				public let activationsArmorResistanceShiftHardener: Int64?
-				public let activationsAutomatedTargetingSystem: Int64?
-				public let activationsBastion: Int64?
-				public let activationsBombLauncher: Int64?
-				public let activationsCapacitorBooster: Int64?
-				public let activationsCargoScanner: Int64?
-				public let activationsCloakingDevice: Int64?
-				public let activationsCloneVatBay: Int64?
-				public let activationsCynosuralField: Int64?
-				public let activationsDamageControl: Int64?
-				public let activationsDataMiners: Int64?
-				public let activationsDroneControlUnit: Int64?
-				public let activationsDroneTrackingModules: Int64?
-				public let activationsEccm: Int64?
-				public let activationsEcm: Int64?
-				public let activationsEcmBurst: Int64?
-				public let activationsEnergyDestabilizer: Int64?
-				public let activationsEnergyVampire: Int64?
-				public let activationsEnergyWeapon: Int64?
-				public let activationsFestivalLauncher: Int64?
-				public let activationsFrequencyMiningLaser: Int64?
-				public let activationsFueledArmorRepairer: Int64?
-				public let activationsFueledShieldBooster: Int64?
-				public let activationsGangCoordinator: Int64?
-				public let activationsGasCloudHarvester: Int64?
-				public let activationsHullRepairUnit: Int64?
-				public let activationsHybridWeapon: Int64?
-				public let activationsIndustrialCore: Int64?
-				public let activationsInterdictionSphereLauncher: Int64?
-				public let activationsMicroJumpDrive: Int64?
-				public let activationsMiningLaser: Int64?
-				public let activationsMissileLauncher: Int64?
-				public let activationsPassiveTargetingSystem: Int64?
-				public let activationsProbeLauncher: Int64?
-				public let activationsProjectedEccm: Int64?
-				public let activationsProjectileWeapon: Int64?
-				public let activationsPropulsionModule: Int64?
-				public let activationsRemoteArmorRepairer: Int64?
-				public let activationsRemoteCapacitorTransmitter: Int64?
-				public let activationsRemoteEcmBurst: Int64?
-				public let activationsRemoteHullRepairer: Int64?
-				public let activationsRemoteSensorBooster: Int64?
-				public let activationsRemoteSensorDamper: Int64?
-				public let activationsRemoteShieldBooster: Int64?
-				public let activationsRemoteTrackingComputer: Int64?
-				public let activationsSalvager: Int64?
-				public let activationsSensorBooster: Int64?
-				public let activationsShieldBooster: Int64?
-				public let activationsShieldHardener: Int64?
-				public let activationsShipScanner: Int64?
-				public let activationsSiege: Int64?
-				public let activationsSmartBomb: Int64?
-				public let activationsStasisWeb: Int64?
-				public let activationsStripMiner: Int64?
-				public let activationsSuperWeapon: Int64?
-				public let activationsSurveyScanner: Int64?
-				public let activationsTargetBreaker: Int64?
-				public let activationsTargetPainter: Int64?
-				public let activationsTrackingComputer: Int64?
-				public let activationsTrackingDisruptor: Int64?
-				public let activationsTractorBeam: Int64?
-				public let activationsTriage: Int64?
-				public let activationsWarpDisruptFieldGenerator: Int64?
-				public let activationsWarpScrambler: Int64?
-				public let linkWeapons: Int64?
-				public let overload: Int64?
-				public let repairs: Int64?
+				public var activationsArmorHardener: Int64?
+				public var activationsArmorRepairUnit: Int64?
+				public var activationsArmorResistanceShiftHardener: Int64?
+				public var activationsAutomatedTargetingSystem: Int64?
+				public var activationsBastion: Int64?
+				public var activationsBombLauncher: Int64?
+				public var activationsCapacitorBooster: Int64?
+				public var activationsCargoScanner: Int64?
+				public var activationsCloakingDevice: Int64?
+				public var activationsCloneVatBay: Int64?
+				public var activationsCynosuralField: Int64?
+				public var activationsDamageControl: Int64?
+				public var activationsDataMiners: Int64?
+				public var activationsDroneControlUnit: Int64?
+				public var activationsDroneTrackingModules: Int64?
+				public var activationsEccm: Int64?
+				public var activationsEcm: Int64?
+				public var activationsEcmBurst: Int64?
+				public var activationsEnergyDestabilizer: Int64?
+				public var activationsEnergyVampire: Int64?
+				public var activationsEnergyWeapon: Int64?
+				public var activationsFestivalLauncher: Int64?
+				public var activationsFrequencyMiningLaser: Int64?
+				public var activationsFueledArmorRepairer: Int64?
+				public var activationsFueledShieldBooster: Int64?
+				public var activationsGangCoordinator: Int64?
+				public var activationsGasCloudHarvester: Int64?
+				public var activationsHullRepairUnit: Int64?
+				public var activationsHybridWeapon: Int64?
+				public var activationsIndustrialCore: Int64?
+				public var activationsInterdictionSphereLauncher: Int64?
+				public var activationsMicroJumpDrive: Int64?
+				public var activationsMiningLaser: Int64?
+				public var activationsMissileLauncher: Int64?
+				public var activationsPassiveTargetingSystem: Int64?
+				public var activationsProbeLauncher: Int64?
+				public var activationsProjectedEccm: Int64?
+				public var activationsProjectileWeapon: Int64?
+				public var activationsPropulsionModule: Int64?
+				public var activationsRemoteArmorRepairer: Int64?
+				public var activationsRemoteCapacitorTransmitter: Int64?
+				public var activationsRemoteEcmBurst: Int64?
+				public var activationsRemoteHullRepairer: Int64?
+				public var activationsRemoteSensorBooster: Int64?
+				public var activationsRemoteSensorDamper: Int64?
+				public var activationsRemoteShieldBooster: Int64?
+				public var activationsRemoteTrackingComputer: Int64?
+				public var activationsSalvager: Int64?
+				public var activationsSensorBooster: Int64?
+				public var activationsShieldBooster: Int64?
+				public var activationsShieldHardener: Int64?
+				public var activationsShipScanner: Int64?
+				public var activationsSiege: Int64?
+				public var activationsSmartBomb: Int64?
+				public var activationsStasisWeb: Int64?
+				public var activationsStripMiner: Int64?
+				public var activationsSuperWeapon: Int64?
+				public var activationsSurveyScanner: Int64?
+				public var activationsTargetBreaker: Int64?
+				public var activationsTargetPainter: Int64?
+				public var activationsTrackingComputer: Int64?
+				public var activationsTrackingDisruptor: Int64?
+				public var activationsTractorBeam: Int64?
+				public var activationsTriage: Int64?
+				public var activationsWarpDisruptFieldGenerator: Int64?
+				public var activationsWarpScrambler: Int64?
+				public var linkWeapons: Int64?
+				public var overload: Int64?
+				public var repairs: Int64?
+				
+				public init(activationsArmorHardener: Int64?, activationsArmorRepairUnit: Int64?, activationsArmorResistanceShiftHardener: Int64?, activationsAutomatedTargetingSystem: Int64?, activationsBastion: Int64?, activationsBombLauncher: Int64?, activationsCapacitorBooster: Int64?, activationsCargoScanner: Int64?, activationsCloakingDevice: Int64?, activationsCloneVatBay: Int64?, activationsCynosuralField: Int64?, activationsDamageControl: Int64?, activationsDataMiners: Int64?, activationsDroneControlUnit: Int64?, activationsDroneTrackingModules: Int64?, activationsEccm: Int64?, activationsEcm: Int64?, activationsEcmBurst: Int64?, activationsEnergyDestabilizer: Int64?, activationsEnergyVampire: Int64?, activationsEnergyWeapon: Int64?, activationsFestivalLauncher: Int64?, activationsFrequencyMiningLaser: Int64?, activationsFueledArmorRepairer: Int64?, activationsFueledShieldBooster: Int64?, activationsGangCoordinator: Int64?, activationsGasCloudHarvester: Int64?, activationsHullRepairUnit: Int64?, activationsHybridWeapon: Int64?, activationsIndustrialCore: Int64?, activationsInterdictionSphereLauncher: Int64?, activationsMicroJumpDrive: Int64?, activationsMiningLaser: Int64?, activationsMissileLauncher: Int64?, activationsPassiveTargetingSystem: Int64?, activationsProbeLauncher: Int64?, activationsProjectedEccm: Int64?, activationsProjectileWeapon: Int64?, activationsPropulsionModule: Int64?, activationsRemoteArmorRepairer: Int64?, activationsRemoteCapacitorTransmitter: Int64?, activationsRemoteEcmBurst: Int64?, activationsRemoteHullRepairer: Int64?, activationsRemoteSensorBooster: Int64?, activationsRemoteSensorDamper: Int64?, activationsRemoteShieldBooster: Int64?, activationsRemoteTrackingComputer: Int64?, activationsSalvager: Int64?, activationsSensorBooster: Int64?, activationsShieldBooster: Int64?, activationsShieldHardener: Int64?, activationsShipScanner: Int64?, activationsSiege: Int64?, activationsSmartBomb: Int64?, activationsStasisWeb: Int64?, activationsStripMiner: Int64?, activationsSuperWeapon: Int64?, activationsSurveyScanner: Int64?, activationsTargetBreaker: Int64?, activationsTargetPainter: Int64?, activationsTrackingComputer: Int64?, activationsTrackingDisruptor: Int64?, activationsTractorBeam: Int64?, activationsTriage: Int64?, activationsWarpDisruptFieldGenerator: Int64?, activationsWarpScrambler: Int64?, linkWeapons: Int64?, overload: Int64?, repairs: Int64?) {
+					self.activationsArmorHardener = activationsArmorHardener
+					self.activationsArmorRepairUnit = activationsArmorRepairUnit
+					self.activationsArmorResistanceShiftHardener = activationsArmorResistanceShiftHardener
+					self.activationsAutomatedTargetingSystem = activationsAutomatedTargetingSystem
+					self.activationsBastion = activationsBastion
+					self.activationsBombLauncher = activationsBombLauncher
+					self.activationsCapacitorBooster = activationsCapacitorBooster
+					self.activationsCargoScanner = activationsCargoScanner
+					self.activationsCloakingDevice = activationsCloakingDevice
+					self.activationsCloneVatBay = activationsCloneVatBay
+					self.activationsCynosuralField = activationsCynosuralField
+					self.activationsDamageControl = activationsDamageControl
+					self.activationsDataMiners = activationsDataMiners
+					self.activationsDroneControlUnit = activationsDroneControlUnit
+					self.activationsDroneTrackingModules = activationsDroneTrackingModules
+					self.activationsEccm = activationsEccm
+					self.activationsEcm = activationsEcm
+					self.activationsEcmBurst = activationsEcmBurst
+					self.activationsEnergyDestabilizer = activationsEnergyDestabilizer
+					self.activationsEnergyVampire = activationsEnergyVampire
+					self.activationsEnergyWeapon = activationsEnergyWeapon
+					self.activationsFestivalLauncher = activationsFestivalLauncher
+					self.activationsFrequencyMiningLaser = activationsFrequencyMiningLaser
+					self.activationsFueledArmorRepairer = activationsFueledArmorRepairer
+					self.activationsFueledShieldBooster = activationsFueledShieldBooster
+					self.activationsGangCoordinator = activationsGangCoordinator
+					self.activationsGasCloudHarvester = activationsGasCloudHarvester
+					self.activationsHullRepairUnit = activationsHullRepairUnit
+					self.activationsHybridWeapon = activationsHybridWeapon
+					self.activationsIndustrialCore = activationsIndustrialCore
+					self.activationsInterdictionSphereLauncher = activationsInterdictionSphereLauncher
+					self.activationsMicroJumpDrive = activationsMicroJumpDrive
+					self.activationsMiningLaser = activationsMiningLaser
+					self.activationsMissileLauncher = activationsMissileLauncher
+					self.activationsPassiveTargetingSystem = activationsPassiveTargetingSystem
+					self.activationsProbeLauncher = activationsProbeLauncher
+					self.activationsProjectedEccm = activationsProjectedEccm
+					self.activationsProjectileWeapon = activationsProjectileWeapon
+					self.activationsPropulsionModule = activationsPropulsionModule
+					self.activationsRemoteArmorRepairer = activationsRemoteArmorRepairer
+					self.activationsRemoteCapacitorTransmitter = activationsRemoteCapacitorTransmitter
+					self.activationsRemoteEcmBurst = activationsRemoteEcmBurst
+					self.activationsRemoteHullRepairer = activationsRemoteHullRepairer
+					self.activationsRemoteSensorBooster = activationsRemoteSensorBooster
+					self.activationsRemoteSensorDamper = activationsRemoteSensorDamper
+					self.activationsRemoteShieldBooster = activationsRemoteShieldBooster
+					self.activationsRemoteTrackingComputer = activationsRemoteTrackingComputer
+					self.activationsSalvager = activationsSalvager
+					self.activationsSensorBooster = activationsSensorBooster
+					self.activationsShieldBooster = activationsShieldBooster
+					self.activationsShieldHardener = activationsShieldHardener
+					self.activationsShipScanner = activationsShipScanner
+					self.activationsSiege = activationsSiege
+					self.activationsSmartBomb = activationsSmartBomb
+					self.activationsStasisWeb = activationsStasisWeb
+					self.activationsStripMiner = activationsStripMiner
+					self.activationsSuperWeapon = activationsSuperWeapon
+					self.activationsSurveyScanner = activationsSurveyScanner
+					self.activationsTargetBreaker = activationsTargetBreaker
+					self.activationsTargetPainter = activationsTargetPainter
+					self.activationsTrackingComputer = activationsTrackingComputer
+					self.activationsTrackingDisruptor = activationsTrackingDisruptor
+					self.activationsTractorBeam = activationsTractorBeam
+					self.activationsTriage = activationsTriage
+					self.activationsWarpDisruptFieldGenerator = activationsWarpDisruptFieldGenerator
+					self.activationsWarpScrambler = activationsWarpScrambler
+					self.linkWeapons = linkWeapons
+					self.overload = overload
+					self.repairs = repairs
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2226,42 +2622,81 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsIndustry: Codable, Hashable {
 				
 				
-				public let hackingSuccesses: Int64?
-				public let jobsCancelled: Int64?
-				public let jobsCompletedCopyBlueprint: Int64?
-				public let jobsCompletedInvention: Int64?
-				public let jobsCompletedManufacture: Int64?
-				public let jobsCompletedManufactureAsteroid: Int64?
-				public let jobsCompletedManufactureAsteroidQuantity: Int64?
-				public let jobsCompletedManufactureCharge: Int64?
-				public let jobsCompletedManufactureChargeQuantity: Int64?
-				public let jobsCompletedManufactureCommodity: Int64?
-				public let jobsCompletedManufactureCommodityQuantity: Int64?
-				public let jobsCompletedManufactureDeployable: Int64?
-				public let jobsCompletedManufactureDeployableQuantity: Int64?
-				public let jobsCompletedManufactureDrone: Int64?
-				public let jobsCompletedManufactureDroneQuantity: Int64?
-				public let jobsCompletedManufactureImplant: Int64?
-				public let jobsCompletedManufactureImplantQuantity: Int64?
-				public let jobsCompletedManufactureModule: Int64?
-				public let jobsCompletedManufactureModuleQuantity: Int64?
-				public let jobsCompletedManufactureOther: Int64?
-				public let jobsCompletedManufactureOtherQuantity: Int64?
-				public let jobsCompletedManufactureShip: Int64?
-				public let jobsCompletedManufactureShipQuantity: Int64?
-				public let jobsCompletedManufactureStructure: Int64?
-				public let jobsCompletedManufactureStructureQuantity: Int64?
-				public let jobsCompletedManufactureSubsystem: Int64?
-				public let jobsCompletedManufactureSubsystemQuantity: Int64?
-				public let jobsCompletedMaterialProductivity: Int64?
-				public let jobsCompletedTimeProductivity: Int64?
-				public let jobsStartedCopyBlueprint: Int64?
-				public let jobsStartedInvention: Int64?
-				public let jobsStartedManufacture: Int64?
-				public let jobsStartedMaterialProductivity: Int64?
-				public let jobsStartedTimeProductivity: Int64?
-				public let reprocessItem: Int64?
-				public let reprocessItemQuantity: Int64?
+				public var hackingSuccesses: Int64?
+				public var jobsCancelled: Int64?
+				public var jobsCompletedCopyBlueprint: Int64?
+				public var jobsCompletedInvention: Int64?
+				public var jobsCompletedManufacture: Int64?
+				public var jobsCompletedManufactureAsteroid: Int64?
+				public var jobsCompletedManufactureAsteroidQuantity: Int64?
+				public var jobsCompletedManufactureCharge: Int64?
+				public var jobsCompletedManufactureChargeQuantity: Int64?
+				public var jobsCompletedManufactureCommodity: Int64?
+				public var jobsCompletedManufactureCommodityQuantity: Int64?
+				public var jobsCompletedManufactureDeployable: Int64?
+				public var jobsCompletedManufactureDeployableQuantity: Int64?
+				public var jobsCompletedManufactureDrone: Int64?
+				public var jobsCompletedManufactureDroneQuantity: Int64?
+				public var jobsCompletedManufactureImplant: Int64?
+				public var jobsCompletedManufactureImplantQuantity: Int64?
+				public var jobsCompletedManufactureModule: Int64?
+				public var jobsCompletedManufactureModuleQuantity: Int64?
+				public var jobsCompletedManufactureOther: Int64?
+				public var jobsCompletedManufactureOtherQuantity: Int64?
+				public var jobsCompletedManufactureShip: Int64?
+				public var jobsCompletedManufactureShipQuantity: Int64?
+				public var jobsCompletedManufactureStructure: Int64?
+				public var jobsCompletedManufactureStructureQuantity: Int64?
+				public var jobsCompletedManufactureSubsystem: Int64?
+				public var jobsCompletedManufactureSubsystemQuantity: Int64?
+				public var jobsCompletedMaterialProductivity: Int64?
+				public var jobsCompletedTimeProductivity: Int64?
+				public var jobsStartedCopyBlueprint: Int64?
+				public var jobsStartedInvention: Int64?
+				public var jobsStartedManufacture: Int64?
+				public var jobsStartedMaterialProductivity: Int64?
+				public var jobsStartedTimeProductivity: Int64?
+				public var reprocessItem: Int64?
+				public var reprocessItemQuantity: Int64?
+				
+				public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
+					self.hackingSuccesses = hackingSuccesses
+					self.jobsCancelled = jobsCancelled
+					self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
+					self.jobsCompletedInvention = jobsCompletedInvention
+					self.jobsCompletedManufacture = jobsCompletedManufacture
+					self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
+					self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
+					self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
+					self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
+					self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
+					self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
+					self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
+					self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
+					self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
+					self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
+					self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
+					self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
+					self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
+					self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
+					self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
+					self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
+					self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
+					self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
+					self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
+					self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
+					self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
+					self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
+					self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
+					self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
+					self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
+					self.jobsStartedInvention = jobsStartedInvention
+					self.jobsStartedManufacture = jobsStartedManufacture
+					self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
+					self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
+					self.reprocessItem = reprocessItem
+					self.reprocessItemQuantity = reprocessItemQuantity
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2358,19 +2793,35 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsMarket: Codable, Hashable {
 				
 				
-				public let acceptContractsCourier: Int64?
-				public let acceptContractsItemExchange: Int64?
-				public let buyOrdersPlaced: Int64?
-				public let cancelMarketOrder: Int64?
-				public let createContractsAuction: Int64?
-				public let createContractsCourier: Int64?
-				public let createContractsItemExchange: Int64?
-				public let deliverCourierContract: Int64?
-				public let iskGained: Int64?
-				public let iskSpent: Int64?
-				public let modifyMarketOrder: Int64?
-				public let searchContracts: Int64?
-				public let sellOrdersPlaced: Int64?
+				public var acceptContractsCourier: Int64?
+				public var acceptContractsItemExchange: Int64?
+				public var buyOrdersPlaced: Int64?
+				public var cancelMarketOrder: Int64?
+				public var createContractsAuction: Int64?
+				public var createContractsCourier: Int64?
+				public var createContractsItemExchange: Int64?
+				public var deliverCourierContract: Int64?
+				public var iskGained: Int64?
+				public var iskSpent: Int64?
+				public var modifyMarketOrder: Int64?
+				public var searchContracts: Int64?
+				public var sellOrdersPlaced: Int64?
+				
+				public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
+					self.acceptContractsCourier = acceptContractsCourier
+					self.acceptContractsItemExchange = acceptContractsItemExchange
+					self.buyOrdersPlaced = buyOrdersPlaced
+					self.cancelMarketOrder = cancelMarketOrder
+					self.createContractsAuction = createContractsAuction
+					self.createContractsCourier = createContractsCourier
+					self.createContractsItemExchange = createContractsItemExchange
+					self.deliverCourierContract = deliverCourierContract
+					self.iskGained = iskGained
+					self.iskSpent = iskSpent
+					self.modifyMarketOrder = modifyMarketOrder
+					self.searchContracts = searchContracts
+					self.sellOrdersPlaced = sellOrdersPlaced
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2421,8 +2872,13 @@ public extension ESI {
 			public struct GetCharactersCharacterIDStatsIsk: Codable, Hashable {
 				
 				
-				public let `in`: Int64?
-				public let out: Int64?
+				public var `in`: Int64?
+				public var out: Int64?
+				
+				public init(`in`: Int64?, out: Int64?) {
+					self.`in` = `in`
+					self.out = out
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -2448,19 +2904,35 @@ public extension ESI {
 				}
 			}
 			
-			public let character: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter?
-			public let combat: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat?
-			public let industry: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry?
-			public let inventory: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory?
-			public let isk: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk?
-			public let market: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket?
-			public let mining: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining?
-			public let module: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsModule?
-			public let orbital: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital?
-			public let pve: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve?
-			public let social: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsSocial?
-			public let travel: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsTravel?
-			public let year: Int
+			public var character: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter?
+			public var combat: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat?
+			public var industry: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry?
+			public var inventory: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory?
+			public var isk: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk?
+			public var market: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket?
+			public var mining: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining?
+			public var module: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsModule?
+			public var orbital: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital?
+			public var pve: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve?
+			public var social: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsSocial?
+			public var travel: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsTravel?
+			public var year: Int
+			
+			public init(character: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter?, combat: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat?, industry: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry?, inventory: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory?, isk: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk?, market: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket?, mining: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining?, module: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsModule?, orbital: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital?, pve: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve?, social: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsSocial?, travel: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsTravel?, year: Int) {
+				self.character = character
+				self.combat = combat
+				self.industry = industry
+				self.inventory = inventory
+				self.isk = isk
+				self.market = market
+				self.mining = mining
+				self.module = module
+				self.orbital = orbital
+				self.pve = pve
+				self.social = social
+				self.travel = travel
+				self.year = year
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2512,8 +2984,13 @@ public extension ESI {
 		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
 			
 			
-			public let name: String?
-			public let titleID: Int?
+			public var name: String?
+			public var titleID: Int?
+			
+			public init(name: String?, titleID: Int?) {
+				self.name = name
+				self.titleID = titleID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -2774,10 +3251,17 @@ public extension ESI {
 				
 			}
 			
-			public let roles: [Character.Role.GetCharactersCharacterIDRolesRoles]?
-			public let rolesAtBase: [Character.Role.GetCharactersCharacterIDRolesRolesAtBase]?
-			public let rolesAtHq: [Character.Role.GetCharactersCharacterIDRolesRolesAtHq]?
-			public let rolesAtOther: [Character.Role.GetCharactersCharacterIDRolesRolesAtOther]?
+			public var roles: [Character.Role.GetCharactersCharacterIDRolesRoles]?
+			public var rolesAtBase: [Character.Role.GetCharactersCharacterIDRolesRolesAtBase]?
+			public var rolesAtHq: [Character.Role.GetCharactersCharacterIDRolesRolesAtHq]?
+			public var rolesAtOther: [Character.Role.GetCharactersCharacterIDRolesRolesAtOther]?
+			
+			public init(roles: [Character.Role.GetCharactersCharacterIDRolesRoles]?, rolesAtBase: [Character.Role.GetCharactersCharacterIDRolesRolesAtBase]?, rolesAtHq: [Character.Role.GetCharactersCharacterIDRolesRolesAtHq]?, rolesAtOther: [Character.Role.GetCharactersCharacterIDRolesRolesAtOther]?) {
+				self.roles = roles
+				self.rolesAtBase = rolesAtBase
+				self.rolesAtHq = rolesAtHq
+				self.rolesAtOther = rolesAtOther
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3007,13 +3491,23 @@ public extension ESI {
 				
 			}
 			
-			public let isRead: Bool?
-			public let notificationID: Int64
-			public let senderID: Int
-			public let senderType: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType
-			public let text: String?
-			public let timestamp: Date
-			public let type: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType
+			public var isRead: Bool?
+			public var notificationID: Int64
+			public var senderID: Int
+			public var senderType: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType
+			public var text: String?
+			public var timestamp: Date
+			public var type: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType
+			
+			public init(isRead: Bool?, notificationID: Int64, senderID: Int, senderType: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsSenderType, text: String?, timestamp: Date, type: Character.GetCharactersCharacterIDNotificationsOk.GetCharactersCharacterIDNotificationsType) {
+				self.isRead = isRead
+				self.notificationID = notificationID
+				self.senderID = senderID
+				self.senderType = senderType
+				self.text = text
+				self.timestamp = timestamp
+				self.type = type
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3053,10 +3547,17 @@ public extension ESI {
 		public struct Affiliation: Codable, Hashable {
 			
 			
-			public let allianceID: Int?
-			public let characterID: Int
-			public let corporationID: Int
-			public let factionID: Int?
+			public var allianceID: Int?
+			public var characterID: Int
+			public var corporationID: Int
+			public var factionID: Int?
+			
+			public init(allianceID: Int?, characterID: Int, corporationID: Int, factionID: Int?) {
+				self.allianceID = allianceID
+				self.characterID = characterID
+				self.corporationID = corporationID
+				self.factionID = factionID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -3173,14 +3674,25 @@ public extension ESI {
 				
 			}
 			
-			public let itemID: Int64
-			public let locationFlag: Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag
-			public let locationID: Int64
-			public let materialEfficiency: Int
-			public let quantity: Int
-			public let runs: Int
-			public let timeEfficiency: Int
-			public let typeID: Int
+			public var itemID: Int64
+			public var locationFlag: Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag
+			public var locationID: Int64
+			public var materialEfficiency: Int
+			public var quantity: Int
+			public var runs: Int
+			public var timeEfficiency: Int
+			public var typeID: Int
+			
+			public init(itemID: Int64, locationFlag: Character.Blueprint.GetCharactersCharacterIDBlueprintsLocationFlag, locationID: Int64, materialEfficiency: Int, quantity: Int, runs: Int, timeEfficiency: Int, typeID: Int) {
+				self.itemID = itemID
+				self.locationFlag = locationFlag
+				self.locationID = locationID
+				self.materialEfficiency = materialEfficiency
+				self.quantity = quantity
+				self.runs = runs
+				self.timeEfficiency = timeEfficiency
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

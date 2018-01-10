@@ -218,10 +218,17 @@ public extension ESI {
 		public struct Bid: Codable, Hashable {
 			
 			
-			public let amount: Float
-			public let bidID: Int
-			public let bidderID: Int
-			public let dateBid: Date
+			public var amount: Float
+			public var bidID: Int
+			public var bidderID: Int
+			public var dateBid: Date
+			
+			public init(amount: Float, bidID: Int, bidderID: Int, dateBid: Date) {
+				self.amount = amount
+				self.bidID = bidID
+				self.bidderID = bidderID
+				self.dateBid = dateBid
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -297,28 +304,53 @@ public extension ESI {
 				
 			}
 			
-			public let acceptorID: Int
-			public let assigneeID: Int
-			public let availability: Contracts.Contract.Availability
-			public let buyout: Double?
-			public let collateral: Double?
-			public let contractID: Int
-			public let dateAccepted: Date?
-			public let dateCompleted: Date?
-			public let dateExpired: Date
-			public let dateIssued: Date
-			public let daysToComplete: Int?
-			public let endLocationID: Int64?
-			public let forCorporation: Bool
-			public let issuerCorporationID: Int
-			public let issuerID: Int
-			public let price: Double?
-			public let reward: Double?
-			public let startLocationID: Int64?
-			public let status: Contracts.Contract.Status
-			public let title: String?
-			public let type: Contracts.Contract.ContractType
-			public let volume: Float?
+			public var acceptorID: Int
+			public var assigneeID: Int
+			public var availability: Contracts.Contract.Availability
+			public var buyout: Double?
+			public var collateral: Double?
+			public var contractID: Int
+			public var dateAccepted: Date?
+			public var dateCompleted: Date?
+			public var dateExpired: Date
+			public var dateIssued: Date
+			public var daysToComplete: Int?
+			public var endLocationID: Int64?
+			public var forCorporation: Bool
+			public var issuerCorporationID: Int
+			public var issuerID: Int
+			public var price: Double?
+			public var reward: Double?
+			public var startLocationID: Int64?
+			public var status: Contracts.Contract.Status
+			public var title: String?
+			public var type: Contracts.Contract.ContractType
+			public var volume: Float?
+			
+			public init(acceptorID: Int, assigneeID: Int, availability: Contracts.Contract.Availability, buyout: Double?, collateral: Double?, contractID: Int, dateAccepted: Date?, dateCompleted: Date?, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, status: Contracts.Contract.Status, title: String?, type: Contracts.Contract.ContractType, volume: Float?) {
+				self.acceptorID = acceptorID
+				self.assigneeID = assigneeID
+				self.availability = availability
+				self.buyout = buyout
+				self.collateral = collateral
+				self.contractID = contractID
+				self.dateAccepted = dateAccepted
+				self.dateCompleted = dateCompleted
+				self.dateExpired = dateExpired
+				self.dateIssued = dateIssued
+				self.daysToComplete = daysToComplete
+				self.endLocationID = endLocationID
+				self.forCorporation = forCorporation
+				self.issuerCorporationID = issuerCorporationID
+				self.issuerID = issuerID
+				self.price = price
+				self.reward = reward
+				self.startLocationID = startLocationID
+				self.status = status
+				self.title = title
+				self.type = type
+				self.volume = volume
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -391,12 +423,21 @@ public extension ESI {
 		public struct Item: Codable, Hashable {
 			
 			
-			public let isIncluded: Bool
-			public let isSingleton: Bool
-			public let quantity: Int
-			public let rawQuantity: Int?
-			public let recordID: Int64
-			public let typeID: Int
+			public var isIncluded: Bool
+			public var isSingleton: Bool
+			public var quantity: Int
+			public var rawQuantity: Int?
+			public var recordID: Int64
+			public var typeID: Int
+			
+			public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
+				self.isIncluded = isIncluded
+				self.isSingleton = isSingleton
+				self.quantity = quantity
+				self.rawQuantity = rawQuantity
+				self.recordID = recordID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -476,28 +517,53 @@ public extension ESI {
 				
 			}
 			
-			public let acceptorID: Int
-			public let assigneeID: Int
-			public let availability: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsAvailability
-			public let buyout: Double?
-			public let collateral: Double?
-			public let contractID: Int
-			public let dateAccepted: Date?
-			public let dateCompleted: Date?
-			public let dateExpired: Date
-			public let dateIssued: Date
-			public let daysToComplete: Int?
-			public let endLocationID: Int64?
-			public let forCorporation: Bool
-			public let issuerCorporationID: Int
-			public let issuerID: Int
-			public let price: Double?
-			public let reward: Double?
-			public let startLocationID: Int64?
-			public let status: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsStatus
-			public let title: String?
-			public let type: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsType
-			public let volume: Float?
+			public var acceptorID: Int
+			public var assigneeID: Int
+			public var availability: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsAvailability
+			public var buyout: Double?
+			public var collateral: Double?
+			public var contractID: Int
+			public var dateAccepted: Date?
+			public var dateCompleted: Date?
+			public var dateExpired: Date
+			public var dateIssued: Date
+			public var daysToComplete: Int?
+			public var endLocationID: Int64?
+			public var forCorporation: Bool
+			public var issuerCorporationID: Int
+			public var issuerID: Int
+			public var price: Double?
+			public var reward: Double?
+			public var startLocationID: Int64?
+			public var status: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsStatus
+			public var title: String?
+			public var type: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsType
+			public var volume: Float?
+			
+			public init(acceptorID: Int, assigneeID: Int, availability: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsAvailability, buyout: Double?, collateral: Double?, contractID: Int, dateAccepted: Date?, dateCompleted: Date?, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, status: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsStatus, title: String?, type: Contracts.GetCorporationsCorporationIDContractsOk.GetCorporationsCorporationIDContractsType, volume: Float?) {
+				self.acceptorID = acceptorID
+				self.assigneeID = assigneeID
+				self.availability = availability
+				self.buyout = buyout
+				self.collateral = collateral
+				self.contractID = contractID
+				self.dateAccepted = dateAccepted
+				self.dateCompleted = dateCompleted
+				self.dateExpired = dateExpired
+				self.dateIssued = dateIssued
+				self.daysToComplete = daysToComplete
+				self.endLocationID = endLocationID
+				self.forCorporation = forCorporation
+				self.issuerCorporationID = issuerCorporationID
+				self.issuerID = issuerID
+				self.price = price
+				self.reward = reward
+				self.startLocationID = startLocationID
+				self.status = status
+				self.title = title
+				self.type = type
+				self.volume = volume
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -570,10 +636,17 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDContractsContractIDBidsOk: Codable, Hashable {
 			
 			
-			public let amount: Float
-			public let bidID: Int
-			public let bidderID: Int
-			public let dateBid: Date
+			public var amount: Float
+			public var bidID: Int
+			public var bidderID: Int
+			public var dateBid: Date
+			
+			public init(amount: Float, bidID: Int, bidderID: Int, dateBid: Date) {
+				self.amount = amount
+				self.bidID = bidID
+				self.bidderID = bidderID
+				self.dateBid = dateBid
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -607,12 +680,21 @@ public extension ESI {
 		public struct GetCorporationsCorporationIDContractsContractIDItemsOk: Codable, Hashable {
 			
 			
-			public let isIncluded: Bool
-			public let isSingleton: Bool
-			public let quantity: Int
-			public let rawQuantity: Int?
-			public let recordID: Int64
-			public let typeID: Int
+			public var isIncluded: Bool
+			public var isSingleton: Bool
+			public var quantity: Int
+			public var rawQuantity: Int?
+			public var recordID: Int64
+			public var typeID: Int
+			
+			public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
+				self.isIncluded = isIncluded
+				self.isSingleton = isSingleton
+				self.quantity = quantity
+				self.rawQuantity = rawQuantity
+				self.recordID = recordID
+				self.typeID = typeID
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

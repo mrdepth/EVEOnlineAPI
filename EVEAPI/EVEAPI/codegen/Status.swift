@@ -50,10 +50,17 @@ public extension ESI {
 		public struct ServerStatus: Codable, Hashable {
 			
 			
-			public let players: Int
-			public let serverVersion: String
-			public let startTime: Date
-			public let vip: Bool?
+			public var players: Int
+			public var serverVersion: String
+			public var startTime: Date
+			public var vip: Bool?
+			
+			public init(players: Int, serverVersion: String, startTime: Date, vip: Bool?) {
+				self.players = players
+				self.serverVersion = serverVersion
+				self.startTime = startTime
+				self.vip = vip
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0

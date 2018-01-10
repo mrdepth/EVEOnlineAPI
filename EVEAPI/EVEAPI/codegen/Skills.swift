@@ -119,10 +119,17 @@ public extension ESI {
 			public struct Skill: Codable, Hashable {
 				
 				
-				public let activeSkillLevel: Int
-				public let skillID: Int
-				public let skillpointsInSkill: Int64
-				public let trainedSkillLevel: Int
+				public var activeSkillLevel: Int
+				public var skillID: Int
+				public var skillpointsInSkill: Int64
+				public var trainedSkillLevel: Int
+				
+				public init(activeSkillLevel: Int, skillID: Int, skillpointsInSkill: Int64, trainedSkillLevel: Int) {
+					self.activeSkillLevel = activeSkillLevel
+					self.skillID = skillID
+					self.skillpointsInSkill = skillpointsInSkill
+					self.trainedSkillLevel = trainedSkillLevel
+				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
@@ -152,9 +159,15 @@ public extension ESI {
 				}
 			}
 			
-			public let skills: [Skills.CharacterSkills.Skill]
-			public let totalSP: Int64
-			public let unallocatedSP: Int?
+			public var skills: [Skills.CharacterSkills.Skill]
+			public var totalSP: Int64
+			public var unallocatedSP: Int?
+			
+			public init(skills: [Skills.CharacterSkills.Skill], totalSP: Int64, unallocatedSP: Int?) {
+				self.skills = skills
+				self.totalSP = totalSP
+				self.unallocatedSP = unallocatedSP
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -186,14 +199,25 @@ public extension ESI {
 		public struct CharacterAttributes: Codable, Hashable {
 			
 			
-			public let accruedRemapCooldownDate: Date?
-			public let bonusRemaps: Int?
-			public let charisma: Int
-			public let intelligence: Int
-			public let lastRemapDate: Date?
-			public let memory: Int
-			public let perception: Int
-			public let willpower: Int
+			public var accruedRemapCooldownDate: Date?
+			public var bonusRemaps: Int?
+			public var charisma: Int
+			public var intelligence: Int
+			public var lastRemapDate: Date?
+			public var memory: Int
+			public var perception: Int
+			public var willpower: Int
+			
+			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
+				self.accruedRemapCooldownDate = accruedRemapCooldownDate
+				self.bonusRemaps = bonusRemaps
+				self.charisma = charisma
+				self.intelligence = intelligence
+				self.lastRemapDate = lastRemapDate
+				self.memory = memory
+				self.perception = perception
+				self.willpower = willpower
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
@@ -236,14 +260,25 @@ public extension ESI {
 		public struct SkillQueueItem: Codable, Hashable {
 			
 			
-			public let finishDate: Date?
-			public let finishedLevel: Int
-			public let levelEndSP: Int?
-			public let levelStartSP: Int?
-			public let queuePosition: Int
-			public let skillID: Int
-			public let startDate: Date?
-			public let trainingStartSP: Int?
+			public var finishDate: Date?
+			public var finishedLevel: Int
+			public var levelEndSP: Int?
+			public var levelStartSP: Int?
+			public var queuePosition: Int
+			public var skillID: Int
+			public var startDate: Date?
+			public var trainingStartSP: Int?
+			
+			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
+				self.finishDate = finishDate
+				self.finishedLevel = finishedLevel
+				self.levelEndSP = levelEndSP
+				self.levelStartSP = levelStartSP
+				self.queuePosition = queuePosition
+				self.skillID = skillID
+				self.startDate = startDate
+				self.trainingStartSP = trainingStartSP
+			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
