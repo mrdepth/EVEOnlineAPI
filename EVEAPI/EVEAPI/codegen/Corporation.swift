@@ -18,7 +18,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_medals.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -53,7 +53,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -88,7 +88,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.write_structures.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body = try? JSONEncoder().encode(newSchedule)
@@ -121,7 +121,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_facilities.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -154,7 +154,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -187,7 +187,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_standings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -254,7 +254,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -289,7 +289,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_outposts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -322,7 +322,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_outposts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -357,7 +357,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.track_members.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -390,7 +390,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_medals.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -425,7 +425,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_container_logs.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -460,7 +460,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_titles.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -493,7 +493,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_titles.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -558,7 +558,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_structures.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -662,7 +662,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.track_members.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -695,7 +695,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_starbases.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -733,7 +733,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_divisions.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -766,7 +766,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_starbases.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -801,7 +801,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_blueprints.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -836,7 +836,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil

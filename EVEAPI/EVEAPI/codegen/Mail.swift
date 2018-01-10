@@ -18,7 +18,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -51,7 +51,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body = try? JSONEncoder().encode(contents)
@@ -84,7 +84,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -117,7 +117,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body = label != nil ? try? JSONEncoder().encode(label) : nil
@@ -150,7 +150,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -183,7 +183,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -216,7 +216,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.send_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body = try? JSONEncoder().encode(mail)
@@ -249,7 +249,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -287,7 +287,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil

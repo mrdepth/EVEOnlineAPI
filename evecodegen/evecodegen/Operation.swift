@@ -88,7 +88,7 @@ class Operation {
 		template = template.replacingOccurrences(of: "{parameters}", with: parameterStrings.joined(separator: "\n"))
 		
 		if security.count > 0 {
-			var s = "let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []\n"
+			var s = "let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []\n"
 			s += security.joined(separator: "\n")
 			template = template.replacingOccurrences(of: "{security}", with: s)
 		}

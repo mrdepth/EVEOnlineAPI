@@ -50,7 +50,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_character_jobs.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -85,7 +85,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -120,7 +120,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -155,7 +155,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_jobs.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -225,7 +225,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_character_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil
@@ -260,7 +260,7 @@ public extension ESI {
 			var session = sessionManager
 			guard session != nil else {return}
 			
-			let scopes = (session?.adapter as? OAuth2Adapter)?.token.scopes ?? []
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
 			
 			let body: Data? = nil

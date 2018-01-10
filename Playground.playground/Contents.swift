@@ -7,17 +7,25 @@ import PlaygroundSupport
 import ObjectiveC
 //import Alamofire
 
-var a = [1,2,3]
-a.forEach { i in
-	a.append(i)
-	print("\(i)")
+class OAuth2ServerError: Error, Codable {
+	let error: String
+	let errorDescription: String
+	
+	init(error: String, errorDescription: String) {
+		self.error = error
+		self.errorDescription = errorDescription
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case error
+		case errorDescription = "error_description"
+	}
+	
+	var localizedDescription: String {
+		return errorDescription
+	}
 }
-//for i in a {
-//	a.append(i)
-////	a.removeLast()
-//	print("\(i)")
-//}
 
+let error: Error = OAuth2ServerError(error: "aa", errorDescription: "Some Description")
 
-
-print("\(a)")
+print ("\(error.localizedDescription)")

@@ -21,7 +21,7 @@ public extension Notification.Name {
 	public static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
 }
 
-fileprivate struct Token: Decodable {
+fileprivate struct TokenResponse: Decodable {
 	var accessToken: String
 	var refreshToken: String
 	var tokenType: String
@@ -35,7 +35,7 @@ fileprivate struct Token: Decodable {
 	}
 }
 
-fileprivate struct TokenVerify: Decodable {
+fileprivate struct TokenVerifyResponse: Decodable {
 	var characterID: Int64
 	var characterName: String
 	var scopes: [String]
@@ -53,93 +53,129 @@ fileprivate struct TokenVerify: Decodable {
 		characterID = try container.decode(Int64.self, forKey: .characterID)
 		characterName = try container.decode(String.self, forKey: .characterName)
 		scopes = try container.decode(String.self, forKey: .scopes).components(separatedBy: .whitespaces)
-		try? expiresOn = OAuth2Retrier.dateFormatter.date(from: container.decode(String.self, forKey: .expiresOn))
+		try? expiresOn = OAuth2Helper.dateFormatter.date(from: container.decode(String.self, forKey: .expiresOn))
 	}
 }
 
-public class OAuth2Token: NSObject, NSSecureCoding {
+public struct OAuth2Token: Codable {
 	public var accessToken: String
 	public var refreshToken: String
 	public var tokenType: String
-	public var expiresOn: Date?
+	public var expiresOn: Date
 	public let characterID: Int64
 	public let characterName: String
 	public let realm: String
 	public let scopes: [String]
-	public var expired: Bool {
+	public var isExpired: Bool {
 		get {
-			if let expiresOn = expiresOn {
-				return expiresOn <= Date()
-			}
-			else {
-				return true
-			}
+			return expiresOn <= Date()
 		}
 	}
 	
-	public init(accessToken: String, refreshToken: String, tokenType: String, scopes: [String], characterID: Int64, characterName: String, realm: String) {
-		self.accessToken = accessToken
-		self.refreshToken = refreshToken
-		self.tokenType = tokenType
-		self.scopes = scopes
-		self.characterID = characterID
-		self.characterName = characterName
-		self.realm = realm
-		super.init()
-	}
-	
-	public func encode(with aCoder: NSCoder) {
-		aCoder.encode(accessToken, forKey:"accessToken")
-		aCoder.encode(refreshToken, forKey:"refreshToken")
-		aCoder.encode(tokenType, forKey:"tokenType")
-		aCoder.encode(scopes, forKey:"scopes")
-		aCoder.encode(expiresOn, forKey:"expiresOn")
-		aCoder.encode(characterID, forKey: "characterID")
-		aCoder.encode(characterName, forKey: "characterName")
-		aCoder.encode(realm, forKey: "realm")
-	}
-	
-	public required init?(coder aDecoder: NSCoder) {
-		guard let accessToken = aDecoder.decodeObject(forKey: "accessToken") as? String else {return nil}
-		guard let refreshToken = aDecoder.decodeObject(forKey: "refreshToken") as? String else {return nil}
-		guard let tokenType = aDecoder.decodeObject(forKey: "tokenType") as? String else {return nil}
-		guard let scopes = aDecoder.decodeObject(forKey: "scopes") as? [String] else {return nil}
-		expiresOn = aDecoder.decodeObject(forKey: "expiresOn") as? Date
-		characterID = aDecoder.decodeInt64(forKey: "characterID")
-		guard let characterName = aDecoder.decodeObject(forKey: "characterName") as? String else {return nil}
-		guard let realm = aDecoder.decodeObject(forKey: "realm") as? String else {return nil}
-		
-		self.accessToken = accessToken
-		self.refreshToken = refreshToken
-		self.tokenType = tokenType
-		self.scopes = scopes
-		self.characterName = characterName
-		self.realm = realm
-		super.init()
-	}
-	
-	public static var supportsSecureCoding: Bool {
-		get {
-			return true
-		}
+	enum CodingKeys: String, CodingKey {
+		case accessToken
+		case refreshToken
+		case tokenType
+		case expiresOn
+		case characterID
+		case characterName
+		case realm
+		case scopes
 	}
 }
 
-public class OAuth2Adapter: RequestAdapter {
-	public let token: OAuth2Token
+public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	
-	public init(token: OAuth2Token) {
+	static let dateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+		return dateFormatter
+	}()
+	
+	public let token: OAuth2Token
+	public let clientID: String
+	public let secretKey: String
+	
+	public init(token: OAuth2Token, clientID: String, secretKey: String) {
 		self.token = token
+		self.clientID = clientID
+		self.secretKey = secretKey
 	}
 	
 	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+		guard !isRefreshing && !token.isExpired else {throw OAuth2Error.tokenExpired}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
 		return request
 	}
+
+	
+	private var isRefreshing = false
+	private var requestsToRetry: [RequestRetryCompletion] = []
+	private let lock = NSLock()
+	
+	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+		lock.lock(); defer {lock.unlock()}
+		
+		let shouldRefresh: Bool
+		if case OAuth2Error.tokenExpired = error, request.retryCount == 0 {
+			shouldRefresh = true
+		}
+		else {
+			shouldRefresh = false
+		}
+		if shouldRefresh {
+			requestsToRetry.append(completion)
+			
+			if !isRefreshing {
+				refreshToken { [weak self] error in
+					guard let strongSelf = self else { return }
+					strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
+					let succeeded = error == nil
+					strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
+					strongSelf.requestsToRetry.removeAll()
+				}
+			}
+		} else {
+			completion(false, 0.0)
+		}
+	}
+	
+	public func refreshToken(completion: @escaping (Error?) -> Void) {
+		guard !isRefreshing else {return}
+		isRefreshing = true
+		let auth = "\(clientID):\(secretKey)".data(using: .utf8)?.base64EncodedString()
+		Alamofire.request(OAuthBaseURL + "token",
+						  method: .post,
+						  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
+						  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable {[weak self] (response: DataResponse<TokenResponse>) in
+							guard let strongSelf = self else { return }
+							
+							switch(response.result) {
+							case let .success(value):
+								let expiresOn = Date(timeIntervalSinceNow: value.expiresIn)
+								var token = strongSelf.token
+								token.accessToken = value.accessToken
+								token.refreshToken = value.refreshToken
+								token.tokenType = value.tokenType
+								token.expiresOn = expiresOn
+								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
+								completion(nil)
+							case let .failure(error):
+								completion(error)
+							}
+							
+							strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
+							strongSelf.isRefreshing = false
+		}
+	}
+	
 }
 
 public class OAuth2 {
+	
 	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
 		var query = [URLQueryItem] ()
 		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
@@ -178,15 +214,15 @@ public class OAuth2 {
 			Alamofire.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
-							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<Token>) in
+							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenResponse>) in
 								switch(response.result) {
 								case let .success(token):
 									let date = Date(timeIntervalSinceNow: token.expiresIn)
-									Alamofire.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenVerify>) in
+									Alamofire.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenVerifyResponse>) in
 										switch(response.result) {
 										case let .success(verify):
-											let oauth2Token = OAuth2Token(accessToken: token.accessToken, refreshToken: token.refreshToken, tokenType: token.tokenType, scopes: verify.scopes, characterID: verify.characterID, characterName: verify.characterName, realm: state)
-											oauth2Token.expiresOn = verify.expiresOn ?? date
+											let expiresOn = max(verify.expiresOn ?? date, date)
+											let oauth2Token = OAuth2Token(accessToken: token.accessToken, refreshToken: token.refreshToken, tokenType: token.tokenType, expiresOn: expiresOn, characterID: verify.characterID, characterName: verify.characterName, realm: state, scopes: verify.scopes)
 											completionHandler(.success(oauth2Token))
 										case let .failure(error):
 											completionHandler(.failure(error))
@@ -204,87 +240,6 @@ public class OAuth2 {
 	}
 }
 
-public class OAuth2Retrier: RequestRetrier {
-	
-	static let dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-		return dateFormatter
-	}()
-	
-	public let token: OAuth2Token
-	public let clientID: String
-	public let secretKey: String
-	
-	public init(token: OAuth2Token, clientID: String, secretKey: String) {
-		self.token = token
-		self.clientID = clientID
-		self.secretKey = secretKey
-	}
-	
-	private var isRefreshing = false
-	private var requestsToRetry: [RequestRetryCompletion] = []
-	private let lock = NSLock()
-	
-	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
-		lock.lock(); defer {lock.unlock()}
-		
-		let shouldRefresh: Bool
-		if case OAuth2Error.tokenExpired = error, request.retryCount == 0 {
-			shouldRefresh = true
-		}
-		else {
-			shouldRefresh = false
-		}
-		if shouldRefresh {
-			requestsToRetry.append(completion)
-			
-			if !isRefreshing {
-				refreshToken { [weak self] error in
-					guard let strongSelf = self else { return }
-					strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
-					let succeeded = error == nil
-					strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
-					strongSelf.requestsToRetry.removeAll()
-				}
-			}
-		} else {
-			completion(false, 0.0)
-		}
-	}
-	
-	public func refreshToken(completion: @escaping (Error?) -> Void) {
-		guard !isRefreshing else {return}
-		isRefreshing = true
-		let auth = "\(clientID):\(secretKey)".data(using: .utf8)?.base64EncodedString()
-		Alamofire.request(OAuthBaseURL + "token",
-		                  method: .post,
-		                  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
-		                  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable {[weak self] (response: DataResponse<Token>) in
-							guard let strongSelf = self else { return }
-							
-							switch(response.result) {
-							case let .success(value):
-								let expiresOn = Date(timeIntervalSinceNow: value.expiresIn)
-								let token = strongSelf.token
-								token.accessToken = value.accessToken
-								token.refreshToken = value.refreshToken
-								token.tokenType = value.tokenType
-								token.expiresOn = expiresOn
-								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
-								completion(nil)
-							case let .failure(error):
-								completion(error)
-							}
-							
-							strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
-							strongSelf.isRefreshing = false
-		}
-	}
-}
-
 fileprivate struct OAuth2ServerError: Codable {
 	var error: String
 	var errorDescription: String
@@ -298,10 +253,10 @@ fileprivate struct OAuth2ServerError: Codable {
 extension DataRequest {
 	@discardableResult
 	public func validateOAuth2() -> Self {
-		let statusCode = IndexSet(200..<300)
+		let statusCodes = IndexSet(200..<300)
 		
 		return validate() {(request, response, data) -> ValidationResult in
-			if statusCode.contains(response.statusCode) {
+			if statusCodes.contains(response.statusCode) {
 				return .success
 			}
 			else if let data = data, let error = try? JSONDecoder().decode(OAuth2ServerError.self, from: data) {
@@ -310,6 +265,6 @@ extension DataRequest {
 			else {
 				return .success
 			}
-		}.validate(statusCode: statusCode)
+		}.validate(statusCode: statusCodes)
 	}
 }

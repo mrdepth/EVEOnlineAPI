@@ -48,7 +48,7 @@ extension Dictionary where Key == String {
 public class EVE: SessionManager {
 	let baseURL = "https://api.eveonline.com/"
 	
-	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Adapter? = nil, retrier: OAuth2Retrier? = nil) {
+	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: ESServer = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Helper? = nil, retrier: OAuth2Retrier? = nil) {
 
 		let configuration = URLSessionConfiguration.default
 		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
@@ -118,7 +118,7 @@ extension DataRequest {
 	}
 }
 
-public class OAuth2EVEAdapter: OAuth2Adapter {
+public class OAuth2EVEAdapter: OAuth2Helper {
 	
 	override public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
 		guard let url = urlRequest.url,

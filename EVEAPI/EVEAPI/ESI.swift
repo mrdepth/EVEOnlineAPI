@@ -9,7 +9,52 @@
 import Foundation
 import Alamofire
 
+struct Weak<T: AnyObject> {
+	typealias Value = T
+	private(set) weak var value: T?
+	init(_ value: T?) {
+		self.value = value
+	}
+}
+
+
+fileprivate class LoadBalancer {
+	let maxConcurentRequestsCount = 1
+	static let shared = LoadBalancer()
+	var queue: [DataRequest] = []
+	var active: [DataRequest] = []
+	private var lock = NSLock()
+	
+	func add(_ request: DataRequest) {
+		lock.lock()
+		queue.append(request)
+		lock.unlock()
+		dispatch()
+	}
+	
+	private func dispatch() {
+		lock.lock(); defer {lock.unlock()}
+		guard !queue.isEmpty && active.count < maxConcurentRequestsCount else {return}
+		let request = queue.removeFirst()
+		active.append(request)
+		request.response { [weak self, weak request] _ in
+			guard let strongSelf = self else {return}
+			strongSelf.lock.lock()
+			if let i = strongSelf.active.index(where: {$0 === request}) {
+				strongSelf.active.remove(at: i)
+			}
+			strongSelf.lock.unlock()
+			strongSelf.dispatch()
+		}
+		request.resume()
+	}
+}
+
 public class ESI: SessionManager {
+	
+	private static var helpers: [String: Weak<OAuth2Helper>] = [:]
+	private static let helpersLock = NSLock()
+
 	fileprivate class CachePolicyAdapter: RequestAdapter {
 		let cachePolicy: URLRequest.CachePolicy
 		let next: RequestAdapter?
@@ -34,7 +79,7 @@ public class ESI: SessionManager {
 	let baseURL = "https://esi.tech.ccp.is"
 	let server: Server
 	
-	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, adapter: OAuth2Adapter? = nil, retrier: OAuth2Retrier? = nil) {
+	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		self.server = server
 		let configuration = URLSessionConfiguration.default
 		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
@@ -43,9 +88,40 @@ public class ESI: SessionManager {
 		super.init(configuration: configuration)
 		
 		if let token = token, let clientID = clientID, let secretKey = secretKey {
-			self.adapter = adapter ?? OAuth2Adapter(token: token)
-			self.retrier = retrier ?? OAuth2Retrier(token: token, clientID: clientID, secretKey: secretKey)
+			ESI.helpersLock.lock(); defer {ESI.helpersLock.unlock()}
+			let helper = ESI.helpers[token.refreshToken]?.value ?? {
+				let helper = OAuth2Helper(token: token, clientID: clientID, secretKey: secretKey)
+				ESI.helpers[token.refreshToken] = Weak(helper)
+				return helper
+			}()
+			adapter = helper
+			retrier = helper
 		}
+		startRequestsImmediately = false
+	}
+	
+	deinit {
+		if let token = (adapter as? OAuth2Helper)?.token {
+			adapter = nil
+			retrier = nil
+			if ESI.helpers[token.refreshToken]?.value == nil {
+				ESI.helpers[token.refreshToken] = nil
+			}
+		}
+	}
+	
+	@discardableResult
+	open override func request(
+		_ url: URLConvertible,
+		method: HTTPMethod = .get,
+		parameters: Parameters? = nil,
+		encoding: ParameterEncoding = URLEncoding.default,
+		headers: HTTPHeaders? = nil)
+		-> DataRequest
+	{
+		let request = super.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+		LoadBalancer.shared.add(request)
+		return request
 	}
 	
 //	public class func initialize() {
