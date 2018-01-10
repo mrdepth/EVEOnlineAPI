@@ -40,11 +40,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -74,11 +76,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -106,11 +110,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.SystemKills]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.SystemKills]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -138,11 +144,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -172,11 +180,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -204,11 +214,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -236,11 +248,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.GraphicInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.GraphicInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -270,11 +284,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.ItemGroupInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ItemGroupInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -304,11 +320,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.ItemCategoryInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ItemCategoryInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -338,11 +356,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -370,11 +390,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -402,11 +424,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -434,11 +458,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -468,11 +494,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Race]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Race]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -500,11 +528,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.MoonInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.MoonInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -534,11 +564,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Faction]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Faction]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -568,11 +600,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -602,11 +636,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.TypeInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.TypeInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -634,11 +670,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int64]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int64]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -666,11 +704,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Name]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Name]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -698,11 +738,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -730,11 +772,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.PlanetInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.PlanetInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -763,11 +807,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.StructureInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.StructureInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -795,11 +841,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -827,11 +875,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -859,11 +909,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -893,11 +945,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Universe.Bloodline]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Bloodline]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -927,11 +981,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Universe.PostUniverseIdsOk>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.PostUniverseIdsOk>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		

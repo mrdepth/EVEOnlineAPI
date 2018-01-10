@@ -40,11 +40,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Insurance.Price]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Insurance.Price]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		

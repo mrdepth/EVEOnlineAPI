@@ -7,25 +7,8 @@ import PlaygroundSupport
 import ObjectiveC
 //import Alamofire
 
-class OAuth2ServerError: Error, Codable {
-	let error: String
-	let errorDescription: String
-	
-	init(error: String, errorDescription: String) {
-		self.error = error
-		self.errorDescription = errorDescription
-	}
-	
-	enum CodingKeys: String, CodingKey {
-		case error
-		case errorDescription = "error_description"
-	}
-	
-	var localizedDescription: String {
-		return errorDescription
-	}
-}
+let data = "{24234.444}".data(using: .utf8)!
 
-let error: Error = OAuth2ServerError(error: "aa", errorDescription: "Some Description")
+let d = try? JSONDecoder().decode(Double.self, from: data)
 
-print ("\(error.localizedDescription)")
+print("\(d)")

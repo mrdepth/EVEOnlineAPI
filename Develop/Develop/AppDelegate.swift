@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		var esi: ESI? = ESI(token: token, clientID: clientID, secretKey: secretKey)
 		let dispatchGroup = DispatchGroup()
 		dispatchGroup.enter()
-		esi?.skills.getCharacterSkills(characterID: Int(token.characterID), completionBlock: { (result) in
+		esi?.wallet.getCharactersWalletBalance(characterID: Int(token.characterID), completionBlock: { (result) in
 			dispatchGroup.leave()
 		})
 		

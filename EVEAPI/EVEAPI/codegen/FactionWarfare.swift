@@ -38,11 +38,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionStats]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionStats]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -71,11 +73,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCharactersCharacterIDFwStatsOk>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCharactersCharacterIDFwStatsOk>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -103,11 +107,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Leaderboards>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Leaderboards>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -135,11 +141,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionWar]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionWar]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -167,11 +175,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.System]>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.System]>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -199,11 +209,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Characters>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Characters>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -232,11 +244,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		
@@ -264,11 +278,13 @@ public extension ESI {
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Corporations>) in
-				completionBlock?(response.result)
-				session = nil
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Corporations>) in
+					completionBlock?(response.result)
+					session = nil
+				}
 			}
 		}
 		

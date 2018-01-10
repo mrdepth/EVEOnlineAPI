@@ -105,7 +105,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		return dateFormatter
 	}()
 	
-	public let token: OAuth2Token
+	private(set) public var token: OAuth2Token
 	public let clientID: String
 	public let secretKey: String
 	
@@ -113,6 +113,10 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		self.token = token
 		self.clientID = clientID
 		self.secretKey = secretKey
+	}
+	
+	deinit {
+		
 	}
 	
 	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
@@ -164,6 +168,10 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 						  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable {[weak self] (response: DataResponse<TokenResponse>) in
 							guard let strongSelf = self else { return }
 							
+							strongSelf.lock.lock();
+							strongSelf.isRefreshing = false
+							strongSelf.lock.unlock()
+
 							switch(response.result) {
 							case let .success(value):
 								let expiresOn = Date(timeIntervalSinceNow: value.expiresIn)
@@ -172,14 +180,13 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 								token.refreshToken = value.refreshToken
 								token.tokenType = value.tokenType
 								token.expiresOn = expiresOn
+								strongSelf.token = token
 								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
 								completion(nil)
 							case let .failure(error):
 								completion(error)
 							}
 							
-							strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
-							strongSelf.isRefreshing = false
 		}
 	}
 	

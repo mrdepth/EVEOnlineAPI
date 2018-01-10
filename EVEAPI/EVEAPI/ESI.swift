@@ -19,13 +19,13 @@ struct Weak<T: AnyObject> {
 
 
 fileprivate class LoadBalancer {
-	let maxConcurentRequestsCount = 1
+	let maxConcurentRequestsCount = 4
 	static let shared = LoadBalancer()
-	var queue: [DataRequest] = []
-	var active: [DataRequest] = []
+	var queue: [()-> DataRequest] = []
+	var active: Int = 0
 	private var lock = NSLock()
 	
-	func add(_ request: DataRequest) {
+	func add(_ request: @escaping ()-> DataRequest) {
 		lock.lock()
 		queue.append(request)
 		lock.unlock()
@@ -34,19 +34,16 @@ fileprivate class LoadBalancer {
 	
 	private func dispatch() {
 		lock.lock(); defer {lock.unlock()}
-		guard !queue.isEmpty && active.count < maxConcurentRequestsCount else {return}
+		guard !queue.isEmpty && active < maxConcurentRequestsCount else {return}
 		let request = queue.removeFirst()
-		active.append(request)
-		request.response { [weak self, weak request] _ in
+		active += 1
+		request().response { [weak self] _ in
 			guard let strongSelf = self else {return}
 			strongSelf.lock.lock()
-			if let i = strongSelf.active.index(where: {$0 === request}) {
-				strongSelf.active.remove(at: i)
-			}
+			strongSelf.active -= 1
 			strongSelf.lock.unlock()
 			strongSelf.dispatch()
 		}
-		request.resume()
 	}
 }
 
@@ -97,7 +94,7 @@ public class ESI: SessionManager {
 			adapter = helper
 			retrier = helper
 		}
-		startRequestsImmediately = false
+//		startRequestsImmediately = false
 	}
 	
 	deinit {
@@ -110,18 +107,8 @@ public class ESI: SessionManager {
 		}
 	}
 	
-	@discardableResult
-	open override func request(
-		_ url: URLConvertible,
-		method: HTTPMethod = .get,
-		parameters: Parameters? = nil,
-		encoding: ParameterEncoding = URLEncoding.default,
-		headers: HTTPHeaders? = nil)
-		-> DataRequest
-	{
-		let request = super.request(url, method: method, parameters: parameters, encoding: encoding, headers: headers)
+	open func perform(_ request: @escaping () -> DataRequest) {
 		LoadBalancer.shared.add(request)
-		return request
 	}
 	
 //	public class func initialize() {
@@ -229,18 +216,12 @@ extension DataRequest {
 		func number(request: URLRequest?, response: HTTPURLResponse?, data: Data?, error: Error?) throws -> NSDecimalNumber {
 			guard error == nil else { throw error! }
 			
-			guard let validData = data, validData.count > 0 else {
+			guard let validData = data,
+				let s = String(data: validData, encoding: .utf8),
+				let number = Decimal(string: s, locale: nil), !validData.isEmpty else {
 				throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
 			}
-			
-			do {
-				guard let s = String(data: validData, encoding: .utf8), let d = Decimal(string: s, locale: nil) else {
-					throw AFError.responseSerializationFailed(reason: .inputDataNilOrZeroLength)
-				}
-				return NSDecimalNumber(decimal: d)
-			} catch {
-				throw error
-			}
+			return NSDecimalNumber(decimal: number)
 		}
 	}
 	
