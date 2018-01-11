@@ -15,10 +15,13 @@ public enum OAuth2Error: Error {
 	case invalidServerResponse(response: Any)
 	case server(message: String)
 	case tokenExpired
+	case invalidToken
 }
+
 
 public extension Notification.Name {
 	public static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
+	public static let OAuth2TokenDidBecomeInvalid = Notification.Name(rawValue: "OAuth2TokenDidBecomeInvalid")
 }
 
 fileprivate struct TokenResponse: Decodable {
@@ -65,7 +68,7 @@ public struct OAuth2Token: Codable {
 	public let characterID: Int64
 	public let characterName: String
 	public let realm: String
-	public let scopes: [String]
+	public var scopes: [String]
 	public var isExpired: Bool {
 		get {
 			return expiresOn <= Date()
@@ -132,6 +135,11 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	private let lock = NSLock()
 	
 	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+		guard !token.refreshToken.isEmpty else {
+			completion(false, 0)
+			return
+		}
+		
 		lock.lock(); defer {lock.unlock()}
 		
 		let shouldRefresh: Bool
@@ -184,6 +192,11 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
 								completion(nil)
 							case let .failure(error):
+								if case OAuth2Error.invalidToken = error {
+									let token = strongSelf.token
+									strongSelf.token.refreshToken = ""
+									NotificationCenter.default.post(name: .OAuth2TokenDidBecomeInvalid, object: token)
+								}
 								completion(error)
 							}
 							
@@ -259,6 +272,10 @@ public class OAuth2 {
 }
 
 fileprivate struct OAuth2ServerError: Codable {
+	public enum Code: String {
+		case invalidToken = "invalid_token"
+	}
+
 	var error: String
 	var errorDescription: String
 	
@@ -278,7 +295,12 @@ extension DataRequest {
 				return .success
 			}
 			else if let data = data, let error = try? JSONDecoder().decode(OAuth2ServerError.self, from: data) {
-				return .failure(OAuth2Error.server(message: error.errorDescription))
+				switch OAuth2ServerError.Code(rawValue: error.error) {
+				case .invalidToken?:
+					return .failure(OAuth2Error.invalidToken)
+				default:
+					return .failure(OAuth2Error.server(message: error.errorDescription))
+				}
 			}
 			else {
 				return .success
