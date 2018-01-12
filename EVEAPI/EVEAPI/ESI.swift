@@ -378,14 +378,6 @@ public extension ESI.Scope {
 	public static var `default`: [ESI.Scope]  {
 		get {
 			return [
-//				.characterAccountRead,
-//				.characterClonesRead,
-//				.characterIndustryJobsRead,
-//				.characterMarketOrdersRead,
-//				.characterSkillsRead,
-//				.characterContractsRead,
-//				.characterStatsRead,
-				.characterWalletRead,
 				.esiClonesReadClonesV1,
 				.esiFittingsWriteFittingsV1,
 				.esiCharactersReadStandingsV1,
@@ -395,28 +387,22 @@ public extension ESI.Scope {
 				.esiSkillsReadSkillqueueV1,
 				.esiAssetsReadAssetsV1,
 				.esiCalendarRespondCalendarEventsV1,
-//				.esiMailOrganizeMailV1,
 				.esiKillmailsReadKillmailsV1,
 				.esiMailSendMailV1,
 				.esiMailOrganizeMailV1,
 				.esiWalletReadCharacterWalletV1,
-//				.esiCharactersReadAgentsResearchV1,
 				.esiFittingsReadFittingsV1,
 				.esiCalendarReadCalendarEventsV1,
 				.esiSkillsReadSkillsV1,
 				.esiLocationReadShipTypeV1,
-//				.esiCharactersWriteContactsV1,
-//				.esiCharactersReadContactsV1,
 				.esiPlanetsManagePlanetsV1,
 				.esiSearchSearchStructuresV1,
 				.esiLocationReadLocationV1,
-//				.esiBookmarksReadCharacterBookmarksV1,
 				.esiCharactersReadLoyaltyV1,
 				.esiMarketsReadCharacterOrdersV1,
 				.esiIndustryReadCharacterJobsV1,
 				.esiCharactersReadBlueprintsV1,
 				.esiContractsReadCharacterContractsV1,
-				
 				.esiClonesReadImplantsV1,
 
 			]

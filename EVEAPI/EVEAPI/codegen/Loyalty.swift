@@ -157,14 +157,14 @@ public extension ESI {
 				}
 			}
 			
-			public var iskCost: Int
+			public var iskCost: Int64
 			public var lpCost: Int
 			public var offerID: Int
 			public var quantity: Int
 			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems]
 			public var typeID: Int
 			
-			public init(iskCost: Int, lpCost: Int, offerID: Int, quantity: Int, requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems], typeID: Int) {
+			public init(iskCost: Int64, lpCost: Int, offerID: Int, quantity: Int, requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems], typeID: Int) {
 				self.iskCost = iskCost
 				self.lpCost = lpCost
 				self.offerID = offerID

@@ -49,8 +49,8 @@ class Scope: Namespace {
 				}
 			}
 			
-			template = template.replacingOccurrences(of: "{values}", with: values.joined(separator: "\n"))
-			template = template.replacingOccurrences(of: "{scopes}", with: scopes.joined(separator: ",\n"))
+			template = template.replacingOccurrences(of: "{values}", with: values.sorted().joined(separator: "\n"))
+			template = template.replacingOccurrences(of: "{scopes}", with: scopes.sorted().joined(separator: ",\n"))
 			
 			/*s += "class func loadClassess() {\n"
 			s += classLoaders.joined(separator: "\n")
