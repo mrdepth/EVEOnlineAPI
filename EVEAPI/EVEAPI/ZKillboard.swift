@@ -112,11 +112,12 @@ extension ZKillboard {
 	}
 	
 	fileprivate static let dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "yyyyMMddHH00"
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-		return dateFormatter
+		return DateFormatter.esiDateTimeFormatter
+//		let dateFormatter = DateFormatter()
+//		dateFormatter.dateFormat = "yyyyMMddHH00"
+//		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+//		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+//		return dateFormatter
 	}()
 	
 	public enum Filter {
