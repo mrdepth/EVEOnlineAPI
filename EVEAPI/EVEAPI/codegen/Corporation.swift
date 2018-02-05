@@ -51,7 +51,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getCorporationMembers(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>) -> Void)?) {
+		public func getCorporationShareholders(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -731,7 +731,7 @@ public extension ESI {
 			}
 		}
 		
-		public func getStarbasePOSDetail(corporationID: Int, page: Int? = nil, starbaseID: Int64, systemID: Int, completionBlock:((Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>) -> Void)?) {
+		public func getStarbasePOSDetail(corporationID: Int, starbaseID: Int64, systemID: Int, completionBlock:((Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>) -> Void)?) {
 			var session = sessionManager
 			guard session != nil else {return}
 			
@@ -748,9 +748,6 @@ public extension ESI {
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
 			if let v = systemID.httpQuery {
 				query.append(URLQueryItem(name: "system_id", value: v))
 			}

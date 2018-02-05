@@ -157,6 +157,7 @@ public extension ESI {
 				}
 			}
 			
+			public var akCost: Int?
 			public var iskCost: Int64
 			public var lpCost: Int
 			public var offerID: Int
@@ -164,7 +165,8 @@ public extension ESI {
 			public var requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems]
 			public var typeID: Int
 			
-			public init(iskCost: Int64, lpCost: Int, offerID: Int, quantity: Int, requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems], typeID: Int) {
+			public init(akCost: Int?, iskCost: Int64, lpCost: Int, offerID: Int, quantity: Int, requiredItems: [Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems], typeID: Int) {
+				self.akCost = akCost
 				self.iskCost = iskCost
 				self.lpCost = lpCost
 				self.offerID = offerID
@@ -175,6 +177,7 @@ public extension ESI {
 			
 			public var hashValue: Int {
 				var hash: Int = 0
+				hashCombine(seed: &hash, value: akCost?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: iskCost.hashValue)
 				hashCombine(seed: &hash, value: lpCost.hashValue)
 				hashCombine(seed: &hash, value: offerID.hashValue)
@@ -189,12 +192,45 @@ public extension ESI {
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
+				case akCost = "ak_cost"
 				case iskCost = "isk_cost"
 				case lpCost = "lp_cost"
 				case offerID = "offer_id"
 				case quantity
 				case requiredItems = "required_items"
 				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
