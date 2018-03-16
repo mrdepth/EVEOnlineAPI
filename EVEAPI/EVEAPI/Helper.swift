@@ -44,6 +44,23 @@ extension Data: ParameterEncoding {
 	
 }
 
+extension Promise {
+	func set<T>(result: Alamofire.Result<T>, cached: TimeInterval = 3600) where Value == ESI.Result<T>{
+		do {
+			switch result {
+			case let .success(value):
+				try set(.success(ESI.Result<T>(value: value, cached: cached)))
+			case let .failure(error):
+				throw error
+			}
+		}
+		catch {
+			try! set(.failure(error))
+		}
+	}
+}
+
+
 public enum ESIError: LocalizedError {
 	case internalError
 //	case network(error: Error)

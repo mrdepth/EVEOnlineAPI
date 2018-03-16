@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func listWars(maxWarID: Int? = nil, completionBlock:((Result<[Int]>) -> Void)?) {
+		@discardableResult
+		public func listWars(maxWarID: Int? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = maxWarID?.httpQuery {
 				query.append(URLQueryItem(name: "max_war_id", value: v))
 			}
@@ -44,16 +46,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getWarInformation(warID: Int, completionBlock:((Result<Wars.WarInformation>) -> Void)?) {
+		@discardableResult
+		public func getWarInformation(warID: Int) -> Future<ESI.Result<Wars.WarInformation>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<Wars.WarInformation>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -62,10 +69,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/wars/\(warID)/"
@@ -78,16 +83,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listKillsForWar(page: Int? = nil, warID: Int, completionBlock:((Result<[Wars.Kills]>) -> Void)?) {
+		@discardableResult
+		public func listKillsForWar(page: Int? = nil, warID: Int) -> Future<ESI.Result<[Wars.Kills]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Wars.Kills]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -96,10 +106,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -114,10 +122,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

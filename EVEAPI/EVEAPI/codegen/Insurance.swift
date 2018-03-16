@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func listInsuranceLevels(language: Language? = nil, completionBlock:((Result<[Insurance.Price]>) -> Void)?) {
+		@discardableResult
+		public func listInsuranceLevels(language: Language? = nil) -> Future<ESI.Result<[Insurance.Price]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Insurance.Price]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = language?.httpQuery {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
@@ -44,10 +46,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Insurance.Price]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

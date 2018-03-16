@@ -43,10 +43,11 @@ public class ZKillboard: SessionManager {
 		super.init(configuration: configuration)
 	}
 	
-	public func kills(filter: [Filter], page: Int?, completionBlock:((Result<[Killmail]>) -> Void)?) {
+	public func kills(filter: [Filter], page: Int?) -> Future<ESI.Result<[Killmail]>> {
+		let promise = Promise<ESI.Result<[Killmail]>>()
 		guard filter.count > 1 else {
-			completionBlock?(.failure(ZKillboardError.notFound))
-			return
+			try! promise.set(.failure(ZKillboardError.notFound))
+			return promise.future
 		}
 		var session: ZKillboard? = self
 		
@@ -62,9 +63,10 @@ public class ZKillboard: SessionManager {
 		session?.request(url + args.joined(separator: "/") + "/orderDirection/desc/", method: .get).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
-				completionBlock?(response.result)
+				promise.set(result: response.result, cached: 600.0)
 				session = nil
 		}
+		return promise.future
 	}
 	
 }

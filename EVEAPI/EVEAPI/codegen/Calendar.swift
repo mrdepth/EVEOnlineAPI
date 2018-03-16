@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getAttendees(characterID: Int, eventID: Int, completionBlock:((Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>) -> Void)?) {
+		@discardableResult
+		public func getAttendees(characterID: Int, eventID: Int) -> Future<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/calendar/\(eventID)/attendees/"
@@ -43,29 +48,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listCalendarEventSummaries(characterID: Int, fromEvent: Int? = nil, completionBlock:((Result<[Calendar.Summary]>) -> Void)?) {
+		@discardableResult
+		public func listCalendarEventSummaries(characterID: Int, fromEvent: Int? = nil) -> Future<ESI.Result<[Calendar.Summary]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Calendar.Summary]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = fromEvent?.httpQuery {
 				query.append(URLQueryItem(name: "from_event", value: v))
 			}
@@ -80,29 +91,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Calendar.Summary]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 5.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func respondToAnEvent(characterID: Int, eventID: Int, response: Calendar.Response, completionBlock:((Result<String>) -> Void)?) {
+		@discardableResult
+		public func respondToAnEvent(characterID: Int, eventID: Int, response: Calendar.Response) -> Future<ESI.Result<String>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-calendar.respond_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-calendar.respond_calendar_events.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(response)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v3/characters/\(characterID)/calendar/\(eventID)/"
@@ -115,29 +132,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<String>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getAnEvent(characterID: Int, eventID: Int, completionBlock:((Result<Calendar.Event>) -> Void)?) {
+		@discardableResult
+		public func getAnEvent(characterID: Int, eventID: Int) -> Future<ESI.Result<Calendar.Event>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Calendar.Event>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v3/characters/\(characterID)/calendar/\(eventID)/"
@@ -150,10 +173,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Calendar.Event>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 5.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

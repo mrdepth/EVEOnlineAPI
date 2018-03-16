@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getActiveImplants(characterID: Int, completionBlock:((Result<[Int]>) -> Void)?) {
+		@discardableResult
+		public func getActiveImplants(characterID: Int) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-clones.read_implants.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-clones.read_implants.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/implants/"
@@ -43,29 +48,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getClones(characterID: Int, completionBlock:((Result<Clones.JumpClones>) -> Void)?) {
+		@discardableResult
+		public func getClones(characterID: Int) -> Future<ESI.Result<Clones.JumpClones>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Clones.JumpClones>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-clones.read_clones.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-clones.read_clones.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v3/characters/\(characterID)/clones/"
@@ -78,10 +89,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Clones.JumpClones>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 120.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

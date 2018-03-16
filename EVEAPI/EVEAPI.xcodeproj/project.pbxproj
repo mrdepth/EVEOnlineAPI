@@ -44,6 +44,7 @@
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		12809FE420034D35006AE91F /* ZKillboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203E8721F017D82009ADF8D /* ZKillboard.swift */; };
 		12809FE5200352C5006AE91F /* rss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CFDAF81F053D6700CC0762 /* rss.swift */; };
+		12841BDE2057DEEC00B30582 /* Future.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12841BDD2057DEEC00B30582 /* Future.swift */; };
 		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */; };
 		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
@@ -57,11 +58,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAlliance.swift; sourceTree = "<group>"; };
-		1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAsset.swift; sourceTree = "<group>"; };
-		1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESConstants.swift; sourceTree = "<group>"; };
-		1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESBookmark.swift; sourceTree = "<group>"; };
-		1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCalendar.swift; sourceTree = "<group>"; };
 		1203E8721F017D82009ADF8D /* ZKillboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZKillboard.swift; sourceTree = "<group>"; };
 		122071A31EF4188A007D86CE /* EVEGlobal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEGlobal.swift; sourceTree = "<group>"; };
 		122B55461EB601A000E46536 /* EVE.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVE.swift; sourceTree = "<group>"; };
@@ -112,6 +108,7 @@
 		126295F81EEAD16C00796B27 /* Wallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wallet.swift; sourceTree = "<group>"; };
 		126295F91EEAD16C00796B27 /* Wars.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wars.swift; sourceTree = "<group>"; };
 		126FA8031DFD761C005FFDD3 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "../ThirdParty/Alamofire/build/Debug-iphoneos/Alamofire.framework"; sourceTree = "<group>"; };
+		12841BDD2057DEEC00B30582 /* Future.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Future.swift; sourceTree = "<group>"; };
 		1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParserExtension.swift; sourceTree = "<group>"; };
 		1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEObject.swift; sourceTree = "<group>"; };
 		1288F0201DEB8D8B00FD7FBE /* EVEServerStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEServerStatus.swift; sourceTree = "<group>"; };
@@ -121,9 +118,6 @@
 		1295ED4A1DF843740048C895 /* CRResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRResult.swift; sourceTree = "<group>"; };
 		1295ED4C1DF844780048C895 /* CRFittingCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRFittingCollection.swift; sourceTree = "<group>"; };
 		1295ED4E1DF846130048C895 /* CRType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CRType.swift; sourceTree = "<group>"; };
-		1295ED511DF85CCA0048C895 /* ESAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESAPI.swift; sourceTree = "<group>"; };
-		1295ED841DFA98300048C895 /* ESMarket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESMarket.swift; sourceTree = "<group>"; };
-		1295ED861DFA983C0048C895 /* ESResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESResult.swift; sourceTree = "<group>"; };
 		12A266931DED805E00DC8291 /* EVEBlueprints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBlueprints.swift; sourceTree = "<group>"; };
 		12A266951DED815300DC8291 /* EVEBookmarks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEBookmarks.swift; sourceTree = "<group>"; };
 		12A266971DED85F000DC8291 /* EVECalendarEventAttendees.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVECalendarEventAttendees.swift; sourceTree = "<group>"; };
@@ -207,21 +201,6 @@
 		12AB65891DEB3528003AA683 /* NSString+md5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+md5.m"; sourceTree = "<group>"; };
 		12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormatterExtension.swift; sourceTree = "<group>"; };
 		12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
-		12BC409C1DFF172300657D40 /* ESWallet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESWallet.swift; sourceTree = "<group>"; };
-		12BC409E1DFF19B200657D40 /* ESWar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESWar.swift; sourceTree = "<group>"; };
-		12C1C9741DFE855F004E9026 /* ESCharacter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCharacter.swift; sourceTree = "<group>"; };
-		12C1C9761DFE8A4E004E9026 /* ESClones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESClones.swift; sourceTree = "<group>"; };
-		12C1C9781DFE8E32004E9026 /* ESCorporation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESCorporation.swift; sourceTree = "<group>"; };
-		12C1C97A1DFEA0D2004E9026 /* ESIncursions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESIncursions.swift; sourceTree = "<group>"; };
-		12C1C97C1DFEA38A004E9026 /* ESInsurance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESInsurance.swift; sourceTree = "<group>"; };
-		12C1C9801DFEA583004E9026 /* ESKillMail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESKillMail.swift; sourceTree = "<group>"; };
-		12C1C9821DFEAE28004E9026 /* ESLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESLocation.swift; sourceTree = "<group>"; };
-		12C1C9841DFEB501004E9026 /* ESMail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESMail.swift; sourceTree = "<group>"; };
-		12C1C98A1DFED92E004E9026 /* ESPlanet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESPlanet.swift; sourceTree = "<group>"; };
-		12C1C98C1DFEE32C004E9026 /* ESSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESSearch.swift; sourceTree = "<group>"; };
-		12C1C98E1DFEE982004E9026 /* ESSkills.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESSkills.swift; sourceTree = "<group>"; };
-		12C1C9901DFEEDDD004E9026 /* ESSovereignty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESSovereignty.swift; sourceTree = "<group>"; };
-		12C1C9921DFEF1DC004E9026 /* ESUniverse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESUniverse.swift; sourceTree = "<group>"; };
 		12CFDAF81F053D6700CC0762 /* rss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rss.swift; sourceTree = "<group>"; };
 		12D39D0B1EF923C90077BD17 /* Eve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eve.swift; sourceTree = "<group>"; };
 		12D39D111EF949500077BD17 /* Contracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contracts.swift; sourceTree = "<group>"; };
@@ -275,36 +254,6 @@
 				122071A31EF4188A007D86CE /* EVEGlobal.swift */,
 			);
 			path = evecodegen;
-			sourceTree = "<group>";
-		};
-		1231C7C91E9EB38200CA409A /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				1295ED511DF85CCA0048C895 /* ESAPI.swift */,
-				1203DB331DFAEC2300BBFAD9 /* ESConstants.swift */,
-				1295ED861DFA983C0048C895 /* ESResult.swift */,
-				1203DB2F1DFAE8D800BBFAD9 /* ESAlliance.swift */,
-				1203DB311DFAEBD200BBFAD9 /* ESAsset.swift */,
-				1203DB351DFAF17000BBFAD9 /* ESBookmark.swift */,
-				1203DB371DFAFA8C00BBFAD9 /* ESCalendar.swift */,
-				1295ED841DFA98300048C895 /* ESMarket.swift */,
-				12C1C9741DFE855F004E9026 /* ESCharacter.swift */,
-				12C1C9761DFE8A4E004E9026 /* ESClones.swift */,
-				12C1C9781DFE8E32004E9026 /* ESCorporation.swift */,
-				12C1C97A1DFEA0D2004E9026 /* ESIncursions.swift */,
-				12C1C97C1DFEA38A004E9026 /* ESInsurance.swift */,
-				12C1C9801DFEA583004E9026 /* ESKillMail.swift */,
-				12C1C9821DFEAE28004E9026 /* ESLocation.swift */,
-				12C1C9841DFEB501004E9026 /* ESMail.swift */,
-				12C1C98A1DFED92E004E9026 /* ESPlanet.swift */,
-				12C1C98C1DFEE32C004E9026 /* ESSearch.swift */,
-				12C1C98E1DFEE982004E9026 /* ESSkills.swift */,
-				12C1C9901DFEEDDD004E9026 /* ESSovereignty.swift */,
-				12C1C9921DFEF1DC004E9026 /* ESUniverse.swift */,
-				12BC409C1DFF172300657D40 /* ESWallet.swift */,
-				12BC409E1DFF19B200657D40 /* ESWar.swift */,
-			);
-			name = Deprecated;
 			sourceTree = "<group>";
 		};
 		123825661DEC8BA30031A884 /* Account */ = {
@@ -462,10 +411,10 @@
 			isa = PBXGroup;
 			children = (
 				126295DA1EEAD16C00796B27 /* codegen */,
-				1231C7C91E9EB38200CA409A /* Deprecated */,
 				1231C8081E9EB3D900CA409A /* Helper.swift */,
 				1231C80B1E9EB42500CA409A /* ESI.swift */,
 				1295ED481DF8169F0048C895 /* OAuth2.swift */,
+				12841BDD2057DEEC00B30582 /* Future.swift */,
 			);
 			name = ESI;
 			sourceTree = "<group>";
@@ -704,6 +653,7 @@
 				126295FB1EEAD16C00796B27 /* Assets.swift in Sources */,
 				126295FA1EEAD16C00796B27 /* Alliance.swift in Sources */,
 				1262960B1EEAD16C00796B27 /* Loyalty.swift in Sources */,
+				12841BDE2057DEEC00B30582 /* Future.swift in Sources */,
 				126296051EEAD16C00796B27 /* Global.swift in Sources */,
 				128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */,
 				12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */,

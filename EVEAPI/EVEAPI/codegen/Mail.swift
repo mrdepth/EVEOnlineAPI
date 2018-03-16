@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func deleteMail(characterID: Int, mailID: Int, completionBlock:((Result<String>) -> Void)?) {
+		@discardableResult
+		public func deleteMail(characterID: Int, mailID: Int) -> Future<ESI.Result<String>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.organize_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
@@ -43,29 +48,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<String>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func updateMetadataAboutMail(characterID: Int, contents: Mail.UpdateContents, mailID: Int, completionBlock:((Result<String>) -> Void)?) {
+		@discardableResult
+		public func updateMetadataAboutMail(characterID: Int, contents: Mail.UpdateContents, mailID: Int) -> Future<ESI.Result<String>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.organize_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(contents)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
@@ -78,29 +89,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<String>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func returnMail(characterID: Int, mailID: Int, completionBlock:((Result<Mail.MailBody>) -> Void)?) {
+		@discardableResult
+		public func returnMail(characterID: Int, mailID: Int) -> Future<ESI.Result<Mail.MailBody>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Mail.MailBody>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.read_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
@@ -113,29 +130,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Mail.MailBody>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 30.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func createMailLabel(characterID: Int, label: Mail.Label? = nil, completionBlock:((Result<Int64>) -> Void)?) {
+		@discardableResult
+		public func createMailLabel(characterID: Int, label: Mail.Label) -> Future<ESI.Result<Int64>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Int64>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = label != nil ? try? JSONEncoder().encode(label) : nil
+			guard scopes.contains("esi-mail.organize_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
+			let body = try? JSONEncoder().encode(label)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v2/characters/\(characterID)/mail/labels/"
@@ -148,29 +171,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Int64>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func returnMailingListSubscriptions(characterID: Int, completionBlock:((Result<[Mail.Subscription]>) -> Void)?) {
+		@discardableResult
+		public func returnMailingListSubscriptions(characterID: Int) -> Future<ESI.Result<[Mail.Subscription]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Mail.Subscription]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.read_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/lists/"
@@ -183,29 +212,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 120.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getMailLabelsAndUnreadCounts(characterID: Int, completionBlock:((Result<Mail.MailLabelsAndUnreadCounts>) -> Void)?) {
+		@discardableResult
+		public func getMailLabelsAndUnreadCounts(characterID: Int) -> Future<ESI.Result<Mail.MailLabelsAndUnreadCounts>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Mail.MailLabelsAndUnreadCounts>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.read_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v3/characters/\(characterID)/mail/labels/"
@@ -218,29 +253,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 30.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func sendNewMail(characterID: Int, mail: Mail.NewMail, completionBlock:((Result<Int>) -> Void)?) {
+		@discardableResult
+		public func sendNewMail(characterID: Int, mail: Mail.NewMail) -> Future<ESI.Result<Int>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Int>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.send_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.send_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(mail)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/"
@@ -253,29 +294,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Int>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func returnMailHeaders(characterID: Int, labels: [Int64]? = nil, lastMailID: Int? = nil, completionBlock:((Result<[Mail.Header]>) -> Void)?) {
+		@discardableResult
+		public func returnMailHeaders(characterID: Int, labels: [Int64]? = nil, lastMailID: Int? = nil) -> Future<ESI.Result<[Mail.Header]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Mail.Header]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.read_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = labels?.httpQuery {
 				query.append(URLQueryItem(name: "labels", value: v))
 			}
@@ -293,29 +340,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Mail.Header]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 30.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func deleteMailLabel(characterID: Int, labelID: Int, completionBlock:((Result<String>) -> Void)?) {
+		@discardableResult
+		public func deleteMailLabel(characterID: Int, labelID: Int) -> Future<ESI.Result<String>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-mail.organize_mail.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/mail/labels/\(labelID)/"
@@ -328,10 +381,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<String>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

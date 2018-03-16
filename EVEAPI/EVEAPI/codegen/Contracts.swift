@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getContracts(characterID: Int, page: Int? = nil, completionBlock:((Result<[Contracts.Contract]>) -> Void)?) {
+		@discardableResult
+		public func getContracts(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Contracts.Contract]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Contracts.Contract]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -45,29 +50,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Contracts.Contract]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCorporationContractItems(contractID: Int, corporationID: Int, completionBlock:((Result<[Contracts.GetCorporationsCorporationIDContractsContractIDItemsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCorporationContractItems(contractID: Int, corporationID: Int) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDItemsOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDItemsOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/corporations/\(corporationID)/contracts/\(contractID)/items/"
@@ -80,29 +91,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsContractIDItemsOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCoporationContracts(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Contracts.GetCorporationsCorporationIDContractsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCoporationContracts(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -117,29 +134,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getContractBids(characterID: Int, contractID: Int, completionBlock:((Result<[Contracts.Bid]>) -> Void)?) {
+		@discardableResult
+		public func getContractBids(characterID: Int, contractID: Int) -> Future<ESI.Result<[Contracts.Bid]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Contracts.Bid]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/contracts/\(contractID)/bids/"
@@ -152,29 +175,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Contracts.Bid]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCorporationContractBids(contractID: Int, corporationID: Int, page: Int? = nil, completionBlock:((Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCorporationContractBids(contractID: Int, corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -189,29 +218,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getContractItems(characterID: Int, contractID: Int, completionBlock:((Result<[Contracts.Item]>) -> Void)?) {
+		@discardableResult
+		public func getContractItems(characterID: Int, contractID: Int) -> Future<ESI.Result<[Contracts.Item]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Contracts.Item]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/contracts/\(contractID)/items/"
@@ -224,10 +259,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Contracts.Item]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

@@ -1,20 +1,22 @@
-	public func {operation}({definitions}completionBlock:((Result<{result}>) -> Void)?) {
+	@discardableResult
+	public func {operation}({definitions}) -> Future<ESI.Result<{result}>> {
 		var session = sessionManager
-		guard session != nil else {return}
-		
+		let promise = Promise<ESI.Result<{result}>>()
+		guard session != nil else {
+			try! promise.set(.failure(ESIError.internalError))
+			return promise.future
+		}
+
 {security}
-		
-		{body}
+{body}
 
 		var headers = HTTPHeaders()
 		headers["Accept"] = "application/json"
-
-		{headers}
+{headers}
 
 		var query = [URLQueryItem]()
 		query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-
-		{queries}
+{queries}
 
 		let url = session!.baseURL + "{url}"
 		let components = NSURLComponents(string: url)!
@@ -26,8 +28,9 @@
 			return session!.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<{result}>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: {cached})
 					session = nil
 				}
 		}
+		return promise.future
 	}

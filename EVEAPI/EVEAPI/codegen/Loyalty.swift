@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getLoyaltyPoints(characterID: Int, completionBlock:((Result<[Loyalty.Point]>) -> Void)?) {
+		@discardableResult
+		public func getLoyaltyPoints(characterID: Int) -> Future<ESI.Result<[Loyalty.Point]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Loyalty.Point]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_loyalty.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-characters.read_loyalty.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/loyalty/points/"
@@ -43,16 +48,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Point]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listLoyaltyStoreOffers(corporationID: Int, completionBlock:((Result<[Loyalty.Offer]>) -> Void)?) {
+		@discardableResult
+		public func listLoyaltyStoreOffers(corporationID: Int) -> Future<ESI.Result<[Loyalty.Offer]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Loyalty.Offer]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -61,10 +71,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/loyalty/stores/\(corporationID)/offers/"
@@ -77,10 +85,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

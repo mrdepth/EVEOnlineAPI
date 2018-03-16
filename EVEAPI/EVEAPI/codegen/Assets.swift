@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getCoporationAssetNames(corporationID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>) -> Void)?) {
+		@discardableResult
+		public func getCoporationAssetNames(corporationID: Int, itemIds: [Int64]) -> Future<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/corporations/\(corporationID)/assets/names/"
@@ -43,29 +48,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCorporationAssets(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Assets.GetCorporationsCorporationIDAssetsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCorporationAssets(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Assets.CorpAsset]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Assets.CorpAsset]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -79,30 +90,36 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Assets.GetCorporationsCorporationIDAssetsOk]>) in
-					completionBlock?(response.result)
+				}.validateESI().responseESI { (response: DataResponse<[Assets.CorpAsset]>) in
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64]) -> Future<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-assets.read_assets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v2/characters/\(characterID)/assets/locations/"
@@ -115,29 +132,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCorporationAssetLocations(corporationID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCorporationAssetLocations(corporationID: Int, itemIds: [Int64]) -> Future<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v2/corporations/\(corporationID)/assets/locations/"
@@ -150,29 +173,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64], completionBlock:((Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>) -> Void)?) {
+		@discardableResult
+		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64]) -> Future<ESI.Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-assets.read_assets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/assets/names/"
@@ -185,29 +214,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsNamesOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCharacterAssets(characterID: Int, page: Int? = nil, completionBlock:((Result<[Assets.Asset]>) -> Void)?) {
+		@discardableResult
+		public func getCharacterAssets(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Assets.Asset]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Assets.Asset]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-assets.read_assets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -222,14 +257,15 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Assets.Asset]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		
-		public struct GetCorporationsCorporationIDAssetsOk: Codable, Hashable {
+		public struct CorpAsset: Codable, Hashable {
 			
 			public enum GetCorporationsCorporationIDAssetsLocationType: String, Codable, HTTPQueryable {
 				case other = "other"
@@ -242,7 +278,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCorporationsCorporationIDAssetsLocationFlag: String, Codable, HTTPQueryable {
+			public enum Flag: String, Codable, HTTPQueryable {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case bonus = "Bonus"
@@ -367,13 +403,13 @@ public extension ESI {
 			
 			public var isSingleton: Bool
 			public var itemID: Int64
-			public var locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag
+			public var locationFlag: Assets.CorpAsset.Flag
 			public var locationID: Int64
-			public var locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType
+			public var locationType: Assets.CorpAsset.GetCorporationsCorporationIDAssetsLocationType
 			public var quantity: Int
 			public var typeID: Int
 			
-			public init(isSingleton: Bool, itemID: Int64, locationFlag: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationFlag, locationID: Int64, locationType: Assets.GetCorporationsCorporationIDAssetsOk.GetCorporationsCorporationIDAssetsLocationType, quantity: Int, typeID: Int) {
+			public init(isSingleton: Bool, itemID: Int64, locationFlag: Assets.CorpAsset.Flag, locationID: Int64, locationType: Assets.CorpAsset.GetCorporationsCorporationIDAssetsLocationType, quantity: Int, typeID: Int) {
 				self.isSingleton = isSingleton
 				self.itemID = itemID
 				self.locationFlag = locationFlag
@@ -395,7 +431,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Assets.GetCorporationsCorporationIDAssetsOk, rhs: Assets.GetCorporationsCorporationIDAssetsOk) -> Bool {
+			public static func ==(lhs: Assets.CorpAsset, rhs: Assets.CorpAsset) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

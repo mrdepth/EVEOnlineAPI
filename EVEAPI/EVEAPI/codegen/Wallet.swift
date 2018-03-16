@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func getWalletTransactions(characterID: Int, fromID: Int64? = nil, completionBlock:((Result<[Wallet.Transaction]>) -> Void)?) {
+		@discardableResult
+		public func getWalletTransactions(characterID: Int, fromID: Int64? = nil) -> Future<ESI.Result<[Wallet.Transaction]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Wallet.Transaction]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = fromID?.httpQuery {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
@@ -45,29 +50,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Wallet.Transaction]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCharacterWalletJournal(characterID: Int, fromID: Int64? = nil, completionBlock:((Result<[Wallet.WalletJournalItem]>) -> Void)?) {
+		@discardableResult
+		public func getCharacterWalletJournal(characterID: Int, fromID: Int64? = nil) -> Future<ESI.Result<[Wallet.WalletJournalItem]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Wallet.WalletJournalItem]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = fromID?.httpQuery {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
@@ -82,29 +93,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Wallet.WalletJournalItem]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCorporationWalletJournal(corporationID: Int, division: Int, fromID: Int64? = nil, completionBlock:((Result<[Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk]>) -> Void)?) {
+		@discardableResult
+		public func getCorporationWalletJournal(corporationID: Int, division: Int, fromID: Int64? = nil) -> Future<ESI.Result<[Wallet.CorpWalletsJournalItem]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Wallet.CorpWalletsJournalItem]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = fromID?.httpQuery {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
@@ -118,30 +135,36 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk]>) in
-					completionBlock?(response.result)
+				}.validateESI().responseESI { (response: DataResponse<[Wallet.CorpWalletsJournalItem]>) in
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCorporationWalletTransactions(corporationID: Int, division: Int, fromID: Int64? = nil, completionBlock:((Result<[Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk]>) -> Void)?) {
+		@discardableResult
+		public func getCorporationWalletTransactions(corporationID: Int, division: Int, fromID: Int64? = nil) -> Future<ESI.Result<[Wallet.CorpTransaction]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Wallet.CorpTransaction]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = fromID?.httpQuery {
 				query.append(URLQueryItem(name: "from_id", value: v))
 			}
@@ -155,30 +178,36 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk]>) in
-					completionBlock?(response.result)
+				}.validateESI().responseESI { (response: DataResponse<[Wallet.CorpTransaction]>) in
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func returnsCorporationsWalletBalance(corporationID: Int, completionBlock:((Result<[Wallet.Balance]>) -> Void)?) {
+		@discardableResult
+		public func returnsCorporationsWalletBalance(corporationID: Int) -> Future<ESI.Result<[Wallet.Balance]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Wallet.Balance]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/corporations/\(corporationID)/wallets/"
@@ -191,29 +220,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Wallet.Balance]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getCharactersWalletBalance(characterID: Int, completionBlock:((Result<Double>) -> Void)?) {
+		@discardableResult
+		public func getCharactersWalletBalance(characterID: Int) -> Future<ESI.Result<Double>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Double>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/wallet/"
@@ -226,14 +261,51 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Double>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 120.0)
 					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		
+		public struct Balance: Codable, Hashable {
+			
+			
+			public var balance: Double
+			public var division: Int
+			
+			public init(balance: Double, division: Int) {
+				self.balance = balance
+				self.division = division
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: balance.hashValue)
+				hashCombine(seed: &hash, value: division.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case balance
+				case division
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
 				}
 			}
 		}
 		
 		
-		public struct GetCorporationsCorporationIDWalletsDivisionTransactionsOk: Codable, Hashable {
+		public struct CorpTransaction: Codable, Hashable {
 			
 			
 			public var clientID: Int
@@ -272,7 +344,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk, rhs: Wallet.GetCorporationsCorporationIDWalletsDivisionTransactionsOk) -> Bool {
+			public static func ==(lhs: Wallet.CorpTransaction, rhs: Wallet.CorpTransaction) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -365,7 +437,133 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationsCorporationIDWalletsDivisionJournalOk: Codable, Hashable {
+		public enum RefType: String, Codable, HTTPQueryable {
+			case accelerationGateFee = "acceleration_gate_fee"
+			case advertisementListingFee = "advertisement_listing_fee"
+			case agentDonation = "agent_donation"
+			case agentLocationServices = "agent_location_services"
+			case agentMiscellaneous = "agent_miscellaneous"
+			case agentMissionCollateralPaid = "agent_mission_collateral_paid"
+			case agentMissionCollateralRefunded = "agent_mission_collateral_refunded"
+			case agentMissionReward = "agent_mission_reward"
+			case agentMissionRewardCorporationTax = "agent_mission_reward_corporation_tax"
+			case agentMissionTimeBonusReward = "agent_mission_time_bonus_reward"
+			case agentMissionTimeBonusRewardCorporationTax = "agent_mission_time_bonus_reward_corporation_tax"
+			case agentSecurityServices = "agent_security_services"
+			case agentServicesRendered = "agent_services_rendered"
+			case agentsPreward = "agents_preward"
+			case allianceMaintainanceFee = "alliance_maintainance_fee"
+			case allianceRegistrationFee = "alliance_registration_fee"
+			case assetSafetyRecoveryTax = "asset_safety_recovery_tax"
+			case bounty = "bounty"
+			case bountyPrize = "bounty_prize"
+			case bountyPrizeCorporationTax = "bounty_prize_corporation_tax"
+			case bountyPrizes = "bounty_prizes"
+			case bountyReimbursement = "bounty_reimbursement"
+			case bountySurcharge = "bounty_surcharge"
+			case brokersFee = "brokers_fee"
+			case cloneActivation = "clone_activation"
+			case cloneTransfer = "clone_transfer"
+			case contrabandFine = "contraband_fine"
+			case contractAuctionBid = "contract_auction_bid"
+			case contractAuctionBidCorp = "contract_auction_bid_corp"
+			case contractAuctionBidRefund = "contract_auction_bid_refund"
+			case contractAuctionSold = "contract_auction_sold"
+			case contractBrokersFee = "contract_brokers_fee"
+			case contractBrokersFeeCorp = "contract_brokers_fee_corp"
+			case contractCollateral = "contract_collateral"
+			case contractCollateralDepositedCorp = "contract_collateral_deposited_corp"
+			case contractCollateralPayout = "contract_collateral_payout"
+			case contractCollateralRefund = "contract_collateral_refund"
+			case contractDeposit = "contract_deposit"
+			case contractDepositCorp = "contract_deposit_corp"
+			case contractDepositRefund = "contract_deposit_refund"
+			case contractDepositSalesTax = "contract_deposit_sales_tax"
+			case contractPrice = "contract_price"
+			case contractPricePaymentCorp = "contract_price_payment_corp"
+			case contractReversal = "contract_reversal"
+			case contractReward = "contract_reward"
+			case contractRewardDeposited = "contract_reward_deposited"
+			case contractRewardDepositedCorp = "contract_reward_deposited_corp"
+			case contractRewardRefund = "contract_reward_refund"
+			case contractSalesTax = "contract_sales_tax"
+			case copying = "copying"
+			case corporateRewardPayout = "corporate_reward_payout"
+			case corporateRewardTax = "corporate_reward_tax"
+			case corporationAccountWithdrawal = "corporation_account_withdrawal"
+			case corporationBulkPayment = "corporation_bulk_payment"
+			case corporationDividendPayment = "corporation_dividend_payment"
+			case corporationLiquidation = "corporation_liquidation"
+			case corporationLogoChangeCost = "corporation_logo_change_cost"
+			case corporationPayment = "corporation_payment"
+			case corporationRegistrationFee = "corporation_registration_fee"
+			case courierMissionEscrow = "courier_mission_escrow"
+			case cspa = "cspa"
+			case cspaofflinerefund = "cspaofflinerefund"
+			case datacoreFee = "datacore_fee"
+			case dnaModificationFee = "dna_modification_fee"
+			case dockingFee = "docking_fee"
+			case duelWagerEscrow = "duel_wager_escrow"
+			case duelWagerPayment = "duel_wager_payment"
+			case duelWagerRefund = "duel_wager_refund"
+			case factorySlotRentalFee = "factory_slot_rental_fee"
+			case gmCashTransfer = "gm_cash_transfer"
+			case industryJobTax = "industry_job_tax"
+			case infrastructureHubMaintenance = "infrastructure_hub_maintenance"
+			case inheritance = "inheritance"
+			case insurance = "insurance"
+			case jumpCloneActivationFee = "jump_clone_activation_fee"
+			case jumpCloneInstallationFee = "jump_clone_installation_fee"
+			case killRightFee = "kill_right_fee"
+			case lpStore = "lp_store"
+			case manufacturing = "manufacturing"
+			case marketEscrow = "market_escrow"
+			case marketFinePaid = "market_fine_paid"
+			case marketTransaction = "market_transaction"
+			case medalCreation = "medal_creation"
+			case medalIssued = "medal_issued"
+			case missionCompletion = "mission_completion"
+			case missionCost = "mission_cost"
+			case missionExpiration = "mission_expiration"
+			case missionReward = "mission_reward"
+			case officeRentalFee = "office_rental_fee"
+			case operationBonus = "operation_bonus"
+			case opportunityReward = "opportunity_reward"
+			case planetaryConstruction = "planetary_construction"
+			case planetaryExportTax = "planetary_export_tax"
+			case planetaryImportTax = "planetary_import_tax"
+			case playerDonation = "player_donation"
+			case playerTrading = "player_trading"
+			case projectDiscoveryReward = "project_discovery_reward"
+			case projectDiscoveryTax = "project_discovery_tax"
+			case reaction = "reaction"
+			case releaseOfImpoundedProperty = "release_of_impounded_property"
+			case repairBill = "repair_bill"
+			case reprocessingTax = "reprocessing_tax"
+			case researchingMaterialProductivity = "researching_material_productivity"
+			case researchingTechnology = "researching_technology"
+			case researchingTimeProductivity = "researching_time_productivity"
+			case resourceWarsReward = "resource_wars_reward"
+			case reverseEngineering = "reverse_engineering"
+			case securityProcessingFee = "security_processing_fee"
+			case shares = "shares"
+			case sovereignityBill = "sovereignity_bill"
+			case storePurchase = "store_purchase"
+			case storePurchaseRefund = "store_purchase_refund"
+			case transactionTax = "transaction_tax"
+			case upkeepAdjustmentFee = "upkeep_adjustment_fee"
+			case warAllyContract = "war_ally_contract"
+			case warFee = "war_fee"
+			case warFeeSurrender = "war_fee_surrender"
+			
+			public var httpQuery: String? {
+				return rawValue
+			}
+			
+		}
+		
+		
+		public struct CorpWalletsJournalItem: Codable, Hashable {
 			
 			public struct GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo: Codable, Hashable {
 				
@@ -415,7 +613,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo, rhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo) -> Bool {
+				public static func ==(lhs: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo, rhs: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -442,124 +640,12 @@ public extension ESI {
 				}
 			}
 			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalRefType: String, Codable, HTTPQueryable {
-				case accelerationGateFee = "acceleration_gate_fee"
-				case advertisementListingFee = "advertisement_listing_fee"
-				case agentDonation = "agent_donation"
-				case agentLocationServices = "agent_location_services"
-				case agentMiscellaneous = "agent_miscellaneous"
-				case agentMissionCollateralPaid = "agent_mission_collateral_paid"
-				case agentMissionCollateralRefunded = "agent_mission_collateral_refunded"
-				case agentMissionReward = "agent_mission_reward"
-				case agentMissionRewardCorporationTax = "agent_mission_reward_corporation_tax"
-				case agentMissionTimeBonusReward = "agent_mission_time_bonus_reward"
-				case agentMissionTimeBonusRewardCorporationTax = "agent_mission_time_bonus_reward_corporation_tax"
-				case agentSecurityServices = "agent_security_services"
-				case agentServicesRendered = "agent_services_rendered"
-				case agentsPreward = "agents_preward"
-				case allianceMaintainanceFee = "alliance_maintainance_fee"
-				case allianceRegistrationFee = "alliance_registration_fee"
-				case assetSafetyRecoveryTax = "asset_safety_recovery_tax"
-				case bounty = "bounty"
-				case bountyPrize = "bounty_prize"
-				case bountyPrizeCorporationTax = "bounty_prize_corporation_tax"
-				case bountyPrizes = "bounty_prizes"
-				case bountyReimbursement = "bounty_reimbursement"
-				case bountySurcharge = "bounty_surcharge"
-				case brokersFee = "brokers_fee"
-				case cloneActivation = "clone_activation"
-				case cloneTransfer = "clone_transfer"
-				case contrabandFine = "contraband_fine"
-				case contractAuctionBid = "contract_auction_bid"
-				case contractAuctionBidCorp = "contract_auction_bid_corp"
-				case contractAuctionBidRefund = "contract_auction_bid_refund"
-				case contractAuctionSold = "contract_auction_sold"
-				case contractBrokersFee = "contract_brokers_fee"
-				case contractBrokersFeeCorp = "contract_brokers_fee_corp"
-				case contractCollateral = "contract_collateral"
-				case contractCollateralDepositedCorp = "contract_collateral_deposited_corp"
-				case contractCollateralPayout = "contract_collateral_payout"
-				case contractCollateralRefund = "contract_collateral_refund"
-				case contractDeposit = "contract_deposit"
-				case contractDepositCorp = "contract_deposit_corp"
-				case contractDepositRefund = "contract_deposit_refund"
-				case contractDepositSalesTax = "contract_deposit_sales_tax"
-				case contractPrice = "contract_price"
-				case contractPricePaymentCorp = "contract_price_payment_corp"
-				case contractReversal = "contract_reversal"
-				case contractReward = "contract_reward"
-				case contractRewardDeposited = "contract_reward_deposited"
-				case contractRewardDepositedCorp = "contract_reward_deposited_corp"
-				case contractRewardRefund = "contract_reward_refund"
-				case contractSalesTax = "contract_sales_tax"
-				case copying = "copying"
-				case corporateRewardPayout = "corporate_reward_payout"
-				case corporateRewardTax = "corporate_reward_tax"
-				case corporationAccountWithdrawal = "corporation_account_withdrawal"
-				case corporationBulkPayment = "corporation_bulk_payment"
-				case corporationDividendPayment = "corporation_dividend_payment"
-				case corporationLiquidation = "corporation_liquidation"
-				case corporationLogoChangeCost = "corporation_logo_change_cost"
-				case corporationPayment = "corporation_payment"
-				case corporationRegistrationFee = "corporation_registration_fee"
-				case courierMissionEscrow = "courier_mission_escrow"
-				case cspa = "cspa"
-				case cspaofflinerefund = "cspaofflinerefund"
-				case datacoreFee = "datacore_fee"
-				case dnaModificationFee = "dna_modification_fee"
-				case dockingFee = "docking_fee"
-				case duelWagerEscrow = "duel_wager_escrow"
-				case duelWagerPayment = "duel_wager_payment"
-				case duelWagerRefund = "duel_wager_refund"
-				case factorySlotRentalFee = "factory_slot_rental_fee"
-				case gmCashTransfer = "gm_cash_transfer"
-				case industryJobTax = "industry_job_tax"
-				case infrastructureHubMaintenance = "infrastructure_hub_maintenance"
-				case inheritance = "inheritance"
-				case insurance = "insurance"
-				case jumpCloneActivationFee = "jump_clone_activation_fee"
-				case jumpCloneInstallationFee = "jump_clone_installation_fee"
-				case killRightFee = "kill_right_fee"
-				case lpStore = "lp_store"
-				case manufacturing = "manufacturing"
-				case marketEscrow = "market_escrow"
-				case marketFinePaid = "market_fine_paid"
-				case marketTransaction = "market_transaction"
-				case medalCreation = "medal_creation"
-				case medalIssued = "medal_issued"
-				case missionCompletion = "mission_completion"
-				case missionCost = "mission_cost"
-				case missionExpiration = "mission_expiration"
-				case missionReward = "mission_reward"
-				case officeRentalFee = "office_rental_fee"
-				case operationBonus = "operation_bonus"
-				case opportunityReward = "opportunity_reward"
-				case planetaryConstruction = "planetary_construction"
-				case planetaryExportTax = "planetary_export_tax"
-				case planetaryImportTax = "planetary_import_tax"
-				case playerDonation = "player_donation"
-				case playerTrading = "player_trading"
-				case projectDiscoveryReward = "project_discovery_reward"
-				case projectDiscoveryTax = "project_discovery_tax"
-				case reaction = "reaction"
-				case releaseOfImpoundedProperty = "release_of_impounded_property"
-				case repairBill = "repair_bill"
-				case reprocessingTax = "reprocessing_tax"
-				case researchingMaterialProductivity = "researching_material_productivity"
-				case researchingTechnology = "researching_technology"
-				case researchingTimeProductivity = "researching_time_productivity"
-				case resourceWarsReward = "resource_wars_reward"
-				case reverseEngineering = "reverse_engineering"
-				case securityProcessingFee = "security_processing_fee"
-				case shares = "shares"
-				case sovereignityBill = "sovereignity_bill"
-				case storePurchase = "store_purchase"
-				case storePurchaseRefund = "store_purchase_refund"
-				case transactionTax = "transaction_tax"
-				case upkeepAdjustmentFee = "upkeep_adjustment_fee"
-				case warAllyContract = "war_ally_contract"
-				case warFee = "war_fee"
-				case warFeeSurrender = "war_fee_surrender"
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case system = "system"
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -580,34 +666,21 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				case system = "system"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public var amount: Double?
 			public var balance: Double?
 			public var date: Date
-			public var extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?
+			public var extraInfo: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?
 			public var firstPartyID: Int?
-			public var firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?
+			public var firstPartyType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?
 			public var reason: String?
 			public var refID: Int64
-			public var refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType
+			public var refType: Wallet.RefType
 			public var secondPartyID: Int?
-			public var secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?
+			public var secondPartyType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?
 			public var tax: Double?
 			public var taxReceiverID: Int?
 			
-			public init(amount: Double?, balance: Double?, date: Date, extraInfo: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?, firstPartyID: Int?, firstPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?, reason: String?, refID: Int64, refType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalRefType, secondPartyID: Int?, secondPartyType: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?, tax: Double?, taxReceiverID: Int?) {
+			public init(amount: Double?, balance: Double?, date: Date, extraInfo: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalExtraInfo?, firstPartyID: Int?, firstPartyType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalFirstPartyType?, reason: String?, refID: Int64, refType: Wallet.RefType, secondPartyID: Int?, secondPartyType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalSecondPartyType?, tax: Double?, taxReceiverID: Int?) {
 				self.amount = amount
 				self.balance = balance
 				self.date = date
@@ -641,7 +714,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk, rhs: Wallet.GetCorporationsCorporationIDWalletsDivisionJournalOk) -> Bool {
+			public static func ==(lhs: Wallet.CorpWalletsJournalItem, rhs: Wallet.CorpWalletsJournalItem) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -670,43 +743,20 @@ public extension ESI {
 		}
 		
 		
-		public struct Balance: Codable, Hashable {
-			
-			
-			public var balance: Double
-			public var division: Int
-			
-			public init(balance: Double, division: Int) {
-				self.balance = balance
-				self.division = division
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: balance.hashValue)
-				hashCombine(seed: &hash, value: division.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case balance
-				case division
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct WalletJournalItem: Codable, Hashable {
+			
+			public enum PartyType: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case system = "system"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
 			public struct ExtraInfo: Codable, Hashable {
 				
@@ -783,144 +833,6 @@ public extension ESI {
 				}
 			}
 			
-			public enum PartyType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				case system = "system"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public enum RefType: String, Codable, HTTPQueryable {
-				case accelerationGateFee = "acceleration_gate_fee"
-				case advertisementListingFee = "advertisement_listing_fee"
-				case agentDonation = "agent_donation"
-				case agentLocationServices = "agent_location_services"
-				case agentMiscellaneous = "agent_miscellaneous"
-				case agentMissionCollateralPaid = "agent_mission_collateral_paid"
-				case agentMissionCollateralRefunded = "agent_mission_collateral_refunded"
-				case agentMissionReward = "agent_mission_reward"
-				case agentMissionRewardCorporationTax = "agent_mission_reward_corporation_tax"
-				case agentMissionTimeBonusReward = "agent_mission_time_bonus_reward"
-				case agentMissionTimeBonusRewardCorporationTax = "agent_mission_time_bonus_reward_corporation_tax"
-				case agentSecurityServices = "agent_security_services"
-				case agentServicesRendered = "agent_services_rendered"
-				case agentsPreward = "agents_preward"
-				case allianceMaintainanceFee = "alliance_maintainance_fee"
-				case allianceRegistrationFee = "alliance_registration_fee"
-				case assetSafetyRecoveryTax = "asset_safety_recovery_tax"
-				case bounty = "bounty"
-				case bountyPrize = "bounty_prize"
-				case bountyPrizeCorporationTax = "bounty_prize_corporation_tax"
-				case bountyPrizes = "bounty_prizes"
-				case bountyReimbursement = "bounty_reimbursement"
-				case bountySurcharge = "bounty_surcharge"
-				case brokersFee = "brokers_fee"
-				case cloneActivation = "clone_activation"
-				case cloneTransfer = "clone_transfer"
-				case contrabandFine = "contraband_fine"
-				case contractAuctionBid = "contract_auction_bid"
-				case contractAuctionBidCorp = "contract_auction_bid_corp"
-				case contractAuctionBidRefund = "contract_auction_bid_refund"
-				case contractAuctionSold = "contract_auction_sold"
-				case contractBrokersFee = "contract_brokers_fee"
-				case contractBrokersFeeCorp = "contract_brokers_fee_corp"
-				case contractCollateral = "contract_collateral"
-				case contractCollateralDepositedCorp = "contract_collateral_deposited_corp"
-				case contractCollateralPayout = "contract_collateral_payout"
-				case contractCollateralRefund = "contract_collateral_refund"
-				case contractDeposit = "contract_deposit"
-				case contractDepositCorp = "contract_deposit_corp"
-				case contractDepositRefund = "contract_deposit_refund"
-				case contractDepositSalesTax = "contract_deposit_sales_tax"
-				case contractPrice = "contract_price"
-				case contractPricePaymentCorp = "contract_price_payment_corp"
-				case contractReversal = "contract_reversal"
-				case contractReward = "contract_reward"
-				case contractRewardDeposited = "contract_reward_deposited"
-				case contractRewardDepositedCorp = "contract_reward_deposited_corp"
-				case contractRewardRefund = "contract_reward_refund"
-				case contractSalesTax = "contract_sales_tax"
-				case copying = "copying"
-				case corporateRewardPayout = "corporate_reward_payout"
-				case corporateRewardTax = "corporate_reward_tax"
-				case corporationAccountWithdrawal = "corporation_account_withdrawal"
-				case corporationBulkPayment = "corporation_bulk_payment"
-				case corporationDividendPayment = "corporation_dividend_payment"
-				case corporationLiquidation = "corporation_liquidation"
-				case corporationLogoChangeCost = "corporation_logo_change_cost"
-				case corporationPayment = "corporation_payment"
-				case corporationRegistrationFee = "corporation_registration_fee"
-				case courierMissionEscrow = "courier_mission_escrow"
-				case cspa = "cspa"
-				case cspaofflinerefund = "cspaofflinerefund"
-				case datacoreFee = "datacore_fee"
-				case dnaModificationFee = "dna_modification_fee"
-				case dockingFee = "docking_fee"
-				case duelWagerEscrow = "duel_wager_escrow"
-				case duelWagerPayment = "duel_wager_payment"
-				case duelWagerRefund = "duel_wager_refund"
-				case factorySlotRentalFee = "factory_slot_rental_fee"
-				case gmCashTransfer = "gm_cash_transfer"
-				case industryJobTax = "industry_job_tax"
-				case infrastructureHubMaintenance = "infrastructure_hub_maintenance"
-				case inheritance = "inheritance"
-				case insurance = "insurance"
-				case jumpCloneActivationFee = "jump_clone_activation_fee"
-				case jumpCloneInstallationFee = "jump_clone_installation_fee"
-				case killRightFee = "kill_right_fee"
-				case lpStore = "lp_store"
-				case manufacturing = "manufacturing"
-				case marketEscrow = "market_escrow"
-				case marketFinePaid = "market_fine_paid"
-				case marketTransaction = "market_transaction"
-				case medalCreation = "medal_creation"
-				case medalIssued = "medal_issued"
-				case missionCompletion = "mission_completion"
-				case missionCost = "mission_cost"
-				case missionExpiration = "mission_expiration"
-				case missionReward = "mission_reward"
-				case officeRentalFee = "office_rental_fee"
-				case operationBonus = "operation_bonus"
-				case opportunityReward = "opportunity_reward"
-				case planetaryConstruction = "planetary_construction"
-				case planetaryExportTax = "planetary_export_tax"
-				case planetaryImportTax = "planetary_import_tax"
-				case playerDonation = "player_donation"
-				case playerTrading = "player_trading"
-				case projectDiscoveryReward = "project_discovery_reward"
-				case projectDiscoveryTax = "project_discovery_tax"
-				case reaction = "reaction"
-				case releaseOfImpoundedProperty = "release_of_impounded_property"
-				case repairBill = "repair_bill"
-				case reprocessingTax = "reprocessing_tax"
-				case researchingMaterialProductivity = "researching_material_productivity"
-				case researchingTechnology = "researching_technology"
-				case researchingTimeProductivity = "researching_time_productivity"
-				case resourceWarsReward = "resource_wars_reward"
-				case reverseEngineering = "reverse_engineering"
-				case securityProcessingFee = "security_processing_fee"
-				case shares = "shares"
-				case sovereignityBill = "sovereignity_bill"
-				case storePurchase = "store_purchase"
-				case storePurchaseRefund = "store_purchase_refund"
-				case transactionTax = "transaction_tax"
-				case upkeepAdjustmentFee = "upkeep_adjustment_fee"
-				case warAllyContract = "war_ally_contract"
-				case warFee = "war_fee"
-				case warFeeSurrender = "war_fee_surrender"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public var amount: Double?
 			public var balance: Double?
 			public var date: Date
@@ -929,13 +841,13 @@ public extension ESI {
 			public var firstPartyType: Wallet.WalletJournalItem.PartyType?
 			public var reason: String?
 			public var refID: Int64
-			public var refType: Wallet.WalletJournalItem.RefType
+			public var refType: Wallet.RefType
 			public var secondPartyID: Int?
 			public var secondPartyType: Wallet.WalletJournalItem.PartyType?
 			public var tax: Double?
 			public var taxReceiverID: Int?
 			
-			public init(amount: Double?, balance: Double?, date: Date, extraInfo: Wallet.WalletJournalItem.ExtraInfo?, firstPartyID: Int?, firstPartyType: Wallet.WalletJournalItem.PartyType?, reason: String?, refID: Int64, refType: Wallet.WalletJournalItem.RefType, secondPartyID: Int?, secondPartyType: Wallet.WalletJournalItem.PartyType?, tax: Double?, taxReceiverID: Int?) {
+			public init(amount: Double?, balance: Double?, date: Date, extraInfo: Wallet.WalletJournalItem.ExtraInfo?, firstPartyID: Int?, firstPartyType: Wallet.WalletJournalItem.PartyType?, reason: String?, refID: Int64, refType: Wallet.RefType, secondPartyID: Int?, secondPartyType: Wallet.WalletJournalItem.PartyType?, tax: Double?, taxReceiverID: Int?) {
 				self.amount = amount
 				self.balance = balance
 				self.date = date

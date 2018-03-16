@@ -34,6 +34,7 @@ class Operation {
 	let responses: [String: Response]
 	let summary: String
 	let security: Security?
+	let cached: TimeInterval
 	weak var path: Path?
 	
 	init (_ dictionary: [String: Any], method: HTTPMethod) throws {
@@ -41,6 +42,7 @@ class Operation {
 		
 		try operationID = dictionary.safeGet(key: "operationId")
 		try summary = dictionary.safeGet(key: "summary")
+		cached = dictionary["x-cached-seconds"] as? Double ?? 3600
 		
 		security = try? Security(dictionary["security"] as? [Any] ?? [])
 		
@@ -118,12 +120,12 @@ class Operation {
 //		headerStrings.insert("\(headerStrings.count > 0 ? "var" : "let") headers = HTTPHeaders()", at: 0)
 		
 		for scope in self.security?.security ?? [] {
-			let s = "guard scopes.contains(\"\(scope)\") else {completionBlock?(.failure(ESIError.forbidden)); return}"
+			let s = "guard scopes.contains(\"\(scope)\") else {\ntry! promise.set(.failure(ESIError.forbidden))\nreturn promise.future\n}"
 			security.append(s)
 		}
 		
 		template = template.replacingOccurrences(of: "{operation}", with: name)
-		template = template.replacingOccurrences(of: "{definitions}", with: definitions.joined(separator: ", ") + (definitions.count > 0 ? ", " : ""))
+		template = template.replacingOccurrences(of: "{definitions}", with: definitions.joined(separator: ", "))
 		template = template.replacingOccurrences(of: "{result}", with: result)
 		template = template.replacingOccurrences(of: "{body}", with: parameterStrings.first ?? "let body: Data? = nil")
 		template = template.replacingOccurrences(of: "{headers}", with: headerStrings.joined(separator: "\n"))
@@ -140,7 +142,7 @@ class Operation {
 		template = template.replacingOccurrences(of: "{method}", with: method.rawValue)
 //		template = template.replacingOccurrences(of: "{encoding}", with: method.encoding)
 		template = template.replacingOccurrences(of: "{url}", with: url)
-		
+		template = template.replacingOccurrences(of: "{cached}", with: "\(cached)")
 		return template
 	}
 }

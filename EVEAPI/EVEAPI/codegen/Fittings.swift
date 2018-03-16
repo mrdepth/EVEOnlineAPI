@@ -14,23 +14,28 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func deleteFitting(characterID: Int, fittingID: Int, completionBlock:((Result<String>) -> Void)?) {
+		@discardableResult
+		public func deleteFitting(characterID: Int, fittingID: Int) -> Future<ESI.Result<String>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-fittings.write_fittings.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/\(fittingID)/"
@@ -43,29 +48,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<String>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func createFitting(characterID: Int, fitting: Fittings.MutableFitting? = nil, completionBlock:((Result<Fittings.CreateFittingResult>) -> Void)?) {
+		@discardableResult
+		public func createFitting(characterID: Int, fitting: Fittings.MutableFitting) -> Future<ESI.Result<Fittings.CreateFittingResult>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Fittings.CreateFittingResult>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-fittings.write_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
-			let body = fitting != nil ? try? JSONEncoder().encode(fitting) : nil
+			guard scopes.contains("esi-fittings.write_fittings.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
+			let body = try? JSONEncoder().encode(fitting)
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/"
@@ -78,29 +89,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Fittings.CreateFittingResult>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func getFittings(characterID: Int, completionBlock:((Result<[Fittings.Fitting]>) -> Void)?) {
+		@discardableResult
+		public func getFittings(characterID: Int) -> Future<ESI.Result<[Fittings.Fitting]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Fittings.Fitting]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-fittings.read_fittings.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-fittings.read_fittings.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/"
@@ -113,10 +130,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

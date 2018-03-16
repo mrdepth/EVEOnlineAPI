@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func listIndustryFacilities(completionBlock:((Result<[Industry.Facilities]>) -> Void)?) {
+		@discardableResult
+		public func listIndustryFacilities() -> Future<ESI.Result<[Industry.Facilities]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Industry.Facilities]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/industry/facilities/"
@@ -42,29 +44,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.Facilities]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listCharacterIndustryJobs(characterID: Int, includeCompleted: Bool? = nil, completionBlock:((Result<[Industry.Job]>) -> Void)?) {
+		@discardableResult
+		public func listCharacterIndustryJobs(characterID: Int, includeCompleted: Bool? = nil) -> Future<ESI.Result<[Industry.Job]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Industry.Job]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_character_jobs.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-industry.read_character_jobs.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = includeCompleted?.httpQuery {
 				query.append(URLQueryItem(name: "include_completed", value: v))
 			}
@@ -79,29 +87,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.Job]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func observedCorporationMining(corporationID: Int, observerID: Int64, page: Int? = nil, completionBlock:((Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>) -> Void)?) {
+		@discardableResult
+		public func observedCorporationMining(corporationID: Int, observerID: Int64, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -116,29 +130,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func corporationMiningObservers(corporationID: Int, page: Int? = nil, completionBlock:((Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>) -> Void)?) {
+		@discardableResult
+		public func corporationMiningObservers(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -153,29 +173,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningObserversOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listCorporationIndustryJobs(corporationID: Int, includeCompleted: Bool? = nil, page: Int? = nil, completionBlock:((Result<[Industry.GetCorporationsCorporationIDIndustryJobsOk]>) -> Void)?) {
+		@discardableResult
+		public func listCorporationIndustryJobs(corporationID: Int, includeCompleted: Bool? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.CorpJob]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Industry.CorpJob]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_corporation_jobs.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-industry.read_corporation_jobs.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = includeCompleted?.httpQuery {
 				query.append(URLQueryItem(name: "include_completed", value: v))
 			}
@@ -192,17 +218,22 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationsCorporationIDIndustryJobsOk]>) in
-					completionBlock?(response.result)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.CorpJob]>) in
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listSolarSystemCostIndices(completionBlock:((Result<[Industry.SolarSystemCostIndices]>) -> Void)?) {
+		@discardableResult
+		public func listSolarSystemCostIndices() -> Future<ESI.Result<[Industry.SolarSystemCostIndices]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Industry.SolarSystemCostIndices]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -211,10 +242,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/industry/systems/"
@@ -227,29 +256,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.SolarSystemCostIndices]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func characterMiningLedger(characterID: Int, page: Int? = nil, completionBlock:((Result<[Industry.GetCharactersCharacterIDMiningOk]>) -> Void)?) {
+		@discardableResult
+		public func characterMiningLedger(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_character_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-industry.read_character_mining.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
@@ -264,30 +299,38 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCharactersCharacterIDMiningOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func moonExtractionTimers(corporationID: Int, completionBlock:((Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>) -> Void)?) {
+		@discardableResult
+		public func moonExtractionTimers(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
 			
 			let url = session!.baseURL + "/v1/corporation/\(corporationID)/mining/extractions/"
 			let components = NSURLComponents(string: url)!
@@ -299,10 +342,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 1800.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		
@@ -587,21 +631,56 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationsCorporationIDIndustryJobsOk: Codable, Hashable {
+		public struct GetCorporationCorporationIDMiningObserversObserverIDOk: Codable, Hashable {
 			
-			public enum GetCorporationsCorporationIDIndustryJobsStatus: String, Codable, HTTPQueryable {
-				case active = "active"
-				case cancelled = "cancelled"
-				case delivered = "delivered"
-				case paused = "paused"
-				case ready = "ready"
-				case reverted = "reverted"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
+			
+			public var characterID: Int
+			public var lastUpdated: Date
+			public var quantity: Int64
+			public var recordedCorporationID: Int
+			public var typeID: Int
+			
+			public init(characterID: Int, lastUpdated: Date, quantity: Int64, recordedCorporationID: Int, typeID: Int) {
+				self.characterID = characterID
+				self.lastUpdated = lastUpdated
+				self.quantity = quantity
+				self.recordedCorporationID = recordedCorporationID
+				self.typeID = typeID
 			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: lastUpdated.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: recordedCorporationID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk, rhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case lastUpdated = "last_updated"
+				case quantity
+				case recordedCorporationID = "recorded_corporation_id"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .lastUpdated: return DateFormatter.esiDateFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CorpJob: Codable, Hashable {
+			
 			
 			public var activityID: Int
 			public var blueprintID: Int64
@@ -623,10 +702,10 @@ public extension ESI {
 			public var productTypeID: Int?
 			public var runs: Int
 			public var startDate: Date
-			public var status: Industry.GetCorporationsCorporationIDIndustryJobsOk.GetCorporationsCorporationIDIndustryJobsStatus
+			public var status: Industry.JobStatus
 			public var successfulRuns: Int?
 			
-			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, locationID: Int64, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, status: Industry.GetCorporationsCorporationIDIndustryJobsOk.GetCorporationsCorporationIDIndustryJobsStatus, successfulRuns: Int?) {
+			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, locationID: Int64, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, status: Industry.JobStatus, successfulRuns: Int?) {
 				self.activityID = activityID
 				self.blueprintID = blueprintID
 				self.blueprintLocationID = blueprintLocationID
@@ -678,7 +757,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Industry.GetCorporationsCorporationIDIndustryJobsOk, rhs: Industry.GetCorporationsCorporationIDIndustryJobsOk) -> Bool {
+			public static func ==(lhs: Industry.CorpJob, rhs: Industry.CorpJob) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -719,69 +798,23 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationCorporationIDMiningObserversObserverIDOk: Codable, Hashable {
+		public enum JobStatus: String, Codable, HTTPQueryable {
+			case active = "active"
+			case cancelled = "cancelled"
+			case delivered = "delivered"
+			case paused = "paused"
+			case ready = "ready"
+			case reverted = "reverted"
 			
-			
-			public var characterID: Int
-			public var lastUpdated: Date
-			public var quantity: Int64
-			public var recordedCorporationID: Int
-			public var typeID: Int
-			
-			public init(characterID: Int, lastUpdated: Date, quantity: Int64, recordedCorporationID: Int, typeID: Int) {
-				self.characterID = characterID
-				self.lastUpdated = lastUpdated
-				self.quantity = quantity
-				self.recordedCorporationID = recordedCorporationID
-				self.typeID = typeID
+			public var httpQuery: String? {
+				return rawValue
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				hashCombine(seed: &hash, value: lastUpdated.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: recordedCorporationID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk, rhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case characterID = "character_id"
-				case lastUpdated = "last_updated"
-				case quantity
-				case recordedCorporationID = "recorded_corporation_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .lastUpdated: return DateFormatter.esiDateFormatter
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
 		public struct Job: Codable, Hashable {
 			
-			public enum Status: String, Codable, HTTPQueryable {
-				case active = "active"
-				case cancelled = "cancelled"
-				case delivered = "delivered"
-				case paused = "paused"
-				case ready = "ready"
-				case reverted = "reverted"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
 			public var activityID: Int
 			public var blueprintID: Int64
@@ -803,10 +836,10 @@ public extension ESI {
 			public var runs: Int
 			public var startDate: Date
 			public var stationID: Int64
-			public var status: Industry.Job.Status
+			public var status: Industry.JobStatus
 			public var successfulRuns: Int?
 			
-			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: Industry.Job.Status, successfulRuns: Int?) {
+			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: Industry.JobStatus, successfulRuns: Int?) {
 				self.activityID = activityID
 				self.blueprintID = blueprintID
 				self.blueprintLocationID = blueprintLocationID

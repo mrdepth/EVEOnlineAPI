@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func anOverviewOfStatisticsAboutFactionsInvolvedInFactionWarfare(completionBlock:((Result<[FactionWarfare.FactionStats]>) -> Void)?) {
+		@discardableResult
+		public func anOverviewOfStatisticsAboutFactionsInvolvedInFactionWarfare() -> Future<ESI.Result<[FactionWarfare.FactionStats]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[FactionWarfare.FactionStats]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/fw/stats/"
@@ -42,29 +44,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionStats]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func overviewOfCharacterInvolvedInFactionWarfare(characterID: Int, completionBlock:((Result<FactionWarfare.GetCharactersCharacterIDFwStatsOk>) -> Void)?) {
+		@discardableResult
+		public func overviewOfCharacterInvolvedInFactionWarfare(characterID: Int) -> Future<ESI.Result<FactionWarfare.GetCharactersCharacterIDFwStatsOk>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<FactionWarfare.GetCharactersCharacterIDFwStatsOk>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_fw_stats.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-characters.read_fw_stats.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/characters/\(characterID)/fw/stats/"
@@ -77,16 +85,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCharactersCharacterIDFwStatsOk>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listOfTheTopFactionsInFactionWarfare(completionBlock:((Result<FactionWarfare.Leaderboards>) -> Void)?) {
+		@discardableResult
+		public func listOfTheTopFactionsInFactionWarfare() -> Future<ESI.Result<FactionWarfare.Leaderboards>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<FactionWarfare.Leaderboards>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -95,10 +108,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/fw/leaderboards/"
@@ -111,16 +122,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Leaderboards>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func dataAboutWhichNPCFactionsAreAtWar(completionBlock:((Result<[FactionWarfare.FactionWar]>) -> Void)?) {
+		@discardableResult
+		public func dataAboutWhichNPCFactionsAreAtWar() -> Future<ESI.Result<[FactionWarfare.FactionWar]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[FactionWarfare.FactionWar]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -129,10 +145,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/fw/wars/"
@@ -145,16 +159,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionWar]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func ownershipOfFactionWarfareSystems(completionBlock:((Result<[FactionWarfare.System]>) -> Void)?) {
+		@discardableResult
+		public func ownershipOfFactionWarfareSystems() -> Future<ESI.Result<[FactionWarfare.System]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[FactionWarfare.System]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -163,10 +182,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/fw/systems/"
@@ -179,16 +196,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[FactionWarfare.System]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 1800.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listOfTheTopPilotsInFactionWarfare(completionBlock:((Result<FactionWarfare.Characters>) -> Void)?) {
+		@discardableResult
+		public func listOfTheTopPilotsInFactionWarfare() -> Future<ESI.Result<FactionWarfare.Characters>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<FactionWarfare.Characters>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -197,10 +219,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/fw/leaderboards/characters/"
@@ -213,29 +233,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Characters>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func overviewOfCorporationInvolvedInFactionWarfare(corporationID: Int, completionBlock:((Result<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>) -> Void)?) {
+		@discardableResult
+		public func overviewOfCorporationInvolvedInFactionWarfare(corporationID: Int) -> Future<ESI.Result<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_fw_stats.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-corporations.read_fw_stats.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/corporations/\(corporationID)/fw/stats/"
@@ -248,16 +274,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listOfTheTopCorporationsInFactionWarfare(completionBlock:((Result<FactionWarfare.Corporations>) -> Void)?) {
+		@discardableResult
+		public func listOfTheTopCorporationsInFactionWarfare() -> Future<ESI.Result<FactionWarfare.Corporations>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<FactionWarfare.Corporations>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -266,10 +297,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/fw/leaderboards/corporations/"
@@ -282,10 +311,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<FactionWarfare.Corporations>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

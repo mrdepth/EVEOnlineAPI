@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func retrieveTheUptimeAndPlayerCounts(completionBlock:((Result<Status.ServerStatus>) -> Void)?) {
+		@discardableResult
+		public func retrieveTheUptimeAndPlayerCounts() -> Future<ESI.Result<Status.ServerStatus>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<Status.ServerStatus>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/status/"
@@ -42,10 +44,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Status.ServerStatus>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 30.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

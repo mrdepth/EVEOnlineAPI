@@ -17,7 +17,6 @@ struct Weak<T: AnyObject> {
 	}
 }
 
-
 fileprivate class LoadBalancer {
 	let maxConcurentRequestsCount = 4
 	static let shared = LoadBalancer()
@@ -26,28 +25,37 @@ fileprivate class LoadBalancer {
 	private var lock = NSLock()
 	
 	func add(_ request: @escaping ()-> DataRequest) {
-		lock.lock()
-		queue.append(request)
-		lock.unlock()
+		lock.perform { queue.append(request) }
 		dispatch()
 	}
 	
 	private func dispatch() {
-		lock.lock(); defer {lock.unlock()}
-		guard !queue.isEmpty && active < maxConcurentRequestsCount else {return}
-		let request = queue.removeFirst()
-		active += 1
-		request().response { [weak self] _ in
-			guard let strongSelf = self else {return}
-			strongSelf.lock.lock()
-			strongSelf.active -= 1
-			strongSelf.lock.unlock()
-			strongSelf.dispatch()
+		lock.perform {
+			guard !queue.isEmpty && active < maxConcurentRequestsCount else {return}
+			let request = queue.removeFirst()
+			active += 1
+			request().response { [weak self] _ in
+				guard let strongSelf = self else {return}
+				strongSelf.lock.lock()
+				strongSelf.active -= 1
+				strongSelf.lock.unlock()
+				strongSelf.dispatch()
+			}
 		}
 	}
 }
 
 public class ESI: SessionManager {
+	
+	public struct Result<Value> {
+		public var value: Value
+		public var cached: TimeInterval
+		
+		public init(value: Value, cached: TimeInterval) {
+			self.value = value
+			self.cached = cached
+		}
+	}
 	
 	private static var helpers: [String: Weak<OAuth2Helper>] = [:]
 	private static let helpersLock = NSLock()
@@ -115,7 +123,8 @@ public class ESI: SessionManager {
 //		loadClassess()
 //	}
 //
-	public func image(characterID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+	@discardableResult
+	public func image(characterID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128, 256, 512, 1024]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -125,12 +134,14 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		let promise = Promise<ESI.Result<Data>>()
 		request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
-			completionBlock?(response.result)
+			promise.set(result: response.result, cached: 3600 * 12)
 		}
+		return promise.future
 	}
 	
-	public func image(corporationID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+	public func image(corporationID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128, 256]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -140,12 +151,14 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		let promise = Promise<ESI.Result<Data>>()
 		request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png").validate().responseData { response in
-			completionBlock?(response.result)
+			promise.set(result: response.result, cached: 3600 * 12)
 		}
+		return promise.future
 	}
 	
-	public func image(allianceID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+	public func image(allianceID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -155,12 +168,14 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		let promise = Promise<ESI.Result<Data>>()
 		request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png").validate().responseData { response in
-			completionBlock?(response.result)
+			promise.set(result: response.result, cached: 3600 * 12)
 		}
+		return promise.future
 	}
 	
-	public func image(typeID: Int, dimension: Int, completionBlock:((Result<Data>) -> Void)?) {
+	public func image(typeID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128, 256, 512]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -170,14 +185,11 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		let promise = Promise<ESI.Result<Data>>()
 		request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png").validate().responseData { response in
-			if response.response?.url?.lastPathComponent != "\(typeID)_\(bestDimension).png" {
-				completionBlock?(.failure(ESIError.notFound))
-			}
-			else {
-				completionBlock?(response.result)
-			}
+			promise.set(result: response.result, cached: 3600 * 12)
 		}
+		return promise.future
 	}
 
 	public struct Scope: Hashable {
@@ -330,7 +342,7 @@ extension DataRequest {
 }
 
 public extension ESI.Scope {
-	public static let characterAccountRead = ESI.Scope("characterAccountRead")
+	/*public static let characterAccountRead = ESI.Scope("characterAccountRead")
 	public static let characterAssetsRead = ESI.Scope("characterAssetsRead")
 	public static let characterBookmarksRead = ESI.Scope("characterBookmarksRead")
 	public static let characterCalendarRead = ESI.Scope("characterCalendarRead")
@@ -373,7 +385,7 @@ public extension ESI.Scope {
 	public static let fleetWrite = ESI.Scope("fleetWrite")
 	public static let publicData = ESI.Scope("publicData")
 	public static let remoteClientUI = ESI.Scope("remoteClientUI")
-	public static let structureVulnUpdate = ESI.Scope("structureVulnUpdate")
+	public static let structureVulnUpdate = ESI.Scope("structureVulnUpdate")*/
 	
 	public static var `default`: [ESI.Scope]  {
 		get {
@@ -405,6 +417,14 @@ public extension ESI.Scope {
 				.esiContractsReadCharacterContractsV1,
 				.esiClonesReadImplantsV1,
 
+				.esiAssetsReadCorporationAssetsV1,
+				.esiContractsReadCorporationContractsV1,
+				.esiCorporationsReadBlueprintsV1,
+				.esiCorporationsReadDivisionsV1,
+				.esiIndustryReadCorporationJobsV1,
+				.esiKillmailsReadCorporationKillmailsV1,
+				.esiMarketsReadCorporationOrdersV1,
+				.esiWalletReadCorporationWalletsV1
 			]
 		}
 	}

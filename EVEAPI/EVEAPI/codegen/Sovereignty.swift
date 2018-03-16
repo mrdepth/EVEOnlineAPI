@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func listSovereigntyStructures(completionBlock:((Result<[Sovereignty.Structure]>) -> Void)?) {
+		@discardableResult
+		public func listSovereigntyStructures() -> Future<ESI.Result<[Sovereignty.Structure]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/sovereignty/structures/"
@@ -42,16 +44,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 120.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listSovereigntyCampaigns(completionBlock:((Result<[Sovereignty.Campaign]>) -> Void)?) {
+		@discardableResult
+		public func listSovereigntyCampaigns() -> Future<ESI.Result<[Sovereignty.Campaign]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -60,10 +67,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/sovereignty/campaigns/"
@@ -76,16 +81,21 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 5.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func listSovereigntyOfSystems(completionBlock:((Result<[Sovereignty.System]>) -> Void)?) {
+		@discardableResult
+		public func listSovereigntyOfSystems() -> Future<ESI.Result<[Sovereignty.System]>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -94,10 +104,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			
 			
 			let url = session!.baseURL + "/v1/sovereignty/map/"
@@ -110,10 +118,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		

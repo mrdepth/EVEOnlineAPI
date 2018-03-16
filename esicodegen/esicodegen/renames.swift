@@ -17,6 +17,8 @@ let typeNames: [String: String] = [
 	//MARK: Assets
 	"GetCharactersCharacterIDAssetsOk"	: "Asset",
 	"GetCharactersCharacterIDAssetsLocationFlag"	: "Flag",
+	"GetCorporationsCorporationIDAssetsOk"	: "CorpAsset",
+	"GetCorporationsCorporationIDAssetsLocationFlag"	: "Flag",
 
 	//MARK: Bookmarks
 	"GetCharactersCharacterIDBookmarksFoldersOk"	: "Folder",
@@ -72,6 +74,9 @@ let typeNames: [String: String] = [
 	"GetCorporationsCorporationIDIconsOk"	: "Icon",
 	"GetCorporationsCorporationIDMembersOk"	: "Member",
 	"GetCorporationsCorporationIDRolesOk"	: "Role",
+	"GetCorporationsCorporationIDDivisionsOk"	: "Divisions",
+	"GetCorporationsCorporationIDDivisionsWallet"	: "Wallet",
+	"GetCorporationsCorporationIDDivisionsHangar"	: "Hangar",
 
 	//MARK: Dogma
 	"GetDogmaEffectsEffectIDOk"	: "Effect",
@@ -114,7 +119,9 @@ let typeNames: [String: String] = [
 	"GetIndustryFacilitiesOk"	: "Facilities",
 	"GetIndustrySystemsOk"	: "SolarSystemCostIndices",
 	"GetCharactersCharacterIDIndustryJobsOk"    : "Job",
-	"GetCharactersCharacterIDIndustryJobsStatus"	: "Status",
+	"GetCharactersCharacterIDIndustryJobsStatus"	: "JobStatus",
+	"GetCorporationsCorporationIDIndustryJobsOk"	: "CorpJob",
+	"GetCorporationsCorporationIDIndustryJobsStatus"	: "JobStatus",
 
 	//MARK: Insurance
 	"GetInsurancePricesOk"	: "Price",
@@ -157,6 +164,7 @@ let typeNames: [String: String] = [
 	"GetMarketsRegionIDOrdersOk"	: "Order",
 	"GetMarketsGroupsMarketGroupIDOk"	: "ItemGroupInformation",
 	"GetCharactersCharacterIDOrdersOk"  : "CharacterOrder",
+	"GetCorporationsCorporationIDOrdersOk"	: "CorpOrder",
 
 	//MARK: Opportunities
 	"GetOpportunitiesGroupsGroupIDOk"	: "Group",
@@ -228,9 +236,12 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDWalletsJournalSecondPartyType"	: "PartyType",
 	"GetCharactersCharacterIDWalletsJournalFirstPartyType"	: "PartyType",
 	"GetCharactersCharacterIDWalletJournalRefType"	: "RefType",
+	"GetCorporationsCorporationIDWalletsDivisionJournalRefType"	: "RefType",
 	"GetCharactersCharacterIDWalletJournalFirstPartyType"	: "PartyType",
 	"GetCharactersCharacterIDWalletJournalSecondPartyType"	: "PartyType",
 	"GetCharactersCharacterIDWalletJournalExtraInfo"	: "ExtraInfo",
+	"GetCorporationsCorporationIDWalletsDivisionJournalOk" : "CorpWalletsJournalItem",
+	"GetCorporationsCorporationIDWalletsDivisionTransactionsOk"	: "CorpTransaction",
 	
 
 	//MARK: Wars

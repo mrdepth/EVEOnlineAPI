@@ -142,7 +142,6 @@ public extension ESI.Scope {
 	public static let esiCorporationsReadStructuresV1 = ESI.Scope("esi-corporations.read_structures.v1")
 	public static let esiCorporationsReadTitlesV1 = ESI.Scope("esi-corporations.read_titles.v1")
 	public static let esiCorporationsTrackMembersV1 = ESI.Scope("esi-corporations.track_members.v1")
-	public static let esiCorporationsWriteStructuresV1 = ESI.Scope("esi-corporations.write_structures.v1")
 	public static let esiFittingsReadFittingsV1 = ESI.Scope("esi-fittings.read_fittings.v1")
 	public static let esiFittingsWriteFittingsV1 = ESI.Scope("esi-fittings.write_fittings.v1")
 	public static let esiFleetsReadFleetV1 = ESI.Scope("esi-fleets.read_fleet.v1")
@@ -216,7 +215,6 @@ public extension ESI.Scope {
 			.esiCorporationsReadStructuresV1,
 			.esiCorporationsReadTitlesV1,
 			.esiCorporationsTrackMembersV1,
-			.esiCorporationsWriteStructuresV1,
 			.esiFittingsReadFittingsV1,
 			.esiFittingsWriteFittingsV1,
 			.esiFleetsReadFleetV1,

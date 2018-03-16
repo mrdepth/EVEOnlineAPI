@@ -14,10 +14,14 @@ public extension ESI {
 			self.sessionManager = sessionManager
 		}
 		
-		public func search(categories: [Search.Categories], language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.SearchResult>) -> Void)?) {
+		@discardableResult
+		public func search(categories: [Search.Categories], language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
 			var session = sessionManager
-			guard session != nil else {return}
-			
+			let promise = Promise<ESI.Result<Search.SearchResult>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			
 			let body: Data? = nil
@@ -26,10 +30,8 @@ public extension ESI {
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = categories.httpQuery {
 				query.append(URLQueryItem(name: "categories", value: v))
 			}
@@ -53,29 +55,35 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
-		public func characterSearch(categories: [Search.SearchCategories], characterID: Int, language: Language? = nil, search: String, strict: Bool? = nil, completionBlock:((Result<Search.CharacterSearchResult>) -> Void)?) {
+		@discardableResult
+		public func characterSearch(categories: [Search.SearchCategories], characterID: Int, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
 			var session = sessionManager
-			guard session != nil else {return}
+			let promise = Promise<ESI.Result<Search.CharacterSearchResult>>()
+			guard session != nil else {
+				try! promise.set(.failure(ESIError.internalError))
+				return promise.future
+			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-search.search_structures.v1") else {completionBlock?(.failure(ESIError.forbidden)); return}
-			
+			guard scopes.contains("esi-search.search_structures.v1") else {
+				try! promise.set(.failure(ESIError.forbidden))
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			
 			
-			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
 			if let v = categories.httpQuery {
 				query.append(URLQueryItem(name: "categories", value: v))
 			}
@@ -99,10 +107,11 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Search.CharacterSearchResult>) in
-					completionBlock?(response.result)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		
