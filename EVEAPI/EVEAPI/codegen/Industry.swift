@@ -19,7 +19,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.Facilities]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -56,13 +56,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.Job]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_character_jobs.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -99,13 +99,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -142,13 +142,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -185,13 +185,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.CorpJob]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_jobs.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -231,7 +231,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.SolarSystemCostIndices]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -268,13 +268,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_character_mining.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -311,13 +311,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil

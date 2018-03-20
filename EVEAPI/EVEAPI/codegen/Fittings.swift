@@ -19,13 +19,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<String>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -60,13 +60,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Fittings.CreateFittingResult>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body = try? JSONEncoder().encode(fitting)
@@ -101,13 +101,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Fittings.Fitting]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.read_fittings.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil

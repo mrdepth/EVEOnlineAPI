@@ -19,13 +19,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-location.read_location.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -60,13 +60,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-location.read_online.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -101,13 +101,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Location.CharacterShip>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-location.read_ship_type.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil

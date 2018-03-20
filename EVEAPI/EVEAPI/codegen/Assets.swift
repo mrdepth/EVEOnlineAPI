@@ -19,13 +19,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsNamesOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body = try? JSONEncoder().encode(itemIds)
@@ -60,13 +60,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.CorpAsset]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -103,13 +103,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_assets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body = try? JSONEncoder().encode(itemIds)
@@ -144,13 +144,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body = try? JSONEncoder().encode(itemIds)
@@ -185,13 +185,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_assets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body = try? JSONEncoder().encode(itemIds)
@@ -226,13 +226,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.Asset]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-assets.read_assets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil

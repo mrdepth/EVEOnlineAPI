@@ -19,7 +19,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.History]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -58,13 +58,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.GetCharactersCharacterIDOrdersHistoryOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_character_orders.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -101,13 +101,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -144,13 +144,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.CorpOrder]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -187,7 +187,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.Price]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -224,7 +224,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -261,13 +261,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.Structure]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.structure_markets.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -304,7 +304,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Market.ItemGroupInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -343,7 +343,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -382,7 +382,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.Order]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -427,13 +427,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Market.CharacterOrder]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_character_orders.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil

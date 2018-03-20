@@ -49,13 +49,13 @@ extension Promise {
 		do {
 			switch result {
 			case let .success(value):
-				try set(.success(ESI.Result<T>(value: value, cached: cached)))
+				try fulfill(ESI.Result<T>(value: value, cached: cached))
 			case let .failure(error):
 				throw error
 			}
 		}
 		catch {
-			try! set(.failure(error))
+			try! fail(error)
 		}
 	}
 }

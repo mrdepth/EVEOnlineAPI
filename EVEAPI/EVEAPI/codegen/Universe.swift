@@ -19,7 +19,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.RegionInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -58,7 +58,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -97,7 +97,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.SystemKills]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -134,7 +134,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -171,7 +171,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.ConstellationInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -210,7 +210,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.GetUniverseStarsStarIDOk>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -247,7 +247,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.GraphicInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -284,7 +284,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.ItemGroupInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -323,7 +323,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.ItemCategoryInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -362,7 +362,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.SolarSystemInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -401,7 +401,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.StargateInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -438,7 +438,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.GetUniverseAncestriesOk]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -477,7 +477,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -514,7 +514,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -551,7 +551,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Race]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -590,7 +590,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.MoonInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -627,7 +627,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Faction]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -666,7 +666,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -705,7 +705,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.TypeInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -744,7 +744,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int64]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -781,7 +781,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Name]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -818,7 +818,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -855,7 +855,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.PlanetInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -892,13 +892,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.StructureInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-universe.read_structures.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -933,7 +933,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Jump]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -970,7 +970,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -1007,7 +1007,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.StationInformation>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -1044,7 +1044,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Bloodline]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -1083,7 +1083,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.PostUniverseIdsOk>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			

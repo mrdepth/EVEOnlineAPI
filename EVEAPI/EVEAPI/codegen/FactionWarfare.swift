@@ -19,7 +19,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[FactionWarfare.FactionStats]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -56,13 +56,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<FactionWarfare.GetCharactersCharacterIDFwStatsOk>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_fw_stats.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -97,7 +97,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<FactionWarfare.Leaderboards>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -134,7 +134,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[FactionWarfare.FactionWar]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -171,7 +171,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[FactionWarfare.System]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -208,7 +208,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<FactionWarfare.Characters>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -245,13 +245,13 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_fw_stats.v1") else {
-				try! promise.set(.failure(ESIError.forbidden))
+				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
 			let body: Data? = nil
@@ -286,7 +286,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<FactionWarfare.Corporations>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			

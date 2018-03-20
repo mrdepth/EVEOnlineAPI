@@ -19,7 +19,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -56,7 +56,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -93,7 +93,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Alliance.Name]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -132,7 +132,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Alliance.Icon>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -169,7 +169,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Alliance.Information>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			

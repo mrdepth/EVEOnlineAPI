@@ -8,61 +8,25 @@
 
 import Foundation
 
-public extension OperationQueue {
-	
-	convenience init (qos: QualityOfService, maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount) {
-		self.init()
-		self.qualityOfService = qos
-		self.maxConcurrentOperationCount = maxConcurrentOperationCount
-	}
-	
-	@discardableResult
-	public func async<Value>(_ execute: @escaping () throws -> Value) -> Future<Value> {
-		let promise = Promise<Value>()
-		addOperation {
-			do {
-				try promise.set(.success(execute()))
-			}
-			catch {
-				try! promise.set(.failure(error))
-			}
-		}
-		return promise.future
-	}
-}
-
-public extension NSLocking {
-	public func perform<Value>(_ execute: () throws -> Value) rethrows -> Value {
-		do {
-			lock()
-			let rval = try execute()
-			unlock()
-			return rval
-		}
-		catch {
-			unlock()
-			throw error
-		}
-	}
-}
-
-public enum FutureResult<Value> {
-	case success(Value)
-	case failure(Error)
-}
-
 public enum FutureError: Error {
 	case promiseAlreadySatisfied
 	case timeout
 }
 
-open class Future<Value>: NSLocking {
+public enum FutureState<Value> {
+	case pending
+	case success(Value)
+	case failure(Error)
+}
+
+final public class Future<Value>: NSLocking {
 	
-	fileprivate var result: FutureResult<Value>? {
+	fileprivate(set) public var state: FutureState<Value> = .pending {
 		didSet {
 			condition.broadcast()
 		}
 	}
+	
 	fileprivate var condition = NSCondition()
 	fileprivate var success = [(DispatchQueue?, (Value) -> Void)]()
 	fileprivate var failure = [(DispatchQueue?, (Error) -> Void)]()
@@ -78,77 +42,85 @@ open class Future<Value>: NSLocking {
 	
 	public func get(until: Date = .distantFuture) throws -> Value {
 		return try condition.perform {
-			while result == nil && Date() < until {
+			while case .pending = state, Date() < until {
 				condition.wait(until: until)
 			}
-			switch result {
-			case let .success(value)?:
+			switch state {
+			case let .success(value):
 				return value
-			case let .failure(error)?:
+			case let .failure(error):
 				throw error
-			default:
+			case .pending:
 				throw FutureError.timeout
 			}
 		}
 	}
 	
-	@discardableResult
-	public func then<Result>(queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Result) -> Future<Result> {
-		return then(queue: queue) { (value: Value, promise: Promise<Result>) in
-			try promise.set(.success(execute(value)))
-		}
-	}
-
-	@discardableResult
-	public func then<Result>(queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Future<Result>) -> Future<Result> {
-		return then(queue: queue) { (value: Value, promise: Promise<Result>) in
-			try execute(value).then { value in
-				try! promise.set(.success(value))
-			}.catch { error in
-				try! promise.set(.failure(error))
+	public func wait(until: Date = .distantFuture) {
+		condition.perform {
+			while case .pending = state, Date() < until {
+				condition.wait(until: until)
 			}
-//			try promise.set(.success(execute(value)))
+		}
+	}
+	
+	@discardableResult
+	public func then<Result>(on queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Result) -> Future<Result> {
+		return then(on: queue) { (value: Value, promise: Promise<Result>) in
+			try promise.fulfill(execute(value))
 		}
 	}
 
 	@discardableResult
-	public func then<Result>(queue: DispatchQueue? = nil, _ execute: @escaping (Value, Promise<Result>) throws -> Void) -> Future<Result> {
+	public func then<Result>(on queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Future<Result>) -> Future<Result> {
+		return then(on: queue) { (value: Value, promise: Promise<Result>) in
+			try execute(value).then { value in
+				try! promise.fulfill(value)
+			}.catch { error in
+				try! promise.fail(error)
+			}
+		}
+	}
+
+	@discardableResult
+	public func then<Result>(on queue: DispatchQueue? = nil, _ execute: @escaping (Value, Promise<Result>) throws -> Void) -> Future<Result> {
 		
 		let promise = Promise<Result>()
-		let finalize = { (value: Value) in
+		
+		let onSuccess = { (value: Value) in
 			do {
 				try execute(value, promise)
 			}
 			catch {
-				try! promise.set(.failure(error))
+				try! promise.fail(error)
 			}
 		}
 		
 		condition.perform { () -> (() -> Void)? in
-			switch result {
-			case let .success(value)?:
-				return {finalize(value)}
-			case let .failure(error)?:
-				return {try! promise.set(.failure(error))}
-			default:
-				success.append((queue, finalize))
-				failure.append((queue, { error in try! promise.set(.failure(error)) }))
+			switch state {
+			case let .success(value):
+				return { onSuccess(value) }
+			case let .failure(error):
+				return { try! promise.fail(error) }
+			case .pending:
+				success.append((queue, onSuccess))
+				failure.append((queue, { error in try! promise.fail(error) }))
 				return nil
 			}
-			}?()
+		}?()
 		
 		return promise.future
 	}
 	
 	@discardableResult
-	public func `catch`(queue: DispatchQueue? = nil, _ execute: @escaping (Error) -> Void) -> Self {
+	public func `catch`(on queue: DispatchQueue? = nil, _ execute: @escaping (Error) -> Void) -> Self {
 		condition.perform { () -> (() -> Void)? in
-			switch result {
-			case let .failure(error)?:
-				return {execute(error)}
-			case .success?:
+			switch state {
+			case let .failure(error):
+				return { execute(error) }
+			case .success:
 				return nil
-			default:
+			case .pending:
 				failure.append((queue, execute))
 				return nil
 			}
@@ -157,13 +129,13 @@ open class Future<Value>: NSLocking {
 	}
 	
 	@discardableResult
-	public func finally(queue: DispatchQueue? = nil, _ execute: @escaping () -> Void) -> Self {
+	public func finally(on queue: DispatchQueue? = nil, _ execute: @escaping () -> Void) -> Self {
 		
 		condition.perform { () -> (() -> Void)? in
-			if result != nil {
-				return {execute()}
-			}
-			else {
+			switch state {
+			case .success, .failure:
+				return { execute() }
+			case .pending:
 				finally.append((queue, execute))
 				return nil
 			}
@@ -177,69 +149,112 @@ open class Promise<Value> {
 	
 	public init() {}
 	
-	open func set(_ result: FutureResult<Value>) throws {
+	open func fulfill(_ value: Value) throws {
 		try future.perform { () -> () -> Void in
-			guard future.result == nil else {throw FutureError.promiseAlreadySatisfied}
+			guard case .pending = future.state else { throw FutureError.promiseAlreadySatisfied }
 			defer {
 				future.success = []
 				future.failure = []
 				future.finally = []
 			}
 			
-			future.result = result
-			switch result {
-			case let .success(value):
-				let execute = self.future.success
-				let finally = self.future.finally
-				return {
-					execute.forEach { (queue, block) in
-						if let queue = queue {
-							queue.async {
-								block(value)
-							}
-						}
-						else {
+			future.state = .success(value)
+			
+			let execute = self.future.success
+			let finally = self.future.finally
+			
+			return {
+				execute.forEach { (queue, block) in
+					if let queue = queue {
+						queue.async {
 							block(value)
 						}
 					}
-					finally.forEach { (queue, block) in
-						if let queue = queue {
-							queue.async {
-								block()
-							}
-						}
-						else {
-							block()
-						}
+					else {
+						block(value)
 					}
 				}
-			case let .failure(error):
-				let execute = self.future.failure
-				let finally = self.future.finally
-				return {
-					execute.forEach { (queue, block) in
-						if let queue = queue {
-							queue.async {
-								block(error)
-							}
-						}
-						else {
-							block(error)
-						}
-					}
-					finally.forEach { (queue, block) in
-						if let queue = queue {
-							queue.async {
-								block()
-							}
-						}
-						else {
+				finally.forEach { (queue, block) in
+					if let queue = queue {
+						queue.async {
 							block()
 						}
+					}
+					else {
+						block()
 					}
 				}
 			}
-			}()
+		}()
+	}
+	
+	open func fail(_ error: Error) throws {
+		try future.perform { () -> () -> Void in
+			guard case .pending = future.state else { throw FutureError.promiseAlreadySatisfied }
+			defer {
+				future.success = []
+				future.failure = []
+				future.finally = []
+			}
+			
+			future.state = .failure(error)
+
+			let execute = self.future.failure
+			let finally = self.future.finally
+			return {
+				execute.forEach { (queue, block) in
+					if let queue = queue {
+						queue.async {
+							block(error)
+						}
+					}
+					else {
+						block(error)
+					}
+				}
+				finally.forEach { (queue, block) in
+					if let queue = queue {
+						queue.async {
+							block()
+						}
+					}
+					else {
+						block()
+					}
+				}
+			}
+		}()
 	}
 }
 
+
+extension OperationQueue {
+	
+	public convenience init (qos: QualityOfService, maxConcurrentOperationCount: Int = OperationQueue.defaultMaxConcurrentOperationCount) {
+		self.init()
+		self.qualityOfService = qos
+		self.maxConcurrentOperationCount = maxConcurrentOperationCount
+	}
+	
+	@discardableResult
+	public func async<Value>(_ execute: @escaping () throws -> Value) -> Future<Value> {
+		let promise = Promise<Value>()
+		addOperation {
+			do {
+				try promise.fulfill(execute())
+			}
+			catch {
+				try! promise.fail(error)
+			}
+		}
+		return promise.future
+	}
+}
+
+extension NSLocking {
+	
+	public func perform<Value>(_ execute: () throws -> Value) rethrows -> Value {
+		lock(); defer { unlock() }
+		return try execute()
+	}
+}

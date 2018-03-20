@@ -46,7 +46,7 @@ public class ZKillboard: SessionManager {
 	public func kills(filter: [Filter], page: Int?) -> Future<ESI.Result<[Killmail]>> {
 		let promise = Promise<ESI.Result<[Killmail]>>()
 		guard filter.count > 1 else {
-			try! promise.set(.failure(ZKillboardError.notFound))
+			try! promise.fail(ZKillboardError.notFound)
 			return promise.future
 		}
 		var session: ZKillboard? = self

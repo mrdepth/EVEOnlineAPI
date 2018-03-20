@@ -19,7 +19,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -56,7 +56,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
@@ -93,7 +93,7 @@ public extension ESI {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
 			guard session != nil else {
-				try! promise.set(.failure(ESIError.internalError))
+				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
