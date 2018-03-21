@@ -251,8 +251,23 @@ extension OperationQueue {
 	}
 }
 
+extension DispatchQueue {
+	public func async<Value>(_ execute: @escaping () throws -> Value) -> Future<Value> {
+		let promise = Promise<Value>()
+		async {
+			do {
+				try promise.fulfill(execute())
+			}
+			catch {
+				try! promise.fail(error)
+			}
+		}
+		return promise.future
+	}
+}
+
 extension NSLocking {
-	
+	@discardableResult
 	public func perform<Value>(_ execute: () throws -> Value) rethrows -> Value {
 		lock(); defer { unlock() }
 		return try execute()
