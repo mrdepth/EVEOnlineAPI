@@ -91,7 +91,7 @@ public enum RSS {
 			updated = DateFormatter.rfc822DateFormatter.date(from: channel["pubDate"] as? String ?? "")
 			
 			if let items = channel["item"] {
-				self.items = (items as? [Any] ?? [items]).flatMap {
+				self.items = (items as? [Any] ?? [items]).compactMap {
 					return try? Item(rss: $0)
 				}
 			}
@@ -110,7 +110,7 @@ public enum RSS {
 				self.image = try? Image(rdf: image)
 			}
 			if let items = dic["item"] {
-				self.items = (items as? [Any] ?? [items]).flatMap {
+				self.items = (items as? [Any] ?? [items]).compactMap {
 					return try? Item(rdf: $0)
 				}
 			}
@@ -130,7 +130,7 @@ public enum RSS {
 			updated = DateFormatter.rfc822DateFormatter.date(from: dic["updated"] as? String ?? "")
 
 			if let items = dic["entry"] {
-				self.items = (items as? [Any] ?? [items]).flatMap {
+				self.items = (items as? [Any] ?? [items]).compactMap {
 					return try? Item(atom: $0)
 				}
 			}

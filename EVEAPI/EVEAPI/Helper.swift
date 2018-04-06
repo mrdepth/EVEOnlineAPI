@@ -232,18 +232,18 @@ extension String: JSONCoding, HTTPQueryable {
 
 extension Array: JSONCoding, HTTPQueryable {
 	public var json: Any {
-		return flatMap{($0 as? JSONCoding)?.json}
+		return compactMap{($0 as? JSONCoding)?.json}
 	}
 	
 	public init(json: Any) throws {
 		guard let v = json as? [Any],
 			let type = Element.self as? JSONCoding.Type else {throw ESIError.invalidFormat(Swift.type(of: self), json)}
 		
-		self = try v.flatMap{try type.init(json: $0) as? Element}
+		self = try v.compactMap{try type.init(json: $0) as? Element}
 	}
 
 	public var httpQuery: String? {
-		let a = flatMap{ ($0 as? HTTPQueryable)?.httpQuery }
+		let a = compactMap{ ($0 as? HTTPQueryable)?.httpQuery }
 		return !a.isEmpty ? a.joined(separator: ",") : nil
 	}
 

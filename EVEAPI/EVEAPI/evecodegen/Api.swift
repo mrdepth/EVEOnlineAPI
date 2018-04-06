@@ -280,8 +280,8 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Api.CallList) {
-				callGroups = other.callGroups.flatMap { EVE.Api.CallList.CallGroup($0) }
-				calls = other.calls.flatMap { EVE.Api.CallList.Call($0) }
+				callGroups = other.callGroups.compactMap { EVE.Api.CallList.CallGroup($0) }
+				calls = other.calls.compactMap { EVE.Api.CallList.Call($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {

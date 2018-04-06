@@ -507,7 +507,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.AccountBalance) {
-				accounts = other.accounts.flatMap { EVE.Corp.AccountBalance.Account($0) }
+				accounts = other.accounts.compactMap { EVE.Corp.AccountBalance.Account($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -615,7 +615,7 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Corp.AssetList.Asset) {
-					contents = other.contents?.flatMap { EVE.Corp.AssetList.Asset($0) }
+					contents = other.contents?.compactMap { EVE.Corp.AssetList.Asset($0) }
 					flag = other.flag
 					itemID = other.itemID
 					locationID = other.locationID
@@ -686,7 +686,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.AssetList) {
-				assets = other.assets.flatMap { EVE.Corp.AssetList.Asset($0) }
+				assets = other.assets.compactMap { EVE.Corp.AssetList.Asset($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -868,7 +868,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.Blueprints) {
-				blueprints = other.blueprints.flatMap { EVE.Corp.Blueprints.Blueprint($0) }
+				blueprints = other.blueprints.compactMap { EVE.Corp.Blueprints.Blueprint($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1074,7 +1074,7 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Corp.Bookmarks.Folder) {
-					bookmarks = other.bookmarks.flatMap { EVE.Corp.Bookmarks.Folder.Bookmark($0) }
+					bookmarks = other.bookmarks.compactMap { EVE.Corp.Bookmarks.Folder.Bookmark($0) }
 					folderID = other.folderID
 					folderName = other.folderName
 				}
@@ -1140,7 +1140,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.Bookmarks) {
-				folders = other.folders.flatMap { EVE.Corp.Bookmarks.Folder($0) }
+				folders = other.folders.compactMap { EVE.Corp.Bookmarks.Folder($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1403,12 +1403,12 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.ContactList) {
-				allianceContactLabels = other.allianceContactLabels.flatMap { EVE.Corp.ContactList.Label($0) }
-				allianceContactList = other.allianceContactList.flatMap { EVE.Corp.ContactList.Contact($0) }
-				contactLabels = other.contactLabels.flatMap { EVE.Corp.ContactList.Label($0) }
-				contactList = other.contactList.flatMap { EVE.Corp.ContactList.Contact($0) }
-				corporateContactLabels = other.corporateContactLabels.flatMap { EVE.Corp.ContactList.Label($0) }
-				corporateContactList = other.corporateContactList.flatMap { EVE.Corp.ContactList.Contact($0) }
+				allianceContactLabels = other.allianceContactLabels.compactMap { EVE.Corp.ContactList.Label($0) }
+				allianceContactList = other.allianceContactList.compactMap { EVE.Corp.ContactList.Contact($0) }
+				contactLabels = other.contactLabels.compactMap { EVE.Corp.ContactList.Label($0) }
+				contactList = other.contactList.compactMap { EVE.Corp.ContactList.Contact($0) }
+				corporateContactLabels = other.corporateContactLabels.compactMap { EVE.Corp.ContactList.Label($0) }
+				corporateContactList = other.corporateContactList.compactMap { EVE.Corp.ContactList.Contact($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1566,7 +1566,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.ContractBids) {
-				bidList = other.bidList.flatMap { EVE.Corp.ContractBids.Bid($0) }
+				bidList = other.bidList.compactMap { EVE.Corp.ContractBids.Bid($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1730,7 +1730,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.ContractItems) {
-				itemList = other.itemList.flatMap { EVE.Corp.ContractItems.Item($0) }
+				itemList = other.itemList.compactMap { EVE.Corp.ContractItems.Item($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -2056,7 +2056,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.Contracts) {
-				contractList = other.contractList.flatMap { EVE.Corp.Contracts.Contract($0) }
+				contractList = other.contractList.compactMap { EVE.Corp.Contracts.Contract($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -2502,7 +2502,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.IndustryJobs) {
-				jobs = other.jobs.flatMap { EVE.Corp.IndustryJobs.Job($0) }
+				jobs = other.jobs.compactMap { EVE.Corp.IndustryJobs.Job($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -2977,8 +2977,8 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Corp.KillMails.Kill) {
-					attackers = other.attackers.flatMap { EVE.Corp.KillMails.Kill.Attacker($0) }
-					items = other.items.flatMap { EVE.Corp.KillMails.Kill.Item($0) }
+					attackers = other.attackers.compactMap { EVE.Corp.KillMails.Kill.Attacker($0) }
+					items = other.items.compactMap { EVE.Corp.KillMails.Kill.Item($0) }
 					killID = other.killID
 					killTime = other.killTime
 					moonID = other.moonID
@@ -3047,7 +3047,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.KillMails) {
-				kills = other.kills.flatMap { EVE.Corp.KillMails.Kill($0) }
+				kills = other.kills.compactMap { EVE.Corp.KillMails.Kill($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3205,7 +3205,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.Locations) {
-				locations = other.locations.flatMap { EVE.Corp.Locations.Location($0) }
+				locations = other.locations.compactMap { EVE.Corp.Locations.Location($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3445,7 +3445,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.MarketOrders) {
-				orders = other.orders.flatMap { EVE.Corp.MarketOrders.Order($0) }
+				orders = other.orders.compactMap { EVE.Corp.MarketOrders.Order($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3647,8 +3647,8 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.Medals) {
-				currentCorporation = other.currentCorporation.flatMap { EVE.Corp.Medals.Medal($0) }
-				otherCorporations = other.otherCorporations.flatMap { EVE.Corp.Medals.Medal($0) }
+				currentCorporation = other.currentCorporation.compactMap { EVE.Corp.Medals.Medal($0) }
+				otherCorporations = other.otherCorporations.compactMap { EVE.Corp.Medals.Medal($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3807,9 +3807,9 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.Standings) {
-				agents = other.agents?.flatMap { EVE.Corp.Standings.Standing($0) }
-				factions = other.factions?.flatMap { EVE.Corp.Standings.Standing($0) }
-				npcCorporations = other.npcCorporations?.flatMap { EVE.Corp.Standings.Standing($0) }
+				agents = other.agents?.compactMap { EVE.Corp.Standings.Standing($0) }
+				factions = other.factions?.compactMap { EVE.Corp.Standings.Standing($0) }
+				npcCorporations = other.npcCorporations?.compactMap { EVE.Corp.Standings.Standing($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -4030,7 +4030,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.WalletJournal) {
-				entries = other.entries.flatMap { EVE.Corp.WalletJournal.Transaction($0) }
+				entries = other.entries.compactMap { EVE.Corp.WalletJournal.Transaction($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -4292,7 +4292,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Corp.WalletTransactions) {
-				transactions = other.transactions.flatMap { EVE.Corp.WalletTransactions.Transaction($0) }
+				transactions = other.transactions.compactMap { EVE.Corp.WalletTransactions.Transaction($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {

@@ -8,23 +8,9 @@
 
 import Foundation
 
-extension Array: Hashable {
-	public static func ==(lhs: Array<Element>, rhs: Array<Element>) -> Bool {
-		return lhs.hashValue == rhs.hashValue
-	}
-	
+extension Array: Hashable where Element: Hashable {
 	public var hashValue: Int {
-		get {
-			var seed = 1
-			for (element) in self {
-				if let v = element as? AnyHashable {
-					hashCombine(seed: &seed, value: v.hashValue)
-				}
-				else if let h = (element as AnyObject).hashValue {
-					hashCombine(seed: &seed, value: h)
-				}
-			}
-			return seed
-		}}
+		return reduce(into: 1) { hashCombine(seed: &$0, value: $1.hashValue)}
+	}
 }
 

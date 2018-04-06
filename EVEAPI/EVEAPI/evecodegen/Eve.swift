@@ -160,7 +160,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Eve.RefTypes) {
-				refTypes = other.refTypes.flatMap { EVE.Eve.RefTypes.RefType($0) }
+				refTypes = other.refTypes.compactMap { EVE.Eve.RefTypes.RefType($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {

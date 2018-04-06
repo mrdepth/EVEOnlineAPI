@@ -873,7 +873,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.AccountBalance) {
-				accounts = other.accounts.flatMap { EVE.Char.AccountBalance.Account($0) }
+				accounts = other.accounts.compactMap { EVE.Char.AccountBalance.Account($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -981,7 +981,7 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Char.AssetList.Asset) {
-					contents = other.contents?.flatMap { EVE.Char.AssetList.Asset($0) }
+					contents = other.contents?.compactMap { EVE.Char.AssetList.Asset($0) }
 					flag = other.flag
 					itemID = other.itemID
 					locationID = other.locationID
@@ -1052,7 +1052,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.AssetList) {
-				assets = other.assets.flatMap { EVE.Char.AssetList.Asset($0) }
+				assets = other.assets.compactMap { EVE.Char.AssetList.Asset($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1234,7 +1234,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Blueprints) {
-				blueprints = other.blueprints.flatMap { EVE.Char.Blueprints.Blueprint($0) }
+				blueprints = other.blueprints.compactMap { EVE.Char.Blueprints.Blueprint($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1440,7 +1440,7 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Char.Bookmarks.Folder) {
-					bookmarks = other.bookmarks.flatMap { EVE.Char.Bookmarks.Folder.Bookmark($0) }
+					bookmarks = other.bookmarks.compactMap { EVE.Char.Bookmarks.Folder.Bookmark($0) }
 					folderID = other.folderID
 					folderName = other.folderName
 				}
@@ -1506,7 +1506,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Bookmarks) {
-				folders = other.folders.flatMap { EVE.Char.Bookmarks.Folder($0) }
+				folders = other.folders.compactMap { EVE.Char.Bookmarks.Folder($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -1672,7 +1672,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.CalendarEventAttendees) {
-				eventAttendees = other.eventAttendees.flatMap { EVE.Char.CalendarEventAttendees.Attendee($0) }
+				eventAttendees = other.eventAttendees.compactMap { EVE.Char.CalendarEventAttendees.Attendee($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -2523,7 +2523,7 @@ public extension EVE {
 				balance = other.balance
 				bloodLine = other.bloodLine
 				bloodLineID = other.bloodLineID
-				certificates = other.certificates.flatMap { EVE.Char.CharacterSheet.Certificate($0) }
+				certificates = other.certificates.compactMap { EVE.Char.CharacterSheet.Certificate($0) }
 				characterID = other.characterID
 				characterName = other.characterName
 				cloneJumpDate = other.cloneJumpDate
@@ -2532,11 +2532,11 @@ public extension EVE {
 				cloneTypeID = other.cloneTypeID
 				corporationID = other.corporationID
 				corporationName = other.corporationName
-				corporationRoles = other.corporationRoles.flatMap { EVE.Char.CharacterSheet.Role($0) }
-				corporationRolesAtBase = other.corporationRolesAtBase.flatMap { EVE.Char.CharacterSheet.Role($0) }
-				corporationRolesAtHQ = other.corporationRolesAtHQ.flatMap { EVE.Char.CharacterSheet.Role($0) }
-				corporationRolesAtOther = other.corporationRolesAtOther.flatMap { EVE.Char.CharacterSheet.Role($0) }
-				corporationTitles = other.corporationTitles.flatMap { EVE.Char.CharacterSheet.Role($0) }
+				corporationRoles = other.corporationRoles.compactMap { EVE.Char.CharacterSheet.Role($0) }
+				corporationRolesAtBase = other.corporationRolesAtBase.compactMap { EVE.Char.CharacterSheet.Role($0) }
+				corporationRolesAtHQ = other.corporationRolesAtHQ.compactMap { EVE.Char.CharacterSheet.Role($0) }
+				corporationRolesAtOther = other.corporationRolesAtOther.compactMap { EVE.Char.CharacterSheet.Role($0) }
+				corporationTitles = other.corporationTitles.compactMap { EVE.Char.CharacterSheet.Role($0) }
 				dateOfBirth = other.dateOfBirth
 				factionID = other.factionID
 				factionName = other.factionName
@@ -2544,17 +2544,17 @@ public extension EVE {
 				freeSkillPoints = other.freeSkillPoints
 				gender = other.gender
 				homeStationID = other.homeStationID
-				implants = other.implants.flatMap { EVE.Char.CharacterSheet.Implant($0) }
+				implants = other.implants.compactMap { EVE.Char.CharacterSheet.Implant($0) }
 				jumpActivation = other.jumpActivation
-				jumpCloneImplants = other.jumpCloneImplants.flatMap { EVE.Char.CharacterSheet.JumpCloneImplant($0) }
-				jumpClones = other.jumpClones.flatMap { EVE.Char.CharacterSheet.JumpClone($0) }
+				jumpCloneImplants = other.jumpCloneImplants.compactMap { EVE.Char.CharacterSheet.JumpCloneImplant($0) }
+				jumpClones = other.jumpClones.compactMap { EVE.Char.CharacterSheet.JumpClone($0) }
 				jumpFatigue = other.jumpFatigue
 				jumpLastUpdate = other.jumpLastUpdate
 				lastRespecDate = other.lastRespecDate
 				lastTimedRespec = other.lastTimedRespec
 				race = other.race
 				remoteStationDate = other.remoteStationDate
-				skills = other.skills.flatMap { EVE.Char.CharacterSheet.Skill($0) }
+				skills = other.skills.compactMap { EVE.Char.CharacterSheet.Skill($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -2764,15 +2764,15 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Char.ChatChannels.Channel) {
-					allowed = other.allowed?.flatMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
-					blocked = other.blocked?.flatMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
+					allowed = other.allowed?.compactMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
+					blocked = other.blocked?.compactMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
 					channelID = other.channelID
 					comparisonKey = other.comparisonKey
 					displayName = other.displayName
 					hasPassword = other.hasPassword
 					motd = other.motd
-					muted = other.muted?.flatMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
-					operators = other.operators?.flatMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
+					muted = other.muted?.compactMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
+					operators = other.operators?.compactMap { EVE.Char.ChatChannels.Channel.Accessor($0) }
 					ownerID = other.ownerID
 					ownerName = other.ownerName
 				}
@@ -2838,7 +2838,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.ChatChannels) {
-				channels = other.channels.flatMap { EVE.Char.ChatChannels.Channel($0) }
+				channels = other.channels.compactMap { EVE.Char.ChatChannels.Channel($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3360,10 +3360,10 @@ public extension EVE {
 				dateOfBirth = other.dateOfBirth
 				freeRespecs = other.freeRespecs
 				gender = other.gender
-				implants = other.implants?.flatMap { EVE.Char.Clones.Implant($0) }
+				implants = other.implants?.compactMap { EVE.Char.Clones.Implant($0) }
 				jumpActivation = other.jumpActivation
-				jumpCloneImplants = other.jumpCloneImplants?.flatMap { EVE.Char.Clones.JumpCloneImplant($0) }
-				jumpClones = other.jumpClones?.flatMap { EVE.Char.Clones.JumpClone($0) }
+				jumpCloneImplants = other.jumpCloneImplants?.compactMap { EVE.Char.Clones.JumpCloneImplant($0) }
+				jumpClones = other.jumpClones?.compactMap { EVE.Char.Clones.JumpClone($0) }
 				jumpFatigue = other.jumpFatigue
 				jumpLastUpdate = other.jumpLastUpdate
 				lastRespecDate = other.lastRespecDate
@@ -3632,12 +3632,12 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.ContactList) {
-				allianceContactLabels = other.allianceContactLabels.flatMap { EVE.Char.ContactList.Label($0) }
-				allianceContactList = other.allianceContactList.flatMap { EVE.Char.ContactList.Contact($0) }
-				contactLabels = other.contactLabels.flatMap { EVE.Char.ContactList.Label($0) }
-				contactList = other.contactList.flatMap { EVE.Char.ContactList.Contact($0) }
-				corporateContactLabels = other.corporateContactLabels.flatMap { EVE.Char.ContactList.Label($0) }
-				corporateContactList = other.corporateContactList.flatMap { EVE.Char.ContactList.Contact($0) }
+				allianceContactLabels = other.allianceContactLabels.compactMap { EVE.Char.ContactList.Label($0) }
+				allianceContactList = other.allianceContactList.compactMap { EVE.Char.ContactList.Contact($0) }
+				contactLabels = other.contactLabels.compactMap { EVE.Char.ContactList.Label($0) }
+				contactList = other.contactList.compactMap { EVE.Char.ContactList.Contact($0) }
+				corporateContactLabels = other.corporateContactLabels.compactMap { EVE.Char.ContactList.Label($0) }
+				corporateContactList = other.corporateContactList.compactMap { EVE.Char.ContactList.Contact($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3795,7 +3795,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.ContactNotifications) {
-				contactNotifications = other.contactNotifications.flatMap { EVE.Char.ContactNotifications.Notification($0) }
+				contactNotifications = other.contactNotifications.compactMap { EVE.Char.ContactNotifications.Notification($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -3953,7 +3953,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.ContractBids) {
-				bidList = other.bidList.flatMap { EVE.Char.ContractBids.Bid($0) }
+				bidList = other.bidList.compactMap { EVE.Char.ContractBids.Bid($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -4117,7 +4117,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.ContractItems) {
-				itemList = other.itemList.flatMap { EVE.Char.ContractItems.Item($0) }
+				itemList = other.itemList.compactMap { EVE.Char.ContractItems.Item($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -4443,7 +4443,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Contracts) {
-				contractList = other.contractList.flatMap { EVE.Char.Contracts.Contract($0) }
+				contractList = other.contractList.compactMap { EVE.Char.Contracts.Contract($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -4889,7 +4889,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.IndustryJobs) {
-				jobs = other.jobs.flatMap { EVE.Char.IndustryJobs.Job($0) }
+				jobs = other.jobs.compactMap { EVE.Char.IndustryJobs.Job($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -5364,8 +5364,8 @@ public extension EVE {
 				}
 				
 				init(_ other: EVE.Char.KillMails.Kill) {
-					attackers = other.attackers.flatMap { EVE.Char.KillMails.Kill.Attacker($0) }
-					items = other.items.flatMap { EVE.Char.KillMails.Kill.Item($0) }
+					attackers = other.attackers.compactMap { EVE.Char.KillMails.Kill.Attacker($0) }
+					items = other.items.compactMap { EVE.Char.KillMails.Kill.Item($0) }
 					killID = other.killID
 					killTime = other.killTime
 					moonID = other.moonID
@@ -5434,7 +5434,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.KillMails) {
-				kills = other.kills.flatMap { EVE.Char.KillMails.Kill($0) }
+				kills = other.kills.compactMap { EVE.Char.KillMails.Kill($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -5592,7 +5592,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Locations) {
-				locations = other.locations.flatMap { EVE.Char.Locations.Location($0) }
+				locations = other.locations.compactMap { EVE.Char.Locations.Location($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -5737,7 +5737,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.MailBodies) {
-				messages = other.messages.flatMap { EVE.Char.MailBodies.Message($0) }
+				messages = other.messages.compactMap { EVE.Char.MailBodies.Message($0) }
 				missingMessageIDs = other.missingMessageIDs
 			}
 			
@@ -5878,7 +5878,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.MailingLists) {
-				mailingLists = other.mailingLists.flatMap { EVE.Char.MailingLists.MailingList($0) }
+				mailingLists = other.mailingLists.compactMap { EVE.Char.MailingLists.MailingList($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -6118,7 +6118,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.MarketOrders) {
-				orders = other.orders.flatMap { EVE.Char.MarketOrders.Order($0) }
+				orders = other.orders.compactMap { EVE.Char.MarketOrders.Order($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -6320,8 +6320,8 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Medals) {
-				currentCorporation = other.currentCorporation.flatMap { EVE.Char.Medals.Medal($0) }
-				otherCorporations = other.otherCorporations.flatMap { EVE.Char.Medals.Medal($0) }
+				currentCorporation = other.currentCorporation.compactMap { EVE.Char.Medals.Medal($0) }
+				otherCorporations = other.otherCorporations.compactMap { EVE.Char.Medals.Medal($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -6500,7 +6500,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Messages) {
-				messages = other.messages.flatMap { EVE.Char.Messages.Message($0) }
+				messages = other.messages.compactMap { EVE.Char.Messages.Message($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -6647,7 +6647,7 @@ public extension EVE {
 			
 			init(_ other: EVE.Char.NotificationTexts) {
 				missindIDs = other.missindIDs
-				notifications = other.notifications.flatMap { EVE.Char.NotificationTexts.Notification($0) }
+				notifications = other.notifications.compactMap { EVE.Char.NotificationTexts.Notification($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -6836,7 +6836,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Notifications) {
-				notifications = other.notifications.flatMap { EVE.Char.Notifications.Notification($0) }
+				notifications = other.notifications.compactMap { EVE.Char.Notifications.Notification($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -7030,7 +7030,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.PlanetaryColonies) {
-				colonies = other.colonies.flatMap { EVE.Char.PlanetaryColonies.Colony($0) }
+				colonies = other.colonies.compactMap { EVE.Char.PlanetaryColonies.Colony($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -7176,7 +7176,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.PlanetaryLinks) {
-				links = other.links.flatMap { EVE.Char.PlanetaryLinks.Link($0) }
+				links = other.links.compactMap { EVE.Char.PlanetaryLinks.Link($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -7391,7 +7391,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.PlanetaryPins) {
-				pins = other.pins.flatMap { EVE.Char.PlanetaryPins.Pin($0) }
+				pins = other.pins.compactMap { EVE.Char.PlanetaryPins.Pin($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -7585,7 +7585,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.PlanetaryRoutes) {
-				routes = other.routes.flatMap { EVE.Char.PlanetaryRoutes.Route($0) }
+				routes = other.routes.compactMap { EVE.Char.PlanetaryRoutes.Route($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -7743,7 +7743,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Research) {
-				research = other.research.flatMap { EVE.Char.Research($0) }
+				research = other.research.compactMap { EVE.Char.Research($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -7913,7 +7913,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.SkillQueue) {
-				skillQueue = other.skillQueue.flatMap { EVE.Char.SkillQueue.Skill($0) }
+				skillQueue = other.skillQueue.compactMap { EVE.Char.SkillQueue.Skill($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -8071,7 +8071,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Skills) {
-				skills = other.skills.flatMap { EVE.Char.Skills.Skill($0) }
+				skills = other.skills.compactMap { EVE.Char.Skills.Skill($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -8230,9 +8230,9 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.Standings) {
-				agents = other.agents?.flatMap { EVE.Char.Standings.Standing($0) }
-				factions = other.factions?.flatMap { EVE.Char.Standings.Standing($0) }
-				npcCorporations = other.npcCorporations?.flatMap { EVE.Char.Standings.Standing($0) }
+				agents = other.agents?.compactMap { EVE.Char.Standings.Standing($0) }
+				factions = other.factions?.compactMap { EVE.Char.Standings.Standing($0) }
+				npcCorporations = other.npcCorporations?.compactMap { EVE.Char.Standings.Standing($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -8434,7 +8434,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.UpcomingCalendarEvents) {
-				upcomingEvents = other.upcomingEvents.flatMap { EVE.Char.UpcomingCalendarEvents.Event($0) }
+				upcomingEvents = other.upcomingEvents.compactMap { EVE.Char.UpcomingCalendarEvents.Event($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -8669,7 +8669,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.WalletJournal) {
-				transactions = other.transactions.flatMap { EVE.Char.WalletJournal.Transaction($0) }
+				transactions = other.transactions.compactMap { EVE.Char.WalletJournal.Transaction($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {
@@ -8919,7 +8919,7 @@ public extension EVE {
 			}
 			
 			init(_ other: EVE.Char.WalletTransactions) {
-				transactions = other.transactions.flatMap { EVE.Char.WalletTransactions.Transaction($0) }
+				transactions = other.transactions.compactMap { EVE.Char.WalletTransactions.Transaction($0) }
 			}
 			
 			public func copy(with zone: NSZone? = nil) -> Any {

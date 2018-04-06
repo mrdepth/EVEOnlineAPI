@@ -279,7 +279,7 @@ public extension EVE {
 				
 				init(_ other: EVE.Account.APIKeyInfo.APIKey) {
 					accessMask = other.accessMask
-					characters = other.characters.flatMap { EVE.Account.APIKeyInfo.APIKey.Character($0) }
+					characters = other.characters.compactMap { EVE.Account.APIKeyInfo.APIKey.Character($0) }
 					expires = other.expires
 					type = other.type
 				}
@@ -502,7 +502,7 @@ public extension EVE {
 				createDate = other.createDate
 				logonCount = other.logonCount
 				logonMinutes = other.logonMinutes
-				multiCharacterTraining = other.multiCharacterTraining.flatMap { EVE.Account.AccountStatus.MultiCharacterTraining($0) }
+				multiCharacterTraining = other.multiCharacterTraining.compactMap { EVE.Account.AccountStatus.MultiCharacterTraining($0) }
 				paidUntil = other.paidUntil
 			}
 			

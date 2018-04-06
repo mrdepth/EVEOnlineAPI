@@ -32,6 +32,13 @@ final public class Future<Value>: NSLocking {
 	fileprivate var failure = [(DispatchQueue?, (Error) -> Void)]()
 	fileprivate var finally = [(DispatchQueue?, () -> Void)]()
 	
+	public init(_ state: FutureState<Value> = .pending) {
+	}
+	
+	public convenience init(_ value: Value) {
+		self.init(.success(value))
+	}
+	
 	public func lock() {
 		condition.lock()
 	}
@@ -65,13 +72,6 @@ final public class Future<Value>: NSLocking {
 	}
 	
 	@discardableResult
-	public func then<Result>(on queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Result) -> Future<Result> {
-		return then(on: queue) { (value: Value, promise: Promise<Result>) in
-			try promise.fulfill(execute(value))
-		}
-	}
-
-	@discardableResult
 	public func then<Result>(on queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Future<Result>) -> Future<Result> {
 		return then(on: queue) { (value: Value, promise: Promise<Result>) in
 			try execute(value).then { value in
@@ -79,6 +79,13 @@ final public class Future<Value>: NSLocking {
 			}.catch { error in
 				try! promise.fail(error)
 			}
+		}
+	}
+
+	@discardableResult
+	public func then<Result>(on queue: DispatchQueue? = nil, _ execute: @escaping (Value) throws -> Result) -> Future<Result> {
+		return then(on: queue) { (value: Value, promise: Promise<Result>) in
+			try promise.fulfill(execute(value))
 		}
 	}
 
@@ -99,9 +106,20 @@ final public class Future<Value>: NSLocking {
 		condition.perform { () -> (() -> Void)? in
 			switch state {
 			case let .success(value):
-				return { onSuccess(value) }
+				return {
+					if let queue = queue {
+						queue.async {
+							onSuccess(value)
+						}
+					}
+					else {
+						onSuccess(value)
+					}
+				}
 			case let .failure(error):
-				return { try! promise.fail(error) }
+				return {
+					try! promise.fail(error)
+				}
 			case .pending:
 				success.append((queue, onSuccess))
 				failure.append((queue, { error in try! promise.fail(error) }))
