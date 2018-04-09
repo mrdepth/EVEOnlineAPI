@@ -267,14 +267,51 @@ extension OperationQueue {
 		}
 		return promise.future
 	}
+	
+	@discardableResult
+	public func async<Value>(_ execute: @escaping () throws -> Future<Value>) -> Future<Value> {
+		let promise = Promise<Value>()
+		addOperation {
+			do {
+				try execute().then { value in
+					try promise.fulfill(value)
+				}.catch { error in
+					try! promise.fail(error)
+				}
+			}
+			catch {
+				try! promise.fail(error)
+			}
+		}
+		return promise.future
+	}
 }
 
 extension DispatchQueue {
+	@discardableResult
 	public func async<Value>(_ execute: @escaping () throws -> Value) -> Future<Value> {
 		let promise = Promise<Value>()
 		async {
 			do {
 				try promise.fulfill(execute())
+			}
+			catch {
+				try! promise.fail(error)
+			}
+		}
+		return promise.future
+	}
+	
+	@discardableResult
+	public func async<Value>(_ execute: @escaping () throws -> Future<Value>) -> Future<Value> {
+		let promise = Promise<Value>()
+		async {
+			do {
+				try execute().then { value in
+					try promise.fulfill(value)
+				}.catch { error in
+					try! promise.fail(error)
+				}
 			}
 			catch {
 				try! promise.fail(error)
@@ -290,4 +327,65 @@ extension NSLocking {
 		lock(); defer { unlock() }
 		return try execute()
 	}
+}
+
+public func all<A>(_ a: Future<A>) -> Future<[A]> {
+	return a.then { return [$0] }
+}
+
+public func all<A, B>(_ a: Future<A>, _ b: Future<B>) -> Future<(A, B)> {
+	return a.then { a in
+		return b.then { b in
+			return (a, b)
+		}
+	}
+}
+
+public func all<A, B, C>(_ a: Future<A>, _ b: Future<B>, _ c: Future<C>) -> Future<(A, B, C)> {
+	return a.then { a in
+		return b.then { b in
+			return c.then { c in
+				return (a, b, c)
+			}
+		}
+	}
+}
+
+public func all<A, B, C, D>(_ a: Future<A>, _ b: Future<B>, _ c: Future<C>, _ d: Future<D>) -> Future<(A, B, C, D)> {
+	return a.then { a in
+		return b.then { b in
+			return c.then { c in
+				return d.then { d in
+					return (a, b, c, d)
+				}
+			}
+		}
+	}
+}
+
+public func all<S, Value>(_ futures: S) -> Future<[Value]> where S: Sequence, S.Element == Future<Value> {
+	
+	let promise = Promise<[Value]>()
+	var values = [Value]()
+
+	var pop: (() -> Void)!
+	var i = futures.makeIterator()
+	
+	pop = {
+		if let next = i.next() {
+			next.then { result in
+				values.append(result)
+				pop()
+			}.catch {error in
+				try! promise.fail(error)
+				pop = nil
+			}
+		}
+		else {
+			try! promise.fulfill(values)
+			pop = nil
+		}
+	}
+	pop()
+	return promise.future
 }
