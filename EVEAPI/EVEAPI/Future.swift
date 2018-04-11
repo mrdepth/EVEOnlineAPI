@@ -21,7 +21,7 @@ public enum FutureState<Value> {
 
 final public class Future<Value>: NSLocking {
 	
-	fileprivate(set) public var state: FutureState<Value> = .pending {
+	fileprivate(set) public var state: FutureState<Value> {
 		didSet {
 			condition.broadcast()
 		}
@@ -33,6 +33,7 @@ final public class Future<Value>: NSLocking {
 	fileprivate var finally = [(DispatchQueue?, () -> Void)]()
 	
 	public init(_ state: FutureState<Value> = .pending) {
+		self.state = state
 	}
 	
 	public convenience init(_ value: Value) {
@@ -357,6 +358,36 @@ public func all<A, B, C, D>(_ a: Future<A>, _ b: Future<B>, _ c: Future<C>, _ d:
 			return c.then { c in
 				return d.then { d in
 					return (a, b, c, d)
+				}
+			}
+		}
+	}
+}
+
+public func all<A, B, C, D, E>(_ a: Future<A>, _ b: Future<B>, _ c: Future<C>, _ d: Future<D>, _ e: Future<E>) -> Future<(A, B, C, D, E)> {
+	return a.then { a in
+		return b.then { b in
+			return c.then { c in
+				return d.then { d in
+					return e.then { e in
+						return (a, b, c, d, e)
+					}
+				}
+			}
+		}
+	}
+}
+
+public func all<A, B, C, D, E, F>(_ a: Future<A>, _ b: Future<B>, _ c: Future<C>, _ d: Future<D>, _ e: Future<E>, _ f: Future<F>) -> Future<(A, B, C, D, E, F)> {
+	return a.then { a in
+		return b.then { b in
+			return c.then { c in
+				return d.then { d in
+					return e.then { e in
+						return f.then { f in
+							return (a, b, c, d, e, f)
+						}
+					}
 				}
 			}
 		}
