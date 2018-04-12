@@ -453,8 +453,8 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			session!.perform { () -> DataRequest in
-				return session!.request("http://im-dgkt3hxggq17.alpari.by/marketOrders.json", method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-//				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+//				return session!.request("http://im-dgkt3hxggq17.alpari.by/marketOrders.json", method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.CharacterOrder]>) in
 					promise.set(result: response.result, cached: 1200.0)

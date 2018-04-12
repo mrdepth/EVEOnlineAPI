@@ -108,7 +108,7 @@ final public class Future<Value>: NSLocking {
 			switch state {
 			case let .success(value):
 				return {
-					if let queue = queue {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
 						queue.async {
 							onSuccess(value)
 						}
@@ -136,7 +136,16 @@ final public class Future<Value>: NSLocking {
 		condition.perform { () -> (() -> Void)? in
 			switch state {
 			case let .failure(error):
-				return { execute(error) }
+				return {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
+						queue.async {
+							execute(error)
+						}
+					}
+					else {
+						execute(error)
+					}
+				}
 			case .success:
 				return nil
 			case .pending:
@@ -153,7 +162,16 @@ final public class Future<Value>: NSLocking {
 		condition.perform { () -> (() -> Void)? in
 			switch state {
 			case .success, .failure:
-				return { execute() }
+				return {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
+						queue.async {
+							execute()
+						}
+					}
+					else {
+						execute()
+					}
+				}
 			case .pending:
 				finally.append((queue, execute))
 				return nil
@@ -184,7 +202,7 @@ open class Promise<Value> {
 			
 			return {
 				execute.forEach { (queue, block) in
-					if let queue = queue {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
 						queue.async {
 							block(value)
 						}
@@ -194,7 +212,7 @@ open class Promise<Value> {
 					}
 				}
 				finally.forEach { (queue, block) in
-					if let queue = queue {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
 						queue.async {
 							block()
 						}
@@ -222,7 +240,7 @@ open class Promise<Value> {
 			let finally = self.future.finally
 			return {
 				execute.forEach { (queue, block) in
-					if let queue = queue {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
 						queue.async {
 							block(error)
 						}
@@ -232,7 +250,7 @@ open class Promise<Value> {
 					}
 				}
 				finally.forEach { (queue, block) in
-					if let queue = queue {
+					if let queue = queue, queue != DispatchQueue.main || !Thread.isMainThread {
 						queue.async {
 							block()
 						}
