@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getEffectInformation(effectID: Int) -> Future<ESI.Result<Dogma.Effect>> {
+		public func getEffectInformation(effectID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Effect>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Dogma.Effect>>()
 			guard session != nil else {
@@ -28,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -52,44 +54,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getEffects() -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/dogma/effects/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAttributeInformation(attributeID: Int) -> Future<ESI.Result<Dogma.Attribute>> {
+		public func getAttributeInformation(attributeID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Attribute>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Dogma.Attribute>>()
 			guard session != nil else {
@@ -102,7 +67,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -126,7 +93,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getAttributes() -> Future<ESI.Result<[Int]>> {
+		public func getEffects(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -139,7 +106,48 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/dogma/effects/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAttributes(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

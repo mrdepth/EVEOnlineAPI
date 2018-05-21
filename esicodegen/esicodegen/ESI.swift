@@ -245,23 +245,17 @@ func hashCombine(seed: inout Int, value: Int) {
 }
 
 
-extension Array: Hashable {
+extension Array: Hashable where Element: Hashable {
+	
 	public static func ==(lhs: Array<Element>, rhs: Array<Element>) -> Bool {
 		return lhs.hashValue == rhs.hashValue
 	}
 	
 	public var hashValue: Int {
 		get {
-			var seed = 1
-			for (element) in self {
-				if let v = element as? AnyHashable {
-					hashCombine(seed: &seed, value: v.hashValue)
-				}
-				else if let h = (element as AnyObject).hashValue {
-					hashCombine(seed: &seed, value: h)
-				}
+			return reduce(into: 1) { (result, i) in
+				hashCombine(seed: &result, value: i.hashValue)
 			}
-			return seed
 		}}
 }
 

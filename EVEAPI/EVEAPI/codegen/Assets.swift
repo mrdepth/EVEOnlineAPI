@@ -56,49 +56,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCorporationAssets(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Assets.CorpAsset]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Assets.CorpAsset]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/corporations/\(corporationID)/assets/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Assets.CorpAsset]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64]) -> Future<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>>()
@@ -181,6 +138,96 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func getCorporationAssets(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Assets.CorpAsset]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Assets.CorpAsset]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v3/corporations/\(corporationID)/assets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Assets.CorpAsset]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterAssets(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Assets.Asset]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Assets.Asset]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-assets.read_assets.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v3/characters/\(characterID)/assets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Assets.Asset]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64]) -> Future<ESI.Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsNamesOk]>>()
@@ -221,47 +268,78 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getCharacterAssets(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Assets.Asset]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Assets.Asset]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		
+		public struct PostCorporationsCorporationIDAssetsLocationsOk: Codable, Hashable {
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v3/characters/\(characterID)/assets/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Assets.Asset]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+			public struct PostCorporationsCorporationIDAssetsLocationsPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
 				}
 			}
-			return promise.future
+			
+			public var itemID: Int64
+			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
+			
+			public init(itemID: Int64, position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
+				self.itemID = itemID
+				self.position = position
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case position
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -316,7 +394,7 @@ public extension ESI {
 				case hiSlot5 = "HiSlot5"
 				case hiSlot6 = "HiSlot6"
 				case hiSlot7 = "HiSlot7"
-				case hiddenModifers = "HiddenModifers"
+				case hiddenModifiers = "HiddenModifiers"
 				case implant = "Implant"
 				case impounded = "Impounded"
 				case junkyardReprocessed = "JunkyardReprocessed"
@@ -382,6 +460,7 @@ public extension ESI {
 				case structureFuel = "StructureFuel"
 				case structureInactive = "StructureInactive"
 				case structureOffline = "StructureOffline"
+				case subSystemBay = "SubSystemBay"
 				case subSystemSlot0 = "SubSystemSlot0"
 				case subSystemSlot1 = "SubSystemSlot1"
 				case subSystemSlot2 = "SubSystemSlot2"
@@ -390,7 +469,6 @@ public extension ESI {
 				case subSystemSlot5 = "SubSystemSlot5"
 				case subSystemSlot6 = "SubSystemSlot6"
 				case subSystemSlot7 = "SubSystemSlot7"
-				case subsystemBay = "SubsystemBay"
 				case unlocked = "Unlocked"
 				case wallet = "Wallet"
 				case wardrobe = "Wardrobe"
@@ -615,6 +693,70 @@ public extension ESI {
 		}
 		
 		
+		public struct PostCorporationsCorporationIDAssetsNamesNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsNamesNotFound, rhs: Assets.PostCorporationsCorporationIDAssetsNamesNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostCorporationsCorporationIDAssetsLocationsNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsNotFound, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct PostCharactersCharacterIDAssetsLocationsOk: Codable, Hashable {
 			
 			public struct PostCharactersCharacterIDAssetsLocationsPosition: Codable, Hashable {
@@ -672,80 +814,6 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Assets.PostCharactersCharacterIDAssetsLocationsOk, rhs: Assets.PostCharactersCharacterIDAssetsLocationsOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case itemID = "item_id"
-				case position
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostCorporationsCorporationIDAssetsLocationsOk: Codable, Hashable {
-			
-			public struct PostCorporationsCorporationIDAssetsLocationsPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: x.hashValue)
-					hashCombine(seed: &hash, value: y.hashValue)
-					hashCombine(seed: &hash, value: z.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var itemID: Int64
-			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
-			
-			public init(itemID: Int64, position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
-				self.itemID = itemID
-				self.position = position
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: itemID.hashValue)
-				hashCombine(seed: &hash, value: position.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk, rhs: Assets.PostCorporationsCorporationIDAssetsLocationsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

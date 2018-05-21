@@ -3,31 +3,27 @@ import Alamofire
 
 public extension ESI {
 	
-	public struct Forbidden: Codable, Hashable {
+	public struct ServiceUnavailable: Codable, Hashable {
 		
 		
 		public var error: String
-		public var ssoStatus: Int?
 		
-		public init(error: String, ssoStatus: Int?) {
+		public init(error: String) {
 			self.error = error
-			self.ssoStatus = ssoStatus
 		}
 		
 		public var hashValue: Int {
 			var hash: Int = 0
 			hashCombine(seed: &hash, value: error.hashValue)
-			hashCombine(seed: &hash, value: ssoStatus?.hashValue ?? 0)
 			return hash
 		}
 		
-		public static func ==(lhs: Forbidden, rhs: Forbidden) -> Bool {
+		public static func ==(lhs: ServiceUnavailable, rhs: ServiceUnavailable) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
-			case ssoStatus = "sso_status"
 			
 			var dateFormatter: DateFormatter? {
 				switch self {
@@ -97,6 +93,138 @@ public extension ESI {
 	}
 	
 	
+	public struct Unauthorized: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		public var hashValue: Int {
+			var hash: Int = 0
+			hashCombine(seed: &hash, value: error.hashValue)
+			return hash
+		}
+		
+		public static func ==(lhs: Unauthorized, rhs: Unauthorized) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	public struct BadGateway: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		public var hashValue: Int {
+			var hash: Int = 0
+			hashCombine(seed: &hash, value: error.hashValue)
+			return hash
+		}
+		
+		public static func ==(lhs: BadGateway, rhs: BadGateway) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	public struct Forbidden: Codable, Hashable {
+		
+		
+		public var error: String
+		public var ssoStatus: Int?
+		
+		public init(error: String, ssoStatus: Int?) {
+			self.error = error
+			self.ssoStatus = ssoStatus
+		}
+		
+		public var hashValue: Int {
+			var hash: Int = 0
+			hashCombine(seed: &hash, value: error.hashValue)
+			hashCombine(seed: &hash, value: ssoStatus?.hashValue ?? 0)
+			return hash
+		}
+		
+		public static func ==(lhs: Forbidden, rhs: Forbidden) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			case ssoStatus = "sso_status"
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	public struct BadRequest: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		public var hashValue: Int {
+			var hash: Int = 0
+			hashCombine(seed: &hash, value: error.hashValue)
+			return hash
+		}
+		
+		public static func ==(lhs: BadRequest, rhs: BadRequest) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
 	
 }
 
@@ -111,7 +239,6 @@ public extension ESI.Scope {
 	public static let esiCalendarRespondCalendarEventsV1 = ESI.Scope("esi-calendar.respond_calendar_events.v1")
 	public static let esiCharactersReadAgentsResearchV1 = ESI.Scope("esi-characters.read_agents_research.v1")
 	public static let esiCharactersReadBlueprintsV1 = ESI.Scope("esi-characters.read_blueprints.v1")
-	public static let esiCharactersReadChatChannelsV1 = ESI.Scope("esi-characters.read_chat_channels.v1")
 	public static let esiCharactersReadContactsV1 = ESI.Scope("esi-characters.read_contacts.v1")
 	public static let esiCharactersReadCorporationRolesV1 = ESI.Scope("esi-characters.read_corporation_roles.v1")
 	public static let esiCharactersReadFatigueV1 = ESI.Scope("esi-characters.read_fatigue.v1")
@@ -184,7 +311,6 @@ public extension ESI.Scope {
 			.esiCalendarRespondCalendarEventsV1,
 			.esiCharactersReadAgentsResearchV1,
 			.esiCharactersReadBlueprintsV1,
-			.esiCharactersReadChatChannelsV1,
 			.esiCharactersReadContactsV1,
 			.esiCharactersReadCorporationRolesV1,
 			.esiCharactersReadFatigueV1,

@@ -15,44 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listSovereigntyStructures() -> Future<ESI.Result<[Sovereignty.Structure]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/sovereignty/structures/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
-					promise.set(result: response.result, cached: 120.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listSovereigntyCampaigns() -> Future<ESI.Result<[Sovereignty.Campaign]>> {
+		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
 			guard session != nil else {
@@ -65,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -89,7 +54,46 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listSovereigntyOfSystems() -> Future<ESI.Result<[Sovereignty.System]>> {
+		public func listSovereigntyStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Structure]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/sovereignty/structures/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
+					promise.set(result: response.result, cached: 120.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.System]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
 			guard session != nil else {
@@ -102,7 +106,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

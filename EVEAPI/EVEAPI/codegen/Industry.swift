@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listIndustryFacilities() -> Future<ESI.Result<[Industry.Facilities]>> {
+		public func listIndustryFacilities(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Industry.Facilities]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.Facilities]>>()
 			guard session != nil else {
@@ -28,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -52,50 +54,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listCharacterIndustryJobs(characterID: Int, includeCompleted: Bool? = nil) -> Future<ESI.Result<[Industry.Job]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Industry.Job]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_character_jobs.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = includeCompleted?.httpQuery {
-				query.append(URLQueryItem(name: "include_completed", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/industry/jobs/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.Job]>) in
-					promise.set(result: response.result, cached: 300.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func observedCorporationMining(corporationID: Int, observerID: Int64, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>> {
+		public func observedCorporationMining(corporationID: Int, ifNoneMatch: String? = nil, observerID: Int64, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>>()
 			guard session != nil else {
@@ -112,7 +71,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -138,7 +99,142 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func corporationMiningObservers(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>> {
+		public func characterMiningLedger(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-industry.read_character_mining.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mining/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCharactersCharacterIDMiningOk]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func moonExtractionTimers(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/corporation/\(corporationID)/mining/extractions/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>) in
+					promise.set(result: response.result, cached: 1800.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listCharacterIndustryJobs(characterID: Int, ifNoneMatch: String? = nil, includeCompleted: Bool? = nil) -> Future<ESI.Result<[Industry.Job]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Industry.Job]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-industry.read_character_jobs.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = includeCompleted?.httpQuery {
+				query.append(URLQueryItem(name: "include_completed", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/industry/jobs/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.Job]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func corporationMiningObservers(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>>()
 			guard session != nil else {
@@ -155,7 +251,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -181,7 +279,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listCorporationIndustryJobs(corporationID: Int, includeCompleted: Bool? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.CorpJob]>> {
+		public func listCorporationIndustryJobs(corporationID: Int, ifNoneMatch: String? = nil, includeCompleted: Bool? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.CorpJob]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.CorpJob]>>()
 			guard session != nil else {
@@ -198,7 +296,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -227,7 +327,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listSolarSystemCostIndices() -> Future<ESI.Result<[Industry.SolarSystemCostIndices]>> {
+		public func listSolarSystemCostIndices(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Industry.SolarSystemCostIndices]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.SolarSystemCostIndices]>>()
 			guard session != nil else {
@@ -240,7 +340,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -257,92 +359,6 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.SolarSystemCostIndices]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func characterMiningLedger(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_character_mining.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/mining/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCharactersCharacterIDMiningOk]>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func moonExtractionTimers(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_corporation_mining.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/corporation/\(corporationID)/mining/extractions/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>) in
-					promise.set(result: response.result, cached: 1800.0)
 					session = nil
 				}
 			}

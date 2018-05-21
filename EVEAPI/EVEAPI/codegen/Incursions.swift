@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listIncursions() -> Future<ESI.Result<[Incursions.Incursion]>> {
+		public func listIncursions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Incursions.Incursion]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Incursions.Incursion]>>()
 			guard session != nil else {
@@ -28,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

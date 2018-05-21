@@ -15,49 +15,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func openInformationWindow(targetID: Int) -> Future<ESI.Result<String>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<String>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = targetID.httpQuery {
-				query.append(URLQueryItem(name: "target_id", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/ui/openwindow/information/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<String>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func setAutopilotWaypoint(addToBeginning: Bool, clearOtherWaypoints: Bool, destinationID: Int64) -> Future<ESI.Result<String>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<String>>()
@@ -133,6 +90,49 @@ public extension ESI {
 			}
 			
 			let url = session!.baseURL + "/v1/ui/openwindow/marketdetails/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<String>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func openInformationWindow(targetID: Int) -> Future<ESI.Result<String>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-ui.open_window.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = targetID.httpQuery {
+				query.append(URLQueryItem(name: "target_id", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/ui/openwindow/information/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

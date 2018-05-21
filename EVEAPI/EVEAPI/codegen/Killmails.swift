@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getSingleKillmail(killmailHash: String, killmailID: Int) -> Future<ESI.Result<Killmails.Killmail>> {
+		public func getSingleKillmail(ifNoneMatch: String? = nil, killmailHash: String, killmailID: Int) -> Future<ESI.Result<Killmails.Killmail>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Killmails.Killmail>>()
 			guard session != nil else {
@@ -28,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -52,7 +54,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCorporationKillsAndLosses(corporationID: Int, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
+		public func getCorporationKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>>()
 			guard session != nil else {
@@ -69,7 +71,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -95,7 +99,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterKillsAndLosses(characterID: Int, maxCount: Int? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
+		public func getCharacterKillsAndLosses(characterID: Int, ifNoneMatch: String? = nil, maxCount: Int? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Killmails.Recent]>>()
 			guard session != nil else {
@@ -112,7 +116,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -211,9 +217,72 @@ public extension ESI {
 		
 		public struct Killmail: Codable, Hashable {
 			
+			public struct Attacker: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var corporationID: Int?
+				public var damageDone: Int
+				public var factionID: Int?
+				public var finalBlow: Bool
+				public var securityStatus: Float
+				public var shipTypeID: Int?
+				public var weaponTypeID: Int?
+				
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.corporationID = corporationID
+					self.damageDone = damageDone
+					self.factionID = factionID
+					self.finalBlow = finalBlow
+					self.securityStatus = securityStatus
+					self.shipTypeID = shipTypeID
+					self.weaponTypeID = weaponTypeID
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageDone.hashValue)
+					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: finalBlow.hashValue)
+					hashCombine(seed: &hash, value: securityStatus.hashValue)
+					hashCombine(seed: &hash, value: shipTypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: weaponTypeID?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Killmails.Killmail.Attacker, rhs: Killmails.Killmail.Attacker) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case characterID = "character_id"
+					case corporationID = "corporation_id"
+					case damageDone = "damage_done"
+					case factionID = "faction_id"
+					case finalBlow = "final_blow"
+					case securityStatus = "security_status"
+					case shipTypeID = "ship_type_id"
+					case weaponTypeID = "weapon_type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public struct Victim: Codable, Hashable {
 				
-				public struct Item: Codable, Hashable {
+				public struct Items: Codable, Hashable {
 					
 					public struct Item: Codable, Hashable {
 						
@@ -242,7 +311,7 @@ public extension ESI {
 							return hash
 						}
 						
-						public static func ==(lhs: Killmails.Killmail.Victim.Item.Item, rhs: Killmails.Killmail.Victim.Item.Item) -> Bool {
+						public static func ==(lhs: Killmails.Killmail.Victim.Items.Item, rhs: Killmails.Killmail.Victim.Items.Item) -> Bool {
 							return lhs.hashValue == rhs.hashValue
 						}
 						
@@ -264,12 +333,12 @@ public extension ESI {
 					
 					public var flag: Int
 					public var itemTypeID: Int
-					public var items: [Killmails.Killmail.Victim.Item.Item]?
+					public var items: [Killmails.Killmail.Victim.Items.Item]?
 					public var quantityDestroyed: Int64?
 					public var quantityDropped: Int64?
 					public var singleton: Int
 					
-					public init(flag: Int, itemTypeID: Int, items: [Killmails.Killmail.Victim.Item.Item]?, quantityDestroyed: Int64?, quantityDropped: Int64?, singleton: Int) {
+					public init(flag: Int, itemTypeID: Int, items: [Killmails.Killmail.Victim.Items.Item]?, quantityDestroyed: Int64?, quantityDropped: Int64?, singleton: Int) {
 						self.flag = flag
 						self.itemTypeID = itemTypeID
 						self.items = items
@@ -289,7 +358,7 @@ public extension ESI {
 						return hash
 					}
 					
-					public static func ==(lhs: Killmails.Killmail.Victim.Item, rhs: Killmails.Killmail.Victim.Item) -> Bool {
+					public static func ==(lhs: Killmails.Killmail.Victim.Items, rhs: Killmails.Killmail.Victim.Items) -> Bool {
 						return lhs.hashValue == rhs.hashValue
 					}
 					
@@ -354,11 +423,11 @@ public extension ESI {
 				public var corporationID: Int?
 				public var damageTaken: Int
 				public var factionID: Int?
-				public var items: [Killmails.Killmail.Victim.Item]?
+				public var items: [Killmails.Killmail.Victim.Items]?
 				public var position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition?
 				public var shipTypeID: Int
 				
-				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [Killmails.Killmail.Victim.Item]?, position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition?, shipTypeID: Int) {
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [Killmails.Killmail.Victim.Items]?, position: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition?, shipTypeID: Int) {
 					self.allianceID = allianceID
 					self.characterID = characterID
 					self.corporationID = corporationID
@@ -395,69 +464,6 @@ public extension ESI {
 					case items
 					case position
 					case shipTypeID = "ship_type_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct Attacker: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var characterID: Int?
-				public var corporationID: Int?
-				public var damageDone: Int
-				public var factionID: Int?
-				public var finalBlow: Bool
-				public var securityStatus: Float
-				public var shipTypeID: Int?
-				public var weaponTypeID: Int?
-				
-				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
-					self.allianceID = allianceID
-					self.characterID = characterID
-					self.corporationID = corporationID
-					self.damageDone = damageDone
-					self.factionID = factionID
-					self.finalBlow = finalBlow
-					self.securityStatus = securityStatus
-					self.shipTypeID = shipTypeID
-					self.weaponTypeID = weaponTypeID
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: damageDone.hashValue)
-					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: finalBlow.hashValue)
-					hashCombine(seed: &hash, value: securityStatus.hashValue)
-					hashCombine(seed: &hash, value: shipTypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: weaponTypeID?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Killmails.Killmail.Attacker, rhs: Killmails.Killmail.Attacker) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case characterID = "character_id"
-					case corporationID = "corporation_id"
-					case damageDone = "damage_done"
-					case factionID = "faction_id"
-					case finalBlow = "final_blow"
-					case securityStatus = "security_status"
-					case shipTypeID = "ship_type_id"
-					case weaponTypeID = "weapon_type_id"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {

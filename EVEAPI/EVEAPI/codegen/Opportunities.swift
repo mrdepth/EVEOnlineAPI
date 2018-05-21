@@ -15,44 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getOpportunitiesTask(taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/opportunities/tasks/\(taskID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getOpportunitiesGroup(groupID: Int, language: Language? = nil) -> Future<ESI.Result<Opportunities.Group>> {
+		public func getOpportunitiesGroup(groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Opportunities.Group>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Opportunities.Group>>()
 			guard session != nil else {
@@ -65,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -91,7 +56,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getOpportunitiesTasks() -> Future<ESI.Result<[Int]>> {
+		public func getOpportunitiesTasks(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -104,7 +69,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -128,7 +95,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getOpportunitiesGroups() -> Future<ESI.Result<[Int]>> {
+		public func getOpportunitiesGroups(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -141,7 +108,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -165,7 +134,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharactersCompletedTasks(characterID: Int) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
+		public func getCharactersCompletedTasks(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Opportunities.CompletedTask]>>()
 			guard session != nil else {
@@ -182,7 +151,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -198,6 +169,45 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Opportunities.CompletedTask]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/opportunities/tasks/\(taskID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}

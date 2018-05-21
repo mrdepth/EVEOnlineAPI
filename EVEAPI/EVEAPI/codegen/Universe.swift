@@ -15,46 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getRegionInformation(language: Language? = nil, regionID: Int) -> Future<ESI.Result<Universe.RegionInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.RegionInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/regions/\(regionID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getItemGroups(page: Int? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getItemGroups(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -67,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -93,7 +56,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getSystemKills() -> Future<ESI.Result<[Universe.SystemKills]>> {
+		public func getSystemKills(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.SystemKills]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.SystemKills]>>()
 			guard session != nil else {
@@ -106,7 +69,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -130,120 +95,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getRegions() -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/regions/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getConstellationInformation(constellationID: Int, language: Language? = nil) -> Future<ESI.Result<Universe.ConstellationInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.ConstellationInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/constellations/\(constellationID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStarInformation(starID: Int) -> Future<ESI.Result<Universe.GetUniverseStarsStarIDOk>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.GetUniverseStarsStarIDOk>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/stars/\(starID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getGraphicInformation(graphicID: Int) -> Future<ESI.Result<Universe.GraphicInformation>> {
+		public func getGraphicInformation(graphicID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GraphicInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.GraphicInformation>>()
 			guard session != nil else {
@@ -256,7 +108,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -280,7 +134,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getItemGroupInformation(groupID: Int, language: Language? = nil) -> Future<ESI.Result<Universe.ItemGroupInformation>> {
+		public func getItemGroupInformation(groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemGroupInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.ItemGroupInformation>>()
 			guard session != nil else {
@@ -293,7 +147,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -319,7 +175,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getItemCategoryInformation(categoryID: Int, language: Language? = nil) -> Future<ESI.Result<Universe.ItemCategoryInformation>> {
+		public func getItemCategoryInformation(categoryID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemCategoryInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.ItemCategoryInformation>>()
 			guard session != nil else {
@@ -332,7 +188,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -358,83 +216,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getSolarSystemInformation(language: Language? = nil, systemID: Int) -> Future<ESI.Result<Universe.SolarSystemInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.SolarSystemInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v3/universe/systems/\(systemID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStargateInformation(stargateID: Int) -> Future<ESI.Result<Universe.StargateInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.StargateInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/stargates/\(stargateID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAncestries(language: Language? = nil) -> Future<ESI.Result<[Universe.GetUniverseAncestriesOk]>> {
+		public func getAncestries(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.GetUniverseAncestriesOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.GetUniverseAncestriesOk]>>()
 			guard session != nil else {
@@ -447,7 +229,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -473,7 +257,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getGraphics() -> Future<ESI.Result<[Int]>> {
+		public func getConstellations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -486,44 +270,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/graphics/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
 			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getConstellations() -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -547,46 +296,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterRaces(language: Language? = nil) -> Future<ESI.Result<[Universe.Race]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.Race]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/races/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.Race]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getMoonInformation(moonID: Int) -> Future<ESI.Result<Universe.MoonInformation>> {
+		public func getMoonInformation(ifNoneMatch: String? = nil, moonID: Int) -> Future<ESI.Result<Universe.MoonInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.MoonInformation>>()
 			guard session != nil else {
@@ -599,7 +309,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -623,46 +335,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getFactions(language: Language? = nil) -> Future<ESI.Result<[Universe.Faction]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.Faction]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/universe/factions/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.Faction]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getTypes(page: Int? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getTypes(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -675,7 +348,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -701,46 +376,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getTypeInformation(language: Language? = nil, typeID: Int) -> Future<ESI.Result<Universe.TypeInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.TypeInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v3/universe/types/\(typeID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.TypeInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listAllPublicStructures() -> Future<ESI.Result<[Int64]>> {
+		public func listAllPublicStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int64]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int64]>>()
 			guard session != nil else {
@@ -753,7 +389,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -814,9 +452,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getSolarSystems() -> Future<ESI.Result<[Int]>> {
+		public func getAsteroidBeltInformation(asteroidBeltID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
+			let promise = Promise<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -827,13 +465,15 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/universe/systems/"
+			let url = session!.baseURL + "/v1/universe/asteroid_belts/\(asteroidBeltID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -842,7 +482,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -851,7 +491,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getPlanetInformation(planetID: Int) -> Future<ESI.Result<Universe.PlanetInformation>> {
+		public func getPlanetInformation(ifNoneMatch: String? = nil, planetID: Int) -> Future<ESI.Result<Universe.PlanetInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.PlanetInformation>>()
 			guard session != nil else {
@@ -864,7 +504,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -888,7 +530,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getStructureInformation(structureID: Int64) -> Future<ESI.Result<Universe.StructureInformation>> {
+		public func getStructureInformation(ifNoneMatch: String? = nil, structureID: Int64) -> Future<ESI.Result<Universe.StructureInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.StructureInformation>>()
 			guard session != nil else {
@@ -905,7 +547,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -929,44 +573,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getSystemJumps() -> Future<ESI.Result<[Universe.Jump]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.Jump]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/system_jumps/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getItemCategories() -> Future<ESI.Result<[Int]>> {
+		public func getItemCategories(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -979,7 +586,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -1003,7 +612,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getStationInformation(stationID: Int) -> Future<ESI.Result<Universe.StationInformation>> {
+		public func getStationInformation(ifNoneMatch: String? = nil, stationID: Int) -> Future<ESI.Result<Universe.StationInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.StationInformation>>()
 			guard session != nil else {
@@ -1016,7 +625,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -1032,7 +643,7 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
-					promise.set(result: response.result, cached: 300.0)
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
@@ -1040,7 +651,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getBloodlines(language: Language? = nil) -> Future<ESI.Result<[Universe.Bloodline]>> {
+		public func getBloodlines(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Bloodline]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Bloodline]>>()
 			guard session != nil else {
@@ -1053,7 +664,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -1110,6 +723,486 @@ public extension ESI {
 				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Universe.PostUniverseIdsOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getRegionInformation(ifNoneMatch: String? = nil, language: Language? = nil, regionID: Int) -> Future<ESI.Result<Universe.RegionInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.RegionInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/regions/\(regionID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getRegions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/regions/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getConstellationInformation(constellationID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ConstellationInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.ConstellationInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/constellations/\(constellationID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStarInformation(ifNoneMatch: String? = nil, starID: Int) -> Future<ESI.Result<Universe.GetUniverseStarsStarIDOk>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.GetUniverseStarsStarIDOk>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/stars/\(starID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSolarSystemInformation(ifNoneMatch: String? = nil, language: Language? = nil, systemID: Int) -> Future<ESI.Result<Universe.SolarSystemInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.SolarSystemInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v3/universe/systems/\(systemID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStargateInformation(ifNoneMatch: String? = nil, stargateID: Int) -> Future<ESI.Result<Universe.StargateInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.StargateInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/stargates/\(stargateID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getGraphics(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/graphics/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterRaces(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Race]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.Race]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/races/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Race]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getFactions(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Faction]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.Faction]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/universe/factions/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Faction]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getTypeInformation(ifNoneMatch: String? = nil, language: Language? = nil, typeID: Int) -> Future<ESI.Result<Universe.TypeInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.TypeInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v3/universe/types/\(typeID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.TypeInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSolarSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/systems/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSystemJumps(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.Jump]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.Jump]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/system_jumps/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -1342,6 +1435,38 @@ public extension ESI {
 		}
 		
 		
+		public struct GetUniverseAsteroidBeltsAsteroidBeltIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDNotFound, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct GetUniversePlanetsPlanetIDNotFound: Codable, Hashable {
 			
 			
@@ -1363,6 +1488,84 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseAsteroidBeltsAsteroidBeltIDOk: Codable, Hashable {
+			
+			public struct GetUniverseAsteroidBeltsAsteroidBeltIDPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public var name: String
+			public var position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition
+			public var systemID: Int
+			
+			public init(name: String, position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, systemID: Int) {
+				self.name = name
+				self.position = position
+				self.systemID = systemID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
+				hashCombine(seed: &hash, value: systemID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				case position
+				case systemID = "system_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -2136,38 +2339,6 @@ public extension ESI {
 				case sofFationName = "sof_fation_name"
 				case sofHullName = "sof_hull_name"
 				case sofRaceName = "sof_race_name"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostUniverseIdsServiceUnavailable: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.PostUniverseIdsServiceUnavailable, rhs: Universe.PostUniverseIdsServiceUnavailable) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -3030,86 +3201,6 @@ public extension ESI {
 		}
 		
 		
-		public struct ItemGroupInformation: Codable, Hashable {
-			
-			
-			public var categoryID: Int
-			public var groupID: Int
-			public var name: String
-			public var published: Bool
-			public var types: [Int]
-			
-			public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
-				self.categoryID = categoryID
-				self.groupID = groupID
-				self.name = name
-				self.published = published
-				self.types = types
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: categoryID.hashValue)
-				hashCombine(seed: &hash, value: groupID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: published.hashValue)
-				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case categoryID = "category_id"
-				case groupID = "group_id"
-				case name
-				case published
-				case types
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseMoonsMoonIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct SolarSystemInformation: Codable, Hashable {
 			
 			public struct GetUniverseSystemsSystemIDPosition: Codable, Hashable {
@@ -3154,16 +3245,19 @@ public extension ESI {
 			public struct GetUniverseSystemsSystemIDPlanets: Codable, Hashable {
 				
 				
+				public var asteroidBelts: [Int]?
 				public var moons: [Int]?
 				public var planetID: Int
 				
-				public init(moons: [Int]?, planetID: Int) {
+				public init(asteroidBelts: [Int]?, moons: [Int]?, planetID: Int) {
+					self.asteroidBelts = asteroidBelts
 					self.moons = moons
 					self.planetID = planetID
 				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
+					self.asteroidBelts?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					self.moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 					hashCombine(seed: &hash, value: planetID.hashValue)
 					return hash
@@ -3174,6 +3268,7 @@ public extension ESI {
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
+					case asteroidBelts = "asteroid_belts"
 					case moons
 					case planetID = "planet_id"
 					
@@ -3240,6 +3335,86 @@ public extension ESI {
 				case stargates
 				case stations
 				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseMoonsMoonIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct ItemGroupInformation: Codable, Hashable {
+			
+			
+			public var categoryID: Int
+			public var groupID: Int
+			public var name: String
+			public var published: Bool
+			public var types: [Int]
+			
+			public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
+				self.categoryID = categoryID
+				self.groupID = groupID
+				self.name = name
+				self.published = published
+				self.types = types
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: categoryID.hashValue)
+				hashCombine(seed: &hash, value: groupID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: published.hashValue)
+				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case categoryID = "category_id"
+				case groupID = "group_id"
+				case name
+				case published
+				case types
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

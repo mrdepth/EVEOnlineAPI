@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listInsuranceLevels(language: Language? = nil) -> Future<ESI.Result<[Insurance.Price]>> {
+		public func listInsuranceLevels(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Insurance.Price]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Insurance.Price]>>()
 			guard session != nil else {
@@ -28,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

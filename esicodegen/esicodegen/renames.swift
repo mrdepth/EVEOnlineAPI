@@ -26,9 +26,10 @@ let typeNames: [String: String] = [
 
 	//MARK: Calendar
 	"PutCharactersCharacterIDCalendarEventIDResponse"	: "Response",
-	"GetCharactersCharacterIDCalendarEventResponse"	: "Response",
+	"PutCharactersCharacterIDCalendarEventIDResponseResponse"	: "Response",
 	"GetCharactersCharacterIDCalendarEventIDOk"	: "Event",
 	"GetCharactersCharacterIDCalendarOk"	: "Summary",
+	"GetCharactersCharacterIDCalendarEventResponse"	: "Response",
 	
 	//MARK: Character
 	"GetCharactersCharacterIDMedalsOk"	: "Medal",
@@ -131,7 +132,8 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDKillmailsRecentOk"	: "Recent",
 	"GetKillmailsKillmailIDKillmailHashVictim"	: "Victim",
 	"GetKillmailsKillmailIDKillmailHashAttackers"	: "Attacker",
-	"GetKillmailsKillmailIDKillmailHashItems"	: "Item",
+	"GetKillmailsKillmailIDKillmailHashItems"	: "Items",
+	"GetKillmailsKillmailIDKillmailHashItemItems"	: "Item",
 
 	//MARK: Location
 	"GetCharactersCharacterIDLocationOk"	: "CharacterLocation",

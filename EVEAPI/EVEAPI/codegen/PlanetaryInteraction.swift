@@ -15,48 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getColonyLayout(characterID: Int, planetID: Int) -> Future<ESI.Result<PlanetaryInteraction.ColonyLayout>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<PlanetaryInteraction.ColonyLayout>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-planets.manage_planets.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v3/characters/\(characterID)/planets/\(planetID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getSchematicInformation(schematicID: Int) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
+		public func getSchematicInformation(ifNoneMatch: String? = nil, schematicID: Int) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<PlanetaryInteraction.SchematicInformation>>()
 			guard session != nil else {
@@ -69,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -93,7 +54,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getColonies(characterID: Int) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
+		public func getColonies(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[PlanetaryInteraction.Colony]>>()
 			guard session != nil else {
@@ -110,7 +71,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -134,7 +97,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listCorporationCustomsOffices(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>> {
+		public func listCorporationCustomsOffices(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>>()
 			guard session != nil else {
@@ -151,7 +114,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -170,6 +135,49 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getColonyLayout(characterID: Int, ifNoneMatch: String? = nil, planetID: Int) -> Future<ESI.Result<PlanetaryInteraction.ColonyLayout>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<PlanetaryInteraction.ColonyLayout>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-planets.manage_planets.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v3/characters/\(characterID)/planets/\(planetID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
+					promise.set(result: response.result, cached: 600.0)
 					session = nil
 				}
 			}

@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getActiveImplants(characterID: Int) -> Future<ESI.Result<[Int]>> {
+		public func getActiveImplants(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -32,7 +32,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -56,7 +58,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getClones(characterID: Int) -> Future<ESI.Result<Clones.JumpClones>> {
+		public func getClones(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Clones.JumpClones>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Clones.JumpClones>>()
 			guard session != nil else {
@@ -73,7 +75,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -101,11 +105,20 @@ public extension ESI {
 			
 			public struct Location: Codable, Hashable {
 				
+				public enum LocationType: String, Codable, HTTPQueryable {
+					case station = "station"
+					case structure = "structure"
+					
+					public var httpQuery: String? {
+						return rawValue
+					}
+					
+				}
 				
 				public var locationID: Int64?
-				public var locationType: Clones.JumpClones.LocationType?
+				public var locationType: Clones.JumpClones.Location.LocationType?
 				
-				public init(locationID: Int64?, locationType: Clones.JumpClones.LocationType?) {
+				public init(locationID: Int64?, locationType: Clones.JumpClones.Location.LocationType?) {
 					self.locationID = locationID
 					self.locationType = locationType
 				}
@@ -134,26 +147,25 @@ public extension ESI {
 				}
 			}
 			
-			public enum LocationType: String, Codable, HTTPQueryable {
-				case station = "station"
-				case structure = "structure"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public struct JumpClone: Codable, Hashable {
 				
+				public enum GetCharactersCharacterIDClonesJumpCloneLocationType: String, Codable, HTTPQueryable {
+					case station = "station"
+					case structure = "structure"
+					
+					public var httpQuery: String? {
+						return rawValue
+					}
+					
+				}
 				
 				public var implants: [Int]
 				public var jumpCloneID: Int
 				public var locationID: Int64
-				public var locationType: Clones.JumpClones.LocationType
+				public var locationType: Clones.JumpClones.JumpClone.GetCharactersCharacterIDClonesJumpCloneLocationType
 				public var name: String?
 				
-				public init(implants: [Int], jumpCloneID: Int, locationID: Int64, locationType: Clones.JumpClones.LocationType, name: String?) {
+				public init(implants: [Int], jumpCloneID: Int, locationID: Int64, locationType: Clones.JumpClones.JumpClone.GetCharactersCharacterIDClonesJumpCloneLocationType, name: String?) {
 					self.implants = implants
 					self.jumpCloneID = jumpCloneID
 					self.locationID = locationID

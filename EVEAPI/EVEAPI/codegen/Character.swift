@@ -15,48 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getChatChannels(characterID: Int) -> Future<ESI.Result<[Character.ChatChannel]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.ChatChannel]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_chat_channels.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/chat_channels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.ChatChannel]>) in
-					promise.set(result: response.result, cached: 300.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func yearlyAggregateStats(characterID: Int) -> Future<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>> {
+		public func yearlyAggregateStats(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>>()
 			guard session != nil else {
@@ -73,7 +32,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -97,7 +58,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterPortraits(characterID: Int) -> Future<ESI.Result<Character.Portrait>> {
+		public func getCharacterPortraits(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Portrait>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Character.Portrait>>()
 			guard session != nil else {
@@ -110,7 +71,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -134,48 +97,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterCorporationTitles(characterID: Int) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_titles.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/titles/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getJumpFatigue(characterID: Int) -> Future<ESI.Result<Character.Fatigue>> {
+		public func getJumpFatigue(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Fatigue>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Character.Fatigue>>()
 			guard session != nil else {
@@ -192,7 +114,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -216,7 +140,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterCorporationRoles(characterID: Int) -> Future<ESI.Result<Character.Role>> {
+		public func getCharacterCorporationRoles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Role>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Character.Role>>()
 			guard session != nil else {
@@ -233,7 +157,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -257,44 +183,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCorporationHistory(characterID: Int) -> Future<ESI.Result<[Character.CorporationHistory]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.CorporationHistory]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/corporationhistory/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharactersPublicInformation(characterID: Int) -> Future<ESI.Result<Character.Information>> {
+		public func getCharactersPublicInformation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Information>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Character.Information>>()
 			guard session != nil else {
@@ -307,7 +196,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -331,50 +222,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterNotifications(characterID: Int) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>> {
+		public func getCorporationHistory(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.CorporationHistory]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_notifications.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/notifications/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterNames(characterIds: [Int64]) -> Future<ESI.Result<[Character.Name]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Name]>>()
+			let promise = Promise<ESI.Result<[Character.CorporationHistory]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -385,15 +235,15 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = characterIds.httpQuery {
-				query.append(URLQueryItem(name: "character_ids", value: v))
-			}
 			
-			let url = session!.baseURL + "/v1/characters/names/"
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/corporationhistory/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -402,89 +252,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Name]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getNewContactNotifications(characterID: Int) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_notifications.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/notifications/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsContactsOk]>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStandings(characterID: Int) -> Future<ESI.Result<[Character.Standing]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Standing]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_standings.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/standings/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
+				}.validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -534,7 +302,220 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getAgentsResearch(characterID: Int) -> Future<ESI.Result<[Character.Research]>> {
+		public func getCharacterCorporationTitles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_titles.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/titles/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterNames(characterIds: [Int64], ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Name]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.Name]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = characterIds.httpQuery {
+				query.append(URLQueryItem(name: "character_ids", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/characters/names/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.Name]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getNewContactNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_notifications.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/notifications/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsContactsOk]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStandings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Standing]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.Standing]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_standings.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/standings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_notifications.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/notifications/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAgentsResearch(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Research]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Character.Research]>>()
 			guard session != nil else {
@@ -551,7 +532,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -575,7 +558,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getMedals(characterID: Int) -> Future<ESI.Result<[Character.Medal]>> {
+		public func getMedals(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Medal]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Character.Medal]>>()
 			guard session != nil else {
@@ -592,7 +575,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -616,7 +601,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getBlueprints(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Character.Blueprint]>> {
+		public func getBlueprints(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Character.Blueprint]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Character.Blueprint]>>()
 			guard session != nil else {
@@ -633,7 +618,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -659,7 +646,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func characterAffiliation(characters: [Int]) -> Future<ESI.Result<[Character.Affiliation]>> {
+		public func characterAffiliation(characters: [Int], ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Affiliation]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Character.Affiliation]>>()
 			guard session != nil else {
@@ -672,6 +659,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
@@ -862,240 +852,6 @@ public extension ESI {
 		}
 		
 		
-		public struct ChatChannel: Codable, Hashable {
-			
-			public enum GetCharactersCharacterIDChatChannelsAccessorType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public struct GetCharactersCharacterIDChatChannelsBlocked: Codable, Hashable {
-				
-				
-				public var accessorID: Int
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
-				public var endAt: Date?
-				public var reason: String?
-				
-				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType, endAt: Date?, reason: String?) {
-					self.accessorID = accessorID
-					self.accessorType = accessorType
-					self.endAt = endAt
-					self.reason = reason
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case accessorID = "accessor_id"
-					case accessorType = "accessor_type"
-					case endAt = "end_at"
-					case reason
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							case .endAt: return DateFormatter.esiDateTimeFormatter
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDChatChannelsOperators: Codable, Hashable {
-				
-				
-				public var accessorID: Int
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
-				
-				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType) {
-					self.accessorID = accessorID
-					self.accessorType = accessorType
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case accessorID = "accessor_id"
-					case accessorType = "accessor_type"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDChatChannelsAllowed: Codable, Hashable {
-				
-				
-				public var accessorID: Int
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
-				
-				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType) {
-					self.accessorID = accessorID
-					self.accessorType = accessorType
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case accessorID = "accessor_id"
-					case accessorType = "accessor_type"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDChatChannelsMuted: Codable, Hashable {
-				
-				
-				public var accessorID: Int
-				public var accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType
-				public var endAt: Date?
-				public var reason: String?
-				
-				public init(accessorID: Int, accessorType: Character.ChatChannel.GetCharactersCharacterIDChatChannelsAccessorType, endAt: Date?, reason: String?) {
-					self.accessorID = accessorID
-					self.accessorType = accessorType
-					self.endAt = endAt
-					self.reason = reason
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: accessorID.hashValue)
-					hashCombine(seed: &hash, value: accessorType.hashValue)
-					hashCombine(seed: &hash, value: endAt?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted, rhs: Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case accessorID = "accessor_id"
-					case accessorType = "accessor_type"
-					case endAt = "end_at"
-					case reason
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							case .endAt: return DateFormatter.esiDateTimeFormatter
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed]
-			public var blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked]
-			public var channelID: Int
-			public var comparisonKey: String
-			public var hasPassword: Bool
-			public var motd: String
-			public var muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted]
-			public var name: String
-			public var operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators]
-			public var ownerID: Int
-			
-			public init(allowed: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsAllowed], blocked: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsBlocked], channelID: Int, comparisonKey: String, hasPassword: Bool, motd: String, muted: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsMuted], name: String, operators: [Character.ChatChannel.GetCharactersCharacterIDChatChannelsOperators], ownerID: Int) {
-				self.allowed = allowed
-				self.blocked = blocked
-				self.channelID = channelID
-				self.comparisonKey = comparisonKey
-				self.hasPassword = hasPassword
-				self.motd = motd
-				self.muted = muted
-				self.name = name
-				self.operators = operators
-				self.ownerID = ownerID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.allowed.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.blocked.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: channelID.hashValue)
-				hashCombine(seed: &hash, value: comparisonKey.hashValue)
-				hashCombine(seed: &hash, value: hasPassword.hashValue)
-				hashCombine(seed: &hash, value: motd.hashValue)
-				self.muted.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				self.operators.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.ChatChannel, rhs: Character.ChatChannel) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allowed
-				case blocked
-				case channelID = "channel_id"
-				case comparisonKey = "comparison_key"
-				case hasPassword = "has_password"
-				case motd
-				case muted
-				case name
-				case operators
-				case ownerID = "owner_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Standing: Codable, Hashable {
 			
 			public enum GetCharactersCharacterIDStandingsFromType: String, Codable, HTTPQueryable {
@@ -1135,6 +891,42 @@ public extension ESI {
 				case fromID = "from_id"
 				case fromType = "from_type"
 				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
+			
+			
+			public var name: String?
+			public var titleID: Int?
+			
+			public init(name: String?, titleID: Int?) {
+				self.name = name
+				self.titleID = titleID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: titleID?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDTitlesOk, rhs: Character.GetCharactersCharacterIDTitlesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				case titleID = "title_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -3102,42 +2894,6 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
-			
-			
-			public var name: String?
-			public var titleID: Int?
-			
-			public init(name: String?, titleID: Int?) {
-				self.name = name
-				self.titleID = titleID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: titleID?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDTitlesOk, rhs: Character.GetCharactersCharacterIDTitlesOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case titleID = "title_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Role: Codable, Hashable {
 			
 			public enum GetCharactersCharacterIDRolesRolesAtBase: String, Codable, HTTPQueryable {
@@ -3415,19 +3171,6 @@ public extension ESI {
 		
 		public struct GetCharactersCharacterIDNotificationsOk: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDNotificationsSenderType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				case other = "other"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public enum GetCharactersCharacterIDNotificationsType: String, Codable, HTTPQueryable {
 				case acceptedAlly = "AcceptedAlly"
 				case acceptedSurrender = "AcceptedSurrender"
@@ -3550,6 +3293,7 @@ public extension ESI {
 				case moonminingAutomaticFracture = "MoonminingAutomaticFracture"
 				case moonminingExtractionCancelled = "MoonminingExtractionCancelled"
 				case moonminingExtractionFinished = "MoonminingExtractionFinished"
+				case moonminingExtractionStarted = "MoonminingExtractionStarted"
 				case moonminingLaserFired = "MoonminingLaserFired"
 				case nPCStandingsGained = "NPCStandingsGained"
 				case nPCStandingsLost = "NPCStandingsLost"
@@ -3597,6 +3341,9 @@ public extension ESI {
 				case structureServicesOffline = "StructureServicesOffline"
 				case structureUnanchoring = "StructureUnanchoring"
 				case structureUnderAttack = "StructureUnderAttack"
+				case structureWentHighPower = "StructureWentHighPower"
+				case structureWentLowPower = "StructureWentLowPower"
+				case structuresReinforcementChanged = "StructuresReinforcementChanged"
 				case towerAlertMsg = "TowerAlertMsg"
 				case towerResourceAlertMsg = "TowerResourceAlertMsg"
 				case transactionReversalMsg = "TransactionReversalMsg"
@@ -3604,7 +3351,19 @@ public extension ESI {
 				case warAllyOfferDeclinedMsg = "WarAllyOfferDeclinedMsg"
 				case warSurrenderDeclinedMsg = "WarSurrenderDeclinedMsg"
 				case warSurrenderOfferMsg = "WarSurrenderOfferMsg"
-				case notificationTypeMoonminingExtractionStarted = "notificationTypeMoonminingExtractionStarted"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCharactersCharacterIDNotificationsSenderType: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				case other = "other"
 				
 				public var httpQuery: String? {
 					return rawValue

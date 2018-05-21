@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterAttributes(characterID: Int) -> Future<ESI.Result<Skills.CharacterAttributes>> {
+		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Skills.CharacterAttributes>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
 			guard session != nil else {
@@ -32,7 +32,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -56,7 +58,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharactersSkillQueue(characterID: Int) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
 			guard session != nil else {
@@ -73,7 +75,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -97,7 +101,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterSkills(characterID: Int) -> Future<ESI.Result<Skills.CharacterSkills>> {
+		public func getCharacterSkills(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Skills.CharacterSkills>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Skills.CharacterSkills>>()
 			guard session != nil else {
@@ -114,7 +118,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

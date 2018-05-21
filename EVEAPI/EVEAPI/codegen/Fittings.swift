@@ -97,7 +97,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getFittings(characterID: Int) -> Future<ESI.Result<[Fittings.Fitting]>> {
+		public func getFittings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Fittings.Fitting]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Fittings.Fitting]>>()
 			guard session != nil else {
@@ -114,7 +114,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))

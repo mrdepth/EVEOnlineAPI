@@ -15,6 +15,268 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func getAllianceContacts(allianceID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-alliances.read_contacts.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/alliances/\(allianceID)/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsOk]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationContacts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_contacts.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsOk]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getContactLabels(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Contacts.Label]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Contacts.Label]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_contacts.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/contacts/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Contacts.Label]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAllianceContactLabels(allianceID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-alliances.read_contacts.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/alliances/\(allianceID)/contacts/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationContactLabels(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_contacts.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/corporations/\(corporationID)/contacts/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func deleteContacts(characterID: Int, contactIds: [Int]) -> Future<ESI.Result<String>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<String>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.write_contacts.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = contactIds.httpQuery {
+				query.append(URLQueryItem(name: "contact_ids", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<String>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func addContacts(characterID: Int, contactIds: [Int], labelID: Int64? = nil, standing: Float, watched: Bool? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
@@ -113,7 +375,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getContacts(characterID: Int, page: Int? = nil) -> Future<ESI.Result<[Contacts.Contact]>> {
+		public func getContacts(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Contacts.Contact]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Contacts.Contact]>>()
 			guard session != nil else {
@@ -130,7 +392,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
@@ -155,174 +419,76 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getAllianceContacts(allianceID: Int, page: Int? = nil) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
+		
+		public struct Label: Codable, Hashable {
+			
+			
+			public var labelID: Int64
+			public var labelName: String
+			
+			public init(labelID: Int64, labelName: String) {
+				self.labelID = labelID
+				self.labelName = labelName
 			}
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-alliances.read_contacts.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: labelID.hashValue)
+				hashCombine(seed: &hash, value: labelName.hashValue)
+				return hash
 			}
 			
-			let url = session!.baseURL + "/v1/alliances/\(allianceID)/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
+			public static func ==(lhs: Contacts.Label, rhs: Contacts.Label) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
 			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsOk]>) in
-					promise.set(result: response.result, cached: 300.0)
-					session = nil
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case labelID = "label_id"
+				case labelName = "label_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
 				}
 			}
-			return promise.future
 		}
 		
-		@discardableResult
-		public func getContactLabels(characterID: Int) -> Future<ESI.Result<[Contacts.Label]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Contacts.Label]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_contacts.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/contacts/labels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Contacts.Label]>) in
-					promise.set(result: response.result, cached: 300.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
 		
-		@discardableResult
-		public func getCorporationContacts(corporationID: Int, page: Int? = nil) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
+		public struct GetAlliancesAllianceIDContactsLabelsOk: Codable, Hashable {
+			
+			
+			public var labelID: Int64
+			public var labelName: String
+			
+			public init(labelID: Int64, labelName: String) {
+				self.labelID = labelID
+				self.labelName = labelName
 			}
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_contacts.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: labelID.hashValue)
+				hashCombine(seed: &hash, value: labelName.hashValue)
+				return hash
 			}
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
+			public static func ==(lhs: Contacts.GetAlliancesAllianceIDContactsLabelsOk, rhs: Contacts.GetAlliancesAllianceIDContactsLabelsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
 			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsOk]>) in
-					promise.set(result: response.result, cached: 300.0)
-					session = nil
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case labelID = "label_id"
+				case labelName = "label_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
 				}
 			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func deleteContacts(characterID: Int, contactIds: [Int]) -> Future<ESI.Result<String>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<String>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.write_contacts.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = contactIds.httpQuery {
-				query.append(URLQueryItem(name: "contact_ids", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/characters/\(characterID)/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<String>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
 		}
 		
 		
@@ -503,7 +669,7 @@ public extension ESI {
 		}
 		
 		
-		public struct Label: Codable, Hashable {
+		public struct GetCorporationsCorporationIDContactsLabelsOk: Codable, Hashable {
 			
 			
 			public var labelID: Int64
@@ -521,7 +687,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Contacts.Label, rhs: Contacts.Label) -> Bool {
+			public static func ==(lhs: Contacts.GetCorporationsCorporationIDContactsLabelsOk, rhs: Contacts.GetCorporationsCorporationIDContactsLabelsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

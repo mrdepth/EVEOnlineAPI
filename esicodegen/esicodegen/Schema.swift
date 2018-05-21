@@ -19,7 +19,7 @@ class Enum: Hashable {
 	}
 	
 	var hashValue: Int {
-		return [cases, self.default].hashValue
+		return [cases.hashValue, self.default.hashValue].hashValue
 	}
 	
 	public static func ==(lhs: Enum, rhs: Enum) -> Bool {

@@ -15,7 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func retrieveTheUptimeAndPlayerCounts() -> Future<ESI.Result<Status.ServerStatus>> {
+		public func retrieveTheUptimeAndPlayerCounts(ifNoneMatch: String? = nil) -> Future<ESI.Result<Status.ServerStatus>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Status.ServerStatus>>()
 			guard session != nil else {
@@ -28,7 +28,9 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
