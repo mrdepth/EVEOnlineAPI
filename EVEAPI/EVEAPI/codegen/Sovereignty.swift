@@ -1,92 +1,87 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var sovereignty: Sovereignty {
-		return Sovereignty(sessionManager: self)
+		return Sovereignty(esi: self)
 	}
 	
 	class Sovereignty {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 		
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
+		init(esi: ESI) {
+			self.esi = esi
 		}
 		
 		@discardableResult
-		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func listSovereigntyStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Structure]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/sovereignty/campaigns/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
-					promise.set(result: response.result, cached: 5.0)
-					session = nil
+				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
+					promise.set(result: response.result, cached: 120.0)
+					esi = nil
 				}
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func listSovereigntyStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Structure]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/sovereignty/structures/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
-					promise.set(result: response.result, cached: 120.0)
-					session = nil
+				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
+					promise.set(result: response.result, cached: 5.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -94,38 +89,35 @@ public extension ESI {
 		
 		@discardableResult
 		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.System]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/sovereignty/map/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future

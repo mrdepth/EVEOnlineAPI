@@ -1,146 +1,129 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var killmails: Killmails {
-		return Killmails(sessionManager: self)
+		return Killmails(esi: self)
 	}
 	
 	class Killmails {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 		
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
+		init(esi: ESI) {
+			self.esi = esi
 		}
 		
 		@discardableResult
 		public func getSingleKillmail(ifNoneMatch: String? = nil, killmailHash: String, killmailID: Int) -> Future<ESI.Result<Killmails.Killmail>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Killmails.Killmail>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/killmails/\(killmailID)/\(killmailHash)/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<Killmails.Killmail>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Killmails.Killmail>) in
 					promise.set(result: response.result, cached: 1209600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getCorporationKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func getCorporationsRecentKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-killmails.read_corporation_killmails.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-killmails.read_corporation_killmails.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = maxKillID?.httpQuery {
-				query.append(URLQueryItem(name: "max_kill_id", value: v))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/killmails/recent/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>) in
 					promise.set(result: response.result, cached: 300.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getCharacterKillsAndLosses(characterID: Int, ifNoneMatch: String? = nil, maxCount: Int? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Killmails.Recent]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func getCharactersRecentKillsAndLosses(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-killmails.read_killmails.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-killmails.read_killmails.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = maxCount?.httpQuery {
-				query.append(URLQueryItem(name: "max_count", value: v))
-			}
-			if let v = maxKillID?.httpQuery {
-				query.append(URLQueryItem(name: "max_kill_id", value: v))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/killmails/recent/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Killmails.Recent]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Killmails.Recent]>) in
-					promise.set(result: response.result, cached: 120.0)
-					session = nil
+					promise.set(result: response.result, cached: 300.0)
+					esi = nil
 				}
 			}
 			return promise.future

@@ -1,17 +1,18 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var {variable}: {scope} {
-		return {scope}(sessionManager: self)
+		return {scope}(esi: self)
 	}
 
 	class {scope} {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 	
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
+		init(esi: ESI) {
+			self.esi = esi
 		}
 
 {operations}

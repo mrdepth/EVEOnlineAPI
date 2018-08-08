@@ -32,7 +32,8 @@ class Scope: Namespace {
 	func scopeDefinition() throws -> String {
 		if tag.isEmpty {
 			var s = "import Foundation\n"
-			s += "import Alamofire\n\n"
+			s += "import Alamofire\n"
+			s += "import Futures\n\n"
 			s += "public extension ESI {\n\n"
 			s += try typeDefinitions()
 			s += "\n\n"

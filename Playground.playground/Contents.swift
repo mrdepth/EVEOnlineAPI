@@ -2,13 +2,29 @@
 
 import UIKit
 import PlaygroundSupport
-//import EVEAPI
-//import AFNetworking
-import ObjectiveC
-//import Alamofire
 
-let data = "{24234.444}".data(using: .utf8)!
 
-let d = try? JSONDecoder().decode(Double.self, from: data)
+public enum AcceptLanguage: String, Codable, CustomStringConvertible {
+	case de = "de"
+	case enUS = "en-us"
+	case fr = "fr"
+	case ja = "ja"
+	case ru = "ru"
+	case zh = "zh"
+	
+	public var httpQuery: String? {
+		return rawValue
+	}
+	
+	public var description: String {
+		return rawValue
+	}
+	
+}
 
-print("\(d)")
+let t = AcceptLanguage.enUS
+
+print("\(String(describing: "12"))")
+
+
+

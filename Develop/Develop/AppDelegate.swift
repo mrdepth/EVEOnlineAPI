@@ -9,7 +9,7 @@
 import UIKit
 import EVEAPI
 import Alamofire
-
+import Futures
 
 
 
@@ -29,33 +29,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-		let p1 = Promise<Int>()
-		let p2 = Promise<Int>()
 		
-		let oq = OperationQueue()
-
-		
-		oq.async { () -> Int in
-			print("0")
-			return 1
-			}.then { i -> Int in
-				print("\(i)")
-				return i + 1
-			}.then { i -> Future<Int> in
-				print("\(i)")
-				return oq.async {
-					return i + 1
-				}
-//				return i + 1
-			}.then { i -> Int in
-				print("\(i)")
-//				throw FutureError.timeout
-				return i + 1
-			}.catch { error in
-				print("\(error)")
-			}.finally {
-				print("finally")
+		let zkb = ZKillboard()
+		zkb.kills(filter: [.losses, .solo], page: nil).catch { error in
+			print(error)
+		}.then { result in
+			print(result)
 		}
+		
 		
 	/*	DispatchQueue.global(qos: .background).async {
 			print("p1")

@@ -292,7 +292,7 @@ extension DataRequest {
 		
 		return validate() {(request, response, data) -> ValidationResult in
 			if statusCodes.contains(response.statusCode) {
-				return .success
+				return .success(Void())
 			}
 			else if let data = data, let error = try? JSONDecoder().decode(OAuth2ServerError.self, from: data) {
 				switch OAuth2ServerError.Code(rawValue: error.error) {
@@ -303,7 +303,7 @@ extension DataRequest {
 				}
 			}
 			else {
-				return .success
+				return .success(Void())
 			}
 		}.validate(statusCode: statusCodes)
 	}

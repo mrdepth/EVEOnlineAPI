@@ -65,10 +65,8 @@ class Parameter {
 	}
 	
 	var headerString: String {
-		return isRequired ?
-			"headers[\"\(name)\"] = String(\(parameterName))" :
-			"if let v = \(parameterName) {\n" +
-		"headers[\"\(name)\"] = String(v)\n}"
+		return "if let v = \(parameterName)\(isRequired ? "" : "?").httpQuery {\n" +
+		"headers[\"\(name)\"] = v\n}"
 	}
 	
 	var queryString: String {

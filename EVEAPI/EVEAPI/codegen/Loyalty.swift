@@ -1,96 +1,88 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var loyalty: Loyalty {
-		return Loyalty(sessionManager: self)
+		return Loyalty(esi: self)
 	}
 	
 	class Loyalty {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 		
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
+		init(esi: ESI) {
+			self.esi = esi
 		}
 		
 		@discardableResult
-		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Offer]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Loyalty.Offer]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func getLoyaltyPoints(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Point]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_loyalty.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/loyalty/stores/\(corporationID)/offers/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Loyalty.Point]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
+				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Point]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getLoyaltyPoints(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Point]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Loyalty.Point]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Offer]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_loyalty.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/loyalty/points/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Loyalty.Offer]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Point]>) in
+				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future

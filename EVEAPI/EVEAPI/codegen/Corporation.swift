@@ -1,531 +1,93 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var corporation: Corporation {
-		return Corporation(sessionManager: self)
+		return Corporation(esi: self)
 	}
 	
 	class Corporation {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 		
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
-		}
-		
-		@discardableResult
-		public func getCorporationShareholders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/shareholders/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDShareholdersOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationFacilities(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_facilities.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/facilities/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationStandings(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDStandingsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDStandingsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_standings.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/standings/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDStandingsOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAllianceHistory(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.History]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.History]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v2/corporations/\(corporationID)/alliancehistory/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.History]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationOutposts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_outposts.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/outposts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationInformation(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Information>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Corporation.Information>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v4/corporations/\(corporationID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Corporation.Information>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationStructures(corporationID: Int, ifNoneMatch: String? = nil, language: Language? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.Structure]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.Structure]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_structures.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/corporations/\(corporationID)/structures/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.Structure]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationNames(corporationIds: [Int], ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.Name]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.Name]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = corporationIds.httpQuery {
-				query.append(URLQueryItem(name: "corporation_ids", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/corporations/names/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.Name]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStarbasePOSDetail(corporationID: Int, ifNoneMatch: String? = nil, starbaseID: Int64, systemID: Int) -> Future<ESI.Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_starbases.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = systemID.httpQuery {
-				query.append(URLQueryItem(name: "system_id", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/starbases/\(starbaseID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationMemberRoles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.Role]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.Role]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/roles/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Corporation.Role]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getNpcCorporations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/corporations/npccorps/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
+		init(esi: ESI) {
+			self.esi = esi
 		}
 		
 		@discardableResult
 		public func getCorporationMedals(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_medals.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/medals/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDMedalsOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationShareholders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDShareholdersOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -533,42 +95,148 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMembers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v3/corporations/\(corporationID)/members/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationFacilities(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_facilities.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationStandings(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDStandingsOk]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_standings.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDStandingsOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDStandingsOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAllianceHistory(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.History]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Corporation.History]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Corporation.History]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -576,87 +244,38 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMemberRolesHistory(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDRolesHistoryOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDRolesHistoryOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/roles/history/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDRolesHistoryOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDRolesHistoryOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationOutpostDetails(corporationID: Int, ifNoneMatch: String? = nil, outpostID: Int) -> Future<ESI.Result<Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_outposts.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/outposts/\(outpostID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -664,44 +283,38 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationBlueprints(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_blueprints.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_blueprints.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v2/corporations/\(corporationID)/blueprints/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -709,42 +322,36 @@ public extension ESI {
 		
 		@discardableResult
 		public func trackCorporationMembers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.track_members.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.track_members.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/membertracking/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -752,44 +359,38 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationIssuedMedals(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsIssuedOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsIssuedOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_medals.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/medals/issued/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsIssuedOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDMedalsIssuedOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -797,42 +398,36 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationTitles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDTitlesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDTitlesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_titles.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/titles/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDTitlesOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDTitlesOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -840,42 +435,117 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationsMembersTitles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMembersTitlesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMembersTitlesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_titles.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/members/titles/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDMembersTitlesOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDMembersTitlesOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationInformation(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Information>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Corporation.Information>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Corporation.Information>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationStructures(acceptLanguage: AcceptLanguage? = nil, corporationID: Int, ifNoneMatch: String? = nil, language: Language? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.Structure]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_structures.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage?.httpQuery {
+				headers["Accept-Language"] = v
+			}
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Corporation.Structure]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Corporation.Structure]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -883,38 +553,35 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationIcon(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Icon>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Corporation.Icon>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/icons/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<Corporation.Icon>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Corporation.Icon>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -922,42 +589,36 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMemberLimit(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Int>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Int>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.track_members.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.track_members.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/members/limit/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<Int>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Int>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -965,44 +626,77 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAllCorporationALSCLogs(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDContainersLogsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDContainersLogsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_container_logs.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_container_logs.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v2/corporations/\(corporationID)/containers/logs/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDContainersLogsOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDContainersLogsOk]>) in
 					promise.set(result: response.result, cached: 600.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStarbasePOSDetail(corporationID: Int, ifNoneMatch: String? = nil, starbaseID: Int64, systemID: Int) -> Future<ESI.Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_starbases.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = systemID.httpQuery {
+				query.append(URLQueryItem(name: "system_id", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -1010,42 +704,36 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationDivisions(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Divisions>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Corporation.Divisions>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_divisions.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_divisions.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/divisions/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<Corporation.Divisions>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Corporation.Divisions>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -1053,44 +741,111 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationStarbasesPOSes(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDStarbasesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDStarbasesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-corporations.read_starbases.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_starbases.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/starbases/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Corporation.GetCorporationsCorporationIDStarbasesOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Corporation.GetCorporationsCorporationIDStarbasesOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationMemberRoles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.Role]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Corporation.Role]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Corporation.Role]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getNpcCorporations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -2181,189 +1936,6 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationsCorporationIDOutpostsOutpostIDOk: Codable, Hashable {
-			
-			public struct GetCorporationsCorporationIDOutpostsOutpostIDCoordinates: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: x.hashValue)
-					hashCombine(seed: &hash, value: y.hashValue)
-					hashCombine(seed: &hash, value: z.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates, rhs: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCorporationsCorporationIDOutpostsOutpostIDServices: Codable, Hashable {
-				
-				public enum GetCorporationsCorporationIDOutpostsOutpostIDServiceName: String, Codable, HTTPQueryable {
-					case assassinationMissions = "Assassination Missions"
-					case blackMarket = "Black Market"
-					case bountyMissions = "Bounty Missions"
-					case cloning = "Cloning"
-					case courierMissions = "Courier Missions"
-					case dNATherapy = "DNA Therapy"
-					case docking = "Docking"
-					case factory = "Factory"
-					case fitting = "Fitting"
-					case gambling = "Gambling"
-					case insurance = "Insurance"
-					case interbus = "Interbus"
-					case jumpCloneFacility = "Jump Clone Facility"
-					case laboratory = "Laboratory"
-					case loyaltyPointStore = "Loyalty Point Store"
-					case market = "Market"
-					case navyOffices = "Navy Offices"
-					case news = "News"
-					case officeRental = "Office Rental"
-					case paintshop = "Paintshop"
-					case refinery = "Refinery"
-					case repairFacilities = "Repair Facilities"
-					case reprocessingPlant = "Reprocessing Plant"
-					case securityOffice = "Security Office"
-					case stockExchange = "Stock Exchange"
-					case storage = "Storage"
-					case surgery = "Surgery"
-					
-					public var httpQuery: String? {
-						return rawValue
-					}
-					
-				}
-				
-				public var discountPerGoodStanding: Double
-				public var minimumStanding: Double
-				public var serviceName: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices.GetCorporationsCorporationIDOutpostsOutpostIDServiceName
-				public var surchargePerBadStanding: Double
-				
-				public init(discountPerGoodStanding: Double, minimumStanding: Double, serviceName: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices.GetCorporationsCorporationIDOutpostsOutpostIDServiceName, surchargePerBadStanding: Double) {
-					self.discountPerGoodStanding = discountPerGoodStanding
-					self.minimumStanding = minimumStanding
-					self.serviceName = serviceName
-					self.surchargePerBadStanding = surchargePerBadStanding
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: discountPerGoodStanding.hashValue)
-					hashCombine(seed: &hash, value: minimumStanding.hashValue)
-					hashCombine(seed: &hash, value: serviceName.hashValue)
-					hashCombine(seed: &hash, value: surchargePerBadStanding.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices, rhs: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case discountPerGoodStanding = "discount_per_good_standing"
-					case minimumStanding = "minimum_standing"
-					case serviceName = "service_name"
-					case surchargePerBadStanding = "surcharge_per_bad_standing"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var coordinates: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates
-			public var dockingCostPerShipVolume: Float
-			public var officeRentalCost: Int64
-			public var ownerID: Int
-			public var reprocessingEfficiency: Float
-			public var reprocessingStationTake: Float
-			public var services: [Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices]
-			public var standingOwnerID: Int
-			public var systemID: Int
-			public var typeID: Int
-			
-			public init(coordinates: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDCoordinates, dockingCostPerShipVolume: Float, officeRentalCost: Int64, ownerID: Int, reprocessingEfficiency: Float, reprocessingStationTake: Float, services: [Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk.GetCorporationsCorporationIDOutpostsOutpostIDServices], standingOwnerID: Int, systemID: Int, typeID: Int) {
-				self.coordinates = coordinates
-				self.dockingCostPerShipVolume = dockingCostPerShipVolume
-				self.officeRentalCost = officeRentalCost
-				self.ownerID = ownerID
-				self.reprocessingEfficiency = reprocessingEfficiency
-				self.reprocessingStationTake = reprocessingStationTake
-				self.services = services
-				self.standingOwnerID = standingOwnerID
-				self.systemID = systemID
-				self.typeID = typeID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: coordinates.hashValue)
-				hashCombine(seed: &hash, value: dockingCostPerShipVolume.hashValue)
-				hashCombine(seed: &hash, value: officeRentalCost.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: reprocessingEfficiency.hashValue)
-				hashCombine(seed: &hash, value: reprocessingStationTake.hashValue)
-				self.services.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: standingOwnerID.hashValue)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk, rhs: Corporation.GetCorporationsCorporationIDOutpostsOutpostIDOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case coordinates
-				case dockingCostPerShipVolume = "docking_cost_per_ship_volume"
-				case officeRentalCost = "office_rental_cost"
-				case ownerID = "owner_id"
-				case reprocessingEfficiency = "reprocessing_efficiency"
-				case reprocessingStationTake = "reprocessing_station_take"
-				case services
-				case standingOwnerID = "standing_owner_id"
-				case systemID = "system_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct GetCorporationsCorporationIDMedalsIssuedOk: Codable, Hashable {
 			
 			public enum GetCorporationsCorporationIDMedalsIssuedStatus: String, Codable, HTTPQueryable {
@@ -2651,6 +2223,42 @@ public extension ESI {
 		}
 		
 		
+		public struct GetCorporationsCorporationIDMembersTitlesOk: Codable, Hashable {
+			
+			
+			public var characterID: Int
+			public var titles: [Int]
+			
+			public init(characterID: Int, titles: [Int]) {
+				self.characterID = characterID
+				self.titles = titles
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				self.titles.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				return hash
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDMembersTitlesOk, rhs: Corporation.GetCorporationsCorporationIDMembersTitlesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case titles
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct Information: Codable, Hashable {
 			
 			
@@ -2885,42 +2493,6 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationsCorporationIDMembersTitlesOk: Codable, Hashable {
-			
-			
-			public var characterID: Int
-			public var titles: [Int]
-			
-			public init(characterID: Int, titles: [Int]) {
-				self.characterID = characterID
-				self.titles = titles
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				self.titles.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDMembersTitlesOk, rhs: Corporation.GetCorporationsCorporationIDMembersTitlesOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case characterID = "character_id"
-				case titles
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct GetCorporationsCorporationIDIconsNotFound: Codable, Hashable {
 			
 			
@@ -2942,42 +2514,6 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Name: Codable, Hashable {
-			
-			
-			public var corporationID: Int
-			public var corporationName: String
-			
-			public init(corporationID: Int, corporationName: String) {
-				self.corporationID = corporationID
-				self.corporationName = corporationName
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: corporationName.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.Name, rhs: Corporation.Name) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case corporationName = "corporation_name"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -3061,6 +2597,188 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case facilityID = "facility_id"
 				case systemID = "system_id"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCorporationsCorporationIDBlueprintsOk: Codable, Hashable {
+			
+			public enum GetCorporationsCorporationIDBlueprintsLocationFlag: String, Codable, HTTPQueryable {
+				case assetSafety = "AssetSafety"
+				case autoFit = "AutoFit"
+				case bonus = "Bonus"
+				case booster = "Booster"
+				case boosterBay = "BoosterBay"
+				case capsule = "Capsule"
+				case cargo = "Cargo"
+				case corpDeliveries = "CorpDeliveries"
+				case corpSAG1 = "CorpSAG1"
+				case corpSAG2 = "CorpSAG2"
+				case corpSAG3 = "CorpSAG3"
+				case corpSAG4 = "CorpSAG4"
+				case corpSAG5 = "CorpSAG5"
+				case corpSAG6 = "CorpSAG6"
+				case corpSAG7 = "CorpSAG7"
+				case crateLoot = "CrateLoot"
+				case deliveries = "Deliveries"
+				case droneBay = "DroneBay"
+				case dustBattle = "DustBattle"
+				case dustDatabank = "DustDatabank"
+				case fighterBay = "FighterBay"
+				case fighterTube0 = "FighterTube0"
+				case fighterTube1 = "FighterTube1"
+				case fighterTube2 = "FighterTube2"
+				case fighterTube3 = "FighterTube3"
+				case fighterTube4 = "FighterTube4"
+				case fleetHangar = "FleetHangar"
+				case hangar = "Hangar"
+				case hangarAll = "HangarAll"
+				case hiSlot0 = "HiSlot0"
+				case hiSlot1 = "HiSlot1"
+				case hiSlot2 = "HiSlot2"
+				case hiSlot3 = "HiSlot3"
+				case hiSlot4 = "HiSlot4"
+				case hiSlot5 = "HiSlot5"
+				case hiSlot6 = "HiSlot6"
+				case hiSlot7 = "HiSlot7"
+				case hiddenModifiers = "HiddenModifiers"
+				case implant = "Implant"
+				case impounded = "Impounded"
+				case junkyardReprocessed = "JunkyardReprocessed"
+				case junkyardTrashed = "JunkyardTrashed"
+				case loSlot0 = "LoSlot0"
+				case loSlot1 = "LoSlot1"
+				case loSlot2 = "LoSlot2"
+				case loSlot3 = "LoSlot3"
+				case loSlot4 = "LoSlot4"
+				case loSlot5 = "LoSlot5"
+				case loSlot6 = "LoSlot6"
+				case loSlot7 = "LoSlot7"
+				case locked = "Locked"
+				case medSlot0 = "MedSlot0"
+				case medSlot1 = "MedSlot1"
+				case medSlot2 = "MedSlot2"
+				case medSlot3 = "MedSlot3"
+				case medSlot4 = "MedSlot4"
+				case medSlot5 = "MedSlot5"
+				case medSlot6 = "MedSlot6"
+				case medSlot7 = "MedSlot7"
+				case officeFolder = "OfficeFolder"
+				case pilot = "Pilot"
+				case planetSurface = "PlanetSurface"
+				case quafeBay = "QuafeBay"
+				case reward = "Reward"
+				case rigSlot0 = "RigSlot0"
+				case rigSlot1 = "RigSlot1"
+				case rigSlot2 = "RigSlot2"
+				case rigSlot3 = "RigSlot3"
+				case rigSlot4 = "RigSlot4"
+				case rigSlot5 = "RigSlot5"
+				case rigSlot6 = "RigSlot6"
+				case rigSlot7 = "RigSlot7"
+				case secondaryStorage = "SecondaryStorage"
+				case serviceSlot0 = "ServiceSlot0"
+				case serviceSlot1 = "ServiceSlot1"
+				case serviceSlot2 = "ServiceSlot2"
+				case serviceSlot3 = "ServiceSlot3"
+				case serviceSlot4 = "ServiceSlot4"
+				case serviceSlot5 = "ServiceSlot5"
+				case serviceSlot6 = "ServiceSlot6"
+				case serviceSlot7 = "ServiceSlot7"
+				case shipHangar = "ShipHangar"
+				case shipOffline = "ShipOffline"
+				case skill = "Skill"
+				case skillInTraining = "SkillInTraining"
+				case specializedAmmoHold = "SpecializedAmmoHold"
+				case specializedCommandCenterHold = "SpecializedCommandCenterHold"
+				case specializedFuelBay = "SpecializedFuelBay"
+				case specializedGasHold = "SpecializedGasHold"
+				case specializedIndustrialShipHold = "SpecializedIndustrialShipHold"
+				case specializedLargeShipHold = "SpecializedLargeShipHold"
+				case specializedMaterialBay = "SpecializedMaterialBay"
+				case specializedMediumShipHold = "SpecializedMediumShipHold"
+				case specializedMineralHold = "SpecializedMineralHold"
+				case specializedOreHold = "SpecializedOreHold"
+				case specializedPlanetaryCommoditiesHold = "SpecializedPlanetaryCommoditiesHold"
+				case specializedSalvageHold = "SpecializedSalvageHold"
+				case specializedShipHold = "SpecializedShipHold"
+				case specializedSmallShipHold = "SpecializedSmallShipHold"
+				case structureActive = "StructureActive"
+				case structureFuel = "StructureFuel"
+				case structureInactive = "StructureInactive"
+				case structureOffline = "StructureOffline"
+				case subSystemBay = "SubSystemBay"
+				case subSystemSlot0 = "SubSystemSlot0"
+				case subSystemSlot1 = "SubSystemSlot1"
+				case subSystemSlot2 = "SubSystemSlot2"
+				case subSystemSlot3 = "SubSystemSlot3"
+				case subSystemSlot4 = "SubSystemSlot4"
+				case subSystemSlot5 = "SubSystemSlot5"
+				case subSystemSlot6 = "SubSystemSlot6"
+				case subSystemSlot7 = "SubSystemSlot7"
+				case unlocked = "Unlocked"
+				case wallet = "Wallet"
+				case wardrobe = "Wardrobe"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var itemID: Int64
+			public var locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag
+			public var locationID: Int64
+			public var materialEfficiency: Int
+			public var quantity: Int
+			public var runs: Int
+			public var timeEfficiency: Int
+			public var typeID: Int
+			
+			public init(itemID: Int64, locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag, locationID: Int64, materialEfficiency: Int, quantity: Int, runs: Int, timeEfficiency: Int, typeID: Int) {
+				self.itemID = itemID
+				self.locationFlag = locationFlag
+				self.locationID = locationID
+				self.materialEfficiency = materialEfficiency
+				self.quantity = quantity
+				self.runs = runs
+				self.timeEfficiency = timeEfficiency
+				self.typeID = typeID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: itemID.hashValue)
+				hashCombine(seed: &hash, value: locationFlag.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: materialEfficiency.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: runs.hashValue)
+				hashCombine(seed: &hash, value: timeEfficiency.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Corporation.GetCorporationsCorporationIDBlueprintsOk, rhs: Corporation.GetCorporationsCorporationIDBlueprintsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case locationFlag = "location_flag"
+				case locationID = "location_id"
+				case materialEfficiency = "material_efficiency"
+				case quantity
+				case runs
+				case timeEfficiency = "time_efficiency"
 				case typeID = "type_id"
 				
 				var dateFormatter: DateFormatter? {
@@ -3641,188 +3359,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .createdAt: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDBlueprintsOk: Codable, Hashable {
-			
-			public enum GetCorporationsCorporationIDBlueprintsLocationFlag: String, Codable, HTTPQueryable {
-				case assetSafety = "AssetSafety"
-				case autoFit = "AutoFit"
-				case bonus = "Bonus"
-				case booster = "Booster"
-				case boosterBay = "BoosterBay"
-				case capsule = "Capsule"
-				case cargo = "Cargo"
-				case corpDeliveries = "CorpDeliveries"
-				case corpSAG1 = "CorpSAG1"
-				case corpSAG2 = "CorpSAG2"
-				case corpSAG3 = "CorpSAG3"
-				case corpSAG4 = "CorpSAG4"
-				case corpSAG5 = "CorpSAG5"
-				case corpSAG6 = "CorpSAG6"
-				case corpSAG7 = "CorpSAG7"
-				case crateLoot = "CrateLoot"
-				case deliveries = "Deliveries"
-				case droneBay = "DroneBay"
-				case dustBattle = "DustBattle"
-				case dustDatabank = "DustDatabank"
-				case fighterBay = "FighterBay"
-				case fighterTube0 = "FighterTube0"
-				case fighterTube1 = "FighterTube1"
-				case fighterTube2 = "FighterTube2"
-				case fighterTube3 = "FighterTube3"
-				case fighterTube4 = "FighterTube4"
-				case fleetHangar = "FleetHangar"
-				case hangar = "Hangar"
-				case hangarAll = "HangarAll"
-				case hiSlot0 = "HiSlot0"
-				case hiSlot1 = "HiSlot1"
-				case hiSlot2 = "HiSlot2"
-				case hiSlot3 = "HiSlot3"
-				case hiSlot4 = "HiSlot4"
-				case hiSlot5 = "HiSlot5"
-				case hiSlot6 = "HiSlot6"
-				case hiSlot7 = "HiSlot7"
-				case hiddenModifiers = "HiddenModifiers"
-				case implant = "Implant"
-				case impounded = "Impounded"
-				case junkyardReprocessed = "JunkyardReprocessed"
-				case junkyardTrashed = "JunkyardTrashed"
-				case loSlot0 = "LoSlot0"
-				case loSlot1 = "LoSlot1"
-				case loSlot2 = "LoSlot2"
-				case loSlot3 = "LoSlot3"
-				case loSlot4 = "LoSlot4"
-				case loSlot5 = "LoSlot5"
-				case loSlot6 = "LoSlot6"
-				case loSlot7 = "LoSlot7"
-				case locked = "Locked"
-				case medSlot0 = "MedSlot0"
-				case medSlot1 = "MedSlot1"
-				case medSlot2 = "MedSlot2"
-				case medSlot3 = "MedSlot3"
-				case medSlot4 = "MedSlot4"
-				case medSlot5 = "MedSlot5"
-				case medSlot6 = "MedSlot6"
-				case medSlot7 = "MedSlot7"
-				case officeFolder = "OfficeFolder"
-				case pilot = "Pilot"
-				case planetSurface = "PlanetSurface"
-				case quafeBay = "QuafeBay"
-				case reward = "Reward"
-				case rigSlot0 = "RigSlot0"
-				case rigSlot1 = "RigSlot1"
-				case rigSlot2 = "RigSlot2"
-				case rigSlot3 = "RigSlot3"
-				case rigSlot4 = "RigSlot4"
-				case rigSlot5 = "RigSlot5"
-				case rigSlot6 = "RigSlot6"
-				case rigSlot7 = "RigSlot7"
-				case secondaryStorage = "SecondaryStorage"
-				case serviceSlot0 = "ServiceSlot0"
-				case serviceSlot1 = "ServiceSlot1"
-				case serviceSlot2 = "ServiceSlot2"
-				case serviceSlot3 = "ServiceSlot3"
-				case serviceSlot4 = "ServiceSlot4"
-				case serviceSlot5 = "ServiceSlot5"
-				case serviceSlot6 = "ServiceSlot6"
-				case serviceSlot7 = "ServiceSlot7"
-				case shipHangar = "ShipHangar"
-				case shipOffline = "ShipOffline"
-				case skill = "Skill"
-				case skillInTraining = "SkillInTraining"
-				case specializedAmmoHold = "SpecializedAmmoHold"
-				case specializedCommandCenterHold = "SpecializedCommandCenterHold"
-				case specializedFuelBay = "SpecializedFuelBay"
-				case specializedGasHold = "SpecializedGasHold"
-				case specializedIndustrialShipHold = "SpecializedIndustrialShipHold"
-				case specializedLargeShipHold = "SpecializedLargeShipHold"
-				case specializedMaterialBay = "SpecializedMaterialBay"
-				case specializedMediumShipHold = "SpecializedMediumShipHold"
-				case specializedMineralHold = "SpecializedMineralHold"
-				case specializedOreHold = "SpecializedOreHold"
-				case specializedPlanetaryCommoditiesHold = "SpecializedPlanetaryCommoditiesHold"
-				case specializedSalvageHold = "SpecializedSalvageHold"
-				case specializedShipHold = "SpecializedShipHold"
-				case specializedSmallShipHold = "SpecializedSmallShipHold"
-				case structureActive = "StructureActive"
-				case structureFuel = "StructureFuel"
-				case structureInactive = "StructureInactive"
-				case structureOffline = "StructureOffline"
-				case subSystemBay = "SubSystemBay"
-				case subSystemSlot0 = "SubSystemSlot0"
-				case subSystemSlot1 = "SubSystemSlot1"
-				case subSystemSlot2 = "SubSystemSlot2"
-				case subSystemSlot3 = "SubSystemSlot3"
-				case subSystemSlot4 = "SubSystemSlot4"
-				case subSystemSlot5 = "SubSystemSlot5"
-				case subSystemSlot6 = "SubSystemSlot6"
-				case subSystemSlot7 = "SubSystemSlot7"
-				case unlocked = "Unlocked"
-				case wallet = "Wallet"
-				case wardrobe = "Wardrobe"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var itemID: Int64
-			public var locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag
-			public var locationID: Int64
-			public var materialEfficiency: Int
-			public var quantity: Int
-			public var runs: Int
-			public var timeEfficiency: Int
-			public var typeID: Int
-			
-			public init(itemID: Int64, locationFlag: Corporation.GetCorporationsCorporationIDBlueprintsOk.GetCorporationsCorporationIDBlueprintsLocationFlag, locationID: Int64, materialEfficiency: Int, quantity: Int, runs: Int, timeEfficiency: Int, typeID: Int) {
-				self.itemID = itemID
-				self.locationFlag = locationFlag
-				self.locationID = locationID
-				self.materialEfficiency = materialEfficiency
-				self.quantity = quantity
-				self.runs = runs
-				self.timeEfficiency = timeEfficiency
-				self.typeID = typeID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: itemID.hashValue)
-				hashCombine(seed: &hash, value: locationFlag.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: materialEfficiency.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: runs.hashValue)
-				hashCombine(seed: &hash, value: timeEfficiency.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Corporation.GetCorporationsCorporationIDBlueprintsOk, rhs: Corporation.GetCorporationsCorporationIDBlueprintsOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case itemID = "item_id"
-				case locationFlag = "location_flag"
-				case locationID = "location_id"
-				case materialEfficiency = "material_efficiency"
-				case quantity
-				case runs
-				case timeEfficiency = "time_efficiency"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
 						default: return nil
 					}
 				}

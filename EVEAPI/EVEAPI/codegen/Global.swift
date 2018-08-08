@@ -1,7 +1,55 @@
 import Foundation
 import Alamofire
+import Futures
 
 public extension ESI {
+	
+	public struct ErrorLimited: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		public var hashValue: Int {
+			var hash: Int = 0
+			hashCombine(seed: &hash, value: error.hashValue)
+			return hash
+		}
+		
+		public static func ==(lhs: ErrorLimited, rhs: ErrorLimited) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	public enum AcceptLanguage: String, Codable, HTTPQueryable {
+		case de = "de"
+		case enUS = "en-us"
+		case fr = "fr"
+		case ja = "ja"
+		case ru = "ru"
+		case zh = "zh"
+		
+		public var httpQuery: String? {
+			return rawValue
+		}
+		
+	}
+	
 	
 	public struct ServiceUnavailable: Codable, Hashable {
 		
@@ -125,38 +173,6 @@ public extension ESI {
 	}
 	
 	
-	public struct BadGateway: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			return hash
-		}
-		
-		public static func ==(lhs: BadGateway, rhs: BadGateway) -> Bool {
-			return lhs.hashValue == rhs.hashValue
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
 	public struct Forbidden: Codable, Hashable {
 		
 		
@@ -225,6 +241,42 @@ public extension ESI {
 	}
 	
 	
+	public struct GatewayTimeout: Codable, Hashable {
+		
+		
+		public var error: String
+		public var timeout: Int?
+		
+		public init(error: String, timeout: Int?) {
+			self.error = error
+			self.timeout = timeout
+		}
+		
+		public var hashValue: Int {
+			var hash: Int = 0
+			hashCombine(seed: &hash, value: error.hashValue)
+			hashCombine(seed: &hash, value: timeout?.hashValue ?? 0)
+			return hash
+		}
+		
+		public static func ==(lhs: GatewayTimeout, rhs: GatewayTimeout) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			case timeout
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
 	
 }
 
@@ -263,7 +315,6 @@ public extension ESI.Scope {
 	public static let esiCorporationsReadFacilitiesV1 = ESI.Scope("esi-corporations.read_facilities.v1")
 	public static let esiCorporationsReadFwStatsV1 = ESI.Scope("esi-corporations.read_fw_stats.v1")
 	public static let esiCorporationsReadMedalsV1 = ESI.Scope("esi-corporations.read_medals.v1")
-	public static let esiCorporationsReadOutpostsV1 = ESI.Scope("esi-corporations.read_outposts.v1")
 	public static let esiCorporationsReadStandingsV1 = ESI.Scope("esi-corporations.read_standings.v1")
 	public static let esiCorporationsReadStarbasesV1 = ESI.Scope("esi-corporations.read_starbases.v1")
 	public static let esiCorporationsReadStructuresV1 = ESI.Scope("esi-corporations.read_structures.v1")
@@ -335,7 +386,6 @@ public extension ESI.Scope {
 			.esiCorporationsReadFacilitiesV1,
 			.esiCorporationsReadFwStatsV1,
 			.esiCorporationsReadMedalsV1,
-			.esiCorporationsReadOutpostsV1,
 			.esiCorporationsReadStandingsV1,
 			.esiCorporationsReadStarbasesV1,
 			.esiCorporationsReadStructuresV1,

@@ -1,39 +1,39 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var search: Search {
-		return Search(sessionManager: self)
+		return Search(esi: self)
 	}
 	
 	class Search {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 		
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
+		init(esi: ESI) {
+			self.esi = esi
 		}
 		
 		@discardableResult
-		public func search(categories: [Search.Categories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Search.SearchResult>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = acceptLanguage?.httpQuery {
+				headers["Accept-Language"] = v
+			}
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = categories.httpQuery {
 				query.append(URLQueryItem(name: "categories", value: v))
 			}
@@ -47,47 +47,44 @@ public extension ESI {
 				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
-			let url = session!.baseURL + "/v2/search/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<Search.SearchResult>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func characterSearch(categories: [Search.SearchCategories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Search.CharacterSearchResult>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+		public func characterSearch(acceptLanguage: AcceptLanguage? = nil, categories: [Search.SearchCategories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-search.search_structures.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-search.search_structures.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = acceptLanguage?.httpQuery {
+				headers["Accept-Language"] = v
+			}
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = categories.httpQuery {
 				query.append(URLQueryItem(name: "categories", value: v))
 			}
@@ -101,18 +98,19 @@ public extension ESI {
 				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
-			let url = session!.baseURL + "/v3/characters/\(characterID)/search/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<Search.CharacterSearchResult>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Search.CharacterSearchResult>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future

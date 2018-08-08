@@ -1,139 +1,53 @@
 import Foundation
 import Alamofire
+import Futures
 
 
 public extension ESI {
 	public var market: Market {
-		return Market(sessionManager: self)
+		return Market(esi: self)
 	}
 	
 	class Market {
-		weak var sessionManager: ESI?
+		weak var esi: ESI?
 		
-		init(sessionManager: ESI) {
-			self.sessionManager = sessionManager
+		init(esi: ESI) {
+			self.esi = esi
 		}
 		
 		@discardableResult
 		public func listHistoricalMarketStatisticsInRegion(ifNoneMatch: String? = nil, regionID: Int, typeID: Int) -> Future<ESI.Result<[Market.History]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.History]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = typeID.httpQuery {
 				query.append(URLQueryItem(name: "type_id", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/markets/\(regionID)/history/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Market.History]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.History]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listHistoricalOrdersFromCorporation(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/corporations/\(corporationID)/orders/history/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getItemGroups(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/markets/groups/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -141,89 +55,38 @@ public extension ESI {
 		
 		@discardableResult
 		public func listHistoricalOrdersByCharacter(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.GetCharactersCharacterIDOrdersHistoryOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.GetCharactersCharacterIDOrdersHistoryOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-markets.read_character_orders.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.read_character_orders.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/orders/history/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Market.GetCharactersCharacterIDOrdersHistoryOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.GetCharactersCharacterIDOrdersHistoryOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listOpenOrdersFromCorporation(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.CorpOrder]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.CorpOrder]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/corporations/\(corporationID)/orders/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Market.CorpOrder]>) in
-					promise.set(result: response.result, cached: 1200.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -231,38 +94,110 @@ public extension ESI {
 		
 		@discardableResult
 		public func listMarketPrices(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Market.Price]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.Price]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/markets/prices/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Market.Price]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.Price]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getItemGroups(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listHistoricalOrdersFromCorporation(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -270,44 +205,118 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOrdersInStructure(ifNoneMatch: String? = nil, page: Int? = nil, structureID: Int64) -> Future<ESI.Result<[Market.Structure]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.Structure]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-markets.structure_markets.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.structure_markets.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/markets/structures/\(structureID)/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Market.Structure]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.Structure]>) in
 					promise.set(result: response.result, cached: 300.0)
-					session = nil
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listOpenOrdersFromCorporation(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.CorpOrder]>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Market.CorpOrder]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Market.CorpOrder]>) in
+					promise.set(result: response.result, cached: 1200.0)
+					esi = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getItemGroupInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, marketGroupID: Int) -> Future<ESI.Result<Market.ItemGroupInformation>> {
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage?.httpQuery {
+				headers["Accept-Language"] = v
+			}
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = esi!.baseURL + "/v1/status/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Market.ItemGroupInformation>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Market.ItemGroupInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					esi = nil
 				}
 			}
 			return promise.future
@@ -315,81 +324,37 @@ public extension ESI {
 		
 		@discardableResult
 		public func listTypeIDsRelevantToMarket(ifNoneMatch: String? = nil, page: Int? = nil, regionID: Int) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/markets/\(regionID)/types/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getItemGroupInformation(ifNoneMatch: String? = nil, language: Language? = nil, marketGroupID: Int) -> Future<ESI.Result<Market.ItemGroupInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Market.ItemGroupInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/markets/groups/\(marketGroupID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Market.ItemGroupInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -397,24 +362,20 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOrdersInRegion(ifNoneMatch: String? = nil, orderType: Market.OrderType, page: Int? = nil, regionID: Int, typeID: Int? = nil) -> Future<ESI.Result<[Market.Order]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.Order]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			if let v = orderType.httpQuery {
 				query.append(URLQueryItem(name: "order_type", value: v))
 			}
@@ -425,18 +386,19 @@ public extension ESI {
 				query.append(URLQueryItem(name: "type_id", value: v))
 			}
 			
-			let url = session!.baseURL + "/v1/markets/\(regionID)/orders/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Market.Order]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.Order]>) in
 					promise.set(result: response.result, cached: 300.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
@@ -444,77 +406,39 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOpenOrdersFromCharacter(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Market.CharacterOrder]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Market.CharacterOrder]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
+			var esi = self.esi
+			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-markets.read_character_orders.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
+			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-markets.read_character_orders.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v2/characters/\(characterID)/orders/"
+			let url = esi!.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			let promise = Promise<ESI.Result<[Market.CharacterOrder]>>()
+			esi!.perform { () -> DataRequest in
+				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Market.CharacterOrder]>) in
 					promise.set(result: response.result, cached: 1200.0)
-					session = nil
+					esi = nil
 				}
 			}
 			return promise.future
-		}
-		
-		
-		public struct GetMarketsRegionIDHistory520Response: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Market.GetMarketsRegionIDHistory520Response, rhs: Market.GetMarketsRegionIDHistory520Response) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -554,6 +478,7 @@ public extension ESI {
 			public var escrow: Double?
 			public var isBuyOrder: Bool?
 			public var issued: Date
+			public var issuedBy: Int?
 			public var locationID: Int64
 			public var minVolume: Int?
 			public var orderID: Int64
@@ -566,11 +491,12 @@ public extension ESI {
 			public var volumeTotal: Int
 			public var walletDivision: Int
 			
-			public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: Market.GetCorporationsCorporationIDOrdersHistoryOk.GetCorporationsCorporationIDOrdersHistoryRange, regionID: Int, state: Market.GetCorporationsCorporationIDOrdersHistoryOk.GetCorporationsCorporationIDOrdersHistoryState, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
+			public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, issued: Date, issuedBy: Int?, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: Market.GetCorporationsCorporationIDOrdersHistoryOk.GetCorporationsCorporationIDOrdersHistoryRange, regionID: Int, state: Market.GetCorporationsCorporationIDOrdersHistoryOk.GetCorporationsCorporationIDOrdersHistoryState, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
 				self.duration = duration
 				self.escrow = escrow
 				self.isBuyOrder = isBuyOrder
 				self.issued = issued
+				self.issuedBy = issuedBy
 				self.locationID = locationID
 				self.minVolume = minVolume
 				self.orderID = orderID
@@ -590,6 +516,7 @@ public extension ESI {
 				hashCombine(seed: &hash, value: escrow?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: isBuyOrder?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: issued.hashValue)
+				hashCombine(seed: &hash, value: issuedBy?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: locationID.hashValue)
 				hashCombine(seed: &hash, value: minVolume?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: orderID.hashValue)
@@ -613,6 +540,7 @@ public extension ESI {
 				case escrow
 				case isBuyOrder = "is_buy_order"
 				case issued
+				case issuedBy = "issued_by"
 				case locationID = "location_id"
 				case minVolume = "min_volume"
 				case orderID = "order_id"
@@ -624,6 +552,109 @@ public extension ESI {
 				case volumeRemain = "volume_remain"
 				case volumeTotal = "volume_total"
 				case walletDivision = "wallet_division"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .issued: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CharacterOrder: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDOrdersRange: String, Codable, HTTPQueryable {
+				case i1 = "1"
+				case i10 = "10"
+				case i2 = "2"
+				case i20 = "20"
+				case i3 = "3"
+				case i30 = "30"
+				case i4 = "4"
+				case i40 = "40"
+				case i5 = "5"
+				case region = "region"
+				case solarsystem = "solarsystem"
+				case station = "station"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var duration: Int
+			public var escrow: Double?
+			public var isBuyOrder: Bool?
+			public var isCorporation: Bool
+			public var issued: Date
+			public var locationID: Int64
+			public var minVolume: Int?
+			public var orderID: Int64
+			public var price: Double
+			public var range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange
+			public var regionID: Int
+			public var typeID: Int
+			public var volumeRemain: Int
+			public var volumeTotal: Int
+			
+			public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+				self.duration = duration
+				self.escrow = escrow
+				self.isBuyOrder = isBuyOrder
+				self.isCorporation = isCorporation
+				self.issued = issued
+				self.locationID = locationID
+				self.minVolume = minVolume
+				self.orderID = orderID
+				self.price = price
+				self.range = range
+				self.regionID = regionID
+				self.typeID = typeID
+				self.volumeRemain = volumeRemain
+				self.volumeTotal = volumeTotal
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: duration.hashValue)
+				hashCombine(seed: &hash, value: escrow?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isBuyOrder?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: isCorporation.hashValue)
+				hashCombine(seed: &hash, value: issued.hashValue)
+				hashCombine(seed: &hash, value: locationID.hashValue)
+				hashCombine(seed: &hash, value: minVolume?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: orderID.hashValue)
+				hashCombine(seed: &hash, value: price.hashValue)
+				hashCombine(seed: &hash, value: range.hashValue)
+				hashCombine(seed: &hash, value: regionID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: volumeRemain.hashValue)
+				hashCombine(seed: &hash, value: volumeTotal.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Market.CharacterOrder, rhs: Market.CharacterOrder) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case duration
+				case escrow
+				case isBuyOrder = "is_buy_order"
+				case isCorporation = "is_corporation"
+				case issued
+				case locationID = "location_id"
+				case minVolume = "min_volume"
+				case orderID = "order_id"
+				case price
+				case range
+				case regionID = "region_id"
+				case typeID = "type_id"
+				case volumeRemain = "volume_remain"
+				case volumeTotal = "volume_total"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -777,109 +808,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CharacterOrder: Codable, Hashable {
-			
-			public enum GetCharactersCharacterIDOrdersRange: String, Codable, HTTPQueryable {
-				case i1 = "1"
-				case i10 = "10"
-				case i2 = "2"
-				case i20 = "20"
-				case i3 = "3"
-				case i30 = "30"
-				case i4 = "4"
-				case i40 = "40"
-				case i5 = "5"
-				case region = "region"
-				case solarsystem = "solarsystem"
-				case station = "station"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var duration: Int
-			public var escrow: Double?
-			public var isBuyOrder: Bool?
-			public var isCorporation: Bool
-			public var issued: Date
-			public var locationID: Int64
-			public var minVolume: Int?
-			public var orderID: Int64
-			public var price: Double
-			public var range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange
-			public var regionID: Int
-			public var typeID: Int
-			public var volumeRemain: Int
-			public var volumeTotal: Int
-			
-			public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: Market.CharacterOrder.GetCharactersCharacterIDOrdersRange, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
-				self.duration = duration
-				self.escrow = escrow
-				self.isBuyOrder = isBuyOrder
-				self.isCorporation = isCorporation
-				self.issued = issued
-				self.locationID = locationID
-				self.minVolume = minVolume
-				self.orderID = orderID
-				self.price = price
-				self.range = range
-				self.regionID = regionID
-				self.typeID = typeID
-				self.volumeRemain = volumeRemain
-				self.volumeTotal = volumeTotal
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: escrow?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isBuyOrder?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: isCorporation.hashValue)
-				hashCombine(seed: &hash, value: issued.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: minVolume?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: orderID.hashValue)
-				hashCombine(seed: &hash, value: price.hashValue)
-				hashCombine(seed: &hash, value: range.hashValue)
-				hashCombine(seed: &hash, value: regionID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: volumeRemain.hashValue)
-				hashCombine(seed: &hash, value: volumeTotal.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Market.CharacterOrder, rhs: Market.CharacterOrder) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case duration
-				case escrow
-				case isBuyOrder = "is_buy_order"
-				case isCorporation = "is_corporation"
-				case issued
-				case locationID = "location_id"
-				case minVolume = "min_volume"
-				case orderID = "order_id"
-				case price
-				case range
-				case regionID = "region_id"
-				case typeID = "type_id"
-				case volumeRemain = "volume_remain"
-				case volumeTotal = "volume_total"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .issued: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -1072,6 +1000,7 @@ public extension ESI {
 			public var escrow: Double?
 			public var isBuyOrder: Bool?
 			public var issued: Date
+			public var issuedBy: Int
 			public var locationID: Int64
 			public var minVolume: Int?
 			public var orderID: Int64
@@ -1083,11 +1012,12 @@ public extension ESI {
 			public var volumeTotal: Int
 			public var walletDivision: Int
 			
-			public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: Market.CorpOrder.GetCorporationsCorporationIDOrdersRange, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
+			public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, issued: Date, issuedBy: Int, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: Market.CorpOrder.GetCorporationsCorporationIDOrdersRange, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
 				self.duration = duration
 				self.escrow = escrow
 				self.isBuyOrder = isBuyOrder
 				self.issued = issued
+				self.issuedBy = issuedBy
 				self.locationID = locationID
 				self.minVolume = minVolume
 				self.orderID = orderID
@@ -1106,6 +1036,7 @@ public extension ESI {
 				hashCombine(seed: &hash, value: escrow?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: isBuyOrder?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: issued.hashValue)
+				hashCombine(seed: &hash, value: issuedBy.hashValue)
 				hashCombine(seed: &hash, value: locationID.hashValue)
 				hashCombine(seed: &hash, value: minVolume?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: orderID.hashValue)
@@ -1128,6 +1059,7 @@ public extension ESI {
 				case escrow
 				case isBuyOrder = "is_buy_order"
 				case issued
+				case issuedBy = "issued_by"
 				case locationID = "location_id"
 				case minVolume = "min_volume"
 				case orderID = "order_id"
@@ -1321,19 +1253,7 @@ public extension ESI {
 		}
 		
 		
-		public enum OrderType: String, Codable, HTTPQueryable {
-			case all = "all"
-			case buy = "buy"
-			case sell = "sell"
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
-		}
-		
-		
-		public struct GetMarketsRegionIDHistoryUnprocessableEntity: Codable, Hashable {
+		public struct GetMarketsRegionIDHistoryError520: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -1348,7 +1268,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity, rhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity) -> Bool {
+			public static func ==(lhs: Market.GetMarketsRegionIDHistoryError520, rhs: Market.GetMarketsRegionIDHistoryError520) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -1362,6 +1282,18 @@ public extension ESI {
 					}
 				}
 			}
+		}
+		
+		
+		public enum OrderType: String, Codable, HTTPQueryable {
+			case all = "all"
+			case buy = "buy"
+			case sell = "sell"
+			
+			public var httpQuery: String? {
+				return rawValue
+			}
+			
 		}
 		
 		
@@ -1449,6 +1381,38 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .issued: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetMarketsRegionIDHistoryUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity, rhs: Market.GetMarketsRegionIDHistoryUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

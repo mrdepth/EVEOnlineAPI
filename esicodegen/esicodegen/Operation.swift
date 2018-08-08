@@ -120,7 +120,7 @@ class Operation {
 //		headerStrings.insert("\(headerStrings.count > 0 ? "var" : "let") headers = HTTPHeaders()", at: 0)
 		
 		for scope in self.security?.security ?? [] {
-			let s = "guard scopes.contains(\"\(scope)\") else {\ntry! promise.fail(ESIError.forbidden)\nreturn promise.future\n}"
+			let s = "guard scopes.contains(\"\(scope)\") else {return .init(.failure(ESIError.forbidden))}"
 			security.append(s)
 		}
 		
@@ -132,7 +132,8 @@ class Operation {
 		template = template.replacingOccurrences(of: "{queries}", with: queryStrings.joined(separator: "\n"))
 		
 		if security.count > 0 {
-			var s = "let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []\n"
+			
+			var s = "let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []\n"
 			s += security.joined(separator: "\n")
 			template = template.replacingOccurrences(of: "{security}", with: s)
 		}

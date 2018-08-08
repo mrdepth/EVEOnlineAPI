@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import Futures
 
 struct Weak<T: AnyObject> {
 	typealias Value = T
@@ -45,7 +46,7 @@ fileprivate class LoadBalancer {
 	}
 }
 
-public class ESI: SessionManager {
+public class ESI {
 	
 	public struct Result<Value> {
 		public var value: Value
@@ -83,14 +84,14 @@ public class ESI: SessionManager {
 
 	let baseURL = "https://esi.tech.ccp.is"
 	let server: Server
+	var sessionManager: SessionManager!
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		self.server = server
 		let configuration = URLSessionConfiguration.default
-		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+		configuration.httpAdditionalHeaders = HTTPHeaders.defaultHTTPHeaders
 		configuration.requestCachePolicy = cachePolicy
-		
-		super.init(configuration: configuration)
+
 		
 		if let token = token, let clientID = clientID, let secretKey = secretKey {
 			ESI.helpersLock.lock(); defer {ESI.helpersLock.unlock()}
@@ -99,16 +100,18 @@ public class ESI: SessionManager {
 				ESI.helpers[token.refreshToken] = Weak(helper)
 				return helper
 			}()
-			adapter = helper
-			retrier = helper
+//			adapter = helper
+//			retrier = helper
+			sessionManager = SessionManager(configuration: configuration, adapter: helper, retrier: helper)
 		}
-//		startRequestsImmediately = false
+		else {
+			sessionManager = SessionManager(configuration: configuration)
+		}
 	}
 	
 	deinit {
-		if let token = (adapter as? OAuth2Helper)?.token {
-			adapter = nil
-			retrier = nil
+		if let token = (sessionManager.adapter as? OAuth2Helper)?.token {
+			sessionManager = nil
 			if ESI.helpers[token.refreshToken]?.value == nil {
 				ESI.helpers[token.refreshToken] = nil
 			}
@@ -134,9 +137,13 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		var esi: ESI? = self
 		let promise = Promise<ESI.Result<Data>>()
-		request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
-			promise.set(result: response.result, cached: 3600 * 12)
+		esi!.perform { () -> DataRequest in
+			esi!.sessionManager.request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
+				promise.set(result: response.result, cached: 3600 * 12)
+				esi = nil
+			}
 		}
 		return promise.future
 	}
@@ -151,9 +158,13 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		var esi: ESI? = self
 		let promise = Promise<ESI.Result<Data>>()
-		request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png").validate().responseData { response in
-			promise.set(result: response.result, cached: 3600 * 12)
+		esi!.perform { () -> DataRequest in
+			esi!.sessionManager.request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png").validate().responseData { response in
+				promise.set(result: response.result, cached: 3600 * 12)
+				esi = nil
+			}
 		}
 		return promise.future
 	}
@@ -168,9 +179,13 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		var esi: ESI? = self
 		let promise = Promise<ESI.Result<Data>>()
-		request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png").validate().responseData { response in
-			promise.set(result: response.result, cached: 3600 * 12)
+		esi!.perform { () -> DataRequest in
+			esi!.sessionManager.request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png").validate().responseData { response in
+				promise.set(result: response.result, cached: 3600 * 12)
+				esi = nil
+			}
 		}
 		return promise.future
 	}
@@ -185,9 +200,13 @@ public class ESI: SessionManager {
 			}
 		}
 		
+		var esi: ESI? = self
 		let promise = Promise<ESI.Result<Data>>()
-		request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png").validate().responseData { response in
-			promise.set(result: response.result, cached: 3600 * 12)
+		esi!.perform { () -> DataRequest in
+			esi!.sessionManager.request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png").validate().responseData { response in
+				promise.set(result: response.result, cached: 3600 * 12)
+				esi = nil
+			}
 		}
 		return promise.future
 	}
@@ -276,7 +295,7 @@ extension DataRequest {
 		
 		return validate() {(request, response, data) -> ValidationResult in
 			if statusCode.contains(response.statusCode) {
-				return .success
+				return .success(Void())
 			}
 			else {
 				let error: SSOError? = {
@@ -290,7 +309,7 @@ extension DataRequest {
 				case let (_, error?, status):
 					return .failure(ESIError.server(error: error, ssoStatus: status))
 				default:
-					return .success
+					return .success(Void())
 				}
 			}
 		}.validate(statusCode: statusCode)

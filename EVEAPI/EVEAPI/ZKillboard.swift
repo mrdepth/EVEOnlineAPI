@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import Futures
 
 enum ZKillboardError: Error {
 	case invalidRequest(URLRequest)
@@ -34,13 +35,12 @@ extension DateFormatter {
 public class ZKillboard: SessionManager {
 	let baseURL = "https://zkillboard.com/api/"
 	
-	public init(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+	public convenience init(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
 		
 		let configuration = URLSessionConfiguration.default
-		configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+		configuration.httpAdditionalHeaders = HTTPHeaders.defaultHTTPHeaders
 		configuration.requestCachePolicy = cachePolicy
-		
-		super.init(configuration: configuration)
+		self.init(configuration: configuration)
 	}
 	
 	public func kills(filter: [Filter], page: Int?) -> Future<ESI.Result<[Killmail]>> {
@@ -60,7 +60,7 @@ public class ZKillboard: SessionManager {
 		
 		let progress = Progress(totalUnitCount: 100)
 		
-		session?.request(url + args.joined(separator: "/") + "/orderDirection/desc/", method: .get).downloadProgress { p in
+		session?.request(url + args.joined(separator: "/") + "/", method: .get).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
 				promise.set(result: response.result, cached: 600.0)

@@ -1,6 +1,6 @@
-[submodule "ThirdParty/AFNetworking"]
-	path = ThirdParty/AFNetworking
-	url = https://github.com/AFNetworking/AFNetworking.git
 [submodule "ThirdParty/Alamofire"]
 	path = ThirdParty/Alamofire
 	url = https://github.com/Alamofire/Alamofire.git
+[submodule "ThirdParty/Futures"]
+	path = ThirdParty/Futures
+	url = https://github.com/mrdepth/Futures.git

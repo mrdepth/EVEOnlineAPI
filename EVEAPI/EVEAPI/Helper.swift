@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import Futures
 
 //fileprivate let salt = Int(truncatingBitPattern: 0x9e3779b9 as UInt64)
 //
@@ -45,7 +46,7 @@ extension Data: ParameterEncoding {
 }
 
 extension Promise {
-	func set<T>(result: Alamofire.Result<T>, cached: TimeInterval = 3600) where Value == ESI.Result<T>{
+	func set<T>(result: Result<T>, cached: TimeInterval = 3600) where Value == ESI.Result<T>{
 		do {
 			switch result {
 			case let .success(value):

@@ -36,13 +36,6 @@ class ViewController: UIViewController {
 		let task = session!.dataTask(with: URL(string: "http://refreshyourcache.com/cache-test/test.php")!)
 		task.resume()*/
 		
-		var session: SessionManager? = SessionManager(configuration: configuration)
-		session?.adapter = Adapter()
-		let request = session?.request("http://refreshyourcache.com/cache-test/test.php").responseString(completionHandler: { (response) in
-			let image = UIImage(data: response.data!)
-			print("\(response.timeline.description)")
-			session = nil
-		})
 	}
 	
 	override func didReceiveMemoryWarning() {
