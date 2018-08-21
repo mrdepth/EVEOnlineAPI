@@ -17,10 +17,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func yearlyAggregateStats(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characterstats.read.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -31,22 +30,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDStatsOk]>) in
 					promise.set(result: response.result, cached: 86400.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -54,8 +52,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterPortraits(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Portrait>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -67,22 +64,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Character.Portrait>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -90,10 +86,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterCorporationTitles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -104,22 +99,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -127,10 +121,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getJumpFatigue(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Fatigue>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_fatigue.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -141,22 +134,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Character.Fatigue>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Fatigue>) in
 					promise.set(result: response.result, cached: 300.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -164,10 +156,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterCorporationRoles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Role>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_corporation_roles.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -178,22 +169,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Character.Role>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Role>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -201,8 +191,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationHistory(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.CorporationHistory]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -214,22 +203,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.CorporationHistory]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -237,8 +225,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharactersPublicInformation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Information>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -250,22 +237,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Character.Information>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Information>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -273,10 +259,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getNewContactNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_notifications.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -287,22 +272,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsContactsOk]>) in
 					promise.set(result: response.result, cached: 600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -310,10 +294,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getStandings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Standing]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_standings.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -324,22 +307,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.Standing]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -347,10 +329,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func calculateCSPAChargeCost(characterID: Int, characters: [Int]) -> Future<ESI.Result<Float>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body = try? JSONEncoder().encode(characters)
 			
@@ -359,22 +340,21 @@ public extension ESI {
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Float>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Float>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -382,10 +362,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_notifications.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -396,22 +375,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
 					promise.set(result: response.result, cached: 600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -419,10 +397,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAgentsResearch(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Research]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_agents_research.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -433,22 +410,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.Research]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -456,10 +432,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getMedals(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Medal]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -470,22 +445,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.Medal]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -493,10 +467,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getBlueprints(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Character.Blueprint]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_blueprints.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -507,24 +480,23 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			if let v = page?.httpQuery {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.Blueprint]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Blueprint]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -532,8 +504,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func characterAffiliation(characters: [Int]) -> Future<ESI.Result<[Character.Affiliation]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body = try? JSONEncoder().encode(characters)
@@ -543,22 +514,21 @@ public extension ESI {
 			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Character.Affiliation]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future

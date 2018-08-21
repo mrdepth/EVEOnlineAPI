@@ -17,8 +17,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -30,22 +29,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -53,8 +51,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getOpportunitiesGroup(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Opportunities.Group>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -69,24 +66,23 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			if let v = language?.httpQuery {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Opportunities.Group>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -94,8 +90,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getOpportunitiesTasks(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -107,22 +102,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -130,8 +124,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func getOpportunitiesGroups(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -143,22 +136,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future
@@ -166,10 +158,9 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharactersCompletedTasks(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
-			let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_opportunities.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -180,22 +171,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Opportunities.CompletedTask]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Opportunities.CompletedTask]>) in
 					promise.set(result: response.result, cached: 3600.0)
-					esi = nil
 				}
 			}
 			return promise.future

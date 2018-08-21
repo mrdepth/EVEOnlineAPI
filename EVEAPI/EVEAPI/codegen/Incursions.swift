@@ -17,8 +17,7 @@ public extension ESI {
 		
 		@discardableResult
 		public func listIncursions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Incursions.Incursion]>> {
-			var esi = self.esi
-			guard esi != nil else { return .init(.failure(ESIError.internalError)) }
+			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -30,22 +29,21 @@ public extension ESI {
 			}
 			
 			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi!.server.rawValue))
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi!.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Incursions.Incursion]>>()
-			esi!.perform { () -> DataRequest in
-				return esi!.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Incursions.Incursion]>) in
 					promise.set(result: response.result, cached: 300.0)
-					esi = nil
 				}
 			}
 			return promise.future

@@ -133,7 +133,7 @@ class Operation {
 		
 		if security.count > 0 {
 			
-			var s = "let scopes = (esi?.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []\n"
+			var s = "let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []\n"
 			s += security.joined(separator: "\n")
 			template = template.replacingOccurrences(of: "{security}", with: s)
 		}
