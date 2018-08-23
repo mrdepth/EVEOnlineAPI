@@ -32,7 +32,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/killmails/\(killmailID)/\(killmailHash)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -43,7 +43,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Killmails.Killmail>) in
-					promise.set(result: response.result, cached: 1209600.0)
+					promise.set(response: response, cached: 1209600.0)
 				}
 			}
 			return promise.future
@@ -69,7 +69,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/corporations/\(corporationID)/killmails/recent/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -80,7 +80,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>) in
-					promise.set(result: response.result, cached: 300.0)
+					promise.set(response: response, cached: 300.0)
 				}
 			}
 			return promise.future
@@ -106,7 +106,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/killmails/recent/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -117,7 +117,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Killmails.Recent]>) in
-					promise.set(result: response.result, cached: 300.0)
+					promise.set(response: response, cached: 300.0)
 				}
 			}
 			return promise.future

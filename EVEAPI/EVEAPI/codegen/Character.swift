@@ -33,7 +33,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v2/characters/\(characterID)/stats/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -44,7 +44,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDStatsOk]>) in
-					promise.set(result: response.result, cached: 86400.0)
+					promise.set(response: response, cached: 86400.0)
 				}
 			}
 			return promise.future
@@ -67,7 +67,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v2/characters/\(characterID)/portrait/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -78,7 +78,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -102,7 +102,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/titles/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -113,7 +113,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -137,7 +137,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/fatigue/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -148,7 +148,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Fatigue>) in
-					promise.set(result: response.result, cached: 300.0)
+					promise.set(response: response, cached: 300.0)
 				}
 			}
 			return promise.future
@@ -172,7 +172,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v2/characters/\(characterID)/roles/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -183,7 +183,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Role>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -206,7 +206,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/corporationhistory/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -217,7 +217,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -240,7 +240,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v4/characters/\(characterID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -251,7 +251,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Character.Information>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -275,7 +275,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/notifications/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -286,7 +286,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsContactsOk]>) in
-					promise.set(result: response.result, cached: 600.0)
+					promise.set(response: response, cached: 600.0)
 				}
 			}
 			return promise.future
@@ -310,7 +310,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/standings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -321,7 +321,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -343,7 +343,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v4/characters/\(characterID)/cspa/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -354,7 +354,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Float>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: nil)
 				}
 			}
 			return promise.future
@@ -378,7 +378,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v2/characters/\(characterID)/notifications/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -389,7 +389,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
-					promise.set(result: response.result, cached: 600.0)
+					promise.set(response: response, cached: 600.0)
 				}
 			}
 			return promise.future
@@ -413,7 +413,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/agents_research/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -424,7 +424,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -448,7 +448,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/medals/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -459,7 +459,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -485,7 +485,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v2/characters/\(characterID)/blueprints/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -496,7 +496,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Blueprint]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -517,7 +517,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/affiliation/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -528,7 +528,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future

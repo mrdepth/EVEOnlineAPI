@@ -43,7 +43,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Status.ServerStatus>) in
-					promise.set(result: response.result, cached: 30.0)
+					promise.set(response: response, cached: 30.0)
 				}
 			}
 			return promise.future

@@ -32,7 +32,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v2/dogma/effects/\(effectID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -43,7 +43,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Dogma.Effect>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: nil)
 				}
 			}
 			return promise.future
@@ -66,7 +66,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/dogma/effects/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -77,7 +77,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: nil)
 				}
 			}
 			return promise.future
@@ -100,7 +100,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/dogma/attributes/\(attributeID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -111,7 +111,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Dogma.Attribute>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: nil)
 				}
 			}
 			return promise.future
@@ -134,7 +134,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/dogma/dynamic/items/\(typeID)/\(itemID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -145,7 +145,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: nil)
 				}
 			}
 			return promise.future
@@ -168,7 +168,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/dogma/attributes/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -179,7 +179,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: nil)
 				}
 			}
 			return promise.future

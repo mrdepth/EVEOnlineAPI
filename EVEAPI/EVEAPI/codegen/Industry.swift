@@ -32,7 +32,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/industry/facilities/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -43,7 +43,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.Facilities]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -69,7 +69,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "include_completed", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/industry/jobs/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -80,7 +80,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.Job]>) in
-					promise.set(result: response.result, cached: 300.0)
+					promise.set(response: response, cached: 300.0)
 				}
 			}
 			return promise.future
@@ -106,7 +106,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/corporation/\(corporationID)/mining/observers/\(observerID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -117,7 +117,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -143,7 +143,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/corporation/\(corporationID)/mining/observers/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -154,7 +154,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningObserversOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -183,7 +183,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/corporations/\(corporationID)/industry/jobs/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -194,7 +194,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.CorpJob]>) in
-					promise.set(result: response.result, cached: 300.0)
+					promise.set(response: response, cached: 300.0)
 				}
 			}
 			return promise.future
@@ -217,7 +217,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/industry/systems/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -228,7 +228,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.SolarSystemCostIndices]>) in
-					promise.set(result: response.result, cached: 3600.0)
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -254,7 +254,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/mining/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -265,7 +265,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCharactersCharacterIDMiningOk]>) in
-					promise.set(result: response.result, cached: 600.0)
+					promise.set(response: response, cached: 600.0)
 				}
 			}
 			return promise.future
@@ -291,7 +291,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/v1/corporation/\(corporationID)/mining/extractions/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -302,7 +302,7 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>) in
-					promise.set(result: response.result, cached: 1800.0)
+					promise.set(response: response, cached: 1800.0)
 				}
 			}
 			return promise.future

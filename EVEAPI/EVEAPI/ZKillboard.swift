@@ -49,22 +49,19 @@ public class ZKillboard: SessionManager {
 			try! promise.fail(ZKillboardError.notFound)
 			return promise.future
 		}
-		var session: ZKillboard? = self
-		
 		var args = filter.map {$0.value}
 		if let page = page {
 			args.append("page/\(page)")
 		}
 		
-		let url = session!.baseURL
+		let url = baseURL
 		
 		let progress = Progress(totalUnitCount: 100)
 		
-		session?.request(url + args.joined(separator: "/") + "/", method: .get).downloadProgress { p in
+		request(url + args.joined(separator: "/") + "/", method: .get).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
-				promise.set(result: response.result, cached: 600.0)
-				session = nil
+		}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
+			promise.set(response: response, cached: 600.0)
 		}
 		return promise.future
 	}

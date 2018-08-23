@@ -34,7 +34,7 @@ class Operation {
 	let responses: [String: Response]
 	let summary: String
 	let security: Security?
-	let cached: TimeInterval
+	let cached: TimeInterval?
 	weak var path: Path?
 	
 	init (_ dictionary: [String: Any], method: HTTPMethod) throws {
@@ -42,7 +42,7 @@ class Operation {
 		
 		try operationID = dictionary.safeGet(key: "operationId")
 		try summary = dictionary.safeGet(key: "summary")
-		cached = dictionary["x-cached-seconds"] as? Double ?? 3600
+		cached = dictionary["x-cached-seconds"] as? Double
 		
 		security = try? Security(dictionary["security"] as? [Any] ?? [])
 		
@@ -143,7 +143,7 @@ class Operation {
 		template = template.replacingOccurrences(of: "{method}", with: method.rawValue)
 //		template = template.replacingOccurrences(of: "{encoding}", with: method.encoding)
 		template = template.replacingOccurrences(of: "{url}", with: url)
-		template = template.replacingOccurrences(of: "{cached}", with: "\(cached)")
+		template = template.replacingOccurrences(of: "{cached}", with: "\(cached.map{"\($0)"} ?? "nil")")
 		return template
 	}
 }

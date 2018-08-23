@@ -46,11 +46,11 @@ extension Data: ParameterEncoding {
 }
 
 extension Promise {
-	func set<T>(result: Result<T>, cached: TimeInterval = 3600) where Value == ESI.Result<T>{
+	func set<T>(response: DataResponse<T>, cached: TimeInterval?) where Value == ESI.Result<T>{
 		do {
-			switch result {
+			switch response.result {
 			case let .success(value):
-				try fulfill(ESI.Result<T>(value: value, cached: cached))
+				try fulfill(ESI.Result<T>(value: value, cached: cached, etag: response.response?.allHeaderFields["Etag"] as? String))
 			case let .failure(error):
 				throw error
 			}

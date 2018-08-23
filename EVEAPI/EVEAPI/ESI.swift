@@ -26,12 +26,12 @@ fileprivate class LoadBalancer {
 	private var lock = NSLock()
 	
 	func add(_ request: @escaping ()-> DataRequest?) {
-		lock.perform { queue.append(request) }
+		lock.performCritical { queue.append(request) }
 		dispatch()
 	}
 	
 	private func dispatch() {
-		lock.perform {
+		lock.performCritical {
 			while !queue.isEmpty && active < maxConcurentRequestsCount {
 				let request = queue.removeFirst()
 				active += 1
@@ -57,11 +57,13 @@ public class ESI {
 	
 	public struct Result<Value> {
 		public var value: Value
-		public var cached: TimeInterval
+		public var cached: TimeInterval?
+		public var etag: String?
 		
-		public init(value: Value, cached: TimeInterval) {
+		public init(value: Value, cached: TimeInterval?, etag: String?) {
 			self.value = value
 			self.cached = cached
+			self.etag = etag
 		}
 	}
 	
@@ -147,7 +149,7 @@ public class ESI {
 		let promise = Promise<ESI.Result<Data>>()
 		perform { [weak self] () -> DataRequest? in
 			self?.sessionManager.request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
-				promise.set(result: response.result, cached: 3600 * 12)
+				promise.set(response: response, cached: 3600 * 12)
 			}
 		}
 		return promise.future
@@ -166,7 +168,7 @@ public class ESI {
 		let promise = Promise<ESI.Result<Data>>()
 		perform { [weak self] () -> DataRequest? in
 			self?.sessionManager.request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png").validate().responseData { response in
-				promise.set(result: response.result, cached: 3600 * 12)
+				promise.set(response: response, cached: 3600 * 12)
 			}
 		}
 		return promise.future
@@ -185,7 +187,7 @@ public class ESI {
 		let promise = Promise<ESI.Result<Data>>()
 		perform { [weak self] () -> DataRequest? in
 			self?.sessionManager.request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png").validate().responseData { response in
-				promise.set(result: response.result, cached: 3600 * 12)
+				promise.set(response: response, cached: 3600 * 12)
 			}
 		}
 		return promise.future
@@ -204,7 +206,7 @@ public class ESI {
 		let promise = Promise<ESI.Result<Data>>()
 		perform { [weak self] () -> DataRequest? in
 			self?.sessionManager.request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png").validate().responseData { response in
-				promise.set(result: response.result, cached: 3600 * 12)
+				promise.set(response: response, cached: 3600 * 12)
 			}
 		}
 		return promise.future
