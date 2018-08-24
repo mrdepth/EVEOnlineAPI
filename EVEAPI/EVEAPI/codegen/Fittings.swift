@@ -8,16 +8,11 @@ public extension ESI {
 		return Fittings(esi: self)
 	}
 	
-	class Fittings {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Fittings {
+		let esi: ESI
 		
 		@discardableResult
 		public func deleteFitting(characterID: Int, fittingID: Int) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -50,7 +45,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func createFitting(characterID: Int, fitting: Fittings.MutableFitting) -> Future<ESI.Result<Fittings.CreateFittingResult>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.write_fittings.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -83,7 +77,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getFittings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Fittings.Fitting]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fittings.read_fittings.v1") else {return .init(.failure(ESIError.forbidden))}

@@ -8,16 +8,11 @@ public extension ESI {
 		return Incursions(esi: self)
 	}
 	
-	class Incursions {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Incursions {
+		let esi: ESI
 		
 		@discardableResult
 		public func listIncursions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Incursions.Incursion]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

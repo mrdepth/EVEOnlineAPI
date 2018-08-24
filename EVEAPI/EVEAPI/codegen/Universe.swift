@@ -8,16 +8,11 @@ public extension ESI {
 		return Universe(esi: self)
 	}
 	
-	class Universe {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Universe {
+		let esi: ESI
 		
 		@discardableResult
 		public func getRegionInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, regionID: Int) -> Future<ESI.Result<Universe.RegionInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -56,7 +51,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getItemGroups(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -92,7 +86,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getSystemKills(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.SystemKills]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -126,7 +119,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getRegions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -160,7 +152,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getConstellationInformation(acceptLanguage: AcceptLanguage? = nil, constellationID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ConstellationInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -199,7 +190,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getStarInformation(ifNoneMatch: String? = nil, starID: Int) -> Future<ESI.Result<Universe.GetUniverseStarsStarIDOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -233,7 +223,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getGraphicInformation(graphicID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GraphicInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -267,7 +256,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getStructureInformation(ifNoneMatch: String? = nil, structureID: Int64) -> Future<ESI.Result<Universe.StructureInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-universe.read_structures.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -302,7 +290,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getItemGroupInformation(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemGroupInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -341,7 +328,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getItemCategoryInformation(acceptLanguage: AcceptLanguage? = nil, categoryID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemCategoryInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -380,7 +366,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getStargateInformation(ifNoneMatch: String? = nil, stargateID: Int) -> Future<ESI.Result<Universe.StargateInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -414,7 +399,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAncestries(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.GetUniverseAncestriesOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -453,7 +437,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getGraphics(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -487,7 +470,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getConstellations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -521,7 +503,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterRaces(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Race]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -560,7 +541,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getMoonInformation(ifNoneMatch: String? = nil, moonID: Int) -> Future<ESI.Result<Universe.MoonInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -594,7 +574,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getFactions(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Faction]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -633,7 +612,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getTypes(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -669,7 +647,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getTypeInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, typeID: Int) -> Future<ESI.Result<Universe.TypeInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -708,7 +685,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listAllPublicStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int64]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -742,7 +718,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getNamesAndCategoriesForSetOfIDs(ids: [Int]) -> Future<ESI.Result<[Universe.Name]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body = try? JSONEncoder().encode(ids)
@@ -774,7 +749,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getSolarSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -808,7 +782,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAsteroidBeltInformation(asteroidBeltID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -842,7 +815,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getPlanetInformation(ifNoneMatch: String? = nil, planetID: Int) -> Future<ESI.Result<Universe.PlanetInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -876,7 +848,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getSystemJumps(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.Jump]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -910,7 +881,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getItemCategories(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -944,7 +914,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getStationInformation(ifNoneMatch: String? = nil, stationID: Int) -> Future<ESI.Result<Universe.StationInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -978,7 +947,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getSolarSystemInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, systemID: Int) -> Future<ESI.Result<Universe.SolarSystemInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -1017,7 +985,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getBloodlines(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Bloodline]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -1056,7 +1023,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func bulkNamesToIDs(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, names: [String]) -> Future<ESI.Result<Universe.PostUniverseIdsOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body = try? JSONEncoder().encode(names)

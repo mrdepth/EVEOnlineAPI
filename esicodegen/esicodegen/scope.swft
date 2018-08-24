@@ -8,12 +8,8 @@ public extension ESI {
 		return {scope}(esi: self)
 	}
 
-	class {scope} {
-		weak var esi: ESI?
-	
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct {scope} {
+		let esi: ESI
 
 {operations}
 

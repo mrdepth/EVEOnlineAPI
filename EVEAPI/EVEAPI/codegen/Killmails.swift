@@ -8,16 +8,11 @@ public extension ESI {
 		return Killmails(esi: self)
 	}
 	
-	class Killmails {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Killmails {
+		let esi: ESI
 		
 		@discardableResult
 		public func getSingleKillmail(ifNoneMatch: String? = nil, killmailHash: String, killmailID: Int) -> Future<ESI.Result<Killmails.Killmail>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -51,7 +46,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationsRecentKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-killmails.read_corporation_killmails.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -88,7 +82,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharactersRecentKillsAndLosses(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-killmails.read_killmails.v1") else {return .init(.failure(ESIError.forbidden))}

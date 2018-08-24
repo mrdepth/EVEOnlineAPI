@@ -8,16 +8,11 @@ public extension ESI {
 		return Wallet(esi: self)
 	}
 	
-	class Wallet {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Wallet {
+		let esi: ESI
 		
 		@discardableResult
 		public func getWalletTransactions(characterID: Int, fromID: Int64? = nil, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Wallet.Transaction]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -54,7 +49,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterWalletJournal(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Wallet.WalletJournalItem]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -91,7 +85,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationWalletJournal(corporationID: Int, division: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Wallet.CorpWalletsJournalItem]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -128,7 +121,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationWalletTransactions(corporationID: Int, division: Int, fromID: Int64? = nil, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Wallet.CorpTransaction]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -165,7 +157,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func returnsCorporationsWalletBalance(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Wallet.Balance]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -200,7 +191,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharactersWalletBalance(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Double>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {return .init(.failure(ESIError.forbidden))}

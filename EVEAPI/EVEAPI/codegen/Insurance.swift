@@ -8,16 +8,11 @@ public extension ESI {
 		return Insurance(esi: self)
 	}
 	
-	class Insurance {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Insurance {
+		let esi: ESI
 		
 		@discardableResult
 		public func listInsuranceLevels(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Insurance.Price]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

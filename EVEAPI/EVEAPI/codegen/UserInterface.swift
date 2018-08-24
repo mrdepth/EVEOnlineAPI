@@ -8,16 +8,11 @@ public extension ESI {
 		return UserInterface(esi: self)
 	}
 	
-	class UserInterface {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct UserInterface {
+		let esi: ESI
 		
 		@discardableResult
 		public func openInformationWindow(targetID: Int) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -52,7 +47,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func setAutopilotWaypoint(addToBeginning: Bool, clearOtherWaypoints: Bool, destinationID: Int64) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-ui.write_waypoint.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -93,7 +87,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func openMarketDetails(typeID: Int) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -128,7 +121,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func openContractWindow(contractID: Int) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -163,7 +155,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func openNewMailWindow(newMail: UserInterface.NewMail) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}

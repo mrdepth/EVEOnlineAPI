@@ -8,16 +8,11 @@ public extension ESI {
 		return Alliance(esi: self)
 	}
 	
-	class Alliance {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Alliance {
+		let esi: ESI
 		
 		@discardableResult
 		public func listAlliancesCorporations(allianceID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -51,7 +46,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listAllAlliances(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -85,7 +79,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAllianceIcon(allianceID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Alliance.Icon>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -119,7 +112,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAllianceInformation(allianceID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Alliance.Information>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

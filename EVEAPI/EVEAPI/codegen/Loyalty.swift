@@ -8,16 +8,11 @@ public extension ESI {
 		return Loyalty(esi: self)
 	}
 	
-	class Loyalty {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Loyalty {
+		let esi: ESI
 		
 		@discardableResult
 		public func getLoyaltyPoints(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Point]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_loyalty.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -52,7 +47,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Offer]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

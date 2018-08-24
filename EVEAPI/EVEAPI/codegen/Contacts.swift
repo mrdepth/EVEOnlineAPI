@@ -8,16 +8,11 @@ public extension ESI {
 		return Contacts(esi: self)
 	}
 	
-	class Contacts {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Contacts {
+		let esi: ESI
 		
 		@discardableResult
 		public func getAllianceContacts(allianceID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-alliances.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -54,7 +49,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationContacts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -91,7 +85,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getContactLabels(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Contacts.Label]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -126,7 +119,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAllianceContactLabels(allianceID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-alliances.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -161,7 +153,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationContactLabels(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -196,7 +187,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func editContacts(characterID: Int, contactIds: [Int], labelIds: [Int64]? = nil, standing: Float, watched: Bool? = nil) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.write_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -237,7 +227,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func addContacts(characterID: Int, contactIds: [Int], labelIds: [Int64]? = nil, standing: Float, watched: Bool? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.write_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -278,7 +267,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getContacts(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Contacts.Contact]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -315,7 +303,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func deleteContacts(characterID: Int, contactIds: [Int]) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-characters.write_contacts.v1") else {return .init(.failure(ESIError.forbidden))}

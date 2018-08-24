@@ -8,16 +8,11 @@ public extension ESI {
 		return Market(esi: self)
 	}
 	
-	class Market {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Market {
+		let esi: ESI
 		
 		@discardableResult
 		public func listHistoricalMarketStatisticsInRegion(ifNoneMatch: String? = nil, regionID: Int, typeID: Int) -> Future<ESI.Result<[Market.History]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -53,7 +48,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listHistoricalOrdersByCharacter(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.GetCharactersCharacterIDOrdersHistoryOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_character_orders.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -90,7 +84,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listMarketPrices(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Market.Price]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -124,7 +117,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getItemGroups(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -158,7 +150,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listHistoricalOrdersFromCorporation(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.GetCorporationsCorporationIDOrdersHistoryOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -195,7 +186,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOrdersInStructure(ifNoneMatch: String? = nil, page: Int? = nil, structureID: Int64) -> Future<ESI.Result<[Market.Structure]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.structure_markets.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -232,7 +222,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOpenOrdersFromCorporation(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Market.CorpOrder]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_corporation_orders.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -269,7 +258,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getItemGroupInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, marketGroupID: Int) -> Future<ESI.Result<Market.ItemGroupInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -308,7 +296,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listTypeIDsRelevantToMarket(ifNoneMatch: String? = nil, page: Int? = nil, regionID: Int) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -344,7 +331,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOrdersInRegion(ifNoneMatch: String? = nil, orderType: Market.OrderType, page: Int? = nil, regionID: Int, typeID: Int? = nil) -> Future<ESI.Result<[Market.Order]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -386,7 +372,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listOpenOrdersFromCharacter(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Market.CharacterOrder]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-markets.read_character_orders.v1") else {return .init(.failure(ESIError.forbidden))}

@@ -8,16 +8,11 @@ public extension ESI {
 		return Status(esi: self)
 	}
 	
-	class Status {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Status {
+		let esi: ESI
 		
 		@discardableResult
 		public func retrieveTheUptimeAndPlayerCounts(ifNoneMatch: String? = nil) -> Future<ESI.Result<Status.ServerStatus>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

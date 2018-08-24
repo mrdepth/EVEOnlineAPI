@@ -8,16 +8,11 @@ public extension ESI {
 		return Location(esi: self)
 	}
 	
-	class Location {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Location {
+		let esi: ESI
 		
 		@discardableResult
 		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.CharacterLocation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-location.read_location.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -52,7 +47,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterOnline(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-location.read_online.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -87,7 +81,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCurrentShip(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.CharacterShip>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-location.read_ship_type.v1") else {return .init(.failure(ESIError.forbidden))}

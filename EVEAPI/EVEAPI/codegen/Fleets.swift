@@ -8,16 +8,11 @@ public extension ESI {
 		return Fleets(esi: self)
 	}
 	
-	class Fleets {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Fleets {
+		let esi: ESI
 		
 		@discardableResult
 		public func createFleetSquad(fleetID: Int64, wingID: Int64) -> Future<ESI.Result<Fleets.SquadCreated>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -50,7 +45,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func createFleetWing(fleetID: Int64) -> Future<ESI.Result<Fleets.WingCreated>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -83,7 +77,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getFleetWings(acceptLanguage: AcceptLanguage? = nil, fleetID: Int64, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Fleets.GetFleetsFleetIDWingsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -123,7 +116,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func deleteFleetSquad(fleetID: Int64, squadID: Int64) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -156,7 +148,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func renameFleetSquad(fleetID: Int64, naming: Fleets.Naming, squadID: Int64) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -189,7 +180,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func createFleetInvitation(fleetID: Int64, invitation: Fleets.Invitation) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -222,7 +212,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getFleetMembers(acceptLanguage: AcceptLanguage? = nil, fleetID: Int64, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Fleets.Member]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -262,7 +251,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func kickFleetMember(fleetID: Int64, memberID: Int) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -295,7 +283,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func moveFleetMember(fleetID: Int64, memberID: Int, movement: Fleets.Movement) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -328,7 +315,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func updateFleet(fleetID: Int64, newSettings: Fleets.FleetUpdate) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -361,7 +347,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getFleetInformation(fleetID: Int64, ifNoneMatch: String? = nil) -> Future<ESI.Result<Fleets.Information>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -396,7 +381,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCharacterFleetInfo(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Fleets.GetCharactersCharacterIDFleetOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -431,7 +415,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func deleteFleetWing(fleetID: Int64, wingID: Int64) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -464,7 +447,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func renameFleetWing(fleetID: Int64, naming: Fleets.Naming, wingID: Int64) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}

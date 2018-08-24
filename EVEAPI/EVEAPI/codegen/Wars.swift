@@ -8,16 +8,11 @@ public extension ESI {
 		return Wars(esi: self)
 	}
 	
-	class Wars {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Wars {
+		let esi: ESI
 		
 		@discardableResult
 		public func listWars(ifNoneMatch: String? = nil, maxWarID: Int? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -53,7 +48,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int) -> Future<ESI.Result<Wars.WarInformation>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -87,7 +81,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int) -> Future<ESI.Result<[Wars.Kills]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

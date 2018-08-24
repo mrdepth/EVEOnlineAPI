@@ -8,16 +8,11 @@ public extension ESI {
 		return Dogma(esi: self)
 	}
 	
-	class Dogma {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Dogma {
+		let esi: ESI
 		
 		@discardableResult
 		public func getEffectInformation(effectID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Effect>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -51,7 +46,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getEffects(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -85,7 +79,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAttributeInformation(attributeID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Attribute>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -119,7 +112,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getDynamicItemInformation(ifNoneMatch: String? = nil, itemID: Int64, typeID: Int) -> Future<ESI.Result<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -153,7 +145,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAttributes(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

@@ -8,16 +8,11 @@ public extension ESI {
 		return Corporation(esi: self)
 	}
 	
-	class Corporation {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Corporation {
+		let esi: ESI
 		
 		@discardableResult
 		public func getCorporationMedals(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -54,7 +49,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationShareholders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDShareholdersOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -91,7 +85,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMembers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -126,7 +119,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationFacilities(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDFacilitiesOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_facilities.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -161,7 +153,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationStandings(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDStandingsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_standings.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -198,7 +189,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAllianceHistory(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.History]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -232,7 +222,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMemberRolesHistory(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDRolesHistoryOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -269,7 +258,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationBlueprints(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDBlueprintsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_blueprints.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -306,7 +294,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func trackCorporationMembers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMembertrackingOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.track_members.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -341,7 +328,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationIssuedMedals(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMedalsIssuedOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -378,7 +364,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationTitles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDTitlesOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -413,7 +398,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationsMembersTitles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDMembersTitlesOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -448,7 +432,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationInformation(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Information>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -482,7 +465,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationStructures(acceptLanguage: AcceptLanguage? = nil, corporationID: Int, ifNoneMatch: String? = nil, language: Language? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.Structure]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_structures.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -525,7 +507,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationIcon(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Icon>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil
@@ -559,7 +540,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMemberLimit(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Int>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.track_members.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -594,7 +574,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAllCorporationALSCLogs(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDContainersLogsOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_container_logs.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -631,7 +610,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getStarbasePOSDetail(corporationID: Int, ifNoneMatch: String? = nil, starbaseID: Int64, systemID: Int) -> Future<ESI.Result<Corporation.GetCorporationsCorporationIDStarbasesStarbaseIDOk>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_starbases.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -668,7 +646,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationDivisions(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Corporation.Divisions>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_divisions.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -703,7 +680,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationStarbasesPOSes(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Corporation.GetCorporationsCorporationIDStarbasesOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_starbases.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -740,7 +716,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getCorporationMemberRoles(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Corporation.Role]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-corporations.read_corporation_membership.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -775,7 +750,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getNpcCorporations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			
 			let body: Data? = nil

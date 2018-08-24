@@ -1,6 +1,5 @@
 	@discardableResult
 	public func {operation}({definitions}) -> Future<ESI.Result<{result}>> {
-		guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 
 {security}
 {body}

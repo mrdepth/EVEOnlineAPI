@@ -8,16 +8,11 @@ public extension ESI {
 		return Calendar(esi: self)
 	}
 	
-	class Calendar {
-		weak var esi: ESI?
-		
-		init(esi: ESI) {
-			self.esi = esi
-		}
+	struct Calendar {
+		let esi: ESI
 		
 		@discardableResult
 		public func getAttendees(characterID: Int, eventID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -52,7 +47,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func listCalendarEventSummaries(characterID: Int, fromEvent: Int? = nil, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Calendar.Summary]>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -89,7 +83,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func respondToAnEvent(characterID: Int, eventID: Int, response: Calendar.Response) -> Future<ESI.Result<String>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.respond_calendar_events.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -122,7 +115,6 @@ public extension ESI {
 		
 		@discardableResult
 		public func getAnEvent(characterID: Int, eventID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Calendar.Event>> {
-			guard let esi = self.esi else { return .init(.failure(ESIError.internalError)) }
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {return .init(.failure(ESIError.forbidden))}
