@@ -102,13 +102,6 @@ public extension ESI {
 					self.locationType = locationType
 				}
 				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: locationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: locationType?.hashValue ?? 0)
-					return hash
-				}
-				
 				public static func ==(lhs: Clones.JumpClones.Location, rhs: Clones.JumpClones.Location) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
@@ -152,16 +145,6 @@ public extension ESI {
 					self.name = name
 				}
 				
-				public var hashValue: Int {
-					var hash: Int = 0
-					self.implants.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: jumpCloneID.hashValue)
-					hashCombine(seed: &hash, value: locationID.hashValue)
-					hashCombine(seed: &hash, value: locationType.hashValue)
-					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-					return hash
-				}
-				
 				public static func ==(lhs: Clones.JumpClones.JumpClone, rhs: Clones.JumpClones.JumpClone) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
@@ -192,15 +175,6 @@ public extension ESI {
 				self.jumpClones = jumpClones
 				self.lastCloneJumpDate = lastCloneJumpDate
 				self.lastStationChangeDate = lastStationChangeDate
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: homeLocation?.hashValue ?? 0)
-				self.jumpClones.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: lastCloneJumpDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastStationChangeDate?.hashValue ?? 0)
-				return hash
 			}
 			
 			public static func ==(lhs: Clones.JumpClones, rhs: Clones.JumpClones) -> Bool {

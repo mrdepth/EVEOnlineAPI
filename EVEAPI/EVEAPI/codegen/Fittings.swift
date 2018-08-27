@@ -123,14 +123,6 @@ public extension ESI {
 				self.typeID = typeID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: flag.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Fittings.Item, rhs: Fittings.Item) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -167,16 +159,6 @@ public extension ESI {
 				self.shipTypeID = shipTypeID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: fittingID.hashValue)
-				self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Fittings.Fitting, rhs: Fittings.Fitting) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -187,38 +169,6 @@ public extension ESI {
 				case items
 				case name
 				case shipTypeID = "ship_type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CreateFittingResult: Codable, Hashable {
-			
-			
-			public var fittingID: Int
-			
-			public init(fittingID: Int) {
-				self.fittingID = fittingID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: fittingID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case fittingID = "fitting_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -245,15 +195,6 @@ public extension ESI {
 				self.shipTypeID = shipTypeID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				self.items.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Fittings.MutableFitting, rhs: Fittings.MutableFitting) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -263,6 +204,32 @@ public extension ESI {
 				case items
 				case name
 				case shipTypeID = "ship_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CreateFittingResult: Codable, Hashable {
+			
+			
+			public var fittingID: Int
+			
+			public init(fittingID: Int) {
+				self.fittingID = fittingID
+			}
+			
+			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fittingID = "fitting_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

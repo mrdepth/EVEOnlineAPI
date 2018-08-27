@@ -60,15 +60,6 @@ public extension ESI {
 				self.vip = vip
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: players.hashValue)
-				hashCombine(seed: &hash, value: serverVersion.hashValue)
-				hashCombine(seed: &hash, value: startTime.hashValue)
-				hashCombine(seed: &hash, value: vip?.hashValue ?? 0)
-				return hash
-			}
-			
 			public static func ==(lhs: Status.ServerStatus, rhs: Status.ServerStatus) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}

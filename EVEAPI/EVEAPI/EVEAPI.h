@@ -16,4 +16,4 @@ FOUNDATION_EXPORT const unsigned char EVEAPIVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <EVEAPI/PublicHeader.h>
 
-#import <EVEAPI/NSString+md5.h>
+//#import <EVEAPI/NSString+md5.h>

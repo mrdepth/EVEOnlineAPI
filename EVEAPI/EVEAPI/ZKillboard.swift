@@ -215,20 +215,6 @@ extension ZKillboard {
 				case weaponTypeID = "weapon_type_id"
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: damageDone.hashValue)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: finalBlow.hashValue)
-				hashCombine(seed: &hash, value: securityStatus.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: weaponTypeID?.hashValue ?? 0)
-				return hash
-			}
-			
 			public static func ==(lhs: Killmail.Attacker, rhs: Killmail.Attacker) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -254,18 +240,6 @@ extension ZKillboard {
 				case items
 			}
 
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: damageTaken.hashValue)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
-				items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
 			public static func ==(lhs: Killmail.Victim, rhs: Killmail.Victim) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -287,16 +261,6 @@ extension ZKillboard {
 				case singleton
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: flag.hashValue)
-				hashCombine(seed: &hash, value: itemTypeID.hashValue)
-				hashCombine(seed: &hash, value: quantityDestroyed?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: quantityDropped?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: singleton.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Killmail.Item, rhs: Killmail.Item) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -313,14 +277,6 @@ extension ZKillboard {
 				case x
 				case y
 				case z
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: x.hashValue)
-				hashCombine(seed: &hash, value: y.hashValue)
-				hashCombine(seed: &hash, value: z.hashValue)
-				return hash
 			}
 			
 			public static func ==(lhs: Killmail.Position, rhs: Killmail.Position) -> Bool {
@@ -347,17 +303,6 @@ extension ZKillboard {
 		
 		public static var supportsSecureCoding: Bool {
 			return true
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			attackers.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-			hashCombine(seed: &hash, value: killmailID.hashValue)
-			hashCombine(seed: &hash, value: killmailTime.hashValue)
-			hashCombine(seed: &hash, value: solarSystemID.hashValue)
-			hashCombine(seed: &hash, value: victim.hashValue)
-			hashCombine(seed: &hash, value: position?.hashValue ?? 0)
-			return hash
 		}
 		
 		public static func ==(lhs: Killmail, rhs: Killmail) -> Bool {

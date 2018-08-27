@@ -79,31 +79,21 @@ public extension ESI {
 		}
 		
 		
-		public struct Point: Codable, Hashable {
+		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
 			
 			
-			public var corporationID: Int
-			public var loyaltyPoints: Int
+			public var error: String?
 			
-			public init(corporationID: Int, loyaltyPoints: Int) {
-				self.corporationID = corporationID
-				self.loyaltyPoints = loyaltyPoints
+			public init(error: String?) {
+				self.error = error
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
+			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case loyaltyPoints = "loyalty_points"
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -126,13 +116,6 @@ public extension ESI {
 				public init(quantity: Int, typeID: Int) {
 					self.quantity = quantity
 					self.typeID = typeID
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: quantity.hashValue)
-					hashCombine(seed: &hash, value: typeID.hashValue)
-					return hash
 				}
 				
 				public static func ==(lhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems, rhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) -> Bool {
@@ -170,18 +153,6 @@ public extension ESI {
 				self.typeID = typeID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: akCost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: iskCost.hashValue)
-				hashCombine(seed: &hash, value: lpCost.hashValue)
-				hashCombine(seed: &hash, value: offerID.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				self.requiredItems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Loyalty.Offer, rhs: Loyalty.Offer) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -205,27 +176,24 @@ public extension ESI {
 		}
 		
 		
-		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
+		public struct Point: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var corporationID: Int
+			public var loyaltyPoints: Int
 			
-			public init(error: String?) {
-				self.error = error
+			public init(corporationID: Int, loyaltyPoints: Int) {
+				self.corporationID = corporationID
+				self.loyaltyPoints = loyaltyPoints
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
+			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case corporationID = "corporation_id"
+				case loyaltyPoints = "loyalty_points"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -120,6 +120,40 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func returnsCorporationsWalletBalance(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Wallet.Balance]>> {
+			
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/corporations/\(corporationID)/wallets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Wallet.Balance]>>()
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Wallet.Balance]>) in
+					promise.set(response: response, cached: 300.0)
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getCorporationWalletTransactions(corporationID: Int, division: Int, fromID: Int64? = nil, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Wallet.CorpTransaction]>> {
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
@@ -150,40 +184,6 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Wallet.CorpTransaction]>) in
 					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func returnsCorporationsWalletBalance(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Wallet.Balance]>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-wallet.read_corporation_wallets.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/wallets/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Wallet.Balance]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Wallet.Balance]>) in
-					promise.set(response: response, cached: 300.0)
 				}
 			}
 			return promise.future
@@ -224,6 +224,59 @@ public extension ESI {
 		}
 		
 		
+		public struct Transaction: Codable, Hashable {
+			
+			
+			public var clientID: Int
+			public var date: Date
+			public var isBuy: Bool
+			public var isPersonal: Bool
+			public var journalRefID: Int64
+			public var locationID: Int64
+			public var quantity: Int
+			public var transactionID: Int64
+			public var typeID: Int
+			public var unitPrice: Double
+			
+			public init(clientID: Int, date: Date, isBuy: Bool, isPersonal: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
+				self.clientID = clientID
+				self.date = date
+				self.isBuy = isBuy
+				self.isPersonal = isPersonal
+				self.journalRefID = journalRefID
+				self.locationID = locationID
+				self.quantity = quantity
+				self.transactionID = transactionID
+				self.typeID = typeID
+				self.unitPrice = unitPrice
+			}
+			
+			public static func ==(lhs: Wallet.Transaction, rhs: Wallet.Transaction) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case clientID = "client_id"
+				case date
+				case isBuy = "is_buy"
+				case isPersonal = "is_personal"
+				case journalRefID = "journal_ref_id"
+				case locationID = "location_id"
+				case quantity
+				case transactionID = "transaction_id"
+				case typeID = "type_id"
+				case unitPrice = "unit_price"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct CorpTransaction: Codable, Hashable {
 			
 			
@@ -247,20 +300,6 @@ public extension ESI {
 				self.transactionID = transactionID
 				self.typeID = typeID
 				self.unitPrice = unitPrice
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: clientID.hashValue)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: isBuy.hashValue)
-				hashCombine(seed: &hash, value: journalRefID.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: transactionID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: unitPrice.hashValue)
-				return hash
 			}
 			
 			public static func ==(lhs: Wallet.CorpTransaction, rhs: Wallet.CorpTransaction) -> Bool {
@@ -288,9 +327,9 @@ public extension ESI {
 		}
 		
 		
-		public struct WalletJournalItem: Codable, Hashable {
+		public struct CorpWalletsJournalItem: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDWalletJournalContextIDType: String, Codable, HTTPQueryable {
+			public enum GetCorporationsCorporationIDWalletsDivisionJournalContextIDType: String, Codable, HTTPQueryable {
 				case allianceID = "alliance_id"
 				case characterID = "character_id"
 				case contractID = "contract_id"
@@ -313,7 +352,7 @@ public extension ESI {
 			public var amount: Double?
 			public var balance: Double?
 			public var contextID: Int64?
-			public var contextIDType: Wallet.WalletJournalItem.GetCharactersCharacterIDWalletJournalContextIDType?
+			public var contextIDType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalContextIDType?
 			public var date: Date
 			public var localizedDescription: String
 			public var firstPartyID: Int?
@@ -324,7 +363,7 @@ public extension ESI {
 			public var tax: Double?
 			public var taxReceiverID: Int?
 			
-			public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: Wallet.WalletJournalItem.GetCharactersCharacterIDWalletJournalContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: Wallet.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
+			public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: Wallet.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
 				self.amount = amount
 				self.balance = balance
 				self.contextID = contextID
@@ -340,25 +379,7 @@ public extension ESI {
 				self.taxReceiverID = taxReceiverID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: balance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: contextID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: contextIDType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: firstPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: id.hashValue)
-				hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: refType.hashValue)
-				hashCombine(seed: &hash, value: secondPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: taxReceiverID?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Wallet.WalletJournalItem, rhs: Wallet.WalletJournalItem) -> Bool {
+			public static func ==(lhs: Wallet.CorpWalletsJournalItem, rhs: Wallet.CorpWalletsJournalItem) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -380,6 +401,35 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Balance: Codable, Hashable {
+			
+			
+			public var balance: Double
+			public var division: Int
+			
+			public init(balance: Double, division: Int) {
+				self.balance = balance
+				self.division = division
+			}
+			
+			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case balance
+				case division
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}
@@ -513,77 +563,9 @@ public extension ESI {
 		}
 		
 		
-		public struct Transaction: Codable, Hashable {
+		public struct WalletJournalItem: Codable, Hashable {
 			
-			
-			public var clientID: Int
-			public var date: Date
-			public var isBuy: Bool
-			public var isPersonal: Bool
-			public var journalRefID: Int64
-			public var locationID: Int64
-			public var quantity: Int
-			public var transactionID: Int64
-			public var typeID: Int
-			public var unitPrice: Double
-			
-			public init(clientID: Int, date: Date, isBuy: Bool, isPersonal: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
-				self.clientID = clientID
-				self.date = date
-				self.isBuy = isBuy
-				self.isPersonal = isPersonal
-				self.journalRefID = journalRefID
-				self.locationID = locationID
-				self.quantity = quantity
-				self.transactionID = transactionID
-				self.typeID = typeID
-				self.unitPrice = unitPrice
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: clientID.hashValue)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: isBuy.hashValue)
-				hashCombine(seed: &hash, value: isPersonal.hashValue)
-				hashCombine(seed: &hash, value: journalRefID.hashValue)
-				hashCombine(seed: &hash, value: locationID.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: transactionID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: unitPrice.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Wallet.Transaction, rhs: Wallet.Transaction) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case clientID = "client_id"
-				case date
-				case isBuy = "is_buy"
-				case isPersonal = "is_personal"
-				case journalRefID = "journal_ref_id"
-				case locationID = "location_id"
-				case quantity
-				case transactionID = "transaction_id"
-				case typeID = "type_id"
-				case unitPrice = "unit_price"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .date: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CorpWalletsJournalItem: Codable, Hashable {
-			
-			public enum GetCorporationsCorporationIDWalletsDivisionJournalContextIDType: String, Codable, HTTPQueryable {
+			public enum GetCharactersCharacterIDWalletJournalContextIDType: String, Codable, HTTPQueryable {
 				case allianceID = "alliance_id"
 				case characterID = "character_id"
 				case contractID = "contract_id"
@@ -606,7 +588,7 @@ public extension ESI {
 			public var amount: Double?
 			public var balance: Double?
 			public var contextID: Int64?
-			public var contextIDType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalContextIDType?
+			public var contextIDType: Wallet.WalletJournalItem.GetCharactersCharacterIDWalletJournalContextIDType?
 			public var date: Date
 			public var localizedDescription: String
 			public var firstPartyID: Int?
@@ -617,7 +599,7 @@ public extension ESI {
 			public var tax: Double?
 			public var taxReceiverID: Int?
 			
-			public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: Wallet.CorpWalletsJournalItem.GetCorporationsCorporationIDWalletsDivisionJournalContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: Wallet.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
+			public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: Wallet.WalletJournalItem.GetCharactersCharacterIDWalletJournalContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: Wallet.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
 				self.amount = amount
 				self.balance = balance
 				self.contextID = contextID
@@ -633,25 +615,7 @@ public extension ESI {
 				self.taxReceiverID = taxReceiverID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: amount?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: balance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: contextID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: contextIDType?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: firstPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: id.hashValue)
-				hashCombine(seed: &hash, value: reason?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: refType.hashValue)
-				hashCombine(seed: &hash, value: secondPartyID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: taxReceiverID?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Wallet.CorpWalletsJournalItem, rhs: Wallet.CorpWalletsJournalItem) -> Bool {
+			public static func ==(lhs: Wallet.WalletJournalItem, rhs: Wallet.WalletJournalItem) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -673,42 +637,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .date: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Balance: Codable, Hashable {
-			
-			
-			public var balance: Double
-			public var division: Int
-			
-			public init(balance: Double, division: Int) {
-				self.balance = balance
-				self.division = division
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: balance.hashValue)
-				hashCombine(seed: &hash, value: division.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case balance
-				case division
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
 						default: return nil
 					}
 				}

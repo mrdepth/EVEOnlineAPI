@@ -13,12 +13,6 @@ public extension ESI {
 			self.error = error
 		}
 		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			return hash
-		}
-		
 		public static func ==(lhs: ErrorLimited, rhs: ErrorLimited) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
@@ -51,27 +45,24 @@ public extension ESI {
 	}
 	
 	
-	public struct ServiceUnavailable: Codable, Hashable {
+	public struct GatewayTimeout: Codable, Hashable {
 		
 		
 		public var error: String
+		public var timeout: Int?
 		
-		public init(error: String) {
+		public init(error: String, timeout: Int?) {
 			self.error = error
+			self.timeout = timeout
 		}
 		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			return hash
-		}
-		
-		public static func ==(lhs: ServiceUnavailable, rhs: ServiceUnavailable) -> Bool {
+		public static func ==(lhs: GatewayTimeout, rhs: GatewayTimeout) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
+			case timeout
 			
 			var dateFormatter: DateFormatter? {
 				switch self {
@@ -80,64 +71,6 @@ public extension ESI {
 				}
 			}
 		}
-	}
-	
-	
-	public struct InternalServerError: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			return hash
-		}
-		
-		public static func ==(lhs: InternalServerError, rhs: InternalServerError) -> Bool {
-			return lhs.hashValue == rhs.hashValue
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
-	public enum Language: String, Codable, HTTPQueryable {
-		case de = "de"
-		case enUS = "en-us"
-		case fr = "fr"
-		case ja = "ja"
-		case ru = "ru"
-		case zh = "zh"
-		
-		public var httpQuery: String? {
-			return rawValue
-		}
-		
-	}
-	
-	
-	public enum Datasource: String, Codable, HTTPQueryable {
-		case singularity = "singularity"
-		case tranquility = "tranquility"
-		
-		public var httpQuery: String? {
-			return rawValue
-		}
-		
 	}
 	
 	
@@ -148,12 +81,6 @@ public extension ESI {
 		
 		public init(error: String) {
 			self.error = error
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			return hash
 		}
 		
 		public static func ==(lhs: Unauthorized, rhs: Unauthorized) -> Bool {
@@ -173,6 +100,32 @@ public extension ESI {
 	}
 	
 	
+	public enum Datasource: String, Codable, HTTPQueryable {
+		case singularity = "singularity"
+		case tranquility = "tranquility"
+		
+		public var httpQuery: String? {
+			return rawValue
+		}
+		
+	}
+	
+	
+	public enum Language: String, Codable, HTTPQueryable {
+		case de = "de"
+		case enUS = "en-us"
+		case fr = "fr"
+		case ja = "ja"
+		case ru = "ru"
+		case zh = "zh"
+		
+		public var httpQuery: String? {
+			return rawValue
+		}
+		
+	}
+	
+	
 	public struct Forbidden: Codable, Hashable {
 		
 		
@@ -182,13 +135,6 @@ public extension ESI {
 		public init(error: String, ssoStatus: Int?) {
 			self.error = error
 			self.ssoStatus = ssoStatus
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			hashCombine(seed: &hash, value: ssoStatus?.hashValue ?? 0)
-			return hash
 		}
 		
 		public static func ==(lhs: Forbidden, rhs: Forbidden) -> Bool {
@@ -218,12 +164,6 @@ public extension ESI {
 			self.error = error
 		}
 		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			return hash
-		}
-		
 		public static func ==(lhs: BadRequest, rhs: BadRequest) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
@@ -241,31 +181,47 @@ public extension ESI {
 	}
 	
 	
-	public struct GatewayTimeout: Codable, Hashable {
+	public struct ServiceUnavailable: Codable, Hashable {
 		
 		
 		public var error: String
-		public var timeout: Int?
 		
-		public init(error: String, timeout: Int?) {
+		public init(error: String) {
 			self.error = error
-			self.timeout = timeout
 		}
 		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: error.hashValue)
-			hashCombine(seed: &hash, value: timeout?.hashValue ?? 0)
-			return hash
-		}
-		
-		public static func ==(lhs: GatewayTimeout, rhs: GatewayTimeout) -> Bool {
+		public static func ==(lhs: ServiceUnavailable, rhs: ServiceUnavailable) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
-			case timeout
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	public struct InternalServerError: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		public static func ==(lhs: InternalServerError, rhs: InternalServerError) -> Bool {
+			return lhs.hashValue == rhs.hashValue
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
 			
 			var dateFormatter: DateFormatter? {
 				switch self {

@@ -65,14 +65,6 @@ public extension ESI {
 					self.payout = payout
 				}
 				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: cost.hashValue)
-					hashCombine(seed: &hash, value: name.hashValue)
-					hashCombine(seed: &hash, value: payout.hashValue)
-					return hash
-				}
-				
 				public static func ==(lhs: Insurance.Price.GetInsurancePricesLevels, rhs: Insurance.Price.GetInsurancePricesLevels) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
@@ -97,13 +89,6 @@ public extension ESI {
 			public init(levels: [Insurance.Price.GetInsurancePricesLevels], typeID: Int) {
 				self.levels = levels
 				self.typeID = typeID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.levels.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
 			}
 			
 			public static func ==(lhs: Insurance.Price, rhs: Insurance.Price) -> Bool {

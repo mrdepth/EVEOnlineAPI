@@ -12,9 +12,10 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
+		public func getCharactersCompletedTasks(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
 			
-			
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_opportunities.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -27,18 +28,18 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/opportunities/tasks/\(taskID)/"
+			let url = esi.baseURL + "/v1/characters/\(characterID)/opportunities/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
-			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
+			let promise = Promise<ESI.Result<[Opportunities.CompletedTask]>>()
 			esi.perform { [weak esi] () -> DataRequest? in
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
-					promise.set(response: response, cached: nil)
+				}.validateESI().responseESI { (response: DataResponse<[Opportunities.CompletedTask]>) in
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -76,6 +77,39 @@ public extension ESI {
 				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
+					promise.set(response: response, cached: nil)
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/opportunities/tasks/\(taskID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
 					promise.set(response: response, cached: nil)
 				}
 			}
@@ -148,38 +182,45 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getCharactersCompletedTasks(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
+		
+		public struct Group: Codable, Hashable {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_opportunities.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
 			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
+			public var connectedGroups: [Int]
+			public var localizedDescription: String
+			public var groupID: Int
+			public var name: String
+			public var notification: String
+			public var requiredTasks: [Int]
+			
+			public init(connectedGroups: [Int], localizedDescription: String, groupID: Int, name: String, notification: String, requiredTasks: [Int]) {
+				self.connectedGroups = connectedGroups
+				self.localizedDescription = localizedDescription
+				self.groupID = groupID
+				self.name = name
+				self.notification = notification
+				self.requiredTasks = requiredTasks
 			}
 			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			public static func ==(lhs: Opportunities.Group, rhs: Opportunities.Group) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
 			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/opportunities/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Opportunities.CompletedTask]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Opportunities.CompletedTask]>) in
-					promise.set(response: response, cached: 3600.0)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case connectedGroups = "connected_groups"
+				case localizedDescription = "description"
+				case groupID = "group_id"
+				case name
+				case notification
+				case requiredTasks = "required_tasks"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
 				}
 			}
-			return promise.future
 		}
 		
 		
@@ -196,15 +237,6 @@ public extension ESI {
 				self.name = name
 				self.notification = notification
 				self.taskID = taskID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: notification.hashValue)
-				hashCombine(seed: &hash, value: taskID.hashValue)
-				return hash
 			}
 			
 			public static func ==(lhs: Opportunities.OpportunitiesTask, rhs: Opportunities.OpportunitiesTask) -> Bool {
@@ -238,13 +270,6 @@ public extension ESI {
 				self.taskID = taskID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: completedAt.hashValue)
-				hashCombine(seed: &hash, value: taskID.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Opportunities.CompletedTask, rhs: Opportunities.CompletedTask) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -256,58 +281,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .completedAt: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Group: Codable, Hashable {
-			
-			
-			public var connectedGroups: [Int]
-			public var localizedDescription: String
-			public var groupID: Int
-			public var name: String
-			public var notification: String
-			public var requiredTasks: [Int]
-			
-			public init(connectedGroups: [Int], localizedDescription: String, groupID: Int, name: String, notification: String, requiredTasks: [Int]) {
-				self.connectedGroups = connectedGroups
-				self.localizedDescription = localizedDescription
-				self.groupID = groupID
-				self.name = name
-				self.notification = notification
-				self.requiredTasks = requiredTasks
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.connectedGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: groupID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: notification.hashValue)
-				self.requiredTasks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
-			public static func ==(lhs: Opportunities.Group, rhs: Opportunities.Group) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case connectedGroups = "connected_groups"
-				case localizedDescription = "description"
-				case groupID = "group_id"
-				case name
-				case notification
-				case requiredTasks = "required_tasks"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
 						default: return nil
 					}
 				}

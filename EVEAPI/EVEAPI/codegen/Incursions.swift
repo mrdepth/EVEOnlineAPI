@@ -78,19 +78,6 @@ public extension ESI {
 				self.type = type
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: constellationID.hashValue)
-				hashCombine(seed: &hash, value: factionID.hashValue)
-				hashCombine(seed: &hash, value: hasBoss.hashValue)
-				self.infestedSolarSystems.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: influence.hashValue)
-				hashCombine(seed: &hash, value: stagingSolarSystemID.hashValue)
-				hashCombine(seed: &hash, value: state.hashValue)
-				hashCombine(seed: &hash, value: type.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Incursions.Incursion, rhs: Incursions.Incursion) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}

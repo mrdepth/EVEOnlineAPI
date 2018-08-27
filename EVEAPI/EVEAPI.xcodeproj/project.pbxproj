@@ -45,15 +45,10 @@
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		12809FE420034D35006AE91F /* ZKillboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203E8721F017D82009ADF8D /* ZKillboard.swift */; };
 		12809FE5200352C5006AE91F /* rss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CFDAF81F053D6700CC0762 /* rss.swift */; };
-		1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
+		1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */; };
 		1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB65781DEA0286003AA683 /* Synchronized.swift */; };
-		12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB657A1DEA06D6003AA683 /* DictionaryExtension.swift */; };
-		12AB658A1DEB3528003AA683 /* NSString+md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB65881DEB3528003AA683 /* NSString+md5.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */ = {isa = PBXBuildFile; fileRef = 12AB65891DEB3528003AA683 /* NSString+md5.m */; };
-		12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */; };
 		12D39D121EF949500077BD17 /* Contracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D39D111EF949500077BD17 /* Contracts.swift */; };
 /* End PBXBuildFile section */
 
@@ -354,15 +349,8 @@
 		1288F01A1DEB8C3E00FD7FBE /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				12AB65881DEB3528003AA683 /* NSString+md5.h */,
-				12AB65891DEB3528003AA683 /* NSString+md5.m */,
-				12AB65781DEA0286003AA683 /* Synchronized.swift */,
-				12AB657A1DEA06D6003AA683 /* DictionaryExtension.swift */,
-				12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */,
 				1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */,
 				12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */,
-				12AB65711DE9AAFF003AA683 /* EVEHTTPSessionManager.swift */,
-				12AB65761DE9ABF3003AA683 /* EVEHTTPCachedContent.swift */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -380,6 +368,13 @@
 		1288F01C1DEB8C5B00FD7FBE /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				12AB65881DEB3528003AA683 /* NSString+md5.h */,
+				12AB65891DEB3528003AA683 /* NSString+md5.m */,
+				12AB65781DEA0286003AA683 /* Synchronized.swift */,
+				12AB657A1DEA06D6003AA683 /* DictionaryExtension.swift */,
+				12AC8DAB1DEF59FD00561A7A /* ArrayExtension.swift */,
+				12AB65711DE9AAFF003AA683 /* EVEHTTPSessionManager.swift */,
+				12AB65761DE9ABF3003AA683 /* EVEHTTPCachedContent.swift */,
 				1288F01D1DEB8C8600FD7FBE /* EVEObject.swift */,
 				123825601DEC199E0031A884 /* EVEAPIObject.swift */,
 				123825621DEC1AD20031A884 /* EVEResult.swift */,
@@ -547,7 +542,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */,
-				12AB658A1DEB3528003AA683 /* NSString+md5.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -584,7 +578,7 @@
 					12AB654B1DE9A993003AA683 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = YB4RLQ4M9A;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 1000;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -623,10 +617,10 @@
 			files = (
 				1262960C1EEAD16C00796B27 /* Mail.swift in Sources */,
 				126296141EEAD16C00796B27 /* Status.swift in Sources */,
+				1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */,
 				12809FE420034D35006AE91F /* ZKillboard.swift in Sources */,
 				1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */,
 				126296091EEAD16C00796B27 /* Killmails.swift in Sources */,
-				1288F0191DEB79ED00FD7FBE /* XMLParserExtension.swift in Sources */,
 				126296131EEAD16C00796B27 /* Sovereignty.swift in Sources */,
 				126295FD1EEAD16C00796B27 /* Calendar.swift in Sources */,
 				126296021EEAD16C00796B27 /* Dogma.swift in Sources */,
@@ -634,19 +628,16 @@
 				12D39D121EF949500077BD17 /* Contracts.swift in Sources */,
 				1262960F1EEAD16C00796B27 /* PlanetaryInteraction.swift in Sources */,
 				126296121EEAD16C00796B27 /* Skills.swift in Sources */,
-				12AB658B1DEB3528003AA683 /* NSString+md5.m in Sources */,
 				126296011EEAD16C00796B27 /* Corporation.swift in Sources */,
 				126296031EEAD16C00796B27 /* Fittings.swift in Sources */,
 				1231C80A1E9EB3D900CA409A /* Helper.swift in Sources */,
 				126296071EEAD16C00796B27 /* Industry.swift in Sources */,
-				12AB65791DEA0286003AA683 /* Synchronized.swift in Sources */,
 				126295FC1EEAD16C00796B27 /* Bookmarks.swift in Sources */,
 				126296181EEAD16C00796B27 /* Wars.swift in Sources */,
 				126296101EEAD16C00796B27 /* Routes.swift in Sources */,
 				126296081EEAD16C00796B27 /* Insurance.swift in Sources */,
 				126296161EEAD16C00796B27 /* UserInterface.swift in Sources */,
 				12809FE5200352C5006AE91F /* rss.swift in Sources */,
-				12AC8DAC1DEF59FD00561A7A /* ArrayExtension.swift in Sources */,
 				1262960E1EEAD16C00796B27 /* Opportunities.swift in Sources */,
 				126295FF1EEAD16C00796B27 /* Clones.swift in Sources */,
 				126296061EEAD16C00796B27 /* Incursions.swift in Sources */,
@@ -656,7 +647,6 @@
 				1262960B1EEAD16C00796B27 /* Loyalty.swift in Sources */,
 				126296051EEAD16C00796B27 /* Global.swift in Sources */,
 				128C5F6D1F41859B0038FE7D /* FactionWarfare.swift in Sources */,
-				12AB657B1DEA06D6003AA683 /* DictionaryExtension.swift in Sources */,
 				126296111EEAD16C00796B27 /* Search.swift in Sources */,
 				126296171EEAD16C00796B27 /* Wallet.swift in Sources */,
 				1295ED491DF8169F0048C895 /* OAuth2.swift in Sources */,
@@ -807,7 +797,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -829,7 +819,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimanski.EVEAPI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

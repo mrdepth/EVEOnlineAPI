@@ -37,7 +37,7 @@ public enum RSS {
 		}
 	}()
 	
-	public struct Feed: JSONCoding, Codable, Hashable {
+	public struct Feed: Codable, Hashable, JSONCoding {
 		public var title: String?
 		public var feedDescription: String?
 		public var copyright: String?
@@ -78,6 +78,10 @@ public enum RSS {
 			else {
 				throw RSSError.invalidFormat(type(of: self), json)
 			}
+		}
+		
+		public var json: Any {
+			return [:]
 		}
 		
 		public init(rss: Any) throws {
@@ -139,24 +143,7 @@ public enum RSS {
 			}
 		}
 		
-		public var json: Any {
-			return ""
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: feedDescription?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: copyright?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: language?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: link?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: publisher?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: updated?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: image?.hashValue ?? 0)
-			items?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-			return hash
-		}
-		
+
 		public static func ==(lhs: Feed, rhs: Feed) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
@@ -191,14 +178,6 @@ public enum RSS {
 			guard let s = atom as? String else {throw RSSError.invalidFormat(type(of: self), atom)}
 			link = URL(string: s)
 			url = URL(string: s)
-		}
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: link?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: url?.hashValue ?? 0)
-			return hash
 		}
 		
 		public static func ==(lhs: Image, rhs: Image) -> Bool {
@@ -239,14 +218,6 @@ public enum RSS {
 		}
 		
 
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: url?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: length?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: type?.hashValue ?? 0)
-			return hash
-		}
-		
 		public static func ==(lhs: Enclosure, rhs: Enclosure) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
@@ -340,20 +311,6 @@ public enum RSS {
 			}
 		}
 		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: link?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: summary?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: author?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: category?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: guid?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: updated?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: source?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: enclosure?.hashValue ?? 0)
-			return hash
-		}
-		
 		public static func ==(lhs: Item, rhs: Item) -> Bool {
 			return lhs.hashValue == rhs.hashValue
 		}
@@ -386,13 +343,6 @@ public enum RSS {
 			title = dic["title"] as? String
 		}
 		
-		
-		public var hashValue: Int {
-			var hash: Int = 0
-			hashCombine(seed: &hash, value: title?.hashValue ?? 0)
-			hashCombine(seed: &hash, value: url?.hashValue ?? 0)
-			return hash
-		}
 		
 		public static func ==(lhs: Source, rhs: Source) -> Bool {
 			return lhs.hashValue == rhs.hashValue

@@ -213,7 +213,7 @@ class Schema: Namespace {
 //		template.replaceSubrange(template.range(of: "{encodings}")!, with: encodings.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{decodings}")!, with: decodings.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{json}")!, with: json.joined(separator: "\n"))
-		template.replaceSubrange(template.range(of: "{hash}")!, with: hashes.joined(separator: "\n"))
+//		template.replaceSubrange(template.range(of: "{hash}")!, with: hashes.joined(separator: "\n"))
 		template.replaceSubrange(template.range(of: "{nested}")!, with: nested.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{copy}")!, with: copy.joined(separator: "\n"))
 //		template.replaceSubrange(template.range(of: "{objcName}")!, with: typeIdentifier.replacingOccurrences(of: ".", with: ""))

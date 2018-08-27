@@ -12,7 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
+		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.SearchCategories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
 			
 			
 			let body: Data? = nil
@@ -59,7 +59,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func characterSearch(acceptLanguage: AcceptLanguage? = nil, categories: [Search.SearchCategories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
+		public func characterSearch(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
 			guard scopes.contains("esi-search.search_structures.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -107,6 +107,59 @@ public extension ESI {
 		}
 		
 		
+		public struct SearchResult: Codable, Hashable {
+			
+			
+			public var agent: [Int]?
+			public var alliance: [Int]?
+			public var character: [Int]?
+			public var constellation: [Int]?
+			public var corporation: [Int]?
+			public var faction: [Int]?
+			public var inventoryType: [Int]?
+			public var region: [Int]?
+			public var solarSystem: [Int]?
+			public var station: [Int]?
+			
+			public init(agent: [Int]?, alliance: [Int]?, character: [Int]?, constellation: [Int]?, corporation: [Int]?, faction: [Int]?, inventoryType: [Int]?, region: [Int]?, solarSystem: [Int]?, station: [Int]?) {
+				self.agent = agent
+				self.alliance = alliance
+				self.character = character
+				self.constellation = constellation
+				self.corporation = corporation
+				self.faction = faction
+				self.inventoryType = inventoryType
+				self.region = region
+				self.solarSystem = solarSystem
+				self.station = station
+			}
+			
+			public static func ==(lhs: Search.SearchResult, rhs: Search.SearchResult) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case agent
+				case alliance
+				case character
+				case constellation
+				case corporation
+				case faction
+				case inventoryType = "inventory_type"
+				case region
+				case solarSystem = "solar_system"
+				case station
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct CharacterSearchResult: Codable, Hashable {
 			
 			
@@ -134,22 +187,6 @@ public extension ESI {
 				self.solarSystem = solarSystem
 				self.station = station
 				self.structure = structure
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.character?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.inventoryType?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.solarSystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.structure?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
 			}
 			
 			public static func ==(lhs: Search.CharacterSearchResult, rhs: Search.CharacterSearchResult) -> Bool {
@@ -190,80 +227,11 @@ public extension ESI {
 			case region = "region"
 			case solarSystem = "solar_system"
 			case station = "station"
-			case structure = "structure"
 			
 			public var httpQuery: String? {
 				return rawValue
 			}
 			
-		}
-		
-		
-		public struct SearchResult: Codable, Hashable {
-			
-			
-			public var agent: [Int]?
-			public var alliance: [Int]?
-			public var character: [Int]?
-			public var constellation: [Int]?
-			public var corporation: [Int]?
-			public var faction: [Int]?
-			public var inventoryType: [Int]?
-			public var region: [Int]?
-			public var solarSystem: [Int]?
-			public var station: [Int]?
-			
-			public init(agent: [Int]?, alliance: [Int]?, character: [Int]?, constellation: [Int]?, corporation: [Int]?, faction: [Int]?, inventoryType: [Int]?, region: [Int]?, solarSystem: [Int]?, station: [Int]?) {
-				self.agent = agent
-				self.alliance = alliance
-				self.character = character
-				self.constellation = constellation
-				self.corporation = corporation
-				self.faction = faction
-				self.inventoryType = inventoryType
-				self.region = region
-				self.solarSystem = solarSystem
-				self.station = station
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.agent?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.alliance?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.character?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.constellation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.corporation?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.faction?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.inventoryType?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.region?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.solarSystem?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.station?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
-			public static func ==(lhs: Search.SearchResult, rhs: Search.SearchResult) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case agent
-				case alliance
-				case character
-				case constellation
-				case corporation
-				case faction
-				case inventoryType = "inventory_type"
-				case region
-				case solarSystem = "solar_system"
-				case station
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -278,6 +246,7 @@ public extension ESI {
 			case region = "region"
 			case solarSystem = "solar_system"
 			case station = "station"
+			case structure = "structure"
 			
 			public var httpQuery: String? {
 				return rawValue

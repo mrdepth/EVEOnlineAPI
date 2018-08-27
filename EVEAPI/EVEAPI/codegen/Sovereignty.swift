@@ -12,39 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listSovereigntyStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Structure]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/sovereignty/structures/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
-					promise.set(response: response, cached: 120.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
 			
 			
@@ -72,6 +39,39 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
 					promise.set(response: response, cached: 5.0)
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listSovereigntyStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Structure]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/sovereignty/structures/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
+					promise.set(response: response, cached: 120.0)
 				}
 			}
 			return promise.future
@@ -111,50 +111,6 @@ public extension ESI {
 		}
 		
 		
-		public struct System: Codable, Hashable {
-			
-			
-			public var allianceID: Int?
-			public var corporationID: Int?
-			public var factionID: Int?
-			public var systemID: Int
-			
-			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
-				self.allianceID = allianceID
-				self.corporationID = corporationID
-				self.factionID = factionID
-				self.systemID = systemID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Structure: Codable, Hashable {
 			
 			
@@ -174,18 +130,6 @@ public extension ESI {
 				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
 				self.vulnerableEndTime = vulnerableEndTime
 				self.vulnerableStartTime = vulnerableStartTime
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: structureID.hashValue)
-				hashCombine(seed: &hash, value: structureTypeID.hashValue)
-				hashCombine(seed: &hash, value: vulnerabilityOccupancyLevel?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: vulnerableEndTime?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: vulnerableStartTime?.hashValue ?? 0)
-				return hash
 			}
 			
 			public static func ==(lhs: Sovereignty.Structure, rhs: Sovereignty.Structure) -> Bool {
@@ -237,13 +181,6 @@ public extension ESI {
 					self.score = score
 				}
 				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID.hashValue)
-					hashCombine(seed: &hash, value: score.hashValue)
-					return hash
-				}
-				
 				public static func ==(lhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants, rhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
@@ -285,21 +222,6 @@ public extension ESI {
 				self.structureID = structureID
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: attackersScore?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: campaignID.hashValue)
-				hashCombine(seed: &hash, value: constellationID.hashValue)
-				hashCombine(seed: &hash, value: defenderID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: defenderScore?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: eventType.hashValue)
-				self.participants?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: startTime.hashValue)
-				hashCombine(seed: &hash, value: structureID.hashValue)
-				return hash
-			}
-			
 			public static func ==(lhs: Sovereignty.Campaign, rhs: Sovereignty.Campaign) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -319,6 +241,41 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .startTime: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct System: Codable, Hashable {
+			
+			
+			public var allianceID: Int?
+			public var corporationID: Int?
+			public var factionID: Int?
+			public var systemID: Int
+			
+			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+				self.allianceID = allianceID
+				self.corporationID = corporationID
+				self.factionID = factionID
+				self.systemID = systemID
+			}
+			
+			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

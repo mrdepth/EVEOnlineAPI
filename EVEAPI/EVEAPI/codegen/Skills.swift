@@ -12,40 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Skills.CharacterAttributes>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/attributes/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
-					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
 			
 			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
@@ -74,6 +40,40 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
 					promise.set(response: response, cached: 120.0)
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Skills.CharacterAttributes>> {
+			
+			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/attributes/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
+			esi.perform { [weak esi] () -> DataRequest? in
+				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
+					promise.set(response: response, cached: 3600.0)
 				}
 			}
 			return promise.future
@@ -131,15 +131,6 @@ public extension ESI {
 					self.trainedSkillLevel = trainedSkillLevel
 				}
 				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: activeSkillLevel.hashValue)
-					hashCombine(seed: &hash, value: skillID.hashValue)
-					hashCombine(seed: &hash, value: skillpointsInSkill.hashValue)
-					hashCombine(seed: &hash, value: trainedSkillLevel.hashValue)
-					return hash
-				}
-				
 				public static func ==(lhs: Skills.CharacterSkills.Skill, rhs: Skills.CharacterSkills.Skill) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
@@ -169,14 +160,6 @@ public extension ESI {
 				self.unallocatedSP = unallocatedSP
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.skills.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: totalSP.hashValue)
-				hashCombine(seed: &hash, value: unallocatedSP?.hashValue ?? 0)
-				return hash
-			}
-			
 			public static func ==(lhs: Skills.CharacterSkills, rhs: Skills.CharacterSkills) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -189,67 +172,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CharacterAttributes: Codable, Hashable {
-			
-			
-			public var accruedRemapCooldownDate: Date?
-			public var bonusRemaps: Int?
-			public var charisma: Int
-			public var intelligence: Int
-			public var lastRemapDate: Date?
-			public var memory: Int
-			public var perception: Int
-			public var willpower: Int
-			
-			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
-				self.accruedRemapCooldownDate = accruedRemapCooldownDate
-				self.bonusRemaps = bonusRemaps
-				self.charisma = charisma
-				self.intelligence = intelligence
-				self.lastRemapDate = lastRemapDate
-				self.memory = memory
-				self.perception = perception
-				self.willpower = willpower
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: accruedRemapCooldownDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: bonusRemaps?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: charisma.hashValue)
-				hashCombine(seed: &hash, value: intelligence.hashValue)
-				hashCombine(seed: &hash, value: lastRemapDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: memory.hashValue)
-				hashCombine(seed: &hash, value: perception.hashValue)
-				hashCombine(seed: &hash, value: willpower.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Skills.CharacterAttributes, rhs: Skills.CharacterAttributes) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case accruedRemapCooldownDate = "accrued_remap_cooldown_date"
-				case bonusRemaps = "bonus_remaps"
-				case charisma
-				case intelligence
-				case lastRemapDate = "last_remap_date"
-				case memory
-				case perception
-				case willpower
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
-						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -280,19 +202,6 @@ public extension ESI {
 				self.trainingStartSP = trainingStartSP
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: finishDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: finishedLevel.hashValue)
-				hashCombine(seed: &hash, value: levelEndSP?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: levelStartSP?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: queuePosition.hashValue)
-				hashCombine(seed: &hash, value: skillID.hashValue)
-				hashCombine(seed: &hash, value: startDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: trainingStartSP?.hashValue ?? 0)
-				return hash
-			}
-			
 			public static func ==(lhs: Skills.SkillQueueItem, rhs: Skills.SkillQueueItem) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
@@ -311,6 +220,54 @@ public extension ESI {
 					switch self {
 						case .finishDate: return DateFormatter.esiDateTimeFormatter
 						case .startDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CharacterAttributes: Codable, Hashable {
+			
+			
+			public var accruedRemapCooldownDate: Date?
+			public var bonusRemaps: Int?
+			public var charisma: Int
+			public var intelligence: Int
+			public var lastRemapDate: Date?
+			public var memory: Int
+			public var perception: Int
+			public var willpower: Int
+			
+			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
+				self.accruedRemapCooldownDate = accruedRemapCooldownDate
+				self.bonusRemaps = bonusRemaps
+				self.charisma = charisma
+				self.intelligence = intelligence
+				self.lastRemapDate = lastRemapDate
+				self.memory = memory
+				self.perception = perception
+				self.willpower = willpower
+			}
+			
+			public static func ==(lhs: Skills.CharacterAttributes, rhs: Skills.CharacterAttributes) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case accruedRemapCooldownDate = "accrued_remap_cooldown_date"
+				case bonusRemaps = "bonus_remaps"
+				case charisma
+				case intelligence
+				case lastRemapDate = "last_remap_date"
+				case memory
+				case perception
+				case willpower
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
+						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
