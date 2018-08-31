@@ -12,7 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getRoute(avoid: [Int]? = nil, connections: [[Int]]? = nil, destination: Int, flag: Routes.Flag? = nil, ifNoneMatch: String? = nil, origin: Int) -> Future<ESI.Result<[Int]>> {
+		public func getRoute(avoid: [Int]? = nil, connections: [[Int]]? = nil, destination: Int, flag: Routes.Flag? = nil, ifNoneMatch: String? = nil, origin: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			
 			let body: Data? = nil
@@ -42,12 +42,10 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: 86400.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: 86400.0)
 			}
 			return promise.future
 		}

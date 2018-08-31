@@ -12,7 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listIncursions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Incursions.Incursion]>> {
+		public func listIncursions(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Incursions.Incursion]>> {
 			
 			
 			let body: Data? = nil
@@ -34,12 +34,10 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Incursions.Incursion]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Incursions.Incursion]>) in
-					promise.set(response: response, cached: 300.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Incursions.Incursion]>) in
+				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
 		}

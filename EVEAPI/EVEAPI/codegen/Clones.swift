@@ -12,9 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getActiveImplants(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getActiveImplants(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-clones.read_implants.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -35,20 +35,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: 300.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getClones(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Clones.JumpClones>> {
+		public func getClones(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Clones.JumpClones>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-clones.read_clones.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -69,12 +67,10 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Clones.JumpClones>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Clones.JumpClones>) in
-					promise.set(response: response, cached: 120.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Clones.JumpClones>) in
+				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}

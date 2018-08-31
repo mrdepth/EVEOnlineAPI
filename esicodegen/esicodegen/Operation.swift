@@ -112,6 +112,7 @@ class Operation {
 			
 			definitions.append(parameter.definition)
 		}
+		definitions.append("cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy")
 		
 //		parameterStrings.insert("\(parameterStrings.count > 0 ? "var" : "let") parameters = Parameters()", at: 0)
 		if method != .get {
@@ -133,7 +134,7 @@ class Operation {
 		
 		if security.count > 0 {
 			
-			var s = "let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []\n"
+			var s = "let scopes = esi.token?.scopes ?? []\n"
 			s += security.joined(separator: "\n")
 			template = template.replacingOccurrences(of: "{security}", with: s)
 		}

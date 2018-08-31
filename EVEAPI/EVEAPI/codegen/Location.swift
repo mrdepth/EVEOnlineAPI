@@ -12,9 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.CharacterLocation>> {
+		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterLocation>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-location.read_location.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -35,20 +35,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
-					promise.set(response: response, cached: 5.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
+				promise.set(response: response, cached: 5.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getCurrentShip(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.CharacterShip>> {
+		public func getCurrentShip(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterShip>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-location.read_ship_type.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -69,20 +67,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Location.CharacterShip>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Location.CharacterShip>) in
-					promise.set(response: response, cached: 5.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Location.CharacterShip>) in
+				promise.set(response: response, cached: 5.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getCharacterOnline(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>> {
+		public func getCharacterOnline(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-location.read_online.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -103,42 +99,44 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Location.GetCharactersCharacterIDOnlineOk>) in
-					promise.set(response: response, cached: 60.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Location.GetCharactersCharacterIDOnlineOk>) in
+				promise.set(response: response, cached: 60.0)
 			}
 			return promise.future
 		}
 		
 		
-		public struct CharacterShip: Codable, Hashable {
+		public struct GetCharactersCharacterIDOnlineOk: Codable, Hashable {
 			
 			
-			public var shipItemID: Int64
-			public var shipName: String
-			public var shipTypeID: Int
+			public var lastLogin: Date?
+			public var lastLogout: Date?
+			public var logins: Int?
+			public var online: Bool
 			
-			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
-				self.shipItemID = shipItemID
-				self.shipName = shipName
-				self.shipTypeID = shipTypeID
+			public init(lastLogin: Date?, lastLogout: Date?, logins: Int?, online: Bool) {
+				self.lastLogin = lastLogin
+				self.lastLogout = lastLogout
+				self.logins = logins
+				self.online = online
 			}
 			
-			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
+			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineOk, rhs: Location.GetCharactersCharacterIDOnlineOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case shipItemID = "ship_item_id"
-				case shipName = "ship_name"
-				case shipTypeID = "ship_type_id"
+				case lastLogin = "last_login"
+				case lastLogout = "last_logout"
+				case logins
+				case online
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						
+						case .lastLogin: return DateFormatter.esiDateTimeFormatter
+						case .lastLogout: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -178,35 +176,31 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDOnlineOk: Codable, Hashable {
+		public struct CharacterShip: Codable, Hashable {
 			
 			
-			public var lastLogin: Date?
-			public var lastLogout: Date?
-			public var logins: Int?
-			public var online: Bool
+			public var shipItemID: Int64
+			public var shipName: String
+			public var shipTypeID: Int
 			
-			public init(lastLogin: Date?, lastLogout: Date?, logins: Int?, online: Bool) {
-				self.lastLogin = lastLogin
-				self.lastLogout = lastLogout
-				self.logins = logins
-				self.online = online
+			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
+				self.shipItemID = shipItemID
+				self.shipName = shipName
+				self.shipTypeID = shipTypeID
 			}
 			
-			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineOk, rhs: Location.GetCharactersCharacterIDOnlineOk) -> Bool {
+			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastLogin = "last_login"
-				case lastLogout = "last_logout"
-				case logins
-				case online
+				case shipItemID = "ship_item_id"
+				case shipName = "ship_name"
+				case shipTypeID = "ship_type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .lastLogin: return DateFormatter.esiDateTimeFormatter
-						case .lastLogout: return DateFormatter.esiDateTimeFormatter
+						
 						default: return nil
 					}
 				}

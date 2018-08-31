@@ -12,7 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int) -> Future<ESI.Result<[Wars.Kills]>> {
+		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Wars.Kills]>> {
 			
 			
 			let body: Data? = nil
@@ -36,18 +36,16 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Wars.Kills]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func listWars(ifNoneMatch: String? = nil, maxWarID: Int? = nil) -> Future<ESI.Result<[Int]>> {
+		public func listWars(ifNoneMatch: String? = nil, maxWarID: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			
 			let body: Data? = nil
@@ -71,18 +69,16 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int) -> Future<ESI.Result<Wars.WarInformation>> {
+		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Wars.WarInformation>> {
 			
 			
 			let body: Data? = nil
@@ -104,14 +100,38 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Wars.WarInformation>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
+		}
+		
+		
+		public struct GetWarsWarIDUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Wars.GetWarsWarIDUnprocessableEntity, rhs: Wars.GetWarsWarIDUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -276,32 +296,6 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity, rhs: Wars.GetWarsWarIDKillmailsUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetWarsWarIDUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Wars.GetWarsWarIDUnprocessableEntity, rhs: Wars.GetWarsWarIDUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

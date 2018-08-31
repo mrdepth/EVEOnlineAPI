@@ -10,6 +10,21 @@ import Foundation
 import Alamofire
 import Futures
 
+struct RequestConvertible: URLRequestConvertible {
+	let url: URLConvertible
+	let method: HTTPMethod
+	let parameters: Parameters?
+	let encoding: ParameterEncoding
+	let headers: HTTPHeaders?
+	let cachePolicy: URLRequest.CachePolicy
+	
+	func asURLRequest() throws -> URLRequest {
+		var request = try URLRequest(url: url, method: method, headers: headers)
+		request.cachePolicy = cachePolicy
+		return try encoding.encode(request, with: parameters)
+	}
+}
+
 struct Weak<T: AnyObject> {
 	typealias Value = T
 	private(set) weak var value: T?
@@ -18,52 +33,15 @@ struct Weak<T: AnyObject> {
 	}
 }
 
-fileprivate class LoadBalancer {
-	let maxConcurentRequestsCount = 4
-	static let shared = LoadBalancer()
-	var queue: [()-> DataRequest?] = []
-	var active: Int = 0
-	private var lock = NSLock()
-	
-	func add(_ request: @escaping ()-> DataRequest?) {
-		lock.performCritical { queue.append(request) }
-		dispatch()
-	}
-	
-	private func dispatch() {
-		lock.performCritical {
-			while !queue.isEmpty && active < maxConcurentRequestsCount {
-				let request = queue.removeFirst()
-				active += 1
-				if let dataRequest = request() {
-					dataRequest.response { [weak self] _ in
-						guard let strongSelf = self else {return}
-						strongSelf.lock.lock()
-						strongSelf.active -= 1
-						strongSelf.lock.unlock()
-						strongSelf.dispatch()
-					}
-					break
-				}
-				else {
-					active -= 1
-				}
-			}
-		}
-	}
-}
-
 public class ESI {
 	
 	public struct Result<Value> {
 		public var value: Value
-		public var cached: TimeInterval?
-		public var etag: String?
+		public var expires: Date?
 		
-		public init(value: Value, cached: TimeInterval?, etag: String?) {
+		public init(value: Value, expires: Date?) {
 			self.value = value
-			self.cached = cached
-			self.etag = etag
+			self.expires = expires
 		}
 	}
 	
@@ -71,16 +49,18 @@ public class ESI {
 	private static let helpersLock = NSLock()
 
 	fileprivate class CachePolicyAdapter: RequestAdapter {
-		let cachePolicy: URLRequest.CachePolicy
 		let next: RequestAdapter?
-		init(cachePolicy: URLRequest.CachePolicy, next: RequestAdapter?) {
-			self.cachePolicy = cachePolicy
+		init(next: RequestAdapter?) {
 			self.next = next
 		}
 		
 		public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+			guard let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
+				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
+				return urlRequest
+			}
 			var request = urlRequest
-			request.cachePolicy = cachePolicy
+			request.setValue(etag, forHTTPHeaderField: "If-None-Match")
 			return try next?.adapt(request) ?? request
 		}
 	}
@@ -95,11 +75,8 @@ public class ESI {
 	let server: Server
 	var sessionManager: SessionManager!
 	
-	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility) {
 		self.server = server
-		let configuration = URLSessionConfiguration.default
-		configuration.httpAdditionalHeaders = HTTPHeaders.defaultHTTPHeaders
-		configuration.requestCachePolicy = cachePolicy
 
 		
 		if let token = token, let clientID = clientID, let secretKey = secretKey {
@@ -109,17 +86,19 @@ public class ESI {
 				ESI.helpers[token.refreshToken] = Weak(helper)
 				return helper
 			}()
-//			adapter = helper
-//			retrier = helper
-			sessionManager = SessionManager(configuration: configuration, adapter: helper, retrier: helper)
+			sessionManager = SessionManager(adapter: CachePolicyAdapter(next: helper), retrier: helper)
 		}
 		else {
-			sessionManager = SessionManager(configuration: configuration)
+			sessionManager = SessionManager(adapter: CachePolicyAdapter(next: nil))
 		}
 	}
 	
+	public var token: OAuth2Token? {
+		return (sessionManager.retrier as? OAuth2Helper)?.token
+	}
+	
 	deinit {
-		if let token = (sessionManager.adapter as? OAuth2Helper)?.token {
+		if let token = self.token {
 			sessionManager = nil
 			if ESI.helpers[token.refreshToken]?.value == nil {
 				ESI.helpers[token.refreshToken] = nil
@@ -127,16 +106,23 @@ public class ESI {
 		}
 	}
 	
-	open func perform(_ request: @escaping () -> DataRequest?) {
-		LoadBalancer.shared.add(request)
+	open func request(_ url: URLConvertible,
+					  method: HTTPMethod = .get,
+					  parameters: Parameters? = nil,
+					  encoding: ParameterEncoding = URLEncoding.default,
+					  headers: HTTPHeaders? = nil,
+					  cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> DataRequest {
+		let convertible = RequestConvertible(url: url,
+											 method: method,
+											 parameters: parameters,
+											 encoding: encoding,
+											 headers: headers,
+											 cachePolicy: cachePolicy)
+		return sessionManager.request(convertible)
 	}
 	
-//	public class func initialize() {
-//		loadClassess()
-//	}
-//
 	@discardableResult
-	public func image(characterID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
+	public func image(characterID: Int, dimension: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128, 256, 512, 1024]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -147,15 +133,13 @@ public class ESI {
 		}
 		
 		let promise = Promise<ESI.Result<Data>>()
-		perform { [weak self] () -> DataRequest? in
-			self?.sessionManager.request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg").validate().responseData { response in
-				promise.set(response: response, cached: 3600 * 12)
-			}
+		request("https://imageserver.eveonline.com/Character/\(characterID)_\(bestDimension).jpg", cachePolicy: cachePolicy).validate().responseData { response in
+			promise.set(response: response, cached: 3600 * 12)
 		}
 		return promise.future
 	}
 	
-	public func image(corporationID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
+	public func image(corporationID: Int, dimension: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128, 256]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -166,15 +150,13 @@ public class ESI {
 		}
 		
 		let promise = Promise<ESI.Result<Data>>()
-		perform { [weak self] () -> DataRequest? in
-			self?.sessionManager.request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png").validate().responseData { response in
-				promise.set(response: response, cached: 3600 * 12)
-			}
+		request("https://imageserver.eveonline.com/Corporation/\(corporationID)_\(bestDimension).png", cachePolicy: cachePolicy).validate().responseData { response in
+			promise.set(response: response, cached: 3600 * 12)
 		}
 		return promise.future
 	}
 	
-	public func image(allianceID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
+	public func image(allianceID: Int, dimension: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -185,15 +167,13 @@ public class ESI {
 		}
 		
 		let promise = Promise<ESI.Result<Data>>()
-		perform { [weak self] () -> DataRequest? in
-			self?.sessionManager.request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png").validate().responseData { response in
-				promise.set(response: response, cached: 3600 * 12)
-			}
+		request("https://imageserver.eveonline.com/Alliance/\(allianceID)_\(bestDimension).png", cachePolicy: cachePolicy).validate().responseData { response in
+			promise.set(response: response, cached: 3600 * 12)
 		}
 		return promise.future
 	}
 	
-	public func image(typeID: Int, dimension: Int) -> Future<ESI.Result<Data>> {
+	public func image(typeID: Int, dimension: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Data>> {
 		let dimensions = [32, 64, 128, 256, 512]
 		var bestDimension = dimensions.last!
 		for d in dimensions {
@@ -204,10 +184,8 @@ public class ESI {
 		}
 		
 		let promise = Promise<ESI.Result<Data>>()
-		perform { [weak self] () -> DataRequest? in
-			self?.sessionManager.request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png").validate().responseData { response in
-				promise.set(response: response, cached: 3600 * 12)
-			}
+		request("https://imageserver.eveonline.com/Render/\(typeID)_\(bestDimension).png", cachePolicy: cachePolicy).validate().responseData { response in
+			promise.set(response: response, cached: 3600 * 12)
 		}
 		return promise.future
 	}
@@ -362,51 +340,7 @@ extension DataRequest {
 }
 
 public extension ESI.Scope {
-	/*public static let characterAccountRead = ESI.Scope("characterAccountRead")
-	public static let characterAssetsRead = ESI.Scope("characterAssetsRead")
-	public static let characterBookmarksRead = ESI.Scope("characterBookmarksRead")
-	public static let characterCalendarRead = ESI.Scope("characterCalendarRead")
-	public static let characterChatChannelsRead = ESI.Scope("characterChatChannelsRead")
-	public static let characterClonesRead = ESI.Scope("characterClonesRead")
-	public static let characterContactsRead = ESI.Scope("characterContactsRead")
-	public static let characterContactsWrite = ESI.Scope("characterContactsWrite")
-	public static let characterContractsRead = ESI.Scope("characterContractsRead")
-	public static let characterFactionalWarfareRead = ESI.Scope("characterFactionalWarfareRead")
-	public static let characterFittingsRead = ESI.Scope("characterFittingsRead")
-	public static let characterFittingsWrite = ESI.Scope("characterFittingsWrite")
-	public static let characterIndustryJobsRead = ESI.Scope("characterIndustryJobsRead")
-	public static let characterKillsRead = ESI.Scope("characterKillsRead")
-	public static let characterLocationRead = ESI.Scope("characterLocationRead")
-	public static let characterLoyaltyPointsRead = ESI.Scope("characterLoyaltyPointsRead")
-	public static let characterMailRead = ESI.Scope("characterMailRead")
-	public static let characterMarketOrdersRead = ESI.Scope("characterMarketOrdersRead")
-	public static let characterMedalsRead = ESI.Scope("characterMedalsRead")
-	public static let characterNavigationWrite = ESI.Scope("characterNavigationWrite")
-	public static let characterNotificationsRead = ESI.Scope("characterNotificationsRead")
-	public static let characterOpportunitiesRead = ESI.Scope("characterOpportunitiesRead")
-	public static let characterResearchRead = ESI.Scope("characterResearchRead")
-	public static let characterSkillsRead = ESI.Scope("characterSkillsRead")
-	public static let characterStatsRead = ESI.Scope("characterStatsRead")
-	public static let characterWalletRead = ESI.Scope("characterWalletRead")
-	public static let corporationAssetsRead = ESI.Scope("corporationAssetsRead")
-	public static let corporationBookmarksRead = ESI.Scope("corporationBookmarksRead")
-	public static let corporationContactsRead = ESI.Scope("corporationContactsRead")
-	public static let corporationContractsRead = ESI.Scope("corporationContractsRead")
-	public static let corporationFactionalWarfareRead = ESI.Scope("corporationFactionalWarfareRead")
-	public static let corporationIndustryJobsRead = ESI.Scope("corporationIndustryJobsRead")
-	public static let corporationKillsRead = ESI.Scope("corporationKillsRead")
-	public static let corporationMarketOrdersRead = ESI.Scope("corporationMarketOrdersRead")
-	public static let corporationMedalsRead = ESI.Scope("corporationMedalsRead")
-	public static let corporationMembersRead = ESI.Scope("corporationMembersRead")
-	public static let corporationShareholdersRead = ESI.Scope("corporationShareholdersRead")
-	public static let corporationStructuresRead = ESI.Scope("corporationStructuresRead")
-	public static let corporationWalletRead = ESI.Scope("corporationWalletRead")
-	public static let fleetRead = ESI.Scope("fleetRead")
-	public static let fleetWrite = ESI.Scope("fleetWrite")
-	public static let publicData = ESI.Scope("publicData")
-	public static let remoteClientUI = ESI.Scope("remoteClientUI")
-	public static let structureVulnUpdate = ESI.Scope("structureVulnUpdate")*/
-	
+
 	public static var `default`: [ESI.Scope]  {
 		get {
 			return [

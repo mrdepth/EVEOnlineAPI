@@ -19,12 +19,10 @@
 		let progress = Progress(totalUnitCount: 100)
 
 		let promise = Promise<ESI.Result<{result}>>()
-		esi.perform { [weak esi] () -> DataRequest? in
-			return esi?.sessionManager.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<{result}>) in
-					promise.set(response: response, cached: {cached})
-				}
+		esi.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+		}.validateESI().responseESI { (response: DataResponse<{result}>) in
+			promise.set(response: response, cached: {cached})
 		}
 		return promise.future
 	}

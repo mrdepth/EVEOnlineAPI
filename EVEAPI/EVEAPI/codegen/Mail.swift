@@ -12,41 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func createMailLabel(characterID: Int, label: Mail.Label) -> Future<ESI.Result<Int>> {
+		public func sendNewMail(characterID: Int, mail: Mail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Int>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(label)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/mail/labels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Int>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Int>) in
-					promise.set(response: response, cached: nil)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func sendNewMail(characterID: Int, mail: Mail.NewMail) -> Future<ESI.Result<Int>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-mail.send_mail.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body = try? JSONEncoder().encode(mail)
 			
@@ -65,20 +33,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Int>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Int>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Int>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func returnMailHeaders(characterID: Int, ifNoneMatch: String? = nil, labels: [Int]? = nil, lastMailID: Int? = nil) -> Future<ESI.Result<[Mail.Header]>> {
+		public func returnMailHeaders(characterID: Int, ifNoneMatch: String? = nil, labels: [Int]? = nil, lastMailID: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Mail.Header]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -104,150 +70,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Mail.Header]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Mail.Header]>) in
-					promise.set(response: response, cached: 30.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Mail.Header]>) in
+				promise.set(response: response, cached: 30.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func returnMail(characterID: Int, ifNoneMatch: String? = nil, mailID: Int) -> Future<ESI.Result<Mail.MailBody>> {
+		public func returnMailingListSubscriptions(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Mail.Subscription]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Mail.MailBody>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Mail.MailBody>) in
-					promise.set(response: response, cached: 30.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func updateMetadataAboutMail(characterID: Int, contents: Mail.UpdateContents, mailID: Int) -> Future<ESI.Result<String>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(contents)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<String>) in
-					promise.set(response: response, cached: nil)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func deleteMail(characterID: Int, mailID: Int) -> Future<ESI.Result<String>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<String>) in
-					promise.set(response: response, cached: nil)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func deleteMailLabel(characterID: Int, labelID: Int) -> Future<ESI.Result<String>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/labels/\(labelID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<String>) in
-					promise.set(response: response, cached: nil)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func returnMailingListSubscriptions(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Mail.Subscription]>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -268,20 +102,78 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Mail.Subscription]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
-					promise.set(response: response, cached: 120.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
+				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getMailLabelsAndUnreadCounts(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Mail.MailLabelsAndUnreadCounts>> {
+		public func deleteMailLabel(characterID: Int, labelID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/labels/\(labelID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func createMailLabel(characterID: Int, label: Mail.Label, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Int>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(label)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v2/characters/\(characterID)/mail/labels/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Int>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Int>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getMailLabelsAndUnreadCounts(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Mail.MailLabelsAndUnreadCounts>> {
+			
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -302,120 +194,125 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Mail.MailLabelsAndUnreadCounts>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
-					promise.set(response: response, cached: 30.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
+				promise.set(response: response, cached: 30.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func returnMail(characterID: Int, ifNoneMatch: String? = nil, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Mail.MailBody>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Mail.MailBody>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Mail.MailBody>) in
+				promise.set(response: response, cached: 30.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func deleteMail(characterID: Int, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func updateMetadataAboutMail(characterID: Int, contents: Mail.UpdateContents, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(contents)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/mail/\(mailID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		
-		public struct Header: Codable, Hashable {
+		public struct Subscription: Codable, Hashable {
 			
 			
-			public var from: Int?
-			public var isRead: Bool?
-			public var labels: [Int]?
-			public var mailID: Int?
-			public var recipients: [Mail.Recipient]?
-			public var subject: String?
-			public var timestamp: Date?
+			public var mailingListID: Int
+			public var name: String
 			
-			public init(from: Int?, isRead: Bool?, labels: [Int]?, mailID: Int?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
-				self.from = from
-				self.isRead = isRead
-				self.labels = labels
-				self.mailID = mailID
-				self.recipients = recipients
-				self.subject = subject
-				self.timestamp = timestamp
+			public init(mailingListID: Int, name: String) {
+				self.mailingListID = mailingListID
+				self.name = name
 			}
 			
-			public static func ==(lhs: Mail.Header, rhs: Mail.Header) -> Bool {
+			public static func ==(lhs: Mail.Subscription, rhs: Mail.Subscription) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case from
-				case isRead = "is_read"
-				case labels
-				case mailID = "mail_id"
-				case recipients
-				case subject
-				case timestamp
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .timestamp: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct MailBody: Codable, Hashable {
-			
-			
-			public var body: String?
-			public var from: Int?
-			public var labels: [Int]?
-			public var read: Bool?
-			public var recipients: [Mail.Recipient]?
-			public var subject: String?
-			public var timestamp: Date?
-			
-			public init(body: String?, from: Int?, labels: [Int]?, read: Bool?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
-				self.body = body
-				self.from = from
-				self.labels = labels
-				self.read = read
-				self.recipients = recipients
-				self.subject = subject
-				self.timestamp = timestamp
-			}
-			
-			public static func ==(lhs: Mail.MailBody, rhs: Mail.MailBody) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case body
-				case from
-				case labels
-				case read
-				case recipients
-				case subject
-				case timestamp
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .timestamp: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostCharactersCharacterIDMailError520: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Mail.PostCharactersCharacterIDMailError520, rhs: Mail.PostCharactersCharacterIDMailError520) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case mailingListID = "mailing_list_id"
+				case name
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -514,28 +411,43 @@ public extension ESI {
 		}
 		
 		
-		public struct Subscription: Codable, Hashable {
+		public struct Header: Codable, Hashable {
 			
 			
-			public var mailingListID: Int
-			public var name: String
+			public var from: Int?
+			public var isRead: Bool?
+			public var labels: [Int]?
+			public var mailID: Int?
+			public var recipients: [Mail.Recipient]?
+			public var subject: String?
+			public var timestamp: Date?
 			
-			public init(mailingListID: Int, name: String) {
-				self.mailingListID = mailingListID
-				self.name = name
+			public init(from: Int?, isRead: Bool?, labels: [Int]?, mailID: Int?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
+				self.from = from
+				self.isRead = isRead
+				self.labels = labels
+				self.mailID = mailID
+				self.recipients = recipients
+				self.subject = subject
+				self.timestamp = timestamp
 			}
 			
-			public static func ==(lhs: Mail.Subscription, rhs: Mail.Subscription) -> Bool {
+			public static func ==(lhs: Mail.Header, rhs: Mail.Header) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case mailingListID = "mailing_list_id"
-				case name
+				case from
+				case isRead = "is_read"
+				case labels
+				case mailID = "mail_id"
+				case recipients
+				case subject
+				case timestamp
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						
+						case .timestamp: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -545,22 +457,11 @@ public extension ESI {
 		
 		public struct Recipient: Codable, Hashable {
 			
-			public enum RecipientType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case mailingList = "mailing_list"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
 			public var recipientID: Int
-			public var recipientType: Mail.Recipient.RecipientType
+			public var recipientType: Mail.RecipientType
 			
-			public init(recipientID: Int, recipientType: Mail.Recipient.RecipientType) {
+			public init(recipientID: Int, recipientType: Mail.RecipientType) {
 				self.recipientID = recipientID
 				self.recipientType = recipientType
 			}
@@ -583,6 +484,109 @@ public extension ESI {
 		}
 		
 		
+		public struct PostCharactersCharacterIDMailError520: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Mail.PostCharactersCharacterIDMailError520, rhs: Mail.PostCharactersCharacterIDMailError520) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct UpdateContents: Codable, Hashable {
+			
+			
+			public var labels: [Int]?
+			public var read: Bool?
+			
+			public init(labels: [Int]?, read: Bool?) {
+				self.labels = labels
+				self.read = read
+			}
+			
+			public static func ==(lhs: Mail.UpdateContents, rhs: Mail.UpdateContents) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case labels
+				case read
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct NewMail: Codable, Hashable {
+			
+			
+			public var approvedCost: Int64?
+			public var body: String
+			public var recipients: [Mail.Recipient]
+			public var subject: String
+			
+			public init(approvedCost: Int64?, body: String, recipients: [Mail.Recipient], subject: String) {
+				self.approvedCost = approvedCost
+				self.body = body
+				self.recipients = recipients
+				self.subject = subject
+			}
+			
+			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case approvedCost = "approved_cost"
+				case body
+				case recipients
+				case subject
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public enum RecipientType: String, Codable, HTTPQueryable {
+			case alliance = "alliance"
+			case character = "character"
+			case corporation = "corporation"
+			case mailingList = "mailing_list"
+			
+			public var httpQuery: String? {
+				return rawValue
+			}
+			
+		}
+		
+		
 		public struct GetCharactersCharacterIDMailMailIDNotFound: Codable, Hashable {
 			
 			
@@ -593,6 +597,76 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Mail.GetCharactersCharacterIDMailMailIDNotFound, rhs: Mail.GetCharactersCharacterIDMailMailIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct MailBody: Codable, Hashable {
+			
+			
+			public var body: String?
+			public var from: Int?
+			public var labels: [Int]?
+			public var read: Bool?
+			public var recipients: [Mail.Recipient]?
+			public var subject: String?
+			public var timestamp: Date?
+			
+			public init(body: String?, from: Int?, labels: [Int]?, read: Bool?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
+				self.body = body
+				self.from = from
+				self.labels = labels
+				self.read = read
+				self.recipients = recipients
+				self.subject = subject
+				self.timestamp = timestamp
+			}
+			
+			public static func ==(lhs: Mail.MailBody, rhs: Mail.MailBody) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case body
+				case from
+				case labels
+				case read
+				case recipients
+				case subject
+				case timestamp
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .timestamp: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity, rhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -652,96 +726,6 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case color
 				case name
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct UpdateContents: Codable, Hashable {
-			
-			
-			public var labels: [Int]?
-			public var read: Bool?
-			
-			public init(labels: [Int]?, read: Bool?) {
-				self.labels = labels
-				self.read = read
-			}
-			
-			public static func ==(lhs: Mail.UpdateContents, rhs: Mail.UpdateContents) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case labels
-				case read
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity, rhs: Mail.DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct NewMail: Codable, Hashable {
-			
-			
-			public var approvedCost: Int64?
-			public var body: String
-			public var recipients: [Mail.Recipient]
-			public var subject: String
-			
-			public init(approvedCost: Int64?, body: String, recipients: [Mail.Recipient], subject: String) {
-				self.approvedCost = approvedCost
-				self.body = body
-				self.recipients = recipients
-				self.subject = subject
-			}
-			
-			public static func ==(lhs: Mail.NewMail, rhs: Mail.NewMail) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case approvedCost = "approved_cost"
-				case body
-				case recipients
-				case subject
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

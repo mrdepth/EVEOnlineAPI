@@ -12,9 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getLoyaltyPoints(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Point]>> {
+		public func getLoyaltyPoints(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Loyalty.Point]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-characters.read_loyalty.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -35,18 +35,16 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Loyalty.Point]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Point]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Loyalty.Point]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Loyalty.Offer]>> {
+		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Loyalty.Offer]>> {
 			
 			
 			let body: Data? = nil
@@ -68,40 +66,12 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Loyalty.Offer]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
-		}
-		
-		
-		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -194,6 +164,32 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case corporationID = "corporation_id"
 				case loyaltyPoints = "loyalty_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

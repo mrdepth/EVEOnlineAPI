@@ -12,9 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listBookmarks(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Bookmarks.Bookmark]>> {
+		public func listBookmarks(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Bookmark]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-bookmarks.read_character_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -37,56 +37,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Bookmarks.Bookmark]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Bookmarks.Bookmark]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Bookmarks.Bookmark]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func listCorporationBookmarkFolders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>> {
+		public func listCorporationBookmarks(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksOk]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-bookmarks.read_corporation_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/bookmarks/folders/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listCorporationBookmarks(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksOk]>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-bookmarks.read_corporation_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -109,20 +71,18 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksOk]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Bookmarks.GetCorporationsCorporationIDBookmarksOk]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Bookmarks.GetCorporationsCorporationIDBookmarksOk]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func listBookmarkFolders(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Bookmarks.Folder]>> {
+		public func listBookmarkFolders(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Folder]>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-bookmarks.read_character_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -145,46 +105,79 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Bookmarks.Folder]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Bookmarks.Folder]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Bookmarks.Folder]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listCorporationBookmarkFolders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-bookmarks.read_corporation_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/v1/corporations/\(corporationID)/bookmarks/folders/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
 		
-		public struct GetCorporationsCorporationIDBookmarksOk: Codable, Hashable {
+		public struct Folder: Codable, Hashable {
 			
-			public struct GetCorporationsCorporationIDBookmarksItem: Codable, Hashable {
+			
+			public var folderID: Int
+			public var name: String
+			
+			public init(folderID: Int, name: String) {
+				self.folderID = folderID
+				self.name = name
+			}
+			
+			public static func ==(lhs: Bookmarks.Folder, rhs: Bookmarks.Folder) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case folderID = "folder_id"
+				case name
 				
-				
-				public var itemID: Int64
-				public var typeID: Int
-				
-				public init(itemID: Int64, typeID: Int) {
-					self.itemID = itemID
-					self.typeID = typeID
-				}
-				
-				public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case itemID = "item_id"
-					case typeID = "type_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
 					}
 				}
 			}
+		}
+		
+		
+		public struct GetCorporationsCorporationIDBookmarksOk: Codable, Hashable {
 			
 			public struct GetCorporationsCorporationIDBookmarksCoordinates: Codable, Hashable {
 				
@@ -207,6 +200,34 @@ public extension ESI {
 					case x
 					case y
 					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCorporationsCorporationIDBookmarksItem: Codable, Hashable {
+				
+				
+				public var itemID: Int64
+				public var typeID: Int
+				
+				public init(itemID: Int64, typeID: Int) {
+					self.itemID = itemID
+					self.typeID = typeID
+				}
+				
+				public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case itemID = "item_id"
+					case typeID = "type_id"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -391,35 +412,6 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case creatorID = "creator_id"
-				case folderID = "folder_id"
-				case name
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Folder: Codable, Hashable {
-			
-			
-			public var folderID: Int
-			public var name: String
-			
-			public init(folderID: Int, name: String) {
-				self.folderID = folderID
-				self.name = name
-			}
-			
-			public static func ==(lhs: Bookmarks.Folder, rhs: Bookmarks.Folder) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
 				case folderID = "folder_id"
 				case name
 				

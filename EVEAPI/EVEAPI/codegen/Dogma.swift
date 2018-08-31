@@ -12,73 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getEffectInformation(effectID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Effect>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v2/dogma/effects/\(effectID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Dogma.Effect>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Dogma.Effect>) in
-					promise.set(response: response, cached: nil)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAttributeInformation(attributeID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Attribute>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/dogma/attributes/\(attributeID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Dogma.Attribute>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Dogma.Attribute>) in
-					promise.set(response: response, cached: nil)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getDynamicItemInformation(ifNoneMatch: String? = nil, itemID: Int64, typeID: Int) -> Future<ESI.Result<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>> {
+		public func getDynamicItemInformation(ifNoneMatch: String? = nil, itemID: Int64, typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>> {
 			
 			
 			let body: Data? = nil
@@ -100,18 +34,78 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getEffects(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getEffectInformation(effectID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Dogma.Effect>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v2/dogma/effects/\(effectID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Dogma.Effect>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Dogma.Effect>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAttributeInformation(attributeID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Dogma.Attribute>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/dogma/attributes/\(attributeID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Dogma.Attribute>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Dogma.Attribute>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getEffects(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			
 			let body: Data? = nil
@@ -133,18 +127,16 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getAttributes(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getAttributes(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			
 			let body: Data? = nil
@@ -166,93 +158,12 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
-		}
-		
-		
-		public struct Attribute: Codable, Hashable {
-			
-			
-			public var attributeID: Int
-			public var defaultValue: Float?
-			public var localizedDescription: String?
-			public var displayName: String?
-			public var highIsGood: Bool?
-			public var iconID: Int?
-			public var name: String?
-			public var published: Bool?
-			public var stackable: Bool?
-			public var unitID: Int?
-			
-			public init(attributeID: Int, defaultValue: Float?, localizedDescription: String?, displayName: String?, highIsGood: Bool?, iconID: Int?, name: String?, published: Bool?, stackable: Bool?, unitID: Int?) {
-				self.attributeID = attributeID
-				self.defaultValue = defaultValue
-				self.localizedDescription = localizedDescription
-				self.displayName = displayName
-				self.highIsGood = highIsGood
-				self.iconID = iconID
-				self.name = name
-				self.published = published
-				self.stackable = stackable
-				self.unitID = unitID
-			}
-			
-			public static func ==(lhs: Dogma.Attribute, rhs: Dogma.Attribute) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case attributeID = "attribute_id"
-				case defaultValue = "default_value"
-				case localizedDescription = "description"
-				case displayName = "display_name"
-				case highIsGood = "high_is_good"
-				case iconID = "icon_id"
-				case name
-				case published
-				case stackable
-				case unitID = "unit_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetDogmaEffectsEffectIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Dogma.GetDogmaEffectsEffectIDNotFound, rhs: Dogma.GetDogmaEffectsEffectIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -407,7 +318,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetDogmaDynamicItemsTypeIDItemIDNotFound: Codable, Hashable {
+		public struct GetDogmaEffectsEffectIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -416,7 +327,7 @@ public extension ESI {
 				self.error = error
 			}
 			
-			public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDNotFound, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDNotFound) -> Bool {
+			public static func ==(lhs: Dogma.GetDogmaEffectsEffectIDNotFound, rhs: Dogma.GetDogmaEffectsEffectIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -434,34 +345,6 @@ public extension ESI {
 		
 		
 		public struct GetDogmaDynamicItemsTypeIDItemIDOk: Codable, Hashable {
-			
-			public struct GetDogmaDynamicItemsTypeIDItemIDDogmaEffects: Codable, Hashable {
-				
-				
-				public var effectID: Int
-				public var isDefault: Bool
-				
-				public init(effectID: Int, isDefault: Bool) {
-					self.effectID = effectID
-					self.isDefault = isDefault
-				}
-				
-				public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case effectID = "effect_id"
-					case isDefault = "is_default"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
 			
 			public struct GetDogmaDynamicItemsTypeIDItemIDDogmaAttributes: Codable, Hashable {
 				
@@ -481,6 +364,34 @@ public extension ESI {
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case attributeID = "attribute_id"
 					case value
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetDogmaDynamicItemsTypeIDItemIDDogmaEffects: Codable, Hashable {
+				
+				
+				public var effectID: Int
+				public var isDefault: Bool
+				
+				public init(effectID: Int, isDefault: Bool) {
+					self.effectID = effectID
+					self.isDefault = isDefault
+				}
+				
+				public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case effectID = "effect_id"
+					case isDefault = "is_default"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -515,6 +426,85 @@ public extension ESI {
 				case dogmaEffects = "dogma_effects"
 				case mutatorTypeID = "mutator_type_id"
 				case sourceTypeID = "source_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Attribute: Codable, Hashable {
+			
+			
+			public var attributeID: Int
+			public var defaultValue: Float?
+			public var localizedDescription: String?
+			public var displayName: String?
+			public var highIsGood: Bool?
+			public var iconID: Int?
+			public var name: String?
+			public var published: Bool?
+			public var stackable: Bool?
+			public var unitID: Int?
+			
+			public init(attributeID: Int, defaultValue: Float?, localizedDescription: String?, displayName: String?, highIsGood: Bool?, iconID: Int?, name: String?, published: Bool?, stackable: Bool?, unitID: Int?) {
+				self.attributeID = attributeID
+				self.defaultValue = defaultValue
+				self.localizedDescription = localizedDescription
+				self.displayName = displayName
+				self.highIsGood = highIsGood
+				self.iconID = iconID
+				self.name = name
+				self.published = published
+				self.stackable = stackable
+				self.unitID = unitID
+			}
+			
+			public static func ==(lhs: Dogma.Attribute, rhs: Dogma.Attribute) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case attributeID = "attribute_id"
+				case defaultValue = "default_value"
+				case localizedDescription = "description"
+				case displayName = "display_name"
+				case highIsGood = "high_is_good"
+				case iconID = "icon_id"
+				case name
+				case published
+				case stackable
+				case unitID = "unit_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetDogmaDynamicItemsTypeIDItemIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDNotFound, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

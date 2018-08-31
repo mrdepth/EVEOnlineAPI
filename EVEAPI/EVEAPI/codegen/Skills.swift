@@ -12,77 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+		public func getCharacterSkills(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Skills.CharacterSkills>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/skillqueue/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
-					promise.set(response: response, cached: 120.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Skills.CharacterAttributes>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/attributes/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
-					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterSkills(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Skills.CharacterSkills>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -103,12 +35,74 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Skills.CharacterSkills>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Skills.CharacterSkills>) in
-					promise.set(response: response, cached: 120.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterSkills>) in
+				promise.set(response: response, cached: 120.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v2/characters/\(characterID)/skillqueue/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
+				promise.set(response: response, cached: 120.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Skills.CharacterAttributes>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/attributes/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
@@ -179,54 +173,6 @@ public extension ESI {
 		}
 		
 		
-		public struct SkillQueueItem: Codable, Hashable {
-			
-			
-			public var finishDate: Date?
-			public var finishedLevel: Int
-			public var levelEndSP: Int?
-			public var levelStartSP: Int?
-			public var queuePosition: Int
-			public var skillID: Int
-			public var startDate: Date?
-			public var trainingStartSP: Int?
-			
-			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
-				self.finishDate = finishDate
-				self.finishedLevel = finishedLevel
-				self.levelEndSP = levelEndSP
-				self.levelStartSP = levelStartSP
-				self.queuePosition = queuePosition
-				self.skillID = skillID
-				self.startDate = startDate
-				self.trainingStartSP = trainingStartSP
-			}
-			
-			public static func ==(lhs: Skills.SkillQueueItem, rhs: Skills.SkillQueueItem) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case finishDate = "finish_date"
-				case finishedLevel = "finished_level"
-				case levelEndSP = "level_end_sp"
-				case levelStartSP = "level_start_sp"
-				case queuePosition = "queue_position"
-				case skillID = "skill_id"
-				case startDate = "start_date"
-				case trainingStartSP = "training_start_sp"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .finishDate: return DateFormatter.esiDateTimeFormatter
-						case .startDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct CharacterAttributes: Codable, Hashable {
 			
 			
@@ -268,6 +214,54 @@ public extension ESI {
 					switch self {
 						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
 						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct SkillQueueItem: Codable, Hashable {
+			
+			
+			public var finishDate: Date?
+			public var finishedLevel: Int
+			public var levelEndSP: Int?
+			public var levelStartSP: Int?
+			public var queuePosition: Int
+			public var skillID: Int
+			public var startDate: Date?
+			public var trainingStartSP: Int?
+			
+			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
+				self.finishDate = finishDate
+				self.finishedLevel = finishedLevel
+				self.levelEndSP = levelEndSP
+				self.levelStartSP = levelStartSP
+				self.queuePosition = queuePosition
+				self.skillID = skillID
+				self.startDate = startDate
+				self.trainingStartSP = trainingStartSP
+			}
+			
+			public static func ==(lhs: Skills.SkillQueueItem, rhs: Skills.SkillQueueItem) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case finishDate = "finish_date"
+				case finishedLevel = "finished_level"
+				case levelEndSP = "level_end_sp"
+				case levelStartSP = "level_start_sp"
+				case queuePosition = "queue_position"
+				case skillID = "skill_id"
+				case startDate = "start_date"
+				case trainingStartSP = "training_start_sp"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .finishDate: return DateFormatter.esiDateTimeFormatter
+						case .startDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

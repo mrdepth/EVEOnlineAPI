@@ -12,41 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getCharactersCompletedTasks(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_opportunities.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/opportunities/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Opportunities.CompletedTask]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Opportunities.CompletedTask]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getOpportunitiesGroup(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Opportunities.Group>> {
+		public func getOpportunitiesGroup(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Opportunities.Group>> {
 			
 			
 			let body: Data? = nil
@@ -73,18 +39,48 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Opportunities.Group>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
+		public func getCharactersCompletedTasks(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Opportunities.CompletedTask]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-characters.read_opportunities.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/opportunities/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Opportunities.CompletedTask]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Opportunities.CompletedTask]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
 			
 			
 			let body: Data? = nil
@@ -106,18 +102,16 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getOpportunitiesTasks(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getOpportunitiesTasks(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			
 			let body: Data? = nil
@@ -139,18 +133,16 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		@discardableResult
-		public func getOpportunitiesGroups(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getOpportunitiesGroups(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			
 			let body: Data? = nil
@@ -172,14 +164,47 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(response: response, cached: nil)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
+		}
+		
+		
+		public struct OpportunitiesTask: Codable, Hashable {
+			
+			
+			public var localizedDescription: String
+			public var name: String
+			public var notification: String
+			public var taskID: Int
+			
+			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.notification = notification
+				self.taskID = taskID
+			}
+			
+			public static func ==(lhs: Opportunities.OpportunitiesTask, rhs: Opportunities.OpportunitiesTask) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case localizedDescription = "description"
+				case name
+				case notification
+				case taskID = "task_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -213,41 +238,6 @@ public extension ESI {
 				case name
 				case notification
 				case requiredTasks = "required_tasks"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct OpportunitiesTask: Codable, Hashable {
-			
-			
-			public var localizedDescription: String
-			public var name: String
-			public var notification: String
-			public var taskID: Int
-			
-			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
-				self.localizedDescription = localizedDescription
-				self.name = name
-				self.notification = notification
-				self.taskID = taskID
-			}
-			
-			public static func ==(lhs: Opportunities.OpportunitiesTask, rhs: Opportunities.OpportunitiesTask) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case localizedDescription = "description"
-				case name
-				case notification
-				case taskID = "task_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -12,9 +12,104 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listCorporationCustomsOffices(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>> {
+		public func getColonyLayout(characterID: Int, ifNoneMatch: String? = nil, planetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<PlanetaryInteraction.ColonyLayout>> {
 			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-planets.manage_planets.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v3/characters/\(characterID)/planets/\(planetID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<PlanetaryInteraction.ColonyLayout>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
+				promise.set(response: response, cached: 600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getColonies(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-planets.manage_planets.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/planets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[PlanetaryInteraction.Colony]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
+				promise.set(response: response, cached: 600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSchematicInformation(ifNoneMatch: String? = nil, schematicID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/universe/schematics/\(schematicID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<PlanetaryInteraction.SchematicInformation>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.SchematicInformation>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listCorporationCustomsOffices(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-planets.read_customs_offices.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
@@ -37,113 +132,10 @@ public extension ESI {
 			let progress = Progress(totalUnitCount: 100)
 			
 			let promise = Promise<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) in
-					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getColonies(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-planets.manage_planets.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/planets/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[PlanetaryInteraction.Colony]>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
-					promise.set(response: response, cached: 600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getSchematicInformation(ifNoneMatch: String? = nil, schematicID: Int) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/universe/schematics/\(schematicID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<PlanetaryInteraction.SchematicInformation>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.SchematicInformation>) in
-					promise.set(response: response, cached: 3600.0)
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getColonyLayout(characterID: Int, ifNoneMatch: String? = nil, planetID: Int) -> Future<ESI.Result<PlanetaryInteraction.ColonyLayout>> {
-			
-			let scopes = (esi.sessionManager.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-planets.manage_planets.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v3/characters/\(characterID)/planets/\(planetID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<PlanetaryInteraction.ColonyLayout>>()
-			esi.perform { [weak esi] () -> DataRequest? in
-				return esi?.sessionManager.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
-					promise.set(response: response, cached: 600.0)
-				}
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
@@ -152,59 +144,6 @@ public extension ESI {
 		public struct ColonyLayout: Codable, Hashable {
 			
 			public struct Pin: Codable, Hashable {
-				
-				public struct Contents: Codable, Hashable {
-					
-					
-					public var amount: Int64
-					public var typeID: Int
-					
-					public init(amount: Int64, typeID: Int) {
-						self.amount = amount
-						self.typeID = typeID
-					}
-					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.Contents, rhs: PlanetaryInteraction.ColonyLayout.Pin.Contents) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case typeID = "type_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
-				public struct FactoryDetails: Codable, Hashable {
-					
-					
-					public var schematicID: Int
-					
-					public init(schematicID: Int) {
-						self.schematicID = schematicID
-					}
-					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case schematicID = "schematic_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
 				
 				public struct ExtractorDetails: Codable, Hashable {
 					
@@ -263,6 +202,59 @@ public extension ESI {
 						case heads
 						case productTypeID = "product_type_id"
 						case qtyPerCycle = "qty_per_cycle"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
+				public struct Contents: Codable, Hashable {
+					
+					
+					public var amount: Int64
+					public var typeID: Int
+					
+					public init(amount: Int64, typeID: Int) {
+						self.amount = amount
+						self.typeID = typeID
+					}
+					
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.Contents, rhs: PlanetaryInteraction.ColonyLayout.Pin.Contents) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
+				public struct FactoryDetails: Codable, Hashable {
+					
+					
+					public var schematicID: Int
+					
+					public init(schematicID: Int) {
+						self.schematicID = schematicID
+					}
+					
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case schematicID = "schematic_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -427,7 +419,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDPlanetsPlanetIDNotFound: Codable, Hashable {
+		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -436,7 +428,7 @@ public extension ESI {
 				self.error = error
 			}
 			
-			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) -> Bool {
+			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -446,6 +438,65 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Colony: Codable, Hashable {
+			
+			public enum PlanetType: String, Codable, HTTPQueryable {
+				case barren = "barren"
+				case gas = "gas"
+				case ice = "ice"
+				case lava = "lava"
+				case oceanic = "oceanic"
+				case plasma = "plasma"
+				case storm = "storm"
+				case temperate = "temperate"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var lastUpdate: Date
+			public var numPins: Int
+			public var ownerID: Int
+			public var planetID: Int
+			public var planetType: PlanetaryInteraction.Colony.PlanetType
+			public var solarSystemID: Int
+			public var upgradeLevel: Int
+			
+			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
+				self.lastUpdate = lastUpdate
+				self.numPins = numPins
+				self.ownerID = ownerID
+				self.planetID = planetID
+				self.planetType = planetType
+				self.solarSystemID = solarSystemID
+				self.upgradeLevel = upgradeLevel
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.Colony, rhs: PlanetaryInteraction.Colony) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case lastUpdate = "last_update"
+				case numPins = "num_pins"
+				case ownerID = "owner_id"
+				case planetID = "planet_id"
+				case planetType = "planet_type"
+				case solarSystemID = "solar_system_id"
+				case upgradeLevel = "upgrade_level"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .lastUpdate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -471,6 +522,32 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case cycleTime = "cycle_time"
 				case schematicName = "schematic_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDPlanetsPlanetIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound, rhs: PlanetaryInteraction.GetCharactersCharacterIDPlanetsPlanetIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -548,91 +625,6 @@ public extension ESI {
 				case standingLevel = "standing_level"
 				case systemID = "system_id"
 				case terribleStandingTaxRate = "terrible_standing_tax_rate"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Colony: Codable, Hashable {
-			
-			public enum PlanetType: String, Codable, HTTPQueryable {
-				case barren = "barren"
-				case gas = "gas"
-				case ice = "ice"
-				case lava = "lava"
-				case oceanic = "oceanic"
-				case plasma = "plasma"
-				case storm = "storm"
-				case temperate = "temperate"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var lastUpdate: Date
-			public var numPins: Int
-			public var ownerID: Int
-			public var planetID: Int
-			public var planetType: PlanetaryInteraction.Colony.PlanetType
-			public var solarSystemID: Int
-			public var upgradeLevel: Int
-			
-			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
-				self.lastUpdate = lastUpdate
-				self.numPins = numPins
-				self.ownerID = ownerID
-				self.planetID = planetID
-				self.planetType = planetType
-				self.solarSystemID = solarSystemID
-				self.upgradeLevel = upgradeLevel
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.Colony, rhs: PlanetaryInteraction.Colony) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastUpdate = "last_update"
-				case numPins = "num_pins"
-				case ownerID = "owner_id"
-				case planetID = "planet_id"
-				case planetType = "planet_type"
-				case solarSystemID = "solar_system_id"
-				case upgradeLevel = "upgrade_level"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .lastUpdate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

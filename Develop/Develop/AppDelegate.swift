@@ -16,6 +16,25 @@ import Futures
 let clientID = "a0cc80b7006944249313dc22205ec645"
 let secretKey = "deUqMep7TONp68beUoC1c71oabAdKQOJdbiKpPcC"
 
+class MyCache: URLCache {
+	override func cachedResponse(for request: URLRequest) -> CachedURLResponse? {
+		print("\(#function): \(request)")
+		return super.cachedResponse(for: request)
+	}
+	
+	override func storeCachedResponse(_ cachedResponse: CachedURLResponse, for request: URLRequest) {
+		print("\(#function): \(request)")
+		let original = cachedResponse.response as! HTTPURLResponse
+		
+		let fields = original.allHeaderFields.map {($0.key as! String, $0.value as! String)}
+		var headers = Dictionary(uniqueKeysWithValues: fields)
+		headers["cached"] = "true"
+		
+		let response = HTTPURLResponse(url: original.url!, statusCode: original.statusCode, httpVersion: nil, headerFields: headers)!
+		let other = CachedURLResponse(response: response, data: cachedResponse.data, userInfo: cachedResponse.userInfo, storagePolicy: cachedResponse.storagePolicy)
+		super.storeCachedResponse(other, for: request)
+	}
+}
 
 
 @UIApplicationMain
@@ -29,8 +48,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-		let url = OAuth2.authURL(clientID: clientID, callbackURL: URL(string:"eveauthnc://sso/")!, scope: ESI.Scope.default, state: "esi")
-		application.open(url, options: [:], completionHandler: nil)
+		URLCache.shared = MyCache(memoryCapacity: 1024*1024, diskCapacity: 50*1024*1024, diskPath: nil)
+		
+		var esi: ESI! = ESI()
+		esi.request("https://esi.evetech.net/latest/alliances/?datasource=tranquility", cachePolicy: .useProtocolCachePolicy).responseString { (r) in
+			print(r)
+			esi = nil
+		}
+		
+//		let url = OAuth2.authURL(clientID: clientID, callbackURL: URL(string:"eveauthnc://sso/")!, scope: ESI.Scope.default, state: "esi")
+//		application.open(url, options: [:], completionHandler: nil)
 		
 	/*	DispatchQueue.global(qos: .background).async {
 			print("p1")
