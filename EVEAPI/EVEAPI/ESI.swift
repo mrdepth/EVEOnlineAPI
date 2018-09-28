@@ -55,7 +55,8 @@ public class ESI {
 		}
 		
 		public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-			guard let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
+			guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
+				let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
 				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
 					return try next?.adapt(urlRequest) ?? urlRequest
 			}
