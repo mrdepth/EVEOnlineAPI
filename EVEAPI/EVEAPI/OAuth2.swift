@@ -134,7 +134,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	private var requestsToRetry: [RequestRetryCompletion] = []
 	private let lock = NSLock()
 	
-	public func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+	public func should(_ manager: Session, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
 		guard !token.refreshToken.isEmpty else {
 			completion(false, 0)
 			return
@@ -170,7 +170,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		guard !isRefreshing else {return}
 		isRefreshing = true
 		let auth = "\(clientID):\(secretKey)".data(using: .utf8)?.base64EncodedString()
-		Alamofire.request(OAuthBaseURL + "token",
+		AF.request(OAuthBaseURL + "token",
 						  method: .post,
 						  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
 						  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable {[weak self] (response: DataResponse<TokenResponse>) in
@@ -242,14 +242,14 @@ public class OAuth2 {
 		if let code = code, let state = state {
 			let auth = "\(clientID):\(secretKey)".data(using: .utf8)?.base64EncodedString()
 			
-			Alamofire.request(OAuthBaseURL + "token",
+			AF.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
 							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenResponse>) in
 								switch(response.result) {
 								case let .success(token):
 									let date = Date(timeIntervalSinceNow: token.expiresIn)
-									Alamofire.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenVerifyResponse>) in
+									AF.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenVerifyResponse>) in
 										switch(response.result) {
 										case let .success(verify):
 											let expiresOn = max(verify.expiresOn ?? date, date)

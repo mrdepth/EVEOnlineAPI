@@ -74,7 +74,7 @@ public class ESI {
 
 	let baseURL = "https://esi.tech.ccp.is"
 	let server: Server
-	var sessionManager: SessionManager!
+	var sessionManager: Session!
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility) {
 		self.server = server
@@ -87,10 +87,10 @@ public class ESI {
 				ESI.helpers[token.refreshToken] = Weak(helper)
 				return helper
 			}()
-			sessionManager = SessionManager(adapter: CachePolicyAdapter(next: helper), retrier: helper)
+			sessionManager = Session(adapter: CachePolicyAdapter(next: helper), retrier: helper)
 		}
 		else {
-			sessionManager = SessionManager(adapter: CachePolicyAdapter(next: nil))
+			sessionManager = Session(adapter: CachePolicyAdapter(next: nil))
 		}
 	}
 	

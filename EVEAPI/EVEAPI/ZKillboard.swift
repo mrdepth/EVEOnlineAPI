@@ -32,7 +32,7 @@ extension DateFormatter {
 }
 
 
-public class ZKillboard: SessionManager {
+public class ZKillboard: Session {
 	let baseURL = "https://zkillboard.com/api/"
 	
 	public convenience init(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
