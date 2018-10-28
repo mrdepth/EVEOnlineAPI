@@ -15,45 +15,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/sovereignty/campaigns/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
-					promise.set(result: response.result, cached: 5.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func listSovereigntyStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Structure]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
@@ -68,7 +29,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -93,6 +54,45 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/sovereignty/campaigns/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
+					promise.set(result: response.result, cached: 5.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Sovereignty.System]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
@@ -107,7 +107,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -235,18 +235,6 @@ public extension ESI {
 		
 		public struct Campaign: Codable, Hashable {
 			
-			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
-				case ihubDefense = "ihub_defense"
-				case stationDefense = "station_defense"
-				case stationFreeport = "station_freeport"
-				case tcuDefense = "tcu_defense"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
 			public struct GetSovereigntyCampaignsParticipants: Codable, Hashable {
 				
 				
@@ -280,6 +268,18 @@ public extension ESI {
 						}
 					}
 				}
+			}
+			
+			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
+				case ihubDefense = "ihub_defense"
+				case stationDefense = "station_defense"
+				case stationFreeport = "station_freeport"
+				case tcuDefense = "tcu_defense"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
 			}
 			
 			public var attackersScore: Float?

@@ -29,7 +29,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -54,7 +54,52 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCorporationKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
+		public func getCharactersRecentKillsAndLosses(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Killmails.Recent]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-killmails.read_killmails.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/killmails/recent/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Killmails.Recent]>) in
+					promise.set(result: response.result, cached: 300.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationsRecentKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>>()
 			guard session != nil else {
@@ -72,13 +117,13 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = maxKillID?.httpQuery {
-				query.append(URLQueryItem(name: "max_kill_id", value: v))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
 			let url = session!.baseURL + "/v1/corporations/\(corporationID)/killmails/recent/"
@@ -98,189 +143,49 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getCharacterKillsAndLosses(characterID: Int, ifNoneMatch: String? = nil, maxCount: Int? = nil, maxKillID: Int? = nil) -> Future<ESI.Result<[Killmails.Recent]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Killmails.Recent]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-killmails.read_killmails.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = maxCount?.httpQuery {
-				query.append(URLQueryItem(name: "max_count", value: v))
-			}
-			if let v = maxKillID?.httpQuery {
-				query.append(URLQueryItem(name: "max_kill_id", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/killmails/recent/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Killmails.Recent]>) in
-					promise.set(result: response.result, cached: 120.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		
-		public struct GetCorporationsCorporationIDKillmailsRecentOk: Codable, Hashable {
-			
-			
-			public var killmailHash: String
-			public var killmailID: Int
-			
-			public init(killmailHash: String, killmailID: Int) {
-				self.killmailHash = killmailHash
-				self.killmailID = killmailID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: killmailHash.hashValue)
-				hashCombine(seed: &hash, value: killmailID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Killmails.GetCorporationsCorporationIDKillmailsRecentOk, rhs: Killmails.GetCorporationsCorporationIDKillmailsRecentOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case killmailHash = "killmail_hash"
-				case killmailID = "killmail_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity, rhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
 		
 		public struct Killmail: Codable, Hashable {
 			
-			public struct Attacker: Codable, Hashable {
+			public struct Victim: Codable, Hashable {
 				
-				
-				public var allianceID: Int?
-				public var characterID: Int?
-				public var corporationID: Int?
-				public var damageDone: Int
-				public var factionID: Int?
-				public var finalBlow: Bool
-				public var securityStatus: Float
-				public var shipTypeID: Int?
-				public var weaponTypeID: Int?
-				
-				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
-					self.allianceID = allianceID
-					self.characterID = characterID
-					self.corporationID = corporationID
-					self.damageDone = damageDone
-					self.factionID = factionID
-					self.finalBlow = finalBlow
-					self.securityStatus = securityStatus
-					self.shipTypeID = shipTypeID
-					self.weaponTypeID = weaponTypeID
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: damageDone.hashValue)
-					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: finalBlow.hashValue)
-					hashCombine(seed: &hash, value: securityStatus.hashValue)
-					hashCombine(seed: &hash, value: shipTypeID?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: weaponTypeID?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Killmails.Killmail.Attacker, rhs: Killmails.Killmail.Attacker) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case characterID = "character_id"
-					case corporationID = "corporation_id"
-					case damageDone = "damage_done"
-					case factionID = "faction_id"
-					case finalBlow = "final_blow"
-					case securityStatus = "security_status"
-					case shipTypeID = "ship_type_id"
-					case weaponTypeID = "weapon_type_id"
+				public struct GetKillmailsKillmailIDKillmailHashPosition: Codable, Hashable {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					
+					public var x: Double
+					public var y: Double
+					public var z: Double
+					
+					public init(x: Double, y: Double, z: Double) {
+						self.x = x
+						self.y = y
+						self.z = z
+					}
+					
+					public var hashValue: Int {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: x.hashValue)
+						hashCombine(seed: &hash, value: y.hashValue)
+						hashCombine(seed: &hash, value: z.hashValue)
+						return hash
+					}
+					
+					public static func ==(lhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition, rhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case x
+						case y
+						case z
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
 						}
 					}
 				}
-			}
-			
-			public struct Victim: Codable, Hashable {
 				
 				public struct Items: Codable, Hashable {
 					
@@ -379,45 +284,6 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetKillmailsKillmailIDKillmailHashPosition: Codable, Hashable {
-					
-					
-					public var x: Double
-					public var y: Double
-					public var z: Double
-					
-					public init(x: Double, y: Double, z: Double) {
-						self.x = x
-						self.y = y
-						self.z = z
-					}
-					
-					public var hashValue: Int {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: x.hashValue)
-						hashCombine(seed: &hash, value: y.hashValue)
-						hashCombine(seed: &hash, value: z.hashValue)
-						return hash
-					}
-					
-					public static func ==(lhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition, rhs: Killmails.Killmail.Victim.GetKillmailsKillmailIDKillmailHashPosition) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case x
-						case y
-						case z
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
 				public var allianceID: Int?
 				public var characterID: Int?
 				public var corporationID: Int?
@@ -464,6 +330,69 @@ public extension ESI {
 					case items
 					case position
 					case shipTypeID = "ship_type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct Attacker: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var corporationID: Int?
+				public var damageDone: Int
+				public var factionID: Int?
+				public var finalBlow: Bool
+				public var securityStatus: Float
+				public var shipTypeID: Int?
+				public var weaponTypeID: Int?
+				
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.corporationID = corporationID
+					self.damageDone = damageDone
+					self.factionID = factionID
+					self.finalBlow = finalBlow
+					self.securityStatus = securityStatus
+					self.shipTypeID = shipTypeID
+					self.weaponTypeID = weaponTypeID
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: characterID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: damageDone.hashValue)
+					hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: finalBlow.hashValue)
+					hashCombine(seed: &hash, value: securityStatus.hashValue)
+					hashCombine(seed: &hash, value: shipTypeID?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: weaponTypeID?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Killmails.Killmail.Attacker, rhs: Killmails.Killmail.Attacker) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case characterID = "character_id"
+					case corporationID = "corporation_id"
+					case damageDone = "damage_done"
+					case factionID = "faction_id"
+					case finalBlow = "final_blow"
+					case securityStatus = "security_status"
+					case shipTypeID = "ship_type_id"
+					case weaponTypeID = "weapon_type_id"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -546,6 +475,74 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Killmails.Recent, rhs: Killmails.Recent) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case killmailHash = "killmail_hash"
+				case killmailID = "killmail_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity, rhs: Killmails.GetKillmailsKillmailIDKillmailHashUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCorporationsCorporationIDKillmailsRecentOk: Codable, Hashable {
+			
+			
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: killmailHash.hashValue)
+				hashCombine(seed: &hash, value: killmailID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Killmails.GetCorporationsCorporationIDKillmailsRecentOk, rhs: Killmails.GetCorporationsCorporationIDKillmailsRecentOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			

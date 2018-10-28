@@ -15,9 +15,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listCalendarEventSummaries(characterID: Int, fromEvent: Int? = nil, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Calendar.Summary]>> {
+		public func getAnEvent(characterID: Int, eventID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Calendar.Event>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Calendar.Summary]>>()
+			let promise = Promise<ESI.Result<Calendar.Event>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -33,16 +33,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = fromEvent?.httpQuery {
-				query.append(URLQueryItem(name: "from_event", value: v))
-			}
 			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/calendar/"
+			
+			let url = session!.baseURL + "/v3/characters/\(characterID)/calendar/\(eventID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -51,51 +49,8 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Calendar.Summary]>) in
+				}.validateESI().responseESI { (response: DataResponse<Calendar.Event>) in
 					promise.set(result: response.result, cached: 5.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAttendees(characterID: Int, eventID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/calendar/\(eventID)/attendees/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>) in
-					promise.set(result: response.result, cached: 600.0)
 					session = nil
 				}
 			}
@@ -144,9 +99,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getAnEvent(characterID: Int, eventID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Calendar.Event>> {
+		public func getAttendees(characterID: Int, eventID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Calendar.Event>>()
+			let promise = Promise<ESI.Result<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -162,14 +117,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v3/characters/\(characterID)/calendar/\(eventID)/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/calendar/\(eventID)/attendees/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -178,71 +133,57 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Calendar.Event>) in
-					promise.set(result: response.result, cached: 5.0)
+				}.validateESI().responseESI { (response: DataResponse<[Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk]>) in
+					promise.set(result: response.result, cached: 600.0)
 					session = nil
 				}
 			}
 			return promise.future
 		}
 		
-		
-		public struct Summary: Codable, Hashable {
-			
-			public enum Response: String, Codable, HTTPQueryable {
-				case accepted = "accepted"
-				case declined = "declined"
-				case notResponded = "not_responded"
-				case tentative = "tentative"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
+		@discardableResult
+		public func listCalendarEventSummaries(characterID: Int, fromEvent: Int? = nil, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Calendar.Summary]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Calendar.Summary]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
 			}
 			
-			public var eventDate: Date?
-			public var eventID: Int?
-			public var eventResponse: Calendar.Summary.Response?
-			public var importance: Int?
-			public var title: String?
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-calendar.read_calendar_events.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
 			
-			public init(eventDate: Date?, eventID: Int?, eventResponse: Calendar.Summary.Response?, importance: Int?, title: String?) {
-				self.eventDate = eventDate
-				self.eventID = eventID
-				self.eventResponse = eventResponse
-				self.importance = importance
-				self.title = title
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: eventDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: eventID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: eventResponse?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: importance?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: title?.hashValue ?? 0)
-				return hash
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = fromEvent?.httpQuery {
+				query.append(URLQueryItem(name: "from_event", value: v))
 			}
 			
-			public static func ==(lhs: Calendar.Summary, rhs: Calendar.Summary) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
+			let url = session!.baseURL + "/v1/characters/\(characterID)/calendar/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case eventDate = "event_date"
-				case eventID = "event_id"
-				case eventResponse = "event_response"
-				case importance
-				case title
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .eventDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Calendar.Summary]>) in
+					promise.set(result: response.result, cached: 5.0)
+					session = nil
 				}
 			}
+			return promise.future
 		}
 		
 		
@@ -271,6 +212,86 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Event: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case eveServer = "eve_server"
+				case faction = "faction"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var date: Date
+			public var duration: Int
+			public var eventID: Int
+			public var importance: Int
+			public var ownerID: Int
+			public var ownerName: String
+			public var ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType
+			public var response: String
+			public var text: String
+			public var title: String
+			
+			public init(date: Date, duration: Int, eventID: Int, importance: Int, ownerID: Int, ownerName: String, ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType, response: String, text: String, title: String) {
+				self.date = date
+				self.duration = duration
+				self.eventID = eventID
+				self.importance = importance
+				self.ownerID = ownerID
+				self.ownerName = ownerName
+				self.ownerType = ownerType
+				self.response = response
+				self.text = text
+				self.title = title
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: duration.hashValue)
+				hashCombine(seed: &hash, value: eventID.hashValue)
+				hashCombine(seed: &hash, value: importance.hashValue)
+				hashCombine(seed: &hash, value: ownerID.hashValue)
+				hashCombine(seed: &hash, value: ownerName.hashValue)
+				hashCombine(seed: &hash, value: ownerType.hashValue)
+				hashCombine(seed: &hash, value: response.hashValue)
+				hashCombine(seed: &hash, value: text.hashValue)
+				hashCombine(seed: &hash, value: title.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Calendar.Event, rhs: Calendar.Event) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case date
+				case duration
+				case eventID = "event_id"
+				case importance
+				case ownerID = "owner_id"
+				case ownerName = "owner_name"
+				case ownerType = "owner_type"
+				case response
+				case text
+				case title
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -367,14 +388,13 @@ public extension ESI {
 		}
 		
 		
-		public struct Event: Codable, Hashable {
+		public struct Summary: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDCalendarEventIDOwnerType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case eveServer = "eve_server"
-				case faction = "faction"
+			public enum Response: String, Codable, HTTPQueryable {
+				case accepted = "accepted"
+				case declined = "declined"
+				case notResponded = "not_responded"
+				case tentative = "tentative"
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -382,64 +402,44 @@ public extension ESI {
 				
 			}
 			
-			public var date: Date
-			public var duration: Int
-			public var eventID: Int
-			public var importance: Int
-			public var ownerID: Int
-			public var ownerName: String
-			public var ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType
-			public var response: String
-			public var text: String
-			public var title: String
+			public var eventDate: Date?
+			public var eventID: Int?
+			public var eventResponse: Calendar.Summary.Response?
+			public var importance: Int?
+			public var title: String?
 			
-			public init(date: Date, duration: Int, eventID: Int, importance: Int, ownerID: Int, ownerName: String, ownerType: Calendar.Event.GetCharactersCharacterIDCalendarEventIDOwnerType, response: String, text: String, title: String) {
-				self.date = date
-				self.duration = duration
+			public init(eventDate: Date?, eventID: Int?, eventResponse: Calendar.Summary.Response?, importance: Int?, title: String?) {
+				self.eventDate = eventDate
 				self.eventID = eventID
+				self.eventResponse = eventResponse
 				self.importance = importance
-				self.ownerID = ownerID
-				self.ownerName = ownerName
-				self.ownerType = ownerType
-				self.response = response
-				self.text = text
 				self.title = title
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: eventID.hashValue)
-				hashCombine(seed: &hash, value: importance.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: ownerName.hashValue)
-				hashCombine(seed: &hash, value: ownerType.hashValue)
-				hashCombine(seed: &hash, value: response.hashValue)
-				hashCombine(seed: &hash, value: text.hashValue)
-				hashCombine(seed: &hash, value: title.hashValue)
+				hashCombine(seed: &hash, value: eventDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: eventID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: eventResponse?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: importance?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: title?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Calendar.Event, rhs: Calendar.Event) -> Bool {
+			public static func ==(lhs: Calendar.Summary, rhs: Calendar.Summary) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case date
-				case duration
+				case eventDate = "event_date"
 				case eventID = "event_id"
+				case eventResponse = "event_response"
 				case importance
-				case ownerID = "owner_id"
-				case ownerName = "owner_name"
-				case ownerType = "owner_type"
-				case response
-				case text
 				case title
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .date: return DateFormatter.esiDateTimeFormatter
+						case .eventDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

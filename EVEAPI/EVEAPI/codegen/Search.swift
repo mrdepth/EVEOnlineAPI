@@ -15,57 +15,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func search(categories: [Search.Categories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Search.SearchResult>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = categories.httpQuery {
-				query.append(URLQueryItem(name: "categories", value: v))
-			}
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			if let v = search.httpQuery {
-				query.append(URLQueryItem(name: "search", value: v))
-			}
-			if let v = strict?.httpQuery {
-				query.append(URLQueryItem(name: "strict", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/search/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func characterSearch(categories: [Search.SearchCategories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
+		public func characterSearch(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.CharacterSearchResult>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Search.CharacterSearchResult>>()
 			guard session != nil else {
@@ -82,8 +32,11 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -111,6 +64,59 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Search.CharacterSearchResult>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.SearchCategories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil) -> Future<ESI.Result<Search.SearchResult>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Search.SearchResult>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = categories.httpQuery {
+				query.append(URLQueryItem(name: "categories", value: v))
+			}
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			if let v = search.httpQuery {
+				query.append(URLQueryItem(name: "search", value: v))
+			}
+			if let v = strict?.httpQuery {
+				query.append(URLQueryItem(name: "strict", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/search/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -191,7 +197,7 @@ public extension ESI {
 		}
 		
 		
-		public enum SearchCategories: String, Codable, HTTPQueryable {
+		public enum Categories: String, Codable, HTTPQueryable {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"
@@ -279,7 +285,7 @@ public extension ESI {
 		}
 		
 		
-		public enum Categories: String, Codable, HTTPQueryable {
+		public enum SearchCategories: String, Codable, HTTPQueryable {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"

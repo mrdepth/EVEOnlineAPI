@@ -15,406 +15,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getItemGroups(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/groups/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getSystemKills(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.SystemKills]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.SystemKills]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v2/universe/system_kills/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.SystemKills]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getGraphicInformation(graphicID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GraphicInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.GraphicInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/graphics/\(graphicID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.GraphicInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getItemGroupInformation(groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemGroupInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.ItemGroupInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/groups/\(groupID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.ItemGroupInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getItemCategoryInformation(categoryID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemCategoryInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.ItemCategoryInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/categories/\(categoryID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.ItemCategoryInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAncestries(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.GetUniverseAncestriesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.GetUniverseAncestriesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/ancestries/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.GetUniverseAncestriesOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getConstellations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/constellations/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getMoonInformation(ifNoneMatch: String? = nil, moonID: Int) -> Future<ESI.Result<Universe.MoonInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.MoonInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/moons/\(moonID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.MoonInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getTypes(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/types/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listAllPublicStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int64]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int64]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/structures/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int64]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getNamesAndCategoriesForSetOfIDs(ids: [Int]) -> Future<ESI.Result<[Universe.Name]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Name]>>()
@@ -452,9 +52,53 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getAsteroidBeltInformation(asteroidBeltID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>> {
+		public func getItemGroupInformation(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemGroupInformation>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>>()
+			let promise = Promise<ESI.Result<Universe.ItemGroupInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/groups/\(groupID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ItemGroupInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getRegions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -466,14 +110,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/universe/asteroid_belts/\(asteroidBeltID)/"
+			let url = session!.baseURL + "/v1/universe/regions/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -482,7 +126,249 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>) in
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStargateInformation(ifNoneMatch: String? = nil, stargateID: Int) -> Future<ESI.Result<Universe.StargateInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.StargateInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/stargates/\(stargateID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterRaces(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Race]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.Race]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/races/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Race]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getGraphicInformation(graphicID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GraphicInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.GraphicInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/graphics/\(graphicID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.GraphicInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func bulkNamesToIDs(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, names: [String]) -> Future<ESI.Result<Universe.PostUniverseIdsOk>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.PostUniverseIdsOk>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body = try? JSONEncoder().encode(names)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/ids/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.PostUniverseIdsOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSolarSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/systems/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getGraphics(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/graphics/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -505,7 +391,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -548,14 +434,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/universe/structures/\(structureID)/"
+			let url = session!.baseURL + "/v2/universe/structures/\(structureID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -573,9 +459,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getItemCategories(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getMoonInformation(ifNoneMatch: String? = nil, moonID: Int) -> Future<ESI.Result<Universe.MoonInformation>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
+			let promise = Promise<ESI.Result<Universe.MoonInformation>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -587,14 +473,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/universe/categories/"
+			let url = session!.baseURL + "/v1/universe/moons/\(moonID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -603,7 +489,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				}.validateESI().responseESI { (response: DataResponse<Universe.MoonInformation>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -612,446 +498,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getStationInformation(ifNoneMatch: String? = nil, stationID: Int) -> Future<ESI.Result<Universe.StationInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.StationInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v2/universe/stations/\(stationID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getBloodlines(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Bloodline]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.Bloodline]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/bloodlines/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.Bloodline]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func bulkNamesToIDs(language: Language? = nil, names: [String]) -> Future<ESI.Result<Universe.PostUniverseIdsOk>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.PostUniverseIdsOk>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body = try? JSONEncoder().encode(names)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/ids/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.PostUniverseIdsOk>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getRegionInformation(ifNoneMatch: String? = nil, language: Language? = nil, regionID: Int) -> Future<ESI.Result<Universe.RegionInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.RegionInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/regions/\(regionID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getRegions(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/regions/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getConstellationInformation(constellationID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ConstellationInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.ConstellationInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/constellations/\(constellationID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStarInformation(ifNoneMatch: String? = nil, starID: Int) -> Future<ESI.Result<Universe.GetUniverseStarsStarIDOk>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.GetUniverseStarsStarIDOk>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/stars/\(starID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getSolarSystemInformation(ifNoneMatch: String? = nil, language: Language? = nil, systemID: Int) -> Future<ESI.Result<Universe.SolarSystemInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.SolarSystemInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v3/universe/systems/\(systemID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStargateInformation(ifNoneMatch: String? = nil, stargateID: Int) -> Future<ESI.Result<Universe.StargateInformation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Universe.StargateInformation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/stargates/\(stargateID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Universe.StargateInformation>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getGraphics(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/graphics/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterRaces(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Race]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.Race]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/universe/races/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.Race]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getFactions(ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Faction]>> {
+		public func getFactions(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Faction]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Universe.Faction]>>()
 			guard session != nil else {
@@ -1064,8 +511,11 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -1092,7 +542,587 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getTypeInformation(ifNoneMatch: String? = nil, language: Language? = nil, typeID: Int) -> Future<ESI.Result<Universe.TypeInformation>> {
+		public func listAllPublicStructures(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int64]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int64]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/structures/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int64]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSolarSystemInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, systemID: Int) -> Future<ESI.Result<Universe.SolarSystemInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.SolarSystemInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v4/universe/systems/\(systemID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.SolarSystemInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAsteroidBeltInformation(asteroidBeltID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/asteroid_belts/\(asteroidBeltID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSystemKills(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.SystemKills]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.SystemKills]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v2/universe/system_kills/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.SystemKills]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAncestries(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.GetUniverseAncestriesOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.GetUniverseAncestriesOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/ancestries/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.GetUniverseAncestriesOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getConstellationInformation(acceptLanguage: AcceptLanguage? = nil, constellationID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ConstellationInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.ConstellationInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/constellations/\(constellationID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ConstellationInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStationInformation(ifNoneMatch: String? = nil, stationID: Int) -> Future<ESI.Result<Universe.StationInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.StationInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v2/universe/stations/\(stationID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.StationInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getConstellations(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/constellations/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getBloodlines(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<[Universe.Bloodline]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.Bloodline]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/bloodlines/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Bloodline]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getSystemJumps(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.Jump]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Universe.Jump]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/system_jumps/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getTypes(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/types/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getItemGroups(ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Int]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Int]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/groups/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getItemCategoryInformation(acceptLanguage: AcceptLanguage? = nil, categoryID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Universe.ItemCategoryInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.ItemCategoryInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/categories/\(categoryID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.ItemCategoryInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getRegionInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, regionID: Int) -> Future<ESI.Result<Universe.RegionInformation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.RegionInformation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/universe/regions/\(regionID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.RegionInformation>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getTypeInformation(acceptLanguage: AcceptLanguage? = nil, ifNoneMatch: String? = nil, language: Language? = nil, typeID: Int) -> Future<ESI.Result<Universe.TypeInformation>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Universe.TypeInformation>>()
 			guard session != nil else {
@@ -1105,8 +1135,11 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -1133,7 +1166,46 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getSolarSystems(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getStarInformation(ifNoneMatch: String? = nil, starID: Int) -> Future<ESI.Result<Universe.GetUniverseStarsStarIDOk>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Universe.GetUniverseStarsStarIDOk>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/universe/stars/\(starID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Universe.GetUniverseStarsStarIDOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getItemCategories(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
@@ -1147,14 +1219,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/universe/systems/"
+			let url = session!.baseURL + "/v1/universe/categories/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -1171,660 +1243,37 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getSystemJumps(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Universe.Jump]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Universe.Jump]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/universe/system_jumps/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Universe.Jump]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
 		
-		
-		public struct SystemKills: Codable, Hashable {
-			
-			
-			public var npcKills: Int
-			public var podKills: Int
-			public var shipKills: Int
-			public var systemID: Int
-			
-			public init(npcKills: Int, podKills: Int, shipKills: Int, systemID: Int) {
-				self.npcKills = npcKills
-				self.podKills = podKills
-				self.shipKills = shipKills
-				self.systemID = systemID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: npcKills.hashValue)
-				hashCombine(seed: &hash, value: podKills.hashValue)
-				hashCombine(seed: &hash, value: shipKills.hashValue)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.SystemKills, rhs: Universe.SystemKills) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case npcKills = "npc_kills"
-				case podKills = "pod_kills"
-				case shipKills = "ship_kills"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostUniverseNamesNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.PostUniverseNamesNotFound, rhs: Universe.PostUniverseNamesNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Bloodline: Codable, Hashable {
-			
-			
-			public var bloodlineID: Int
-			public var charisma: Int
-			public var corporationID: Int
-			public var localizedDescription: String
-			public var intelligence: Int
-			public var memory: Int
-			public var name: String
-			public var perception: Int
-			public var raceID: Int
-			public var shipTypeID: Int
-			public var willpower: Int
-			
-			public init(bloodlineID: Int, charisma: Int, corporationID: Int, localizedDescription: String, intelligence: Int, memory: Int, name: String, perception: Int, raceID: Int, shipTypeID: Int, willpower: Int) {
-				self.bloodlineID = bloodlineID
-				self.charisma = charisma
-				self.corporationID = corporationID
-				self.localizedDescription = localizedDescription
-				self.intelligence = intelligence
-				self.memory = memory
-				self.name = name
-				self.perception = perception
-				self.raceID = raceID
-				self.shipTypeID = shipTypeID
-				self.willpower = willpower
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: bloodlineID.hashValue)
-				hashCombine(seed: &hash, value: charisma.hashValue)
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: intelligence.hashValue)
-				hashCombine(seed: &hash, value: memory.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: perception.hashValue)
-				hashCombine(seed: &hash, value: raceID.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
-				hashCombine(seed: &hash, value: willpower.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.Bloodline, rhs: Universe.Bloodline) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case bloodlineID = "bloodline_id"
-				case charisma
-				case corporationID = "corporation_id"
-				case localizedDescription = "description"
-				case intelligence
-				case memory
-				case name
-				case perception
-				case raceID = "race_id"
-				case shipTypeID = "ship_type_id"
-				case willpower
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Race: Codable, Hashable {
-			
-			
-			public var allianceID: Int
-			public var localizedDescription: String
-			public var name: String
-			public var raceID: Int
-			
-			public init(allianceID: Int, localizedDescription: String, name: String, raceID: Int) {
-				self.allianceID = allianceID
-				self.localizedDescription = localizedDescription
-				self.name = name
-				self.raceID = raceID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: raceID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.Race, rhs: Universe.Race) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case localizedDescription = "description"
-				case name
-				case raceID = "race_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseStructuresStructureIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseStructuresStructureIDNotFound, rhs: Universe.GetUniverseStructuresStructureIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseAsteroidBeltsAsteroidBeltIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDNotFound, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniversePlanetsPlanetIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniversePlanetsPlanetIDNotFound, rhs: Universe.GetUniversePlanetsPlanetIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseAsteroidBeltsAsteroidBeltIDOk: Codable, Hashable {
-			
-			public struct GetUniverseAsteroidBeltsAsteroidBeltIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: x.hashValue)
-					hashCombine(seed: &hash, value: y.hashValue)
-					hashCombine(seed: &hash, value: z.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var name: String
-			public var position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition
-			public var systemID: Int
-			
-			public init(name: String, position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, systemID: Int) {
-				self.name = name
-				self.position = position
-				self.systemID = systemID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: position.hashValue)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case position
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseTypesTypeIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseTypesTypeIDNotFound, rhs: Universe.GetUniverseTypesTypeIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct RegionInformation: Codable, Hashable {
-			
-			
-			public var constellations: [Int]
-			public var localizedDescription: String?
-			public var name: String
-			public var regionID: Int
-			
-			public init(constellations: [Int], localizedDescription: String?, name: String, regionID: Int) {
-				self.constellations = constellations
-				self.localizedDescription = localizedDescription
-				self.name = name
-				self.regionID = regionID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				self.constellations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: localizedDescription?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: regionID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.RegionInformation, rhs: Universe.RegionInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case constellations
-				case localizedDescription = "description"
-				case name
-				case regionID = "region_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct TypeInformation: Codable, Hashable {
-			
-			public struct GetUniverseTypesTypeIDDogmaEffects: Codable, Hashable {
-				
-				
-				public var effectID: Int
-				public var isDefault: Bool
-				
-				public init(effectID: Int, isDefault: Bool) {
-					self.effectID = effectID
-					self.isDefault = isDefault
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: effectID.hashValue)
-					hashCombine(seed: &hash, value: isDefault.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects, rhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case effectID = "effect_id"
-					case isDefault = "is_default"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetUniverseTypesTypeIDDogmaAttributes: Codable, Hashable {
-				
-				
-				public var attributeID: Int
-				public var value: Float
-				
-				public init(attributeID: Int, value: Float) {
-					self.attributeID = attributeID
-					self.value = value
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: attributeID.hashValue)
-					hashCombine(seed: &hash, value: value.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes, rhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case attributeID = "attribute_id"
-					case value
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var capacity: Float?
-			public var localizedDescription: String
-			public var dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?
-			public var dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?
-			public var graphicID: Int?
-			public var groupID: Int
-			public var iconID: Int?
-			public var marketGroupID: Int?
-			public var mass: Float?
-			public var name: String
-			public var packagedVolume: Float?
-			public var portionSize: Int?
-			public var published: Bool
-			public var radius: Float?
-			public var typeID: Int
-			public var volume: Float?
-			
-			public init(capacity: Float?, localizedDescription: String, dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?, dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Float?, name: String, packagedVolume: Float?, portionSize: Int?, published: Bool, radius: Float?, typeID: Int, volume: Float?) {
-				self.capacity = capacity
-				self.localizedDescription = localizedDescription
-				self.dogmaAttributes = dogmaAttributes
-				self.dogmaEffects = dogmaEffects
-				self.graphicID = graphicID
-				self.groupID = groupID
-				self.iconID = iconID
-				self.marketGroupID = marketGroupID
-				self.mass = mass
-				self.name = name
-				self.packagedVolume = packagedVolume
-				self.portionSize = portionSize
-				self.published = published
-				self.radius = radius
-				self.typeID = typeID
-				self.volume = volume
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: capacity?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				self.dogmaAttributes?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.dogmaEffects?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: graphicID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: groupID.hashValue)
-				hashCombine(seed: &hash, value: iconID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: marketGroupID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: mass?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: packagedVolume?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: portionSize?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: published.hashValue)
-				hashCombine(seed: &hash, value: radius?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				hashCombine(seed: &hash, value: volume?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.TypeInformation, rhs: Universe.TypeInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case capacity
-				case localizedDescription = "description"
-				case dogmaAttributes = "dogma_attributes"
-				case dogmaEffects = "dogma_effects"
-				case graphicID = "graphic_id"
-				case groupID = "group_id"
-				case iconID = "icon_id"
-				case marketGroupID = "market_group_id"
-				case mass
-				case name
-				case packagedVolume = "packaged_volume"
-				case portionSize = "portion_size"
-				case published
-				case radius
-				case typeID = "type_id"
-				case volume
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Name: Codable, Hashable {
-			
-			public enum Category: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case constellation = "constellation"
-				case corporation = "corporation"
-				case inventoryType = "inventory_type"
-				case region = "region"
-				case solarSystem = "solar_system"
-				case station = "station"
+		public struct StationInformation: Codable, Hashable {
+			
+			public enum GetUniverseStationsStationIDServices: String, Codable, HTTPQueryable {
+				case assasinationMissions = "assasination-missions"
+				case blackMarket = "black-market"
+				case bountyMissions = "bounty-missions"
+				case cloning = "cloning"
+				case courierMissions = "courier-missions"
+				case dnaTherapy = "dna-therapy"
+				case docking = "docking"
+				case factory = "factory"
+				case fitting = "fitting"
+				case gambling = "gambling"
+				case insurance = "insurance"
+				case interbus = "interbus"
+				case jumpCloneFacility = "jump-clone-facility"
+				case labratory = "labratory"
+				case loyaltyPointStore = "loyalty-point-store"
+				case market = "market"
+				case navyOffices = "navy-offices"
+				case news = "news"
+				case officeRental = "office-rental"
+				case paintshop = "paintshop"
+				case refinery = "refinery"
+				case repairFacilities = "repair-facilities"
+				case reprocessingPlant = "reprocessing-plant"
+				case securityOffices = "security-offices"
+				case stockExchange = "stock-exchange"
+				case storage = "storage"
+				case surgery = "surgery"
 				
 				public var httpQuery: String? {
 					return rawValue
@@ -1832,110 +1281,7 @@ public extension ESI {
 				
 			}
 			
-			public var category: Universe.Name.Category
-			public var id: Int
-			public var name: String
-			
-			public init(category: Universe.Name.Category, id: Int, name: String) {
-				self.category = category
-				self.id = id
-				self.name = name
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: category.hashValue)
-				hashCombine(seed: &hash, value: id.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.Name, rhs: Universe.Name) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case category
-				case id
-				case name
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseStargatesStargateIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseStargatesStargateIDNotFound, rhs: Universe.GetUniverseStargatesStargateIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseStationsStationIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseStationsStationIDNotFound, rhs: Universe.GetUniverseStationsStationIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct StargateInformation: Codable, Hashable {
-			
-			public struct GetUniverseStargatesStargateIDPosition: Codable, Hashable {
+			public struct GetUniverseStationsStationIDPosition: Codable, Hashable {
 				
 				
 				public var x: Double
@@ -1956,7 +1302,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) -> Bool {
+				public static func ==(lhs: Universe.StationInformation.GetUniverseStationsStationIDPosition, rhs: Universe.StationInformation.GetUniverseStationsStationIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -1974,77 +1320,66 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetUniverseStargatesStargateIDDestination: Codable, Hashable {
-				
-				
-				public var stargateID: Int
-				public var systemID: Int
-				
-				public init(stargateID: Int, systemID: Int) {
-					self.stargateID = stargateID
-					self.systemID = systemID
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: stargateID.hashValue)
-					hashCombine(seed: &hash, value: systemID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case stargateID = "stargate_id"
-					case systemID = "system_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination
+			public var maxDockableShipVolume: Float
 			public var name: String
-			public var position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition
-			public var stargateID: Int
+			public var officeRentalCost: Float
+			public var owner: Int?
+			public var position: Universe.StationInformation.GetUniverseStationsStationIDPosition
+			public var raceID: Int?
+			public var reprocessingEfficiency: Float
+			public var reprocessingStationsTake: Float
+			public var services: [Universe.StationInformation.GetUniverseStationsStationIDServices]
+			public var stationID: Int
 			public var systemID: Int
 			public var typeID: Int
 			
-			public init(destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, name: String, position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, stargateID: Int, systemID: Int, typeID: Int) {
-				self.destination = destination
+			public init(maxDockableShipVolume: Float, name: String, officeRentalCost: Float, owner: Int?, position: Universe.StationInformation.GetUniverseStationsStationIDPosition, raceID: Int?, reprocessingEfficiency: Float, reprocessingStationsTake: Float, services: [Universe.StationInformation.GetUniverseStationsStationIDServices], stationID: Int, systemID: Int, typeID: Int) {
+				self.maxDockableShipVolume = maxDockableShipVolume
 				self.name = name
+				self.officeRentalCost = officeRentalCost
+				self.owner = owner
 				self.position = position
-				self.stargateID = stargateID
+				self.raceID = raceID
+				self.reprocessingEfficiency = reprocessingEfficiency
+				self.reprocessingStationsTake = reprocessingStationsTake
+				self.services = services
+				self.stationID = stationID
 				self.systemID = systemID
 				self.typeID = typeID
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: destination.hashValue)
+				hashCombine(seed: &hash, value: maxDockableShipVolume.hashValue)
 				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: officeRentalCost.hashValue)
+				hashCombine(seed: &hash, value: owner?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: position.hashValue)
-				hashCombine(seed: &hash, value: stargateID.hashValue)
+				hashCombine(seed: &hash, value: raceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: reprocessingEfficiency.hashValue)
+				hashCombine(seed: &hash, value: reprocessingStationsTake.hashValue)
+				self.services.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: stationID.hashValue)
 				hashCombine(seed: &hash, value: systemID.hashValue)
 				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.StargateInformation, rhs: Universe.StargateInformation) -> Bool {
+			public static func ==(lhs: Universe.StationInformation, rhs: Universe.StationInformation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case destination
+				case maxDockableShipVolume = "max_dockable_ship_volume"
 				case name
+				case officeRentalCost = "office_rental_cost"
+				case owner
 				case position
-				case stargateID = "stargate_id"
+				case raceID = "race_id"
+				case reprocessingEfficiency = "reprocessing_efficiency"
+				case reprocessingStationsTake = "reprocessing_stations_take"
+				case services
+				case stationID = "station_id"
 				case systemID = "system_id"
 				case typeID = "type_id"
 				
@@ -2214,51 +1549,7 @@ public extension ESI {
 		}
 		
 		
-		public struct ItemCategoryInformation: Codable, Hashable {
-			
-			
-			public var categoryID: Int
-			public var groups: [Int]
-			public var name: String
-			public var published: Bool
-			
-			public init(categoryID: Int, groups: [Int], name: String, published: Bool) {
-				self.categoryID = categoryID
-				self.groups = groups
-				self.name = name
-				self.published = published
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: categoryID.hashValue)
-				self.groups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: published.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.ItemCategoryInformation, rhs: Universe.ItemCategoryInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case categoryID = "category_id"
-				case groups
-				case name
-				case published
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseGroupsGroupIDNotFound: Codable, Hashable {
+		public struct GetUniverseMoonsMoonIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -2273,7 +1564,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseGroupsGroupIDNotFound, rhs: Universe.GetUniverseGroupsGroupIDNotFound) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -2290,55 +1581,73 @@ public extension ESI {
 		}
 		
 		
-		public struct GraphicInformation: Codable, Hashable {
+		public struct GetUniverseAsteroidBeltsAsteroidBeltIDOk: Codable, Hashable {
 			
+			public struct GetUniverseAsteroidBeltsAsteroidBeltIDPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
 			
-			public var collisionFile: String?
-			public var graphicFile: String?
-			public var graphicID: Int
-			public var iconFolder: String?
-			public var sofDna: String?
-			public var sofFationName: String?
-			public var sofHullName: String?
-			public var sofRaceName: String?
+			public var name: String
+			public var position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition
+			public var systemID: Int
 			
-			public init(collisionFile: String?, graphicFile: String?, graphicID: Int, iconFolder: String?, sofDna: String?, sofFationName: String?, sofHullName: String?, sofRaceName: String?) {
-				self.collisionFile = collisionFile
-				self.graphicFile = graphicFile
-				self.graphicID = graphicID
-				self.iconFolder = iconFolder
-				self.sofDna = sofDna
-				self.sofFationName = sofFationName
-				self.sofHullName = sofHullName
-				self.sofRaceName = sofRaceName
+			public init(name: String, position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, systemID: Int) {
+				self.name = name
+				self.position = position
+				self.systemID = systemID
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: collisionFile?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: graphicFile?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: graphicID.hashValue)
-				hashCombine(seed: &hash, value: iconFolder?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: sofDna?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: sofFationName?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: sofHullName?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: sofRaceName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
+				hashCombine(seed: &hash, value: systemID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GraphicInformation, rhs: Universe.GraphicInformation) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case collisionFile = "collision_file"
-				case graphicFile = "graphic_file"
-				case graphicID = "graphic_id"
-				case iconFolder = "icon_folder"
-				case sofDna = "sof_dna"
-				case sofFationName = "sof_fation_name"
-				case sofHullName = "sof_hull_name"
-				case sofRaceName = "sof_race_name"
+				case name
+				case position
+				case systemID = "system_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -2386,73 +1695,9 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseRegionsRegionIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseRegionsRegionIDNotFound, rhs: Universe.GetUniverseRegionsRegionIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseGraphicsGraphicIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.GetUniverseGraphicsGraphicIDNotFound, rhs: Universe.GetUniverseGraphicsGraphicIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct PostUniverseIdsOk: Codable, Hashable {
 			
-			public struct PostUniverseIdsCharacters: Codable, Hashable {
+			public struct PostUniverseIdsCorporations: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -2470,112 +1715,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct PostUniverseIdsAlliances: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: id?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct PostUniverseIdsConstellations: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: id?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct PostUniverseIdsInventoryTypes: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: id?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes) -> Bool {
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -2627,7 +1767,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct PostUniverseIdsStations: Codable, Hashable {
+			public struct PostUniverseIdsCharacters: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -2645,7 +1785,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsStations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsStations) -> Bool {
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsCharacters) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -2697,6 +1837,41 @@ public extension ESI {
 				}
 			}
 			
+			public struct PostUniverseIdsInventoryTypes: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public struct PostUniverseIdsAgents: Codable, Hashable {
 				
 				
@@ -2716,6 +1891,76 @@ public extension ESI {
 				}
 				
 				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsAgents, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsAgents) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct PostUniverseIdsConstellations: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsConstellations) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct PostUniverseIdsAlliances: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: id?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: name?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsAlliances) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -2767,7 +2012,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct PostUniverseIdsCorporations: Codable, Hashable {
+			public struct PostUniverseIdsStations: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -2785,7 +2030,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsCorporations) -> Bool {
+				public static func ==(lhs: Universe.PostUniverseIdsOk.PostUniverseIdsStations, rhs: Universe.PostUniverseIdsOk.PostUniverseIdsStations) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -2867,7 +2112,51 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseCategoriesCategoryIDNotFound: Codable, Hashable {
+		public struct RegionInformation: Codable, Hashable {
+			
+			
+			public var constellations: [Int]
+			public var localizedDescription: String?
+			public var name: String
+			public var regionID: Int
+			
+			public init(constellations: [Int], localizedDescription: String?, name: String, regionID: Int) {
+				self.constellations = constellations
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.regionID = regionID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				self.constellations.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: localizedDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: regionID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.RegionInformation, rhs: Universe.RegionInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case constellations
+				case localizedDescription = "description"
+				case name
+				case regionID = "region_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseTypesTypeIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -2882,7 +2171,401 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseCategoriesCategoryIDNotFound, rhs: Universe.GetUniverseCategoriesCategoryIDNotFound) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseTypesTypeIDNotFound, rhs: Universe.GetUniverseTypesTypeIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Name: Codable, Hashable {
+			
+			public enum Category: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case constellation = "constellation"
+				case corporation = "corporation"
+				case inventoryType = "inventory_type"
+				case region = "region"
+				case solarSystem = "solar_system"
+				case station = "station"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var category: Universe.Name.Category
+			public var id: Int
+			public var name: String
+			
+			public init(category: Universe.Name.Category, id: Int, name: String) {
+				self.category = category
+				self.id = id
+				self.name = name
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: category.hashValue)
+				hashCombine(seed: &hash, value: id.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.Name, rhs: Universe.Name) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case category
+				case id
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct MoonInformation: Codable, Hashable {
+			
+			public struct GetUniverseMoonsMoonIDPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, rhs: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public var moonID: Int
+			public var name: String
+			public var position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition
+			public var systemID: Int
+			
+			public init(moonID: Int, name: String, position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, systemID: Int) {
+				self.moonID = moonID
+				self.name = name
+				self.position = position
+				self.systemID = systemID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: moonID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
+				hashCombine(seed: &hash, value: systemID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.MoonInformation, rhs: Universe.MoonInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case moonID = "moon_id"
+				case name
+				case position
+				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct ItemGroupInformation: Codable, Hashable {
+			
+			
+			public var categoryID: Int
+			public var groupID: Int
+			public var name: String
+			public var published: Bool
+			public var types: [Int]
+			
+			public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
+				self.categoryID = categoryID
+				self.groupID = groupID
+				self.name = name
+				self.published = published
+				self.types = types
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: categoryID.hashValue)
+				hashCombine(seed: &hash, value: groupID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: published.hashValue)
+				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case categoryID = "category_id"
+				case groupID = "group_id"
+				case name
+				case published
+				case types
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct SolarSystemInformation: Codable, Hashable {
+			
+			public struct GetUniverseSystemsSystemIDPlanets: Codable, Hashable {
+				
+				
+				public var asteroidBelts: [Int]?
+				public var moons: [Int]?
+				public var planetID: Int
+				
+				public init(asteroidBelts: [Int]?, moons: [Int]?, planetID: Int) {
+					self.asteroidBelts = asteroidBelts
+					self.moons = moons
+					self.planetID = planetID
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					self.asteroidBelts?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					self.moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+					hashCombine(seed: &hash, value: planetID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case asteroidBelts = "asteroid_belts"
+					case moons
+					case planetID = "planet_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetUniverseSystemsSystemIDPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: x.hashValue)
+					hashCombine(seed: &hash, value: y.hashValue)
+					hashCombine(seed: &hash, value: z.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public var constellationID: Int
+			public var name: String
+			public var planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]?
+			public var position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition
+			public var securityClass: String?
+			public var securityStatus: Float
+			public var starID: Int?
+			public var stargates: [Int]?
+			public var stations: [Int]?
+			public var systemID: Int
+			
+			public init(constellationID: Int, name: String, planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]?, position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, securityClass: String?, securityStatus: Float, starID: Int?, stargates: [Int]?, stations: [Int]?, systemID: Int) {
+				self.constellationID = constellationID
+				self.name = name
+				self.planets = planets
+				self.position = position
+				self.securityClass = securityClass
+				self.securityStatus = securityStatus
+				self.starID = starID
+				self.stargates = stargates
+				self.stations = stations
+				self.systemID = systemID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: constellationID.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				self.planets?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: position.hashValue)
+				hashCombine(seed: &hash, value: securityClass?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: securityStatus.hashValue)
+				hashCombine(seed: &hash, value: starID?.hashValue ?? 0)
+				self.stargates?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.stations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: systemID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.SolarSystemInformation, rhs: Universe.SolarSystemInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case constellationID = "constellation_id"
+				case name
+				case planets
+				case position
+				case securityClass = "security_class"
+				case securityStatus = "security_status"
+				case starID = "star_id"
+				case stargates
+				case stations
+				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseGraphicsGraphicIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseGraphicsGraphicIDNotFound, rhs: Universe.GetUniverseGraphicsGraphicIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseStationsStationIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseStationsStationIDNotFound, rhs: Universe.GetUniverseStationsStationIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -2985,47 +2668,27 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseAncestriesOk: Codable, Hashable {
+		public struct GetUniverseGroupsGroupIDNotFound: Codable, Hashable {
 			
 			
-			public var bloodlineID: Int
-			public var localizedDescription: String
-			public var iconID: Int?
-			public var id: Int
-			public var name: String
-			public var shortDescription: String?
+			public var error: String?
 			
-			public init(bloodlineID: Int, localizedDescription: String, iconID: Int?, id: Int, name: String, shortDescription: String?) {
-				self.bloodlineID = bloodlineID
-				self.localizedDescription = localizedDescription
-				self.iconID = iconID
-				self.id = id
-				self.name = name
-				self.shortDescription = shortDescription
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: bloodlineID.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: iconID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: id.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: shortDescription?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseAncestriesOk, rhs: Universe.GetUniverseAncestriesOk) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseGroupsGroupIDNotFound, rhs: Universe.GetUniverseGroupsGroupIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case bloodlineID = "bloodline_id"
-				case localizedDescription = "description"
-				case iconID = "icon_id"
-				case id
-				case name
-				case shortDescription = "short_description"
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -3037,37 +2700,33 @@ public extension ESI {
 		}
 		
 		
-		public struct MoonInformation: Codable, Hashable {
+		public struct TypeInformation: Codable, Hashable {
 			
-			public struct GetUniverseMoonsMoonIDPosition: Codable, Hashable {
+			public struct GetUniverseTypesTypeIDDogmaAttributes: Codable, Hashable {
 				
 				
-				public var x: Double
-				public var y: Double
-				public var z: Double
+				public var attributeID: Int
+				public var value: Float
 				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
+				public init(attributeID: Int, value: Float) {
+					self.attributeID = attributeID
+					self.value = value
 				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: x.hashValue)
-					hashCombine(seed: &hash, value: y.hashValue)
-					hashCombine(seed: &hash, value: z.hashValue)
+					hashCombine(seed: &hash, value: attributeID.hashValue)
+					hashCombine(seed: &hash, value: value.hashValue)
 					return hash
 				}
 				
-				public static func ==(lhs: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, rhs: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition) -> Bool {
+				public static func ==(lhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes, rhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
+					case attributeID = "attribute_id"
+					case value
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -3078,36 +2737,215 @@ public extension ESI {
 				}
 			}
 			
-			public var moonID: Int
-			public var name: String
-			public var position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition
-			public var systemID: Int
+			public struct GetUniverseTypesTypeIDDogmaEffects: Codable, Hashable {
+				
+				
+				public var effectID: Int
+				public var isDefault: Bool
+				
+				public init(effectID: Int, isDefault: Bool) {
+					self.effectID = effectID
+					self.isDefault = isDefault
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: effectID.hashValue)
+					hashCombine(seed: &hash, value: isDefault.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects, rhs: Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case effectID = "effect_id"
+					case isDefault = "is_default"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
 			
-			public init(moonID: Int, name: String, position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, systemID: Int) {
-				self.moonID = moonID
+			public var capacity: Float?
+			public var localizedDescription: String
+			public var dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?
+			public var dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?
+			public var graphicID: Int?
+			public var groupID: Int
+			public var iconID: Int?
+			public var marketGroupID: Int?
+			public var mass: Float?
+			public var name: String
+			public var packagedVolume: Float?
+			public var portionSize: Int?
+			public var published: Bool
+			public var radius: Float?
+			public var typeID: Int
+			public var volume: Float?
+			
+			public init(capacity: Float?, localizedDescription: String, dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?, dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Float?, name: String, packagedVolume: Float?, portionSize: Int?, published: Bool, radius: Float?, typeID: Int, volume: Float?) {
+				self.capacity = capacity
+				self.localizedDescription = localizedDescription
+				self.dogmaAttributes = dogmaAttributes
+				self.dogmaEffects = dogmaEffects
+				self.graphicID = graphicID
+				self.groupID = groupID
+				self.iconID = iconID
+				self.marketGroupID = marketGroupID
+				self.mass = mass
 				self.name = name
-				self.position = position
-				self.systemID = systemID
+				self.packagedVolume = packagedVolume
+				self.portionSize = portionSize
+				self.published = published
+				self.radius = radius
+				self.typeID = typeID
+				self.volume = volume
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: moonID.hashValue)
+				hashCombine(seed: &hash, value: capacity?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				self.dogmaAttributes?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.dogmaEffects?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: graphicID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: groupID.hashValue)
+				hashCombine(seed: &hash, value: iconID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: marketGroupID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: mass?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: position.hashValue)
-				hashCombine(seed: &hash, value: systemID.hashValue)
+				hashCombine(seed: &hash, value: packagedVolume?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: portionSize?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: published.hashValue)
+				hashCombine(seed: &hash, value: radius?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: volume?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.MoonInformation, rhs: Universe.MoonInformation) -> Bool {
+			public static func ==(lhs: Universe.TypeInformation, rhs: Universe.TypeInformation) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case moonID = "moon_id"
+				case capacity
+				case localizedDescription = "description"
+				case dogmaAttributes = "dogma_attributes"
+				case dogmaEffects = "dogma_effects"
+				case graphicID = "graphic_id"
+				case groupID = "group_id"
+				case iconID = "icon_id"
+				case marketGroupID = "market_group_id"
+				case mass
 				case name
-				case position
-				case systemID = "system_id"
+				case packagedVolume = "packaged_volume"
+				case portionSize = "portion_size"
+				case published
+				case radius
+				case typeID = "type_id"
+				case volume
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseSystemsSystemIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseSystemsSystemIDNotFound, rhs: Universe.GetUniverseSystemsSystemIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseRegionsRegionIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseRegionsRegionIDNotFound, rhs: Universe.GetUniverseRegionsRegionIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniversePlanetsPlanetIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniversePlanetsPlanetIDNotFound, rhs: Universe.GetUniversePlanetsPlanetIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -3161,12 +2999,14 @@ public extension ESI {
 			}
 			
 			public var name: String
+			public var ownerID: Int
 			public var position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?
 			public var solarSystemID: Int
 			public var typeID: Int?
 			
-			public init(name: String, position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?, solarSystemID: Int, typeID: Int?) {
+			public init(name: String, ownerID: Int, position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?, solarSystemID: Int, typeID: Int?) {
 				self.name = name
+				self.ownerID = ownerID
 				self.position = position
 				self.solarSystemID = solarSystemID
 				self.typeID = typeID
@@ -3175,6 +3015,7 @@ public extension ESI {
 			public var hashValue: Int {
 				var hash: Int = 0
 				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: ownerID.hashValue)
 				hashCombine(seed: &hash, value: position?.hashValue ?? 0)
 				hashCombine(seed: &hash, value: solarSystemID.hashValue)
 				hashCombine(seed: &hash, value: typeID?.hashValue ?? 0)
@@ -3187,6 +3028,7 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case name
+				case ownerID = "owner_id"
 				case position
 				case solarSystemID = "solar_system_id"
 				case typeID = "type_id"
@@ -3201,9 +3043,272 @@ public extension ESI {
 		}
 		
 		
-		public struct SolarSystemInformation: Codable, Hashable {
+		public struct Bloodline: Codable, Hashable {
 			
-			public struct GetUniverseSystemsSystemIDPosition: Codable, Hashable {
+			
+			public var bloodlineID: Int
+			public var charisma: Int
+			public var corporationID: Int
+			public var localizedDescription: String
+			public var intelligence: Int
+			public var memory: Int
+			public var name: String
+			public var perception: Int
+			public var raceID: Int
+			public var shipTypeID: Int
+			public var willpower: Int
+			
+			public init(bloodlineID: Int, charisma: Int, corporationID: Int, localizedDescription: String, intelligence: Int, memory: Int, name: String, perception: Int, raceID: Int, shipTypeID: Int, willpower: Int) {
+				self.bloodlineID = bloodlineID
+				self.charisma = charisma
+				self.corporationID = corporationID
+				self.localizedDescription = localizedDescription
+				self.intelligence = intelligence
+				self.memory = memory
+				self.name = name
+				self.perception = perception
+				self.raceID = raceID
+				self.shipTypeID = shipTypeID
+				self.willpower = willpower
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: bloodlineID.hashValue)
+				hashCombine(seed: &hash, value: charisma.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: intelligence.hashValue)
+				hashCombine(seed: &hash, value: memory.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: perception.hashValue)
+				hashCombine(seed: &hash, value: raceID.hashValue)
+				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				hashCombine(seed: &hash, value: willpower.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.Bloodline, rhs: Universe.Bloodline) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case bloodlineID = "bloodline_id"
+				case charisma
+				case corporationID = "corporation_id"
+				case localizedDescription = "description"
+				case intelligence
+				case memory
+				case name
+				case perception
+				case raceID = "race_id"
+				case shipTypeID = "ship_type_id"
+				case willpower
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Faction: Codable, Hashable {
+			
+			
+			public var corporationID: Int?
+			public var localizedDescription: String
+			public var factionID: Int
+			public var isUnique: Bool
+			public var militiaCorporationID: Int?
+			public var name: String
+			public var sizeFactor: Float
+			public var solarSystemID: Int?
+			public var stationCount: Int
+			public var stationSystemCount: Int
+			
+			public init(corporationID: Int?, localizedDescription: String, factionID: Int, isUnique: Bool, militiaCorporationID: Int?, name: String, sizeFactor: Float, solarSystemID: Int?, stationCount: Int, stationSystemCount: Int) {
+				self.corporationID = corporationID
+				self.localizedDescription = localizedDescription
+				self.factionID = factionID
+				self.isUnique = isUnique
+				self.militiaCorporationID = militiaCorporationID
+				self.name = name
+				self.sizeFactor = sizeFactor
+				self.solarSystemID = solarSystemID
+				self.stationCount = stationCount
+				self.stationSystemCount = stationSystemCount
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: factionID.hashValue)
+				hashCombine(seed: &hash, value: isUnique.hashValue)
+				hashCombine(seed: &hash, value: militiaCorporationID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: sizeFactor.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: stationCount.hashValue)
+				hashCombine(seed: &hash, value: stationSystemCount.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.Faction, rhs: Universe.Faction) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case localizedDescription = "description"
+				case factionID = "faction_id"
+				case isUnique = "is_unique"
+				case militiaCorporationID = "militia_corporation_id"
+				case name
+				case sizeFactor = "size_factor"
+				case solarSystemID = "solar_system_id"
+				case stationCount = "station_count"
+				case stationSystemCount = "station_system_count"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct ItemCategoryInformation: Codable, Hashable {
+			
+			
+			public var categoryID: Int
+			public var groups: [Int]
+			public var name: String
+			public var published: Bool
+			
+			public init(categoryID: Int, groups: [Int], name: String, published: Bool) {
+				self.categoryID = categoryID
+				self.groups = groups
+				self.name = name
+				self.published = published
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: categoryID.hashValue)
+				self.groups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: published.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.ItemCategoryInformation, rhs: Universe.ItemCategoryInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case categoryID = "category_id"
+				case groups
+				case name
+				case published
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Race: Codable, Hashable {
+			
+			
+			public var allianceID: Int
+			public var localizedDescription: String
+			public var name: String
+			public var raceID: Int
+			
+			public init(allianceID: Int, localizedDescription: String, name: String, raceID: Int) {
+				self.allianceID = allianceID
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.raceID = raceID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: allianceID.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: raceID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.Race, rhs: Universe.Race) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case localizedDescription = "description"
+				case name
+				case raceID = "race_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct StargateInformation: Codable, Hashable {
+			
+			public struct GetUniverseStargatesStargateIDDestination: Codable, Hashable {
+				
+				
+				public var stargateID: Int
+				public var systemID: Int
+				
+				public init(stargateID: Int, systemID: Int) {
+					self.stargateID = stargateID
+					self.systemID = systemID
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: stargateID.hashValue)
+					hashCombine(seed: &hash, value: systemID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case stargateID = "stargate_id"
+					case systemID = "system_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetUniverseStargatesStargateIDPosition: Codable, Hashable {
 				
 				
 				public var x: Double
@@ -3224,7 +3329,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition) -> Bool {
+				public static func ==(lhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, rhs: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -3242,98 +3347,139 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetUniverseSystemsSystemIDPlanets: Codable, Hashable {
+			public var destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination
+			public var name: String
+			public var position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition
+			public var stargateID: Int
+			public var systemID: Int
+			public var typeID: Int
+			
+			public init(destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, name: String, position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, stargateID: Int, systemID: Int, typeID: Int) {
+				self.destination = destination
+				self.name = name
+				self.position = position
+				self.stargateID = stargateID
+				self.systemID = systemID
+				self.typeID = typeID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: destination.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: position.hashValue)
+				hashCombine(seed: &hash, value: stargateID.hashValue)
+				hashCombine(seed: &hash, value: systemID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.StargateInformation, rhs: Universe.StargateInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case destination
+				case name
+				case position
+				case stargateID = "stargate_id"
+				case systemID = "system_id"
+				case typeID = "type_id"
 				
-				
-				public var asteroidBelts: [Int]?
-				public var moons: [Int]?
-				public var planetID: Int
-				
-				public init(asteroidBelts: [Int]?, moons: [Int]?, planetID: Int) {
-					self.asteroidBelts = asteroidBelts
-					self.moons = moons
-					self.planetID = planetID
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					self.asteroidBelts?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					self.moons?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-					hashCombine(seed: &hash, value: planetID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets, rhs: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case asteroidBelts = "asteroid_belts"
-					case moons
-					case planetID = "planet_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
 					}
 				}
 			}
+		}
+		
+		
+		public struct GetUniverseAncestriesOk: Codable, Hashable {
 			
-			public var constellationID: Int
+			
+			public var bloodlineID: Int
+			public var localizedDescription: String
+			public var iconID: Int?
+			public var id: Int
 			public var name: String
-			public var planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]
-			public var position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition
-			public var securityClass: String?
-			public var securityStatus: Float
-			public var starID: Int
-			public var stargates: [Int]?
-			public var stations: [Int]?
+			public var shortDescription: String?
+			
+			public init(bloodlineID: Int, localizedDescription: String, iconID: Int?, id: Int, name: String, shortDescription: String?) {
+				self.bloodlineID = bloodlineID
+				self.localizedDescription = localizedDescription
+				self.iconID = iconID
+				self.id = id
+				self.name = name
+				self.shortDescription = shortDescription
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: bloodlineID.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: iconID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: id.hashValue)
+				hashCombine(seed: &hash, value: name.hashValue)
+				hashCombine(seed: &hash, value: shortDescription?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseAncestriesOk, rhs: Universe.GetUniverseAncestriesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case bloodlineID = "bloodline_id"
+				case localizedDescription = "description"
+				case iconID = "icon_id"
+				case id
+				case name
+				case shortDescription = "short_description"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct SystemKills: Codable, Hashable {
+			
+			
+			public var npcKills: Int
+			public var podKills: Int
+			public var shipKills: Int
 			public var systemID: Int
 			
-			public init(constellationID: Int, name: String, planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets], position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, securityClass: String?, securityStatus: Float, starID: Int, stargates: [Int]?, stations: [Int]?, systemID: Int) {
-				self.constellationID = constellationID
-				self.name = name
-				self.planets = planets
-				self.position = position
-				self.securityClass = securityClass
-				self.securityStatus = securityStatus
-				self.starID = starID
-				self.stargates = stargates
-				self.stations = stations
+			public init(npcKills: Int, podKills: Int, shipKills: Int, systemID: Int) {
+				self.npcKills = npcKills
+				self.podKills = podKills
+				self.shipKills = shipKills
 				self.systemID = systemID
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: constellationID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				self.planets.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: position.hashValue)
-				hashCombine(seed: &hash, value: securityClass?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: securityStatus.hashValue)
-				hashCombine(seed: &hash, value: starID.hashValue)
-				self.stargates?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				self.stations?.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: npcKills.hashValue)
+				hashCombine(seed: &hash, value: podKills.hashValue)
+				hashCombine(seed: &hash, value: shipKills.hashValue)
 				hashCombine(seed: &hash, value: systemID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.SolarSystemInformation, rhs: Universe.SolarSystemInformation) -> Bool {
+			public static func ==(lhs: Universe.SystemKills, rhs: Universe.SystemKills) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case constellationID = "constellation_id"
-				case name
-				case planets
-				case position
-				case securityClass = "security_class"
-				case securityStatus = "security_status"
-				case starID = "star_id"
-				case stargates
-				case stations
+				case npcKills = "npc_kills"
+				case podKills = "pod_kills"
+				case shipKills = "ship_kills"
 				case systemID = "system_id"
 				
 				var dateFormatter: DateFormatter? {
@@ -3346,7 +3492,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseMoonsMoonIDNotFound: Codable, Hashable {
+		public struct PostUniverseNamesNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -3361,60 +3507,12 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseMoonsMoonIDNotFound, rhs: Universe.GetUniverseMoonsMoonIDNotFound) -> Bool {
+			public static func ==(lhs: Universe.PostUniverseNamesNotFound, rhs: Universe.PostUniverseNamesNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct ItemGroupInformation: Codable, Hashable {
-			
-			
-			public var categoryID: Int
-			public var groupID: Int
-			public var name: String
-			public var published: Bool
-			public var types: [Int]
-			
-			public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
-				self.categoryID = categoryID
-				self.groupID = groupID
-				self.name = name
-				self.published = published
-				self.types = types
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: categoryID.hashValue)
-				hashCombine(seed: &hash, value: groupID.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: published.hashValue)
-				self.types.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.ItemGroupInformation, rhs: Universe.ItemGroupInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case categoryID = "category_id"
-				case groupID = "group_id"
-				case name
-				case published
-				case types
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -3512,155 +3610,6 @@ public extension ESI {
 		}
 		
 		
-		public struct StationInformation: Codable, Hashable {
-			
-			public enum GetUniverseStationsStationIDServices: String, Codable, HTTPQueryable {
-				case assasinationMissions = "assasination-missions"
-				case blackMarket = "black-market"
-				case bountyMissions = "bounty-missions"
-				case cloning = "cloning"
-				case courierMissions = "courier-missions"
-				case dnaTherapy = "dna-therapy"
-				case docking = "docking"
-				case factory = "factory"
-				case fitting = "fitting"
-				case gambling = "gambling"
-				case insurance = "insurance"
-				case interbus = "interbus"
-				case jumpCloneFacility = "jump-clone-facility"
-				case labratory = "labratory"
-				case loyaltyPointStore = "loyalty-point-store"
-				case market = "market"
-				case navyOffices = "navy-offices"
-				case news = "news"
-				case officeRental = "office-rental"
-				case paintshop = "paintshop"
-				case refinery = "refinery"
-				case repairFacilities = "repair-facilities"
-				case reprocessingPlant = "reprocessing-plant"
-				case securityOffices = "security-offices"
-				case stockExchange = "stock-exchange"
-				case storage = "storage"
-				case surgery = "surgery"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public struct GetUniverseStationsStationIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: x.hashValue)
-					hashCombine(seed: &hash, value: y.hashValue)
-					hashCombine(seed: &hash, value: z.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Universe.StationInformation.GetUniverseStationsStationIDPosition, rhs: Universe.StationInformation.GetUniverseStationsStationIDPosition) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var maxDockableShipVolume: Float
-			public var name: String
-			public var officeRentalCost: Float
-			public var owner: Int?
-			public var position: Universe.StationInformation.GetUniverseStationsStationIDPosition
-			public var raceID: Int?
-			public var reprocessingEfficiency: Float
-			public var reprocessingStationsTake: Float
-			public var services: [Universe.StationInformation.GetUniverseStationsStationIDServices]
-			public var stationID: Int
-			public var systemID: Int
-			public var typeID: Int
-			
-			public init(maxDockableShipVolume: Float, name: String, officeRentalCost: Float, owner: Int?, position: Universe.StationInformation.GetUniverseStationsStationIDPosition, raceID: Int?, reprocessingEfficiency: Float, reprocessingStationsTake: Float, services: [Universe.StationInformation.GetUniverseStationsStationIDServices], stationID: Int, systemID: Int, typeID: Int) {
-				self.maxDockableShipVolume = maxDockableShipVolume
-				self.name = name
-				self.officeRentalCost = officeRentalCost
-				self.owner = owner
-				self.position = position
-				self.raceID = raceID
-				self.reprocessingEfficiency = reprocessingEfficiency
-				self.reprocessingStationsTake = reprocessingStationsTake
-				self.services = services
-				self.stationID = stationID
-				self.systemID = systemID
-				self.typeID = typeID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: maxDockableShipVolume.hashValue)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: officeRentalCost.hashValue)
-				hashCombine(seed: &hash, value: owner?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: position.hashValue)
-				hashCombine(seed: &hash, value: raceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: reprocessingEfficiency.hashValue)
-				hashCombine(seed: &hash, value: reprocessingStationsTake.hashValue)
-				self.services.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: stationID.hashValue)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Universe.StationInformation, rhs: Universe.StationInformation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case maxDockableShipVolume = "max_dockable_ship_volume"
-				case name
-				case officeRentalCost = "office_rental_cost"
-				case owner
-				case position
-				case raceID = "race_id"
-				case reprocessingEfficiency = "reprocessing_efficiency"
-				case reprocessingStationsTake = "reprocessing_stations_take"
-				case services
-				case stationID = "station_id"
-				case systemID = "system_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct GetUniverseConstellationsConstellationIDNotFound: Codable, Hashable {
 			
 			
@@ -3693,7 +3642,67 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseSystemsSystemIDNotFound: Codable, Hashable {
+		public struct GraphicInformation: Codable, Hashable {
+			
+			
+			public var collisionFile: String?
+			public var graphicFile: String?
+			public var graphicID: Int
+			public var iconFolder: String?
+			public var sofDna: String?
+			public var sofFationName: String?
+			public var sofHullName: String?
+			public var sofRaceName: String?
+			
+			public init(collisionFile: String?, graphicFile: String?, graphicID: Int, iconFolder: String?, sofDna: String?, sofFationName: String?, sofHullName: String?, sofRaceName: String?) {
+				self.collisionFile = collisionFile
+				self.graphicFile = graphicFile
+				self.graphicID = graphicID
+				self.iconFolder = iconFolder
+				self.sofDna = sofDna
+				self.sofFationName = sofFationName
+				self.sofHullName = sofHullName
+				self.sofRaceName = sofRaceName
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: collisionFile?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: graphicFile?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: graphicID.hashValue)
+				hashCombine(seed: &hash, value: iconFolder?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: sofDna?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: sofFationName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: sofHullName?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: sofRaceName?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GraphicInformation, rhs: Universe.GraphicInformation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case collisionFile = "collision_file"
+				case graphicFile = "graphic_file"
+				case graphicID = "graphic_id"
+				case iconFolder = "icon_folder"
+				case sofDna = "sof_dna"
+				case sofFationName = "sof_fation_name"
+				case sofHullName = "sof_hull_name"
+				case sofRaceName = "sof_race_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseStargatesStargateIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -3708,7 +3717,7 @@ public extension ESI {
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.GetUniverseSystemsSystemIDNotFound, rhs: Universe.GetUniverseSystemsSystemIDNotFound) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseStargatesStargateIDNotFound, rhs: Universe.GetUniverseStargatesStargateIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -3725,63 +3734,91 @@ public extension ESI {
 		}
 		
 		
-		public struct Faction: Codable, Hashable {
+		public struct GetUniverseCategoriesCategoryIDNotFound: Codable, Hashable {
 			
 			
-			public var corporationID: Int?
-			public var localizedDescription: String
-			public var factionID: Int
-			public var isUnique: Bool
-			public var militiaCorporationID: Int?
-			public var name: String
-			public var sizeFactor: Float
-			public var solarSystemID: Int?
-			public var stationCount: Int
-			public var stationSystemCount: Int
+			public var error: String?
 			
-			public init(corporationID: Int?, localizedDescription: String, factionID: Int, isUnique: Bool, militiaCorporationID: Int?, name: String, sizeFactor: Float, solarSystemID: Int?, stationCount: Int, stationSystemCount: Int) {
-				self.corporationID = corporationID
-				self.localizedDescription = localizedDescription
-				self.factionID = factionID
-				self.isUnique = isUnique
-				self.militiaCorporationID = militiaCorporationID
-				self.name = name
-				self.sizeFactor = sizeFactor
-				self.solarSystemID = solarSystemID
-				self.stationCount = stationCount
-				self.stationSystemCount = stationSystemCount
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: factionID.hashValue)
-				hashCombine(seed: &hash, value: isUnique.hashValue)
-				hashCombine(seed: &hash, value: militiaCorporationID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: name.hashValue)
-				hashCombine(seed: &hash, value: sizeFactor.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: stationCount.hashValue)
-				hashCombine(seed: &hash, value: stationSystemCount.hashValue)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Universe.Faction, rhs: Universe.Faction) -> Bool {
+			public static func ==(lhs: Universe.GetUniverseCategoriesCategoryIDNotFound, rhs: Universe.GetUniverseCategoriesCategoryIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case localizedDescription = "description"
-				case factionID = "faction_id"
-				case isUnique = "is_unique"
-				case militiaCorporationID = "militia_corporation_id"
-				case name
-				case sizeFactor = "size_factor"
-				case solarSystemID = "solar_system_id"
-				case stationCount = "station_count"
-				case stationSystemCount = "station_system_count"
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseAsteroidBeltsAsteroidBeltIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDNotFound, rhs: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseStructuresStructureIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Universe.GetUniverseStructuresStructureIDNotFound, rhs: Universe.GetUniverseStructuresStructureIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

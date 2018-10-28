@@ -15,12 +15,12 @@ func hashCombine(seed: inout Int, value: Int) {
 	seed ^= value &+ salt &+ (seed << 6) &+ (seed >> 2);
 }
 
-extension Dictionary: Hashable where Key: Comparable, Value: Hashable {
-	public var hashValue: Int {
-		return sorted {$0.key < $1.key}.reduce(into: 1) {
-			hashCombine(seed: &$0, value: $1.key.hashValue)
-			hashCombine(seed: &$0, value: $1.value.hashValue)
-		}
-	}
-}
-
+//extension Dictionary: Hashable where Key: Comparable, Value: Hashable {
+//	public var hashValue: Int {
+//		return sorted {$0.key < $1.key}.reduce(into: 1) {
+//			hashCombine(seed: &$0, value: $1.key.hashValue)
+//			hashCombine(seed: &$0, value: $1.value.hashValue)
+//		}
+//	}
+//}
+//

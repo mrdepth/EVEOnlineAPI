@@ -15,49 +15,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.CharacterLocation>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-location.read_location.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/location/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
-					promise.set(result: response.result, cached: 5.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getCharacterOnline(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>>()
@@ -76,7 +33,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -94,6 +51,49 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<Location.GetCharactersCharacterIDOnlineOk>) in
 					promise.set(result: response.result, cached: 60.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Location.CharacterLocation>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-location.read_location.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/location/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
+					promise.set(result: response.result, cached: 5.0)
 					session = nil
 				}
 			}
@@ -119,7 +119,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -141,46 +141,6 @@ public extension ESI {
 				}
 			}
 			return promise.future
-		}
-		
-		
-		public struct CharacterShip: Codable, Hashable {
-			
-			
-			public var shipItemID: Int64
-			public var shipName: String
-			public var shipTypeID: Int
-			
-			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
-				self.shipItemID = shipItemID
-				self.shipName = shipName
-				self.shipTypeID = shipTypeID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: shipItemID.hashValue)
-				hashCombine(seed: &hash, value: shipName.hashValue)
-				hashCombine(seed: &hash, value: shipTypeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case shipItemID = "ship_item_id"
-				case shipName = "ship_name"
-				case shipTypeID = "ship_type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -222,6 +182,46 @@ public extension ESI {
 					switch self {
 						case .lastLogin: return DateFormatter.esiDateTimeFormatter
 						case .lastLogout: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CharacterShip: Codable, Hashable {
+			
+			
+			public var shipItemID: Int64
+			public var shipName: String
+			public var shipTypeID: Int
+			
+			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
+				self.shipItemID = shipItemID
+				self.shipName = shipName
+				self.shipTypeID = shipTypeID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: shipItemID.hashValue)
+				hashCombine(seed: &hash, value: shipName.hashValue)
+				hashCombine(seed: &hash, value: shipTypeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case shipItemID = "ship_item_id"
+				case shipName = "ship_name"
+				case shipTypeID = "ship_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

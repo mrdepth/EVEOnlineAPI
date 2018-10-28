@@ -15,9 +15,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listWars(ifNoneMatch: String? = nil, maxWarID: Int? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int) -> Future<ESI.Result<Wars.WarInformation>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
+			let promise = Promise<ESI.Result<Wars.WarInformation>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -29,16 +29,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = maxWarID?.httpQuery {
-				query.append(URLQueryItem(name: "max_war_id", value: v))
-			}
 			
-			let url = session!.baseURL + "/v1/wars/"
+			
+			let url = session!.baseURL + "/v1/wars/\(warID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -47,7 +45,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				}.validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -70,7 +68,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -97,9 +95,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int) -> Future<ESI.Result<Wars.WarInformation>> {
+		public func listWars(ifNoneMatch: String? = nil, maxWarID: Int? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Wars.WarInformation>>()
+			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -111,14 +109,16 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = maxWarID?.httpQuery {
+				query.append(URLQueryItem(name: "max_war_id", value: v))
+			}
 			
-			
-			let url = session!.baseURL + "/v1/wars/\(warID)/"
+			let url = session!.baseURL + "/v1/wars/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -127,7 +127,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -136,45 +136,9 @@ public extension ESI {
 		}
 		
 		
-		public struct Kills: Codable, Hashable {
-			
-			
-			public var killmailHash: String
-			public var killmailID: Int
-			
-			public init(killmailHash: String, killmailID: Int) {
-				self.killmailHash = killmailHash
-				self.killmailID = killmailID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: killmailHash.hashValue)
-				hashCombine(seed: &hash, value: killmailID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Wars.Kills, rhs: Wars.Kills) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case killmailHash = "killmail_hash"
-				case killmailID = "killmail_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct WarInformation: Codable, Hashable {
 			
-			public struct GetWarsWarIDDefender: Codable, Hashable {
+			public struct GetWarsWarIDAggressor: Codable, Hashable {
 				
 				
 				public var allianceID: Int?
@@ -198,7 +162,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDDefender, rhs: Wars.WarInformation.GetWarsWarIDDefender) -> Bool {
+				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAggressor, rhs: Wars.WarInformation.GetWarsWarIDAggressor) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -252,7 +216,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetWarsWarIDAggressor: Codable, Hashable {
+			public struct GetWarsWarIDDefender: Codable, Hashable {
 				
 				
 				public var allianceID: Int?
@@ -276,7 +240,7 @@ public extension ESI {
 					return hash
 				}
 				
-				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDAggressor, rhs: Wars.WarInformation.GetWarsWarIDAggressor) -> Bool {
+				public static func ==(lhs: Wars.WarInformation.GetWarsWarIDDefender, rhs: Wars.WarInformation.GetWarsWarIDDefender) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
@@ -384,6 +348,42 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Kills: Codable, Hashable {
+			
+			
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: killmailHash.hashValue)
+				hashCombine(seed: &hash, value: killmailID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Wars.Kills, rhs: Wars.Kills) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case killmailHash = "killmail_hash"
+				case killmailID = "killmail_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

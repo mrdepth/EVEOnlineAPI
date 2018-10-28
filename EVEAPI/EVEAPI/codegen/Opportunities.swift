@@ -15,9 +15,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getOpportunitiesGroup(groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Opportunities.Group>> {
+		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Opportunities.Group>>()
+			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -29,16 +29,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
 			
-			let url = session!.baseURL + "/v1/opportunities/groups/\(groupID)/"
+			
+			let url = session!.baseURL + "/v1/opportunities/tasks/\(taskID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -47,7 +45,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
+				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -70,7 +68,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -109,7 +107,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -126,6 +124,50 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getOpportunitiesGroup(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil) -> Future<ESI.Result<Opportunities.Group>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Opportunities.Group>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage {
+				headers["Accept-Language"] = String(describing: v)
+			}
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/opportunities/groups/\(groupID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -152,7 +194,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -176,79 +218,48 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getOpportunitiesTask(ifNoneMatch: String? = nil, taskID: Int) -> Future<ESI.Result<Opportunities.OpportunitiesTask>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Opportunities.OpportunitiesTask>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/opportunities/tasks/\(taskID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Opportunities.OpportunitiesTask>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
 		
-		
-		public struct OpportunitiesTask: Codable, Hashable {
+		public struct Group: Codable, Hashable {
 			
 			
+			public var connectedGroups: [Int]
 			public var localizedDescription: String
+			public var groupID: Int
 			public var name: String
 			public var notification: String
-			public var taskID: Int
+			public var requiredTasks: [Int]
 			
-			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
+			public init(connectedGroups: [Int], localizedDescription: String, groupID: Int, name: String, notification: String, requiredTasks: [Int]) {
+				self.connectedGroups = connectedGroups
 				self.localizedDescription = localizedDescription
+				self.groupID = groupID
 				self.name = name
 				self.notification = notification
-				self.taskID = taskID
+				self.requiredTasks = requiredTasks
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
+				self.connectedGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				hashCombine(seed: &hash, value: groupID.hashValue)
 				hashCombine(seed: &hash, value: name.hashValue)
 				hashCombine(seed: &hash, value: notification.hashValue)
-				hashCombine(seed: &hash, value: taskID.hashValue)
+				self.requiredTasks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				return hash
 			}
 			
-			public static func ==(lhs: Opportunities.OpportunitiesTask, rhs: Opportunities.OpportunitiesTask) -> Bool {
+			public static func ==(lhs: Opportunities.Group, rhs: Opportunities.Group) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
+				case connectedGroups = "connected_groups"
 				case localizedDescription = "description"
+				case groupID = "group_id"
 				case name
 				case notification
-				case taskID = "task_id"
+				case requiredTasks = "required_tasks"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -296,47 +307,39 @@ public extension ESI {
 		}
 		
 		
-		public struct Group: Codable, Hashable {
+		public struct OpportunitiesTask: Codable, Hashable {
 			
 			
-			public var connectedGroups: [Int]
 			public var localizedDescription: String
-			public var groupID: Int
 			public var name: String
 			public var notification: String
-			public var requiredTasks: [Int]
+			public var taskID: Int
 			
-			public init(connectedGroups: [Int], localizedDescription: String, groupID: Int, name: String, notification: String, requiredTasks: [Int]) {
-				self.connectedGroups = connectedGroups
+			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
 				self.localizedDescription = localizedDescription
-				self.groupID = groupID
 				self.name = name
 				self.notification = notification
-				self.requiredTasks = requiredTasks
+				self.taskID = taskID
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				self.connectedGroups.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
 				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				hashCombine(seed: &hash, value: groupID.hashValue)
 				hashCombine(seed: &hash, value: name.hashValue)
 				hashCombine(seed: &hash, value: notification.hashValue)
-				self.requiredTasks.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: taskID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Opportunities.Group, rhs: Opportunities.Group) -> Bool {
+			public static func ==(lhs: Opportunities.OpportunitiesTask, rhs: Opportunities.OpportunitiesTask) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case connectedGroups = "connected_groups"
 				case localizedDescription = "description"
-				case groupID = "group_id"
 				case name
 				case notification
-				case requiredTasks = "required_tasks"
+				case taskID = "task_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

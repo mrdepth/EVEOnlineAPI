@@ -29,7 +29,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -47,49 +47,6 @@ public extension ESI {
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.SchematicInformation>) in
 					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getColonies(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[PlanetaryInteraction.Colony]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-planets.manage_planets.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/planets/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
-					promise.set(result: response.result, cached: 600.0)
 					session = nil
 				}
 			}
@@ -115,7 +72,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -142,6 +99,49 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func getColonies(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[PlanetaryInteraction.Colony]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-planets.manage_planets.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/planets/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getColonyLayout(characterID: Int, ifNoneMatch: String? = nil, planetID: Int) -> Future<ESI.Result<PlanetaryInteraction.ColonyLayout>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<PlanetaryInteraction.ColonyLayout>>()
@@ -160,7 +160,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -182,6 +182,102 @@ public extension ESI {
 				}
 			}
 			return promise.future
+		}
+		
+		
+		public struct GetCorporationsCorporationIDCustomsOfficesOk: Codable, Hashable {
+			
+			public enum GetCorporationsCorporationIDCustomsOfficesStandingLevel: String, Codable, HTTPQueryable {
+				case bad = "bad"
+				case excellent = "excellent"
+				case good = "good"
+				case neutral = "neutral"
+				case terrible = "terrible"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var allianceTaxRate: Float?
+			public var allowAccessWithStandings: Bool
+			public var allowAllianceAccess: Bool
+			public var badStandingTaxRate: Float?
+			public var corporationTaxRate: Float?
+			public var excellentStandingTaxRate: Float?
+			public var goodStandingTaxRate: Float?
+			public var neutralStandingTaxRate: Float?
+			public var officeID: Int64
+			public var reinforceExitEnd: Int
+			public var reinforceExitStart: Int
+			public var standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?
+			public var systemID: Int
+			public var terribleStandingTaxRate: Float?
+			
+			public init(allianceTaxRate: Float?, allowAccessWithStandings: Bool, allowAllianceAccess: Bool, badStandingTaxRate: Float?, corporationTaxRate: Float?, excellentStandingTaxRate: Float?, goodStandingTaxRate: Float?, neutralStandingTaxRate: Float?, officeID: Int64, reinforceExitEnd: Int, reinforceExitStart: Int, standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?, systemID: Int, terribleStandingTaxRate: Float?) {
+				self.allianceTaxRate = allianceTaxRate
+				self.allowAccessWithStandings = allowAccessWithStandings
+				self.allowAllianceAccess = allowAllianceAccess
+				self.badStandingTaxRate = badStandingTaxRate
+				self.corporationTaxRate = corporationTaxRate
+				self.excellentStandingTaxRate = excellentStandingTaxRate
+				self.goodStandingTaxRate = goodStandingTaxRate
+				self.neutralStandingTaxRate = neutralStandingTaxRate
+				self.officeID = officeID
+				self.reinforceExitEnd = reinforceExitEnd
+				self.reinforceExitStart = reinforceExitStart
+				self.standingLevel = standingLevel
+				self.systemID = systemID
+				self.terribleStandingTaxRate = terribleStandingTaxRate
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: allianceTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: allowAccessWithStandings.hashValue)
+				hashCombine(seed: &hash, value: allowAllianceAccess.hashValue)
+				hashCombine(seed: &hash, value: badStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: corporationTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: excellentStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: goodStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: neutralStandingTaxRate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: officeID.hashValue)
+				hashCombine(seed: &hash, value: reinforceExitEnd.hashValue)
+				hashCombine(seed: &hash, value: reinforceExitStart.hashValue)
+				hashCombine(seed: &hash, value: standingLevel?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: systemID.hashValue)
+				hashCombine(seed: &hash, value: terribleStandingTaxRate?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk, rhs: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceTaxRate = "alliance_tax_rate"
+				case allowAccessWithStandings = "allow_access_with_standings"
+				case allowAllianceAccess = "allow_alliance_access"
+				case badStandingTaxRate = "bad_standing_tax_rate"
+				case corporationTaxRate = "corporation_tax_rate"
+				case excellentStandingTaxRate = "excellent_standing_tax_rate"
+				case goodStandingTaxRate = "good_standing_tax_rate"
+				case neutralStandingTaxRate = "neutral_standing_tax_rate"
+				case officeID = "office_id"
+				case reinforceExitEnd = "reinforce_exit_end"
+				case reinforceExitStart = "reinforce_exit_start"
+				case standingLevel = "standing_level"
+				case systemID = "system_id"
+				case terribleStandingTaxRate = "terrible_standing_tax_rate"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -217,112 +313,40 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Colony: Codable, Hashable {
-			
-			public enum PlanetType: String, Codable, HTTPQueryable {
-				case barren = "barren"
-				case gas = "gas"
-				case ice = "ice"
-				case lava = "lava"
-				case oceanic = "oceanic"
-				case plasma = "plasma"
-				case storm = "storm"
-				case temperate = "temperate"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var lastUpdate: Date
-			public var numPins: Int
-			public var ownerID: Int
-			public var planetID: Int
-			public var planetType: PlanetaryInteraction.Colony.PlanetType
-			public var solarSystemID: Int
-			public var upgradeLevel: Int
-			
-			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
-				self.lastUpdate = lastUpdate
-				self.numPins = numPins
-				self.ownerID = ownerID
-				self.planetID = planetID
-				self.planetType = planetType
-				self.solarSystemID = solarSystemID
-				self.upgradeLevel = upgradeLevel
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: lastUpdate.hashValue)
-				hashCombine(seed: &hash, value: numPins.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: planetID.hashValue)
-				hashCombine(seed: &hash, value: planetType.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: upgradeLevel.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.Colony, rhs: PlanetaryInteraction.Colony) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastUpdate = "last_update"
-				case numPins = "num_pins"
-				case ownerID = "owner_id"
-				case planetID = "planet_id"
-				case planetType = "planet_type"
-				case solarSystemID = "solar_system_id"
-				case upgradeLevel = "upgrade_level"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .lastUpdate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct ColonyLayout: Codable, Hashable {
 			
 			public struct Pin: Codable, Hashable {
+				
+				public struct FactoryDetails: Codable, Hashable {
+					
+					
+					public var schematicID: Int
+					
+					public init(schematicID: Int) {
+						self.schematicID = schematicID
+					}
+					
+					public var hashValue: Int {
+						var hash: Int = 0
+						hashCombine(seed: &hash, value: schematicID.hashValue)
+						return hash
+					}
+					
+					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) -> Bool {
+						return lhs.hashValue == rhs.hashValue
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case schematicID = "schematic_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
 				
 				public struct ExtractorDetails: Codable, Hashable {
 					
@@ -444,37 +468,6 @@ public extension ESI {
 					}
 				}
 				
-				public struct FactoryDetails: Codable, Hashable {
-					
-					
-					public var schematicID: Int
-					
-					public init(schematicID: Int) {
-						self.schematicID = schematicID
-					}
-					
-					public var hashValue: Int {
-						var hash: Int = 0
-						hashCombine(seed: &hash, value: schematicID.hashValue)
-						return hash
-					}
-					
-					public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails, rhs: PlanetaryInteraction.ColonyLayout.Pin.FactoryDetails) -> Bool {
-						return lhs.hashValue == rhs.hashValue
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case schematicID = "schematic_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
 				public var contents: [PlanetaryInteraction.ColonyLayout.Pin.Contents]?
 				public var expiryTime: Date?
 				public var extractorDetails: PlanetaryInteraction.ColonyLayout.Pin.ExtractorDetails?
@@ -545,45 +538,6 @@ public extension ESI {
 				}
 			}
 			
-			public struct Link: Codable, Hashable {
-				
-				
-				public var destinationPinID: Int64
-				public var linkLevel: Int
-				public var sourcePinID: Int64
-				
-				public init(destinationPinID: Int64, linkLevel: Int, sourcePinID: Int64) {
-					self.destinationPinID = destinationPinID
-					self.linkLevel = linkLevel
-					self.sourcePinID = sourcePinID
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: destinationPinID.hashValue)
-					hashCombine(seed: &hash, value: linkLevel.hashValue)
-					hashCombine(seed: &hash, value: sourcePinID.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Link, rhs: PlanetaryInteraction.ColonyLayout.Link) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case destinationPinID = "destination_pin_id"
-					case linkLevel = "link_level"
-					case sourcePinID = "source_pin_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
 			public struct Route: Codable, Hashable {
 				
 				
@@ -635,6 +589,45 @@ public extension ESI {
 				}
 			}
 			
+			public struct Link: Codable, Hashable {
+				
+				
+				public var destinationPinID: Int64
+				public var linkLevel: Int
+				public var sourcePinID: Int64
+				
+				public init(destinationPinID: Int64, linkLevel: Int, sourcePinID: Int64) {
+					self.destinationPinID = destinationPinID
+					self.linkLevel = linkLevel
+					self.sourcePinID = sourcePinID
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: destinationPinID.hashValue)
+					hashCombine(seed: &hash, value: linkLevel.hashValue)
+					hashCombine(seed: &hash, value: sourcePinID.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: PlanetaryInteraction.ColonyLayout.Link, rhs: PlanetaryInteraction.ColonyLayout.Link) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case destinationPinID = "destination_pin_id"
+					case linkLevel = "link_level"
+					case sourcePinID = "source_pin_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public var links: [PlanetaryInteraction.ColonyLayout.Link]
 			public var pins: [PlanetaryInteraction.ColonyLayout.Pin]
 			public var routes: [PlanetaryInteraction.ColonyLayout.Route]
@@ -672,6 +665,109 @@ public extension ESI {
 		}
 		
 		
+		public struct Colony: Codable, Hashable {
+			
+			public enum PlanetType: String, Codable, HTTPQueryable {
+				case barren = "barren"
+				case gas = "gas"
+				case ice = "ice"
+				case lava = "lava"
+				case oceanic = "oceanic"
+				case plasma = "plasma"
+				case storm = "storm"
+				case temperate = "temperate"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var lastUpdate: Date
+			public var numPins: Int
+			public var ownerID: Int
+			public var planetID: Int
+			public var planetType: PlanetaryInteraction.Colony.PlanetType
+			public var solarSystemID: Int
+			public var upgradeLevel: Int
+			
+			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
+				self.lastUpdate = lastUpdate
+				self.numPins = numPins
+				self.ownerID = ownerID
+				self.planetID = planetID
+				self.planetType = planetType
+				self.solarSystemID = solarSystemID
+				self.upgradeLevel = upgradeLevel
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: lastUpdate.hashValue)
+				hashCombine(seed: &hash, value: numPins.hashValue)
+				hashCombine(seed: &hash, value: ownerID.hashValue)
+				hashCombine(seed: &hash, value: planetID.hashValue)
+				hashCombine(seed: &hash, value: planetType.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: upgradeLevel.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.Colony, rhs: PlanetaryInteraction.Colony) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case lastUpdate = "last_update"
+				case numPins = "num_pins"
+				case ownerID = "owner_id"
+				case planetID = "planet_id"
+				case planetType = "planet_type"
+				case solarSystemID = "solar_system_id"
+				case upgradeLevel = "upgrade_level"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .lastUpdate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound, rhs: PlanetaryInteraction.GetUniverseSchematicsSchematicIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct SchematicInformation: Codable, Hashable {
 			
 			
@@ -697,102 +793,6 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case cycleTime = "cycle_time"
 				case schematicName = "schematic_name"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDCustomsOfficesOk: Codable, Hashable {
-			
-			public enum GetCorporationsCorporationIDCustomsOfficesStandingLevel: String, Codable, HTTPQueryable {
-				case bad = "bad"
-				case excellent = "excellent"
-				case good = "good"
-				case neutral = "neutral"
-				case terrible = "terrible"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var allianceTaxRate: Float?
-			public var allowAccessWithStandings: Bool
-			public var allowAllianceAccess: Bool
-			public var badStandingTaxRate: Float?
-			public var corporationTaxRate: Float?
-			public var excellentStandingTaxRate: Float?
-			public var goodStandingTaxRate: Float?
-			public var neutralStandingTaxRate: Float?
-			public var officeID: Int64
-			public var reinforceExitEnd: Int
-			public var reinforceExitStart: Int
-			public var standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?
-			public var systemID: Int
-			public var terribleStandingTaxRate: Float?
-			
-			public init(allianceTaxRate: Float?, allowAccessWithStandings: Bool, allowAllianceAccess: Bool, badStandingTaxRate: Float?, corporationTaxRate: Float?, excellentStandingTaxRate: Float?, goodStandingTaxRate: Float?, neutralStandingTaxRate: Float?, officeID: Int64, reinforceExitEnd: Int, reinforceExitStart: Int, standingLevel: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk.GetCorporationsCorporationIDCustomsOfficesStandingLevel?, systemID: Int, terribleStandingTaxRate: Float?) {
-				self.allianceTaxRate = allianceTaxRate
-				self.allowAccessWithStandings = allowAccessWithStandings
-				self.allowAllianceAccess = allowAllianceAccess
-				self.badStandingTaxRate = badStandingTaxRate
-				self.corporationTaxRate = corporationTaxRate
-				self.excellentStandingTaxRate = excellentStandingTaxRate
-				self.goodStandingTaxRate = goodStandingTaxRate
-				self.neutralStandingTaxRate = neutralStandingTaxRate
-				self.officeID = officeID
-				self.reinforceExitEnd = reinforceExitEnd
-				self.reinforceExitStart = reinforceExitStart
-				self.standingLevel = standingLevel
-				self.systemID = systemID
-				self.terribleStandingTaxRate = terribleStandingTaxRate
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceTaxRate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: allowAccessWithStandings.hashValue)
-				hashCombine(seed: &hash, value: allowAllianceAccess.hashValue)
-				hashCombine(seed: &hash, value: badStandingTaxRate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: corporationTaxRate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: excellentStandingTaxRate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: goodStandingTaxRate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: neutralStandingTaxRate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: officeID.hashValue)
-				hashCombine(seed: &hash, value: reinforceExitEnd.hashValue)
-				hashCombine(seed: &hash, value: reinforceExitStart.hashValue)
-				hashCombine(seed: &hash, value: standingLevel?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: systemID.hashValue)
-				hashCombine(seed: &hash, value: terribleStandingTaxRate?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk, rhs: PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceTaxRate = "alliance_tax_rate"
-				case allowAccessWithStandings = "allow_access_with_standings"
-				case allowAllianceAccess = "allow_alliance_access"
-				case badStandingTaxRate = "bad_standing_tax_rate"
-				case corporationTaxRate = "corporation_tax_rate"
-				case excellentStandingTaxRate = "excellent_standing_tax_rate"
-				case goodStandingTaxRate = "good_standing_tax_rate"
-				case neutralStandingTaxRate = "neutral_standing_tax_rate"
-				case officeID = "office_id"
-				case reinforceExitEnd = "reinforce_exit_end"
-				case reinforceExitStart = "reinforce_exit_start"
-				case standingLevel = "standing_level"
-				case systemID = "system_id"
-				case terribleStandingTaxRate = "terrible_standing_tax_rate"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

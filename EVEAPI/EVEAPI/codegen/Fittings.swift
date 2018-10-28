@@ -15,16 +15,16 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func deleteFitting(characterID: Int, fittingID: Int) -> Future<ESI.Result<String>> {
+		public func getFittings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Fittings.Fitting]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<String>>()
+			let promise = Promise<ESI.Result<[Fittings.Fitting]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-fittings.write_fittings.v1") else {
+			guard scopes.contains("esi-fittings.read_fittings.v1") else {
 				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
@@ -32,23 +32,25 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/\(fittingID)/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<String>) in
-					promise.set(result: response.result, cached: 3600.0)
+				}.validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
+					promise.set(result: response.result, cached: 300.0)
 					session = nil
 				}
 			}
@@ -97,16 +99,16 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getFittings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Fittings.Fitting]>> {
+		public func deleteFitting(characterID: Int, fittingID: Int) -> Future<ESI.Result<String>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Fittings.Fitting]>>()
+			let promise = Promise<ESI.Result<String>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-fittings.read_fittings.v1") else {
+			guard scopes.contains("esi-fittings.write_fittings.v1") else {
 				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
@@ -114,29 +116,59 @@ public extension ESI {
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/fittings/\(fittingID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let progress = Progress(totalUnitCount: 100)
 			
 			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+				return session!.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
-					promise.set(result: response.result, cached: 300.0)
+				}.validateESI().responseESI { (response: DataResponse<String>) in
+					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
 			return promise.future
+		}
+		
+		
+		public struct CreateFittingResult: Codable, Hashable {
+			
+			
+			public var fittingID: Int
+			
+			public init(fittingID: Int) {
+				self.fittingID = fittingID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: fittingID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fittingID = "fitting_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -217,38 +249,6 @@ public extension ESI {
 				case items
 				case name
 				case shipTypeID = "ship_type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CreateFittingResult: Codable, Hashable {
-			
-			
-			public var fittingID: Int
-			
-			public init(fittingID: Int) {
-				self.fittingID = fittingID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: fittingID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case fittingID = "fitting_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

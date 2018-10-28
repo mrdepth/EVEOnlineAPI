@@ -15,6 +15,45 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func getCharactersPublicInformation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Information>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Character.Information>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v4/characters/\(characterID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Character.Information>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func yearlyAggregateStats(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>>()
@@ -33,7 +72,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -58,28 +97,32 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterPortraits(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Portrait>> {
+		public func getMedals(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Medal]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Character.Portrait>>()
+			let promise = Promise<ESI.Result<[Character.Medal]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
-			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_medals.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v2/characters/\(characterID)/portrait/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/medals/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -88,7 +131,224 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
+				}.validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterCorporationRoles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Role>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Character.Role>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_corporation_roles.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/roles/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Character.Role>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_notifications.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v3/characters/\(characterID)/notifications/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getNewContactNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_notifications.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/notifications/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsContactsOk]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getBlueprints(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Character.Blueprint]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.Blueprint]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_blueprints.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/blueprints/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.Blueprint]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getStandings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Standing]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.Standing]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_standings.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/standings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -115,7 +375,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -140,16 +400,16 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharacterCorporationRoles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Role>> {
+		public func getAgentsResearch(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Research]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Character.Role>>()
+			let promise = Promise<ESI.Result<[Character.Research]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
 			}
 			
 			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_corporation_roles.v1") else {
+			guard scopes.contains("esi-characters.read_agents_research.v1") else {
 				try! promise.fail(ESIError.forbidden)
 				return promise.future
 			}
@@ -158,14 +418,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v2/characters/\(characterID)/roles/"
+			let url = session!.baseURL + "/v1/characters/\(characterID)/agents_research/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -174,46 +434,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Character.Role>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharactersPublicInformation(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Information>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Character.Information>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v4/characters/\(characterID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Character.Information>) in
+				}.validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -236,7 +457,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -253,6 +474,125 @@ public extension ESI {
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 				}.validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func characterAffiliation(characters: [Int]) -> Future<ESI.Result<[Character.Affiliation]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.Affiliation]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body = try? JSONEncoder().encode(characters)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/affiliation/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterCorporationTitles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-characters.read_titles.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/titles/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterPortraits(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Character.Portrait>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Character.Portrait>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v2/characters/\(characterID)/portrait/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -299,642 +639,6 @@ public extension ESI {
 				}
 			}
 			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterCorporationTitles(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_titles.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/titles/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterNames(characterIds: [Int64], ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Name]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Name]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = characterIds.httpQuery {
-				query.append(URLQueryItem(name: "character_ids", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/characters/names/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Name]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getNewContactNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsContactsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_notifications.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/notifications/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsContactsOk]>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getStandings(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Standing]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Standing]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_standings.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/standings/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterNotifications(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_notifications.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v2/characters/\(characterID)/notifications/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAgentsResearch(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Research]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Research]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_agents_research.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/agents_research/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getMedals(characterID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Medal]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Medal]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_medals.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/medals/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getBlueprints(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Character.Blueprint]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Blueprint]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-characters.read_blueprints.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v2/characters/\(characterID)/blueprints/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Blueprint]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func characterAffiliation(characters: [Int], ifNoneMatch: String? = nil) -> Future<ESI.Result<[Character.Affiliation]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Character.Affiliation]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body = try? JSONEncoder().encode(characters)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/characters/affiliation/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		
-		public struct Portrait: Codable, Hashable {
-			
-			
-			public var px128x128: String?
-			public var px256x256: String?
-			public var px512x512: String?
-			public var px64x64: String?
-			
-			public init(px128x128: String?, px256x256: String?, px512x512: String?, px64x64: String?) {
-				self.px128x128 = px128x128
-				self.px256x256 = px256x256
-				self.px512x512 = px512x512
-				self.px64x64 = px64x64
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px256x256?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px512x512?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Portrait, rhs: Character.Portrait) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case px128x128
-				case px256x256
-				case px512x512
-				case px64x64
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDNotificationsContactsOk: Codable, Hashable {
-			
-			
-			public var message: String
-			public var notificationID: Int
-			public var sendDate: Date
-			public var senderCharacterID: Int
-			public var standingLevel: Float
-			
-			public init(message: String, notificationID: Int, sendDate: Date, senderCharacterID: Int, standingLevel: Float) {
-				self.message = message
-				self.notificationID = notificationID
-				self.sendDate = sendDate
-				self.senderCharacterID = senderCharacterID
-				self.standingLevel = standingLevel
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: message.hashValue)
-				hashCombine(seed: &hash, value: notificationID.hashValue)
-				hashCombine(seed: &hash, value: sendDate.hashValue)
-				hashCombine(seed: &hash, value: senderCharacterID.hashValue)
-				hashCombine(seed: &hash, value: standingLevel.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDNotificationsContactsOk, rhs: Character.GetCharactersCharacterIDNotificationsContactsOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case message
-				case notificationID = "notification_id"
-				case sendDate = "send_date"
-				case senderCharacterID = "sender_character_id"
-				case standingLevel = "standing_level"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .sendDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Fatigue: Codable, Hashable {
-			
-			
-			public var jumpFatigueExpireDate: Date?
-			public var lastJumpDate: Date?
-			public var lastUpdateDate: Date?
-			
-			public init(jumpFatigueExpireDate: Date?, lastJumpDate: Date?, lastUpdateDate: Date?) {
-				self.jumpFatigueExpireDate = jumpFatigueExpireDate
-				self.lastJumpDate = lastJumpDate
-				self.lastUpdateDate = lastUpdateDate
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: jumpFatigueExpireDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastJumpDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: lastUpdateDate?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Fatigue, rhs: Character.Fatigue) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case jumpFatigueExpireDate = "jump_fatigue_expire_date"
-				case lastJumpDate = "last_jump_date"
-				case lastUpdateDate = "last_update_date"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .jumpFatigueExpireDate: return DateFormatter.esiDateTimeFormatter
-						case .lastJumpDate: return DateFormatter.esiDateTimeFormatter
-						case .lastUpdateDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Standing: Codable, Hashable {
-			
-			public enum GetCharactersCharacterIDStandingsFromType: String, Codable, HTTPQueryable {
-				case agent = "agent"
-				case faction = "faction"
-				case npcCorp = "npc_corp"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var fromID: Int
-			public var fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
-			public var standing: Float
-			
-			public init(fromID: Int, fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType, standing: Float) {
-				self.fromID = fromID
-				self.fromType = fromType
-				self.standing = standing
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: fromID.hashValue)
-				hashCombine(seed: &hash, value: fromType.hashValue)
-				hashCombine(seed: &hash, value: standing.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Standing, rhs: Character.Standing) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case fromID = "from_id"
-				case fromType = "from_type"
-				case standing
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
-			
-			
-			public var name: String?
-			public var titleID: Int?
-			
-			public init(name: String?, titleID: Int?) {
-				self.name = name
-				self.titleID = titleID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: titleID?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDTitlesOk, rhs: Character.GetCharactersCharacterIDTitlesOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case titleID = "title_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -1019,535 +723,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDPortraitNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.GetCharactersCharacterIDPortraitNotFound, rhs: Character.GetCharactersCharacterIDPortraitNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Research: Codable, Hashable {
-			
-			
-			public var agentID: Int
-			public var pointsPerDay: Float
-			public var remainderPoints: Float
-			public var skillTypeID: Int
-			public var startedAt: Date
-			
-			public init(agentID: Int, pointsPerDay: Float, remainderPoints: Float, skillTypeID: Int, startedAt: Date) {
-				self.agentID = agentID
-				self.pointsPerDay = pointsPerDay
-				self.remainderPoints = remainderPoints
-				self.skillTypeID = skillTypeID
-				self.startedAt = startedAt
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: agentID.hashValue)
-				hashCombine(seed: &hash, value: pointsPerDay.hashValue)
-				hashCombine(seed: &hash, value: remainderPoints.hashValue)
-				hashCombine(seed: &hash, value: skillTypeID.hashValue)
-				hashCombine(seed: &hash, value: startedAt.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Research, rhs: Character.Research) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case agentID = "agent_id"
-				case pointsPerDay = "points_per_day"
-				case remainderPoints = "remainder_points"
-				case skillTypeID = "skill_type_id"
-				case startedAt = "started_at"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .startedAt: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Medal: Codable, Hashable {
-			
-			public enum GetCharactersCharacterIDMedalsStatus: String, Codable, HTTPQueryable {
-				case `private` = "private"
-				case `public` = "public"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public struct GetCharactersCharacterIDMedalsGraphics: Codable, Hashable {
-				
-				
-				public var color: Int?
-				public var graphic: String
-				public var layer: Int
-				public var part: Int
-				
-				public init(color: Int?, graphic: String, layer: Int, part: Int) {
-					self.color = color
-					self.graphic = graphic
-					self.layer = layer
-					self.part = part
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: color?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: graphic.hashValue)
-					hashCombine(seed: &hash, value: layer.hashValue)
-					hashCombine(seed: &hash, value: part.hashValue)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics, rhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case color
-					case graphic
-					case layer
-					case part
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var corporationID: Int
-			public var date: Date
-			public var localizedDescription: String
-			public var graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
-			public var issuerID: Int
-			public var medalID: Int
-			public var reason: String
-			public var status: Character.Medal.GetCharactersCharacterIDMedalsStatus
-			public var title: String
-			
-			public init(corporationID: Int, date: Date, localizedDescription: String, graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics], issuerID: Int, medalID: Int, reason: String, status: Character.Medal.GetCharactersCharacterIDMedalsStatus, title: String) {
-				self.corporationID = corporationID
-				self.date = date
-				self.localizedDescription = localizedDescription
-				self.graphics = graphics
-				self.issuerID = issuerID
-				self.medalID = medalID
-				self.reason = reason
-				self.status = status
-				self.title = title
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: localizedDescription.hashValue)
-				self.graphics.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
-				hashCombine(seed: &hash, value: issuerID.hashValue)
-				hashCombine(seed: &hash, value: medalID.hashValue)
-				hashCombine(seed: &hash, value: reason.hashValue)
-				hashCombine(seed: &hash, value: status.hashValue)
-				hashCombine(seed: &hash, value: title.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Medal, rhs: Character.Medal) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case date
-				case localizedDescription = "description"
-				case graphics
-				case issuerID = "issuer_id"
-				case medalID = "medal_id"
-				case reason
-				case status
-				case title
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .date: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostCharactersAffiliationNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.PostCharactersAffiliationNotFound, rhs: Character.PostCharactersAffiliationNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CorporationHistory: Codable, Hashable {
-			
-			
-			public var corporationID: Int
-			public var isDeleted: Bool?
-			public var recordID: Int
-			public var startDate: Date
-			
-			public init(corporationID: Int, isDeleted: Bool?, recordID: Int, startDate: Date) {
-				self.corporationID = corporationID
-				self.isDeleted = isDeleted
-				self.recordID = recordID
-				self.startDate = startDate
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: isDeleted?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: recordID.hashValue)
-				hashCombine(seed: &hash, value: startDate.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.CorporationHistory, rhs: Character.CorporationHistory) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case isDeleted = "is_deleted"
-				case recordID = "record_id"
-				case startDate = "start_date"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .startDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Name: Codable, Hashable {
-			
-			
-			public var characterID: Int64
-			public var characterName: String
-			
-			public init(characterID: Int64, characterName: String) {
-				self.characterID = characterID
-				self.characterName = characterName
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				hashCombine(seed: &hash, value: characterName.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Character.Name, rhs: Character.Name) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case characterID = "character_id"
-				case characterName = "character_name"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct GetCharactersCharacterIDStatsOk: Codable, Hashable {
-			
-			public struct GetCharactersCharacterIDStatsPve: Codable, Hashable {
-				
-				
-				public var dungeonsCompletedAgent: Int64?
-				public var dungeonsCompletedDistribution: Int64?
-				public var missionsSucceeded: Int64?
-				public var missionsSucceededEpicArc: Int64?
-				
-				public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
-					self.dungeonsCompletedAgent = dungeonsCompletedAgent
-					self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
-					self.missionsSucceeded = missionsSucceeded
-					self.missionsSucceededEpicArc = missionsSucceededEpicArc
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: dungeonsCompletedAgent?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: dungeonsCompletedDistribution?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: missionsSucceeded?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: missionsSucceededEpicArc?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case dungeonsCompletedAgent = "dungeons_completed_agent"
-					case dungeonsCompletedDistribution = "dungeons_completed_distribution"
-					case missionsSucceeded = "missions_succeeded"
-					case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsInventory: Codable, Hashable {
-				
-				
-				public var abandonLootQuantity: Int64?
-				public var trashItemQuantity: Int64?
-				
-				public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
-					self.abandonLootQuantity = abandonLootQuantity
-					self.trashItemQuantity = trashItemQuantity
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: abandonLootQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: trashItemQuantity?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case abandonLootQuantity = "abandon_loot_quantity"
-					case trashItemQuantity = "trash_item_quantity"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsCharacter: Codable, Hashable {
-				
-				
-				public var daysOfActivity: Int64?
-				public var minutes: Int64?
-				public var sessionsStarted: Int64?
-				
-				public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
-					self.daysOfActivity = daysOfActivity
-					self.minutes = minutes
-					self.sessionsStarted = sessionsStarted
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: daysOfActivity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: minutes?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: sessionsStarted?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case daysOfActivity = "days_of_activity"
-					case minutes
-					case sessionsStarted = "sessions_started"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsMining: Codable, Hashable {
-				
-				
-				public var droneMine: Int64?
-				public var oreArkonor: Int64?
-				public var oreBistot: Int64?
-				public var oreCrokite: Int64?
-				public var oreDarkOchre: Int64?
-				public var oreGneiss: Int64?
-				public var oreHarvestableCloud: Int64?
-				public var oreHedbergite: Int64?
-				public var oreHemorphite: Int64?
-				public var oreIce: Int64?
-				public var oreJaspet: Int64?
-				public var oreKernite: Int64?
-				public var oreMercoxit: Int64?
-				public var oreOmber: Int64?
-				public var orePlagioclase: Int64?
-				public var orePyroxeres: Int64?
-				public var oreScordite: Int64?
-				public var oreSpodumain: Int64?
-				public var oreVeldspar: Int64?
-				
-				public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
-					self.droneMine = droneMine
-					self.oreArkonor = oreArkonor
-					self.oreBistot = oreBistot
-					self.oreCrokite = oreCrokite
-					self.oreDarkOchre = oreDarkOchre
-					self.oreGneiss = oreGneiss
-					self.oreHarvestableCloud = oreHarvestableCloud
-					self.oreHedbergite = oreHedbergite
-					self.oreHemorphite = oreHemorphite
-					self.oreIce = oreIce
-					self.oreJaspet = oreJaspet
-					self.oreKernite = oreKernite
-					self.oreMercoxit = oreMercoxit
-					self.oreOmber = oreOmber
-					self.orePlagioclase = orePlagioclase
-					self.orePyroxeres = orePyroxeres
-					self.oreScordite = oreScordite
-					self.oreSpodumain = oreSpodumain
-					self.oreVeldspar = oreVeldspar
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: droneMine?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreArkonor?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreBistot?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreCrokite?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreDarkOchre?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreGneiss?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreHarvestableCloud?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreHedbergite?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreHemorphite?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreIce?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreJaspet?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreKernite?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreMercoxit?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreOmber?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: orePlagioclase?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: orePyroxeres?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreScordite?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreSpodumain?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: oreVeldspar?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case droneMine = "drone_mine"
-					case oreArkonor = "ore_arkonor"
-					case oreBistot = "ore_bistot"
-					case oreCrokite = "ore_crokite"
-					case oreDarkOchre = "ore_dark_ochre"
-					case oreGneiss = "ore_gneiss"
-					case oreHarvestableCloud = "ore_harvestable_cloud"
-					case oreHedbergite = "ore_hedbergite"
-					case oreHemorphite = "ore_hemorphite"
-					case oreIce = "ore_ice"
-					case oreJaspet = "ore_jaspet"
-					case oreKernite = "ore_kernite"
-					case oreMercoxit = "ore_mercoxit"
-					case oreOmber = "ore_omber"
-					case orePlagioclase = "ore_plagioclase"
-					case orePyroxeres = "ore_pyroxeres"
-					case oreScordite = "ore_scordite"
-					case oreSpodumain = "ore_spodumain"
-					case oreVeldspar = "ore_veldspar"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
 			
 			public struct GetCharactersCharacterIDStatsCombat: Codable, Hashable {
 				
@@ -1952,6 +1128,85 @@ public extension ESI {
 				}
 			}
 			
+			public struct GetCharactersCharacterIDStatsMarket: Codable, Hashable {
+				
+				
+				public var acceptContractsCourier: Int64?
+				public var acceptContractsItemExchange: Int64?
+				public var buyOrdersPlaced: Int64?
+				public var cancelMarketOrder: Int64?
+				public var createContractsAuction: Int64?
+				public var createContractsCourier: Int64?
+				public var createContractsItemExchange: Int64?
+				public var deliverCourierContract: Int64?
+				public var iskGained: Int64?
+				public var iskSpent: Int64?
+				public var modifyMarketOrder: Int64?
+				public var searchContracts: Int64?
+				public var sellOrdersPlaced: Int64?
+				
+				public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
+					self.acceptContractsCourier = acceptContractsCourier
+					self.acceptContractsItemExchange = acceptContractsItemExchange
+					self.buyOrdersPlaced = buyOrdersPlaced
+					self.cancelMarketOrder = cancelMarketOrder
+					self.createContractsAuction = createContractsAuction
+					self.createContractsCourier = createContractsCourier
+					self.createContractsItemExchange = createContractsItemExchange
+					self.deliverCourierContract = deliverCourierContract
+					self.iskGained = iskGained
+					self.iskSpent = iskSpent
+					self.modifyMarketOrder = modifyMarketOrder
+					self.searchContracts = searchContracts
+					self.sellOrdersPlaced = sellOrdersPlaced
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: acceptContractsCourier?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: acceptContractsItemExchange?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: buyOrdersPlaced?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: cancelMarketOrder?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: createContractsAuction?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: createContractsCourier?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: createContractsItemExchange?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: deliverCourierContract?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: iskGained?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: iskSpent?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: modifyMarketOrder?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: searchContracts?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: sellOrdersPlaced?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case acceptContractsCourier = "accept_contracts_courier"
+					case acceptContractsItemExchange = "accept_contracts_item_exchange"
+					case buyOrdersPlaced = "buy_orders_placed"
+					case cancelMarketOrder = "cancel_market_order"
+					case createContractsAuction = "create_contracts_auction"
+					case createContractsCourier = "create_contracts_courier"
+					case createContractsItemExchange = "create_contracts_item_exchange"
+					case deliverCourierContract = "deliver_courier_contract"
+					case iskGained = "isk_gained"
+					case iskSpent = "isk_spent"
+					case modifyMarketOrder = "modify_market_order"
+					case searchContracts = "search_contracts"
+					case sellOrdersPlaced = "sell_orders_placed"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public struct GetCharactersCharacterIDStatsTravel: Codable, Hashable {
 				
 				
@@ -2053,6 +1308,397 @@ public extension ESI {
 					case warpsToFleetMember = "warps_to_fleet_member"
 					case warpsToScanResult = "warps_to_scan_result"
 					case warpsWormhole = "warps_wormhole"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsOrbital: Codable, Hashable {
+				
+				
+				public var strikeCharactersKilled: Int64?
+				public var strikeDamageToPlayersArmorAmount: Int64?
+				public var strikeDamageToPlayersShieldAmount: Int64?
+				
+				public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
+					self.strikeCharactersKilled = strikeCharactersKilled
+					self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
+					self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: strikeCharactersKilled?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: strikeDamageToPlayersArmorAmount?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: strikeDamageToPlayersShieldAmount?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case strikeCharactersKilled = "strike_characters_killed"
+					case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
+					case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsIsk: Codable, Hashable {
+				
+				
+				public var `in`: Int64?
+				public var out: Int64?
+				
+				public init(`in`: Int64?, out: Int64?) {
+					self.`in` = `in`
+					self.out = out
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: `in`?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: out?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case `in` = "in"
+					case out
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsPve: Codable, Hashable {
+				
+				
+				public var dungeonsCompletedAgent: Int64?
+				public var dungeonsCompletedDistribution: Int64?
+				public var missionsSucceeded: Int64?
+				public var missionsSucceededEpicArc: Int64?
+				
+				public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
+					self.dungeonsCompletedAgent = dungeonsCompletedAgent
+					self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
+					self.missionsSucceeded = missionsSucceeded
+					self.missionsSucceededEpicArc = missionsSucceededEpicArc
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: dungeonsCompletedAgent?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: dungeonsCompletedDistribution?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: missionsSucceeded?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: missionsSucceededEpicArc?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsPve) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case dungeonsCompletedAgent = "dungeons_completed_agent"
+					case dungeonsCompletedDistribution = "dungeons_completed_distribution"
+					case missionsSucceeded = "missions_succeeded"
+					case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsIndustry: Codable, Hashable {
+				
+				
+				public var hackingSuccesses: Int64?
+				public var jobsCancelled: Int64?
+				public var jobsCompletedCopyBlueprint: Int64?
+				public var jobsCompletedInvention: Int64?
+				public var jobsCompletedManufacture: Int64?
+				public var jobsCompletedManufactureAsteroid: Int64?
+				public var jobsCompletedManufactureAsteroidQuantity: Int64?
+				public var jobsCompletedManufactureCharge: Int64?
+				public var jobsCompletedManufactureChargeQuantity: Int64?
+				public var jobsCompletedManufactureCommodity: Int64?
+				public var jobsCompletedManufactureCommodityQuantity: Int64?
+				public var jobsCompletedManufactureDeployable: Int64?
+				public var jobsCompletedManufactureDeployableQuantity: Int64?
+				public var jobsCompletedManufactureDrone: Int64?
+				public var jobsCompletedManufactureDroneQuantity: Int64?
+				public var jobsCompletedManufactureImplant: Int64?
+				public var jobsCompletedManufactureImplantQuantity: Int64?
+				public var jobsCompletedManufactureModule: Int64?
+				public var jobsCompletedManufactureModuleQuantity: Int64?
+				public var jobsCompletedManufactureOther: Int64?
+				public var jobsCompletedManufactureOtherQuantity: Int64?
+				public var jobsCompletedManufactureShip: Int64?
+				public var jobsCompletedManufactureShipQuantity: Int64?
+				public var jobsCompletedManufactureStructure: Int64?
+				public var jobsCompletedManufactureStructureQuantity: Int64?
+				public var jobsCompletedManufactureSubsystem: Int64?
+				public var jobsCompletedManufactureSubsystemQuantity: Int64?
+				public var jobsCompletedMaterialProductivity: Int64?
+				public var jobsCompletedTimeProductivity: Int64?
+				public var jobsStartedCopyBlueprint: Int64?
+				public var jobsStartedInvention: Int64?
+				public var jobsStartedManufacture: Int64?
+				public var jobsStartedMaterialProductivity: Int64?
+				public var jobsStartedTimeProductivity: Int64?
+				public var reprocessItem: Int64?
+				public var reprocessItemQuantity: Int64?
+				
+				public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
+					self.hackingSuccesses = hackingSuccesses
+					self.jobsCancelled = jobsCancelled
+					self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
+					self.jobsCompletedInvention = jobsCompletedInvention
+					self.jobsCompletedManufacture = jobsCompletedManufacture
+					self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
+					self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
+					self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
+					self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
+					self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
+					self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
+					self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
+					self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
+					self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
+					self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
+					self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
+					self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
+					self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
+					self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
+					self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
+					self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
+					self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
+					self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
+					self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
+					self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
+					self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
+					self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
+					self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
+					self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
+					self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
+					self.jobsStartedInvention = jobsStartedInvention
+					self.jobsStartedManufacture = jobsStartedManufacture
+					self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
+					self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
+					self.reprocessItem = reprocessItem
+					self.reprocessItemQuantity = reprocessItemQuantity
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: hackingSuccesses?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCancelled?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedCopyBlueprint?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedInvention?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufacture?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureAsteroid?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureAsteroidQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureCharge?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureChargeQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureCommodity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureCommodityQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDeployable?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDeployableQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDrone?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureDroneQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureImplant?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureImplantQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureModule?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureModuleQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureOther?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureOtherQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureShip?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureShipQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureStructure?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureStructureQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureSubsystem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedManufactureSubsystemQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedMaterialProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsCompletedTimeProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedCopyBlueprint?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedInvention?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedManufacture?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedMaterialProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: jobsStartedTimeProductivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reprocessItem?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: reprocessItemQuantity?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case hackingSuccesses = "hacking_successes"
+					case jobsCancelled = "jobs_cancelled"
+					case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
+					case jobsCompletedInvention = "jobs_completed_invention"
+					case jobsCompletedManufacture = "jobs_completed_manufacture"
+					case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
+					case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
+					case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
+					case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
+					case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
+					case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
+					case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
+					case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
+					case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
+					case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
+					case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
+					case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
+					case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
+					case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
+					case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
+					case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
+					case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
+					case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
+					case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
+					case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
+					case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
+					case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
+					case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
+					case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
+					case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
+					case jobsStartedInvention = "jobs_started_invention"
+					case jobsStartedManufacture = "jobs_started_manufacture"
+					case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
+					case jobsStartedTimeProductivity = "jobs_started_time_productivity"
+					case reprocessItem = "reprocess_item"
+					case reprocessItemQuantity = "reprocess_item_quantity"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsMining: Codable, Hashable {
+				
+				
+				public var droneMine: Int64?
+				public var oreArkonor: Int64?
+				public var oreBistot: Int64?
+				public var oreCrokite: Int64?
+				public var oreDarkOchre: Int64?
+				public var oreGneiss: Int64?
+				public var oreHarvestableCloud: Int64?
+				public var oreHedbergite: Int64?
+				public var oreHemorphite: Int64?
+				public var oreIce: Int64?
+				public var oreJaspet: Int64?
+				public var oreKernite: Int64?
+				public var oreMercoxit: Int64?
+				public var oreOmber: Int64?
+				public var orePlagioclase: Int64?
+				public var orePyroxeres: Int64?
+				public var oreScordite: Int64?
+				public var oreSpodumain: Int64?
+				public var oreVeldspar: Int64?
+				
+				public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
+					self.droneMine = droneMine
+					self.oreArkonor = oreArkonor
+					self.oreBistot = oreBistot
+					self.oreCrokite = oreCrokite
+					self.oreDarkOchre = oreDarkOchre
+					self.oreGneiss = oreGneiss
+					self.oreHarvestableCloud = oreHarvestableCloud
+					self.oreHedbergite = oreHedbergite
+					self.oreHemorphite = oreHemorphite
+					self.oreIce = oreIce
+					self.oreJaspet = oreJaspet
+					self.oreKernite = oreKernite
+					self.oreMercoxit = oreMercoxit
+					self.oreOmber = oreOmber
+					self.orePlagioclase = orePlagioclase
+					self.orePyroxeres = orePyroxeres
+					self.oreScordite = oreScordite
+					self.oreSpodumain = oreSpodumain
+					self.oreVeldspar = oreVeldspar
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: droneMine?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreArkonor?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreBistot?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreCrokite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreDarkOchre?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreGneiss?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreHarvestableCloud?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreHedbergite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreHemorphite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreIce?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreJaspet?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreKernite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreMercoxit?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreOmber?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: orePlagioclase?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: orePyroxeres?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreScordite?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreSpodumain?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: oreVeldspar?.hashValue ?? 0)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMining) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case droneMine = "drone_mine"
+					case oreArkonor = "ore_arkonor"
+					case oreBistot = "ore_bistot"
+					case oreCrokite = "ore_crokite"
+					case oreDarkOchre = "ore_dark_ochre"
+					case oreGneiss = "ore_gneiss"
+					case oreHarvestableCloud = "ore_harvestable_cloud"
+					case oreHedbergite = "ore_hedbergite"
+					case oreHemorphite = "ore_hemorphite"
+					case oreIce = "ore_ice"
+					case oreJaspet = "ore_jaspet"
+					case oreKernite = "ore_kernite"
+					case oreMercoxit = "ore_mercoxit"
+					case oreOmber = "ore_omber"
+					case orePlagioclase = "ore_plagioclase"
+					case orePyroxeres = "ore_pyroxeres"
+					case oreScordite = "ore_scordite"
+					case oreSpodumain = "ore_spodumain"
+					case oreVeldspar = "ore_veldspar"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2180,45 +1826,6 @@ public extension ESI {
 					case fleetJoins = "fleet_joins"
 					case mailsReceived = "mails_received"
 					case mailsSent = "mails_sent"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsOrbital: Codable, Hashable {
-				
-				
-				public var strikeCharactersKilled: Int64?
-				public var strikeDamageToPlayersArmorAmount: Int64?
-				public var strikeDamageToPlayersShieldAmount: Int64?
-				
-				public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
-					self.strikeCharactersKilled = strikeCharactersKilled
-					self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
-					self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: strikeCharactersKilled?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: strikeDamageToPlayersArmorAmount?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: strikeDamageToPlayersShieldAmount?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsOrbital) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case strikeCharactersKilled = "strike_characters_killed"
-					case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
-					case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2532,167 +2139,31 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsIndustry: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsInventory: Codable, Hashable {
 				
 				
-				public var hackingSuccesses: Int64?
-				public var jobsCancelled: Int64?
-				public var jobsCompletedCopyBlueprint: Int64?
-				public var jobsCompletedInvention: Int64?
-				public var jobsCompletedManufacture: Int64?
-				public var jobsCompletedManufactureAsteroid: Int64?
-				public var jobsCompletedManufactureAsteroidQuantity: Int64?
-				public var jobsCompletedManufactureCharge: Int64?
-				public var jobsCompletedManufactureChargeQuantity: Int64?
-				public var jobsCompletedManufactureCommodity: Int64?
-				public var jobsCompletedManufactureCommodityQuantity: Int64?
-				public var jobsCompletedManufactureDeployable: Int64?
-				public var jobsCompletedManufactureDeployableQuantity: Int64?
-				public var jobsCompletedManufactureDrone: Int64?
-				public var jobsCompletedManufactureDroneQuantity: Int64?
-				public var jobsCompletedManufactureImplant: Int64?
-				public var jobsCompletedManufactureImplantQuantity: Int64?
-				public var jobsCompletedManufactureModule: Int64?
-				public var jobsCompletedManufactureModuleQuantity: Int64?
-				public var jobsCompletedManufactureOther: Int64?
-				public var jobsCompletedManufactureOtherQuantity: Int64?
-				public var jobsCompletedManufactureShip: Int64?
-				public var jobsCompletedManufactureShipQuantity: Int64?
-				public var jobsCompletedManufactureStructure: Int64?
-				public var jobsCompletedManufactureStructureQuantity: Int64?
-				public var jobsCompletedManufactureSubsystem: Int64?
-				public var jobsCompletedManufactureSubsystemQuantity: Int64?
-				public var jobsCompletedMaterialProductivity: Int64?
-				public var jobsCompletedTimeProductivity: Int64?
-				public var jobsStartedCopyBlueprint: Int64?
-				public var jobsStartedInvention: Int64?
-				public var jobsStartedManufacture: Int64?
-				public var jobsStartedMaterialProductivity: Int64?
-				public var jobsStartedTimeProductivity: Int64?
-				public var reprocessItem: Int64?
-				public var reprocessItemQuantity: Int64?
+				public var abandonLootQuantity: Int64?
+				public var trashItemQuantity: Int64?
 				
-				public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
-					self.hackingSuccesses = hackingSuccesses
-					self.jobsCancelled = jobsCancelled
-					self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
-					self.jobsCompletedInvention = jobsCompletedInvention
-					self.jobsCompletedManufacture = jobsCompletedManufacture
-					self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
-					self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
-					self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
-					self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
-					self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
-					self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
-					self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
-					self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
-					self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
-					self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
-					self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
-					self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
-					self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
-					self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
-					self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
-					self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
-					self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
-					self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
-					self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
-					self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
-					self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
-					self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
-					self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
-					self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
-					self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
-					self.jobsStartedInvention = jobsStartedInvention
-					self.jobsStartedManufacture = jobsStartedManufacture
-					self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
-					self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
-					self.reprocessItem = reprocessItem
-					self.reprocessItemQuantity = reprocessItemQuantity
+				public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
+					self.abandonLootQuantity = abandonLootQuantity
+					self.trashItemQuantity = trashItemQuantity
 				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: hackingSuccesses?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCancelled?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedCopyBlueprint?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedInvention?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufacture?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureAsteroid?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureAsteroidQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureCharge?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureChargeQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureCommodity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureCommodityQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureDeployable?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureDeployableQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureDrone?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureDroneQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureImplant?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureImplantQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureModule?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureModuleQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureOther?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureOtherQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureShip?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureShipQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureStructure?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureStructureQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureSubsystem?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedManufactureSubsystemQuantity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedMaterialProductivity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsCompletedTimeProductivity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsStartedCopyBlueprint?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsStartedInvention?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsStartedManufacture?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsStartedMaterialProductivity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: jobsStartedTimeProductivity?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reprocessItem?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: reprocessItemQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: abandonLootQuantity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: trashItemQuantity?.hashValue ?? 0)
 					return hash
 				}
 				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry) -> Bool {
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsInventory) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case hackingSuccesses = "hacking_successes"
-					case jobsCancelled = "jobs_cancelled"
-					case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
-					case jobsCompletedInvention = "jobs_completed_invention"
-					case jobsCompletedManufacture = "jobs_completed_manufacture"
-					case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
-					case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
-					case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
-					case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
-					case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
-					case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
-					case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
-					case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
-					case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
-					case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
-					case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
-					case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
-					case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
-					case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
-					case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
-					case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
-					case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
-					case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
-					case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
-					case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
-					case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
-					case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
-					case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
-					case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
-					case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
-					case jobsStartedInvention = "jobs_started_invention"
-					case jobsStartedManufacture = "jobs_started_manufacture"
-					case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
-					case jobsStartedTimeProductivity = "jobs_started_time_productivity"
-					case reprocessItem = "reprocess_item"
-					case reprocessItemQuantity = "reprocess_item_quantity"
+					case abandonLootQuantity = "abandon_loot_quantity"
+					case trashItemQuantity = "trash_item_quantity"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2703,110 +2174,35 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsMarket: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsCharacter: Codable, Hashable {
 				
 				
-				public var acceptContractsCourier: Int64?
-				public var acceptContractsItemExchange: Int64?
-				public var buyOrdersPlaced: Int64?
-				public var cancelMarketOrder: Int64?
-				public var createContractsAuction: Int64?
-				public var createContractsCourier: Int64?
-				public var createContractsItemExchange: Int64?
-				public var deliverCourierContract: Int64?
-				public var iskGained: Int64?
-				public var iskSpent: Int64?
-				public var modifyMarketOrder: Int64?
-				public var searchContracts: Int64?
-				public var sellOrdersPlaced: Int64?
+				public var daysOfActivity: Int64?
+				public var minutes: Int64?
+				public var sessionsStarted: Int64?
 				
-				public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
-					self.acceptContractsCourier = acceptContractsCourier
-					self.acceptContractsItemExchange = acceptContractsItemExchange
-					self.buyOrdersPlaced = buyOrdersPlaced
-					self.cancelMarketOrder = cancelMarketOrder
-					self.createContractsAuction = createContractsAuction
-					self.createContractsCourier = createContractsCourier
-					self.createContractsItemExchange = createContractsItemExchange
-					self.deliverCourierContract = deliverCourierContract
-					self.iskGained = iskGained
-					self.iskSpent = iskSpent
-					self.modifyMarketOrder = modifyMarketOrder
-					self.searchContracts = searchContracts
-					self.sellOrdersPlaced = sellOrdersPlaced
+				public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
+					self.daysOfActivity = daysOfActivity
+					self.minutes = minutes
+					self.sessionsStarted = sessionsStarted
 				}
 				
 				public var hashValue: Int {
 					var hash: Int = 0
-					hashCombine(seed: &hash, value: acceptContractsCourier?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: acceptContractsItemExchange?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: buyOrdersPlaced?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: cancelMarketOrder?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: createContractsAuction?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: createContractsCourier?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: createContractsItemExchange?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: deliverCourierContract?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: iskGained?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: iskSpent?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: modifyMarketOrder?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: searchContracts?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: sellOrdersPlaced?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: daysOfActivity?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: minutes?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: sessionsStarted?.hashValue ?? 0)
 					return hash
 				}
 				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsMarket) -> Bool {
+				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter) -> Bool {
 					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case acceptContractsCourier = "accept_contracts_courier"
-					case acceptContractsItemExchange = "accept_contracts_item_exchange"
-					case buyOrdersPlaced = "buy_orders_placed"
-					case cancelMarketOrder = "cancel_market_order"
-					case createContractsAuction = "create_contracts_auction"
-					case createContractsCourier = "create_contracts_courier"
-					case createContractsItemExchange = "create_contracts_item_exchange"
-					case deliverCourierContract = "deliver_courier_contract"
-					case iskGained = "isk_gained"
-					case iskSpent = "isk_spent"
-					case modifyMarketOrder = "modify_market_order"
-					case searchContracts = "search_contracts"
-					case sellOrdersPlaced = "sell_orders_placed"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsIsk: Codable, Hashable {
-				
-				
-				public var `in`: Int64?
-				public var out: Int64?
-				
-				public init(`in`: Int64?, out: Int64?) {
-					self.`in` = `in`
-					self.out = out
-				}
-				
-				public var hashValue: Int {
-					var hash: Int = 0
-					hashCombine(seed: &hash, value: `in`?.hashValue ?? 0)
-					hashCombine(seed: &hash, value: out?.hashValue ?? 0)
-					return hash
-				}
-				
-				public static func ==(lhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk, rhs: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIsk) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case `in` = "in"
-					case out
+					case daysOfActivity = "days_of_activity"
+					case minutes
+					case sessionsStarted = "sessions_started"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2894,65 +2290,383 @@ public extension ESI {
 		}
 		
 		
-		public struct Role: Codable, Hashable {
+		public struct Affiliation: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDRolesRolesAtBase: String, Codable, HTTPQueryable {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
-				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
-				case trader = "Trader"
+			
+			public var allianceID: Int?
+			public var characterID: Int
+			public var corporationID: Int
+			public var factionID: Int?
+			
+			public init(allianceID: Int?, characterID: Int, corporationID: Int, factionID: Int?) {
+				self.allianceID = allianceID
+				self.characterID = characterID
+				self.corporationID = corporationID
+				self.factionID = factionID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Affiliation, rhs: Character.Affiliation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case characterID = "character_id"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDNotificationsContactsOk: Codable, Hashable {
+			
+			
+			public var message: String
+			public var notificationID: Int
+			public var sendDate: Date
+			public var senderCharacterID: Int
+			public var standingLevel: Float
+			
+			public init(message: String, notificationID: Int, sendDate: Date, senderCharacterID: Int, standingLevel: Float) {
+				self.message = message
+				self.notificationID = notificationID
+				self.sendDate = sendDate
+				self.senderCharacterID = senderCharacterID
+				self.standingLevel = standingLevel
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: message.hashValue)
+				hashCombine(seed: &hash, value: notificationID.hashValue)
+				hashCombine(seed: &hash, value: sendDate.hashValue)
+				hashCombine(seed: &hash, value: senderCharacterID.hashValue)
+				hashCombine(seed: &hash, value: standingLevel.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDNotificationsContactsOk, rhs: Character.GetCharactersCharacterIDNotificationsContactsOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case message
+				case notificationID = "notification_id"
+				case sendDate = "send_date"
+				case senderCharacterID = "sender_character_id"
+				case standingLevel = "standing_level"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .sendDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Research: Codable, Hashable {
+			
+			
+			public var agentID: Int
+			public var pointsPerDay: Float
+			public var remainderPoints: Float
+			public var skillTypeID: Int
+			public var startedAt: Date
+			
+			public init(agentID: Int, pointsPerDay: Float, remainderPoints: Float, skillTypeID: Int, startedAt: Date) {
+				self.agentID = agentID
+				self.pointsPerDay = pointsPerDay
+				self.remainderPoints = remainderPoints
+				self.skillTypeID = skillTypeID
+				self.startedAt = startedAt
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: agentID.hashValue)
+				hashCombine(seed: &hash, value: pointsPerDay.hashValue)
+				hashCombine(seed: &hash, value: remainderPoints.hashValue)
+				hashCombine(seed: &hash, value: skillTypeID.hashValue)
+				hashCombine(seed: &hash, value: startedAt.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Research, rhs: Character.Research) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case agentID = "agent_id"
+				case pointsPerDay = "points_per_day"
+				case remainderPoints = "remainder_points"
+				case skillTypeID = "skill_type_id"
+				case startedAt = "started_at"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .startedAt: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CorporationHistory: Codable, Hashable {
+			
+			
+			public var corporationID: Int
+			public var isDeleted: Bool?
+			public var recordID: Int
+			public var startDate: Date
+			
+			public init(corporationID: Int, isDeleted: Bool?, recordID: Int, startDate: Date) {
+				self.corporationID = corporationID
+				self.isDeleted = isDeleted
+				self.recordID = recordID
+				self.startDate = startDate
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: isDeleted?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: recordID.hashValue)
+				hashCombine(seed: &hash, value: startDate.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.CorporationHistory, rhs: Character.CorporationHistory) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case isDeleted = "is_deleted"
+				case recordID = "record_id"
+				case startDate = "start_date"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .startDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Portrait: Codable, Hashable {
+			
+			
+			public var px128x128: String?
+			public var px256x256: String?
+			public var px512x512: String?
+			public var px64x64: String?
+			
+			public init(px128x128: String?, px256x256: String?, px512x512: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px256x256 = px256x256
+				self.px512x512 = px512x512
+				self.px64x64 = px64x64
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: px128x128?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px256x256?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px512x512?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: px64x64?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Portrait, rhs: Character.Portrait) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case px128x128
+				case px256x256
+				case px512x512
+				case px64x64
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDNotFound, rhs: Character.GetCharactersCharacterIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Medal: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDMedalsStatus: String, Codable, HTTPQueryable {
+				case `private` = "private"
+				case `public` = "public"
 				
 				public var httpQuery: String? {
 					return rawValue
 				}
 				
 			}
+			
+			public struct GetCharactersCharacterIDMedalsGraphics: Codable, Hashable {
+				
+				
+				public var color: Int?
+				public var graphic: String
+				public var layer: Int
+				public var part: Int
+				
+				public init(color: Int?, graphic: String, layer: Int, part: Int) {
+					self.color = color
+					self.graphic = graphic
+					self.layer = layer
+					self.part = part
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: color?.hashValue ?? 0)
+					hashCombine(seed: &hash, value: graphic.hashValue)
+					hashCombine(seed: &hash, value: layer.hashValue)
+					hashCombine(seed: &hash, value: part.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics, rhs: Character.Medal.GetCharactersCharacterIDMedalsGraphics) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case color
+					case graphic
+					case layer
+					case part
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public var corporationID: Int
+			public var date: Date
+			public var localizedDescription: String
+			public var graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
+			public var issuerID: Int
+			public var medalID: Int
+			public var reason: String
+			public var status: Character.Medal.GetCharactersCharacterIDMedalsStatus
+			public var title: String
+			
+			public init(corporationID: Int, date: Date, localizedDescription: String, graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics], issuerID: Int, medalID: Int, reason: String, status: Character.Medal.GetCharactersCharacterIDMedalsStatus, title: String) {
+				self.corporationID = corporationID
+				self.date = date
+				self.localizedDescription = localizedDescription
+				self.graphics = graphics
+				self.issuerID = issuerID
+				self.medalID = medalID
+				self.reason = reason
+				self.status = status
+				self.title = title
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: localizedDescription.hashValue)
+				self.graphics.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: issuerID.hashValue)
+				hashCombine(seed: &hash, value: medalID.hashValue)
+				hashCombine(seed: &hash, value: reason.hashValue)
+				hashCombine(seed: &hash, value: status.hashValue)
+				hashCombine(seed: &hash, value: title.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Medal, rhs: Character.Medal) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case date
+				case localizedDescription = "description"
+				case graphics
+				case issuerID = "issuer_id"
+				case medalID = "medal_id"
+				case reason
+				case status
+				case title
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Role: Codable, Hashable {
 			
 			public enum GetCharactersCharacterIDRolesRolesAtHq: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
@@ -3013,6 +2727,64 @@ public extension ESI {
 			}
 			
 			public enum GetCharactersCharacterIDRolesRoles: String, Codable, HTTPQueryable {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case terrestrialCombatOfficer = "Terrestrial_Combat_Officer"
+				case terrestrialLogisticsOfficer = "Terrestrial_Logistics_Officer"
+				case trader = "Trader"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public enum GetCharactersCharacterIDRolesRolesAtBase: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -3162,6 +2934,134 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Standing: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDStandingsFromType: String, Codable, HTTPQueryable {
+				case agent = "agent"
+				case faction = "faction"
+				case npcCorp = "npc_corp"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var fromID: Int
+			public var fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
+			public var standing: Float
+			
+			public init(fromID: Int, fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType, standing: Float) {
+				self.fromID = fromID
+				self.fromType = fromType
+				self.standing = standing
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: fromID.hashValue)
+				hashCombine(seed: &hash, value: fromType.hashValue)
+				hashCombine(seed: &hash, value: standing.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Standing, rhs: Character.Standing) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fromID = "from_id"
+				case fromType = "from_type"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
+			
+			
+			public var name: String?
+			public var titleID: Int?
+			
+			public init(name: String?, titleID: Int?) {
+				self.name = name
+				self.titleID = titleID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: name?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: titleID?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.GetCharactersCharacterIDTitlesOk, rhs: Character.GetCharactersCharacterIDTitlesOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				case titleID = "title_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Fatigue: Codable, Hashable {
+			
+			
+			public var jumpFatigueExpireDate: Date?
+			public var lastJumpDate: Date?
+			public var lastUpdateDate: Date?
+			
+			public init(jumpFatigueExpireDate: Date?, lastJumpDate: Date?, lastUpdateDate: Date?) {
+				self.jumpFatigueExpireDate = jumpFatigueExpireDate
+				self.lastJumpDate = lastJumpDate
+				self.lastUpdateDate = lastUpdateDate
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: jumpFatigueExpireDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: lastJumpDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: lastUpdateDate?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.Fatigue, rhs: Character.Fatigue) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case jumpFatigueExpireDate = "jump_fatigue_expire_date"
+				case lastJumpDate = "last_jump_date"
+				case lastUpdateDate = "last_update_date"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .jumpFatigueExpireDate: return DateFormatter.esiDateTimeFormatter
+						case .lastJumpDate: return DateFormatter.esiDateTimeFormatter
+						case .lastUpdateDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -3335,6 +3235,7 @@ public extension ESI {
 				case structureDestroyed = "StructureDestroyed"
 				case structureFuelAlert = "StructureFuelAlert"
 				case structureItemsDelivered = "StructureItemsDelivered"
+				case structureItemsMovedToSafety = "StructureItemsMovedToSafety"
 				case structureLostArmor = "StructureLostArmor"
 				case structureLostShields = "StructureLostShields"
 				case structureOnline = "StructureOnline"
@@ -3343,6 +3244,8 @@ public extension ESI {
 				case structureUnderAttack = "StructureUnderAttack"
 				case structureWentHighPower = "StructureWentHighPower"
 				case structureWentLowPower = "StructureWentLowPower"
+				case structuresJobsCancelled = "StructuresJobsCancelled"
+				case structuresJobsPaused = "StructuresJobsPaused"
 				case structuresReinforcementChanged = "StructuresReinforcementChanged"
 				case towerAlertMsg = "TowerAlertMsg"
 				case towerResourceAlertMsg = "TowerResourceAlertMsg"
@@ -3424,39 +3327,59 @@ public extension ESI {
 		}
 		
 		
-		public struct Affiliation: Codable, Hashable {
+		public struct GetCharactersCharacterIDPortraitNotFound: Codable, Hashable {
 			
 			
-			public var allianceID: Int?
-			public var characterID: Int
-			public var corporationID: Int
-			public var factionID: Int?
+			public var error: String?
 			
-			public init(allianceID: Int?, characterID: Int, corporationID: Int, factionID: Int?) {
-				self.allianceID = allianceID
-				self.characterID = characterID
-				self.corporationID = corporationID
-				self.factionID = factionID
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: allianceID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: characterID.hashValue)
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: factionID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Character.Affiliation, rhs: Character.Affiliation) -> Bool {
+			public static func ==(lhs: Character.GetCharactersCharacterIDPortraitNotFound, rhs: Character.GetCharactersCharacterIDPortraitNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case characterID = "character_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostCharactersAffiliationNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Character.PostCharactersAffiliationNotFound, rhs: Character.PostCharactersAffiliationNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -15,45 +15,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listIndustryFacilities(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Industry.Facilities]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Industry.Facilities]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/industry/facilities/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.Facilities]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func observedCorporationMining(corporationID: Int, ifNoneMatch: String? = nil, observerID: Int64, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversObserverIDOk]>>()
@@ -72,7 +33,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -99,51 +60,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func characterMiningLedger(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
-			guard scopes.contains("esi-industry.read_character_mining.v1") else {
-				try! promise.fail(ESIError.forbidden)
-				return promise.future
-			}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = session!.baseURL + "/v1/characters/\(characterID)/mining/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCharactersCharacterIDMiningOk]>) in
-					promise.set(result: response.result, cached: 600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func moonExtractionTimers(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningExtractionsOk]>>()
@@ -162,7 +78,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -189,6 +105,90 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func listSolarSystemCostIndices(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Industry.SolarSystemCostIndices]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Industry.SolarSystemCostIndices]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/industry/systems/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.SolarSystemCostIndices]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func characterMiningLedger(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Industry.GetCharactersCharacterIDMiningOk]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			let scopes = (session?.adapter as? OAuth2Helper)?.token.scopes ?? []
+			guard scopes.contains("esi-industry.read_character_mining.v1") else {
+				try! promise.fail(ESIError.forbidden)
+				return promise.future
+			}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = session!.baseURL + "/v1/characters/\(characterID)/mining/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.GetCharactersCharacterIDMiningOk]>) in
+					promise.set(result: response.result, cached: 600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func listCharacterIndustryJobs(characterID: Int, ifNoneMatch: String? = nil, includeCompleted: Bool? = nil) -> Future<ESI.Result<[Industry.Job]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.Job]>>()
@@ -207,7 +207,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -234,6 +234,45 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func listIndustryFacilities(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Industry.Facilities]>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<[Industry.Facilities]>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/industry/facilities/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<[Industry.Facilities]>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func corporationMiningObservers(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil) -> Future<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>> {
 			var session = sessionManager
 			let promise = Promise<ESI.Result<[Industry.GetCorporationCorporationIDMiningObserversOk]>>()
@@ -252,7 +291,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -297,7 +336,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -326,83 +365,50 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func listSolarSystemCostIndices(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Industry.SolarSystemCostIndices]>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<[Industry.SolarSystemCostIndices]>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/industry/systems/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Industry.SolarSystemCostIndices]>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
 		
-		
-		public struct GetCharactersCharacterIDMiningOk: Codable, Hashable {
+		public struct GetCorporationCorporationIDMiningExtractionsOk: Codable, Hashable {
 			
 			
-			public var date: Date
-			public var quantity: Int64
-			public var solarSystemID: Int
-			public var typeID: Int
+			public var chunkArrivalTime: Date
+			public var extractionStartTime: Date
+			public var moonID: Int
+			public var naturalDecayTime: Date
+			public var structureID: Int64
 			
-			public init(date: Date, quantity: Int64, solarSystemID: Int, typeID: Int) {
-				self.date = date
-				self.quantity = quantity
-				self.solarSystemID = solarSystemID
-				self.typeID = typeID
+			public init(chunkArrivalTime: Date, extractionStartTime: Date, moonID: Int, naturalDecayTime: Date, structureID: Int64) {
+				self.chunkArrivalTime = chunkArrivalTime
+				self.extractionStartTime = extractionStartTime
+				self.moonID = moonID
+				self.naturalDecayTime = naturalDecayTime
+				self.structureID = structureID
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: date.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: chunkArrivalTime.hashValue)
+				hashCombine(seed: &hash, value: extractionStartTime.hashValue)
+				hashCombine(seed: &hash, value: moonID.hashValue)
+				hashCombine(seed: &hash, value: naturalDecayTime.hashValue)
+				hashCombine(seed: &hash, value: structureID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Industry.GetCharactersCharacterIDMiningOk, rhs: Industry.GetCharactersCharacterIDMiningOk) -> Bool {
+			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningExtractionsOk, rhs: Industry.GetCorporationCorporationIDMiningExtractionsOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case date
-				case quantity
-				case solarSystemID = "solar_system_id"
-				case typeID = "type_id"
+				case chunkArrivalTime = "chunk_arrival_time"
+				case extractionStartTime = "extraction_start_time"
+				case moonID = "moon_id"
+				case naturalDecayTime = "natural_decay_time"
+				case structureID = "structure_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .date: return DateFormatter.esiDateFormatter
+						case .chunkArrivalTime: return DateFormatter.esiDateTimeFormatter
+						case .extractionStartTime: return DateFormatter.esiDateTimeFormatter
+						case .naturalDecayTime: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -410,47 +416,118 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationCorporationIDMiningObserversOk: Codable, Hashable {
+		public struct Job: Codable, Hashable {
 			
-			public enum GetCorporationCorporationIDMiningObserversObserverType: String, Codable, HTTPQueryable {
-				case structure = "structure"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
-			public var lastUpdated: Date
-			public var observerID: Int64
-			public var observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType
+			public var activityID: Int
+			public var blueprintID: Int64
+			public var blueprintLocationID: Int64
+			public var blueprintTypeID: Int
+			public var completedCharacterID: Int?
+			public var completedDate: Date?
+			public var cost: Double?
+			public var duration: Int
+			public var endDate: Date
+			public var facilityID: Int64
+			public var installerID: Int
+			public var jobID: Int
+			public var licensedRuns: Int?
+			public var outputLocationID: Int64
+			public var pauseDate: Date?
+			public var probability: Float?
+			public var productTypeID: Int?
+			public var runs: Int
+			public var startDate: Date
+			public var stationID: Int64
+			public var status: Industry.JobStatus
+			public var successfulRuns: Int?
 			
-			public init(lastUpdated: Date, observerID: Int64, observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType) {
-				self.lastUpdated = lastUpdated
-				self.observerID = observerID
-				self.observerType = observerType
+			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: Industry.JobStatus, successfulRuns: Int?) {
+				self.activityID = activityID
+				self.blueprintID = blueprintID
+				self.blueprintLocationID = blueprintLocationID
+				self.blueprintTypeID = blueprintTypeID
+				self.completedCharacterID = completedCharacterID
+				self.completedDate = completedDate
+				self.cost = cost
+				self.duration = duration
+				self.endDate = endDate
+				self.facilityID = facilityID
+				self.installerID = installerID
+				self.jobID = jobID
+				self.licensedRuns = licensedRuns
+				self.outputLocationID = outputLocationID
+				self.pauseDate = pauseDate
+				self.probability = probability
+				self.productTypeID = productTypeID
+				self.runs = runs
+				self.startDate = startDate
+				self.stationID = stationID
+				self.status = status
+				self.successfulRuns = successfulRuns
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: lastUpdated.hashValue)
-				hashCombine(seed: &hash, value: observerID.hashValue)
-				hashCombine(seed: &hash, value: observerType.hashValue)
+				hashCombine(seed: &hash, value: activityID.hashValue)
+				hashCombine(seed: &hash, value: blueprintID.hashValue)
+				hashCombine(seed: &hash, value: blueprintLocationID.hashValue)
+				hashCombine(seed: &hash, value: blueprintTypeID.hashValue)
+				hashCombine(seed: &hash, value: completedCharacterID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: completedDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: cost?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: duration.hashValue)
+				hashCombine(seed: &hash, value: endDate.hashValue)
+				hashCombine(seed: &hash, value: facilityID.hashValue)
+				hashCombine(seed: &hash, value: installerID.hashValue)
+				hashCombine(seed: &hash, value: jobID.hashValue)
+				hashCombine(seed: &hash, value: licensedRuns?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: outputLocationID.hashValue)
+				hashCombine(seed: &hash, value: pauseDate?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: probability?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: productTypeID?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: runs.hashValue)
+				hashCombine(seed: &hash, value: startDate.hashValue)
+				hashCombine(seed: &hash, value: stationID.hashValue)
+				hashCombine(seed: &hash, value: status.hashValue)
+				hashCombine(seed: &hash, value: successfulRuns?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningObserversOk, rhs: Industry.GetCorporationCorporationIDMiningObserversOk) -> Bool {
+			public static func ==(lhs: Industry.Job, rhs: Industry.Job) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastUpdated = "last_updated"
-				case observerID = "observer_id"
-				case observerType = "observer_type"
+				case activityID = "activity_id"
+				case blueprintID = "blueprint_id"
+				case blueprintLocationID = "blueprint_location_id"
+				case blueprintTypeID = "blueprint_type_id"
+				case completedCharacterID = "completed_character_id"
+				case completedDate = "completed_date"
+				case cost
+				case duration
+				case endDate = "end_date"
+				case facilityID = "facility_id"
+				case installerID = "installer_id"
+				case jobID = "job_id"
+				case licensedRuns = "licensed_runs"
+				case outputLocationID = "output_location_id"
+				case pauseDate = "pause_date"
+				case probability
+				case productTypeID = "product_type_id"
+				case runs
+				case startDate = "start_date"
+				case stationID = "station_id"
+				case status
+				case successfulRuns = "successful_runs"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .lastUpdated: return DateFormatter.esiDateFormatter
+						case .completedDate: return DateFormatter.esiDateTimeFormatter
+						case .endDate: return DateFormatter.esiDateTimeFormatter
+						case .pauseDate: return DateFormatter.esiDateTimeFormatter
+						case .startDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -545,145 +622,43 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationCorporationIDMiningExtractionsOk: Codable, Hashable {
+		public struct GetCorporationCorporationIDMiningObserversOk: Codable, Hashable {
 			
-			
-			public var chunkArrivalTime: Date
-			public var extractionStartTime: Date
-			public var moonID: Int
-			public var naturalDecayTime: Date
-			public var structureID: Int64
-			
-			public init(chunkArrivalTime: Date, extractionStartTime: Date, moonID: Int, naturalDecayTime: Date, structureID: Int64) {
-				self.chunkArrivalTime = chunkArrivalTime
-				self.extractionStartTime = extractionStartTime
-				self.moonID = moonID
-				self.naturalDecayTime = naturalDecayTime
-				self.structureID = structureID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: chunkArrivalTime.hashValue)
-				hashCombine(seed: &hash, value: extractionStartTime.hashValue)
-				hashCombine(seed: &hash, value: moonID.hashValue)
-				hashCombine(seed: &hash, value: naturalDecayTime.hashValue)
-				hashCombine(seed: &hash, value: structureID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningExtractionsOk, rhs: Industry.GetCorporationCorporationIDMiningExtractionsOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case chunkArrivalTime = "chunk_arrival_time"
-				case extractionStartTime = "extraction_start_time"
-				case moonID = "moon_id"
-				case naturalDecayTime = "natural_decay_time"
-				case structureID = "structure_id"
+			public enum GetCorporationCorporationIDMiningObserversObserverType: String, Codable, HTTPQueryable {
+				case structure = "structure"
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .chunkArrivalTime: return DateFormatter.esiDateTimeFormatter
-						case .extractionStartTime: return DateFormatter.esiDateTimeFormatter
-						case .naturalDecayTime: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
+				public var httpQuery: String? {
+					return rawValue
 				}
-			}
-		}
-		
-		
-		public struct Facilities: Codable, Hashable {
-			
-			
-			public var facilityID: Int64
-			public var ownerID: Int
-			public var regionID: Int
-			public var solarSystemID: Int
-			public var tax: Float?
-			public var typeID: Int
-			
-			public init(facilityID: Int64, ownerID: Int, regionID: Int, solarSystemID: Int, tax: Float?, typeID: Int) {
-				self.facilityID = facilityID
-				self.ownerID = ownerID
-				self.regionID = regionID
-				self.solarSystemID = solarSystemID
-				self.tax = tax
-				self.typeID = typeID
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: facilityID.hashValue)
-				hashCombine(seed: &hash, value: ownerID.hashValue)
-				hashCombine(seed: &hash, value: regionID.hashValue)
-				hashCombine(seed: &hash, value: solarSystemID.hashValue)
-				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: typeID.hashValue)
-				return hash
-			}
-			
-			public static func ==(lhs: Industry.Facilities, rhs: Industry.Facilities) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case facilityID = "facility_id"
-				case ownerID = "owner_id"
-				case regionID = "region_id"
-				case solarSystemID = "solar_system_id"
-				case tax
-				case typeID = "type_id"
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
 			}
-		}
-		
-		
-		public struct GetCorporationCorporationIDMiningObserversObserverIDOk: Codable, Hashable {
 			
-			
-			public var characterID: Int
 			public var lastUpdated: Date
-			public var quantity: Int64
-			public var recordedCorporationID: Int
-			public var typeID: Int
+			public var observerID: Int64
+			public var observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType
 			
-			public init(characterID: Int, lastUpdated: Date, quantity: Int64, recordedCorporationID: Int, typeID: Int) {
-				self.characterID = characterID
+			public init(lastUpdated: Date, observerID: Int64, observerType: Industry.GetCorporationCorporationIDMiningObserversOk.GetCorporationCorporationIDMiningObserversObserverType) {
 				self.lastUpdated = lastUpdated
-				self.quantity = quantity
-				self.recordedCorporationID = recordedCorporationID
-				self.typeID = typeID
+				self.observerID = observerID
+				self.observerType = observerType
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: characterID.hashValue)
 				hashCombine(seed: &hash, value: lastUpdated.hashValue)
-				hashCombine(seed: &hash, value: quantity.hashValue)
-				hashCombine(seed: &hash, value: recordedCorporationID.hashValue)
-				hashCombine(seed: &hash, value: typeID.hashValue)
+				hashCombine(seed: &hash, value: observerID.hashValue)
+				hashCombine(seed: &hash, value: observerType.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk, rhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk) -> Bool {
+			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningObserversOk, rhs: Industry.GetCorporationCorporationIDMiningObserversOk) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case characterID = "character_id"
 				case lastUpdated = "last_updated"
-				case quantity
-				case recordedCorporationID = "recorded_corporation_id"
-				case typeID = "type_id"
+				case observerID = "observer_id"
+				case observerType = "observer_type"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -814,6 +789,50 @@ public extension ESI {
 		}
 		
 		
+		public struct GetCharactersCharacterIDMiningOk: Codable, Hashable {
+			
+			
+			public var date: Date
+			public var quantity: Int64
+			public var solarSystemID: Int
+			public var typeID: Int
+			
+			public init(date: Date, quantity: Int64, solarSystemID: Int, typeID: Int) {
+				self.date = date
+				self.quantity = quantity
+				self.solarSystemID = solarSystemID
+				self.typeID = typeID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: date.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Industry.GetCharactersCharacterIDMiningOk, rhs: Industry.GetCharactersCharacterIDMiningOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case date
+				case quantity
+				case solarSystemID = "solar_system_id"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public enum JobStatus: String, Codable, HTTPQueryable {
 			case active = "active"
 			case cancelled = "cancelled"
@@ -829,118 +848,99 @@ public extension ESI {
 		}
 		
 		
-		public struct Job: Codable, Hashable {
+		public struct Facilities: Codable, Hashable {
 			
 			
-			public var activityID: Int
-			public var blueprintID: Int64
-			public var blueprintLocationID: Int64
-			public var blueprintTypeID: Int
-			public var completedCharacterID: Int?
-			public var completedDate: Date?
-			public var cost: Double?
-			public var duration: Int
-			public var endDate: Date
 			public var facilityID: Int64
-			public var installerID: Int
-			public var jobID: Int
-			public var licensedRuns: Int?
-			public var outputLocationID: Int64
-			public var pauseDate: Date?
-			public var probability: Float?
-			public var productTypeID: Int?
-			public var runs: Int
-			public var startDate: Date
-			public var stationID: Int64
-			public var status: Industry.JobStatus
-			public var successfulRuns: Int?
+			public var ownerID: Int
+			public var regionID: Int
+			public var solarSystemID: Int
+			public var tax: Float?
+			public var typeID: Int
 			
-			public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Float?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: Industry.JobStatus, successfulRuns: Int?) {
-				self.activityID = activityID
-				self.blueprintID = blueprintID
-				self.blueprintLocationID = blueprintLocationID
-				self.blueprintTypeID = blueprintTypeID
-				self.completedCharacterID = completedCharacterID
-				self.completedDate = completedDate
-				self.cost = cost
-				self.duration = duration
-				self.endDate = endDate
+			public init(facilityID: Int64, ownerID: Int, regionID: Int, solarSystemID: Int, tax: Float?, typeID: Int) {
 				self.facilityID = facilityID
-				self.installerID = installerID
-				self.jobID = jobID
-				self.licensedRuns = licensedRuns
-				self.outputLocationID = outputLocationID
-				self.pauseDate = pauseDate
-				self.probability = probability
-				self.productTypeID = productTypeID
-				self.runs = runs
-				self.startDate = startDate
-				self.stationID = stationID
-				self.status = status
-				self.successfulRuns = successfulRuns
+				self.ownerID = ownerID
+				self.regionID = regionID
+				self.solarSystemID = solarSystemID
+				self.tax = tax
+				self.typeID = typeID
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: activityID.hashValue)
-				hashCombine(seed: &hash, value: blueprintID.hashValue)
-				hashCombine(seed: &hash, value: blueprintLocationID.hashValue)
-				hashCombine(seed: &hash, value: blueprintTypeID.hashValue)
-				hashCombine(seed: &hash, value: completedCharacterID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: completedDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: cost?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: duration.hashValue)
-				hashCombine(seed: &hash, value: endDate.hashValue)
 				hashCombine(seed: &hash, value: facilityID.hashValue)
-				hashCombine(seed: &hash, value: installerID.hashValue)
-				hashCombine(seed: &hash, value: jobID.hashValue)
-				hashCombine(seed: &hash, value: licensedRuns?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: outputLocationID.hashValue)
-				hashCombine(seed: &hash, value: pauseDate?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: probability?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: productTypeID?.hashValue ?? 0)
-				hashCombine(seed: &hash, value: runs.hashValue)
-				hashCombine(seed: &hash, value: startDate.hashValue)
-				hashCombine(seed: &hash, value: stationID.hashValue)
-				hashCombine(seed: &hash, value: status.hashValue)
-				hashCombine(seed: &hash, value: successfulRuns?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: ownerID.hashValue)
+				hashCombine(seed: &hash, value: regionID.hashValue)
+				hashCombine(seed: &hash, value: solarSystemID.hashValue)
+				hashCombine(seed: &hash, value: tax?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: typeID.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Industry.Job, rhs: Industry.Job) -> Bool {
+			public static func ==(lhs: Industry.Facilities, rhs: Industry.Facilities) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case activityID = "activity_id"
-				case blueprintID = "blueprint_id"
-				case blueprintLocationID = "blueprint_location_id"
-				case blueprintTypeID = "blueprint_type_id"
-				case completedCharacterID = "completed_character_id"
-				case completedDate = "completed_date"
-				case cost
-				case duration
-				case endDate = "end_date"
 				case facilityID = "facility_id"
-				case installerID = "installer_id"
-				case jobID = "job_id"
-				case licensedRuns = "licensed_runs"
-				case outputLocationID = "output_location_id"
-				case pauseDate = "pause_date"
-				case probability
-				case productTypeID = "product_type_id"
-				case runs
-				case startDate = "start_date"
-				case stationID = "station_id"
-				case status
-				case successfulRuns = "successful_runs"
+				case ownerID = "owner_id"
+				case regionID = "region_id"
+				case solarSystemID = "solar_system_id"
+				case tax
+				case typeID = "type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .completedDate: return DateFormatter.esiDateTimeFormatter
-						case .endDate: return DateFormatter.esiDateTimeFormatter
-						case .pauseDate: return DateFormatter.esiDateTimeFormatter
-						case .startDate: return DateFormatter.esiDateTimeFormatter
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCorporationCorporationIDMiningObserversObserverIDOk: Codable, Hashable {
+			
+			
+			public var characterID: Int
+			public var lastUpdated: Date
+			public var quantity: Int64
+			public var recordedCorporationID: Int
+			public var typeID: Int
+			
+			public init(characterID: Int, lastUpdated: Date, quantity: Int64, recordedCorporationID: Int, typeID: Int) {
+				self.characterID = characterID
+				self.lastUpdated = lastUpdated
+				self.quantity = quantity
+				self.recordedCorporationID = recordedCorporationID
+				self.typeID = typeID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: characterID.hashValue)
+				hashCombine(seed: &hash, value: lastUpdated.hashValue)
+				hashCombine(seed: &hash, value: quantity.hashValue)
+				hashCombine(seed: &hash, value: recordedCorporationID.hashValue)
+				hashCombine(seed: &hash, value: typeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk, rhs: Industry.GetCorporationCorporationIDMiningObserversObserverIDOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case lastUpdated = "last_updated"
+				case quantity
+				case recordedCorporationID = "recorded_corporation_id"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .lastUpdated: return DateFormatter.esiDateFormatter
 						default: return nil
 					}
 				}

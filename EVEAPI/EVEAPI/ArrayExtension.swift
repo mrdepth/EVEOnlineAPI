@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension Array: Hashable where Element: Hashable {
-	public var hashValue: Int {
-		return reduce(into: 1) { hashCombine(seed: &$0, value: $1.hashValue)}
-	}
-}
-
+//extension Array: Hashable where Element: Hashable {
+//	public var hashValue: Int {
+//		return reduce(into: 1) { hashCombine(seed: &$0, value: $1.hashValue)}
+//	}
+//}
+//

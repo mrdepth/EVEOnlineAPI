@@ -29,7 +29,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -72,7 +72,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -97,31 +97,27 @@ public extension ESI {
 		}
 		
 		
-		public struct Point: Codable, Hashable {
+		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
 			
 			
-			public var corporationID: Int
-			public var loyaltyPoints: Int
+			public var error: String?
 			
-			public init(corporationID: Int, loyaltyPoints: Int) {
-				self.corporationID = corporationID
-				self.loyaltyPoints = loyaltyPoints
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: corporationID.hashValue)
-				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
 				return hash
 			}
 			
-			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
+			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case loyaltyPoints = "loyalty_points"
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -223,27 +219,31 @@ public extension ESI {
 		}
 		
 		
-		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
+		public struct Point: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var corporationID: Int
+			public var loyaltyPoints: Int
 			
-			public init(error: String?) {
-				self.error = error
+			public init(corporationID: Int, loyaltyPoints: Int) {
+				self.corporationID = corporationID
+				self.loyaltyPoints = loyaltyPoints
 			}
 			
 			public var hashValue: Int {
 				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				hashCombine(seed: &hash, value: corporationID.hashValue)
+				hashCombine(seed: &hash, value: loyaltyPoints.hashValue)
 				return hash
 			}
 			
-			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
+			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case corporationID = "corporation_id"
+				case loyaltyPoints = "loyalty_points"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -15,9 +15,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getEffectInformation(effectID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Effect>> {
+		public func getAttributes(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<Dogma.Effect>>()
+			let promise = Promise<ESI.Result<[Int]>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -29,14 +29,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v2/dogma/effects/\(effectID)/"
+			let url = session!.baseURL + "/v1/dogma/attributes/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -45,46 +45,7 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Dogma.Effect>) in
-					promise.set(result: response.result, cached: 3600.0)
-					session = nil
-				}
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAttributeInformation(attributeID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Attribute>> {
-			var session = sessionManager
-			let promise = Promise<ESI.Result<Dogma.Attribute>>()
-			guard session != nil else {
-				try! promise.fail(ESIError.internalError)
-				return promise.future
-			}
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
-			
-			
-			let url = session!.baseURL + "/v1/dogma/attributes/\(attributeID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			session!.perform { () -> DataRequest in
-				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
-					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<Dogma.Attribute>) in
+				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
@@ -107,7 +68,7 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
@@ -132,9 +93,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getAttributes(ifNoneMatch: String? = nil) -> Future<ESI.Result<[Int]>> {
+		public func getEffectInformation(effectID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Effect>> {
 			var session = sessionManager
-			let promise = Promise<ESI.Result<[Int]>>()
+			let promise = Promise<ESI.Result<Dogma.Effect>>()
 			guard session != nil else {
 				try! promise.fail(ESIError.internalError)
 				return promise.future
@@ -146,14 +107,14 @@ public extension ESI {
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
 			if let v = ifNoneMatch {
-				headers["If-None-Match"] = String(v)
+				headers["If-None-Match"] = String(describing: v)
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
 			
 			
-			let url = session!.baseURL + "/v1/dogma/attributes/"
+			let url = session!.baseURL + "/v2/dogma/effects/\(effectID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -162,12 +123,303 @@ public extension ESI {
 			session!.perform { () -> DataRequest in
 				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
 					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-				}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+				}.validateESI().responseESI { (response: DataResponse<Dogma.Effect>) in
 					promise.set(result: response.result, cached: 3600.0)
 					session = nil
 				}
 			}
 			return promise.future
+		}
+		
+		@discardableResult
+		public func getDynamicItemInformation(ifNoneMatch: String? = nil, itemID: Int64, typeID: Int) -> Future<ESI.Result<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/dogma/dynamic/items/\(typeID)/\(itemID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Dogma.GetDogmaDynamicItemsTypeIDItemIDOk>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAttributeInformation(attributeID: Int, ifNoneMatch: String? = nil) -> Future<ESI.Result<Dogma.Attribute>> {
+			var session = sessionManager
+			let promise = Promise<ESI.Result<Dogma.Attribute>>()
+			guard session != nil else {
+				try! promise.fail(ESIError.internalError)
+				return promise.future
+			}
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch {
+				headers["If-None-Match"] = String(describing: v)
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: session!.server.rawValue))
+			
+			
+			let url = session!.baseURL + "/v1/dogma/attributes/\(attributeID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			session!.perform { () -> DataRequest in
+				return session!.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers).downloadProgress { p in
+					progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+				}.validateESI().responseESI { (response: DataResponse<Dogma.Attribute>) in
+					promise.set(result: response.result, cached: 3600.0)
+					session = nil
+				}
+			}
+			return promise.future
+		}
+		
+		
+		public struct GetDogmaDynamicItemsTypeIDItemIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDNotFound, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetDogmaEffectsEffectIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Dogma.GetDogmaEffectsEffectIDNotFound, rhs: Dogma.GetDogmaEffectsEffectIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetDogmaDynamicItemsTypeIDItemIDOk: Codable, Hashable {
+			
+			public struct GetDogmaDynamicItemsTypeIDItemIDDogmaAttributes: Codable, Hashable {
+				
+				
+				public var attributeID: Int
+				public var value: Float
+				
+				public init(attributeID: Int, value: Float) {
+					self.attributeID = attributeID
+					self.value = value
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: attributeID.hashValue)
+					hashCombine(seed: &hash, value: value.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaAttributes, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaAttributes) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case attributeID = "attribute_id"
+					case value
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetDogmaDynamicItemsTypeIDItemIDDogmaEffects: Codable, Hashable {
+				
+				
+				public var effectID: Int
+				public var isDefault: Bool
+				
+				public init(effectID: Int, isDefault: Bool) {
+					self.effectID = effectID
+					self.isDefault = isDefault
+				}
+				
+				public var hashValue: Int {
+					var hash: Int = 0
+					hashCombine(seed: &hash, value: effectID.hashValue)
+					hashCombine(seed: &hash, value: isDefault.hashValue)
+					return hash
+				}
+				
+				public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects) -> Bool {
+					return lhs.hashValue == rhs.hashValue
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case effectID = "effect_id"
+					case isDefault = "is_default"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public var createdBy: Int
+			public var dogmaAttributes: [Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaAttributes]
+			public var dogmaEffects: [Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects]
+			public var mutatorTypeID: Int
+			public var sourceTypeID: Int
+			
+			public init(createdBy: Int, dogmaAttributes: [Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaAttributes], dogmaEffects: [Dogma.GetDogmaDynamicItemsTypeIDItemIDOk.GetDogmaDynamicItemsTypeIDItemIDDogmaEffects], mutatorTypeID: Int, sourceTypeID: Int) {
+				self.createdBy = createdBy
+				self.dogmaAttributes = dogmaAttributes
+				self.dogmaEffects = dogmaEffects
+				self.mutatorTypeID = mutatorTypeID
+				self.sourceTypeID = sourceTypeID
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: createdBy.hashValue)
+				self.dogmaAttributes.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				self.dogmaEffects.forEach {hashCombine(seed: &hash, value: $0.hashValue)}
+				hashCombine(seed: &hash, value: mutatorTypeID.hashValue)
+				hashCombine(seed: &hash, value: sourceTypeID.hashValue)
+				return hash
+			}
+			
+			public static func ==(lhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk, rhs: Dogma.GetDogmaDynamicItemsTypeIDItemIDOk) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case createdBy = "created_by"
+				case dogmaAttributes = "dogma_attributes"
+				case dogmaEffects = "dogma_effects"
+				case mutatorTypeID = "mutator_type_id"
+				case sourceTypeID = "source_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetDogmaAttributesAttributeIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public var hashValue: Int {
+				var hash: Int = 0
+				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
+				return hash
+			}
+			
+			public static func ==(lhs: Dogma.GetDogmaAttributesAttributeIDNotFound, rhs: Dogma.GetDogmaAttributesAttributeIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -333,38 +585,6 @@ public extension ESI {
 		}
 		
 		
-		public struct GetDogmaAttributesAttributeIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Dogma.GetDogmaAttributesAttributeIDNotFound, rhs: Dogma.GetDogmaAttributesAttributeIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Attribute: Codable, Hashable {
 			
 			
@@ -422,38 +642,6 @@ public extension ESI {
 				case published
 				case stackable
 				case unitID = "unit_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetDogmaEffectsEffectIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public var hashValue: Int {
-				var hash: Int = 0
-				hashCombine(seed: &hash, value: error?.hashValue ?? 0)
-				return hash
-			}
-			
-			public static func ==(lhs: Dogma.GetDogmaEffectsEffectIDNotFound, rhs: Dogma.GetDogmaEffectsEffectIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -68,7 +68,7 @@ class Parameter {
 		return isRequired ?
 			"headers[\"\(name)\"] = String(\(parameterName))" :
 			"if let v = \(parameterName) {\n" +
-		"headers[\"\(name)\"] = String(v)\n}"
+		"headers[\"\(name)\"] = String(describing: v)\n}"
 	}
 	
 	var queryString: String {
