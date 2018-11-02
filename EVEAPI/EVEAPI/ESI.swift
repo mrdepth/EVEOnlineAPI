@@ -338,6 +338,12 @@ extension DataRequest {
 			return response(queue: queue, responseSerializer: Int64ResponseSerializer(), completionHandler: completionHandler)
 	}
 
+	@discardableResult
+	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<String>) -> Void)
+		-> Self {
+			return response(queue: queue, responseSerializer: StringResponseSerializer(), completionHandler: completionHandler)
+	}
+
 }
 
 public extension ESI.Scope {
