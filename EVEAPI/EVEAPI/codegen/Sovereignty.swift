@@ -12,6 +12,37 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
+		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/sovereignty/campaigns/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
+				promise.set(response: response, cached: 5.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.System]>> {
 			
 			
@@ -73,37 +104,6 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/sovereignty/campaigns/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
-		}
-		
 		
 		public struct Structure: Codable, Hashable {
 			
@@ -150,19 +150,42 @@ public extension ESI {
 		}
 		
 		
-		public struct Campaign: Codable, Hashable {
+		public struct System: Codable, Hashable {
 			
-			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
-				case ihubDefense = "ihub_defense"
-				case stationDefense = "station_defense"
-				case stationFreeport = "station_freeport"
-				case tcuDefense = "tcu_defense"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
+			
+			public var allianceID: Int?
+			public var corporationID: Int?
+			public var factionID: Int?
+			public var systemID: Int
+			
+			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+				self.allianceID = allianceID
+				self.corporationID = corporationID
+				self.factionID = factionID
+				self.systemID = systemID
 			}
+			
+			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Campaign: Codable, Hashable {
 			
 			public struct GetSovereigntyCampaignsParticipants: Codable, Hashable {
 				
@@ -190,6 +213,18 @@ public extension ESI {
 						}
 					}
 				}
+			}
+			
+			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
+				case ihubDefense = "ihub_defense"
+				case stationDefense = "station_defense"
+				case stationFreeport = "station_freeport"
+				case tcuDefense = "tcu_defense"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
 			}
 			
 			public var attackersScore: Float?
@@ -235,41 +270,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .startTime: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct System: Codable, Hashable {
-			
-			
-			public var allianceID: Int?
-			public var corporationID: Int?
-			public var factionID: Int?
-			public var systemID: Int
-			
-			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
-				self.allianceID = allianceID
-				self.corporationID = corporationID
-				self.factionID = factionID
-				self.systemID = systemID
-			}
-			
-			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
 						default: return nil
 					}
 				}

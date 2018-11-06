@@ -50,9 +50,10 @@ extension Promise {
 		do {
 			switch response.result {
 			case let .success(value):
-				let expires = (response.response?.allHeaderFields["Expires"] as? String).flatMap({DateFormatter.rfc822DateFormatter.date(from: $0)}) ?? cached.map({Date.init(timeIntervalSinceNow: $0)})
+				let metadata = response.response?.allHeaderFields
+				let expires = (metadata?["Expires"] as? String).flatMap({DateFormatter.rfc822DateFormatter.date(from: $0)}) ?? cached.map({Date.init(timeIntervalSinceNow: $0)})
 				
-				try fulfill(ESI.Result<T>(value: value, expires: expires))
+				try fulfill(ESI.Result<T>(value: value, expires: expires, metadata: metadata as? [String: String]))
 
 				
 			case let .failure(error):

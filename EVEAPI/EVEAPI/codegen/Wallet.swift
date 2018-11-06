@@ -80,6 +80,38 @@ public extension ESI {
 		}
 		
 		@discardableResult
+		public func getCharactersWalletBalance(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Double>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/wallet/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Double>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Double>) in
+				promise.set(response: response, cached: 120.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getCorporationWalletJournal(corporationID: Int, division: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Wallet.CorpWalletsJournalItem]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -109,38 +141,6 @@ public extension ESI {
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<[Wallet.CorpWalletsJournalItem]>) in
 				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharactersWalletBalance(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Double>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-wallet.read_character_wallet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/wallet/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Double>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Double>) in
-				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}
@@ -209,56 +209,6 @@ public extension ESI {
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
-		}
-		
-		
-		public struct CorpTransaction: Codable, Hashable {
-			
-			
-			public var clientID: Int
-			public var date: Date
-			public var isBuy: Bool
-			public var journalRefID: Int64
-			public var locationID: Int64
-			public var quantity: Int
-			public var transactionID: Int64
-			public var typeID: Int
-			public var unitPrice: Double
-			
-			public init(clientID: Int, date: Date, isBuy: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
-				self.clientID = clientID
-				self.date = date
-				self.isBuy = isBuy
-				self.journalRefID = journalRefID
-				self.locationID = locationID
-				self.quantity = quantity
-				self.transactionID = transactionID
-				self.typeID = typeID
-				self.unitPrice = unitPrice
-			}
-			
-			public static func ==(lhs: Wallet.CorpTransaction, rhs: Wallet.CorpTransaction) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case clientID = "client_id"
-				case date
-				case isBuy = "is_buy"
-				case journalRefID = "journal_ref_id"
-				case locationID = "location_id"
-				case quantity
-				case transactionID = "transaction_id"
-				case typeID = "type_id"
-				case unitPrice = "unit_price"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .date: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -385,35 +335,6 @@ public extension ESI {
 				return rawValue
 			}
 			
-		}
-		
-		
-		public struct Balance: Codable, Hashable {
-			
-			
-			public var balance: Double
-			public var division: Int
-			
-			public init(balance: Double, division: Int) {
-				self.balance = balance
-				self.division = division
-			}
-			
-			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case balance
-				case division
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -551,6 +472,56 @@ public extension ESI {
 		}
 		
 		
+		public struct CorpTransaction: Codable, Hashable {
+			
+			
+			public var clientID: Int
+			public var date: Date
+			public var isBuy: Bool
+			public var journalRefID: Int64
+			public var locationID: Int64
+			public var quantity: Int
+			public var transactionID: Int64
+			public var typeID: Int
+			public var unitPrice: Double
+			
+			public init(clientID: Int, date: Date, isBuy: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
+				self.clientID = clientID
+				self.date = date
+				self.isBuy = isBuy
+				self.journalRefID = journalRefID
+				self.locationID = locationID
+				self.quantity = quantity
+				self.transactionID = transactionID
+				self.typeID = typeID
+				self.unitPrice = unitPrice
+			}
+			
+			public static func ==(lhs: Wallet.CorpTransaction, rhs: Wallet.CorpTransaction) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case clientID = "client_id"
+				case date
+				case isBuy = "is_buy"
+				case journalRefID = "journal_ref_id"
+				case locationID = "location_id"
+				case quantity
+				case transactionID = "transaction_id"
+				case typeID = "type_id"
+				case unitPrice = "unit_price"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct WalletJournalItem: Codable, Hashable {
 			
 			public enum GetCharactersCharacterIDWalletJournalContextIDType: String, Codable, HTTPQueryable {
@@ -625,6 +596,35 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Balance: Codable, Hashable {
+			
+			
+			public var balance: Double
+			public var division: Int
+			
+			public init(balance: Double, division: Int) {
+				self.balance = balance
+				self.division = division
+			}
+			
+			public static func ==(lhs: Wallet.Balance, rhs: Wallet.Balance) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case balance
+				case division
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

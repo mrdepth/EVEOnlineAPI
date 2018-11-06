@@ -44,38 +44,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/skillqueue/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Skills.CharacterAttributes>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -103,6 +71,38 @@ public extension ESI {
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
 				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v2/characters/\(characterID)/skillqueue/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
+				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}

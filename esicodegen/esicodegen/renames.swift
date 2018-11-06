@@ -19,6 +19,8 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDAssetsLocationFlag"	: "Flag",
 	"GetCorporationsCorporationIDAssetsOk"	: "CorpAsset",
 	"GetCorporationsCorporationIDAssetsLocationFlag"	: "Flag",
+	"PostCharactersCharacterIDAssetsNamesOk"	: "Name",
+	"PostCorporationsCorporationIDAssetsNamesOk"	: "Name",
 
 	//MARK: Bookmarks
 	"GetCharactersCharacterIDBookmarksFoldersOk"	: "Folder",

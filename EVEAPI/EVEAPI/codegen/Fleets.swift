@@ -12,140 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func createFleetInvitation(fleetID: Int64, invitation: Fleets.Invitation, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(invitation)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getFleetMembers(acceptLanguage: AcceptLanguage? = nil, fleetID: Int64, ifNoneMatch: String? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Fleets.Member]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.httpQuery {
-				headers["Accept-Language"] = v
-			}
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Fleets.Member]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Fleets.Member]>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func createFleetWing(fleetID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Fleets.WingCreated>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Fleets.WingCreated>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Fleets.WingCreated>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getFleetWings(acceptLanguage: AcceptLanguage? = nil, fleetID: Int64, ifNoneMatch: String? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Fleets.GetFleetsFleetIDWingsOk]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.httpQuery {
-				headers["Accept-Language"] = v
-			}
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Fleets.GetFleetsFleetIDWingsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Fleets.GetFleetsFleetIDWingsOk]>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getCharacterFleetInfo(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Fleets.GetCharactersCharacterIDFleetOk>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -173,216 +39,6 @@ public extension ESI {
 				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 			}.validateESI().responseESI { (response: DataResponse<Fleets.GetCharactersCharacterIDFleetOk>) in
 				promise.set(response: response, cached: 60.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func kickFleetMember(fleetID: Int64, memberID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/\(memberID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func moveFleetMember(fleetID: Int64, memberID: Int, movement: Fleets.Movement, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(movement)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/\(memberID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func deleteFleetWing(fleetID: Int64, wingID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func renameFleetWing(fleetID: Int64, naming: Fleets.Naming, wingID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(naming)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func deleteFleetSquad(fleetID: Int64, squadID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/squads/\(squadID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func renameFleetSquad(fleetID: Int64, naming: Fleets.Naming, squadID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(naming)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/squads/\(squadID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func createFleetSquad(fleetID: Int64, wingID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Fleets.SquadCreated>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/squads/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Fleets.SquadCreated>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Fleets.SquadCreated>) in
-				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
@@ -449,56 +105,348 @@ public extension ESI {
 			return promise.future
 		}
 		
-		
-		public struct DeleteFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
+		@discardableResult
+		public func moveFleetMember(fleetID: Int64, memberID: Int, movement: Fleets.Movement, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(movement)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			public var error: String?
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/\(memberID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
 			
-			public init(error: String?) {
-				self.error = error
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
 			}
-			
-			public static func ==(lhs: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound, rhs: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
+			return promise.future
 		}
 		
+		@discardableResult
+		public func kickFleetMember(fleetID: Int64, memberID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/\(memberID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
 		
-		public struct PutFleetsFleetIDMembersMemberIDUnprocessableEntity: Codable, Hashable {
+		@discardableResult
+		public func getFleetMembers(acceptLanguage: AcceptLanguage? = nil, fleetID: Int64, ifNoneMatch: String? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Fleets.Member]>> {
 			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
 			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage?.httpQuery {
+				headers["Accept-Language"] = v
+			}
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity, rhs: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity) -> Bool {
-				return lhs.hashValue == rhs.hashValue
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Fleets.Member]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Fleets.Member]>) in
+				promise.set(response: response, cached: 5.0)
 			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func createFleetInvitation(fleetID: Int64, invitation: Fleets.Invitation, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(invitation)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/members/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func renameFleetSquad(fleetID: Int64, naming: Fleets.Naming, squadID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(naming)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/squads/\(squadID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func deleteFleetSquad(fleetID: Int64, squadID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/squads/\(squadID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func renameFleetWing(fleetID: Int64, naming: Fleets.Naming, wingID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(naming)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func deleteFleetWing(fleetID: Int64, wingID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func createFleetSquad(fleetID: Int64, wingID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Fleets.SquadCreated>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/\(wingID)/squads/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Fleets.SquadCreated>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Fleets.SquadCreated>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getFleetWings(acceptLanguage: AcceptLanguage? = nil, fleetID: Int64, ifNoneMatch: String? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Fleets.GetFleetsFleetIDWingsOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.read_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = acceptLanguage?.httpQuery {
+				headers["Accept-Language"] = v
+			}
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = language?.httpQuery {
+				query.append(URLQueryItem(name: "language", value: v))
+			}
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Fleets.GetFleetsFleetIDWingsOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Fleets.GetFleetsFleetIDWingsOk]>) in
+				promise.set(response: response, cached: 5.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func createFleetWing(fleetID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Fleets.WingCreated>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-fleets.write_fleet.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/fleets/\(fleetID)/wings/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Fleets.WingCreated>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Fleets.WingCreated>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
 		}
 		
 		
@@ -528,21 +476,24 @@ public extension ESI {
 		}
 		
 		
-		public struct GetFleetsFleetIDNotFound: Codable, Hashable {
+		public struct FleetUpdate: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var isFreeMove: Bool?
+			public var motd: String?
 			
-			public init(error: String?) {
-				self.error = error
+			public init(isFreeMove: Bool?, motd: String?) {
+				self.isFreeMove = isFreeMove
+				self.motd = motd
 			}
 			
-			public static func ==(lhs: Fleets.GetFleetsFleetIDNotFound, rhs: Fleets.GetFleetsFleetIDNotFound) -> Bool {
+			public static func ==(lhs: Fleets.FleetUpdate, rhs: Fleets.FleetUpdate) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case isFreeMove = "is_free_move"
+				case motd
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -554,7 +505,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetFleetsFleetIDMembersNotFound: Codable, Hashable {
+		public struct PostFleetsFleetIDWingsWingIDSquadsNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -563,38 +514,12 @@ public extension ESI {
 				self.error = error
 			}
 			
-			public static func ==(lhs: Fleets.GetFleetsFleetIDMembersNotFound, rhs: Fleets.GetFleetsFleetIDMembersNotFound) -> Bool {
+			public static func ==(lhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound, rhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Naming: Codable, Hashable {
-			
-			
-			public var name: String
-			
-			public init(name: String) {
-				self.name = name
-			}
-			
-			public static func ==(lhs: Fleets.Naming, rhs: Fleets.Naming) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -616,234 +541,6 @@ public extension ESI {
 			}
 			
 			public static func ==(lhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.DeleteFleetsFleetIDMembersMemberIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PutFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound, rhs: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetFleetsFleetIDWingsNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Fleets.GetFleetsFleetIDWingsNotFound, rhs: Fleets.GetFleetsFleetIDWingsNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Invitation: Codable, Hashable {
-			
-			public enum PostFleetsFleetIDMembersRole: String, Codable, HTTPQueryable {
-				case fleetCommander = "fleet_commander"
-				case squadCommander = "squad_commander"
-				case squadMember = "squad_member"
-				case wingCommander = "wing_commander"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var characterID: Int
-			public var role: Fleets.Invitation.PostFleetsFleetIDMembersRole
-			public var squadID: Int64?
-			public var wingID: Int64?
-			
-			public init(characterID: Int, role: Fleets.Invitation.PostFleetsFleetIDMembersRole, squadID: Int64?, wingID: Int64?) {
-				self.characterID = characterID
-				self.role = role
-				self.squadID = squadID
-				self.wingID = wingID
-			}
-			
-			public static func ==(lhs: Fleets.Invitation, rhs: Fleets.Invitation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case characterID = "character_id"
-				case role
-				case squadID = "squad_id"
-				case wingID = "wing_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct SquadCreated: Codable, Hashable {
-			
-			
-			public var squadID: Int64
-			
-			public init(squadID: Int64) {
-				self.squadID = squadID
-			}
-			
-			public static func ==(lhs: Fleets.SquadCreated, rhs: Fleets.SquadCreated) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case squadID = "squad_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostFleetsFleetIDMembersNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersNotFound, rhs: Fleets.PostFleetsFleetIDMembersNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PutFleetsFleetIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDNotFound, rhs: Fleets.PutFleetsFleetIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PutFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDWingsWingIDNotFound, rhs: Fleets.PutFleetsFleetIDWingsWingIDNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PutFleetsFleetIDMembersMemberIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Fleets.PutFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.PutFleetsFleetIDMembersMemberIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -906,6 +603,251 @@ public extension ESI {
 		}
 		
 		
+		public struct Movement: Codable, Hashable {
+			
+			public enum PutFleetsFleetIDMembersMemberIDRole: String, Codable, HTTPQueryable {
+				case fleetCommander = "fleet_commander"
+				case squadCommander = "squad_commander"
+				case squadMember = "squad_member"
+				case wingCommander = "wing_commander"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole
+			public var squadID: Int64?
+			public var wingID: Int64?
+			
+			public init(role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole, squadID: Int64?, wingID: Int64?) {
+				self.role = role
+				self.squadID = squadID
+				self.wingID = wingID
+			}
+			
+			public static func ==(lhs: Fleets.Movement, rhs: Fleets.Movement) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case role
+				case squadID = "squad_id"
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Naming: Codable, Hashable {
+			
+			
+			public var name: String
+			
+			public init(name: String) {
+				self.name = name
+			}
+			
+			public static func ==(lhs: Fleets.Naming, rhs: Fleets.Naming) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PutFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.PutFleetsFleetIDWingsWingIDNotFound, rhs: Fleets.PutFleetsFleetIDWingsWingIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct SquadCreated: Codable, Hashable {
+			
+			
+			public var squadID: Int64
+			
+			public init(squadID: Int64) {
+				self.squadID = squadID
+			}
+			
+			public static func ==(lhs: Fleets.SquadCreated, rhs: Fleets.SquadCreated) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case squadID = "squad_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PutFleetsFleetIDMembersMemberIDUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity, rhs: Fleets.PutFleetsFleetIDMembersMemberIDUnprocessableEntity) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Invitation: Codable, Hashable {
+			
+			public enum PostFleetsFleetIDMembersRole: String, Codable, HTTPQueryable {
+				case fleetCommander = "fleet_commander"
+				case squadCommander = "squad_commander"
+				case squadMember = "squad_member"
+				case wingCommander = "wing_commander"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var characterID: Int
+			public var role: Fleets.Invitation.PostFleetsFleetIDMembersRole
+			public var squadID: Int64?
+			public var wingID: Int64?
+			
+			public init(characterID: Int, role: Fleets.Invitation.PostFleetsFleetIDMembersRole, squadID: Int64?, wingID: Int64?) {
+				self.characterID = characterID
+				self.role = role
+				self.squadID = squadID
+				self.wingID = wingID
+			}
+			
+			public static func ==(lhs: Fleets.Invitation, rhs: Fleets.Invitation) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case role
+				case squadID = "squad_id"
+				case wingID = "wing_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PutFleetsFleetIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.PutFleetsFleetIDNotFound, rhs: Fleets.PutFleetsFleetIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct DeleteFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound, rhs: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct PostFleetsFleetIDMembersUnprocessableEntity: Codable, Hashable {
 			
 			
@@ -932,21 +874,30 @@ public extension ESI {
 		}
 		
 		
-		public struct PostFleetsFleetIDWingsWingIDSquadsNotFound: Codable, Hashable {
+		public struct Information: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var isFreeMove: Bool
+			public var isRegistered: Bool
+			public var isVoiceEnabled: Bool
+			public var motd: String
 			
-			public init(error: String?) {
-				self.error = error
+			public init(isFreeMove: Bool, isRegistered: Bool, isVoiceEnabled: Bool, motd: String) {
+				self.isFreeMove = isFreeMove
+				self.isRegistered = isRegistered
+				self.isVoiceEnabled = isVoiceEnabled
+				self.motd = motd
 			}
 			
-			public static func ==(lhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound, rhs: Fleets.PostFleetsFleetIDWingsWingIDSquadsNotFound) -> Bool {
+			public static func ==(lhs: Fleets.Information, rhs: Fleets.Information) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case isFreeMove = "is_free_move"
+				case isRegistered = "is_registered"
+				case isVoiceEnabled = "is_voice_enabled"
+				case motd
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -1017,38 +968,47 @@ public extension ESI {
 		}
 		
 		
-		public struct Movement: Codable, Hashable {
+		public struct PutFleetsFleetIDMembersMemberIDNotFound: Codable, Hashable {
 			
-			public enum PutFleetsFleetIDMembersMemberIDRole: String, Codable, HTTPQueryable {
-				case fleetCommander = "fleet_commander"
-				case squadCommander = "squad_commander"
-				case squadMember = "squad_member"
-				case wingCommander = "wing_commander"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
 			}
 			
-			public var role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole
-			public var squadID: Int64?
-			public var wingID: Int64?
-			
-			public init(role: Fleets.Movement.PutFleetsFleetIDMembersMemberIDRole, squadID: Int64?, wingID: Int64?) {
-				self.role = role
-				self.squadID = squadID
-				self.wingID = wingID
-			}
-			
-			public static func ==(lhs: Fleets.Movement, rhs: Fleets.Movement) -> Bool {
+			public static func ==(lhs: Fleets.PutFleetsFleetIDMembersMemberIDNotFound, rhs: Fleets.PutFleetsFleetIDMembersMemberIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case role
-				case squadID = "squad_id"
-				case wingID = "wing_id"
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDFleetNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.GetCharactersCharacterIDFleetNotFound, rhs: Fleets.GetCharactersCharacterIDFleetNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -1086,7 +1046,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDFleetNotFound: Codable, Hashable {
+		public struct GetFleetsFleetIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -1095,7 +1055,59 @@ public extension ESI {
 				self.error = error
 			}
 			
-			public static func ==(lhs: Fleets.GetCharactersCharacterIDFleetNotFound, rhs: Fleets.GetCharactersCharacterIDFleetNotFound) -> Bool {
+			public static func ==(lhs: Fleets.GetFleetsFleetIDNotFound, rhs: Fleets.GetFleetsFleetIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct DeleteFleetsFleetIDWingsWingIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound, rhs: Fleets.DeleteFleetsFleetIDWingsWingIDNotFound) -> Bool {
+				return lhs.hashValue == rhs.hashValue
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostFleetsFleetIDMembersNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			public static func ==(lhs: Fleets.PostFleetsFleetIDMembersNotFound, rhs: Fleets.PostFleetsFleetIDMembersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -1176,7 +1188,7 @@ public extension ESI {
 		}
 		
 		
-		public struct DeleteFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
+		public struct PutFleetsFleetIDSquadsSquadIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -1185,7 +1197,7 @@ public extension ESI {
 				self.error = error
 			}
 			
-			public static func ==(lhs: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound, rhs: Fleets.DeleteFleetsFleetIDSquadsSquadIDNotFound) -> Bool {
+			public static func ==(lhs: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound, rhs: Fleets.PutFleetsFleetIDSquadsSquadIDNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
@@ -1202,30 +1214,21 @@ public extension ESI {
 		}
 		
 		
-		public struct Information: Codable, Hashable {
+		public struct GetFleetsFleetIDMembersNotFound: Codable, Hashable {
 			
 			
-			public var isFreeMove: Bool
-			public var isRegistered: Bool
-			public var isVoiceEnabled: Bool
-			public var motd: String
+			public var error: String?
 			
-			public init(isFreeMove: Bool, isRegistered: Bool, isVoiceEnabled: Bool, motd: String) {
-				self.isFreeMove = isFreeMove
-				self.isRegistered = isRegistered
-				self.isVoiceEnabled = isVoiceEnabled
-				self.motd = motd
+			public init(error: String?) {
+				self.error = error
 			}
 			
-			public static func ==(lhs: Fleets.Information, rhs: Fleets.Information) -> Bool {
+			public static func ==(lhs: Fleets.GetFleetsFleetIDMembersNotFound, rhs: Fleets.GetFleetsFleetIDMembersNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case isFreeMove = "is_free_move"
-				case isRegistered = "is_registered"
-				case isVoiceEnabled = "is_voice_enabled"
-				case motd
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -1237,24 +1240,21 @@ public extension ESI {
 		}
 		
 		
-		public struct FleetUpdate: Codable, Hashable {
+		public struct GetFleetsFleetIDWingsNotFound: Codable, Hashable {
 			
 			
-			public var isFreeMove: Bool?
-			public var motd: String?
+			public var error: String?
 			
-			public init(isFreeMove: Bool?, motd: String?) {
-				self.isFreeMove = isFreeMove
-				self.motd = motd
+			public init(error: String?) {
+				self.error = error
 			}
 			
-			public static func ==(lhs: Fleets.FleetUpdate, rhs: Fleets.FleetUpdate) -> Bool {
+			public static func ==(lhs: Fleets.GetFleetsFleetIDWingsNotFound, rhs: Fleets.GetFleetsFleetIDWingsNotFound) -> Bool {
 				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case isFreeMove = "is_free_move"
-				case motd
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -38,10 +38,12 @@ public class ESI {
 	public struct Result<Value> {
 		public var value: Value
 		public var expires: Date?
+		public var metadata: [String: String]?
 		
-		public init(value: Value, expires: Date?) {
+		public init(value: Value, expires: Date?, metadata: [String: String]?) {
 			self.value = value
 			self.expires = expires
+			self.metadata = metadata
 		}
 	}
 	
