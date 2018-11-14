@@ -121,7 +121,10 @@ public class ESI {
 											 encoding: encoding,
 											 headers: headers,
 											 cachePolicy: cachePolicy)
-		return sessionManager.request(convertible)
+		let progress = Progress(totalUnitCount: 100)
+		return sessionManager.request(convertible).downloadProgress { p in
+			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+		}
 	}
 	
 	@discardableResult

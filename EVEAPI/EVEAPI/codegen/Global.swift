@@ -4,17 +4,20 @@ import Futures
 
 public extension ESI {
 	
-	public struct BadRequest: Codable, Hashable {
+	public struct Forbidden: Codable, Hashable {
 		
 		
 		public var error: String
+		public var ssoStatus: Int?
 		
-		public init(error: String) {
+		public init(error: String, ssoStatus: Int?) {
 			self.error = error
+			self.ssoStatus = ssoStatus
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
+			case ssoStatus = "sso_status"
 			
 			var dateFormatter: DateFormatter? {
 				switch self {
@@ -59,7 +62,22 @@ public extension ESI {
 	}
 	
 	
-	public struct ServiceUnavailable: Codable, Hashable {
+	public enum Language: String, Codable, HTTPQueryable {
+		case de = "de"
+		case enUS = "en-us"
+		case fr = "fr"
+		case ja = "ja"
+		case ru = "ru"
+		case zh = "zh"
+		
+		public var httpQuery: String? {
+			return rawValue
+		}
+		
+	}
+	
+	
+	public struct Unauthorized: Codable, Hashable {
 		
 		
 		public var error: String
@@ -81,7 +99,7 @@ public extension ESI {
 	}
 	
 	
-	public enum Language: String, Codable, HTTPQueryable {
+	public enum AcceptLanguage: String, Codable, HTTPQueryable {
 		case de = "de"
 		case enUS = "en-us"
 		case fr = "fr"
@@ -93,31 +111,6 @@ public extension ESI {
 			return rawValue
 		}
 		
-	}
-	
-	
-	public struct Forbidden: Codable, Hashable {
-		
-		
-		public var error: String
-		public var ssoStatus: Int?
-		
-		public init(error: String, ssoStatus: Int?) {
-			self.error = error
-			self.ssoStatus = ssoStatus
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			case ssoStatus = "sso_status"
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
 	}
 	
 	
@@ -168,22 +161,29 @@ public extension ESI {
 	}
 	
 	
-	public enum AcceptLanguage: String, Codable, HTTPQueryable {
-		case de = "de"
-		case enUS = "en-us"
-		case fr = "fr"
-		case ja = "ja"
-		case ru = "ru"
-		case zh = "zh"
+	public struct ServiceUnavailable: Codable, Hashable {
 		
-		public var httpQuery: String? {
-			return rawValue
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
 		}
 		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
 	}
 	
 	
-	public struct Unauthorized: Codable, Hashable {
+	public struct BadRequest: Codable, Hashable {
 		
 		
 		public var error: String

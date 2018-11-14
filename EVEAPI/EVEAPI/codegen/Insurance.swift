@@ -36,12 +36,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Insurance.Price]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Insurance.Price]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Insurance.Price]>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future

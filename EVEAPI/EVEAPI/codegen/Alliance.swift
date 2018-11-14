@@ -12,6 +12,33 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
+		public func listAlliancesCorporations(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/alliances/\(allianceID)/corporations/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getAllianceIcon(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Alliance.Icon>> {
 			
 			
@@ -31,12 +58,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<Alliance.Icon>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Alliance.Icon>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Icon>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -62,12 +85,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -93,68 +112,11 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<Alliance.Information>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Alliance.Information>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Information>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
-		}
-		
-		@discardableResult
-		public func listAlliancesCorporations(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/alliances/\(allianceID)/corporations/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		
-		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -180,20 +142,17 @@ public extension ESI {
 		}
 		
 		
-		public struct Icon: Codable, Hashable {
+		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
 			
 			
-			public var px128x128: String?
-			public var px64x64: String?
+			public var error: String?
 			
-			public init(px128x128: String?, px64x64: String?) {
-				self.px128x128 = px128x128
-				self.px64x64 = px64x64
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case px128x128
-				case px64x64
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -238,6 +197,31 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .dateFounded: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Icon: Codable, Hashable {
+			
+			
+			public var px128x128: String?
+			public var px64x64: String?
+			
+			public init(px128x128: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px64x64 = px64x64
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case px128x128
+				case px64x64
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

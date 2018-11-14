@@ -12,39 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Wars.Kills]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/wars/\(warID)/killmails/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Wars.Kills]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Wars.WarInformation>> {
 			
 			
@@ -64,12 +31,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<Wars.WarInformation>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Wars.WarInformation>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -97,37 +60,40 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
 		
-		
-		public struct GetWarsWarIDKillmailsUnprocessableEntity: Codable, Hashable {
+		@discardableResult
+		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Wars.Kills]>> {
 			
 			
-			public var error: String?
+			let body: Data? = nil
 			
-			public init(error: String?) {
-				self.error = error
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
+			
+			let url = esi.baseURL + "/v1/wars/\(warID)/killmails/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Wars.Kills]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
 		}
 		
 		
@@ -179,7 +145,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetWarsWarIDAggressor: Codable, Hashable {
+			public struct GetWarsWarIDDefender: Codable, Hashable {
 				
 				
 				public var allianceID: Int?
@@ -209,7 +175,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetWarsWarIDDefender: Codable, Hashable {
+			public struct GetWarsWarIDAggressor: Codable, Hashable {
 				
 				
 				public var allianceID: Int?
@@ -302,6 +268,28 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case killmailHash = "killmail_hash"
 				case killmailID = "killmail_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetWarsWarIDKillmailsUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -31,44 +31,9 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
 				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.System]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/sovereignty/map/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
-				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
@@ -93,46 +58,38 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
 				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}
 		
-		
-		public struct System: Codable, Hashable {
+		@discardableResult
+		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.System]>> {
 			
 			
-			public var allianceID: Int?
-			public var corporationID: Int?
-			public var factionID: Int?
-			public var systemID: Int
+			let body: Data? = nil
 			
-			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
-				self.allianceID = allianceID
-				self.corporationID = corporationID
-				self.factionID = factionID
-				self.systemID = systemID
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/sovereignty/map/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
+			return promise.future
 		}
 		
 		
@@ -254,6 +211,37 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .startTime: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct System: Codable, Hashable {
+			
+			
+			public var allianceID: Int?
+			public var corporationID: Int?
+			public var factionID: Int?
+			public var systemID: Int
+			
+			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+				self.allianceID = allianceID
+				self.corporationID = corporationID
+				self.factionID = factionID
+				self.systemID = systemID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

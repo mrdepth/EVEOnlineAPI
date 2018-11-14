@@ -30,12 +30,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
 				promise.set(response: response, cached: nil)
 			}
 			return promise.future
@@ -62,12 +58,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Fittings.Fitting]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Fittings.Fitting]>) in
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
@@ -92,41 +84,31 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<Fittings.CreateFittingResult>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Fittings.CreateFittingResult>) in
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Fittings.CreateFittingResult>) in
 				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
 		
 		
-		public struct Fitting: Codable, Hashable {
+		public struct Item: Codable, Hashable {
 			
 			
-			public var localizedDescription: String
-			public var fittingID: Int
-			public var items: [Fittings.Item]
-			public var name: String
-			public var shipTypeID: Int
+			public var flag: Int
+			public var quantity: Int
+			public var typeID: Int
 			
-			public init(localizedDescription: String, fittingID: Int, items: [Fittings.Item], name: String, shipTypeID: Int) {
-				self.localizedDescription = localizedDescription
-				self.fittingID = fittingID
-				self.items = items
-				self.name = name
-				self.shipTypeID = shipTypeID
+			public init(flag: Int, quantity: Int, typeID: Int) {
+				self.flag = flag
+				self.quantity = quantity
+				self.typeID = typeID
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case localizedDescription = "description"
-				case fittingID = "fitting_id"
-				case items
-				case name
-				case shipTypeID = "ship_type_id"
+				case flag
+				case quantity
+				case typeID = "type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -169,23 +151,29 @@ public extension ESI {
 		}
 		
 		
-		public struct Item: Codable, Hashable {
+		public struct Fitting: Codable, Hashable {
 			
 			
-			public var flag: Int
-			public var quantity: Int
-			public var typeID: Int
+			public var localizedDescription: String
+			public var fittingID: Int
+			public var items: [Fittings.Item]
+			public var name: String
+			public var shipTypeID: Int
 			
-			public init(flag: Int, quantity: Int, typeID: Int) {
-				self.flag = flag
-				self.quantity = quantity
-				self.typeID = typeID
+			public init(localizedDescription: String, fittingID: Int, items: [Fittings.Item], name: String, shipTypeID: Int) {
+				self.localizedDescription = localizedDescription
+				self.fittingID = fittingID
+				self.items = items
+				self.name = name
+				self.shipTypeID = shipTypeID
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case flag
-				case quantity
-				case typeID = "type_id"
+				case localizedDescription = "description"
+				case fittingID = "fitting_id"
+				case items
+				case name
+				case shipTypeID = "ship_type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

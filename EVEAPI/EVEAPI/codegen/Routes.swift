@@ -39,27 +39,11 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
 				promise.set(response: response, cached: 86400.0)
 			}
 			return promise.future
-		}
-		
-		
-		public enum Flag: String, Codable, HTTPQueryable {
-			case insecure = "insecure"
-			case secure = "secure"
-			case shortest = "shortest"
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
 		}
 		
 		
@@ -82,6 +66,18 @@ public extension ESI {
 					}
 				}
 			}
+		}
+		
+		
+		public enum Flag: String, Codable, HTTPQueryable {
+			case insecure = "insecure"
+			case secure = "secure"
+			case shortest = "shortest"
+			
+			public var httpQuery: String? {
+				return rawValue
+			}
+			
 		}
 		
 		

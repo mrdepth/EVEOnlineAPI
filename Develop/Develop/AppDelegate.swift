@@ -56,6 +56,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			esi = nil
 		}
 		
+		var zkb: ZKillboard! = ZKillboard()
+		zkb.kills(filter: [.solo, .wSpace], page: nil).then {
+			print($0)
+		}.catch {
+			print($0)
+		}.finally {
+			zkb = nil
+		}
+		
 //		let url = OAuth2.authURL(clientID: clientID, callbackURL: URL(string:"eveauthnc://sso/")!, scope: ESI.Scope.default, state: "esi")
 //		application.open(url, options: [:], completionHandler: nil)
 		

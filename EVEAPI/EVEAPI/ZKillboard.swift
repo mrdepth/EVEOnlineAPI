@@ -32,18 +32,31 @@ extension DateFormatter {
 }
 
 
-public class ZKillboard: Session {
+public class ZKillboard {
 	let baseURL = "https://zkillboard.com/api/"
 	
-	public convenience init(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
+	var sessionManager = Session()
+	
+	public init() {
 		
-		let configuration = URLSessionConfiguration.default
-		configuration.httpAdditionalHeaders = HTTPHeaders.defaultHTTPHeaders
-		configuration.requestCachePolicy = cachePolicy
-		self.init(configuration: configuration)
 	}
 	
-	public func kills(filter: [Filter], page: Int?) -> Future<ESI.Result<[Killmail]>> {
+	open func request(_ url: URLConvertible,
+					  method: HTTPMethod = .get,
+					  parameters: Parameters? = nil,
+					  encoding: ParameterEncoding = URLEncoding.default,
+					  headers: HTTPHeaders? = nil,
+					  cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> DataRequest {
+		let convertible = RequestConvertible(url: url,
+											 method: method,
+											 parameters: parameters,
+											 encoding: encoding,
+											 headers: headers,
+											 cachePolicy: cachePolicy)
+		return sessionManager.request(convertible)
+	}
+	
+	public func kills(filter: [Filter], page: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Killmail]>> {
 		let promise = Promise<ESI.Result<[Killmail]>>()
 		guard filter.count > 1 else {
 			try! promise.fail(ZKillboardError.notFound)
@@ -58,7 +71,7 @@ public class ZKillboard: Session {
 		
 		let progress = Progress(totalUnitCount: 100)
 		
-		request(url + args.joined(separator: "/") + "/", method: .get).downloadProgress { p in
+		request(url + args.joined(separator: "/") + "/", method: .get, cachePolicy: cachePolicy).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
 		}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
 			promise.set(response: response, cached: 600.0)
@@ -78,27 +91,6 @@ extension DataRequest {
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = .formatted(ZKillboard.dateFormatter)
 		return responseJSONDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
-		
-		/*let serializer = DataResponseSerializer<T> { (request, response, data, error) -> Result<T> in
-			let result = DataRequest.jsonResponseSerializer().serializeResponse(request, response, data, error)
-			switch result {
-			case let .success(value):
-				do {
-					return .success(try T(json: value))
-				}
-				catch {
-					return .failure(error)
-				}
-			case let .failure(error):
-				return .failure(error)
-			}
-		}
-		
-		return response(
-			queue: queue,
-			responseSerializer: serializer,
-			completionHandler: completionHandler
-		)*/
 	}
 }
 
@@ -112,11 +104,6 @@ extension ZKillboard {
 	
 	fileprivate static let dateFormatter: DateFormatter = {
 		return DateFormatter.esiDateTimeFormatter
-//		let dateFormatter = DateFormatter()
-//		dateFormatter.dateFormat = "yyyyMMddHH00"
-//		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-//		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-//		return dateFormatter
 	}()
 	
 	public enum Filter {
@@ -191,122 +178,60 @@ extension ZKillboard {
 
 	public struct Killmail: Codable, Hashable {
 		
-		public struct Attacker: Codable, Hashable {
-
-			public var characterID: Int?
-			public var corporationID: Int?
-			public var allianceID: Int?
-			public var factionID: Int?
-			public var securityStatus: Float
-			public var damageDone: Int
-			public var finalBlow: Bool
-			public var shipTypeID: Int?
-			public var weaponTypeID: Int?
-			
-			enum CodingKeys: String, CodingKey {
-				case characterID = "character_id"
-				case corporationID = "corporation_id"
-				case allianceID = "alliance_id"
-				case factionID = "faction_id"
-				case securityStatus = "security_status"
-				case damageDone = "damage_done"
-				case finalBlow = "final_blow"
-				case shipTypeID = "ship_type_id"
-				case weaponTypeID = "weapon_type_id"
-			}
-			
-			public static func ==(lhs: Killmail.Attacker, rhs: Killmail.Attacker) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-		}
+		public var killmailID: Int64
+		public var fittedValue: Double?
+		public var hash: String
+		public var locationID: Int
+		public var points: Int
+		public var totalValue: Double?
+		public var npc: Bool
+		public var solo: Bool
+		public var awox: Bool
 		
-		public struct Victim: Codable, Hashable {
-			
-			public var characterID: Int?
-			public var corporationID: Int?
-			public var allianceID: Int?
-			public var factionID: Int?
-			public var damageTaken: Int
-			public var shipTypeID: Int
-			public var items: [Killmail.Item]? = nil
-
-			enum CodingKeys: String, CodingKey {
-				case characterID = "character_id"
-				case corporationID = "corporation_id"
-				case allianceID = "alliance_id"
-				case factionID = "faction_id"
-				case damageTaken = "damage_taken"
-				case shipTypeID = "ship_type_id"
-				case items
-			}
-
-			public static func ==(lhs: Killmail.Victim, rhs: Killmail.Victim) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-		}
-		
-		public struct Item: Codable, Hashable {
-			
-			public var flag: Int
-			public var itemTypeID: Int
-			public var quantityDestroyed: Int64?
-			public var quantityDropped: Int64?
-			public var singleton: Int
-			
-			enum CodingKeys: String, CodingKey {
-				case flag
-				case itemTypeID = "item_type_id"
-				case quantityDestroyed = "quantity_destroyed"
-				case quantityDropped = "quantity_dropped"
-				case singleton
-			}
-			
-			public static func ==(lhs: Killmail.Item, rhs: Killmail.Item) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-		}
-
-		public struct Position: Codable, Hashable {
-			
-			
-			public var x: Float
-			public var y: Float
-			public var z: Float
-			
-			enum CodingKeys: String, CodingKey {
-				case x
-				case y
-				case z
-			}
-			
-			public static func ==(lhs: Killmail.Position, rhs: Killmail.Position) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-		}
-
-		
-		public var attackers: [Killmail.Attacker]
-		public var killmailID: Int
-		public var killmailTime: Date
-		public var solarSystemID: Int
-		public var victim: Killmail.Victim
-		public var position: Killmail.Position?
-
 		enum CodingKeys: String, CodingKey {
-			case attackers
 			case killmailID = "killmail_id"
-			case killmailTime = "killmail_time"
-			case solarSystemID = "solar_system_id"
-			case victim
-			case position
+			case zkb
 		}
 		
-		public static var supportsSecureCoding: Bool {
-			return true
+		enum ZKBCodingKeys: String, CodingKey {
+			case fittedValue
+			case hash
+			case locationID
+			case points
+			case totalValue
+			case npc
+			case solo
+			case awox
 		}
 		
-		public static func ==(lhs: Killmail, rhs: Killmail) -> Bool {
-			return lhs.hashValue == rhs.hashValue
+		public init(from decoder: Decoder) throws {
+			let container = try decoder.container(keyedBy: CodingKeys.self)
+			killmailID = try container.decode(Int64.self, forKey: .killmailID)
+			let zkb = try container.nestedContainer(keyedBy: ZKBCodingKeys.self, forKey: .zkb)
+			
+			fittedValue = try zkb.decodeIfPresent(Double.self, forKey: .fittedValue)
+			hash = try zkb.decode(String.self, forKey: .hash)
+			locationID = try zkb.decode(Int.self, forKey: .locationID)
+			points = try zkb.decode(Int.self, forKey: .points)
+			totalValue = try zkb.decodeIfPresent(Double.self, forKey: .totalValue)
+			npc = try zkb.decode(Bool.self, forKey: .npc)
+			solo = try zkb.decode(Bool.self, forKey: .solo)
+			awox = try zkb.decode(Bool.self, forKey: .awox)
+		}
+		
+		public func encode(to encoder: Encoder) throws {
+			var container = encoder.container(keyedBy: CodingKeys.self)
+			try container.encode(killmailID, forKey: .killmailID)
+			
+			var zkb = container.nestedContainer(keyedBy: ZKBCodingKeys.self, forKey: .zkb)
+			try zkb.encodeIfPresent(fittedValue, forKey: .fittedValue)
+			try zkb.encode(hash, forKey: .hash)
+			try zkb.encode(locationID, forKey: .locationID)
+			try zkb.encode(points, forKey: .points)
+			try zkb.encodeIfPresent(totalValue, forKey: .totalValue)
+			try zkb.encode(npc, forKey: .npc)
+			try zkb.encode(solo, forKey: .solo)
+			try zkb.encode(awox, forKey: .awox)
 		}
 	}
 

@@ -12,10 +12,10 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getAllianceContacts(allianceID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>> {
+		public func getCorporationContacts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-alliances.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-corporations.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -30,16 +30,12 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v2/alliances/\(allianceID)/contacts/"
+			let url = esi.baseURL + "/v2/corporations/\(corporationID)/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsOk]>) in
+			let promise = Promise<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsOk]>) in
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
@@ -66,12 +62,38 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Contacts.Label]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.Label]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contacts.Label]>) in
+				promise.set(response: response, cached: 300.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAllianceContacts(allianceID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-alliances.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/v2/alliances/\(allianceID)/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsOk]>) in
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
@@ -98,12 +120,38 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contacts.GetAlliancesAllianceIDContactsLabelsOk]>) in
+				promise.set(response: response, cached: 300.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getContacts(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contacts.Contact]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/v2/characters/\(characterID)/contacts/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Contacts.Contact]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contacts.Contact]>) in
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
@@ -136,12 +184,8 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
+			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
 				promise.set(response: response, cached: nil)
 			}
 			return promise.future
@@ -168,47 +212,9 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<String>) in
+			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
 				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getContacts(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contacts.Contact]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Contacts.Contact]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.Contact]>) in
-				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
 		}
@@ -240,47 +246,9 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Int]>) in
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
 				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationContacts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-corporations.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v2/corporations/\(corporationID)/contacts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsOk]>) in
-				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
 		}
@@ -306,15 +274,56 @@ public extension ESI {
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let progress = Progress(totalUnitCount: 100)
-			
 			let promise = Promise<ESI.Result<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>) in
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contacts.GetCorporationsCorporationIDContactsLabelsOk]>) in
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
+		}
+		
+		
+		public struct GetCorporationsCorporationIDContactsOk: Codable, Hashable {
+			
+			public enum GetCorporationsCorporationIDContactsContactType: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var contactID: Int
+			public var contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType
+			public var isWatched: Bool?
+			public var labelIds: [Int64]?
+			public var standing: Float
+			
+			public init(contactID: Int, contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType, isWatched: Bool?, labelIds: [Int64]?, standing: Float) {
+				self.contactID = contactID
+				self.contactType = contactType
+				self.isWatched = isWatched
+				self.labelIds = labelIds
+				self.standing = standing
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contactID = "contact_id"
+				case contactType = "contact_type"
+				case isWatched = "is_watched"
+				case labelIds = "label_ids"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -366,49 +375,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetAlliancesAllianceIDContactsOk: Codable, Hashable {
-			
-			public enum GetAlliancesAllianceIDContactsContactType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var contactID: Int
-			public var contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType
-			public var labelIds: [Int64]?
-			public var standing: Float
-			
-			public init(contactID: Int, contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType, labelIds: [Int64]?, standing: Float) {
-				self.contactID = contactID
-				self.contactType = contactType
-				self.labelIds = labelIds
-				self.standing = standing
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case contactID = "contact_id"
-				case contactType = "contact_type"
-				case labelIds = "label_ids"
-				case standing
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetAlliancesAllianceIDContactsLabelsOk: Codable, Hashable {
+		public struct GetCorporationsCorporationIDContactsLabelsOk: Codable, Hashable {
 			
 			
 			public var labelID: Int64
@@ -422,51 +389,6 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case labelID = "label_id"
 				case labelName = "label_name"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDContactsOk: Codable, Hashable {
-			
-			public enum GetCorporationsCorporationIDContactsContactType: String, Codable, HTTPQueryable {
-				case alliance = "alliance"
-				case character = "character"
-				case corporation = "corporation"
-				case faction = "faction"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var contactID: Int
-			public var contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType
-			public var isWatched: Bool?
-			public var labelIds: [Int64]?
-			public var standing: Float
-			
-			public init(contactID: Int, contactType: Contacts.GetCorporationsCorporationIDContactsOk.GetCorporationsCorporationIDContactsContactType, isWatched: Bool?, labelIds: [Int64]?, standing: Float) {
-				self.contactID = contactID
-				self.contactType = contactType
-				self.isWatched = isWatched
-				self.labelIds = labelIds
-				self.standing = standing
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case contactID = "contact_id"
-				case contactType = "contact_type"
-				case isWatched = "is_watched"
-				case labelIds = "label_ids"
-				case standing
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -500,7 +422,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationsCorporationIDContactsLabelsOk: Codable, Hashable {
+		public struct GetAlliancesAllianceIDContactsLabelsOk: Codable, Hashable {
 			
 			
 			public var labelID: Int64
@@ -539,6 +461,48 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case labelID = "label_id"
 				case labelName = "label_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetAlliancesAllianceIDContactsOk: Codable, Hashable {
+			
+			public enum GetAlliancesAllianceIDContactsContactType: String, Codable, HTTPQueryable {
+				case alliance = "alliance"
+				case character = "character"
+				case corporation = "corporation"
+				case faction = "faction"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var contactID: Int
+			public var contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType
+			public var labelIds: [Int64]?
+			public var standing: Float
+			
+			public init(contactID: Int, contactType: Contacts.GetAlliancesAllianceIDContactsOk.GetAlliancesAllianceIDContactsContactType, labelIds: [Int64]?, standing: Float) {
+				self.contactID = contactID
+				self.contactType = contactType
+				self.labelIds = labelIds
+				self.standing = standing
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contactID = "contact_id"
+				case contactType = "contact_type"
+				case labelIds = "label_ids"
+				case standing
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
