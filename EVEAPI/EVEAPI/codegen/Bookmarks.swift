@@ -80,40 +80,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func listBookmarks(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Bookmark]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-bookmarks.read_character_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/bookmarks/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Bookmarks.Bookmark]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Bookmarks.Bookmark]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func listBookmarkFolders(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Folder]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -147,6 +113,40 @@ public extension ESI {
 			return promise.future
 		}
 		
+		@discardableResult
+		public func listBookmarks(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Bookmark]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-bookmarks.read_character_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/v2/characters/\(characterID)/bookmarks/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Bookmarks.Bookmark]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Bookmarks.Bookmark]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
 		
 		public struct GetCorporationsCorporationIDBookmarksOk: Codable, Hashable {
 			
@@ -161,10 +161,6 @@ public extension ESI {
 					self.x = x
 					self.y = y
 					self.z = z
-				}
-				
-				public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates) -> Bool {
-					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
@@ -190,10 +186,6 @@ public extension ESI {
 				public init(itemID: Int64, typeID: Int) {
 					self.itemID = itemID
 					self.typeID = typeID
-				}
-				
-				public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem) -> Bool {
-					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
@@ -231,10 +223,6 @@ public extension ESI {
 				self.notes = notes
 			}
 			
-			public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case bookmarkID = "bookmark_id"
 				case coordinates
@@ -258,6 +246,30 @@ public extension ESI {
 		
 		public struct Bookmark: Codable, Hashable {
 			
+			public struct GetCharactersCharacterIDBookmarksItem: Codable, Hashable {
+				
+				
+				public var itemID: Int64
+				public var typeID: Int
+				
+				public init(itemID: Int64, typeID: Int) {
+					self.itemID = itemID
+					self.typeID = typeID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case itemID = "item_id"
+					case typeID = "type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public struct GetCharactersCharacterIDBookmarksCoordinates: Codable, Hashable {
 				
 				
@@ -271,42 +283,10 @@ public extension ESI {
 					self.z = z
 				}
 				
-				public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case x
 					case y
 					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDBookmarksItem: Codable, Hashable {
-				
-				
-				public var itemID: Int64
-				public var typeID: Int
-				
-				public init(itemID: Int64, typeID: Int) {
-					self.itemID = itemID
-					self.typeID = typeID
-				}
-				
-				public static func ==(lhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem, rhs: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case itemID = "item_id"
-					case typeID = "type_id"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -337,10 +317,6 @@ public extension ESI {
 				self.label = label
 				self.locationID = locationID
 				self.notes = notes
-			}
-			
-			public static func ==(lhs: Bookmarks.Bookmark, rhs: Bookmarks.Bookmark) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
@@ -377,10 +353,6 @@ public extension ESI {
 				self.name = name
 			}
 			
-			public static func ==(lhs: Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk, rhs: Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case creatorID = "creator_id"
 				case folderID = "folder_id"
@@ -405,10 +377,6 @@ public extension ESI {
 			public init(folderID: Int, name: String) {
 				self.folderID = folderID
 				self.name = name
-			}
-			
-			public static func ==(lhs: Bookmarks.Folder, rhs: Bookmarks.Folder) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {

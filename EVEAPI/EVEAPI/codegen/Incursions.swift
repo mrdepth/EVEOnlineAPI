@@ -76,10 +76,6 @@ public extension ESI {
 				self.type = type
 			}
 			
-			public static func ==(lhs: Incursions.Incursion, rhs: Incursions.Incursion) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case constellationID = "constellation_id"
 				case factionID = "faction_id"

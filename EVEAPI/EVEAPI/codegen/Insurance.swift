@@ -63,10 +63,6 @@ public extension ESI {
 					self.payout = payout
 				}
 				
-				public static func ==(lhs: Insurance.Price.GetInsurancePricesLevels, rhs: Insurance.Price.GetInsurancePricesLevels) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case cost
 					case name
@@ -87,10 +83,6 @@ public extension ESI {
 			public init(levels: [Insurance.Price.GetInsurancePricesLevels], typeID: Int) {
 				self.levels = levels
 				self.typeID = typeID
-			}
-			
-			public static func ==(lhs: Insurance.Price, rhs: Insurance.Price) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {

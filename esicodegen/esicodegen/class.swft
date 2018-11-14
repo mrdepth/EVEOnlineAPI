@@ -7,10 +7,6 @@ public struct {className}: Codable, Hashable {
 {initializations}
 	}
 
-	public static func ==(lhs: {class}, rhs: {class}) -> Bool {
-		return lhs.hashValue == rhs.hashValue
-	}
-
 	enum CodingKeys: String, CodingKey, DateFormatted {
 {codingKeys}
 

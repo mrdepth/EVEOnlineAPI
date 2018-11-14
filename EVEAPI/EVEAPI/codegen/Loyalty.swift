@@ -12,37 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Loyalty.Offer]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/loyalty/stores/\(corporationID)/offers/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<[Loyalty.Offer]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getLoyaltyPoints(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Loyalty.Point]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -74,6 +43,37 @@ public extension ESI {
 			return promise.future
 		}
 		
+		@discardableResult
+		public func listLoyaltyStoreOffers(corporationID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Loyalty.Offer]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/loyalty/stores/\(corporationID)/offers/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<[Loyalty.Offer]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<[Loyalty.Offer]>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
 		
 		public struct Offer: Codable, Hashable {
 			
@@ -86,10 +86,6 @@ public extension ESI {
 				public init(quantity: Int, typeID: Int) {
 					self.quantity = quantity
 					self.typeID = typeID
-				}
-				
-				public static func ==(lhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems, rhs: Loyalty.Offer.GetLoyaltyStoresCorporationIDOffersRequiredItems) -> Bool {
-					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
@@ -123,10 +119,6 @@ public extension ESI {
 				self.typeID = typeID
 			}
 			
-			public static func ==(lhs: Loyalty.Offer, rhs: Loyalty.Offer) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case akCost = "ak_cost"
 				case iskCost = "isk_cost"
@@ -135,32 +127,6 @@ public extension ESI {
 				case quantity
 				case requiredItems = "required_items"
 				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			public static func ==(lhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound, rhs: Loyalty.GetLoyaltyStoresCorporationIDOffersNotFound) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -183,13 +149,31 @@ public extension ESI {
 				self.loyaltyPoints = loyaltyPoints
 			}
 			
-			public static func ==(lhs: Loyalty.Point, rhs: Loyalty.Point) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case corporationID = "corporation_id"
 				case loyaltyPoints = "loyalty_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

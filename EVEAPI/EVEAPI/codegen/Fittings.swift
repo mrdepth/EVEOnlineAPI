@@ -104,64 +104,6 @@ public extension ESI {
 		}
 		
 		
-		public struct Item: Codable, Hashable {
-			
-			
-			public var flag: Int
-			public var quantity: Int
-			public var typeID: Int
-			
-			public init(flag: Int, quantity: Int, typeID: Int) {
-				self.flag = flag
-				self.quantity = quantity
-				self.typeID = typeID
-			}
-			
-			public static func ==(lhs: Fittings.Item, rhs: Fittings.Item) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case flag
-				case quantity
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CreateFittingResult: Codable, Hashable {
-			
-			
-			public var fittingID: Int
-			
-			public init(fittingID: Int) {
-				self.fittingID = fittingID
-			}
-			
-			public static func ==(lhs: Fittings.CreateFittingResult, rhs: Fittings.CreateFittingResult) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case fittingID = "fitting_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Fitting: Codable, Hashable {
 			
 			
@@ -177,10 +119,6 @@ public extension ESI {
 				self.items = items
 				self.name = name
 				self.shipTypeID = shipTypeID
-			}
-			
-			public static func ==(lhs: Fittings.Fitting, rhs: Fittings.Fitting) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
@@ -215,15 +153,61 @@ public extension ESI {
 				self.shipTypeID = shipTypeID
 			}
 			
-			public static func ==(lhs: Fittings.MutableFitting, rhs: Fittings.MutableFitting) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case localizedDescription = "description"
 				case items
 				case name
 				case shipTypeID = "ship_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Item: Codable, Hashable {
+			
+			
+			public var flag: Int
+			public var quantity: Int
+			public var typeID: Int
+			
+			public init(flag: Int, quantity: Int, typeID: Int) {
+				self.flag = flag
+				self.quantity = quantity
+				self.typeID = typeID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case flag
+				case quantity
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CreateFittingResult: Codable, Hashable {
+			
+			
+			public var fittingID: Int
+			
+			public init(fittingID: Int) {
+				self.fittingID = fittingID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fittingID = "fitting_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

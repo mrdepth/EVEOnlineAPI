@@ -105,6 +105,37 @@ public extension ESI {
 		}
 		
 		
+		public struct System: Codable, Hashable {
+			
+			
+			public var allianceID: Int?
+			public var corporationID: Int?
+			public var factionID: Int?
+			public var systemID: Int
+			
+			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+				self.allianceID = allianceID
+				self.corporationID = corporationID
+				self.factionID = factionID
+				self.systemID = systemID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				case systemID = "system_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct Structure: Codable, Hashable {
 			
 			
@@ -124,10 +155,6 @@ public extension ESI {
 				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
 				self.vulnerableEndTime = vulnerableEndTime
 				self.vulnerableStartTime = vulnerableStartTime
-			}
-			
-			public static func ==(lhs: Sovereignty.Structure, rhs: Sovereignty.Structure) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
@@ -150,42 +177,19 @@ public extension ESI {
 		}
 		
 		
-		public struct System: Codable, Hashable {
-			
-			
-			public var allianceID: Int?
-			public var corporationID: Int?
-			public var factionID: Int?
-			public var systemID: Int
-			
-			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
-				self.allianceID = allianceID
-				self.corporationID = corporationID
-				self.factionID = factionID
-				self.systemID = systemID
-			}
-			
-			public static func ==(lhs: Sovereignty.System, rhs: Sovereignty.System) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Campaign: Codable, Hashable {
+			
+			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
+				case ihubDefense = "ihub_defense"
+				case stationDefense = "station_defense"
+				case stationFreeport = "station_freeport"
+				case tcuDefense = "tcu_defense"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
 			
 			public struct GetSovereigntyCampaignsParticipants: Codable, Hashable {
 				
@@ -196,10 +200,6 @@ public extension ESI {
 				public init(allianceID: Int, score: Float) {
 					self.allianceID = allianceID
 					self.score = score
-				}
-				
-				public static func ==(lhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants, rhs: Sovereignty.Campaign.GetSovereigntyCampaignsParticipants) -> Bool {
-					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
@@ -213,18 +213,6 @@ public extension ESI {
 						}
 					}
 				}
-			}
-			
-			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
-				case ihubDefense = "ihub_defense"
-				case stationDefense = "station_defense"
-				case stationFreeport = "station_freeport"
-				case tcuDefense = "tcu_defense"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
 			}
 			
 			public var attackersScore: Float?
@@ -249,10 +237,6 @@ public extension ESI {
 				self.solarSystemID = solarSystemID
 				self.startTime = startTime
 				self.structureID = structureID
-			}
-			
-			public static func ==(lhs: Sovereignty.Campaign, rhs: Sovereignty.Campaign) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {

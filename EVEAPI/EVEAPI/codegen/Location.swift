@@ -121,46 +121,10 @@ public extension ESI {
 				self.shipTypeID = shipTypeID
 			}
 			
-			public static func ==(lhs: Location.CharacterShip, rhs: Location.CharacterShip) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case shipItemID = "ship_item_id"
 				case shipName = "ship_name"
 				case shipTypeID = "ship_type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CharacterLocation: Codable, Hashable {
-			
-			
-			public var solarSystemID: Int
-			public var stationID: Int?
-			public var structureID: Int64?
-			
-			public init(solarSystemID: Int, stationID: Int?, structureID: Int64?) {
-				self.solarSystemID = solarSystemID
-				self.stationID = stationID
-				self.structureID = structureID
-			}
-			
-			public static func ==(lhs: Location.CharacterLocation, rhs: Location.CharacterLocation) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case solarSystemID = "solar_system_id"
-				case stationID = "station_id"
-				case structureID = "structure_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -187,10 +151,6 @@ public extension ESI {
 				self.online = online
 			}
 			
-			public static func ==(lhs: Location.GetCharactersCharacterIDOnlineOk, rhs: Location.GetCharactersCharacterIDOnlineOk) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case lastLogin = "last_login"
 				case lastLogout = "last_logout"
@@ -201,6 +161,34 @@ public extension ESI {
 					switch self {
 						case .lastLogin: return DateFormatter.esiDateTimeFormatter
 						case .lastLogout: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CharacterLocation: Codable, Hashable {
+			
+			
+			public var solarSystemID: Int
+			public var stationID: Int?
+			public var structureID: Int64?
+			
+			public init(solarSystemID: Int, stationID: Int?, structureID: Int64?) {
+				self.solarSystemID = solarSystemID
+				self.stationID = stationID
+				self.structureID = structureID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case solarSystemID = "solar_system_id"
+				case stationID = "station_id"
+				case structureID = "structure_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

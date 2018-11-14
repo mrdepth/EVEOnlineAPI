@@ -58,10 +58,6 @@ public extension ESI {
 				self.vip = vip
 			}
 			
-			public static func ==(lhs: Status.ServerStatus, rhs: Status.ServerStatus) -> Bool {
-				return lhs.hashValue == rhs.hashValue
-			}
-			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case players
 				case serverVersion = "server_version"

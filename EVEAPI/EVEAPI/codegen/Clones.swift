@@ -12,38 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getClones(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Clones.JumpClones>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-clones.read_clones.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v3/characters/\(characterID)/clones/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let progress = Progress(totalUnitCount: 100)
-			
-			let promise = Promise<ESI.Result<Clones.JumpClones>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
-				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-			}.validateESI().responseESI { (response: DataResponse<Clones.JumpClones>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getActiveImplants(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -75,6 +43,38 @@ public extension ESI {
 			return promise.future
 		}
 		
+		@discardableResult
+		public func getClones(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Clones.JumpClones>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-clones.read_clones.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v3/characters/\(characterID)/clones/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let progress = Progress(totalUnitCount: 100)
+			
+			let promise = Promise<ESI.Result<Clones.JumpClones>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).downloadProgress { p in
+				progress.completedUnitCount = Int64(p.fractionCompleted * 100)
+			}.validateESI().responseESI { (response: DataResponse<Clones.JumpClones>) in
+				promise.set(response: response, cached: 120.0)
+			}
+			return promise.future
+		}
+		
 		
 		public struct JumpClones: Codable, Hashable {
 			
@@ -102,10 +102,6 @@ public extension ESI {
 					self.locationID = locationID
 					self.locationType = locationType
 					self.name = name
-				}
-				
-				public static func ==(lhs: Clones.JumpClones.JumpClone, rhs: Clones.JumpClones.JumpClone) -> Bool {
-					return lhs.hashValue == rhs.hashValue
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
@@ -144,10 +140,6 @@ public extension ESI {
 					self.locationType = locationType
 				}
 				
-				public static func ==(lhs: Clones.JumpClones.Location, rhs: Clones.JumpClones.Location) -> Bool {
-					return lhs.hashValue == rhs.hashValue
-				}
-				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case locationID = "location_id"
 					case locationType = "location_type"
@@ -171,10 +163,6 @@ public extension ESI {
 				self.jumpClones = jumpClones
 				self.lastCloneJumpDate = lastCloneJumpDate
 				self.lastStationChangeDate = lastStationChangeDate
-			}
-			
-			public static func ==(lhs: Clones.JumpClones, rhs: Clones.JumpClones) -> Bool {
-				return lhs.hashValue == rhs.hashValue
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
