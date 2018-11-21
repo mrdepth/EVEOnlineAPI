@@ -181,7 +181,7 @@ extension ZKillboard {
 		public var killmailID: Int64
 		public var fittedValue: Double?
 		public var hash: String
-		public var locationID: Int
+		public var locationID: Int?
 		public var points: Int
 		public var totalValue: Double?
 		public var npc: Bool
@@ -211,7 +211,7 @@ extension ZKillboard {
 			
 			fittedValue = try zkb.decodeIfPresent(Double.self, forKey: .fittedValue)
 			hash = try zkb.decode(String.self, forKey: .hash)
-			locationID = try zkb.decode(Int.self, forKey: .locationID)
+			locationID = try zkb.decodeIfPresent(Int.self, forKey: .locationID)
 			points = try zkb.decode(Int.self, forKey: .points)
 			totalValue = try zkb.decodeIfPresent(Double.self, forKey: .totalValue)
 			npc = try zkb.decode(Bool.self, forKey: .npc)
@@ -226,7 +226,7 @@ extension ZKillboard {
 			var zkb = container.nestedContainer(keyedBy: ZKBCodingKeys.self, forKey: .zkb)
 			try zkb.encodeIfPresent(fittedValue, forKey: .fittedValue)
 			try zkb.encode(hash, forKey: .hash)
-			try zkb.encode(locationID, forKey: .locationID)
+			try zkb.encodeIfPresent(locationID, forKey: .locationID)
 			try zkb.encode(points, forKey: .points)
 			try zkb.encodeIfPresent(totalValue, forKey: .totalValue)
 			try zkb.encode(npc, forKey: .npc)
