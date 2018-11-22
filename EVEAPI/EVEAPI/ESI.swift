@@ -51,21 +51,34 @@ public class ESI {
 	private static let helpersLock = NSLock()
 
 	fileprivate class CachePolicyAdapter: RequestAdapter {
+		
+		func adapt(_ urlRequest: URLRequest, completion: @escaping (Alamofire.Result<URLRequest>) -> Void) {
+			guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
+				let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
+				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
+					next?.adapt(urlRequest, completion: completion) ?? completion(.success(urlRequest))
+					return
+			}
+			var request = urlRequest
+			request.setValue(etag, forHTTPHeaderField: "If-None-Match")
+			next?.adapt(request, completion: completion) ?? completion(.success(request))
+		}
+		
 		let next: RequestAdapter?
 		init(next: RequestAdapter?) {
 			self.next = next
 		}
 		
-		public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-			guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
-				let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
-				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
-					return try next?.adapt(urlRequest) ?? urlRequest
-			}
-			var request = urlRequest
-			request.setValue(etag, forHTTPHeaderField: "If-None-Match")
-			return try next?.adapt(request) ?? request
-		}
+//		public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+//			guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
+//				let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
+//				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
+//					return try next?.adapt(urlRequest) ?? urlRequest
+//			}
+//			var request = urlRequest
+//			request.setValue(etag, forHTTPHeaderField: "If-None-Match")
+//			return try next?.adapt(request) ?? request
+//		}
 	}
 
 	

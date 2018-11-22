@@ -100,6 +100,7 @@ public struct OAuth2Token: Codable {
 
 public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	
+	
 	static let dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
@@ -118,18 +119,13 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		self.secretKey = secretKey
 	}
 	
-	deinit {
-		
-	}
-	
-	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-		guard !isRefreshing && !token.isExpired else {throw OAuth2Error.tokenExpired}
+	public func adapt(_ urlRequest: URLRequest, completion: @escaping (Result<URLRequest>) -> Void) {
+		guard !isRefreshing && !token.isExpired else {return completion(.failure(OAuth2Error.tokenExpired))}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
-		return request
+		completion(.success(request))
 	}
 
-	
 	private var isRefreshing = false
 	private var requestsToRetry: [RequestRetryCompletion] = []
 	private let lock = NSLock()
