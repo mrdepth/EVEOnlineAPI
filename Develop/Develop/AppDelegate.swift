@@ -50,7 +50,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		URLCache.shared = MyCache(memoryCapacity: 1024*1024, diskCapacity: 50*1024*1024, diskPath: nil)
 		
-		var esi: ESI! = ESI()
+		AF.request("http://google.com").responseString { result in
+			print(result)
+		}
+		
+		/*var esi: ESI! = ESI()
 		esi.request("https://esi.evetech.net/latest/alliances/?datasource=tranquility", cachePolicy: .useProtocolCachePolicy).responseString { (r) in
 			print(r)
 			esi = nil
@@ -63,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			print($0)
 		}.finally {
 			zkb = nil
-		}
+		}*/
 		
 //		let url = OAuth2.authURL(clientID: clientID, callbackURL: URL(string:"eveauthnc://sso/")!, scope: ESI.Scope.default, state: "esi")
 //		application.open(url, options: [:], completionHandler: nil)

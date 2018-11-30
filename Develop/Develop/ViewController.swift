@@ -10,16 +10,6 @@ import UIKit
 import EVEAPI
 import Alamofire
 
-public class Adapter: RequestAdapter {
-	
-	public func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
-		var request = urlRequest
-		request.cachePolicy = .returnCacheDataDontLoad
-		return request
-	}
-}
-
-
 class ViewController: UIViewController {
 
 	override func viewDidLoad() {
