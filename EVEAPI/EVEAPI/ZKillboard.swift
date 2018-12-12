@@ -90,7 +90,7 @@ extension DataRequest {
 	{
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = .formatted(ZKillboard.dateFormatter)
-		return responseJSONDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
+		return responseDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
 	}
 }
 

@@ -169,7 +169,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		AF.request(OAuthBaseURL + "token",
 						  method: .post,
 						  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
-						  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable {[weak self] (response: DataResponse<TokenResponse>) in
+						  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseDecodable {[weak self] (response: DataResponse<TokenResponse>) in
 							guard let strongSelf = self else { return }
 							
 							strongSelf.lock.lock();
@@ -241,11 +241,11 @@ public class OAuth2 {
 			AF.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
-							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenResponse>) in
+							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseDecodable { (response: DataResponse<TokenResponse>) in
 								switch(response.result) {
 								case let .success(token):
 									let date = Date(timeIntervalSinceNow: token.expiresIn)
-									AF.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseJSONDecodable { (response: DataResponse<TokenVerifyResponse>) in
+									AF.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseDecodable { (response: DataResponse<TokenVerifyResponse>) in
 										switch(response.result) {
 										case let .success(verify):
 											let expiresOn = max(verify.expiresOn ?? date, date)

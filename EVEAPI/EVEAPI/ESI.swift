@@ -329,7 +329,7 @@ extension DataRequest {
 			}
 		}
 		
-		return responseJSONDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
+		return responseDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
 	}
 	
 	@discardableResult
