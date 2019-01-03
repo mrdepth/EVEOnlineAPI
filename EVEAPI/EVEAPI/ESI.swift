@@ -87,7 +87,7 @@ public class ESI {
 		case singularity = "singularity"
 	}
 
-	let baseURL = "https://esi.tech.ccp.is"
+	let baseURL = "https://esi.evetech.net"
 	let server: Server
 	var sessionManager: Session!
 	
