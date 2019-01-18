@@ -81,7 +81,7 @@ public class ESI: SessionManager {
 		case singularity = "singularity"
 	}
 
-	let baseURL = "https://esi.tech.ccp.is"
+	let baseURL = "https://esi.evetech.net"
 	let server: Server
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) {
