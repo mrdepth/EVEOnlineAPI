@@ -51,17 +51,17 @@ public class ESI {
 	private static let helpersLock = NSLock()
 
 	fileprivate class CachePolicyAdapter: RequestAdapter {
-		
-		func adapt(_ urlRequest: URLRequest, completion: @escaping (Alamofire.Result<URLRequest>) -> Void) {
+		func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (AFResult<URLRequest>) -> Void) {
 			guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
 				let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
 				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
-					next?.adapt(urlRequest, completion: completion) ?? completion(.success(urlRequest))
+					next?.adapt(urlRequest, for: session, completion: completion) ?? completion(.success(urlRequest))
 					return
 			}
 			var request = urlRequest
 			request.setValue(etag, forHTTPHeaderField: "If-None-Match")
-			next?.adapt(request, completion: completion) ?? completion(.success(request))
+			next?.adapt(request, for: session, completion: completion) ?? completion(.success(request))
+//			next?.adapt(request, completion: completion) ?? completion(.success(request))
 		}
 		
 		let next: RequestAdapter?
@@ -90,10 +90,11 @@ public class ESI {
 	let baseURL = "https://esi.evetech.net"
 	let server: Server
 	var sessionManager: Session!
+	private(set) var token: OAuth2Token?
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility) {
 		self.server = server
-
+		self.token = token
 		
 		if let token = token, let clientID = clientID, let secretKey = secretKey {
 			ESI.helpersLock.lock(); defer {ESI.helpersLock.unlock()}
@@ -102,15 +103,12 @@ public class ESI {
 				ESI.helpers[token.refreshToken] = Weak(helper)
 				return helper
 			}()
-			sessionManager = Session(adapter: CachePolicyAdapter(next: helper), retrier: helper)
+			sessionManager = Session(interceptor: Interceptor(adapter: CachePolicyAdapter(next: helper), retrier: helper))
 		}
 		else {
-			sessionManager = Session(adapter: CachePolicyAdapter(next: nil))
+			
+			sessionManager = Session(interceptor: Interceptor(adapters: [CachePolicyAdapter(next: nil)], retriers: []))
 		}
-	}
-	
-	public var token: OAuth2Token? {
-		return (sessionManager.retrier as? OAuth2Helper)?.token
 	}
 	
 	deinit {
@@ -315,7 +313,7 @@ extension DataRequest {
 	
 
 	@discardableResult
-	public func responseESI<T: Decodable>(queue: DispatchQueue? = nil,
+	public func responseESI<T: Decodable>(queue: DispatchQueue = .main,
 		completionHandler: @escaping (DataResponse<T>) -> Void)
 		-> Self {
 		let decoder = JSONDecoder()
@@ -333,31 +331,31 @@ extension DataRequest {
 	}
 	
 	@discardableResult
-	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Double>) -> Void)
+	public func responseESI(queue: DispatchQueue = .main, completionHandler: @escaping (DataResponse<Double>) -> Void)
 		-> Self {
 			return response(queue: queue, responseSerializer: DoubleResponseSerializer(), completionHandler: completionHandler)
 	}
 	
 	@discardableResult
-	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Float>) -> Void)
+	public func responseESI(queue: DispatchQueue = .main, completionHandler: @escaping (DataResponse<Float>) -> Void)
 		-> Self {
 			return response(queue: queue, responseSerializer: FloatResponseSerializer(), completionHandler: completionHandler)
 	}
 
 	@discardableResult
-	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Int>) -> Void)
+	public func responseESI(queue: DispatchQueue = .main, completionHandler: @escaping (DataResponse<Int>) -> Void)
 		-> Self {
 			return response(queue: queue, responseSerializer: IntResponseSerializer(), completionHandler: completionHandler)
 	}
 
 	@discardableResult
-	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<Int64>) -> Void)
+	public func responseESI(queue: DispatchQueue = .main, completionHandler: @escaping (DataResponse<Int64>) -> Void)
 		-> Self {
 			return response(queue: queue, responseSerializer: Int64ResponseSerializer(), completionHandler: completionHandler)
 	}
 
 	@discardableResult
-	public func responseESI(queue: DispatchQueue? = nil, completionHandler: @escaping (DataResponse<String>) -> Void)
+	public func responseESI(queue: DispatchQueue = .main, completionHandler: @escaping (DataResponse<String>) -> Void)
 		-> Self {
 			return response(queue: queue, responseSerializer: StringResponseSerializer(), completionHandler: completionHandler)
 	}
@@ -366,7 +364,7 @@ extension DataRequest {
 
 public extension ESI.Scope {
 
-	public static var `default`: [ESI.Scope]  {
+	static var `default`: [ESI.Scope]  {
 		get {
 			return [
 				.esiClonesReadClonesV1,

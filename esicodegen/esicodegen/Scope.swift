@@ -45,7 +45,7 @@ class Scope: Namespace {
 			
 			for (_, array) in security {
 				for scope in array {
-					values.append("public static let \(scope.camelBack) = ESI.Scope(\"\(scope)\")")
+					values.append("static let \(scope.camelBack) = ESI.Scope(\"\(scope)\")")
 					scopes.append(".\(scope.camelBack)")
 				}
 			}

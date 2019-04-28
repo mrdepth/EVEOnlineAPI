@@ -363,11 +363,10 @@ extension DataRequest {
 	}
 	
 	@discardableResult
-	public func responseRSS<T: JSONCoding>(queue: DispatchQueue? = nil,
+	public func responseRSS<T: JSONCoding>(queue: DispatchQueue = .main,
 	                        options: JSONSerialization.ReadingOptions = .allowFragments,
 	                        completionHandler: @escaping (DataResponse<T>) -> Void) -> Self {
 		let serializer = RSSSerializer<T>()
-		
 		return response(
 			queue: queue,
 			responseSerializer: serializer,

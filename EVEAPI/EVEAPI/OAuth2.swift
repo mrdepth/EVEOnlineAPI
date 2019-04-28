@@ -20,8 +20,8 @@ public enum OAuth2Error: Error {
 
 
 public extension Notification.Name {
-	public static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
-	public static let OAuth2TokenDidBecomeInvalid = Notification.Name(rawValue: "OAuth2TokenDidBecomeInvalid")
+	static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
+	static let OAuth2TokenDidBecomeInvalid = Notification.Name(rawValue: "OAuth2TokenDidBecomeInvalid")
 }
 
 fileprivate struct TokenResponse: Decodable {
@@ -98,7 +98,7 @@ public struct OAuth2Token: Codable {
 	}
 }
 
-public class OAuth2Helper: RequestAdapter, RequestRetrier {
+public class OAuth2Helper: RequestInterceptor {
 	
 	
 	static let dateFormatter: DateFormatter = {
@@ -119,7 +119,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		self.secretKey = secretKey
 	}
 	
-	public func adapt(_ urlRequest: URLRequest, completion: @escaping (Result<URLRequest>) -> Void) {
+	public func adapt(_ urlRequest: URLRequest, completion: @escaping (AFResult<URLRequest>) -> Void) {
 		guard !isRefreshing && !token.isExpired else {return completion(.failure(OAuth2Error.tokenExpired))}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
@@ -127,12 +127,12 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	}
 
 	private var isRefreshing = false
-	private var requestsToRetry: [RequestRetryCompletion] = []
+	private var requestsToRetry: [(RetryResult) -> Void] = []
 	private let lock = NSLock()
 	
-	public func should(_ manager: Session, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+	public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
 		guard !token.refreshToken.isEmpty else {
-			completion(false, 0)
+			completion(.doNotRetry)
 			return
 		}
 		
@@ -152,13 +152,17 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 				refreshToken { [weak self] error in
 					guard let strongSelf = self else { return }
 					strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
-					let succeeded = error == nil
-					strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
+					if let error = error {
+						strongSelf.requestsToRetry.forEach { $0(.doNotRetryWithError(error)) }
+					}
+					else {
+						strongSelf.requestsToRetry.forEach { $0(.retry) }
+					}
 					strongSelf.requestsToRetry.removeAll()
 				}
 			}
 		} else {
-			completion(false, 0.0)
+			completion(.doNotRetry)
 		}
 	}
 	
@@ -220,7 +224,7 @@ public class OAuth2 {
 	}
 	
 	
-	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Result<OAuth2Token>) -> Void) -> Bool {
+	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: AFResult<OAuth2Token>) -> Void) -> Bool {
 		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
 		guard let query = components.queryItems else {return false}
 		var code: String?

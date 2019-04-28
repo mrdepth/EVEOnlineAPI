@@ -85,7 +85,7 @@ extension DataRequest {
 	
 	
 	@discardableResult
-	public func responseZKillboard<T: Decodable>(queue: DispatchQueue? = nil,
+	public func responseZKillboard<T: Decodable>(queue: DispatchQueue = .main,
 	                        completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
 	{
 		let decoder = JSONDecoder()
