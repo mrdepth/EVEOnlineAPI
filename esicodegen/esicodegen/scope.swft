@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var {variable}: {scope} {
+	var {variable}: {scope} {
 		return {scope}(esi: self)
 	}
 

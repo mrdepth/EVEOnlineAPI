@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var userInterface: UserInterface {
+	var userInterface: UserInterface {
 		return UserInterface(esi: self)
 	}
 	
@@ -12,7 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func openContractWindow(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		public func openInformationWindow(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
 			
 			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -24,11 +24,65 @@ public extension ESI {
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = contractID.httpQuery {
-				query.append(URLQueryItem(name: "contract_id", value: v))
+			if let v = targetID.httpQuery {
+				query.append(URLQueryItem(name: "target_id", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/ui/openwindow/contract/"
+			let url = esi.baseURL + "/v1/ui/openwindow/information/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func openMarketDetails(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = typeID.httpQuery {
+				query.append(URLQueryItem(name: "type_id", value: v))
+			}
+			
+			let url = esi.baseURL + "/v1/ui/openwindow/marketdetails/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<String>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func openNewMailWindow(newMail: UserInterface.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(newMail)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/ui/openwindow/newmail/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -74,33 +128,7 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func openNewMailWindow(newMail: UserInterface.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(newMail)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/ui/openwindow/newmail/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func openMarketDetails(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		public func openContractWindow(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
 			
 			let scopes = esi.token?.scopes ?? []
 			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
@@ -112,39 +140,11 @@ public extension ESI {
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = typeID.httpQuery {
-				query.append(URLQueryItem(name: "type_id", value: v))
+			if let v = contractID.httpQuery {
+				query.append(URLQueryItem(name: "contract_id", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/ui/openwindow/marketdetails/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func openInformationWindow(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = targetID.httpQuery {
-				query.append(URLQueryItem(name: "target_id", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/ui/openwindow/information/"
+			let url = esi.baseURL + "/v1/ui/openwindow/contract/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

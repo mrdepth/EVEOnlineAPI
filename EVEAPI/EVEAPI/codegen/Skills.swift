@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var skills: Skills {
+	var skills: Skills {
 		return Skills(esi: self)
 	}
 	
@@ -62,7 +62,7 @@ public extension ESI {
 			
 			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
-				promise.set(response: response, cached: 3600.0)
+				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}
@@ -153,50 +153,6 @@ public extension ESI {
 		}
 		
 		
-		public struct SkillQueueItem: Codable, Hashable {
-			
-			
-			public var finishDate: Date?
-			public var finishedLevel: Int
-			public var levelEndSP: Int?
-			public var levelStartSP: Int?
-			public var queuePosition: Int
-			public var skillID: Int
-			public var startDate: Date?
-			public var trainingStartSP: Int?
-			
-			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
-				self.finishDate = finishDate
-				self.finishedLevel = finishedLevel
-				self.levelEndSP = levelEndSP
-				self.levelStartSP = levelStartSP
-				self.queuePosition = queuePosition
-				self.skillID = skillID
-				self.startDate = startDate
-				self.trainingStartSP = trainingStartSP
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case finishDate = "finish_date"
-				case finishedLevel = "finished_level"
-				case levelEndSP = "level_end_sp"
-				case levelStartSP = "level_start_sp"
-				case queuePosition = "queue_position"
-				case skillID = "skill_id"
-				case startDate = "start_date"
-				case trainingStartSP = "training_start_sp"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .finishDate: return DateFormatter.esiDateTimeFormatter
-						case .startDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct CharacterAttributes: Codable, Hashable {
 			
 			
@@ -234,6 +190,50 @@ public extension ESI {
 					switch self {
 						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
 						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct SkillQueueItem: Codable, Hashable {
+			
+			
+			public var finishDate: Date?
+			public var finishedLevel: Int
+			public var levelEndSP: Int?
+			public var levelStartSP: Int?
+			public var queuePosition: Int
+			public var skillID: Int
+			public var startDate: Date?
+			public var trainingStartSP: Int?
+			
+			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
+				self.finishDate = finishDate
+				self.finishedLevel = finishedLevel
+				self.levelEndSP = levelEndSP
+				self.levelStartSP = levelStartSP
+				self.queuePosition = queuePosition
+				self.skillID = skillID
+				self.startDate = startDate
+				self.trainingStartSP = trainingStartSP
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case finishDate = "finish_date"
+				case finishedLevel = "finished_level"
+				case levelEndSP = "level_end_sp"
+				case levelStartSP = "level_start_sp"
+				case queuePosition = "queue_position"
+				case skillID = "skill_id"
+				case startDate = "start_date"
+				case trainingStartSP = "training_start_sp"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .finishDate: return DateFormatter.esiDateTimeFormatter
+						case .startDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

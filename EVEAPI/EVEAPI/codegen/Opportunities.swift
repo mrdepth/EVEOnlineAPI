@@ -4,12 +4,39 @@ import Futures
 
 
 public extension ESI {
-	public var opportunities: Opportunities {
+	var opportunities: Opportunities {
 		return Opportunities(esi: self)
 	}
 	
 	struct Opportunities {
 		let esi: ESI
+		
+		@discardableResult
+		public func getOpportunitiesGroups(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/opportunities/groups/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
 		
 		@discardableResult
 		public func getOpportunitiesGroup(acceptLanguage: AcceptLanguage? = nil, groupID: Int, ifNoneMatch: String? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Opportunities.Group>> {
@@ -38,60 +65,6 @@ public extension ESI {
 			
 			let promise = Promise<ESI.Result<Opportunities.Group>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Opportunities.Group>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getOpportunitiesTasks(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/opportunities/tasks/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getOpportunitiesGroups(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/opportunities/groups/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
 				promise.set(response: response, cached: nil)
 			}
 			return promise.future
@@ -152,6 +125,33 @@ public extension ESI {
 			return promise.future
 		}
 		
+		@discardableResult
+		public func getOpportunitiesTasks(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/opportunities/tasks/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
 		
 		public struct CompletedTask: Codable, Hashable {
 			
@@ -171,6 +171,37 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .completedAt: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct OpportunitiesTask: Codable, Hashable {
+			
+			
+			public var localizedDescription: String
+			public var name: String
+			public var notification: String
+			public var taskID: Int
+			
+			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
+				self.localizedDescription = localizedDescription
+				self.name = name
+				self.notification = notification
+				self.taskID = taskID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case localizedDescription = "description"
+				case name
+				case notification
+				case taskID = "task_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}
@@ -204,37 +235,6 @@ public extension ESI {
 				case name
 				case notification
 				case requiredTasks = "required_tasks"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct OpportunitiesTask: Codable, Hashable {
-			
-			
-			public var localizedDescription: String
-			public var name: String
-			public var notification: String
-			public var taskID: Int
-			
-			public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
-				self.localizedDescription = localizedDescription
-				self.name = name
-				self.notification = notification
-				self.taskID = taskID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case localizedDescription = "description"
-				case name
-				case notification
-				case taskID = "task_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

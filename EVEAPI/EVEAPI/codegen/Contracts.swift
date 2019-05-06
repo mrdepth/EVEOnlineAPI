@@ -4,12 +4,42 @@ import Futures
 
 
 public extension ESI {
-	public var contracts: Contracts {
+	var contracts: Contracts {
 		return Contracts(esi: self)
 	}
 	
 	struct Contracts {
 		let esi: ESI
+		
+		@discardableResult
+		public func getCorporationContractBids(contractID: Int, corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/v1/corporations/\(corporationID)/contracts/\(contractID)/bids/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
 		
 		@discardableResult
 		public func getCorporationContractItems(contractID: Int, corporationID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDItemsOk]>> {
@@ -69,37 +99,10 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getContractItems(characterID: Int, contractID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.Item]>> {
+		public func getCorporationContracts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsOk]>> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/contracts/\(contractID)/items/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Contracts.Item]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.Item]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getPublicContracts(ifNoneMatch: String? = nil, page: Int? = nil, regionID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetContractsPublicRegionIDOk]>> {
-			
-			
+			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -114,13 +117,13 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/contracts/public/\(regionID)/"
+			let url = esi.baseURL + "/v1/corporations/\(corporationID)/contracts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Contracts.GetContractsPublicRegionIDOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.GetContractsPublicRegionIDOk]>) in
-				promise.set(response: response, cached: 1800.0)
+			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsOk]>) in
+				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
 		}
@@ -154,10 +157,9 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCorporationContractBids(contractID: Int, corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>> {
+		public func getPublicContracts(ifNoneMatch: String? = nil, page: Int? = nil, regionID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetContractsPublicRegionIDOk]>> {
 			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {return .init(.failure(ESIError.forbidden))}
+			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -172,13 +174,13 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/contracts/\(contractID)/bids/"
+			let url = esi.baseURL + "/v1/contracts/public/\(regionID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsContractIDBidsOk]>) in
-				promise.set(response: response, cached: 3600.0)
+			let promise = Promise<ESI.Result<[Contracts.GetContractsPublicRegionIDOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.GetContractsPublicRegionIDOk]>) in
+				promise.set(response: response, cached: 1800.0)
 			}
 			return promise.future
 		}
@@ -214,36 +216,6 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCorporationContracts(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsOk]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-contracts.read_corporation_contracts.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/contracts/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Contracts.GetCorporationsCorporationIDContractsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.GetCorporationsCorporationIDContractsOk]>) in
-				promise.set(response: response, cached: 300.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getPublicContractItems(contractID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.GetContractsPublicItemsContractIDOk]>> {
 			
 			
@@ -272,241 +244,36 @@ public extension ESI {
 			return promise.future
 		}
 		
-		
-		public struct GetContractsPublicItemsContractIDForbidden: Codable, Hashable {
+		@discardableResult
+		public func getContractItems(characterID: Int, contractID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Contracts.Item]>> {
 			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-contracts.read_character_contracts.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
 			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/characters/\(characterID)/contracts/\(contractID)/items/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Contracts.Item]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Contracts.Item]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDContractsContractIDItemsNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDContractsContractIDItemsError520: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDContractsContractIDItemsOk: Codable, Hashable {
-			
-			
-			public var isIncluded: Bool
-			public var isSingleton: Bool
-			public var quantity: Int
-			public var rawQuantity: Int?
-			public var recordID: Int64
-			public var typeID: Int
-			
-			public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
-				self.isIncluded = isIncluded
-				self.isSingleton = isSingleton
-				self.quantity = quantity
-				self.rawQuantity = rawQuantity
-				self.recordID = recordID
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case isIncluded = "is_included"
-				case isSingleton = "is_singleton"
-				case quantity
-				case rawQuantity = "raw_quantity"
-				case recordID = "record_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Bid: Codable, Hashable {
-			
-			
-			public var amount: Float
-			public var bidID: Int
-			public var bidderID: Int
-			public var dateBid: Date
-			
-			public init(amount: Float, bidID: Int, bidderID: Int, dateBid: Date) {
-				self.amount = amount
-				self.bidID = bidID
-				self.bidderID = bidderID
-				self.dateBid = dateBid
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case amount
-				case bidID = "bid_id"
-				case bidderID = "bidder_id"
-				case dateBid = "date_bid"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .dateBid: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDContractsContractIDBidsOk: Codable, Hashable {
-			
-			
-			public var amount: Float
-			public var bidID: Int
-			public var bidderID: Int
-			public var dateBid: Date
-			
-			public init(amount: Float, bidID: Int, bidderID: Int, dateBid: Date) {
-				self.amount = amount
-				self.bidID = bidID
-				self.bidderID = bidderID
-				self.dateBid = dateBid
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case amount
-				case bidID = "bid_id"
-				case bidderID = "bidder_id"
-				case dateBid = "date_bid"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .dateBid: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
+			return promise.future
 		}
 		
 		
 		public struct GetCorporationsCorporationIDContractsContractIDBidsNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetContractsPublicItemsContractIDOk: Codable, Hashable {
-			
-			
-			public var isBlueprintCopy: Bool?
-			public var isIncluded: Bool
-			public var itemID: Int64?
-			public var materialEfficiency: Int?
-			public var quantity: Int
-			public var recordID: Int64
-			public var runs: Int?
-			public var timeEfficiency: Int?
-			public var typeID: Int
-			
-			public init(isBlueprintCopy: Bool?, isIncluded: Bool, itemID: Int64?, materialEfficiency: Int?, quantity: Int, recordID: Int64, runs: Int?, timeEfficiency: Int?, typeID: Int) {
-				self.isBlueprintCopy = isBlueprintCopy
-				self.isIncluded = isIncluded
-				self.itemID = itemID
-				self.materialEfficiency = materialEfficiency
-				self.quantity = quantity
-				self.recordID = recordID
-				self.runs = runs
-				self.timeEfficiency = timeEfficiency
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case isBlueprintCopy = "is_blueprint_copy"
-				case isIncluded = "is_included"
-				case itemID = "item_id"
-				case materialEfficiency = "material_efficiency"
-				case quantity
-				case recordID = "record_id"
-				case runs
-				case timeEfficiency = "time_efficiency"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDContractsContractIDBidsNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -556,7 +323,38 @@ public extension ESI {
 		}
 		
 		
-		public struct GetContractsPublicItemsContractIDNotFound: Codable, Hashable {
+		public struct Bid: Codable, Hashable {
+			
+			
+			public var amount: Float
+			public var bidID: Int
+			public var bidderID: Int
+			public var dateBid: Date
+			
+			public init(amount: Float, bidID: Int, bidderID: Int, dateBid: Date) {
+				self.amount = amount
+				self.bidID = bidID
+				self.bidderID = bidderID
+				self.dateBid = dateBid
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case amount
+				case bidID = "bid_id"
+				case bidderID = "bidder_id"
+				case dateBid = "date_bid"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .dateBid: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetContractsPublicItemsContractIDForbidden: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -658,6 +456,28 @@ public extension ESI {
 		}
 		
 		
+		public struct GetContractsPublicItemsContractIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct GetCorporationsCorporationIDContractsContractIDItemsNotFound: Codable, Hashable {
 			
 			
@@ -680,32 +500,136 @@ public extension ESI {
 		}
 		
 		
-		public struct Item: Codable, Hashable {
+		public struct GetCharactersCharacterIDContractsContractIDItemsNotFound: Codable, Hashable {
 			
 			
-			public var isIncluded: Bool
-			public var isSingleton: Bool
-			public var quantity: Int
-			public var rawQuantity: Int?
-			public var recordID: Int64
-			public var typeID: Int
+			public var error: String?
 			
-			public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
-				self.isIncluded = isIncluded
-				self.isSingleton = isSingleton
-				self.quantity = quantity
-				self.rawQuantity = rawQuantity
-				self.recordID = recordID
-				self.typeID = typeID
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case isIncluded = "is_included"
-				case isSingleton = "is_singleton"
-				case quantity
-				case rawQuantity = "raw_quantity"
-				case recordID = "record_id"
-				case typeID = "type_id"
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDContractsContractIDBidsNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetContractsPublicBidsContractIDForbidden: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetContractsPublicBidsContractIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCorporationsCorporationIDContractsContractIDBidsOk: Codable, Hashable {
+			
+			
+			public var amount: Float
+			public var bidID: Int
+			public var bidderID: Int
+			public var dateBid: Date
+			
+			public init(amount: Float, bidID: Int, bidderID: Int, dateBid: Date) {
+				self.amount = amount
+				self.bidID = bidID
+				self.bidderID = bidderID
+				self.dateBid = dateBid
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case amount
+				case bidID = "bid_id"
+				case bidderID = "bidder_id"
+				case dateBid = "date_bid"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .dateBid: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetContractsPublicRegionIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -847,7 +771,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetContractsPublicBidsContractIDForbidden: Codable, Hashable {
+		public struct GetCorporationsCorporationIDContractsContractIDItemsError520: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -858,6 +782,43 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCorporationsCorporationIDContractsContractIDItemsOk: Codable, Hashable {
+			
+			
+			public var isIncluded: Bool
+			public var isSingleton: Bool
+			public var quantity: Int
+			public var rawQuantity: Int?
+			public var recordID: Int64
+			public var typeID: Int
+			
+			public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
+				self.isIncluded = isIncluded
+				self.isSingleton = isSingleton
+				self.quantity = quantity
+				self.rawQuantity = rawQuantity
+				self.recordID = recordID
+				self.typeID = typeID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case isIncluded = "is_included"
+				case isSingleton = "is_singleton"
+				case quantity
+				case rawQuantity = "raw_quantity"
+				case recordID = "record_id"
+				case typeID = "type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -999,17 +960,41 @@ public extension ESI {
 		}
 		
 		
-		public struct GetContractsPublicRegionIDNotFound: Codable, Hashable {
+		public struct GetContractsPublicItemsContractIDOk: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var isBlueprintCopy: Bool?
+			public var isIncluded: Bool
+			public var itemID: Int64?
+			public var materialEfficiency: Int?
+			public var quantity: Int
+			public var recordID: Int64
+			public var runs: Int?
+			public var timeEfficiency: Int?
+			public var typeID: Int
 			
-			public init(error: String?) {
-				self.error = error
+			public init(isBlueprintCopy: Bool?, isIncluded: Bool, itemID: Int64?, materialEfficiency: Int?, quantity: Int, recordID: Int64, runs: Int?, timeEfficiency: Int?, typeID: Int) {
+				self.isBlueprintCopy = isBlueprintCopy
+				self.isIncluded = isIncluded
+				self.itemID = itemID
+				self.materialEfficiency = materialEfficiency
+				self.quantity = quantity
+				self.recordID = recordID
+				self.runs = runs
+				self.timeEfficiency = timeEfficiency
+				self.typeID = typeID
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case isBlueprintCopy = "is_blueprint_copy"
+				case isIncluded = "is_included"
+				case itemID = "item_id"
+				case materialEfficiency = "material_efficiency"
+				case quantity
+				case recordID = "record_id"
+				case runs
+				case timeEfficiency = "time_efficiency"
+				case typeID = "type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -1021,17 +1006,32 @@ public extension ESI {
 		}
 		
 		
-		public struct GetContractsPublicBidsContractIDNotFound: Codable, Hashable {
+		public struct Item: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var isIncluded: Bool
+			public var isSingleton: Bool
+			public var quantity: Int
+			public var rawQuantity: Int?
+			public var recordID: Int64
+			public var typeID: Int
 			
-			public init(error: String?) {
-				self.error = error
+			public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
+				self.isIncluded = isIncluded
+				self.isSingleton = isSingleton
+				self.quantity = quantity
+				self.rawQuantity = rawQuantity
+				self.recordID = recordID
+				self.typeID = typeID
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case isIncluded = "is_included"
+				case isSingleton = "is_singleton"
+				case quantity
+				case rawQuantity = "raw_quantity"
+				case recordID = "record_id"
+				case typeID = "type_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

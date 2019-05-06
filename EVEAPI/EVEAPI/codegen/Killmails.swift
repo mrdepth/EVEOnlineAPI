@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var killmails: Killmails {
+	var killmails: Killmails {
 		return Killmails(esi: self)
 	}
 	
@@ -99,9 +99,128 @@ public extension ESI {
 		}
 		
 		
+		public struct Recent: Codable, Hashable {
+			
+			
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case killmailHash = "killmail_hash"
+				case killmailID = "killmail_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct Killmail: Codable, Hashable {
 			
+			public struct Attacker: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var corporationID: Int?
+				public var damageDone: Int
+				public var factionID: Int?
+				public var finalBlow: Bool
+				public var securityStatus: Float
+				public var shipTypeID: Int?
+				public var weaponTypeID: Int?
+				
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.corporationID = corporationID
+					self.damageDone = damageDone
+					self.factionID = factionID
+					self.finalBlow = finalBlow
+					self.securityStatus = securityStatus
+					self.shipTypeID = shipTypeID
+					self.weaponTypeID = weaponTypeID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case characterID = "character_id"
+					case corporationID = "corporation_id"
+					case damageDone = "damage_done"
+					case factionID = "faction_id"
+					case finalBlow = "final_blow"
+					case securityStatus = "security_status"
+					case shipTypeID = "ship_type_id"
+					case weaponTypeID = "weapon_type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public struct Victim: Codable, Hashable {
+				
+				public struct GetKillmailsKillmailIDKillmailHashPosition: Codable, Hashable {
+					
+					
+					public var x: Double
+					public var y: Double
+					public var z: Double
+					
+					public init(x: Double, y: Double, z: Double) {
+						self.x = x
+						self.y = y
+						self.z = z
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case x
+						case y
+						case z
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
 				
 				public struct Items: Codable, Hashable {
 					
@@ -171,33 +290,6 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetKillmailsKillmailIDKillmailHashPosition: Codable, Hashable {
-					
-					
-					public var x: Double
-					public var y: Double
-					public var z: Double
-					
-					public init(x: Double, y: Double, z: Double) {
-						self.x = x
-						self.y = y
-						self.z = z
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case x
-						case y
-						case z
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
 				public var allianceID: Int?
 				public var characterID: Int?
 				public var corporationID: Int?
@@ -227,51 +319,6 @@ public extension ESI {
 					case items
 					case position
 					case shipTypeID = "ship_type_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct Attacker: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var characterID: Int?
-				public var corporationID: Int?
-				public var damageDone: Int
-				public var factionID: Int?
-				public var finalBlow: Bool
-				public var securityStatus: Float
-				public var shipTypeID: Int?
-				public var weaponTypeID: Int?
-				
-				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
-					self.allianceID = allianceID
-					self.characterID = characterID
-					self.corporationID = corporationID
-					self.damageDone = damageDone
-					self.factionID = factionID
-					self.finalBlow = finalBlow
-					self.securityStatus = securityStatus
-					self.shipTypeID = shipTypeID
-					self.weaponTypeID = weaponTypeID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case characterID = "character_id"
-					case corporationID = "corporation_id"
-					case damageDone = "damage_done"
-					case factionID = "faction_id"
-					case finalBlow = "final_blow"
-					case securityStatus = "security_status"
-					case shipTypeID = "ship_type_id"
-					case weaponTypeID = "weapon_type_id"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -319,54 +366,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct GetCorporationsCorporationIDKillmailsRecentOk: Codable, Hashable {
-			
-			
-			public var killmailHash: String
-			public var killmailID: Int
-			
-			public init(killmailHash: String, killmailID: Int) {
-				self.killmailHash = killmailHash
-				self.killmailID = killmailID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case killmailHash = "killmail_hash"
-				case killmailID = "killmail_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Recent: Codable, Hashable {
 			
 			
 			public var killmailHash: String

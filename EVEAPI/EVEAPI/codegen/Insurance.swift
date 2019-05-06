@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var insurance: Insurance {
+	var insurance: Insurance {
 		return Insurance(esi: self)
 	}
 	

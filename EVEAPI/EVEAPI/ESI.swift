@@ -90,7 +90,7 @@ public class ESI {
 	let baseURL = "https://esi.evetech.net"
 	let server: Server
 	var sessionManager: Session!
-	private(set) var token: OAuth2Token?
+	private(set) public var token: OAuth2Token?
 	
 	public init(token: OAuth2Token? = nil, clientID: String? = nil, secretKey: String? = nil, server: Server = .tranquility) {
 		self.server = server
@@ -215,8 +215,8 @@ public class ESI {
 			rawValue = value
 		}
 		
-		public var hashValue: Int {
-			return rawValue.hashValue
+		public func hash(into hasher: inout Hasher) {
+			hasher.combine(rawValue)
 		}
 		
 		public static func ==(lhs: ESI.Scope, rhs: ESI.Scope) -> Bool {

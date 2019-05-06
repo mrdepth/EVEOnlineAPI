@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var alliance: Alliance {
+	var alliance: Alliance {
 		return Alliance(esi: self)
 	}
 	
@@ -60,6 +60,33 @@ public extension ESI {
 			
 			let promise = Promise<ESI.Result<Alliance.Icon>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Icon>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAllianceInformation(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Alliance.Information>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v3/alliances/\(allianceID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<Alliance.Information>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Information>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -92,35 +119,33 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getAllianceInformation(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Alliance.Information>> {
+		
+		public struct Icon: Codable, Hashable {
 			
 			
-			let body: Data? = nil
+			public var px128x128: String?
+			public var px64x64: String?
 			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
+			public init(px128x128: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px64x64 = px64x64
 			}
 			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v3/alliances/\(allianceID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Alliance.Information>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Information>) in
-				promise.set(response: response, cached: 3600.0)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case px128x128
+				case px64x64
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			return promise.future
 		}
 		
 		
-		public struct GetAlliancesAllianceIDNotFound: Codable, Hashable {
+		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -142,7 +167,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
+		public struct GetAlliancesAllianceIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -197,31 +222,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .dateFounded: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Icon: Codable, Hashable {
-			
-			
-			public var px128x128: String?
-			public var px64x64: String?
-			
-			public init(px128x128: String?, px64x64: String?) {
-				self.px128x128 = px128x128
-				self.px64x64 = px64x64
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case px128x128
-				case px64x64
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
 						default: return nil
 					}
 				}

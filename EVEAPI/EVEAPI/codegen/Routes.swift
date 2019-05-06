@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var routes: Routes {
+	var routes: Routes {
 		return Routes(esi: self)
 	}
 	

@@ -1,4 +1,4 @@
-public struct {className}: Codable, Hashable {
+{access}struct {className}: Codable, Hashable {
 
 {nested}
 {definitions}

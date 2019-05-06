@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var status: Status {
+	var status: Status {
 		return Status(esi: self)
 	}
 	

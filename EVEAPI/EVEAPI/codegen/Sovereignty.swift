@@ -4,39 +4,12 @@ import Futures
 
 
 public extension ESI {
-	public var sovereignty: Sovereignty {
+	var sovereignty: Sovereignty {
 		return Sovereignty(esi: self)
 	}
 	
 	struct Sovereignty {
 		let esi: ESI
-		
-		@discardableResult
-		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/sovereignty/campaigns/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
-		}
 		
 		@discardableResult
 		public func listSovereigntyStructures(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Structure]>> {
@@ -61,6 +34,33 @@ public extension ESI {
 			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
 				promise.set(response: response, cached: 120.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/v1/sovereignty/campaigns/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
+				promise.set(response: response, cached: 5.0)
 			}
 			return promise.future
 		}
@@ -93,40 +93,30 @@ public extension ESI {
 		}
 		
 		
-		public struct Structure: Codable, Hashable {
+		public struct System: Codable, Hashable {
 			
 			
-			public var allianceID: Int
-			public var solarSystemID: Int
-			public var structureID: Int64
-			public var structureTypeID: Int
-			public var vulnerabilityOccupancyLevel: Float?
-			public var vulnerableEndTime: Date?
-			public var vulnerableStartTime: Date?
+			public var allianceID: Int?
+			public var corporationID: Int?
+			public var factionID: Int?
+			public var systemID: Int
 			
-			public init(allianceID: Int, solarSystemID: Int, structureID: Int64, structureTypeID: Int, vulnerabilityOccupancyLevel: Float?, vulnerableEndTime: Date?, vulnerableStartTime: Date?) {
+			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
 				self.allianceID = allianceID
-				self.solarSystemID = solarSystemID
-				self.structureID = structureID
-				self.structureTypeID = structureTypeID
-				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
-				self.vulnerableEndTime = vulnerableEndTime
-				self.vulnerableStartTime = vulnerableStartTime
+				self.corporationID = corporationID
+				self.factionID = factionID
+				self.systemID = systemID
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case allianceID = "alliance_id"
-				case solarSystemID = "solar_system_id"
-				case structureID = "structure_id"
-				case structureTypeID = "structure_type_id"
-				case vulnerabilityOccupancyLevel = "vulnerability_occupancy_level"
-				case vulnerableEndTime = "vulnerable_end_time"
-				case vulnerableStartTime = "vulnerable_start_time"
+				case corporationID = "corporation_id"
+				case factionID = "faction_id"
+				case systemID = "system_id"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .vulnerableEndTime: return DateFormatter.esiDateTimeFormatter
-						case .vulnerableStartTime: return DateFormatter.esiDateTimeFormatter
+						
 						default: return nil
 					}
 				}
@@ -218,30 +208,40 @@ public extension ESI {
 		}
 		
 		
-		public struct System: Codable, Hashable {
+		public struct Structure: Codable, Hashable {
 			
 			
-			public var allianceID: Int?
-			public var corporationID: Int?
-			public var factionID: Int?
-			public var systemID: Int
+			public var allianceID: Int
+			public var solarSystemID: Int
+			public var structureID: Int64
+			public var structureTypeID: Int
+			public var vulnerabilityOccupancyLevel: Float?
+			public var vulnerableEndTime: Date?
+			public var vulnerableStartTime: Date?
 			
-			public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+			public init(allianceID: Int, solarSystemID: Int, structureID: Int64, structureTypeID: Int, vulnerabilityOccupancyLevel: Float?, vulnerableEndTime: Date?, vulnerableStartTime: Date?) {
 				self.allianceID = allianceID
-				self.corporationID = corporationID
-				self.factionID = factionID
-				self.systemID = systemID
+				self.solarSystemID = solarSystemID
+				self.structureID = structureID
+				self.structureTypeID = structureTypeID
+				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
+				self.vulnerableEndTime = vulnerableEndTime
+				self.vulnerableStartTime = vulnerableStartTime
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case allianceID = "alliance_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
-				case systemID = "system_id"
+				case solarSystemID = "solar_system_id"
+				case structureID = "structure_id"
+				case structureTypeID = "structure_type_id"
+				case vulnerabilityOccupancyLevel = "vulnerability_occupancy_level"
+				case vulnerableEndTime = "vulnerable_end_time"
+				case vulnerableStartTime = "vulnerable_start_time"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						
+						case .vulnerableEndTime: return DateFormatter.esiDateTimeFormatter
+						case .vulnerableStartTime: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

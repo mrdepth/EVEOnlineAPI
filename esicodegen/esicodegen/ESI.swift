@@ -197,7 +197,7 @@ extension String {
 			}
 			else {
 				let r = s.startIndex..<s.index(after: s.startIndex)
-				return s.replacingCharacters(in: r, with: s.substring(with: r).uppercased())
+				return s.replacingCharacters(in: r, with: s[r].uppercased())
 			}
 		}.joined()
 	}
@@ -206,7 +206,7 @@ extension String {
 		guard !isEmpty else {return self}
 		let s = camelCaps
 		let r = s.startIndex..<s.index(after: s.startIndex)
-		return s.replacingCharacters(in: r, with: s.substring(with: r).lowercased())
+		return s.replacingCharacters(in: r, with: s[r].lowercased())
 	}
 	
 	var indented: String {
@@ -215,10 +215,10 @@ extension String {
 		
 		for s in self.components(separatedBy: "\n") {
 			let s = s.trimmingCharacters(in: CharacterSet(charactersIn: "\t"))
-			let i = indentation - (s.characters.first == "}" ? 1 : 0)
+			let i = indentation - (s.first == "}" ? 1 : 0)
 			c.append(String(repeating: "\t", count: i) + s)
 			
-			for c in s.characters {
+			for c in s {
 				if c == "}" {
 					indentation -= 1
 				}
@@ -245,20 +245,6 @@ func hashCombine(seed: inout Int, value: Int) {
 }
 
 
-extension Array: Hashable where Element: Hashable {
-	
-	public static func ==(lhs: Array<Element>, rhs: Array<Element>) -> Bool {
-		return lhs.hashValue == rhs.hashValue
-	}
-	
-	public var hashValue: Int {
-		get {
-			return reduce(into: 1) { (result, i) in
-				hashCombine(seed: &result, value: i.hashValue)
-			}
-		}}
-}
-
 class Namespace: Hashable {
 	var parent: Namespace?
 	var namespaceName: String
@@ -268,12 +254,12 @@ class Namespace: Hashable {
 		namespaceName = name
 	}
 	
-	var hashValue: Int {
-		return namespaceName.hashValue
+	func hash(into hasher: inout Hasher) {
+		hasher.combine(namespaceName)
 	}
 	
 	static func==(lhs: Namespace, rhs: Namespace) -> Bool {
-		return lhs.hashValue == rhs.hashValue
+		return lhs.namespaceName == rhs.namespaceName
 	}
 }
 

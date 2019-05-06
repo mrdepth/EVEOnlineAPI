@@ -52,7 +52,7 @@ var refParameters: [String: [String: Any]]
 refParameters = swagger["parameters"] as? [String: [String: Any]] ?? [:]
 
 var definitions: [Schema]
-definitions = (swagger["definitions"] as? [String: [String: Any]])?.flatMap { i -> Schema? in
+definitions = (swagger["definitions"] as? [String: [String: Any]])?.compactMap { i -> Schema? in
 	do {
 		return try Schema(i.value, title: i.key, parent: globalScope)
 	}
@@ -69,7 +69,7 @@ for path in (swagger["paths"] as? [String: Any]) ?? [:] {
 		let path = try Path(path: path.key, dictionary: dic)
 		paths.append(path)
 		
-		for operation in path.operations {
+//		for operation in path.operations {
 //			guard let tag = operation.tags?.first else {throw ESIParserError.missingTag(path)}
 //			let scope = scopes[tag] ?? {
 //				let scope = Scope(tag: tag)
@@ -77,7 +77,7 @@ for path in (swagger["paths"] as? [String: Any]) ?? [:] {
 //				return scope
 //				}()
 //			scope.operations.append(operation)
-		}
+//		}
 	}
 	catch {
 		print ("error: \(path) \(error)")
@@ -93,8 +93,8 @@ for (key, value) in (swagger["securityDefinitions"] as? [String: Any]) ?? [:] {
 
 var namespaces = [Namespace: Set<Schema>]()
 
-for (title, map) in allSchemes {
-	for (key, schemes) in map {
+for (_, map) in allSchemes {
+	for (_, schemes) in map {
 		let scopes = schemes.map { i -> [Namespace] in
 			return i.parent?.namespaceChain ?? []
 		}
@@ -144,7 +144,7 @@ for (_, scope) in scopes {
 	do {
 		let name = scope.tag.isEmpty ? "Global.swift" : scope.tag + ".swift"
 		let url = outURL.appendingPathComponent(name)
-		let s = try scope.scopeDefinition().indented
+		let s = try scope.scopeDefinition(isPublic: false).indented
 		try s.write(to: url, atomically: true, encoding: .utf8)
 	}
 	catch {

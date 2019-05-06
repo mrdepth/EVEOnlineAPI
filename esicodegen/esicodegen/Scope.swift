@@ -18,24 +18,24 @@ class Scope: Namespace {
 		super.init(self.tag, parent: parent)
 	}
 	
-	func typeDefinitions() throws -> String {
+	func typeDefinitions(isPublic: Bool) throws -> String {
 		var definitions = [String: String]()
 		
 		for schema in namespaces[self] ?? [] {
-			guard let s = schema.typeDefinition else {continue}
+			guard let s = schema.typeDefinition(isPublic: isPublic) else {continue}
 			definitions[schema.typeName] = s
 		}
 		
 		return definitions.values.joined(separator: "\n\n")
 	}
 	
-	func scopeDefinition() throws -> String {
+	func scopeDefinition(isPublic: Bool) throws -> String {
 		if tag.isEmpty {
 			var s = "import Foundation\n"
 			s += "import Alamofire\n"
 			s += "import Futures\n\n"
 			s += "public extension ESI {\n\n"
-			s += try typeDefinitions()
+			s += try typeDefinitions(isPublic: isPublic)
 			s += "\n\n"
 			
 			var template = try! String(contentsOf: securityURL)
@@ -73,7 +73,7 @@ class Scope: Namespace {
 				operations.append(operation.definition)
 			}
 			
-			template = template.replacingOccurrences(of: "{classes}", with: try typeDefinitions())
+			template = template.replacingOccurrences(of: "{classes}", with: try typeDefinitions(isPublic: true))
 			template = template.replacingOccurrences(of: "{variable}", with: variable)
 			template = template.replacingOccurrences(of: "{scope}", with: tag)
 			template = template.replacingOccurrences(of: "{operations}", with: operations.joined(separator: "\n"))

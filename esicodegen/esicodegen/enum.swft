@@ -1,4 +1,4 @@
-public enum {enum}: String, Codable, HTTPQueryable {
+{access}enum {enum}: String, Codable, HTTPQueryable {
 {cases}
 	
 	public var httpQuery: String? {

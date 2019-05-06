@@ -18,8 +18,9 @@ class Enum: Hashable {
 		self.default = dictionary["default"] as? String ?? cases[0]
 	}
 	
-	var hashValue: Int {
-		return [cases.hashValue, self.default.hashValue].hashValue
+	func hash(into hasher: inout Hasher) {
+		hasher.combine(cases)
+		hasher.combine(self.default)
 	}
 	
 	public static func ==(lhs: Enum, rhs: Enum) -> Bool {
@@ -79,24 +80,25 @@ class Schema: Namespace {
 
 	}
 	
-	override var hashValue: Int {
-		var h = [AnyHashable]()
-		h.append(typeName)
-		h.append(type)
+	override func hash(into hasher: inout Hasher) {
+		super.hash(into: &hasher)
+		hasher.combine(typeName)
+		hasher.combine(type)
 		
 		if let properties = properties {
-			h.append(properties)
-			h.append(properties.map{$0.name})
-			h.append(properties.map{$0.isRequired})
+			hasher.combine(properties)
+			hasher.combine(properties.map{$0.name})
+			hasher.combine(properties.map{$0.isRequired})
 		}
 		if let array = array {
-			h.append(array)
+			hasher.combine(array)
 		}
 		if let e = self.enum {
-			h.append(e)
+			hasher.combine(e)
 		}
-		return h.hashValue
 	}
+
+	
 	
 	var typeName: String {
 		switch type {
@@ -120,18 +122,18 @@ class Schema: Namespace {
 		}
 	}
 	
-	public lazy var typeDefinition: String? = {
+	public func typeDefinition(isPublic: Bool) -> String? {
 		switch self.type {
 		case .object:
-			return self.classDefinition
+			return self.classDefinition(isPublic: isPublic)
 		case .enum:
-			return self.enumDefinition
+			return self.enumDefinition(isPublic: isPublic)
 		default:
 			return nil
 		}
-	}()
+	}
 	
-	public var enumDefinition: String {
+	public func enumDefinition(isPublic: Bool) -> String {
 		guard let e = self.enum, !e.cases.isEmpty else {return ""}
 		
 		func caseName(_ s: String) -> String {
@@ -149,7 +151,7 @@ class Schema: Namespace {
 				return "`private`"
 			default:
 				let r = s.startIndex..<s.index(after: s.startIndex)
-				return s.replacingCharacters(in: r, with: s.substring(with: r).lowercased())
+				return s.replacingCharacters(in: r, with: s[r].lowercased())
 			}
 		}
 		let cases = e.cases.map { s -> String in
@@ -159,14 +161,14 @@ class Schema: Namespace {
 		
 		var template = try! String(contentsOf: enumURL)
 		template = template.replacingOccurrences(of: "{enum}", with: typeName)
-//		template.replaceSubrange(template.range(of: "{default}")!, with: caseName(e.default))
+		template = template.replacingOccurrences(of: "{access}", with: isPublic ? "public " : "")
 		
 		let s = cases.enumerated().map { "\tcase \($0.element) = \"\(e.cases[$0.offset])\"" }.joined(separator: "\n")
 		template.replaceSubrange(template.range(of: "{cases}")!, with: s)
 		return template
 	}
 	
-	public var classDefinition: String {
+	public func classDefinition(isPublic: Bool) -> String {
 		var template = try! String(contentsOf: classURL)
 		var definitions = [String]()
 		var initializations = [String]()
@@ -200,12 +202,13 @@ class Schema: Namespace {
 		}
 		
 		for subSchema in namespaces[self] ?? [] {
-			guard let s = subSchema.typeDefinition else {continue}
+			guard let s = subSchema.typeDefinition(isPublic: true) else {continue}
 			nested.append(s)
 		}
 
 		
 		template = template.replacingOccurrences(of: "{className}", with: typeName)
+		template = template.replacingOccurrences(of: "{access}", with: isPublic ? "public " : "")
 //		template = template.replacingOccurrences(of: "{classIdentifier}", with: typeIdentifier)
 		template = template.replacingOccurrences(of: "{class}", with: typeIdentifier)
 		template.replaceSubrange(template.range(of: "{definitions}")!, with: definitions.joined(separator: "\n"))

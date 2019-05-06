@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var loyalty: Loyalty {
+	var loyalty: Loyalty {
 		return Loyalty(esi: self)
 	}
 	
@@ -64,6 +64,31 @@ public extension ESI {
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
+		}
+		
+		
+		public struct Point: Codable, Hashable {
+			
+			
+			public var corporationID: Int
+			public var loyaltyPoints: Int
+			
+			public init(corporationID: Int, loyaltyPoints: Int) {
+				self.corporationID = corporationID
+				self.loyaltyPoints = loyaltyPoints
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case loyaltyPoints = "loyalty_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -141,31 +166,6 @@ public extension ESI {
 				case quantity
 				case requiredItems = "required_items"
 				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Point: Codable, Hashable {
-			
-			
-			public var corporationID: Int
-			public var loyaltyPoints: Int
-			
-			public init(corporationID: Int, loyaltyPoints: Int) {
-				self.corporationID = corporationID
-				self.loyaltyPoints = loyaltyPoints
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case loyaltyPoints = "loyalty_points"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

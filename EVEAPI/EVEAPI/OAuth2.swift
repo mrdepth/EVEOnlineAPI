@@ -119,7 +119,7 @@ public class OAuth2Helper: RequestInterceptor {
 		self.secretKey = secretKey
 	}
 	
-	public func adapt(_ urlRequest: URLRequest, completion: @escaping (AFResult<URLRequest>) -> Void) {
+	public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (AFResult<URLRequest>) -> Void) {
 		guard !isRefreshing && !token.isExpired else {return completion(.failure(OAuth2Error.tokenExpired))}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
@@ -135,11 +135,13 @@ public class OAuth2Helper: RequestInterceptor {
 			completion(.doNotRetry)
 			return
 		}
-		
+
 		lock.lock(); defer {lock.unlock()}
-		
 		let shouldRefresh: Bool
 		if case OAuth2Error.tokenExpired = error, request.retryCount == 0 {
+			shouldRefresh = true
+		}
+		else if case OAuth2Error.tokenExpired? = (error as? AFError)?.underlyingError, request.retryCount == 0 {
 			shouldRefresh = true
 		}
 		else {

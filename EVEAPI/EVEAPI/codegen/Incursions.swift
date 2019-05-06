@@ -4,7 +4,7 @@ import Futures
 
 
 public extension ESI {
-	public var incursions: Incursions {
+	var incursions: Incursions {
 		return Incursions(esi: self)
 	}
 	
