@@ -12,6 +12,33 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
+		public func getSingleKillmail(ifNoneMatch: String? = nil, killmailHash: String, killmailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Killmails.Killmail>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/killmails/\(killmailID)/\(killmailHash)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<Killmails.Killmail>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Killmails.Killmail>) in
+				promise.set(response: response, cached: 1209600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getCorporationsRecentKillsAndLosses(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Killmails.GetCorporationsCorporationIDKillmailsRecentOk]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -30,7 +57,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/killmails/recent/"
+			let url = esi.baseURL + "/corporations/\(corporationID)/killmails/recent/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -60,7 +87,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/killmails/recent/"
+			let url = esi.baseURL + "/characters/\(characterID)/killmails/recent/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -71,31 +98,51 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getSingleKillmail(ifNoneMatch: String? = nil, killmailHash: String, killmailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Killmails.Killmail>> {
+		
+		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
 			
 			
-			let body: Data? = nil
+			public var error: String?
 			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
+			public init(error: String?) {
+				self.error = error
 			}
 			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/killmails/\(killmailID)/\(killmailHash)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Killmails.Killmail>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Killmails.Killmail>) in
-				promise.set(response: response, cached: 1209600.0)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
 			}
-			return promise.future
+		}
+		
+		
+		public struct GetCorporationsCorporationIDKillmailsRecentOk: Codable, Hashable {
+			
+			
+			public var killmailHash: String
+			public var killmailID: Int
+			
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case killmailHash = "killmail_hash"
+				case killmailID = "killmail_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -124,74 +171,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetKillmailsKillmailIDKillmailHashUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Killmail: Codable, Hashable {
-			
-			public struct Attacker: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var characterID: Int?
-				public var corporationID: Int?
-				public var damageDone: Int
-				public var factionID: Int?
-				public var finalBlow: Bool
-				public var securityStatus: Float
-				public var shipTypeID: Int?
-				public var weaponTypeID: Int?
-				
-				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
-					self.allianceID = allianceID
-					self.characterID = characterID
-					self.corporationID = corporationID
-					self.damageDone = damageDone
-					self.factionID = factionID
-					self.finalBlow = finalBlow
-					self.securityStatus = securityStatus
-					self.shipTypeID = shipTypeID
-					self.weaponTypeID = weaponTypeID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case characterID = "character_id"
-					case corporationID = "corporation_id"
-					case damageDone = "damage_done"
-					case factionID = "faction_id"
-					case finalBlow = "final_blow"
-					case securityStatus = "security_status"
-					case shipTypeID = "ship_type_id"
-					case weaponTypeID = "weapon_type_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
 			
 			public struct Victim: Codable, Hashable {
 				
@@ -329,6 +309,51 @@ public extension ESI {
 				}
 			}
 			
+			public struct Attacker: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var characterID: Int?
+				public var corporationID: Int?
+				public var damageDone: Int
+				public var factionID: Int?
+				public var finalBlow: Bool
+				public var securityStatus: Float
+				public var shipTypeID: Int?
+				public var weaponTypeID: Int?
+				
+				public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageDone: Int, factionID: Int?, finalBlow: Bool, securityStatus: Float, shipTypeID: Int?, weaponTypeID: Int?) {
+					self.allianceID = allianceID
+					self.characterID = characterID
+					self.corporationID = corporationID
+					self.damageDone = damageDone
+					self.factionID = factionID
+					self.finalBlow = finalBlow
+					self.securityStatus = securityStatus
+					self.shipTypeID = shipTypeID
+					self.weaponTypeID = weaponTypeID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case characterID = "character_id"
+					case corporationID = "corporation_id"
+					case damageDone = "damage_done"
+					case factionID = "faction_id"
+					case finalBlow = "final_blow"
+					case securityStatus = "security_status"
+					case shipTypeID = "ship_type_id"
+					case weaponTypeID = "weapon_type_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public var attackers: [Killmails.Killmail.Attacker]
 			public var killmailID: Int
 			public var killmailTime: Date
@@ -359,31 +384,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .killmailTime: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCorporationsCorporationIDKillmailsRecentOk: Codable, Hashable {
-			
-			
-			public var killmailHash: String
-			public var killmailID: Int
-			
-			public init(killmailHash: String, killmailID: Int) {
-				self.killmailHash = killmailHash
-				self.killmailID = killmailID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case killmailHash = "killmail_hash"
-				case killmailID = "killmail_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
 						default: return nil
 					}
 				}

@@ -12,7 +12,7 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.SearchCategories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Search.SearchResult>> {
+		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Search.SearchResult>> {
 			
 			
 			let body: Data? = nil
@@ -41,7 +41,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
-			let url = esi.baseURL + "/v2/search/"
+			let url = esi.baseURL + "/search/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -83,7 +83,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "strict", value: v))
 			}
 			
-			let url = esi.baseURL + "/v3/characters/\(characterID)/search/"
+			let url = esi.baseURL + "/characters/\(characterID)/search/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -92,45 +92,6 @@ public extension ESI {
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
-		}
-		
-		
-		public enum SearchCategories: String, Codable, HTTPQueryable {
-			case agent = "agent"
-			case alliance = "alliance"
-			case character = "character"
-			case constellation = "constellation"
-			case corporation = "corporation"
-			case faction = "faction"
-			case inventoryType = "inventory_type"
-			case region = "region"
-			case solarSystem = "solar_system"
-			case station = "station"
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
-		}
-		
-		
-		public enum Categories: String, Codable, HTTPQueryable {
-			case agent = "agent"
-			case alliance = "alliance"
-			case character = "character"
-			case constellation = "constellation"
-			case corporation = "corporation"
-			case faction = "faction"
-			case inventoryType = "inventory_type"
-			case region = "region"
-			case solarSystem = "solar_system"
-			case station = "station"
-			case structure = "structure"
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
 		}
 		
 		
@@ -232,6 +193,25 @@ public extension ESI {
 					}
 				}
 			}
+		}
+		
+		
+		public enum Categories: String, Codable, HTTPQueryable {
+			case agent = "agent"
+			case alliance = "alliance"
+			case character = "character"
+			case constellation = "constellation"
+			case corporation = "corporation"
+			case faction = "faction"
+			case inventoryType = "inventory_type"
+			case region = "region"
+			case solarSystem = "solar_system"
+			case station = "station"
+			
+			public var httpQuery: String? {
+				return rawValue
+			}
+			
 		}
 		
 		

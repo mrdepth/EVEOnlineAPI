@@ -24,7 +24,8 @@ guard var swagger = (try? JSONSerialization.jsonObject(with: data, options: [.mu
 
 //Patch
 do {
-	let keyPath = "paths./v3/characters/{character_id}/assets/.get.responses.200.schema.items.properties.location_flag.enum"
+    print(swagger)
+	let keyPath = "paths./characters/{character_id}/assets/.get.responses.200.schema.items.properties.location_flag.enum"
 	var array = (swagger as NSDictionary).value(forKeyPath: keyPath) as! [String]
 	array.append(contentsOf: ["StructureServiceSlot0",
 	                          "StructureServiceSlot1",

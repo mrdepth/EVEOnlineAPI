@@ -32,7 +32,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "language", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/insurance/prices/"
+			let url = esi.baseURL + "/insurance/prices/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

@@ -35,7 +35,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "flag", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/route/\(origin)/\(destination)/"
+			let url = esi.baseURL + "/route/\(origin)/\(destination)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

@@ -12,35 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Wars.Kills]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/wars/\(warID)/killmails/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Wars.Kills]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getWarInformation(ifNoneMatch: String? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Wars.WarInformation>> {
 			
 			
@@ -56,7 +27,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/wars/\(warID)/"
+			let url = esi.baseURL + "/wars/\(warID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -85,7 +56,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "max_war_id", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/wars/"
+			let url = esi.baseURL + "/wars/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -96,52 +67,61 @@ public extension ESI {
 			return promise.future
 		}
 		
-		
-		public struct GetWarsWarIDUnprocessableEntity: Codable, Hashable {
+		@discardableResult
+		public func listKillsForWar(ifNoneMatch: String? = nil, page: Int? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Wars.Kills]>> {
 			
 			
-			public var error: String?
+			let body: Data? = nil
 			
-			public init(error: String?) {
-				self.error = error
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetWarsWarIDKillmailsUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
+			let url = esi.baseURL + "/wars/\(warID)/killmails/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Wars.Kills]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Wars.Kills]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
+			return promise.future
 		}
 		
 		
 		public struct WarInformation: Codable, Hashable {
+			
+			public struct GetWarsWarIDAllies: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var corporationID: Int?
+				
+				public init(allianceID: Int?, corporationID: Int?) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
 			
 			public struct GetWarsWarIDDefender: Codable, Hashable {
 				
@@ -163,30 +143,6 @@ public extension ESI {
 					case corporationID = "corporation_id"
 					case iskDestroyed = "isk_destroyed"
 					case shipsKilled = "ships_killed"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetWarsWarIDAllies: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				
-				public init(allianceID: Int?, corporationID: Int?) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -276,6 +232,28 @@ public extension ESI {
 		}
 		
 		
+		public struct GetWarsWarIDKillmailsUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct Kills: Codable, Hashable {
 			
 			
@@ -290,6 +268,28 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case killmailHash = "killmail_hash"
 				case killmailID = "killmail_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetWarsWarIDUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

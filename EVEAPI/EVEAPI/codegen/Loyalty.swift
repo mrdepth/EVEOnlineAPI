@@ -27,7 +27,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/loyalty/stores/\(corporationID)/offers/"
+			let url = esi.baseURL + "/loyalty/stores/\(corporationID)/offers/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -55,7 +55,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/loyalty/points/"
+			let url = esi.baseURL + "/characters/\(characterID)/loyalty/points/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -64,53 +64,6 @@ public extension ESI {
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
-		}
-		
-		
-		public struct Point: Codable, Hashable {
-			
-			
-			public var corporationID: Int
-			public var loyaltyPoints: Int
-			
-			public init(corporationID: Int, loyaltyPoints: Int) {
-				self.corporationID = corporationID
-				self.loyaltyPoints = loyaltyPoints
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case loyaltyPoints = "loyalty_points"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -166,6 +119,53 @@ public extension ESI {
 				case quantity
 				case requiredItems = "required_items"
 				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Point: Codable, Hashable {
+			
+			
+			public var corporationID: Int
+			public var loyaltyPoints: Int
+			
+			public init(corporationID: Int, loyaltyPoints: Int) {
+				self.corporationID = corporationID
+				self.loyaltyPoints = loyaltyPoints
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case loyaltyPoints = "loyalty_points"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetLoyaltyStoresCorporationIDOffersNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

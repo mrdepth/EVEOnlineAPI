@@ -12,10 +12,9 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getCharacterCorporationRoles(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Character.Role>> {
+		public func getCharactersPublicInformation(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Character.Information>> {
 			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characters.read_corporation_roles.v1") else {return .init(.failure(ESIError.forbidden))}
+			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -28,12 +27,65 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/roles/"
+			let url = esi.baseURL + "/characters/\(characterID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Character.Role>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Character.Role>) in
+			let promise = Promise<ESI.Result<Character.Information>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Character.Information>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func characterAffiliation(characters: [Int], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.Affiliation]>> {
+			
+			
+			let body = try? JSONEncoder().encode(characters)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/affiliation/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Character.Affiliation]>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterCorporationTitles(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-characters.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/titles/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -58,7 +110,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/blueprints/"
+			let url = esi.baseURL + "/characters/\(characterID)/blueprints/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -70,10 +122,36 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func yearlyAggregateStats(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>> {
+		public func calculateCSPAChargeCost(characterID: Int, characters: [Int], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Float>> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characterstats.read.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body = try? JSONEncoder().encode(characters)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/cspa/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<Float>>()
+			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Float>) in
+				promise.set(response: response, cached: nil)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterCorporationRoles(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Character.Role>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-characters.read_corporation_roles.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -86,13 +164,40 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/stats/"
+			let url = esi.baseURL + "/characters/\(characterID)/roles/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDStatsOk]>) in
-				promise.set(response: response, cached: 86400.0)
+			let promise = Promise<ESI.Result<Character.Role>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Character.Role>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCharacterPortraits(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Character.Portrait>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/portrait/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<Character.Portrait>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
+				promise.set(response: response, cached: nil)
 			}
 			return promise.future
 		}
@@ -114,7 +219,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/notifications/contacts/"
+			let url = esi.baseURL + "/characters/\(characterID)/notifications/contacts/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -142,92 +247,12 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/standings/"
+			let url = esi.baseURL + "/characters/\(characterID)/standings/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let promise = Promise<ESI.Result<[Character.Standing]>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.Standing]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharactersPublicInformation(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Character.Information>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v4/characters/\(characterID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Character.Information>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Character.Information>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func characterAffiliation(characters: [Int], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.Affiliation]>> {
-			
-			
-			let body = try? JSONEncoder().encode(characters)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/affiliation/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Character.Affiliation]>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.Affiliation]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getMedals(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.Medal]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characters.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/medals/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Character.Medal]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -250,13 +275,68 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v4/characters/\(characterID)/notifications/"
+			let url = esi.baseURL + "/characters/\(characterID)/notifications/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDNotificationsOk]>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDNotificationsOk]>) in
 				promise.set(response: response, cached: 600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getCorporationHistory(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.CorporationHistory]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/corporationhistory/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Character.CorporationHistory]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getMedals(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.Medal]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-characters.read_medals.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/medals/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Character.Medal]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.Medal]>) in
+				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
@@ -278,120 +358,12 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/agents_research/"
+			let url = esi.baseURL + "/characters/\(characterID)/agents_research/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let promise = Promise<ESI.Result<[Character.Research]>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.Research]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func calculateCSPAChargeCost(characterID: Int, characters: [Int], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Float>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characters.read_contacts.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(characters)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v4/characters/\(characterID)/cspa/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Float>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Float>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterPortraits(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Character.Portrait>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/portrait/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Character.Portrait>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Character.Portrait>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCharacterCorporationTitles(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characters.read_titles.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/titles/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDTitlesOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDTitlesOk]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getCorporationHistory(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.CorporationHistory]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/corporationhistory/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Character.CorporationHistory]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.CorporationHistory]>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -414,7 +386,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/fatigue/"
+			let url = esi.baseURL + "/characters/\(characterID)/fatigue/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -423,6 +395,99 @@ public extension ESI {
 				promise.set(response: response, cached: 300.0)
 			}
 			return promise.future
+		}
+		
+		@discardableResult
+		public func yearlyAggregateStats(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-characterstats.read.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/stats/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Character.GetCharactersCharacterIDStatsOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Character.GetCharactersCharacterIDStatsOk]>) in
+				promise.set(response: response, cached: 86400.0)
+			}
+			return promise.future
+		}
+		
+		
+		public struct CorporationHistory: Codable, Hashable {
+			
+			
+			public var corporationID: Int
+			public var isDeleted: Bool?
+			public var recordID: Int
+			public var startDate: Date
+			
+			public init(corporationID: Int, isDeleted: Bool?, recordID: Int, startDate: Date) {
+				self.corporationID = corporationID
+				self.isDeleted = isDeleted
+				self.recordID = recordID
+				self.startDate = startDate
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case isDeleted = "is_deleted"
+				case recordID = "record_id"
+				case startDate = "start_date"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .startDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Research: Codable, Hashable {
+			
+			
+			public var agentID: Int
+			public var pointsPerDay: Float
+			public var remainderPoints: Float
+			public var skillTypeID: Int
+			public var startedAt: Date
+			
+			public init(agentID: Int, pointsPerDay: Float, remainderPoints: Float, skillTypeID: Int, startedAt: Date) {
+				self.agentID = agentID
+				self.pointsPerDay = pointsPerDay
+				self.remainderPoints = remainderPoints
+				self.skillTypeID = skillTypeID
+				self.startedAt = startedAt
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case agentID = "agent_id"
+				case pointsPerDay = "points_per_day"
+				case remainderPoints = "remainder_points"
+				case skillTypeID = "skill_type_id"
+				case startedAt = "started_at"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .startedAt: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -448,84 +513,29 @@ public extension ESI {
 		}
 		
 		
-		public struct Medal: Codable, Hashable {
+		public struct Fatigue: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDMedalsStatus: String, Codable, HTTPQueryable {
-				case `private` = "private"
-				case `public` = "public"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
-			public struct GetCharactersCharacterIDMedalsGraphics: Codable, Hashable {
-				
-				
-				public var color: Int?
-				public var graphic: String
-				public var layer: Int
-				public var part: Int
-				
-				public init(color: Int?, graphic: String, layer: Int, part: Int) {
-					self.color = color
-					self.graphic = graphic
-					self.layer = layer
-					self.part = part
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case color
-					case graphic
-					case layer
-					case part
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
+			public var jumpFatigueExpireDate: Date?
+			public var lastJumpDate: Date?
+			public var lastUpdateDate: Date?
 			
-			public var corporationID: Int
-			public var date: Date
-			public var localizedDescription: String
-			public var graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
-			public var issuerID: Int
-			public var medalID: Int
-			public var reason: String
-			public var status: Character.Medal.GetCharactersCharacterIDMedalsStatus
-			public var title: String
-			
-			public init(corporationID: Int, date: Date, localizedDescription: String, graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics], issuerID: Int, medalID: Int, reason: String, status: Character.Medal.GetCharactersCharacterIDMedalsStatus, title: String) {
-				self.corporationID = corporationID
-				self.date = date
-				self.localizedDescription = localizedDescription
-				self.graphics = graphics
-				self.issuerID = issuerID
-				self.medalID = medalID
-				self.reason = reason
-				self.status = status
-				self.title = title
+			public init(jumpFatigueExpireDate: Date?, lastJumpDate: Date?, lastUpdateDate: Date?) {
+				self.jumpFatigueExpireDate = jumpFatigueExpireDate
+				self.lastJumpDate = lastJumpDate
+				self.lastUpdateDate = lastUpdateDate
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case date
-				case localizedDescription = "description"
-				case graphics
-				case issuerID = "issuer_id"
-				case medalID = "medal_id"
-				case reason
-				case status
-				case title
+				case jumpFatigueExpireDate = "jump_fatigue_expire_date"
+				case lastJumpDate = "last_jump_date"
+				case lastUpdateDate = "last_update_date"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .date: return DateFormatter.esiDateTimeFormatter
+						case .jumpFatigueExpireDate: return DateFormatter.esiDateTimeFormatter
+						case .lastJumpDate: return DateFormatter.esiDateTimeFormatter
+						case .lastUpdateDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -533,20 +543,17 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
+		public struct GetCharactersCharacterIDNotFound: Codable, Hashable {
 			
 			
-			public var name: String?
-			public var titleID: Int?
+			public var error: String?
 			
-			public init(name: String?, titleID: Int?) {
-				self.name = name
-				self.titleID = titleID
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case titleID = "title_id"
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -558,63 +565,30 @@ public extension ESI {
 		}
 		
 		
-		public struct Information: Codable, Hashable {
+		public struct Affiliation: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDGender: String, Codable, HTTPQueryable {
-				case female = "female"
-				case male = "male"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
 			
 			public var allianceID: Int?
-			public var ancestryID: Int?
-			public var birthday: Date
-			public var bloodlineID: Int
+			public var characterID: Int
 			public var corporationID: Int
-			public var localizedDescription: String?
 			public var factionID: Int?
-			public var gender: Character.Information.GetCharactersCharacterIDGender
-			public var name: String
-			public var raceID: Int
-			public var securityStatus: Float?
-			public var title: String?
 			
-			public init(allianceID: Int?, ancestryID: Int?, birthday: Date, bloodlineID: Int, corporationID: Int, localizedDescription: String?, factionID: Int?, gender: Character.Information.GetCharactersCharacterIDGender, name: String, raceID: Int, securityStatus: Float?, title: String?) {
+			public init(allianceID: Int?, characterID: Int, corporationID: Int, factionID: Int?) {
 				self.allianceID = allianceID
-				self.ancestryID = ancestryID
-				self.birthday = birthday
-				self.bloodlineID = bloodlineID
+				self.characterID = characterID
 				self.corporationID = corporationID
-				self.localizedDescription = localizedDescription
 				self.factionID = factionID
-				self.gender = gender
-				self.name = name
-				self.raceID = raceID
-				self.securityStatus = securityStatus
-				self.title = title
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case allianceID = "alliance_id"
-				case ancestryID = "ancestry_id"
-				case birthday
-				case bloodlineID = "bloodline_id"
+				case characterID = "character_id"
 				case corporationID = "corporation_id"
-				case localizedDescription = "description"
 				case factionID = "faction_id"
-				case gender
-				case name
-				case raceID = "race_id"
-				case securityStatus = "security_status"
-				case title
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .birthday: return DateFormatter.esiDateTimeFormatter
+						
 						default: return nil
 					}
 				}
@@ -682,7 +656,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCharactersCharacterIDRolesRolesAtOther: String, Codable, HTTPQueryable {
+			public enum GetCharactersCharacterIDRolesRoles: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -740,7 +714,7 @@ public extension ESI {
 				
 			}
 			
-			public enum GetCharactersCharacterIDRolesRoles: String, Codable, HTTPQueryable {
+			public enum GetCharactersCharacterIDRolesRolesAtOther: String, Codable, HTTPQueryable {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -877,93 +851,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CorporationHistory: Codable, Hashable {
-			
-			
-			public var corporationID: Int
-			public var isDeleted: Bool?
-			public var recordID: Int
-			public var startDate: Date
-			
-			public init(corporationID: Int, isDeleted: Bool?, recordID: Int, startDate: Date) {
-				self.corporationID = corporationID
-				self.isDeleted = isDeleted
-				self.recordID = recordID
-				self.startDate = startDate
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case isDeleted = "is_deleted"
-				case recordID = "record_id"
-				case startDate = "start_date"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .startDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Research: Codable, Hashable {
-			
-			
-			public var agentID: Int
-			public var pointsPerDay: Float
-			public var remainderPoints: Float
-			public var skillTypeID: Int
-			public var startedAt: Date
-			
-			public init(agentID: Int, pointsPerDay: Float, remainderPoints: Float, skillTypeID: Int, startedAt: Date) {
-				self.agentID = agentID
-				self.pointsPerDay = pointsPerDay
-				self.remainderPoints = remainderPoints
-				self.skillTypeID = skillTypeID
-				self.startedAt = startedAt
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case agentID = "agent_id"
-				case pointsPerDay = "points_per_day"
-				case remainderPoints = "remainder_points"
-				case skillTypeID = "skill_type_id"
-				case startedAt = "started_at"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .startedAt: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -1215,192 +1102,6 @@ public extension ESI {
 		}
 		
 		
-		public struct Standing: Codable, Hashable {
-			
-			public enum GetCharactersCharacterIDStandingsFromType: String, Codable, HTTPQueryable {
-				case agent = "agent"
-				case faction = "faction"
-				case npcCorp = "npc_corp"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var fromID: Int
-			public var fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
-			public var standing: Float
-			
-			public init(fromID: Int, fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType, standing: Float) {
-				self.fromID = fromID
-				self.fromType = fromType
-				self.standing = standing
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case fromID = "from_id"
-				case fromType = "from_type"
-				case standing
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostCharactersAffiliationNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDNotificationsContactsOk: Codable, Hashable {
-			
-			
-			public var message: String
-			public var notificationID: Int
-			public var sendDate: Date
-			public var senderCharacterID: Int
-			public var standingLevel: Float
-			
-			public init(message: String, notificationID: Int, sendDate: Date, senderCharacterID: Int, standingLevel: Float) {
-				self.message = message
-				self.notificationID = notificationID
-				self.sendDate = sendDate
-				self.senderCharacterID = senderCharacterID
-				self.standingLevel = standingLevel
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case message
-				case notificationID = "notification_id"
-				case sendDate = "send_date"
-				case senderCharacterID = "sender_character_id"
-				case standingLevel = "standing_level"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .sendDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Portrait: Codable, Hashable {
-			
-			
-			public var px128x128: String?
-			public var px256x256: String?
-			public var px512x512: String?
-			public var px64x64: String?
-			
-			public init(px128x128: String?, px256x256: String?, px512x512: String?, px64x64: String?) {
-				self.px128x128 = px128x128
-				self.px256x256 = px256x256
-				self.px512x512 = px512x512
-				self.px64x64 = px64x64
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case px128x128
-				case px256x256
-				case px512x512
-				case px64x64
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Affiliation: Codable, Hashable {
-			
-			
-			public var allianceID: Int?
-			public var characterID: Int
-			public var corporationID: Int
-			public var factionID: Int?
-			
-			public init(allianceID: Int?, characterID: Int, corporationID: Int, factionID: Int?) {
-				self.allianceID = allianceID
-				self.characterID = characterID
-				self.corporationID = corporationID
-				self.factionID = factionID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case characterID = "character_id"
-				case corporationID = "corporation_id"
-				case factionID = "faction_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Fatigue: Codable, Hashable {
-			
-			
-			public var jumpFatigueExpireDate: Date?
-			public var lastJumpDate: Date?
-			public var lastUpdateDate: Date?
-			
-			public init(jumpFatigueExpireDate: Date?, lastJumpDate: Date?, lastUpdateDate: Date?) {
-				self.jumpFatigueExpireDate = jumpFatigueExpireDate
-				self.lastJumpDate = lastJumpDate
-				self.lastUpdateDate = lastUpdateDate
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case jumpFatigueExpireDate = "jump_fatigue_expire_date"
-				case lastJumpDate = "last_jump_date"
-				case lastUpdateDate = "last_update_date"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .jumpFatigueExpireDate: return DateFormatter.esiDateTimeFormatter
-						case .lastJumpDate: return DateFormatter.esiDateTimeFormatter
-						case .lastUpdateDate: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Blueprint: Codable, Hashable {
 			
 			public enum GetCharactersCharacterIDBlueprintsLocationFlag: String, Codable, HTTPQueryable {
@@ -1527,103 +1228,211 @@ public extension ESI {
 		}
 		
 		
+		public struct GetCharactersCharacterIDTitlesOk: Codable, Hashable {
+			
+			
+			public var name: String?
+			public var titleID: Int?
+			
+			public init(name: String?, titleID: Int?) {
+				self.name = name
+				self.titleID = titleID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case name
+				case titleID = "title_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostCharactersAffiliationNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Medal: Codable, Hashable {
+			
+			public struct GetCharactersCharacterIDMedalsGraphics: Codable, Hashable {
+				
+				
+				public var color: Int?
+				public var graphic: String
+				public var layer: Int
+				public var part: Int
+				
+				public init(color: Int?, graphic: String, layer: Int, part: Int) {
+					self.color = color
+					self.graphic = graphic
+					self.layer = layer
+					self.part = part
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case color
+					case graphic
+					case layer
+					case part
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public enum GetCharactersCharacterIDMedalsStatus: String, Codable, HTTPQueryable {
+				case `private` = "private"
+				case `public` = "public"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var corporationID: Int
+			public var date: Date
+			public var localizedDescription: String
+			public var graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics]
+			public var issuerID: Int
+			public var medalID: Int
+			public var reason: String
+			public var status: Character.Medal.GetCharactersCharacterIDMedalsStatus
+			public var title: String
+			
+			public init(corporationID: Int, date: Date, localizedDescription: String, graphics: [Character.Medal.GetCharactersCharacterIDMedalsGraphics], issuerID: Int, medalID: Int, reason: String, status: Character.Medal.GetCharactersCharacterIDMedalsStatus, title: String) {
+				self.corporationID = corporationID
+				self.date = date
+				self.localizedDescription = localizedDescription
+				self.graphics = graphics
+				self.issuerID = issuerID
+				self.medalID = medalID
+				self.reason = reason
+				self.status = status
+				self.title = title
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case corporationID = "corporation_id"
+				case date
+				case localizedDescription = "description"
+				case graphics
+				case issuerID = "issuer_id"
+				case medalID = "medal_id"
+				case reason
+				case status
+				case title
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .date: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct GetCharactersCharacterIDStatsOk: Codable, Hashable {
 			
-			public struct GetCharactersCharacterIDStatsPve: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsTravel: Codable, Hashable {
 				
 				
-				public var dungeonsCompletedAgent: Int64?
-				public var dungeonsCompletedDistribution: Int64?
-				public var missionsSucceeded: Int64?
-				public var missionsSucceededEpicArc: Int64?
+				public var accelerationGateActivations: Int64?
+				public var alignTo: Int64?
+				public var distanceWarpedHighSec: Int64?
+				public var distanceWarpedLowSec: Int64?
+				public var distanceWarpedNullSec: Int64?
+				public var distanceWarpedWormhole: Int64?
+				public var docksHighSec: Int64?
+				public var docksLowSec: Int64?
+				public var docksNullSec: Int64?
+				public var jumpsStargateHighSec: Int64?
+				public var jumpsStargateLowSec: Int64?
+				public var jumpsStargateNullSec: Int64?
+				public var jumpsWormhole: Int64?
+				public var warpsHighSec: Int64?
+				public var warpsLowSec: Int64?
+				public var warpsNullSec: Int64?
+				public var warpsToBookmark: Int64?
+				public var warpsToCelestial: Int64?
+				public var warpsToFleetMember: Int64?
+				public var warpsToScanResult: Int64?
+				public var warpsWormhole: Int64?
 				
-				public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
-					self.dungeonsCompletedAgent = dungeonsCompletedAgent
-					self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
-					self.missionsSucceeded = missionsSucceeded
-					self.missionsSucceededEpicArc = missionsSucceededEpicArc
+				public init(accelerationGateActivations: Int64?, alignTo: Int64?, distanceWarpedHighSec: Int64?, distanceWarpedLowSec: Int64?, distanceWarpedNullSec: Int64?, distanceWarpedWormhole: Int64?, docksHighSec: Int64?, docksLowSec: Int64?, docksNullSec: Int64?, jumpsStargateHighSec: Int64?, jumpsStargateLowSec: Int64?, jumpsStargateNullSec: Int64?, jumpsWormhole: Int64?, warpsHighSec: Int64?, warpsLowSec: Int64?, warpsNullSec: Int64?, warpsToBookmark: Int64?, warpsToCelestial: Int64?, warpsToFleetMember: Int64?, warpsToScanResult: Int64?, warpsWormhole: Int64?) {
+					self.accelerationGateActivations = accelerationGateActivations
+					self.alignTo = alignTo
+					self.distanceWarpedHighSec = distanceWarpedHighSec
+					self.distanceWarpedLowSec = distanceWarpedLowSec
+					self.distanceWarpedNullSec = distanceWarpedNullSec
+					self.distanceWarpedWormhole = distanceWarpedWormhole
+					self.docksHighSec = docksHighSec
+					self.docksLowSec = docksLowSec
+					self.docksNullSec = docksNullSec
+					self.jumpsStargateHighSec = jumpsStargateHighSec
+					self.jumpsStargateLowSec = jumpsStargateLowSec
+					self.jumpsStargateNullSec = jumpsStargateNullSec
+					self.jumpsWormhole = jumpsWormhole
+					self.warpsHighSec = warpsHighSec
+					self.warpsLowSec = warpsLowSec
+					self.warpsNullSec = warpsNullSec
+					self.warpsToBookmark = warpsToBookmark
+					self.warpsToCelestial = warpsToCelestial
+					self.warpsToFleetMember = warpsToFleetMember
+					self.warpsToScanResult = warpsToScanResult
+					self.warpsWormhole = warpsWormhole
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case dungeonsCompletedAgent = "dungeons_completed_agent"
-					case dungeonsCompletedDistribution = "dungeons_completed_distribution"
-					case missionsSucceeded = "missions_succeeded"
-					case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsOrbital: Codable, Hashable {
-				
-				
-				public var strikeCharactersKilled: Int64?
-				public var strikeDamageToPlayersArmorAmount: Int64?
-				public var strikeDamageToPlayersShieldAmount: Int64?
-				
-				public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
-					self.strikeCharactersKilled = strikeCharactersKilled
-					self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
-					self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case strikeCharactersKilled = "strike_characters_killed"
-					case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
-					case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsIsk: Codable, Hashable {
-				
-				
-				public var `in`: Int64?
-				public var out: Int64?
-				
-				public init(`in`: Int64?, out: Int64?) {
-					self.`in` = `in`
-					self.out = out
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case `in` = "in"
-					case out
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetCharactersCharacterIDStatsInventory: Codable, Hashable {
-				
-				
-				public var abandonLootQuantity: Int64?
-				public var trashItemQuantity: Int64?
-				
-				public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
-					self.abandonLootQuantity = abandonLootQuantity
-					self.trashItemQuantity = trashItemQuantity
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case abandonLootQuantity = "abandon_loot_quantity"
-					case trashItemQuantity = "trash_item_quantity"
+					case accelerationGateActivations = "acceleration_gate_activations"
+					case alignTo = "align_to"
+					case distanceWarpedHighSec = "distance_warped_high_sec"
+					case distanceWarpedLowSec = "distance_warped_low_sec"
+					case distanceWarpedNullSec = "distance_warped_null_sec"
+					case distanceWarpedWormhole = "distance_warped_wormhole"
+					case docksHighSec = "docks_high_sec"
+					case docksLowSec = "docks_low_sec"
+					case docksNullSec = "docks_null_sec"
+					case jumpsStargateHighSec = "jumps_stargate_high_sec"
+					case jumpsStargateLowSec = "jumps_stargate_low_sec"
+					case jumpsStargateNullSec = "jumps_stargate_null_sec"
+					case jumpsWormhole = "jumps_wormhole"
+					case warpsHighSec = "warps_high_sec"
+					case warpsLowSec = "warps_low_sec"
+					case warpsNullSec = "warps_null_sec"
+					case warpsToBookmark = "warps_to_bookmark"
+					case warpsToCelestial = "warps_to_celestial"
+					case warpsToFleetMember = "warps_to_fleet_member"
+					case warpsToScanResult = "warps_to_scan_result"
+					case warpsWormhole = "warps_wormhole"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -1760,23 +1569,53 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsCharacter: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsMarket: Codable, Hashable {
 				
 				
-				public var daysOfActivity: Int64?
-				public var minutes: Int64?
-				public var sessionsStarted: Int64?
+				public var acceptContractsCourier: Int64?
+				public var acceptContractsItemExchange: Int64?
+				public var buyOrdersPlaced: Int64?
+				public var cancelMarketOrder: Int64?
+				public var createContractsAuction: Int64?
+				public var createContractsCourier: Int64?
+				public var createContractsItemExchange: Int64?
+				public var deliverCourierContract: Int64?
+				public var iskGained: Int64?
+				public var iskSpent: Int64?
+				public var modifyMarketOrder: Int64?
+				public var searchContracts: Int64?
+				public var sellOrdersPlaced: Int64?
 				
-				public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
-					self.daysOfActivity = daysOfActivity
-					self.minutes = minutes
-					self.sessionsStarted = sessionsStarted
+				public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
+					self.acceptContractsCourier = acceptContractsCourier
+					self.acceptContractsItemExchange = acceptContractsItemExchange
+					self.buyOrdersPlaced = buyOrdersPlaced
+					self.cancelMarketOrder = cancelMarketOrder
+					self.createContractsAuction = createContractsAuction
+					self.createContractsCourier = createContractsCourier
+					self.createContractsItemExchange = createContractsItemExchange
+					self.deliverCourierContract = deliverCourierContract
+					self.iskGained = iskGained
+					self.iskSpent = iskSpent
+					self.modifyMarketOrder = modifyMarketOrder
+					self.searchContracts = searchContracts
+					self.sellOrdersPlaced = sellOrdersPlaced
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case daysOfActivity = "days_of_activity"
-					case minutes
-					case sessionsStarted = "sessions_started"
+					case acceptContractsCourier = "accept_contracts_courier"
+					case acceptContractsItemExchange = "accept_contracts_item_exchange"
+					case buyOrdersPlaced = "buy_orders_placed"
+					case cancelMarketOrder = "cancel_market_order"
+					case createContractsAuction = "create_contracts_auction"
+					case createContractsCourier = "create_contracts_courier"
+					case createContractsItemExchange = "create_contracts_item_exchange"
+					case deliverCourierContract = "deliver_courier_contract"
+					case iskGained = "isk_gained"
+					case iskSpent = "isk_spent"
+					case modifyMarketOrder = "modify_market_order"
+					case searchContracts = "search_contracts"
+					case sellOrdersPlaced = "sell_orders_placed"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -1787,221 +1626,26 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsModule: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsPve: Codable, Hashable {
 				
 				
-				public var activationsArmorHardener: Int64?
-				public var activationsArmorRepairUnit: Int64?
-				public var activationsArmorResistanceShiftHardener: Int64?
-				public var activationsAutomatedTargetingSystem: Int64?
-				public var activationsBastion: Int64?
-				public var activationsBombLauncher: Int64?
-				public var activationsCapacitorBooster: Int64?
-				public var activationsCargoScanner: Int64?
-				public var activationsCloakingDevice: Int64?
-				public var activationsCloneVatBay: Int64?
-				public var activationsCynosuralField: Int64?
-				public var activationsDamageControl: Int64?
-				public var activationsDataMiners: Int64?
-				public var activationsDroneControlUnit: Int64?
-				public var activationsDroneTrackingModules: Int64?
-				public var activationsEccm: Int64?
-				public var activationsEcm: Int64?
-				public var activationsEcmBurst: Int64?
-				public var activationsEnergyDestabilizer: Int64?
-				public var activationsEnergyVampire: Int64?
-				public var activationsEnergyWeapon: Int64?
-				public var activationsFestivalLauncher: Int64?
-				public var activationsFrequencyMiningLaser: Int64?
-				public var activationsFueledArmorRepairer: Int64?
-				public var activationsFueledShieldBooster: Int64?
-				public var activationsGangCoordinator: Int64?
-				public var activationsGasCloudHarvester: Int64?
-				public var activationsHullRepairUnit: Int64?
-				public var activationsHybridWeapon: Int64?
-				public var activationsIndustrialCore: Int64?
-				public var activationsInterdictionSphereLauncher: Int64?
-				public var activationsMicroJumpDrive: Int64?
-				public var activationsMiningLaser: Int64?
-				public var activationsMissileLauncher: Int64?
-				public var activationsPassiveTargetingSystem: Int64?
-				public var activationsProbeLauncher: Int64?
-				public var activationsProjectedEccm: Int64?
-				public var activationsProjectileWeapon: Int64?
-				public var activationsPropulsionModule: Int64?
-				public var activationsRemoteArmorRepairer: Int64?
-				public var activationsRemoteCapacitorTransmitter: Int64?
-				public var activationsRemoteEcmBurst: Int64?
-				public var activationsRemoteHullRepairer: Int64?
-				public var activationsRemoteSensorBooster: Int64?
-				public var activationsRemoteSensorDamper: Int64?
-				public var activationsRemoteShieldBooster: Int64?
-				public var activationsRemoteTrackingComputer: Int64?
-				public var activationsSalvager: Int64?
-				public var activationsSensorBooster: Int64?
-				public var activationsShieldBooster: Int64?
-				public var activationsShieldHardener: Int64?
-				public var activationsShipScanner: Int64?
-				public var activationsSiege: Int64?
-				public var activationsSmartBomb: Int64?
-				public var activationsStasisWeb: Int64?
-				public var activationsStripMiner: Int64?
-				public var activationsSuperWeapon: Int64?
-				public var activationsSurveyScanner: Int64?
-				public var activationsTargetBreaker: Int64?
-				public var activationsTargetPainter: Int64?
-				public var activationsTrackingComputer: Int64?
-				public var activationsTrackingDisruptor: Int64?
-				public var activationsTractorBeam: Int64?
-				public var activationsTriage: Int64?
-				public var activationsWarpDisruptFieldGenerator: Int64?
-				public var activationsWarpScrambler: Int64?
-				public var linkWeapons: Int64?
-				public var overload: Int64?
-				public var repairs: Int64?
+				public var dungeonsCompletedAgent: Int64?
+				public var dungeonsCompletedDistribution: Int64?
+				public var missionsSucceeded: Int64?
+				public var missionsSucceededEpicArc: Int64?
 				
-				public init(activationsArmorHardener: Int64?, activationsArmorRepairUnit: Int64?, activationsArmorResistanceShiftHardener: Int64?, activationsAutomatedTargetingSystem: Int64?, activationsBastion: Int64?, activationsBombLauncher: Int64?, activationsCapacitorBooster: Int64?, activationsCargoScanner: Int64?, activationsCloakingDevice: Int64?, activationsCloneVatBay: Int64?, activationsCynosuralField: Int64?, activationsDamageControl: Int64?, activationsDataMiners: Int64?, activationsDroneControlUnit: Int64?, activationsDroneTrackingModules: Int64?, activationsEccm: Int64?, activationsEcm: Int64?, activationsEcmBurst: Int64?, activationsEnergyDestabilizer: Int64?, activationsEnergyVampire: Int64?, activationsEnergyWeapon: Int64?, activationsFestivalLauncher: Int64?, activationsFrequencyMiningLaser: Int64?, activationsFueledArmorRepairer: Int64?, activationsFueledShieldBooster: Int64?, activationsGangCoordinator: Int64?, activationsGasCloudHarvester: Int64?, activationsHullRepairUnit: Int64?, activationsHybridWeapon: Int64?, activationsIndustrialCore: Int64?, activationsInterdictionSphereLauncher: Int64?, activationsMicroJumpDrive: Int64?, activationsMiningLaser: Int64?, activationsMissileLauncher: Int64?, activationsPassiveTargetingSystem: Int64?, activationsProbeLauncher: Int64?, activationsProjectedEccm: Int64?, activationsProjectileWeapon: Int64?, activationsPropulsionModule: Int64?, activationsRemoteArmorRepairer: Int64?, activationsRemoteCapacitorTransmitter: Int64?, activationsRemoteEcmBurst: Int64?, activationsRemoteHullRepairer: Int64?, activationsRemoteSensorBooster: Int64?, activationsRemoteSensorDamper: Int64?, activationsRemoteShieldBooster: Int64?, activationsRemoteTrackingComputer: Int64?, activationsSalvager: Int64?, activationsSensorBooster: Int64?, activationsShieldBooster: Int64?, activationsShieldHardener: Int64?, activationsShipScanner: Int64?, activationsSiege: Int64?, activationsSmartBomb: Int64?, activationsStasisWeb: Int64?, activationsStripMiner: Int64?, activationsSuperWeapon: Int64?, activationsSurveyScanner: Int64?, activationsTargetBreaker: Int64?, activationsTargetPainter: Int64?, activationsTrackingComputer: Int64?, activationsTrackingDisruptor: Int64?, activationsTractorBeam: Int64?, activationsTriage: Int64?, activationsWarpDisruptFieldGenerator: Int64?, activationsWarpScrambler: Int64?, linkWeapons: Int64?, overload: Int64?, repairs: Int64?) {
-					self.activationsArmorHardener = activationsArmorHardener
-					self.activationsArmorRepairUnit = activationsArmorRepairUnit
-					self.activationsArmorResistanceShiftHardener = activationsArmorResistanceShiftHardener
-					self.activationsAutomatedTargetingSystem = activationsAutomatedTargetingSystem
-					self.activationsBastion = activationsBastion
-					self.activationsBombLauncher = activationsBombLauncher
-					self.activationsCapacitorBooster = activationsCapacitorBooster
-					self.activationsCargoScanner = activationsCargoScanner
-					self.activationsCloakingDevice = activationsCloakingDevice
-					self.activationsCloneVatBay = activationsCloneVatBay
-					self.activationsCynosuralField = activationsCynosuralField
-					self.activationsDamageControl = activationsDamageControl
-					self.activationsDataMiners = activationsDataMiners
-					self.activationsDroneControlUnit = activationsDroneControlUnit
-					self.activationsDroneTrackingModules = activationsDroneTrackingModules
-					self.activationsEccm = activationsEccm
-					self.activationsEcm = activationsEcm
-					self.activationsEcmBurst = activationsEcmBurst
-					self.activationsEnergyDestabilizer = activationsEnergyDestabilizer
-					self.activationsEnergyVampire = activationsEnergyVampire
-					self.activationsEnergyWeapon = activationsEnergyWeapon
-					self.activationsFestivalLauncher = activationsFestivalLauncher
-					self.activationsFrequencyMiningLaser = activationsFrequencyMiningLaser
-					self.activationsFueledArmorRepairer = activationsFueledArmorRepairer
-					self.activationsFueledShieldBooster = activationsFueledShieldBooster
-					self.activationsGangCoordinator = activationsGangCoordinator
-					self.activationsGasCloudHarvester = activationsGasCloudHarvester
-					self.activationsHullRepairUnit = activationsHullRepairUnit
-					self.activationsHybridWeapon = activationsHybridWeapon
-					self.activationsIndustrialCore = activationsIndustrialCore
-					self.activationsInterdictionSphereLauncher = activationsInterdictionSphereLauncher
-					self.activationsMicroJumpDrive = activationsMicroJumpDrive
-					self.activationsMiningLaser = activationsMiningLaser
-					self.activationsMissileLauncher = activationsMissileLauncher
-					self.activationsPassiveTargetingSystem = activationsPassiveTargetingSystem
-					self.activationsProbeLauncher = activationsProbeLauncher
-					self.activationsProjectedEccm = activationsProjectedEccm
-					self.activationsProjectileWeapon = activationsProjectileWeapon
-					self.activationsPropulsionModule = activationsPropulsionModule
-					self.activationsRemoteArmorRepairer = activationsRemoteArmorRepairer
-					self.activationsRemoteCapacitorTransmitter = activationsRemoteCapacitorTransmitter
-					self.activationsRemoteEcmBurst = activationsRemoteEcmBurst
-					self.activationsRemoteHullRepairer = activationsRemoteHullRepairer
-					self.activationsRemoteSensorBooster = activationsRemoteSensorBooster
-					self.activationsRemoteSensorDamper = activationsRemoteSensorDamper
-					self.activationsRemoteShieldBooster = activationsRemoteShieldBooster
-					self.activationsRemoteTrackingComputer = activationsRemoteTrackingComputer
-					self.activationsSalvager = activationsSalvager
-					self.activationsSensorBooster = activationsSensorBooster
-					self.activationsShieldBooster = activationsShieldBooster
-					self.activationsShieldHardener = activationsShieldHardener
-					self.activationsShipScanner = activationsShipScanner
-					self.activationsSiege = activationsSiege
-					self.activationsSmartBomb = activationsSmartBomb
-					self.activationsStasisWeb = activationsStasisWeb
-					self.activationsStripMiner = activationsStripMiner
-					self.activationsSuperWeapon = activationsSuperWeapon
-					self.activationsSurveyScanner = activationsSurveyScanner
-					self.activationsTargetBreaker = activationsTargetBreaker
-					self.activationsTargetPainter = activationsTargetPainter
-					self.activationsTrackingComputer = activationsTrackingComputer
-					self.activationsTrackingDisruptor = activationsTrackingDisruptor
-					self.activationsTractorBeam = activationsTractorBeam
-					self.activationsTriage = activationsTriage
-					self.activationsWarpDisruptFieldGenerator = activationsWarpDisruptFieldGenerator
-					self.activationsWarpScrambler = activationsWarpScrambler
-					self.linkWeapons = linkWeapons
-					self.overload = overload
-					self.repairs = repairs
+				public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
+					self.dungeonsCompletedAgent = dungeonsCompletedAgent
+					self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
+					self.missionsSucceeded = missionsSucceeded
+					self.missionsSucceededEpicArc = missionsSucceededEpicArc
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case activationsArmorHardener = "activations_armor_hardener"
-					case activationsArmorRepairUnit = "activations_armor_repair_unit"
-					case activationsArmorResistanceShiftHardener = "activations_armor_resistance_shift_hardener"
-					case activationsAutomatedTargetingSystem = "activations_automated_targeting_system"
-					case activationsBastion = "activations_bastion"
-					case activationsBombLauncher = "activations_bomb_launcher"
-					case activationsCapacitorBooster = "activations_capacitor_booster"
-					case activationsCargoScanner = "activations_cargo_scanner"
-					case activationsCloakingDevice = "activations_cloaking_device"
-					case activationsCloneVatBay = "activations_clone_vat_bay"
-					case activationsCynosuralField = "activations_cynosural_field"
-					case activationsDamageControl = "activations_damage_control"
-					case activationsDataMiners = "activations_data_miners"
-					case activationsDroneControlUnit = "activations_drone_control_unit"
-					case activationsDroneTrackingModules = "activations_drone_tracking_modules"
-					case activationsEccm = "activations_eccm"
-					case activationsEcm = "activations_ecm"
-					case activationsEcmBurst = "activations_ecm_burst"
-					case activationsEnergyDestabilizer = "activations_energy_destabilizer"
-					case activationsEnergyVampire = "activations_energy_vampire"
-					case activationsEnergyWeapon = "activations_energy_weapon"
-					case activationsFestivalLauncher = "activations_festival_launcher"
-					case activationsFrequencyMiningLaser = "activations_frequency_mining_laser"
-					case activationsFueledArmorRepairer = "activations_fueled_armor_repairer"
-					case activationsFueledShieldBooster = "activations_fueled_shield_booster"
-					case activationsGangCoordinator = "activations_gang_coordinator"
-					case activationsGasCloudHarvester = "activations_gas_cloud_harvester"
-					case activationsHullRepairUnit = "activations_hull_repair_unit"
-					case activationsHybridWeapon = "activations_hybrid_weapon"
-					case activationsIndustrialCore = "activations_industrial_core"
-					case activationsInterdictionSphereLauncher = "activations_interdiction_sphere_launcher"
-					case activationsMicroJumpDrive = "activations_micro_jump_drive"
-					case activationsMiningLaser = "activations_mining_laser"
-					case activationsMissileLauncher = "activations_missile_launcher"
-					case activationsPassiveTargetingSystem = "activations_passive_targeting_system"
-					case activationsProbeLauncher = "activations_probe_launcher"
-					case activationsProjectedEccm = "activations_projected_eccm"
-					case activationsProjectileWeapon = "activations_projectile_weapon"
-					case activationsPropulsionModule = "activations_propulsion_module"
-					case activationsRemoteArmorRepairer = "activations_remote_armor_repairer"
-					case activationsRemoteCapacitorTransmitter = "activations_remote_capacitor_transmitter"
-					case activationsRemoteEcmBurst = "activations_remote_ecm_burst"
-					case activationsRemoteHullRepairer = "activations_remote_hull_repairer"
-					case activationsRemoteSensorBooster = "activations_remote_sensor_booster"
-					case activationsRemoteSensorDamper = "activations_remote_sensor_damper"
-					case activationsRemoteShieldBooster = "activations_remote_shield_booster"
-					case activationsRemoteTrackingComputer = "activations_remote_tracking_computer"
-					case activationsSalvager = "activations_salvager"
-					case activationsSensorBooster = "activations_sensor_booster"
-					case activationsShieldBooster = "activations_shield_booster"
-					case activationsShieldHardener = "activations_shield_hardener"
-					case activationsShipScanner = "activations_ship_scanner"
-					case activationsSiege = "activations_siege"
-					case activationsSmartBomb = "activations_smart_bomb"
-					case activationsStasisWeb = "activations_stasis_web"
-					case activationsStripMiner = "activations_strip_miner"
-					case activationsSuperWeapon = "activations_super_weapon"
-					case activationsSurveyScanner = "activations_survey_scanner"
-					case activationsTargetBreaker = "activations_target_breaker"
-					case activationsTargetPainter = "activations_target_painter"
-					case activationsTrackingComputer = "activations_tracking_computer"
-					case activationsTrackingDisruptor = "activations_tracking_disruptor"
-					case activationsTractorBeam = "activations_tractor_beam"
-					case activationsTriage = "activations_triage"
-					case activationsWarpDisruptFieldGenerator = "activations_warp_disrupt_field_generator"
-					case activationsWarpScrambler = "activations_warp_scrambler"
-					case linkWeapons = "link_weapons"
-					case overload
-					case repairs
+					case dungeonsCompletedAgent = "dungeons_completed_agent"
+					case dungeonsCompletedDistribution = "dungeons_completed_distribution"
+					case missionsSucceeded = "missions_succeeded"
+					case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2012,89 +1656,23 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsSocial: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsOrbital: Codable, Hashable {
 				
 				
-				public var addContactBad: Int64?
-				public var addContactGood: Int64?
-				public var addContactHigh: Int64?
-				public var addContactHorrible: Int64?
-				public var addContactNeutral: Int64?
-				public var addNote: Int64?
-				public var addedAsContactBad: Int64?
-				public var addedAsContactGood: Int64?
-				public var addedAsContactHigh: Int64?
-				public var addedAsContactHorrible: Int64?
-				public var addedAsContactNeutral: Int64?
-				public var calendarEventCreated: Int64?
-				public var chatMessagesAlliance: Int64?
-				public var chatMessagesConstellation: Int64?
-				public var chatMessagesCorporation: Int64?
-				public var chatMessagesFleet: Int64?
-				public var chatMessagesRegion: Int64?
-				public var chatMessagesSolarsystem: Int64?
-				public var chatMessagesWarfaction: Int64?
-				public var chatTotalMessageLength: Int64?
-				public var directTrades: Int64?
-				public var fleetBroadcasts: Int64?
-				public var fleetJoins: Int64?
-				public var mailsReceived: Int64?
-				public var mailsSent: Int64?
+				public var strikeCharactersKilled: Int64?
+				public var strikeDamageToPlayersArmorAmount: Int64?
+				public var strikeDamageToPlayersShieldAmount: Int64?
 				
-				public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
-					self.addContactBad = addContactBad
-					self.addContactGood = addContactGood
-					self.addContactHigh = addContactHigh
-					self.addContactHorrible = addContactHorrible
-					self.addContactNeutral = addContactNeutral
-					self.addNote = addNote
-					self.addedAsContactBad = addedAsContactBad
-					self.addedAsContactGood = addedAsContactGood
-					self.addedAsContactHigh = addedAsContactHigh
-					self.addedAsContactHorrible = addedAsContactHorrible
-					self.addedAsContactNeutral = addedAsContactNeutral
-					self.calendarEventCreated = calendarEventCreated
-					self.chatMessagesAlliance = chatMessagesAlliance
-					self.chatMessagesConstellation = chatMessagesConstellation
-					self.chatMessagesCorporation = chatMessagesCorporation
-					self.chatMessagesFleet = chatMessagesFleet
-					self.chatMessagesRegion = chatMessagesRegion
-					self.chatMessagesSolarsystem = chatMessagesSolarsystem
-					self.chatMessagesWarfaction = chatMessagesWarfaction
-					self.chatTotalMessageLength = chatTotalMessageLength
-					self.directTrades = directTrades
-					self.fleetBroadcasts = fleetBroadcasts
-					self.fleetJoins = fleetJoins
-					self.mailsReceived = mailsReceived
-					self.mailsSent = mailsSent
+				public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
+					self.strikeCharactersKilled = strikeCharactersKilled
+					self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
+					self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case addContactBad = "add_contact_bad"
-					case addContactGood = "add_contact_good"
-					case addContactHigh = "add_contact_high"
-					case addContactHorrible = "add_contact_horrible"
-					case addContactNeutral = "add_contact_neutral"
-					case addNote = "add_note"
-					case addedAsContactBad = "added_as_contact_bad"
-					case addedAsContactGood = "added_as_contact_good"
-					case addedAsContactHigh = "added_as_contact_high"
-					case addedAsContactHorrible = "added_as_contact_horrible"
-					case addedAsContactNeutral = "added_as_contact_neutral"
-					case calendarEventCreated = "calendar_event_created"
-					case chatMessagesAlliance = "chat_messages_alliance"
-					case chatMessagesConstellation = "chat_messages_constellation"
-					case chatMessagesCorporation = "chat_messages_corporation"
-					case chatMessagesFleet = "chat_messages_fleet"
-					case chatMessagesRegion = "chat_messages_region"
-					case chatMessagesSolarsystem = "chat_messages_solarsystem"
-					case chatMessagesWarfaction = "chat_messages_warfaction"
-					case chatTotalMessageLength = "chat_total_message_length"
-					case directTrades = "direct_trades"
-					case fleetBroadcasts = "fleet_broadcasts"
-					case fleetJoins = "fleet_joins"
-					case mailsReceived = "mails_received"
-					case mailsSent = "mails_sent"
+					case strikeCharactersKilled = "strike_characters_killed"
+					case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
+					case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2405,77 +1983,221 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsTravel: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsModule: Codable, Hashable {
 				
 				
-				public var accelerationGateActivations: Int64?
-				public var alignTo: Int64?
-				public var distanceWarpedHighSec: Int64?
-				public var distanceWarpedLowSec: Int64?
-				public var distanceWarpedNullSec: Int64?
-				public var distanceWarpedWormhole: Int64?
-				public var docksHighSec: Int64?
-				public var docksLowSec: Int64?
-				public var docksNullSec: Int64?
-				public var jumpsStargateHighSec: Int64?
-				public var jumpsStargateLowSec: Int64?
-				public var jumpsStargateNullSec: Int64?
-				public var jumpsWormhole: Int64?
-				public var warpsHighSec: Int64?
-				public var warpsLowSec: Int64?
-				public var warpsNullSec: Int64?
-				public var warpsToBookmark: Int64?
-				public var warpsToCelestial: Int64?
-				public var warpsToFleetMember: Int64?
-				public var warpsToScanResult: Int64?
-				public var warpsWormhole: Int64?
+				public var activationsArmorHardener: Int64?
+				public var activationsArmorRepairUnit: Int64?
+				public var activationsArmorResistanceShiftHardener: Int64?
+				public var activationsAutomatedTargetingSystem: Int64?
+				public var activationsBastion: Int64?
+				public var activationsBombLauncher: Int64?
+				public var activationsCapacitorBooster: Int64?
+				public var activationsCargoScanner: Int64?
+				public var activationsCloakingDevice: Int64?
+				public var activationsCloneVatBay: Int64?
+				public var activationsCynosuralField: Int64?
+				public var activationsDamageControl: Int64?
+				public var activationsDataMiners: Int64?
+				public var activationsDroneControlUnit: Int64?
+				public var activationsDroneTrackingModules: Int64?
+				public var activationsEccm: Int64?
+				public var activationsEcm: Int64?
+				public var activationsEcmBurst: Int64?
+				public var activationsEnergyDestabilizer: Int64?
+				public var activationsEnergyVampire: Int64?
+				public var activationsEnergyWeapon: Int64?
+				public var activationsFestivalLauncher: Int64?
+				public var activationsFrequencyMiningLaser: Int64?
+				public var activationsFueledArmorRepairer: Int64?
+				public var activationsFueledShieldBooster: Int64?
+				public var activationsGangCoordinator: Int64?
+				public var activationsGasCloudHarvester: Int64?
+				public var activationsHullRepairUnit: Int64?
+				public var activationsHybridWeapon: Int64?
+				public var activationsIndustrialCore: Int64?
+				public var activationsInterdictionSphereLauncher: Int64?
+				public var activationsMicroJumpDrive: Int64?
+				public var activationsMiningLaser: Int64?
+				public var activationsMissileLauncher: Int64?
+				public var activationsPassiveTargetingSystem: Int64?
+				public var activationsProbeLauncher: Int64?
+				public var activationsProjectedEccm: Int64?
+				public var activationsProjectileWeapon: Int64?
+				public var activationsPropulsionModule: Int64?
+				public var activationsRemoteArmorRepairer: Int64?
+				public var activationsRemoteCapacitorTransmitter: Int64?
+				public var activationsRemoteEcmBurst: Int64?
+				public var activationsRemoteHullRepairer: Int64?
+				public var activationsRemoteSensorBooster: Int64?
+				public var activationsRemoteSensorDamper: Int64?
+				public var activationsRemoteShieldBooster: Int64?
+				public var activationsRemoteTrackingComputer: Int64?
+				public var activationsSalvager: Int64?
+				public var activationsSensorBooster: Int64?
+				public var activationsShieldBooster: Int64?
+				public var activationsShieldHardener: Int64?
+				public var activationsShipScanner: Int64?
+				public var activationsSiege: Int64?
+				public var activationsSmartBomb: Int64?
+				public var activationsStasisWeb: Int64?
+				public var activationsStripMiner: Int64?
+				public var activationsSuperWeapon: Int64?
+				public var activationsSurveyScanner: Int64?
+				public var activationsTargetBreaker: Int64?
+				public var activationsTargetPainter: Int64?
+				public var activationsTrackingComputer: Int64?
+				public var activationsTrackingDisruptor: Int64?
+				public var activationsTractorBeam: Int64?
+				public var activationsTriage: Int64?
+				public var activationsWarpDisruptFieldGenerator: Int64?
+				public var activationsWarpScrambler: Int64?
+				public var linkWeapons: Int64?
+				public var overload: Int64?
+				public var repairs: Int64?
 				
-				public init(accelerationGateActivations: Int64?, alignTo: Int64?, distanceWarpedHighSec: Int64?, distanceWarpedLowSec: Int64?, distanceWarpedNullSec: Int64?, distanceWarpedWormhole: Int64?, docksHighSec: Int64?, docksLowSec: Int64?, docksNullSec: Int64?, jumpsStargateHighSec: Int64?, jumpsStargateLowSec: Int64?, jumpsStargateNullSec: Int64?, jumpsWormhole: Int64?, warpsHighSec: Int64?, warpsLowSec: Int64?, warpsNullSec: Int64?, warpsToBookmark: Int64?, warpsToCelestial: Int64?, warpsToFleetMember: Int64?, warpsToScanResult: Int64?, warpsWormhole: Int64?) {
-					self.accelerationGateActivations = accelerationGateActivations
-					self.alignTo = alignTo
-					self.distanceWarpedHighSec = distanceWarpedHighSec
-					self.distanceWarpedLowSec = distanceWarpedLowSec
-					self.distanceWarpedNullSec = distanceWarpedNullSec
-					self.distanceWarpedWormhole = distanceWarpedWormhole
-					self.docksHighSec = docksHighSec
-					self.docksLowSec = docksLowSec
-					self.docksNullSec = docksNullSec
-					self.jumpsStargateHighSec = jumpsStargateHighSec
-					self.jumpsStargateLowSec = jumpsStargateLowSec
-					self.jumpsStargateNullSec = jumpsStargateNullSec
-					self.jumpsWormhole = jumpsWormhole
-					self.warpsHighSec = warpsHighSec
-					self.warpsLowSec = warpsLowSec
-					self.warpsNullSec = warpsNullSec
-					self.warpsToBookmark = warpsToBookmark
-					self.warpsToCelestial = warpsToCelestial
-					self.warpsToFleetMember = warpsToFleetMember
-					self.warpsToScanResult = warpsToScanResult
-					self.warpsWormhole = warpsWormhole
+				public init(activationsArmorHardener: Int64?, activationsArmorRepairUnit: Int64?, activationsArmorResistanceShiftHardener: Int64?, activationsAutomatedTargetingSystem: Int64?, activationsBastion: Int64?, activationsBombLauncher: Int64?, activationsCapacitorBooster: Int64?, activationsCargoScanner: Int64?, activationsCloakingDevice: Int64?, activationsCloneVatBay: Int64?, activationsCynosuralField: Int64?, activationsDamageControl: Int64?, activationsDataMiners: Int64?, activationsDroneControlUnit: Int64?, activationsDroneTrackingModules: Int64?, activationsEccm: Int64?, activationsEcm: Int64?, activationsEcmBurst: Int64?, activationsEnergyDestabilizer: Int64?, activationsEnergyVampire: Int64?, activationsEnergyWeapon: Int64?, activationsFestivalLauncher: Int64?, activationsFrequencyMiningLaser: Int64?, activationsFueledArmorRepairer: Int64?, activationsFueledShieldBooster: Int64?, activationsGangCoordinator: Int64?, activationsGasCloudHarvester: Int64?, activationsHullRepairUnit: Int64?, activationsHybridWeapon: Int64?, activationsIndustrialCore: Int64?, activationsInterdictionSphereLauncher: Int64?, activationsMicroJumpDrive: Int64?, activationsMiningLaser: Int64?, activationsMissileLauncher: Int64?, activationsPassiveTargetingSystem: Int64?, activationsProbeLauncher: Int64?, activationsProjectedEccm: Int64?, activationsProjectileWeapon: Int64?, activationsPropulsionModule: Int64?, activationsRemoteArmorRepairer: Int64?, activationsRemoteCapacitorTransmitter: Int64?, activationsRemoteEcmBurst: Int64?, activationsRemoteHullRepairer: Int64?, activationsRemoteSensorBooster: Int64?, activationsRemoteSensorDamper: Int64?, activationsRemoteShieldBooster: Int64?, activationsRemoteTrackingComputer: Int64?, activationsSalvager: Int64?, activationsSensorBooster: Int64?, activationsShieldBooster: Int64?, activationsShieldHardener: Int64?, activationsShipScanner: Int64?, activationsSiege: Int64?, activationsSmartBomb: Int64?, activationsStasisWeb: Int64?, activationsStripMiner: Int64?, activationsSuperWeapon: Int64?, activationsSurveyScanner: Int64?, activationsTargetBreaker: Int64?, activationsTargetPainter: Int64?, activationsTrackingComputer: Int64?, activationsTrackingDisruptor: Int64?, activationsTractorBeam: Int64?, activationsTriage: Int64?, activationsWarpDisruptFieldGenerator: Int64?, activationsWarpScrambler: Int64?, linkWeapons: Int64?, overload: Int64?, repairs: Int64?) {
+					self.activationsArmorHardener = activationsArmorHardener
+					self.activationsArmorRepairUnit = activationsArmorRepairUnit
+					self.activationsArmorResistanceShiftHardener = activationsArmorResistanceShiftHardener
+					self.activationsAutomatedTargetingSystem = activationsAutomatedTargetingSystem
+					self.activationsBastion = activationsBastion
+					self.activationsBombLauncher = activationsBombLauncher
+					self.activationsCapacitorBooster = activationsCapacitorBooster
+					self.activationsCargoScanner = activationsCargoScanner
+					self.activationsCloakingDevice = activationsCloakingDevice
+					self.activationsCloneVatBay = activationsCloneVatBay
+					self.activationsCynosuralField = activationsCynosuralField
+					self.activationsDamageControl = activationsDamageControl
+					self.activationsDataMiners = activationsDataMiners
+					self.activationsDroneControlUnit = activationsDroneControlUnit
+					self.activationsDroneTrackingModules = activationsDroneTrackingModules
+					self.activationsEccm = activationsEccm
+					self.activationsEcm = activationsEcm
+					self.activationsEcmBurst = activationsEcmBurst
+					self.activationsEnergyDestabilizer = activationsEnergyDestabilizer
+					self.activationsEnergyVampire = activationsEnergyVampire
+					self.activationsEnergyWeapon = activationsEnergyWeapon
+					self.activationsFestivalLauncher = activationsFestivalLauncher
+					self.activationsFrequencyMiningLaser = activationsFrequencyMiningLaser
+					self.activationsFueledArmorRepairer = activationsFueledArmorRepairer
+					self.activationsFueledShieldBooster = activationsFueledShieldBooster
+					self.activationsGangCoordinator = activationsGangCoordinator
+					self.activationsGasCloudHarvester = activationsGasCloudHarvester
+					self.activationsHullRepairUnit = activationsHullRepairUnit
+					self.activationsHybridWeapon = activationsHybridWeapon
+					self.activationsIndustrialCore = activationsIndustrialCore
+					self.activationsInterdictionSphereLauncher = activationsInterdictionSphereLauncher
+					self.activationsMicroJumpDrive = activationsMicroJumpDrive
+					self.activationsMiningLaser = activationsMiningLaser
+					self.activationsMissileLauncher = activationsMissileLauncher
+					self.activationsPassiveTargetingSystem = activationsPassiveTargetingSystem
+					self.activationsProbeLauncher = activationsProbeLauncher
+					self.activationsProjectedEccm = activationsProjectedEccm
+					self.activationsProjectileWeapon = activationsProjectileWeapon
+					self.activationsPropulsionModule = activationsPropulsionModule
+					self.activationsRemoteArmorRepairer = activationsRemoteArmorRepairer
+					self.activationsRemoteCapacitorTransmitter = activationsRemoteCapacitorTransmitter
+					self.activationsRemoteEcmBurst = activationsRemoteEcmBurst
+					self.activationsRemoteHullRepairer = activationsRemoteHullRepairer
+					self.activationsRemoteSensorBooster = activationsRemoteSensorBooster
+					self.activationsRemoteSensorDamper = activationsRemoteSensorDamper
+					self.activationsRemoteShieldBooster = activationsRemoteShieldBooster
+					self.activationsRemoteTrackingComputer = activationsRemoteTrackingComputer
+					self.activationsSalvager = activationsSalvager
+					self.activationsSensorBooster = activationsSensorBooster
+					self.activationsShieldBooster = activationsShieldBooster
+					self.activationsShieldHardener = activationsShieldHardener
+					self.activationsShipScanner = activationsShipScanner
+					self.activationsSiege = activationsSiege
+					self.activationsSmartBomb = activationsSmartBomb
+					self.activationsStasisWeb = activationsStasisWeb
+					self.activationsStripMiner = activationsStripMiner
+					self.activationsSuperWeapon = activationsSuperWeapon
+					self.activationsSurveyScanner = activationsSurveyScanner
+					self.activationsTargetBreaker = activationsTargetBreaker
+					self.activationsTargetPainter = activationsTargetPainter
+					self.activationsTrackingComputer = activationsTrackingComputer
+					self.activationsTrackingDisruptor = activationsTrackingDisruptor
+					self.activationsTractorBeam = activationsTractorBeam
+					self.activationsTriage = activationsTriage
+					self.activationsWarpDisruptFieldGenerator = activationsWarpDisruptFieldGenerator
+					self.activationsWarpScrambler = activationsWarpScrambler
+					self.linkWeapons = linkWeapons
+					self.overload = overload
+					self.repairs = repairs
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case accelerationGateActivations = "acceleration_gate_activations"
-					case alignTo = "align_to"
-					case distanceWarpedHighSec = "distance_warped_high_sec"
-					case distanceWarpedLowSec = "distance_warped_low_sec"
-					case distanceWarpedNullSec = "distance_warped_null_sec"
-					case distanceWarpedWormhole = "distance_warped_wormhole"
-					case docksHighSec = "docks_high_sec"
-					case docksLowSec = "docks_low_sec"
-					case docksNullSec = "docks_null_sec"
-					case jumpsStargateHighSec = "jumps_stargate_high_sec"
-					case jumpsStargateLowSec = "jumps_stargate_low_sec"
-					case jumpsStargateNullSec = "jumps_stargate_null_sec"
-					case jumpsWormhole = "jumps_wormhole"
-					case warpsHighSec = "warps_high_sec"
-					case warpsLowSec = "warps_low_sec"
-					case warpsNullSec = "warps_null_sec"
-					case warpsToBookmark = "warps_to_bookmark"
-					case warpsToCelestial = "warps_to_celestial"
-					case warpsToFleetMember = "warps_to_fleet_member"
-					case warpsToScanResult = "warps_to_scan_result"
-					case warpsWormhole = "warps_wormhole"
+					case activationsArmorHardener = "activations_armor_hardener"
+					case activationsArmorRepairUnit = "activations_armor_repair_unit"
+					case activationsArmorResistanceShiftHardener = "activations_armor_resistance_shift_hardener"
+					case activationsAutomatedTargetingSystem = "activations_automated_targeting_system"
+					case activationsBastion = "activations_bastion"
+					case activationsBombLauncher = "activations_bomb_launcher"
+					case activationsCapacitorBooster = "activations_capacitor_booster"
+					case activationsCargoScanner = "activations_cargo_scanner"
+					case activationsCloakingDevice = "activations_cloaking_device"
+					case activationsCloneVatBay = "activations_clone_vat_bay"
+					case activationsCynosuralField = "activations_cynosural_field"
+					case activationsDamageControl = "activations_damage_control"
+					case activationsDataMiners = "activations_data_miners"
+					case activationsDroneControlUnit = "activations_drone_control_unit"
+					case activationsDroneTrackingModules = "activations_drone_tracking_modules"
+					case activationsEccm = "activations_eccm"
+					case activationsEcm = "activations_ecm"
+					case activationsEcmBurst = "activations_ecm_burst"
+					case activationsEnergyDestabilizer = "activations_energy_destabilizer"
+					case activationsEnergyVampire = "activations_energy_vampire"
+					case activationsEnergyWeapon = "activations_energy_weapon"
+					case activationsFestivalLauncher = "activations_festival_launcher"
+					case activationsFrequencyMiningLaser = "activations_frequency_mining_laser"
+					case activationsFueledArmorRepairer = "activations_fueled_armor_repairer"
+					case activationsFueledShieldBooster = "activations_fueled_shield_booster"
+					case activationsGangCoordinator = "activations_gang_coordinator"
+					case activationsGasCloudHarvester = "activations_gas_cloud_harvester"
+					case activationsHullRepairUnit = "activations_hull_repair_unit"
+					case activationsHybridWeapon = "activations_hybrid_weapon"
+					case activationsIndustrialCore = "activations_industrial_core"
+					case activationsInterdictionSphereLauncher = "activations_interdiction_sphere_launcher"
+					case activationsMicroJumpDrive = "activations_micro_jump_drive"
+					case activationsMiningLaser = "activations_mining_laser"
+					case activationsMissileLauncher = "activations_missile_launcher"
+					case activationsPassiveTargetingSystem = "activations_passive_targeting_system"
+					case activationsProbeLauncher = "activations_probe_launcher"
+					case activationsProjectedEccm = "activations_projected_eccm"
+					case activationsProjectileWeapon = "activations_projectile_weapon"
+					case activationsPropulsionModule = "activations_propulsion_module"
+					case activationsRemoteArmorRepairer = "activations_remote_armor_repairer"
+					case activationsRemoteCapacitorTransmitter = "activations_remote_capacitor_transmitter"
+					case activationsRemoteEcmBurst = "activations_remote_ecm_burst"
+					case activationsRemoteHullRepairer = "activations_remote_hull_repairer"
+					case activationsRemoteSensorBooster = "activations_remote_sensor_booster"
+					case activationsRemoteSensorDamper = "activations_remote_sensor_damper"
+					case activationsRemoteShieldBooster = "activations_remote_shield_booster"
+					case activationsRemoteTrackingComputer = "activations_remote_tracking_computer"
+					case activationsSalvager = "activations_salvager"
+					case activationsSensorBooster = "activations_sensor_booster"
+					case activationsShieldBooster = "activations_shield_booster"
+					case activationsShieldHardener = "activations_shield_hardener"
+					case activationsShipScanner = "activations_ship_scanner"
+					case activationsSiege = "activations_siege"
+					case activationsSmartBomb = "activations_smart_bomb"
+					case activationsStasisWeb = "activations_stasis_web"
+					case activationsStripMiner = "activations_strip_miner"
+					case activationsSuperWeapon = "activations_super_weapon"
+					case activationsSurveyScanner = "activations_survey_scanner"
+					case activationsTargetBreaker = "activations_target_breaker"
+					case activationsTargetPainter = "activations_target_painter"
+					case activationsTrackingComputer = "activations_tracking_computer"
+					case activationsTrackingDisruptor = "activations_tracking_disruptor"
+					case activationsTractorBeam = "activations_tractor_beam"
+					case activationsTriage = "activations_triage"
+					case activationsWarpDisruptFieldGenerator = "activations_warp_disrupt_field_generator"
+					case activationsWarpScrambler = "activations_warp_scrambler"
+					case linkWeapons = "link_weapons"
+					case overload
+					case repairs
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2486,53 +2208,71 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDStatsMarket: Codable, Hashable {
+			public struct GetCharactersCharacterIDStatsIsk: Codable, Hashable {
 				
 				
-				public var acceptContractsCourier: Int64?
-				public var acceptContractsItemExchange: Int64?
-				public var buyOrdersPlaced: Int64?
-				public var cancelMarketOrder: Int64?
-				public var createContractsAuction: Int64?
-				public var createContractsCourier: Int64?
-				public var createContractsItemExchange: Int64?
-				public var deliverCourierContract: Int64?
-				public var iskGained: Int64?
-				public var iskSpent: Int64?
-				public var modifyMarketOrder: Int64?
-				public var searchContracts: Int64?
-				public var sellOrdersPlaced: Int64?
+				public var `in`: Int64?
+				public var out: Int64?
 				
-				public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
-					self.acceptContractsCourier = acceptContractsCourier
-					self.acceptContractsItemExchange = acceptContractsItemExchange
-					self.buyOrdersPlaced = buyOrdersPlaced
-					self.cancelMarketOrder = cancelMarketOrder
-					self.createContractsAuction = createContractsAuction
-					self.createContractsCourier = createContractsCourier
-					self.createContractsItemExchange = createContractsItemExchange
-					self.deliverCourierContract = deliverCourierContract
-					self.iskGained = iskGained
-					self.iskSpent = iskSpent
-					self.modifyMarketOrder = modifyMarketOrder
-					self.searchContracts = searchContracts
-					self.sellOrdersPlaced = sellOrdersPlaced
+				public init(`in`: Int64?, out: Int64?) {
+					self.`in` = `in`
+					self.out = out
 				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case acceptContractsCourier = "accept_contracts_courier"
-					case acceptContractsItemExchange = "accept_contracts_item_exchange"
-					case buyOrdersPlaced = "buy_orders_placed"
-					case cancelMarketOrder = "cancel_market_order"
-					case createContractsAuction = "create_contracts_auction"
-					case createContractsCourier = "create_contracts_courier"
-					case createContractsItemExchange = "create_contracts_item_exchange"
-					case deliverCourierContract = "deliver_courier_contract"
-					case iskGained = "isk_gained"
-					case iskSpent = "isk_spent"
-					case modifyMarketOrder = "modify_market_order"
-					case searchContracts = "search_contracts"
-					case sellOrdersPlaced = "sell_orders_placed"
+					case `in` = "in"
+					case out
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsCharacter: Codable, Hashable {
+				
+				
+				public var daysOfActivity: Int64?
+				public var minutes: Int64?
+				public var sessionsStarted: Int64?
+				
+				public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
+					self.daysOfActivity = daysOfActivity
+					self.minutes = minutes
+					self.sessionsStarted = sessionsStarted
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case daysOfActivity = "days_of_activity"
+					case minutes
+					case sessionsStarted = "sessions_started"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
+			public struct GetCharactersCharacterIDStatsInventory: Codable, Hashable {
+				
+				
+				public var abandonLootQuantity: Int64?
+				public var trashItemQuantity: Int64?
+				
+				public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
+					self.abandonLootQuantity = abandonLootQuantity
+					self.trashItemQuantity = trashItemQuantity
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case abandonLootQuantity = "abandon_loot_quantity"
+					case trashItemQuantity = "trash_item_quantity"
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
@@ -2618,6 +2358,99 @@ public extension ESI {
 				}
 			}
 			
+			public struct GetCharactersCharacterIDStatsSocial: Codable, Hashable {
+				
+				
+				public var addContactBad: Int64?
+				public var addContactGood: Int64?
+				public var addContactHigh: Int64?
+				public var addContactHorrible: Int64?
+				public var addContactNeutral: Int64?
+				public var addNote: Int64?
+				public var addedAsContactBad: Int64?
+				public var addedAsContactGood: Int64?
+				public var addedAsContactHigh: Int64?
+				public var addedAsContactHorrible: Int64?
+				public var addedAsContactNeutral: Int64?
+				public var calendarEventCreated: Int64?
+				public var chatMessagesAlliance: Int64?
+				public var chatMessagesConstellation: Int64?
+				public var chatMessagesCorporation: Int64?
+				public var chatMessagesFleet: Int64?
+				public var chatMessagesRegion: Int64?
+				public var chatMessagesSolarsystem: Int64?
+				public var chatMessagesWarfaction: Int64?
+				public var chatTotalMessageLength: Int64?
+				public var directTrades: Int64?
+				public var fleetBroadcasts: Int64?
+				public var fleetJoins: Int64?
+				public var mailsReceived: Int64?
+				public var mailsSent: Int64?
+				
+				public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
+					self.addContactBad = addContactBad
+					self.addContactGood = addContactGood
+					self.addContactHigh = addContactHigh
+					self.addContactHorrible = addContactHorrible
+					self.addContactNeutral = addContactNeutral
+					self.addNote = addNote
+					self.addedAsContactBad = addedAsContactBad
+					self.addedAsContactGood = addedAsContactGood
+					self.addedAsContactHigh = addedAsContactHigh
+					self.addedAsContactHorrible = addedAsContactHorrible
+					self.addedAsContactNeutral = addedAsContactNeutral
+					self.calendarEventCreated = calendarEventCreated
+					self.chatMessagesAlliance = chatMessagesAlliance
+					self.chatMessagesConstellation = chatMessagesConstellation
+					self.chatMessagesCorporation = chatMessagesCorporation
+					self.chatMessagesFleet = chatMessagesFleet
+					self.chatMessagesRegion = chatMessagesRegion
+					self.chatMessagesSolarsystem = chatMessagesSolarsystem
+					self.chatMessagesWarfaction = chatMessagesWarfaction
+					self.chatTotalMessageLength = chatTotalMessageLength
+					self.directTrades = directTrades
+					self.fleetBroadcasts = fleetBroadcasts
+					self.fleetJoins = fleetJoins
+					self.mailsReceived = mailsReceived
+					self.mailsSent = mailsSent
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case addContactBad = "add_contact_bad"
+					case addContactGood = "add_contact_good"
+					case addContactHigh = "add_contact_high"
+					case addContactHorrible = "add_contact_horrible"
+					case addContactNeutral = "add_contact_neutral"
+					case addNote = "add_note"
+					case addedAsContactBad = "added_as_contact_bad"
+					case addedAsContactGood = "added_as_contact_good"
+					case addedAsContactHigh = "added_as_contact_high"
+					case addedAsContactHorrible = "added_as_contact_horrible"
+					case addedAsContactNeutral = "added_as_contact_neutral"
+					case calendarEventCreated = "calendar_event_created"
+					case chatMessagesAlliance = "chat_messages_alliance"
+					case chatMessagesConstellation = "chat_messages_constellation"
+					case chatMessagesCorporation = "chat_messages_corporation"
+					case chatMessagesFleet = "chat_messages_fleet"
+					case chatMessagesRegion = "chat_messages_region"
+					case chatMessagesSolarsystem = "chat_messages_solarsystem"
+					case chatMessagesWarfaction = "chat_messages_warfaction"
+					case chatTotalMessageLength = "chat_total_message_length"
+					case directTrades = "direct_trades"
+					case fleetBroadcasts = "fleet_broadcasts"
+					case fleetJoins = "fleet_joins"
+					case mailsReceived = "mails_received"
+					case mailsSent = "mails_sent"
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public var character: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCharacter?
 			public var combat: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsCombat?
 			public var industry: Character.GetCharactersCharacterIDStatsOk.GetCharactersCharacterIDStatsIndustry?
@@ -2662,6 +2495,173 @@ public extension ESI {
 				case social
 				case travel
 				case year
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Information: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDGender: String, Codable, HTTPQueryable {
+				case female = "female"
+				case male = "male"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var allianceID: Int?
+			public var ancestryID: Int?
+			public var birthday: Date
+			public var bloodlineID: Int
+			public var corporationID: Int
+			public var localizedDescription: String?
+			public var factionID: Int?
+			public var gender: Character.Information.GetCharactersCharacterIDGender
+			public var name: String
+			public var raceID: Int
+			public var securityStatus: Float?
+			public var title: String?
+			
+			public init(allianceID: Int?, ancestryID: Int?, birthday: Date, bloodlineID: Int, corporationID: Int, localizedDescription: String?, factionID: Int?, gender: Character.Information.GetCharactersCharacterIDGender, name: String, raceID: Int, securityStatus: Float?, title: String?) {
+				self.allianceID = allianceID
+				self.ancestryID = ancestryID
+				self.birthday = birthday
+				self.bloodlineID = bloodlineID
+				self.corporationID = corporationID
+				self.localizedDescription = localizedDescription
+				self.factionID = factionID
+				self.gender = gender
+				self.name = name
+				self.raceID = raceID
+				self.securityStatus = securityStatus
+				self.title = title
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case ancestryID = "ancestry_id"
+				case birthday
+				case bloodlineID = "bloodline_id"
+				case corporationID = "corporation_id"
+				case localizedDescription = "description"
+				case factionID = "faction_id"
+				case gender
+				case name
+				case raceID = "race_id"
+				case securityStatus = "security_status"
+				case title
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .birthday: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Standing: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDStandingsFromType: String, Codable, HTTPQueryable {
+				case agent = "agent"
+				case faction = "faction"
+				case npcCorp = "npc_corp"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var fromID: Int
+			public var fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType
+			public var standing: Float
+			
+			public init(fromID: Int, fromType: Character.Standing.GetCharactersCharacterIDStandingsFromType, standing: Float) {
+				self.fromID = fromID
+				self.fromType = fromType
+				self.standing = standing
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case fromID = "from_id"
+				case fromType = "from_type"
+				case standing
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDNotificationsContactsOk: Codable, Hashable {
+			
+			
+			public var message: String
+			public var notificationID: Int
+			public var sendDate: Date
+			public var senderCharacterID: Int
+			public var standingLevel: Float
+			
+			public init(message: String, notificationID: Int, sendDate: Date, senderCharacterID: Int, standingLevel: Float) {
+				self.message = message
+				self.notificationID = notificationID
+				self.sendDate = sendDate
+				self.senderCharacterID = senderCharacterID
+				self.standingLevel = standingLevel
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case message
+				case notificationID = "notification_id"
+				case sendDate = "send_date"
+				case senderCharacterID = "sender_character_id"
+				case standingLevel = "standing_level"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .sendDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Portrait: Codable, Hashable {
+			
+			
+			public var px128x128: String?
+			public var px256x256: String?
+			public var px512x512: String?
+			public var px64x64: String?
+			
+			public init(px128x128: String?, px256x256: String?, px512x512: String?, px64x64: String?) {
+				self.px128x128 = px128x128
+				self.px256x256 = px256x256
+				self.px512x512 = px512x512
+				self.px64x64 = px64x64
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case px128x128
+				case px256x256
+				case px512x512
+				case px64x64
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

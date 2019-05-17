@@ -12,33 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listAlliancesCorporations(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/alliances/\(allianceID)/corporations/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func getAllianceIcon(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Alliance.Icon>> {
 			
 			
@@ -54,40 +27,13 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/alliances/\(allianceID)/icons/"
+			let url = esi.baseURL + "/alliances/\(allianceID)/icons/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let promise = Promise<ESI.Result<Alliance.Icon>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Icon>) in
 				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getAllianceInformation(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Alliance.Information>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v3/alliances/\(allianceID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Alliance.Information>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Information>) in
-				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
 		}
@@ -108,7 +54,61 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/alliances/"
+			let url = esi.baseURL + "/alliances/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Int]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func getAllianceInformation(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Alliance.Information>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/alliances/\(allianceID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<Alliance.Information>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Alliance.Information>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listAlliancesCorporations(allianceID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/alliances/\(allianceID)/corporations/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -134,50 +134,6 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case px128x128
 				case px64x64
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetAlliancesAllianceIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -222,6 +178,50 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .dateFounded: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetAlliancesAllianceIDIconsNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetAlliancesAllianceIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

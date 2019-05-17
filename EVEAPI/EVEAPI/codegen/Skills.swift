@@ -12,6 +12,34 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
+		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/characters/\(characterID)/skillqueue/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
+				promise.set(response: response, cached: 120.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getCharacterSkills(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Skills.CharacterSkills>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -28,7 +56,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v4/characters/\(characterID)/skills/"
+			let url = esi.baseURL + "/characters/\(characterID)/skills/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -56,7 +84,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/attributes/"
+			let url = esi.baseURL + "/characters/\(characterID)/attributes/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -67,32 +95,48 @@ public extension ESI {
 			return promise.future
 		}
 		
-		@discardableResult
-		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+		
+		public struct CharacterAttributes: Codable, Hashable {
 			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
 			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
+			public var accruedRemapCooldownDate: Date?
+			public var bonusRemaps: Int?
+			public var charisma: Int
+			public var intelligence: Int
+			public var lastRemapDate: Date?
+			public var memory: Int
+			public var perception: Int
+			public var willpower: Int
+			
+			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
+				self.accruedRemapCooldownDate = accruedRemapCooldownDate
+				self.bonusRemaps = bonusRemaps
+				self.charisma = charisma
+				self.intelligence = intelligence
+				self.lastRemapDate = lastRemapDate
+				self.memory = memory
+				self.perception = perception
+				self.willpower = willpower
 			}
 			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/skillqueue/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
-				promise.set(response: response, cached: 120.0)
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case accruedRemapCooldownDate = "accrued_remap_cooldown_date"
+				case bonusRemaps = "bonus_remaps"
+				case charisma
+				case intelligence
+				case lastRemapDate = "last_remap_date"
+				case memory
+				case perception
+				case willpower
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
+						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
 			}
-			return promise.future
 		}
 		
 		
@@ -146,50 +190,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct CharacterAttributes: Codable, Hashable {
-			
-			
-			public var accruedRemapCooldownDate: Date?
-			public var bonusRemaps: Int?
-			public var charisma: Int
-			public var intelligence: Int
-			public var lastRemapDate: Date?
-			public var memory: Int
-			public var perception: Int
-			public var willpower: Int
-			
-			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
-				self.accruedRemapCooldownDate = accruedRemapCooldownDate
-				self.bonusRemaps = bonusRemaps
-				self.charisma = charisma
-				self.intelligence = intelligence
-				self.lastRemapDate = lastRemapDate
-				self.memory = memory
-				self.perception = perception
-				self.willpower = willpower
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case accruedRemapCooldownDate = "accrued_remap_cooldown_date"
-				case bonusRemaps = "bonus_remaps"
-				case charisma
-				case intelligence
-				case lastRemapDate = "last_remap_date"
-				case memory
-				case perception
-				case willpower
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
-						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

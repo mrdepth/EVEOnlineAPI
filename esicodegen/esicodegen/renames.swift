@@ -99,6 +99,9 @@ let typeNames: [String: String] = [
 	"GetCharactersCharacterIDFittingsOk"	: "Fitting",
 	"PostCharactersCharacterIDFittingsItems"	: "Item",
 	"GetCharactersCharacterIDFittingsItems"	: "Item",
+    "GetCharactersCharacterIDFittingsFlag" : "Flag",
+    "PostCharactersCharacterIDFittingsFlag" : "Flag",
+    
 
 	//MARK: Fleets
 	"PutFleetsFleetIDNewSettings"	: "FleetUpdate",

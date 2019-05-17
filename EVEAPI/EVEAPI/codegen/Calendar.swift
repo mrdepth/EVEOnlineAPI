@@ -28,7 +28,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/calendar/\(eventID)/attendees/"
+			let url = esi.baseURL + "/characters/\(characterID)/calendar/\(eventID)/attendees/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -58,7 +58,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "from_event", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/calendar/"
+			let url = esi.baseURL + "/characters/\(characterID)/calendar/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -86,7 +86,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v3/characters/\(characterID)/calendar/\(eventID)/"
+			let url = esi.baseURL + "/characters/\(characterID)/calendar/\(eventID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -112,7 +112,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v3/characters/\(characterID)/calendar/\(eventID)/"
+			let url = esi.baseURL + "/characters/\(characterID)/calendar/\(eventID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -121,64 +121,6 @@ public extension ESI {
 				promise.set(response: response, cached: nil)
 			}
 			return promise.future
-		}
-		
-		
-		public struct GetCharactersCharacterIDCalendarEventIDAttendeesOk: Codable, Hashable {
-			
-			public enum GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse: String, Codable, HTTPQueryable {
-				case accepted = "accepted"
-				case declined = "declined"
-				case notResponded = "not_responded"
-				case tentative = "tentative"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var characterID: Int?
-			public var eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?
-			
-			public init(characterID: Int?, eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?) {
-				self.characterID = characterID
-				self.eventResponse = eventResponse
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case characterID = "character_id"
-				case eventResponse = "event_response"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDCalendarEventIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
 		
@@ -227,6 +169,42 @@ public extension ESI {
 		}
 		
 		
+		public struct GetCharactersCharacterIDCalendarEventIDAttendeesOk: Codable, Hashable {
+			
+			public enum GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse: String, Codable, HTTPQueryable {
+				case accepted = "accepted"
+				case declined = "declined"
+				case notResponded = "not_responded"
+				case tentative = "tentative"
+				
+				public var httpQuery: String? {
+					return rawValue
+				}
+				
+			}
+			
+			public var characterID: Int?
+			public var eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?
+			
+			public init(characterID: Int?, eventResponse: Calendar.GetCharactersCharacterIDCalendarEventIDAttendeesOk.GetCharactersCharacterIDCalendarEventIDAttendeesEventResponse?) {
+				self.characterID = characterID
+				self.eventResponse = eventResponse
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case characterID = "character_id"
+				case eventResponse = "event_response"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct Response: Codable, Hashable {
 			
 			public enum Response: String, Codable, HTTPQueryable {
@@ -248,6 +226,28 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case response
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDCalendarEventIDAttendeesNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -320,7 +320,7 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDCalendarEventIDAttendeesNotFound: Codable, Hashable {
+		public struct GetCharactersCharacterIDCalendarEventIDNotFound: Codable, Hashable {
 			
 			
 			public var error: String?

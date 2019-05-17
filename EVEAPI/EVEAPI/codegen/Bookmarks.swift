@@ -12,66 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listBookmarkFolders(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Folder]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-bookmarks.read_character_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/bookmarks/folders/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Bookmarks.Folder]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Bookmarks.Folder]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listCorporationBookmarkFolders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-bookmarks.read_corporation_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
-			}
-			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/bookmarks/folders/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func listBookmarks(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Bookmark]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -90,7 +30,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/bookmarks/"
+			let url = esi.baseURL + "/characters/\(characterID)/bookmarks/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -120,7 +60,7 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/bookmarks/"
+			let url = esi.baseURL + "/corporations/\(corporationID)/bookmarks/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -131,10 +71,70 @@ public extension ESI {
 			return promise.future
 		}
 		
-		
-		public struct GetCorporationsCorporationIDBookmarksOk: Codable, Hashable {
+		@discardableResult
+		public func listCorporationBookmarkFolders(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>> {
 			
-			public struct GetCorporationsCorporationIDBookmarksItem: Codable, Hashable {
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-bookmarks.read_corporation_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/corporations/\(corporationID)/bookmarks/folders/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Bookmarks.GetCorporationsCorporationIDBookmarksFoldersOk]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listBookmarkFolders(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Bookmarks.Folder]>> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-bookmarks.read_character_bookmarks.v1") else {return .init(.failure(ESIError.forbidden))}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = page?.httpQuery {
+				query.append(URLQueryItem(name: "page", value: v))
+			}
+			
+			let url = esi.baseURL + "/characters/\(characterID)/bookmarks/folders/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Bookmarks.Folder]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Bookmarks.Folder]>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		
+		public struct Bookmark: Codable, Hashable {
+			
+			public struct GetCharactersCharacterIDBookmarksItem: Codable, Hashable {
 				
 				
 				public var itemID: Int64
@@ -158,7 +158,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCorporationsCorporationIDBookmarksCoordinates: Codable, Hashable {
+			public struct GetCharactersCharacterIDBookmarksCoordinates: Codable, Hashable {
 				
 				
 				public var x: Double
@@ -186,16 +186,16 @@ public extension ESI {
 			}
 			
 			public var bookmarkID: Int
-			public var coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?
+			public var coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?
 			public var created: Date
 			public var creatorID: Int
 			public var folderID: Int?
-			public var item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?
+			public var item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?
 			public var label: String
 			public var locationID: Int
 			public var notes: String
 			
-			public init(bookmarkID: Int, coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?, created: Date, creatorID: Int, folderID: Int?, item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?, label: String, locationID: Int, notes: String) {
+			public init(bookmarkID: Int, coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?, created: Date, creatorID: Int, folderID: Int?, item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?, label: String, locationID: Int, notes: String) {
 				self.bookmarkID = bookmarkID
 				self.coordinates = coordinates
 				self.created = created
@@ -281,9 +281,9 @@ public extension ESI {
 		}
 		
 		
-		public struct Bookmark: Codable, Hashable {
+		public struct GetCorporationsCorporationIDBookmarksOk: Codable, Hashable {
 			
-			public struct GetCharactersCharacterIDBookmarksItem: Codable, Hashable {
+			public struct GetCorporationsCorporationIDBookmarksItem: Codable, Hashable {
 				
 				
 				public var itemID: Int64
@@ -307,7 +307,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDBookmarksCoordinates: Codable, Hashable {
+			public struct GetCorporationsCorporationIDBookmarksCoordinates: Codable, Hashable {
 				
 				
 				public var x: Double
@@ -335,16 +335,16 @@ public extension ESI {
 			}
 			
 			public var bookmarkID: Int
-			public var coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?
+			public var coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?
 			public var created: Date
 			public var creatorID: Int
 			public var folderID: Int?
-			public var item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?
+			public var item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?
 			public var label: String
 			public var locationID: Int
 			public var notes: String
 			
-			public init(bookmarkID: Int, coordinates: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksCoordinates?, created: Date, creatorID: Int, folderID: Int?, item: Bookmarks.Bookmark.GetCharactersCharacterIDBookmarksItem?, label: String, locationID: Int, notes: String) {
+			public init(bookmarkID: Int, coordinates: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksCoordinates?, created: Date, creatorID: Int, folderID: Int?, item: Bookmarks.GetCorporationsCorporationIDBookmarksOk.GetCorporationsCorporationIDBookmarksItem?, label: String, locationID: Int, notes: String) {
 				self.bookmarkID = bookmarkID
 				self.coordinates = coordinates
 				self.created = created

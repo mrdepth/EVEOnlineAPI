@@ -12,6 +12,33 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
+		public func getSchematicInformation(ifNoneMatch: String? = nil, schematicID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/universe/schematics/\(schematicID)/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<PlanetaryInteraction.SchematicInformation>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.SchematicInformation>) in
+				promise.set(response: response, cached: 3600.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
 		public func getColonies(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
 			
 			let scopes = esi.token?.scopes ?? []
@@ -28,7 +55,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/planets/"
+			let url = esi.baseURL + "/characters/\(characterID)/planets/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -58,39 +85,12 @@ public extension ESI {
 				query.append(URLQueryItem(name: "page", value: v))
 			}
 			
-			let url = esi.baseURL + "/v1/corporations/\(corporationID)/customs_offices/"
+			let url = esi.baseURL + "/corporations/\(corporationID)/customs_offices/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let promise = Promise<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func getSchematicInformation(ifNoneMatch: String? = nil, schematicID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/universe/schematics/\(schematicID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<PlanetaryInteraction.SchematicInformation>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.SchematicInformation>) in
 				promise.set(response: response, cached: 3600.0)
 			}
 			return promise.future
@@ -113,7 +113,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v3/characters/\(characterID)/planets/\(planetID)/"
+			let url = esi.baseURL + "/characters/\(characterID)/planets/\(planetID)/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -122,6 +122,31 @@ public extension ESI {
 				promise.set(response: response, cached: 600.0)
 			}
 			return promise.future
+		}
+		
+		
+		public struct SchematicInformation: Codable, Hashable {
+			
+			
+			public var cycleTime: Int
+			public var schematicName: String
+			
+			public init(cycleTime: Int, schematicName: String) {
+				self.cycleTime = cycleTime
+				self.schematicName = schematicName
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case cycleTime = "cycle_time"
+				case schematicName = "schematic_name"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -222,67 +247,7 @@ public extension ESI {
 		
 		public struct ColonyLayout: Codable, Hashable {
 			
-			public struct Route: Codable, Hashable {
-				
-				
-				public var contentTypeID: Int
-				public var destinationPinID: Int64
-				public var quantity: Float
-				public var routeID: Int64
-				public var sourcePinID: Int64
-				public var waypoints: [Int64]?
-				
-				public init(contentTypeID: Int, destinationPinID: Int64, quantity: Float, routeID: Int64, sourcePinID: Int64, waypoints: [Int64]?) {
-					self.contentTypeID = contentTypeID
-					self.destinationPinID = destinationPinID
-					self.quantity = quantity
-					self.routeID = routeID
-					self.sourcePinID = sourcePinID
-					self.waypoints = waypoints
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case contentTypeID = "content_type_id"
-					case destinationPinID = "destination_pin_id"
-					case quantity
-					case routeID = "route_id"
-					case sourcePinID = "source_pin_id"
-					case waypoints
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
 			public struct Pin: Codable, Hashable {
-				
-				public struct Contents: Codable, Hashable {
-					
-					
-					public var amount: Int64
-					public var typeID: Int
-					
-					public init(amount: Int64, typeID: Int) {
-						self.amount = amount
-						self.typeID = typeID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case typeID = "type_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
 				
 				public struct ExtractorDetails: Codable, Hashable {
 					
@@ -333,6 +298,30 @@ public extension ESI {
 						case heads
 						case productTypeID = "product_type_id"
 						case qtyPerCycle = "qty_per_cycle"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
+				public struct Contents: Codable, Hashable {
+					
+					
+					public var amount: Int64
+					public var typeID: Int
+					
+					public init(amount: Int64, typeID: Int) {
+						self.amount = amount
+						self.typeID = typeID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case typeID = "type_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -441,6 +430,42 @@ public extension ESI {
 				}
 			}
 			
+			public struct Route: Codable, Hashable {
+				
+				
+				public var contentTypeID: Int
+				public var destinationPinID: Int64
+				public var quantity: Float
+				public var routeID: Int64
+				public var sourcePinID: Int64
+				public var waypoints: [Int64]?
+				
+				public init(contentTypeID: Int, destinationPinID: Int64, quantity: Float, routeID: Int64, sourcePinID: Int64, waypoints: [Int64]?) {
+					self.contentTypeID = contentTypeID
+					self.destinationPinID = destinationPinID
+					self.quantity = quantity
+					self.routeID = routeID
+					self.sourcePinID = sourcePinID
+					self.waypoints = waypoints
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case contentTypeID = "content_type_id"
+					case destinationPinID = "destination_pin_id"
+					case quantity
+					case routeID = "route_id"
+					case sourcePinID = "source_pin_id"
+					case waypoints
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public var links: [PlanetaryInteraction.ColonyLayout.Link]
 			public var pins: [PlanetaryInteraction.ColonyLayout.Pin]
 			public var routes: [PlanetaryInteraction.ColonyLayout.Route]
@@ -477,31 +502,6 @@ public extension ESI {
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct SchematicInformation: Codable, Hashable {
-			
-			
-			public var cycleTime: Int
-			public var schematicName: String
-			
-			public init(cycleTime: Int, schematicName: String) {
-				self.cycleTime = cycleTime
-				self.schematicName = schematicName
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case cycleTime = "cycle_time"
-				case schematicName = "schematic_name"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

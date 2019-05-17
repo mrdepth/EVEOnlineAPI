@@ -19,20 +19,31 @@ public extension ESI {
 	}
 	
 	
-	struct Forbidden: Codable, Hashable {
+	enum Datasource: String, Codable, HTTPQueryable {
+		case singularity = "singularity"
+		case tranquility = "tranquility"
+		
+		public var httpQuery: String? {
+			return rawValue
+		}
+		
+	}
+	
+	
+	struct GatewayTimeout: Codable, Hashable {
 		
 		
 		public var error: String
-		public var ssoStatus: Int?
+		public var timeout: Int?
 		
-		public init(error: String, ssoStatus: Int?) {
+		public init(error: String, timeout: Int?) {
 			self.error = error
-			self.ssoStatus = ssoStatus
+			self.timeout = timeout
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
-			case ssoStatus = "sso_status"
+			case timeout
 			
 			var dateFormatter: DateFormatter? {
 				switch self {
@@ -44,51 +55,7 @@ public extension ESI {
 	}
 	
 	
-	struct ServiceUnavailable: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
-	struct InternalServerError: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
-	struct Unauthorized: Codable, Hashable {
+	struct BadRequest: Codable, Hashable {
 		
 		
 		public var error: String
@@ -132,14 +99,25 @@ public extension ESI {
 	}
 	
 	
-	enum Datasource: String, Codable, HTTPQueryable {
-		case singularity = "singularity"
-		case tranquility = "tranquility"
+	struct ServiceUnavailable: Codable, Hashable {
 		
-		public var httpQuery: String? {
-			return rawValue
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
 		}
 		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
 	}
 	
 	
@@ -158,20 +136,17 @@ public extension ESI {
 	}
 	
 	
-	struct GatewayTimeout: Codable, Hashable {
+	struct Unauthorized: Codable, Hashable {
 		
 		
 		public var error: String
-		public var timeout: Int?
 		
-		public init(error: String, timeout: Int?) {
+		public init(error: String) {
 			self.error = error
-			self.timeout = timeout
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
-			case timeout
 			
 			var dateFormatter: DateFormatter? {
 				switch self {
@@ -183,7 +158,32 @@ public extension ESI {
 	}
 	
 	
-	struct BadRequest: Codable, Hashable {
+	struct Forbidden: Codable, Hashable {
+		
+		
+		public var error: String
+		public var ssoStatus: Int?
+		
+		public init(error: String, ssoStatus: Int?) {
+			self.error = error
+			self.ssoStatus = ssoStatus
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			case ssoStatus = "sso_status"
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	struct InternalServerError: Codable, Hashable {
 		
 		
 		public var error: String

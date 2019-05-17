@@ -12,10 +12,10 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterLocation>> {
+		public func getCurrentShip(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterShip>> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-location.read_location.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-location.read_ship_type.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -28,12 +28,12 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/location/"
+			let url = esi.baseURL + "/characters/\(characterID)/ship/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
+			let promise = Promise<ESI.Result<Location.CharacterShip>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.CharacterShip>) in
 				promise.set(response: response, cached: 5.0)
 			}
 			return promise.future
@@ -56,7 +56,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v2/characters/\(characterID)/online/"
+			let url = esi.baseURL + "/characters/\(characterID)/online/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
@@ -68,10 +68,10 @@ public extension ESI {
 		}
 		
 		@discardableResult
-		public func getCurrentShip(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterShip>> {
+		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterLocation>> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-location.read_ship_type.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-location.read_location.v1") else {return .init(.failure(ESIError.forbidden))}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -84,12 +84,12 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/characters/\(characterID)/ship/"
+			let url = esi.baseURL + "/characters/\(characterID)/location/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Location.CharacterShip>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.CharacterShip>) in
+			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
 				promise.set(response: response, cached: 5.0)
 			}
 			return promise.future

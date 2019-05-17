@@ -12,33 +12,6 @@ public extension ESI {
 		let esi: ESI
 		
 		@discardableResult
-		public func listSovereigntyStructures(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Structure]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/v1/sovereignty/structures/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
 		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
 			
 			
@@ -54,13 +27,40 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/sovereignty/campaigns/"
+			let url = esi.baseURL + "/sovereignty/campaigns/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
 			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
 			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
 				promise.set(response: response, cached: 5.0)
+			}
+			return promise.future
+		}
+		
+		@discardableResult
+		public func listSovereigntyStructures(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Structure]>> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			if let v = ifNoneMatch?.httpQuery {
+				headers["If-None-Match"] = v
+			}
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			let url = esi.baseURL + "/sovereignty/structures/"
+			let components = NSURLComponents(string: url)!
+			components.queryItems = query
+			
+			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
+			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
+				promise.set(response: response, cached: 120.0)
 			}
 			return promise.future
 		}
@@ -81,7 +81,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/sovereignty/map/"
+			let url = esi.baseURL + "/sovereignty/map/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			

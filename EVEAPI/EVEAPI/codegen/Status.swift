@@ -27,7 +27,7 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/v1/status/"
+			let url = esi.baseURL + "/status/"
 			let components = NSURLComponents(string: url)!
 			components.queryItems = query
 			
