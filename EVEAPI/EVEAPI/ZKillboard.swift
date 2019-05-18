@@ -103,7 +103,10 @@ extension ZKillboard {
 	}
 	
 	fileprivate static let dateFormatter: DateFormatter = {
-		return DateFormatter.esiDateTimeFormatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddHH00"
+        return DateFormatted
+//        return DateFormatter.esiDateTimeFormatter
 	}()
 	
 	public enum Filter {

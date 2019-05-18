@@ -87,7 +87,7 @@ public class ESI {
 		case singularity = "singularity"
 	}
 
-	let baseURL = "https://esi.evetech.net"
+	let baseURL = "https://esi.evetech.net/latest"
 	let server: Server
 	var sessionManager: Session!
 	private(set) public var token: OAuth2Token?
