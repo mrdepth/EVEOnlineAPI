@@ -51,16 +51,16 @@ public class ESI {
 	private static let helpersLock = NSLock()
 
 	fileprivate class CachePolicyAdapter: RequestAdapter {
-		func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (AFResult<URLRequest>) -> Void) {
+        func adapt(_ urlRequest: URLRequest, completion: @escaping (Alamofire.Result<URLRequest>) -> Void) {
 			guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
 				let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest)?.response as? HTTPURLResponse,
 				let etag = cachedResponse.allHeaderFields["Etag"] as? String else {
-					next?.adapt(urlRequest, for: session, completion: completion) ?? completion(.success(urlRequest))
+					next?.adapt(urlRequest, completion: completion) ?? completion(.success(urlRequest))
 					return
 			}
 			var request = urlRequest
 			request.setValue(etag, forHTTPHeaderField: "If-None-Match")
-			next?.adapt(request, for: session, completion: completion) ?? completion(.success(request))
+			next?.adapt(request, completion: completion) ?? completion(.success(request))
 //			next?.adapt(request, completion: completion) ?? completion(.success(request))
 		}
 		
@@ -103,11 +103,11 @@ public class ESI {
 				ESI.helpers[token.refreshToken] = Weak(helper)
 				return helper
 			}()
-			sessionManager = Session(interceptor: Interceptor(adapter: CachePolicyAdapter(next: helper), retrier: helper))
+			sessionManager = Session(adapter: CachePolicyAdapter(next: helper), retrier: helper)
 		}
 		else {
 			
-			sessionManager = Session(interceptor: Interceptor(adapters: [CachePolicyAdapter(next: nil)], retriers: []))
+            sessionManager = Session(adapter: CachePolicyAdapter(next: nil))
 		}
 	}
 	
@@ -133,9 +133,12 @@ public class ESI {
 											 headers: headers,
 											 cachePolicy: cachePolicy)
 		let progress = Progress(totalUnitCount: 100)
+        var strongSelf: ESI? = self
 		return sessionManager.request(convertible).downloadProgress { p in
 			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-		}
+        }.responseData { _ in
+            strongSelf = nil
+        }
 	}
 	
 	@discardableResult

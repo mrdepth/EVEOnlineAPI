@@ -89,7 +89,7 @@ extension DataRequest {
 	                        completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
 	{
 		let decoder = JSONDecoder()
-		decoder.dateDecodingStrategy = .formatted(ZKillboard.dateFormatter)
+//        decoder.dateDecodingStrategy = .formatted(ZKillboard.dateFormatter)
 		return responseDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
 	}
 }
@@ -102,12 +102,9 @@ extension ZKillboard {
 		case descending
 	}
 	
-	fileprivate static let dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMddHH00"
-        return DateFormatted
+//    fileprivate static let dateFormatter: DateFormatter = {
 //        return DateFormatter.esiDateTimeFormatter
-	}()
+//    }()
 	
 	public enum Filter {
 		case characterID([Int64])
@@ -120,8 +117,8 @@ extension ZKillboard {
 		case regionID([Int])
 		case warID([Int])
 		case iskValue(Int64)
-		case startTime(Date)
-		case endTime(Date)
+//        case startTime(Date)
+//        case endTime(Date)
 		case noItems
 		case noAttackers
 		case zkbOnly
@@ -153,10 +150,10 @@ extension ZKillboard {
 				return "warID/\(id.map{String($0)}.joined(separator: ","))"
 			case let .iskValue(id):
 				return "iskValue/\(id)"
-			case let .startTime(date):
-				return "startTime/\(dateFormatter.string(from: date))"
-			case let .endTime(date):
-				return "endTime/\(dateFormatter.string(from: date))"
+//            case let .startTime(date):
+//                return "startTime/\(dateFormatter.string(from: date))"
+//            case let .endTime(date):
+//                return "endTime/\(dateFormatter.string(from: date))"
 			case .noItems:
 				return "no-items"
 			case .noAttackers:

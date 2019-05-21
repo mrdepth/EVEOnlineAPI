@@ -98,7 +98,7 @@ public struct OAuth2Token: Codable {
 	}
 }
 
-public class OAuth2Helper: RequestInterceptor {
+public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	
 	
 	static let dateFormatter: DateFormatter = {
@@ -119,7 +119,7 @@ public class OAuth2Helper: RequestInterceptor {
 		self.secretKey = secretKey
 	}
 	
-	public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (AFResult<URLRequest>) -> Void) {
+    public func adapt(_ urlRequest: URLRequest, completion: @escaping (Alamofire.Result<URLRequest>) -> Void) {
 		guard !isRefreshing && !token.isExpired else {return completion(.failure(OAuth2Error.tokenExpired))}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
@@ -127,12 +127,12 @@ public class OAuth2Helper: RequestInterceptor {
 	}
 
 	private var isRefreshing = false
-	private var requestsToRetry: [(RetryResult) -> Void] = []
+	private var requestsToRetry: [RequestRetryCompletion] = []
 	private let lock = NSLock()
 	
-	public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
+    public func should(_ manager: Session, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
 		guard !token.refreshToken.isEmpty else {
-			completion(.doNotRetry)
+            completion(false, 0)
 			return
 		}
 
@@ -155,16 +155,16 @@ public class OAuth2Helper: RequestInterceptor {
 					guard let strongSelf = self else { return }
 					strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
 					if let error = error {
-						strongSelf.requestsToRetry.forEach { $0(.doNotRetryWithError(error)) }
+						strongSelf.requestsToRetry.forEach { $0(false, 0) }
 					}
 					else {
-						strongSelf.requestsToRetry.forEach { $0(.retry) }
+						strongSelf.requestsToRetry.forEach { $0(true, 0) }
 					}
 					strongSelf.requestsToRetry.removeAll()
 				}
 			}
 		} else {
-			completion(.doNotRetry)
+			completion(false, 0)
 		}
 	}
 	
@@ -226,7 +226,7 @@ public class OAuth2 {
 	}
 	
 	
-	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: AFResult<OAuth2Token>) -> Void) -> Bool {
+	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Alamofire.Result<OAuth2Token>) -> Void) -> Bool {
 		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
 		guard let query = components.queryItems else {return false}
 		var code: String?

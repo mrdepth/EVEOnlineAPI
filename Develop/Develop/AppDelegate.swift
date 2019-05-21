@@ -49,10 +49,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		URLCache.shared = MyCache(memoryCapacity: 1024*1024, diskCapacity: 50*1024*1024, diskPath: nil)
+        var esi: ESI? = ESI()
+        let request = esi?.status.retrieveTheUptimeAndPlayerCounts().then(on: .main) { result in
+            print(result)
+        }.catch{ error in
+                print(error)
+        }.finally {
+            print(#function)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            esi = nil
+            print(request)
+        }
 		
-		AF.request("http://google.com").responseString { result in
-			print(result)
-		}
+//        AF.request("http://google.com").responseString { result in
+//            print(result)
+//        }
 		
 		/*var esi: ESI! = ESI()
 		esi.request("https://esi.evetech.net/latest/alliances/?datasource=tranquility", cachePolicy: .useProtocolCachePolicy).responseString { (r) in
@@ -158,12 +170,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 	func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-		OAuth2.handleOpenURL(url, clientID: clientID, secretKey: secretKey) { (result) in
+		return OAuth2.handleOpenURL(url, clientID: clientID, secretKey: secretKey) { (result) in
 			guard let token = result.value else {return}
 			let s = String(data: try! JSONEncoder().encode(token), encoding: .utf8)
 			print(s!)
 		}
-		return true
 	}
 
 
