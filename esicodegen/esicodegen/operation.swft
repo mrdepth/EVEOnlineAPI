@@ -17,7 +17,7 @@
 		components.queryItems = query
 
 		let promise = Promise<ESI.Result<{result}>>()
-		esi.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<{result}>) in
+		esi.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<{result}, Error>) in
 			promise.set(response: response, cached: {cached})
 		}
 		return promise.future
