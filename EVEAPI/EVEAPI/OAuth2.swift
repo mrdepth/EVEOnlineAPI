@@ -19,7 +19,7 @@ public enum OAuth2Error: Error {
 }
 
 
-public extension Notification.Name {
+extension Notification.Name {
 	static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
 	static let OAuth2TokenDidBecomeInvalid = Notification.Name(rawValue: "OAuth2TokenDidBecomeInvalid")
 }
@@ -56,7 +56,7 @@ fileprivate struct TokenVerifyResponse: Decodable {
 		characterID = try container.decode(Int64.self, forKey: .characterID)
 		characterName = try container.decode(String.self, forKey: .characterName)
 		scopes = try container.decode(String.self, forKey: .scopes).components(separatedBy: .whitespaces)
-		try? expiresOn = OAuth2Helper.dateFormatter.date(from: container.decode(String.self, forKey: .expiresOn))
+		try? expiresOn = OAuth2Interceptor.dateFormatter.date(from: container.decode(String.self, forKey: .expiresOn))
 	}
 }
 
@@ -98,10 +98,9 @@ public struct OAuth2Token: Codable {
 	}
 }
 
-public class OAuth2Helper: RequestAdapter, RequestRetrier {
-	
-	
-	static let dateFormatter: DateFormatter = {
+public class OAuth2Interceptor: RequestInterceptor {
+
+    static let dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSSZ"
 		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -118,8 +117,8 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		self.clientID = clientID
 		self.secretKey = secretKey
 	}
-	
-    public func adapt(_ urlRequest: URLRequest, completion: @escaping (Alamofire.Result<URLRequest>) -> Void) {
+    
+    public func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
 		guard !isRefreshing && !token.isExpired else {return completion(.failure(OAuth2Error.tokenExpired))}
 		var request = urlRequest
 		request.addValue("\(token.tokenType) \(token.accessToken)", forHTTPHeaderField: "Authorization")
@@ -127,12 +126,12 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 	}
 
 	private var isRefreshing = false
-	private var requestsToRetry: [RequestRetryCompletion] = []
+	private var requestsToRetry: [(RetryResult) -> Void] = []
 	private let lock = NSLock()
 	
-    public func should(_ manager: Session, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+    public func retry(_ request: Request, for session: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
 		guard !token.refreshToken.isEmpty else {
-            completion(false, 0)
+            completion(.doNotRetry)
 			return
 		}
 
@@ -155,16 +154,16 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 					guard let strongSelf = self else { return }
 					strongSelf.lock.lock(); defer {strongSelf.lock.unlock()}
 					if let error = error {
-						strongSelf.requestsToRetry.forEach { $0(false, 0) }
+                        strongSelf.requestsToRetry.forEach { $0(.doNotRetryWithError(error)) }
 					}
 					else {
-						strongSelf.requestsToRetry.forEach { $0(true, 0) }
+                        strongSelf.requestsToRetry.forEach { $0(.retry) }
 					}
 					strongSelf.requestsToRetry.removeAll()
 				}
 			}
 		} else {
-			completion(false, 0)
+            completion(.doNotRetry)
 		}
 	}
 	
@@ -175,7 +174,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 		AF.request(OAuthBaseURL + "token",
 						  method: .post,
 						  parameters:["grant_type": "refresh_token", "refresh_token": token.refreshToken],
-						  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseDecodable {[weak self] (response: DataResponse<TokenResponse>) in
+                          headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseDecodable(of: TokenResponse.self) {[weak self] response in
 							guard let strongSelf = self else { return }
 							
 							strongSelf.lock.lock();
@@ -194,7 +193,7 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
 								completion(nil)
 							case let .failure(error):
-								if case OAuth2Error.invalidToken = error {
+                                if case .requestRetryFailed(let retryError, _) = error, case OAuth2Error.invalidToken = retryError {
 									let token = strongSelf.token
 									strongSelf.token.refreshToken = ""
 									NotificationCenter.default.post(name: .OAuth2TokenDidBecomeInvalid, object: token)
@@ -209,24 +208,24 @@ public class OAuth2Helper: RequestAdapter, RequestRetrier {
 
 public class OAuth2 {
 	
-	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
-		var query = [URLQueryItem] ()
-		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
-		
-		query.append(URLQueryItem(name: "response_type", value: "code"))
-		query.append(URLQueryItem(name: "redirect_uri", value: callback))
-		query.append(URLQueryItem(name: "client_id", value: clientID))
-		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+")))
-		query.append(URLQueryItem(name: "state", value: state))
-		query.append(URLQueryItem(name: "realm", value: state))
-		
-		var components = URLComponents(string: OAuthBaseURL + "authorize/")!
-		components.queryItems = query
-		return components.url!
-	}
+//	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
+//		var query = [URLQueryItem] ()
+//		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+//
+//		query.append(URLQueryItem(name: "response_type", value: "code"))
+//		query.append(URLQueryItem(name: "redirect_uri", value: callback))
+//		query.append(URLQueryItem(name: "client_id", value: clientID))
+//		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+")))
+//		query.append(URLQueryItem(name: "state", value: state))
+//		query.append(URLQueryItem(name: "realm", value: state))
+//
+//		var components = URLComponents(string: OAuthBaseURL + "authorize/")!
+//		components.queryItems = query
+//		return components.url!
+//	}
 	
 	
-	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Alamofire.Result<OAuth2Token>) -> Void) -> Bool {
+	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Result<OAuth2Token, AFError>) -> Void) -> Bool {
 		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {return false}
 		guard let query = components.queryItems else {return false}
 		var code: String?
@@ -247,11 +246,11 @@ public class OAuth2 {
 			AF.request(OAuthBaseURL + "token",
 			                  method: .post,
 			                  parameters:["grant_type": "authorization_code", "code": code],
-							  headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseDecodable { (response: DataResponse<TokenResponse>) in
+                              headers:["Authorization":"Basic \(auth!)"]).validateOAuth2().responseDecodable(of: TokenResponse.self) { response in
 								switch(response.result) {
 								case let .success(token):
 									let date = Date(timeIntervalSinceNow: token.expiresIn)
-									AF.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseDecodable { (response: DataResponse<TokenVerifyResponse>) in
+                                    AF.request(OAuthBaseURL + "verify", headers: ["Authorization":"\(token.tokenType) \(token.accessToken)"]).validateOAuth2().responseDecodable(of: TokenVerifyResponse.self) { response in
 										switch(response.result) {
 										case let .success(verify):
 											let expiresOn = max(verify.expiresOn ?? date, date)

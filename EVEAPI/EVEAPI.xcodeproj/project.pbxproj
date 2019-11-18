@@ -12,6 +12,9 @@
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		16DFCC9A2382CC6100A4A72C /* Alamofire+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DFCC992382CC6100A4A72C /* Alamofire+Extensions.swift */; };
+		16DFCC9B2382CD0900A4A72C /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
+		16DFCC9D2382E13D00A4A72C /* ESI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DFCC9C2382E13D00A4A72C /* ESI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,7 +26,7 @@
 		122B55551EB7154F00E46536 /* Char.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Char.swift; sourceTree = "<group>"; };
 		122B55561EB7154F00E46536 /* Corp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Corp.swift; sourceTree = "<group>"; };
 		1231C8081E9EB3D900CA409A /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
-		1231C80B1E9EB42500CA409A /* ESI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESI.swift; sourceTree = "<group>"; };
+		1231C80B1E9EB42500CA409A /* ESI1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ESI1.swift; sourceTree = "<group>"; };
 		123825601DEC199E0031A884 /* EVEAPIObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPIObject.swift; sourceTree = "<group>"; };
 		123825621DEC1AD20031A884 /* EVEResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEResult.swift; sourceTree = "<group>"; };
 		123825641DEC1E240031A884 /* EVEAPISerializer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EVEAPISerializer.swift; sourceTree = "<group>"; };
@@ -161,6 +164,8 @@
 		12CFDAF81F053D6700CC0762 /* rss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rss.swift; sourceTree = "<group>"; };
 		12D39D0B1EF923C90077BD17 /* Eve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eve.swift; sourceTree = "<group>"; };
 		12D39D111EF949500077BD17 /* Contracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contracts.swift; sourceTree = "<group>"; };
+		16DFCC992382CC6100A4A72C /* Alamofire+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extensions.swift"; sourceTree = "<group>"; };
+		16DFCC9C2382E13D00A4A72C /* ESI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,8 +375,10 @@
 			children = (
 				126295DA1EEAD16C00796B27 /* codegen */,
 				1231C8081E9EB3D900CA409A /* Helper.swift */,
-				1231C80B1E9EB42500CA409A /* ESI.swift */,
+				1231C80B1E9EB42500CA409A /* ESI1.swift */,
+				16DFCC9C2382E13D00A4A72C /* ESI.swift */,
 				1295ED481DF8169F0048C895 /* OAuth2.swift */,
+				16DFCC992382CC6100A4A72C /* Alamofire+Extensions.swift */,
 			);
 			name = ESI;
 			sourceTree = "<group>";
@@ -579,6 +586,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */,
+				16DFCC9D2382E13D00A4A72C /* ESI.swift in Sources */,
+				16DFCC9A2382CC6100A4A72C /* Alamofire+Extensions.swift in Sources */,
+				16DFCC9B2382CD0900A4A72C /* OAuth2.swift in Sources */,
 				1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -715,7 +725,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = EVEAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimanski.EVEAPI;
@@ -738,7 +748,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = EVEAPI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = mh_dylib;
 				PRODUCT_BUNDLE_IDENTIFIER = com.shimanski.EVEAPI;
