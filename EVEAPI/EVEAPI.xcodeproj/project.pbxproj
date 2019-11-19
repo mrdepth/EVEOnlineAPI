@@ -8,9 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */; };
-		126AF8F2211AE2D9008ED515 /* Futures.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126AF8F1211AE2D9008ED515 /* Futures.framework */; };
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
-		1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1696DBB32383DB8800BAFDB0 /* EVEAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1696DBB22383DB8800BAFDB0 /* EVEAPITests.swift */; };
 		1696DBB52383DB8800BAFDB0 /* EVEAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12AB654C1DE9A994003AA683 /* EVEAPI.framework */; };
@@ -221,7 +219,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				126AF8F2211AE2D9008ED515 /* Futures.framework in Frameworks */,
 				126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -684,7 +681,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */,
 				1696DBBE2384170600BAFDB0 /* Calendar.swift in Sources */,
 				1696DBC32384170600BAFDB0 /* Corporation.swift in Sources */,
 				1696DBD72384170600BAFDB0 /* Status.swift in Sources */,
