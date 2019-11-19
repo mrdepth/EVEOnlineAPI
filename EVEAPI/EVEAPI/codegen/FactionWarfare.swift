@@ -1,253 +1,253 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var factionWarfare: FactionWarfare {
+extension ESI {
+	public var factionWarfare: FactionWarfare {
 		return FactionWarfare(esi: self)
 	}
 	
-	struct FactionWarfare {
+	public struct FactionWarfare {
 		let esi: ESI
 		
-		@discardableResult
-		public func listOfTheTopFactionsInFactionWarfare(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<FactionWarfare.Leaderboards>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/fw/leaderboards/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<FactionWarfare.Leaderboards>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<FactionWarfare.Leaderboards>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
 		
-		@discardableResult
-		public func ownershipOfFactionWarfareSystems(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[FactionWarfare.System]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/fw/systems/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[FactionWarfare.System]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[FactionWarfare.System]>) in
-				promise.set(response: response, cached: 1800.0)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func listOfTheTopCorporationsInFactionWarfare(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<FactionWarfare.Corporations>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/fw/leaderboards/corporations/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<FactionWarfare.Corporations>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<FactionWarfare.Corporations>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func overviewOfCharacterInvolvedInFactionWarfare(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<FactionWarfare.GetCharactersCharacterIDFwStatsOk>> {
+		public func overviewOfCorporationInvolvedInFactionWarfare(corporationID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<FactionWarfare.GetCorporationsCorporationIDFwStatsOk, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-characters.read_fw_stats.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-corporations.read_fw_stats.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/fw/stats/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/corporations/\(corporationID)/fw/stats/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<FactionWarfare.GetCharactersCharacterIDFwStatsOk>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCharactersCharacterIDFwStatsOk>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func dataAboutWhichNPCFactionsAreAtWar(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[FactionWarfare.FactionWar]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/fw/wars/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[FactionWarfare.FactionWar]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionWar]>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
 		
-		@discardableResult
-		public func listOfTheTopPilotsInFactionWarfare(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<FactionWarfare.Characters>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/fw/leaderboards/characters/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<FactionWarfare.Characters>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<FactionWarfare.Characters>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func anOverviewOfStatisticsAboutFactionsInvolvedInFactionWarfare(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[FactionWarfare.FactionStats]>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/fw/stats/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[FactionWarfare.FactionStats]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[FactionWarfare.FactionStats]>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func overviewOfCorporationInvolvedInFactionWarfare(corporationID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>> {
+		public func overviewOfCharacterInvolvedInFactionWarfare(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<FactionWarfare.GetCharactersCharacterIDFwStatsOk, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-corporations.read_fw_stats.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-characters.read_fw_stats.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/corporations/\(corporationID)/fw/stats/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/fw/stats/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<FactionWarfare.GetCorporationsCorporationIDFwStatsOk>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
-		public struct Characters: Codable, Hashable {
+		public func listOfTheTopPilotsInFactionWarfare(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<FactionWarfare.Characters, AFError> {
 			
-			public struct GetFwLeaderboardsCharactersVictoryPoints: Codable, Hashable {
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/fw/leaderboards/characters/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func anOverviewOfStatisticsAboutFactionsInvolvedInFactionWarfare(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[FactionWarfare.FactionStats], AFError> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/fw/stats/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func listOfTheTopCorporationsInFactionWarfare(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<FactionWarfare.Corporations, AFError> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/fw/leaderboards/corporations/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func ownershipOfFactionWarfareSystems(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[FactionWarfare.System], AFError> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/fw/systems/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func listOfTheTopFactionsInFactionWarfare(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<FactionWarfare.Leaderboards, AFError> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/fw/leaderboards/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func dataAboutWhichNPCFactionsAreAtWar(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[FactionWarfare.FactionWar], AFError> {
+			
+			
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/fw/wars/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public struct Corporations: Codable, Hashable {
+			
+			public struct GetFwLeaderboardsCorporationsKills: Codable, Hashable {
 				
-				public struct GetFwLeaderboardsCharactersVictoryPointsActiveTotal: Codable, Hashable {
+				public struct GetFwLeaderboardsCorporationsLastWeek: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var characterID: Int?
+					public var corporationID: Int?
 					
-					public init(amount: Int?, characterID: Int?) {
+					public init(amount: Int?, corporationID: Int?) {
 						self.amount = amount
-						self.characterID = characterID
+						self.corporationID = corporationID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case characterID = "character_id"
+						case corporationID = "corporation_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -258,20 +258,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCharactersVictoryPointsYesterday: Codable, Hashable {
+				public struct GetFwLeaderboardsCorporationsActiveTotal: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var characterID: Int?
+					public var corporationID: Int?
 					
-					public init(amount: Int?, characterID: Int?) {
+					public init(amount: Int?, corporationID: Int?) {
 						self.amount = amount
-						self.characterID = characterID
+						self.corporationID = corporationID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case characterID = "character_id"
+						case corporationID = "corporation_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -282,20 +282,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCharactersVictoryPointsLastWeek: Codable, Hashable {
+				public struct GetFwLeaderboardsCorporationsYesterday: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var characterID: Int?
+					public var corporationID: Int?
 					
-					public init(amount: Int?, characterID: Int?) {
+					public init(amount: Int?, corporationID: Int?) {
 						self.amount = amount
-						self.characterID = characterID
+						self.corporationID = corporationID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case characterID = "character_id"
+						case corporationID = "corporation_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -306,11 +306,11 @@ public extension ESI {
 					}
 				}
 				
-				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsActiveTotal]
-				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsLastWeek]
-				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsYesterday]
+				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsActiveTotal]
+				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsLastWeek]
+				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsYesterday]
 				
-				public init(activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsActiveTotal], lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsLastWeek], yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsYesterday]) {
+				public init(activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsActiveTotal], lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsLastWeek], yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsYesterday]) {
 					self.activeTotal = activeTotal
 					self.lastWeek = lastWeek
 					self.yesterday = yesterday
@@ -330,22 +330,22 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetFwLeaderboardsCharactersKills: Codable, Hashable {
+			public struct GetFwLeaderboardsCorporationsVictoryPoints: Codable, Hashable {
 				
-				public struct GetFwLeaderboardsCharactersLastWeek: Codable, Hashable {
+				public struct GetFwLeaderboardsCorporationsVictoryPointsActiveTotal: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var characterID: Int?
+					public var corporationID: Int?
 					
-					public init(amount: Int?, characterID: Int?) {
+					public init(amount: Int?, corporationID: Int?) {
 						self.amount = amount
-						self.characterID = characterID
+						self.corporationID = corporationID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case characterID = "character_id"
+						case corporationID = "corporation_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -356,20 +356,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCharactersActiveTotal: Codable, Hashable {
+				public struct GetFwLeaderboardsCorporationsVictoryPointsLastWeek: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var characterID: Int?
+					public var corporationID: Int?
 					
-					public init(amount: Int?, characterID: Int?) {
+					public init(amount: Int?, corporationID: Int?) {
 						self.amount = amount
-						self.characterID = characterID
+						self.corporationID = corporationID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case characterID = "character_id"
+						case corporationID = "corporation_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -380,20 +380,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCharactersYesterday: Codable, Hashable {
+				public struct GetFwLeaderboardsCorporationsVictoryPointsYesterday: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var characterID: Int?
+					public var corporationID: Int?
 					
-					public init(amount: Int?, characterID: Int?) {
+					public init(amount: Int?, corporationID: Int?) {
 						self.amount = amount
-						self.characterID = characterID
+						self.corporationID = corporationID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case characterID = "character_id"
+						case corporationID = "corporation_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -404,11 +404,11 @@ public extension ESI {
 					}
 				}
 				
-				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersActiveTotal]
-				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersLastWeek]
-				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersYesterday]
+				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsActiveTotal]
+				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsLastWeek]
+				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsYesterday]
 				
-				public init(activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersActiveTotal], lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersLastWeek], yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersYesterday]) {
+				public init(activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsActiveTotal], lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsLastWeek], yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsYesterday]) {
 					self.activeTotal = activeTotal
 					self.lastWeek = lastWeek
 					self.yesterday = yesterday
@@ -428,10 +428,10 @@ public extension ESI {
 				}
 			}
 			
-			public var kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills
-			public var victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints
+			public var kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills
+			public var victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints
 			
-			public init(kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills, victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints) {
+			public init(kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills, victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints) {
 				self.kills = kills
 				self.victoryPoints = victoryPoints
 			}
@@ -450,9 +450,57 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCorporationsCorporationIDFwStatsOk: Codable, Hashable {
+		public struct System: Codable, Hashable {
 			
-			public struct GetCorporationsCorporationIDFwStatsVictoryPoints: Codable, Hashable {
+			public enum GetFwSystemsContested: String, Codable, CustomStringConvertible {
+				case captured = "captured"
+				case contested = "contested"
+				case uncontested = "uncontested"
+				case vulnerable = "vulnerable"
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
+			
+			public var contested: FactionWarfare.System.GetFwSystemsContested
+			public var occupierFactionID: Int
+			public var ownerFactionID: Int
+			public var solarSystemID: Int
+			public var victoryPoints: Int
+			public var victoryPointsThreshold: Int
+			
+			public init(contested: FactionWarfare.System.GetFwSystemsContested, occupierFactionID: Int, ownerFactionID: Int, solarSystemID: Int, victoryPoints: Int, victoryPointsThreshold: Int) {
+				self.contested = contested
+				self.occupierFactionID = occupierFactionID
+				self.ownerFactionID = ownerFactionID
+				self.solarSystemID = solarSystemID
+				self.victoryPoints = victoryPoints
+				self.victoryPointsThreshold = victoryPointsThreshold
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case contested
+				case occupierFactionID = "occupier_faction_id"
+				case ownerFactionID = "owner_faction_id"
+				case solarSystemID = "solar_system_id"
+				case victoryPoints = "victory_points"
+				case victoryPointsThreshold = "victory_points_threshold"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct FactionStats: Codable, Hashable {
+			
+			public struct GetFwStatsVictoryPoints: Codable, Hashable {
 				
 				
 				public var lastWeek: Int
@@ -479,7 +527,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCorporationsCorporationIDFwStatsKills: Codable, Hashable {
+			public struct GetFwStatsKills: Codable, Hashable {
 				
 				
 				public var lastWeek: Int
@@ -506,30 +554,30 @@ public extension ESI {
 				}
 			}
 			
-			public var enlistedOn: Date?
-			public var factionID: Int?
-			public var kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills
-			public var pilots: Int?
-			public var victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints
+			public var factionID: Int
+			public var kills: FactionWarfare.FactionStats.GetFwStatsKills
+			public var pilots: Int
+			public var systemsControlled: Int
+			public var victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints
 			
-			public init(enlistedOn: Date?, factionID: Int?, kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills, pilots: Int?, victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints) {
-				self.enlistedOn = enlistedOn
+			public init(factionID: Int, kills: FactionWarfare.FactionStats.GetFwStatsKills, pilots: Int, systemsControlled: Int, victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints) {
 				self.factionID = factionID
 				self.kills = kills
 				self.pilots = pilots
+				self.systemsControlled = systemsControlled
 				self.victoryPoints = victoryPoints
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case enlistedOn = "enlisted_on"
 				case factionID = "faction_id"
 				case kills
 				case pilots
+				case systemsControlled = "systems_controlled"
 				case victoryPoints = "victory_points"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .enlistedOn: return DateFormatter.esiDateTimeFormatter
+						
 						default: return nil
 					}
 				}
@@ -539,7 +587,7 @@ public extension ESI {
 		
 		public struct GetCharactersCharacterIDFwStatsOk: Codable, Hashable {
 			
-			public struct GetCharactersCharacterIDFwStatsVictoryPoints: Codable, Hashable {
+			public struct GetCharactersCharacterIDFwStatsKills: Codable, Hashable {
 				
 				
 				public var lastWeek: Int
@@ -566,7 +614,7 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetCharactersCharacterIDFwStatsKills: Codable, Hashable {
+			public struct GetCharactersCharacterIDFwStatsVictoryPoints: Codable, Hashable {
 				
 				
 				public var lastWeek: Int
@@ -627,82 +675,20 @@ public extension ESI {
 		}
 		
 		
-		public struct FactionStats: Codable, Hashable {
+		public struct FactionWar: Codable, Hashable {
 			
-			public struct GetFwStatsKills: Codable, Hashable {
-				
-				
-				public var lastWeek: Int
-				public var total: Int
-				public var yesterday: Int
-				
-				public init(lastWeek: Int, total: Int, yesterday: Int) {
-					self.lastWeek = lastWeek
-					self.total = total
-					self.yesterday = yesterday
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case lastWeek = "last_week"
-					case total
-					case yesterday
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
 			
-			public struct GetFwStatsVictoryPoints: Codable, Hashable {
-				
-				
-				public var lastWeek: Int
-				public var total: Int
-				public var yesterday: Int
-				
-				public init(lastWeek: Int, total: Int, yesterday: Int) {
-					self.lastWeek = lastWeek
-					self.total = total
-					self.yesterday = yesterday
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case lastWeek = "last_week"
-					case total
-					case yesterday
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
+			public var againstID: Int
 			public var factionID: Int
-			public var kills: FactionWarfare.FactionStats.GetFwStatsKills
-			public var pilots: Int
-			public var systemsControlled: Int
-			public var victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints
 			
-			public init(factionID: Int, kills: FactionWarfare.FactionStats.GetFwStatsKills, pilots: Int, systemsControlled: Int, victoryPoints: FactionWarfare.FactionStats.GetFwStatsVictoryPoints) {
+			public init(againstID: Int, factionID: Int) {
+				self.againstID = againstID
 				self.factionID = factionID
-				self.kills = kills
-				self.pilots = pilots
-				self.systemsControlled = systemsControlled
-				self.victoryPoints = victoryPoints
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
+				case againstID = "against_id"
 				case factionID = "faction_id"
-				case kills
-				case pilots
-				case systemsControlled = "systems_controlled"
-				case victoryPoints = "victory_points"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -715,104 +701,6 @@ public extension ESI {
 		
 		
 		public struct Leaderboards: Codable, Hashable {
-			
-			public struct GetFwLeaderboardsKills: Codable, Hashable {
-				
-				public struct GetFwLeaderboardsYesterday: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
-				public struct GetFwLeaderboardsLastWeek: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
-				public struct GetFwLeaderboardsActiveTotal: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
-				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsActiveTotal]
-				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsLastWeek]
-				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsYesterday]
-				
-				public init(activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsActiveTotal], lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsLastWeek], yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsYesterday]) {
-					self.activeTotal = activeTotal
-					self.lastWeek = lastWeek
-					self.yesterday = yesterday
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case activeTotal = "active_total"
-					case lastWeek = "last_week"
-					case yesterday
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
 			
 			public struct GetFwLeaderboardsVictoryPoints: Codable, Hashable {
 				
@@ -912,6 +800,104 @@ public extension ESI {
 				}
 			}
 			
+			public struct GetFwLeaderboardsKills: Codable, Hashable {
+				
+				public struct GetFwLeaderboardsActiveTotal: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
+				public struct GetFwLeaderboardsLastWeek: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
+				public struct GetFwLeaderboardsYesterday: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
+				public var activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsActiveTotal]
+				public var lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsLastWeek]
+				public var yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsYesterday]
+				
+				public init(activeTotal: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsActiveTotal], lastWeek: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsLastWeek], yesterday: [FactionWarfare.Leaderboards.GetFwLeaderboardsKills.GetFwLeaderboardsYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
+			
 			public var kills: FactionWarfare.Leaderboards.GetFwLeaderboardsKills
 			public var victoryPoints: FactionWarfare.Leaderboards.GetFwLeaderboardsVictoryPoints
 			
@@ -934,24 +920,24 @@ public extension ESI {
 		}
 		
 		
-		public struct Corporations: Codable, Hashable {
+		public struct Characters: Codable, Hashable {
 			
-			public struct GetFwLeaderboardsCorporationsVictoryPoints: Codable, Hashable {
+			public struct GetFwLeaderboardsCharactersKills: Codable, Hashable {
 				
-				public struct GetFwLeaderboardsCorporationsVictoryPointsLastWeek: Codable, Hashable {
+				public struct GetFwLeaderboardsCharactersYesterday: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var corporationID: Int?
+					public var characterID: Int?
 					
-					public init(amount: Int?, corporationID: Int?) {
+					public init(amount: Int?, characterID: Int?) {
 						self.amount = amount
-						self.corporationID = corporationID
+						self.characterID = characterID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case corporationID = "corporation_id"
+						case characterID = "character_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -962,20 +948,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCorporationsVictoryPointsYesterday: Codable, Hashable {
+				public struct GetFwLeaderboardsCharactersLastWeek: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var corporationID: Int?
+					public var characterID: Int?
 					
-					public init(amount: Int?, corporationID: Int?) {
+					public init(amount: Int?, characterID: Int?) {
 						self.amount = amount
-						self.corporationID = corporationID
+						self.characterID = characterID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case corporationID = "corporation_id"
+						case characterID = "character_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -986,20 +972,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCorporationsVictoryPointsActiveTotal: Codable, Hashable {
+				public struct GetFwLeaderboardsCharactersActiveTotal: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var corporationID: Int?
+					public var characterID: Int?
 					
-					public init(amount: Int?, corporationID: Int?) {
+					public init(amount: Int?, characterID: Int?) {
 						self.amount = amount
-						self.corporationID = corporationID
+						self.characterID = characterID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case corporationID = "corporation_id"
+						case characterID = "character_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -1010,11 +996,11 @@ public extension ESI {
 					}
 				}
 				
-				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsActiveTotal]
-				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsLastWeek]
-				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsYesterday]
+				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersActiveTotal]
+				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersLastWeek]
+				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersYesterday]
 				
-				public init(activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsActiveTotal], lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsLastWeek], yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints.GetFwLeaderboardsCorporationsVictoryPointsYesterday]) {
+				public init(activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersActiveTotal], lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersLastWeek], yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersKills.GetFwLeaderboardsCharactersYesterday]) {
 					self.activeTotal = activeTotal
 					self.lastWeek = lastWeek
 					self.yesterday = yesterday
@@ -1034,22 +1020,22 @@ public extension ESI {
 				}
 			}
 			
-			public struct GetFwLeaderboardsCorporationsKills: Codable, Hashable {
+			public struct GetFwLeaderboardsCharactersVictoryPoints: Codable, Hashable {
 				
-				public struct GetFwLeaderboardsCorporationsActiveTotal: Codable, Hashable {
+				public struct GetFwLeaderboardsCharactersVictoryPointsYesterday: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var corporationID: Int?
+					public var characterID: Int?
 					
-					public init(amount: Int?, corporationID: Int?) {
+					public init(amount: Int?, characterID: Int?) {
 						self.amount = amount
-						self.corporationID = corporationID
+						self.characterID = characterID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case corporationID = "corporation_id"
+						case characterID = "character_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -1060,20 +1046,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCorporationsLastWeek: Codable, Hashable {
+				public struct GetFwLeaderboardsCharactersVictoryPointsLastWeek: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var corporationID: Int?
+					public var characterID: Int?
 					
-					public init(amount: Int?, corporationID: Int?) {
+					public init(amount: Int?, characterID: Int?) {
 						self.amount = amount
-						self.corporationID = corporationID
+						self.characterID = characterID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case corporationID = "corporation_id"
+						case characterID = "character_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -1084,20 +1070,20 @@ public extension ESI {
 					}
 				}
 				
-				public struct GetFwLeaderboardsCorporationsYesterday: Codable, Hashable {
+				public struct GetFwLeaderboardsCharactersVictoryPointsActiveTotal: Codable, Hashable {
 					
 					
 					public var amount: Int?
-					public var corporationID: Int?
+					public var characterID: Int?
 					
-					public init(amount: Int?, corporationID: Int?) {
+					public init(amount: Int?, characterID: Int?) {
 						self.amount = amount
-						self.corporationID = corporationID
+						self.characterID = characterID
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
-						case corporationID = "corporation_id"
+						case characterID = "character_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -1108,11 +1094,11 @@ public extension ESI {
 					}
 				}
 				
-				public var activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsActiveTotal]
-				public var lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsLastWeek]
-				public var yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsYesterday]
+				public var activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsActiveTotal]
+				public var lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsLastWeek]
+				public var yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsYesterday]
 				
-				public init(activeTotal: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsActiveTotal], lastWeek: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsLastWeek], yesterday: [FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills.GetFwLeaderboardsCorporationsYesterday]) {
+				public init(activeTotal: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsActiveTotal], lastWeek: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsLastWeek], yesterday: [FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints.GetFwLeaderboardsCharactersVictoryPointsYesterday]) {
 					self.activeTotal = activeTotal
 					self.lastWeek = lastWeek
 					self.yesterday = yesterday
@@ -1132,10 +1118,10 @@ public extension ESI {
 				}
 			}
 			
-			public var kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills
-			public var victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints
+			public var kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills
+			public var victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints
 			
-			public init(kills: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsKills, victoryPoints: FactionWarfare.Corporations.GetFwLeaderboardsCorporationsVictoryPoints) {
+			public init(kills: FactionWarfare.Characters.GetFwLeaderboardsCharactersKills, victoryPoints: FactionWarfare.Characters.GetFwLeaderboardsCharactersVictoryPoints) {
 				self.kills = kills
 				self.victoryPoints = victoryPoints
 			}
@@ -1154,72 +1140,86 @@ public extension ESI {
 		}
 		
 		
-		public struct System: Codable, Hashable {
+		public struct GetCorporationsCorporationIDFwStatsOk: Codable, Hashable {
 			
-			public enum GetFwSystemsContested: String, Codable, HTTPQueryable {
-				case captured = "captured"
-				case contested = "contested"
-				case uncontested = "uncontested"
-				case vulnerable = "vulnerable"
+			public struct GetCorporationsCorporationIDFwStatsKills: Codable, Hashable {
 				
-				public var httpQuery: String? {
-					return rawValue
+				
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
 				}
 				
-			}
-			
-			public var contested: FactionWarfare.System.GetFwSystemsContested
-			public var occupierFactionID: Int
-			public var ownerFactionID: Int
-			public var solarSystemID: Int
-			public var victoryPoints: Int
-			public var victoryPointsThreshold: Int
-			
-			public init(contested: FactionWarfare.System.GetFwSystemsContested, occupierFactionID: Int, ownerFactionID: Int, solarSystemID: Int, victoryPoints: Int, victoryPointsThreshold: Int) {
-				self.contested = contested
-				self.occupierFactionID = occupierFactionID
-				self.ownerFactionID = ownerFactionID
-				self.solarSystemID = solarSystemID
-				self.victoryPoints = victoryPoints
-				self.victoryPointsThreshold = victoryPointsThreshold
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case contested
-				case occupierFactionID = "occupier_faction_id"
-				case ownerFactionID = "owner_faction_id"
-				case solarSystemID = "solar_system_id"
-				case victoryPoints = "victory_points"
-				case victoryPointsThreshold = "victory_points_threshold"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
 					}
 				}
 			}
-		}
-		
-		
-		public struct FactionWar: Codable, Hashable {
 			
+			public struct GetCorporationsCorporationIDFwStatsVictoryPoints: Codable, Hashable {
+				
+				
+				public var lastWeek: Int
+				public var total: Int
+				public var yesterday: Int
+				
+				public init(lastWeek: Int, total: Int, yesterday: Int) {
+					self.lastWeek = lastWeek
+					self.total = total
+					self.yesterday = yesterday
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case lastWeek = "last_week"
+					case total
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
 			
-			public var againstID: Int
-			public var factionID: Int
+			public var enlistedOn: Date?
+			public var factionID: Int?
+			public var kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills
+			public var pilots: Int?
+			public var victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints
 			
-			public init(againstID: Int, factionID: Int) {
-				self.againstID = againstID
+			public init(enlistedOn: Date?, factionID: Int?, kills: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsKills, pilots: Int?, victoryPoints: FactionWarfare.GetCorporationsCorporationIDFwStatsOk.GetCorporationsCorporationIDFwStatsVictoryPoints) {
+				self.enlistedOn = enlistedOn
 				self.factionID = factionID
+				self.kills = kills
+				self.pilots = pilots
+				self.victoryPoints = victoryPoints
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case againstID = "against_id"
+				case enlistedOn = "enlisted_on"
 				case factionID = "faction_id"
+				case kills
+				case pilots
+				case victoryPoints = "victory_points"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						
+						case .enlistedOn: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

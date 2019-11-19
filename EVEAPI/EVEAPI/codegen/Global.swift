@@ -4,46 +4,17 @@ import Futures
 
 public extension ESI {
 	
-	enum AcceptLanguage: String, Codable, HTTPQueryable {
-		case de = "de"
-		case enUS = "en-us"
-		case fr = "fr"
-		case ja = "ja"
-		case ru = "ru"
-		case zh = "zh"
-		
-		public var httpQuery: String? {
-			return rawValue
-		}
-		
-	}
-	
-	
-	enum Datasource: String, Codable, HTTPQueryable {
-		case singularity = "singularity"
-		case tranquility = "tranquility"
-		
-		public var httpQuery: String? {
-			return rawValue
-		}
-		
-	}
-	
-	
-	struct GatewayTimeout: Codable, Hashable {
+	struct ErrorLimited: Codable, Hashable {
 		
 		
 		public var error: String
-		public var timeout: Int?
 		
-		public init(error: String, timeout: Int?) {
+		public init(error: String) {
 			self.error = error
-			self.timeout = timeout
 		}
 		
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
-			case timeout
 			
 			var dateFormatter: DateFormatter? {
 				switch self {
@@ -77,66 +48,119 @@ public extension ESI {
 	}
 	
 	
-	struct ErrorLimited: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
-	struct ServiceUnavailable: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
-	enum Language: String, Codable, HTTPQueryable {
+	enum Language: String, Codable, CustomStringConvertible {
 		case de = "de"
 		case enUS = "en-us"
 		case fr = "fr"
 		case ja = "ja"
+		case ko = "ko"
 		case ru = "ru"
 		case zh = "zh"
 		
-		public var httpQuery: String? {
+		public var description: String {
 			return rawValue
 		}
 		
 	}
 	
 	
+	struct GatewayTimeout: Codable, Hashable {
+		
+		
+		public var error: String
+		public var timeout: Int?
+		
+		public init(error: String, timeout: Int?) {
+			self.error = error
+			self.timeout = timeout
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			case timeout
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	struct InternalServerError: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
 	struct Unauthorized: Codable, Hashable {
+		
+		
+		public var error: String
+		
+		public init(error: String) {
+			self.error = error
+		}
+		
+		enum CodingKeys: String, CodingKey, DateFormatted {
+			case error
+			
+			var dateFormatter: DateFormatter? {
+				switch self {
+					
+					default: return nil
+				}
+			}
+		}
+	}
+	
+	
+	enum Datasource: String, Codable, CustomStringConvertible {
+		case singularity = "singularity"
+		case tranquility = "tranquility"
+		
+		public var description: String {
+			return rawValue
+		}
+		
+	}
+	
+	
+	enum AcceptLanguage: String, Codable, CustomStringConvertible {
+		case de = "de"
+		case enUS = "en-us"
+		case fr = "fr"
+		case ja = "ja"
+		case ko = "ko"
+		case ru = "ru"
+		case zh = "zh"
+		
+		public var description: String {
+			return rawValue
+		}
+		
+	}
+	
+	
+	struct ServiceUnavailable: Codable, Hashable {
 		
 		
 		public var error: String
@@ -172,28 +196,6 @@ public extension ESI {
 		enum CodingKeys: String, CodingKey, DateFormatted {
 			case error
 			case ssoStatus = "sso_status"
-			
-			var dateFormatter: DateFormatter? {
-				switch self {
-					
-					default: return nil
-				}
-			}
-		}
-	}
-	
-	
-	struct InternalServerError: Codable, Hashable {
-		
-		
-		public var error: String
-		
-		public init(error: String) {
-			self.error = error
-		}
-		
-		enum CodingKeys: String, CodingKey, DateFormatted {
-			case error
 			
 			var dateFormatter: DateFormatter? {
 				switch self {

@@ -1,70 +1,70 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var clones: Clones {
+extension ESI {
+	public var clones: Clones {
 		return Clones(esi: self)
 	}
 	
-	struct Clones {
+	public struct Clones {
 		let esi: ESI
 		
-		@discardableResult
-		public func getClones(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Clones.JumpClones>> {
+		
+		public func getActiveImplants(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-clones.read_clones.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-clones.read_implants.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/clones/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/implants/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Clones.JumpClones>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Clones.JumpClones>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getActiveImplants(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
+		
+		public func getClones(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Clones.JumpClones, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-clones.read_implants.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-clones.read_clones.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/implants/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/clones/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
@@ -72,11 +72,11 @@ public extension ESI {
 			
 			public struct Location: Codable, Hashable {
 				
-				public enum LocationType: String, Codable, HTTPQueryable {
+				public enum LocationType: String, Codable, CustomStringConvertible {
 					case station = "station"
 					case structure = "structure"
 					
-					public var httpQuery: String? {
+					public var description: String {
 						return rawValue
 					}
 					
@@ -105,11 +105,11 @@ public extension ESI {
 			
 			public struct JumpClone: Codable, Hashable {
 				
-				public enum GetCharactersCharacterIDClonesJumpCloneLocationType: String, Codable, HTTPQueryable {
+				public enum GetCharactersCharacterIDClonesJumpCloneLocationType: String, Codable, CustomStringConvertible {
 					case station = "station"
 					case structure = "structure"
 					
-					public var httpQuery: String? {
+					public var description: String {
 						return rawValue
 					}
 					

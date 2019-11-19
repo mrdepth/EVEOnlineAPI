@@ -29,12 +29,12 @@ class Enum: Hashable {
 }
 
 class Schema: Namespace {
-	var title: String
+	private(set) var title: String
 	let type: Type
 	let description: String?
-	var properties: [Property]?
-	var array: Schema?
-	var `enum`: Enum?
+	private(set) var properties: [Property]?
+	private(set) var array: Schema?
+	private(set) var `enum`: Enum?
 
 	
 	init (_ dictionary: [String: Any], title: String?, parent: Namespace?) throws {
@@ -65,18 +65,21 @@ class Schema: Namespace {
 		default:
 			break
 		}
+        
+        namespaceName = typeName
+
 		switch type {
 		case .object, .enum:
-			var a = allSchemes[self.title] ?? [:]
-			var b = a[hashValue] ?? []
-			b.append(self)
-			a[hashValue] = b
-			allSchemes[self.title] = a
+            allSchemes[self.title, default: [:]][hashValue, default: []].append(self)
+//			var a = allSchemes[self.title] ?? [:]
+//			var b = a[hashValue] ?? []
+//			b.append(self)
+//			a[hashValue] = b
+//			allSchemes[self.title] = a
 		default:
 			break
 		}
 		
-		namespaceName = typeName
 
 	}
 	

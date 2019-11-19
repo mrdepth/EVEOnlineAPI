@@ -1,126 +1,98 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var location: Location {
+extension ESI {
+	public var location: Location {
 		return Location(esi: self)
 	}
 	
-	struct Location {
+	public struct Location {
 		let esi: ESI
 		
-		@discardableResult
-		public func getCurrentShip(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterShip>> {
+		
+		public func getCharacterOnline(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Location.GetCharactersCharacterIDOnlineOk, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-location.read_ship_type.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-location.read_online.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/ship/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/online/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Location.CharacterShip>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.CharacterShip>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCharacterOnline(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>> {
+		
+		public func getCharacterLocation(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Location.CharacterLocation, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-location.read_online.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-location.read_location.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/online/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/location/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Location.GetCharactersCharacterIDOnlineOk>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.GetCharactersCharacterIDOnlineOk>) in
-				promise.set(response: response, cached: 60.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCharacterLocation(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Location.CharacterLocation>> {
+		
+		public func getCurrentShip(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Location.CharacterShip, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-location.read_location.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-location.read_ship_type.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/location/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/ship/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Location.CharacterLocation>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Location.CharacterLocation>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
-		}
-		
-		
-		public struct CharacterShip: Codable, Hashable {
-			
-			
-			public var shipItemID: Int64
-			public var shipName: String
-			public var shipTypeID: Int
-			
-			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
-				self.shipItemID = shipItemID
-				self.shipName = shipName
-				self.shipTypeID = shipTypeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case shipItemID = "ship_item_id"
-				case shipName = "ship_name"
-				case shipTypeID = "ship_type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
@@ -177,6 +149,34 @@ public extension ESI {
 					switch self {
 						case .lastLogin: return DateFormatter.esiDateTimeFormatter
 						case .lastLogout: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct CharacterShip: Codable, Hashable {
+			
+			
+			public var shipItemID: Int64
+			public var shipName: String
+			public var shipTypeID: Int
+			
+			public init(shipItemID: Int64, shipName: String, shipTypeID: Int) {
+				self.shipItemID = shipItemID
+				self.shipName = shipName
+				self.shipTypeID = shipTypeID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case shipItemID = "ship_item_id"
+				case shipName = "ship_name"
+				case shipTypeID = "ship_type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
 						default: return nil
 					}
 				}

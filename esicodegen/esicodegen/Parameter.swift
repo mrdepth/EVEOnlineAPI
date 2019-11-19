@@ -65,13 +65,48 @@ class Parameter {
 	}
 	
 	var headerString: String {
-		return "if let v = \(parameterName)\(isRequired ? "" : "?").httpQuery {\n" +
-		"headers[\"\(name)\"] = v\n}"
+        if isRequired {
+            if type == .array {
+                return "headers[\"\(name)\"] = \(parameterName).isEmpty ? nil : \(parameterName).lazy.map{$0.description}.joined(separator: \",\")"
+            }
+            else {
+                return "headers[\"\(name)\"] = \(parameterName).description"
+            }
+        }
+        else {
+            if type == .array {
+                return "if let v = \(parameterName) {\n" +
+                "headers[\"\(name)\"] = v.lazy.map{$0.description}.joined(separator: \",\")\n}"
+            }
+            else {
+                return "if let v = \(parameterName)?.description {\n" +
+                "headers[\"\(name)\"] = v\n}"
+            }
+        }
 	}
 	
 	var queryString: String {
-		return "if let v = \(parameterName)\(isRequired ? "" : "?").httpQuery {\n" +
-		"query.append(URLQueryItem(name: \"\(name)\", value: v))\n}"
+        if isRequired {
+            if type == .array {
+                return "if !\(parameterName).isEmpty {\n" +
+                "query.append(URLQueryItem(name: \"\(name)\", value: \(parameterName).lazy.map{$0.description}.joined(separator: \",\")))\n}"
+            }
+            else {
+                return "query.append(URLQueryItem(name: \"\(name)\", value: \(parameterName).description))"
+            }
+        }
+        else {
+            if type == .array {
+                return "if let v = \(parameterName), !v.isEmpty {\n" +
+                "query.append(URLQueryItem(name: \"\(name)\", value: v.lazy.map{$0.description}.joined(separator: \",\")))\n}"
+            }
+            else {
+                return "if let v = \(parameterName)?.description {\n" +
+                "query.append(URLQueryItem(name: \"\(name)\", value: v.lazy.map{$0.description}.joined(separator: \",\")))\n}"
+            }
+        }
+//		return "if let v = \(parameterName)\(isRequired ? "" : "?").description {\n" +
+//		"query.append(URLQueryItem(name: \"\(name)\", value: v))\n}"
 
 		
 //		let value: String = ""

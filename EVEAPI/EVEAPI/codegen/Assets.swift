@@ -1,21 +1,21 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var assets: Assets {
+extension ESI {
+	public var assets: Assets {
 		return Assets(esi: self)
 	}
 	
-	struct Assets {
+	public struct Assets {
 		let esi: ESI
 		
-		@discardableResult
-		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Assets.Name]>> {
+		
+		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Assets.PostCharactersCharacterIDAssetsLocationsOk], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-assets.read_assets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
@@ -26,52 +26,82 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/assets/names/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/assets/locations/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Assets.Name]>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Assets.Name]>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCorporationAssets(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Assets.CorpAsset]>> {
+		
+		public func getCorporationAssetNames(corporationID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Assets.Name], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
+			let body = try? JSONEncoder().encode(itemIds)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/corporations/\(corporationID)/assets/names/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func getCharacterAssets(characterID: Int, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Assets.Asset], AFError> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-assets.read_assets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
+			if let v = page?.description {
+				query.append(URLQueryItem(name: "page", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
 			
-			let url = esi.baseURL + "/corporations/\(corporationID)/assets/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/assets/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Assets.CorpAsset]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Assets.CorpAsset]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCorporationAssetLocations(corporationID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>> {
+		
+		public func getCorporationAssetLocations(corporationID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Assets.PostCorporationsCorporationIDAssetsLocationsOk], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body = try? JSONEncoder().encode(itemIds)
 			
 			var headers = HTTPHeaders()
@@ -82,114 +112,194 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/corporations/\(corporationID)/assets/locations/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/corporations/\(corporationID)/assets/locations/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Assets.PostCorporationsCorporationIDAssetsLocationsOk]>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCharacterAssets(characterID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Assets.Asset]>> {
+		
+		public func getCharacterAssetNames(characterID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Assets.Name], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-assets.read_assets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
+			let body = try? JSONEncoder().encode(itemIds)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/assets/names/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func getCorporationAssets(corporationID: Int, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Assets.CorpAsset], AFError> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
+			if let v = page?.description {
+				query.append(URLQueryItem(name: "page", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
 			
-			let url = esi.baseURL + "/characters/\(characterID)/assets/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/corporations/\(corporationID)/assets/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Assets.Asset]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Assets.Asset]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCorporationAssetNames(corporationID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Assets.Name]>> {
+		
+		public struct PostCharactersCharacterIDAssetsLocationsOk: Codable, Hashable {
 			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-assets.read_corporation_assets.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(itemIds)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/corporations/\(corporationID)/assets/names/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Assets.Name]>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Assets.Name]>) in
-				promise.set(response: response, cached: nil)
+			public struct PostCharactersCharacterIDAssetsLocationsPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
 			}
-			return promise.future
+			
+			public var itemID: Int64
+			public var position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition
+			
+			public init(itemID: Int64, position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) {
+				self.itemID = itemID
+				self.position = position
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case position
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
-		@discardableResult
-		public func getCharacterAssetLocations(characterID: Int, itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>> {
+		
+		public struct PostCorporationsCorporationIDAssetsLocationsOk: Codable, Hashable {
 			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-assets.read_assets.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(itemIds)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/characters/\(characterID)/assets/locations/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Assets.PostCharactersCharacterIDAssetsLocationsOk]>) in
-				promise.set(response: response, cached: nil)
+			public struct PostCorporationsCorporationIDAssetsLocationsPosition: Codable, Hashable {
+				
+				
+				public var x: Double
+				public var y: Double
+				public var z: Double
+				
+				public init(x: Double, y: Double, z: Double) {
+					self.x = x
+					self.y = y
+					self.z = z
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case x
+					case y
+					case z
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
 			}
-			return promise.future
+			
+			public var itemID: Int64
+			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
+			
+			public init(itemID: Int64, position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
+				self.itemID = itemID
+				self.position = position
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case position
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
 		public struct Asset: Codable, Hashable {
 			
-			public enum GetCharactersCharacterIDAssetsLocationType: String, Codable, HTTPQueryable {
+			public enum GetCharactersCharacterIDAssetsLocationType: String, Codable, CustomStringConvertible {
 				case other = "other"
 				case solarSystem = "solar_system"
 				case station = "station"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
 			}
 			
-			public enum Flag: String, Codable, HTTPQueryable {
+			public enum Flag: String, Codable, CustomStringConvertible {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case boosterBay = "BoosterBay"
@@ -279,7 +389,7 @@ public extension ESI {
 				case unlocked = "Unlocked"
 				case wardrobe = "Wardrobe"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
@@ -325,57 +435,6 @@ public extension ESI {
 		}
 		
 		
-		public struct PostCharactersCharacterIDAssetsLocationsOk: Codable, Hashable {
-			
-			public struct PostCharactersCharacterIDAssetsLocationsPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var itemID: Int64
-			public var position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition
-			
-			public init(itemID: Int64, position: Assets.PostCharactersCharacterIDAssetsLocationsOk.PostCharactersCharacterIDAssetsLocationsPosition) {
-				self.itemID = itemID
-				self.position = position
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case itemID = "item_id"
-				case position
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct Name: Codable, Hashable {
 			
 			
@@ -401,115 +460,20 @@ public extension ESI {
 		}
 		
 		
-		public struct PostCorporationsCorporationIDAssetsLocationsOk: Codable, Hashable {
-			
-			public struct PostCorporationsCorporationIDAssetsLocationsPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var itemID: Int64
-			public var position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition
-			
-			public init(itemID: Int64, position: Assets.PostCorporationsCorporationIDAssetsLocationsOk.PostCorporationsCorporationIDAssetsLocationsPosition) {
-				self.itemID = itemID
-				self.position = position
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case itemID = "item_id"
-				case position
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostCorporationsCorporationIDAssetsNamesNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostCorporationsCorporationIDAssetsLocationsNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
 		public struct CorpAsset: Codable, Hashable {
 			
-			public enum GetCorporationsCorporationIDAssetsLocationType: String, Codable, HTTPQueryable {
+			public enum GetCorporationsCorporationIDAssetsLocationType: String, Codable, CustomStringConvertible {
 				case other = "other"
 				case solarSystem = "solar_system"
 				case station = "station"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
 			}
 			
-			public enum Flag: String, Codable, HTTPQueryable {
+			public enum Flag: String, Codable, CustomStringConvertible {
 				case assetSafety = "AssetSafety"
 				case autoFit = "AutoFit"
 				case bonus = "Bonus"
@@ -626,7 +590,7 @@ public extension ESI {
 				case wallet = "Wallet"
 				case wardrobe = "Wardrobe"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
@@ -661,6 +625,50 @@ public extension ESI {
 				case locationType = "location_type"
 				case quantity
 				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostCorporationsCorporationIDAssetsNamesNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostCorporationsCorporationIDAssetsLocationsNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

@@ -1,52 +1,52 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var incursions: Incursions {
+extension ESI {
+	public var incursions: Incursions {
 		return Incursions(esi: self)
 	}
 	
-	struct Incursions {
+	public struct Incursions {
 		let esi: ESI
 		
-		@discardableResult
-		public func listIncursions(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Incursions.Incursion]>> {
+		
+		public func listIncursions(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Incursions.Incursion], AFError> {
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/incursions/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/incursions/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Incursions.Incursion]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Incursions.Incursion]>) in
-				promise.set(response: response, cached: 300.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
 		public struct Incursion: Codable, Hashable {
 			
-			public enum State: String, Codable, HTTPQueryable {
+			public enum State: String, Codable, CustomStringConvertible {
 				case established = "established"
 				case mobilizing = "mobilizing"
 				case withdrawing = "withdrawing"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				

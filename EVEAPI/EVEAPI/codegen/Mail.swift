@@ -1,49 +1,49 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var mail: Mail {
+extension ESI {
+	public var mail: Mail {
 		return Mail(esi: self)
 	}
 	
-	struct Mail {
+	public struct Mail {
 		let esi: ESI
 		
-		@discardableResult
-		public func returnMailingListSubscriptions(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Mail.Subscription]>> {
+		
+		public func deleteMail(characterID: Int, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			headers["Content-Type"] = "application/json"
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/lists/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/\(mailID)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Mail.Subscription]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Mail.Subscription]>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .delete,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func updateMetadataAboutMail(characterID: Int, contents: Mail.UpdateContents, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func updateMetadataAboutMail(characterID: Int, contents: Mail.UpdateContents, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body = try? JSONEncoder().encode(contents)
 			
 			var headers = HTTPHeaders()
@@ -54,22 +54,52 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/\(mailID)/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/\(mailID)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .put, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .put,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func deleteMail(characterID: Int, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func returnMail(characterID: Int, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Mail.MailBody, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-mail.read_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/\(mailID)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func deleteMailLabel(characterID: Int, labelID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -80,130 +110,57 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/\(mailID)/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/labels/\(labelID)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .delete,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func returnMail(characterID: Int, ifNoneMatch: String? = nil, mailID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Mail.MailBody>> {
+		
+		public func returnMailHeaders(characterID: Int, labels: [Int]? = nil, lastMailID: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Mail.Header], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-mail.read_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			if let v = labels, !v.isEmpty {
+				query.append(URLQueryItem(name: "labels", value: v.lazy.map{$0.description}.joined(separator: ",")))
+			}
+			if let v = lastMailID?.description {
+				query.append(URLQueryItem(name: "last_mail_id", value: v.lazy.map{$0.description}.joined(separator: ",")))
+			}
 			
-			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/\(mailID)/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Mail.MailBody>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Mail.MailBody>) in
-				promise.set(response: response, cached: 30.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getMailLabelsAndUnreadCounts(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Mail.MailLabelsAndUnreadCounts>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/labels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Mail.MailLabelsAndUnreadCounts>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Mail.MailLabelsAndUnreadCounts>) in
-				promise.set(response: response, cached: 30.0)
-			}
-			return promise.future
-		}
 		
-		@discardableResult
-		public func createMailLabel(characterID: Int, label: Mail.Label, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Int>> {
+		public func sendNewMail(characterID: Int, mail: Mail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Int, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body = try? JSONEncoder().encode(label)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/labels/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<Int>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Int>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func deleteMailLabel(characterID: Int, labelID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.organize_mail.v1") else {return .init(.failure(ESIError.forbidden))}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/labels/\(labelID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .delete, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		@discardableResult
-		public func sendNewMail(characterID: Int, mail: Mail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Int>> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.send_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-mail.send_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body = try? JSONEncoder().encode(mail)
 			
 			var headers = HTTPHeaders()
@@ -214,119 +171,101 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Int>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Int>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func returnMailHeaders(characterID: Int, ifNoneMatch: String? = nil, labels: [Int]? = nil, lastMailID: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Mail.Header]>> {
+		
+		public func createMailLabel(characterID: Int, label: Mail.Label, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Int, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-mail.read_mail.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-mail.organize_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
+			let body = try? JSONEncoder().encode(label)
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			headers["Content-Type"] = "application/json"
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/labels/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func getMailLabelsAndUnreadCounts(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Mail.MailLabelsAndUnreadCounts, AFError> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.read_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = labels?.httpQuery {
-				query.append(URLQueryItem(name: "labels", value: v))
-			}
-			if let v = lastMailID?.httpQuery {
-				query.append(URLQueryItem(name: "last_mail_id", value: v))
-			}
 			
-			let url = esi.baseURL + "/characters/\(characterID)/mail/"
-			let components = NSURLComponents(string: url)!
+			
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/labels/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Mail.Header]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Mail.Header]>) in
-				promise.set(response: response, cached: 30.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
-		public struct MailBody: Codable, Hashable {
+		public func returnMailingListSubscriptions(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Mail.Subscription], AFError> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-mail.read_mail.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
 			
 			
-			public var body: String?
-			public var from: Int?
-			public var labels: [Int]?
-			public var read: Bool?
-			public var recipients: [Mail.Recipient]?
-			public var subject: String?
-			public var timestamp: Date?
-			
-			public init(body: String?, from: Int?, labels: [Int]?, read: Bool?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
-				self.body = body
-				self.from = from
-				self.labels = labels
-				self.read = read
-				self.recipients = recipients
-				self.subject = subject
-				self.timestamp = timestamp
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case body
-				case from
-				case labels
-				case read
-				case recipients
-				case subject
-				case timestamp
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .timestamp: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct NewMail: Codable, Hashable {
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			public var approvedCost: Int64?
-			public var body: String
-			public var recipients: [Mail.Recipient]
-			public var subject: String
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/mail/lists/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
 			
-			public init(approvedCost: Int64?, body: String, recipients: [Mail.Recipient], subject: String) {
-				self.approvedCost = approvedCost
-				self.body = body
-				self.recipients = recipients
-				self.subject = subject
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case approvedCost = "approved_cost"
-				case body
-				case recipients
-				case subject
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
@@ -334,7 +273,7 @@ public extension ESI {
 			
 			public struct Label: Codable, Hashable {
 				
-				public enum GetCharactersCharacterIDMailLabelsColor: String, Codable, HTTPQueryable {
+				public enum GetCharactersCharacterIDMailLabelsColor: String, Codable, CustomStringConvertible {
 					case h0000fe = "#0000fe"
 					case h006634 = "#006634"
 					case h0099ff = "#0099ff"
@@ -354,7 +293,7 @@ public extension ESI {
 					case hffffcd = "#ffffcd"
 					case hffffff = "#ffffff"
 					
-					public var httpQuery: String? {
+					public var description: String {
 						return rawValue
 					}
 					
@@ -409,7 +348,7 @@ public extension ESI {
 		}
 		
 		
-		public struct PostCharactersCharacterIDMailError520: Codable, Hashable {
+		public struct DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: Codable, Hashable {
 			
 			
 			public var error: String?
@@ -431,58 +370,17 @@ public extension ESI {
 		}
 		
 		
-		public enum RecipientType: String, Codable, HTTPQueryable {
-			case alliance = "alliance"
-			case character = "character"
-			case corporation = "corporation"
-			case mailingList = "mailing_list"
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
-		}
-		
-		
-		public struct UpdateContents: Codable, Hashable {
+		public struct GetCharactersCharacterIDMailMailIDNotFound: Codable, Hashable {
 			
 			
-			public var labels: [Int]?
-			public var read: Bool?
+			public var error: String?
 			
-			public init(labels: [Int]?, read: Bool?) {
-				self.labels = labels
-				self.read = read
+			public init(error: String?) {
+				self.error = error
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case labels
-				case read
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Recipient: Codable, Hashable {
-			
-			
-			public var recipientID: Int
-			public var recipientType: Mail.RecipientType
-			
-			public init(recipientID: Int, recipientType: Mail.RecipientType) {
-				self.recipientID = recipientID
-				self.recipientType = recipientType
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case recipientID = "recipient_id"
-				case recipientType = "recipient_type"
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -496,7 +394,7 @@ public extension ESI {
 		
 		public struct Label: Codable, Hashable {
 			
-			public enum PostCharactersCharacterIDMailLabelsColor: String, Codable, HTTPQueryable {
+			public enum PostCharactersCharacterIDMailLabelsColor: String, Codable, CustomStringConvertible {
 				case h0000fe = "#0000fe"
 				case h006634 = "#006634"
 				case h0099ff = "#0099ff"
@@ -516,7 +414,7 @@ public extension ESI {
 				case hffffcd = "#ffffcd"
 				case hffffff = "#ffffff"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
@@ -533,6 +431,37 @@ public extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case color
 				case name
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct NewMail: Codable, Hashable {
+			
+			
+			public var approvedCost: Int64?
+			public var body: String
+			public var recipients: [Mail.Recipient]
+			public var subject: String
+			
+			public init(approvedCost: Int64?, body: String, recipients: [Mail.Recipient], subject: String) {
+				self.approvedCost = approvedCost
+				self.body = body
+				self.recipients = recipients
+				self.subject = subject
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case approvedCost = "approved_cost"
+				case body
+				case recipients
+				case subject
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -569,39 +498,20 @@ public extension ESI {
 		}
 		
 		
-		public struct GetCharactersCharacterIDMailMailIDNotFound: Codable, Hashable {
+		public struct UpdateContents: Codable, Hashable {
 			
 			
-			public var error: String?
+			public var labels: [Int]?
+			public var read: Bool?
 			
-			public init(error: String?) {
-				self.error = error
+			public init(labels: [Int]?, read: Bool?) {
+				self.labels = labels
+				self.read = read
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct DeleteCharactersCharacterIDMailLabelsLabelIDUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case labels
+				case read
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
@@ -639,6 +549,106 @@ public extension ESI {
 				case isRead = "is_read"
 				case labels
 				case mailID = "mail_id"
+				case recipients
+				case subject
+				case timestamp
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .timestamp: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct Recipient: Codable, Hashable {
+			
+			
+			public var recipientID: Int
+			public var recipientType: Mail.RecipientType
+			
+			public init(recipientID: Int, recipientType: Mail.RecipientType) {
+				self.recipientID = recipientID
+				self.recipientType = recipientType
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case recipientID = "recipient_id"
+				case recipientType = "recipient_type"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public enum RecipientType: String, Codable, CustomStringConvertible {
+			case alliance = "alliance"
+			case character = "character"
+			case corporation = "corporation"
+			case mailingList = "mailing_list"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		
+		public struct PostCharactersCharacterIDMailError520: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct MailBody: Codable, Hashable {
+			
+			
+			public var body: String?
+			public var from: Int?
+			public var labels: [Int]?
+			public var read: Bool?
+			public var recipients: [Mail.Recipient]?
+			public var subject: String?
+			public var timestamp: Date?
+			
+			public init(body: String?, from: Int?, labels: [Int]?, read: Bool?, recipients: [Mail.Recipient]?, subject: String?, timestamp: Date?) {
+				self.body = body
+				self.from = from
+				self.labels = labels
+				self.read = read
+				self.recipients = recipients
+				self.subject = subject
+				self.timestamp = timestamp
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case body
+				case from
+				case labels
+				case read
 				case recipients
 				case subject
 				case timestamp

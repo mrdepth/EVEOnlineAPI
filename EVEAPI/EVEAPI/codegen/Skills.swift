@@ -1,138 +1,138 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var skills: Skills {
+extension ESI {
+	public var skills: Skills {
 		return Skills(esi: self)
 	}
 	
-	struct Skills {
+	public struct Skills {
 		let esi: ESI
 		
-		@discardableResult
-		public func getCharactersSkillQueue(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Skills.SkillQueueItem]>> {
+		
+		public func getCharacterAttributes(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Skills.CharacterAttributes, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-skills.read_skills.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/skillqueue/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/attributes/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Skills.SkillQueueItem]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Skills.SkillQueueItem]>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCharacterSkills(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Skills.CharacterSkills>> {
+		
+		public func getCharactersSkillQueue(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Skills.SkillQueueItem], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-skills.read_skillqueue.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/skills/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/skillqueue/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Skills.CharacterSkills>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Skills.CharacterSkills>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getCharacterAttributes(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Skills.CharacterAttributes>> {
+		
+		public func getCharacterSkills(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Skills.CharacterSkills, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-skills.read_skills.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-skills.read_skills.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/attributes/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/skills/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Skills.CharacterAttributes>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Skills.CharacterAttributes>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
-		public struct CharacterAttributes: Codable, Hashable {
+		public struct SkillQueueItem: Codable, Hashable {
 			
 			
-			public var accruedRemapCooldownDate: Date?
-			public var bonusRemaps: Int?
-			public var charisma: Int
-			public var intelligence: Int
-			public var lastRemapDate: Date?
-			public var memory: Int
-			public var perception: Int
-			public var willpower: Int
+			public var finishDate: Date?
+			public var finishedLevel: Int
+			public var levelEndSP: Int?
+			public var levelStartSP: Int?
+			public var queuePosition: Int
+			public var skillID: Int
+			public var startDate: Date?
+			public var trainingStartSP: Int?
 			
-			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
-				self.accruedRemapCooldownDate = accruedRemapCooldownDate
-				self.bonusRemaps = bonusRemaps
-				self.charisma = charisma
-				self.intelligence = intelligence
-				self.lastRemapDate = lastRemapDate
-				self.memory = memory
-				self.perception = perception
-				self.willpower = willpower
+			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
+				self.finishDate = finishDate
+				self.finishedLevel = finishedLevel
+				self.levelEndSP = levelEndSP
+				self.levelStartSP = levelStartSP
+				self.queuePosition = queuePosition
+				self.skillID = skillID
+				self.startDate = startDate
+				self.trainingStartSP = trainingStartSP
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case accruedRemapCooldownDate = "accrued_remap_cooldown_date"
-				case bonusRemaps = "bonus_remaps"
-				case charisma
-				case intelligence
-				case lastRemapDate = "last_remap_date"
-				case memory
-				case perception
-				case willpower
+				case finishDate = "finish_date"
+				case finishedLevel = "finished_level"
+				case levelEndSP = "level_end_sp"
+				case levelStartSP = "level_start_sp"
+				case queuePosition = "queue_position"
+				case skillID = "skill_id"
+				case startDate = "start_date"
+				case trainingStartSP = "training_start_sp"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
-						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
+						case .finishDate: return DateFormatter.esiDateTimeFormatter
+						case .startDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -197,43 +197,43 @@ public extension ESI {
 		}
 		
 		
-		public struct SkillQueueItem: Codable, Hashable {
+		public struct CharacterAttributes: Codable, Hashable {
 			
 			
-			public var finishDate: Date?
-			public var finishedLevel: Int
-			public var levelEndSP: Int?
-			public var levelStartSP: Int?
-			public var queuePosition: Int
-			public var skillID: Int
-			public var startDate: Date?
-			public var trainingStartSP: Int?
+			public var accruedRemapCooldownDate: Date?
+			public var bonusRemaps: Int?
+			public var charisma: Int
+			public var intelligence: Int
+			public var lastRemapDate: Date?
+			public var memory: Int
+			public var perception: Int
+			public var willpower: Int
 			
-			public init(finishDate: Date?, finishedLevel: Int, levelEndSP: Int?, levelStartSP: Int?, queuePosition: Int, skillID: Int, startDate: Date?, trainingStartSP: Int?) {
-				self.finishDate = finishDate
-				self.finishedLevel = finishedLevel
-				self.levelEndSP = levelEndSP
-				self.levelStartSP = levelStartSP
-				self.queuePosition = queuePosition
-				self.skillID = skillID
-				self.startDate = startDate
-				self.trainingStartSP = trainingStartSP
+			public init(accruedRemapCooldownDate: Date?, bonusRemaps: Int?, charisma: Int, intelligence: Int, lastRemapDate: Date?, memory: Int, perception: Int, willpower: Int) {
+				self.accruedRemapCooldownDate = accruedRemapCooldownDate
+				self.bonusRemaps = bonusRemaps
+				self.charisma = charisma
+				self.intelligence = intelligence
+				self.lastRemapDate = lastRemapDate
+				self.memory = memory
+				self.perception = perception
+				self.willpower = willpower
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case finishDate = "finish_date"
-				case finishedLevel = "finished_level"
-				case levelEndSP = "level_end_sp"
-				case levelStartSP = "level_start_sp"
-				case queuePosition = "queue_position"
-				case skillID = "skill_id"
-				case startDate = "start_date"
-				case trainingStartSP = "training_start_sp"
+				case accruedRemapCooldownDate = "accrued_remap_cooldown_date"
+				case bonusRemaps = "bonus_remaps"
+				case charisma
+				case intelligence
+				case lastRemapDate = "last_remap_date"
+				case memory
+				case perception
+				case willpower
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .finishDate: return DateFormatter.esiDateTimeFormatter
-						case .startDate: return DateFormatter.esiDateTimeFormatter
+						case .accruedRemapCooldownDate: return DateFormatter.esiDateTimeFormatter
+						case .lastRemapDate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

@@ -1,97 +1,91 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var search: Search {
+extension ESI {
+	public var search: Search {
 		return Search(esi: self)
 	}
 	
-	struct Search {
+	public struct Search {
 		let esi: ESI
 		
-		@discardableResult
-		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Search.SearchResult>> {
+		
+		public func search(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], language: Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Search.SearchResult, AFError> {
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.httpQuery {
+			if let v = acceptLanguage?.description {
 				headers["Accept-Language"] = v
-			}
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = categories.httpQuery {
-				query.append(URLQueryItem(name: "categories", value: v))
+			if !categories.isEmpty {
+				query.append(URLQueryItem(name: "categories", value: categories.lazy.map{$0.description}.joined(separator: ",")))
 			}
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
+			if let v = language?.description {
+				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
-			if let v = search.httpQuery {
-				query.append(URLQueryItem(name: "search", value: v))
-			}
-			if let v = strict?.httpQuery {
-				query.append(URLQueryItem(name: "strict", value: v))
+			query.append(URLQueryItem(name: "search", value: search.description))
+			if let v = strict?.description {
+				query.append(URLQueryItem(name: "strict", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
 			
-			let url = esi.baseURL + "/search/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/search/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Search.SearchResult>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Search.SearchResult>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func characterSearch(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], characterID: Int, ifNoneMatch: String? = nil, language: Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<Search.CharacterSearchResult>> {
+		
+		public func characterSearch(acceptLanguage: AcceptLanguage? = nil, categories: [Search.Categories], characterID: Int, language: Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Search.CharacterSearchResult, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-search.search_structures.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-search.search_structures.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.httpQuery {
+			if let v = acceptLanguage?.description {
 				headers["Accept-Language"] = v
-			}
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
 			}
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = categories.httpQuery {
-				query.append(URLQueryItem(name: "categories", value: v))
+			if !categories.isEmpty {
+				query.append(URLQueryItem(name: "categories", value: categories.lazy.map{$0.description}.joined(separator: ",")))
 			}
-			if let v = language?.httpQuery {
-				query.append(URLQueryItem(name: "language", value: v))
+			if let v = language?.description {
+				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
-			if let v = search.httpQuery {
-				query.append(URLQueryItem(name: "search", value: v))
-			}
-			if let v = strict?.httpQuery {
-				query.append(URLQueryItem(name: "strict", value: v))
+			query.append(URLQueryItem(name: "search", value: search.description))
+			if let v = strict?.description {
+				query.append(URLQueryItem(name: "strict", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
 			
-			let url = esi.baseURL + "/characters/\(characterID)/search/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/search/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<Search.CharacterSearchResult>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<Search.CharacterSearchResult>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
@@ -196,7 +190,7 @@ public extension ESI {
 		}
 		
 		
-		public enum Categories: String, Codable, HTTPQueryable {
+		public enum Categories: String, Codable, CustomStringConvertible {
 			case agent = "agent"
 			case alliance = "alliance"
 			case character = "character"
@@ -207,8 +201,9 @@ public extension ESI {
 			case region = "region"
 			case solarSystem = "solar_system"
 			case station = "station"
+			case structure = "structure"
 			
-			public var httpQuery: String? {
+			public var description: String {
 				return rawValue
 			}
 			

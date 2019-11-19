@@ -1,21 +1,21 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var userInterface: UserInterface {
+extension ESI {
+	public var userInterface: UserInterface {
 		return UserInterface(esi: self)
 	}
 	
-	struct UserInterface {
+	public struct UserInterface {
 		let esi: ESI
 		
-		@discardableResult
-		public func openInformationWindow(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func setAutopilotWaypoint(addToBeginning: Bool, clearOtherWaypoints: Bool, destinationID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-ui.write_waypoint.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -24,26 +24,28 @@ public extension ESI {
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = targetID.httpQuery {
-				query.append(URLQueryItem(name: "target_id", value: v))
-			}
+			query.append(URLQueryItem(name: "add_to_beginning", value: addToBeginning.description))
+			query.append(URLQueryItem(name: "clear_other_waypoints", value: clearOtherWaypoints.description))
+			query.append(URLQueryItem(name: "destination_id", value: destinationID.description))
 			
-			let url = esi.baseURL + "/ui/openwindow/information/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/ui/autopilot/waypoint/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func openNewMailWindow(newMail: UserInterface.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func openNewMailWindow(newMail: UserInterface.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-ui.open_window.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body = try? JSONEncoder().encode(newMail)
 			
 			var headers = HTTPHeaders()
@@ -54,22 +56,24 @@ public extension ESI {
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/ui/openwindow/newmail/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/ui/openwindow/newmail/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func setAutopilotWaypoint(addToBeginning: Bool, clearOtherWaypoints: Bool, destinationID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func openContractWindow(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.write_waypoint.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-ui.open_window.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -78,32 +82,26 @@ public extension ESI {
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = addToBeginning.httpQuery {
-				query.append(URLQueryItem(name: "add_to_beginning", value: v))
-			}
-			if let v = clearOtherWaypoints.httpQuery {
-				query.append(URLQueryItem(name: "clear_other_waypoints", value: v))
-			}
-			if let v = destinationID.httpQuery {
-				query.append(URLQueryItem(name: "destination_id", value: v))
-			}
+			query.append(URLQueryItem(name: "contract_id", value: contractID.description))
 			
-			let url = esi.baseURL + "/ui/autopilot/waypoint/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/ui/openwindow/contract/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func openContractWindow(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func openInformationWindow(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-ui.open_window.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -112,26 +110,26 @@ public extension ESI {
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = contractID.httpQuery {
-				query.append(URLQueryItem(name: "contract_id", value: v))
-			}
+			query.append(URLQueryItem(name: "target_id", value: targetID.description))
 			
-			let url = esi.baseURL + "/ui/openwindow/contract/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/ui/openwindow/information/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func openMarketDetails(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<String>> {
+		
+		public func openMarketDetails(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-ui.open_window.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-ui.open_window.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
@@ -140,41 +138,19 @@ public extension ESI {
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = typeID.httpQuery {
-				query.append(URLQueryItem(name: "type_id", value: v))
-			}
+			query.append(URLQueryItem(name: "type_id", value: typeID.description))
 			
-			let url = esi.baseURL + "/ui/openwindow/marketdetails/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/ui/openwindow/marketdetails/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<String>>()
-			esi.request(components.url!, method: .post, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<String>) in
-				promise.set(response: response, cached: nil)
-			}
-			return promise.future
-		}
-		
-		
-		public struct PostUiOpenwindowNewmailUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
+			        return esi.session.publisher(components,
+			                                     method: .post,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseString(queue: esi.session.serializationQueue)
+			            .eraseToAnyPublisher()
 		}
 		
 		
@@ -201,6 +177,28 @@ public extension ESI {
 				case subject
 				case toCorpOrAllianceID = "to_corp_or_alliance_id"
 				case toMailingListID = "to_mailing_list_id"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct PostUiOpenwindowNewmailUnprocessableEntity: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
 				
 				var dateFormatter: DateFormatter? {
 					switch self {

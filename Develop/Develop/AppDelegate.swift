@@ -174,7 +174,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var c3: AnyCancellable?
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let p = URLSession.shared.dataTaskPublisher(for: URL(string: "http://worldclockapi.com/api/json/est/now")!)
+        let s = Deferred{CurrentValueSubject<String, Never>("sdf").handleEvents(receiveCancel: {
+            print("cancel")
+        })}
+        
+        s.sink {
+            print($0)
+        }
+        
+        var r = AF.request("http://worldclockapi.com/api/json/est/now")
+        print(r.isResumed)
+//        r = r.responseString { result in
+//            print(result)
+//        }
+        print(r.isResumed)
+        
+        /*let p = URLSession.shared.dataTaskPublisher(for: URL(string: "http://worldclockapi.com/api/json/est/now")!)
         c1 = p.sink(receiveCompletion: { (c) in
             print(c)
         }) { (d) in
@@ -197,7 +212,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let r = session.request("http://google.com").validate().stringPublisher().catch{_ in Just("")}.sink { result in
 //            print(result)
 //        }
-//        c = r
+//        c = r*/
         return true
     }
 

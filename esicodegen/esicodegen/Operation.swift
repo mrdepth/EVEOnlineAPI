@@ -8,7 +8,7 @@
 
 import Foundation
 
-fileprivate let Skip = ["datasource", "token", "user_agent", "X-User-Agent"]
+fileprivate let Skip = ["datasource", "token", "user_agent", "X-User-Agent", "If-None-Match"]
 
 class Security {
 	let security: [String]
@@ -95,7 +95,7 @@ class Operation {
 		
 		let response = responses["200"] ?? responses.first {(Int($0.key) ?? 500) < 300}?.value
 		let result = response?.schema?.typeIdentifier ?? "String"
-		
+        
 		for parameter in parameters {
 			guard !Skip.contains(parameter.name) else {continue}
 			
@@ -121,7 +121,7 @@ class Operation {
 //		headerStrings.insert("\(headerStrings.count > 0 ? "var" : "let") headers = HTTPHeaders()", at: 0)
 		
 		for scope in self.security?.security ?? [] {
-			let s = "guard scopes.contains(\"\(scope)\") else {return .init(.failure(ESIError.forbidden))}"
+			let s = "guard scopes.contains(\"\(scope)\") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}"
 			security.append(s)
 		}
 		
@@ -131,6 +131,15 @@ class Operation {
 		template = template.replacingOccurrences(of: "{body}", with: parameterStrings.first ?? "let body: Data? = nil")
 		template = template.replacingOccurrences(of: "{headers}", with: headerStrings.joined(separator: "\n"))
 		template = template.replacingOccurrences(of: "{queries}", with: queryStrings.joined(separator: "\n"))
+        
+        let decode: String
+        if result == "String" {
+            decode = "responseString(queue: esi.session.serializationQueue)"
+        }
+        else {
+            decode = "responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)"
+        }
+        template = template.replacingOccurrences(of: "{decode}", with: decode)
 		
 		if security.count > 0 {
 			

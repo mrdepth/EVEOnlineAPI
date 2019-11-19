@@ -1,14 +1,14 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var {variable}: {scope} {
+extension ESI {
+	public var {variable}: {scope} {
 		return {scope}(esi: self)
 	}
 
-	struct {scope} {
+	public struct {scope} {
 		let esi: ESI
 
 {operations}

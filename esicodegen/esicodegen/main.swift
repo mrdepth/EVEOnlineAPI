@@ -24,7 +24,7 @@ guard var swagger = (try? JSONSerialization.jsonObject(with: data, options: [.mu
 
 //Patch
 do {
-    print(swagger)
+//    print(swagger)
 	let keyPath = "paths./characters/{character_id}/assets/.get.responses.200.schema.items.properties.location_flag.enum"
 	var array = (swagger as NSDictionary).value(forKeyPath: keyPath) as! [String]
 	array.append(contentsOf: ["StructureServiceSlot0",
@@ -110,8 +110,7 @@ for (_, map) in allSchemes {
 		}
 		let ns = prefix.last!
 		schemes.forEach {$0.parent = ns}
-		let a = namespaces[ns] ?? Set()
-		namespaces[ns] = a.union(schemes)
+        namespaces[ns, default: Set()].formUnion(schemes)
 	}
 }
 
@@ -129,8 +128,10 @@ for (_, schemes) in namespaces {
 		if i > 0 {
 			var title = scheme.title + "\(i)"
 			title = conflicts[title] ?? title
-			scheme.title = title
-			scheme.namespaceName = title
+            print("error: Conflict \(sequence(first: scheme, next: {$0.parent}).map{$0.namespaceName}.reversed().joined(separator: "."))")
+            exit(1)
+//			scheme.title = title
+//			scheme.namespaceName = title
 		}
 		set.insert(scheme.typeIdentifier)
 		if let loader = scheme.classLoader {

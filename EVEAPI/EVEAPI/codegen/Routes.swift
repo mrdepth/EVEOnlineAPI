@@ -1,49 +1,61 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var routes: Routes {
+extension ESI {
+	public var routes: Routes {
 		return Routes(esi: self)
 	}
 	
-	struct Routes {
+	public struct Routes {
 		let esi: ESI
 		
-		@discardableResult
-		public func getRoute(avoid: [Int]? = nil, connections: [[Int]]? = nil, destination: Int, flag: Routes.Flag? = nil, ifNoneMatch: String? = nil, origin: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Int]>> {
+		
+		public func getRoute(avoid: [Int]? = nil, connections: [[Int]]? = nil, destination: Int, flag: Routes.Flag? = nil, origin: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = avoid?.httpQuery {
-				query.append(URLQueryItem(name: "avoid", value: v))
+			if let v = avoid, !v.isEmpty {
+				query.append(URLQueryItem(name: "avoid", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
-			if let v = connections?.httpQuery {
-				query.append(URLQueryItem(name: "connections", value: v))
+			if let v = connections, !v.isEmpty {
+				query.append(URLQueryItem(name: "connections", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
-			if let v = flag?.httpQuery {
-				query.append(URLQueryItem(name: "flag", value: v))
+			if let v = flag?.description {
+				query.append(URLQueryItem(name: "flag", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
 			
-			let url = esi.baseURL + "/route/\(origin)/\(destination)/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/route/\(origin)/\(destination)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Int]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Int]>) in
-				promise.set(response: response, cached: 86400.0)
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public enum Flag: String, Codable, CustomStringConvertible {
+			case insecure = "insecure"
+			case secure = "secure"
+			case shortest = "shortest"
+			
+			public var description: String {
+				return rawValue
 			}
-			return promise.future
+			
 		}
 		
 		
@@ -66,18 +78,6 @@ public extension ESI {
 					}
 				}
 			}
-		}
-		
-		
-		public enum Flag: String, Codable, HTTPQueryable {
-			case insecure = "insecure"
-			case secure = "secure"
-			case shortest = "shortest"
-			
-			public var httpQuery: String? {
-				return rawValue
-			}
-			
 		}
 		
 		

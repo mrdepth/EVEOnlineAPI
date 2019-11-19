@@ -1,5 +1,5 @@
-	@discardableResult
-	public func {operation}({definitions}) -> Future<ESI.Result<{result}>> {
+	
+	public func {operation}({definitions}) -> AnyPublisher<{result}, AFError> {
 
 {security}
 {body}
@@ -12,13 +12,15 @@
 		query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 {queries}
 
-		let url = esi.baseURL + "{url}"
-		let components = NSURLComponents(string: url)!
+        let url = ESI.apiURL.appendingPathComponent("{url}")
+		var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 		components.queryItems = query
 
-		let promise = Promise<ESI.Result<{result}>>()
-		esi.request(components.url!, method: .{method}, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<{result}, Error>) in
-			promise.set(response: response, cached: {cached})
-		}
-		return promise.future
+        return esi.session.publisher(components,
+                                     method: .{method},
+                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+                                     headers: headers,
+                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+            .{decode}
+            .eraseToAnyPublisher()
 	}

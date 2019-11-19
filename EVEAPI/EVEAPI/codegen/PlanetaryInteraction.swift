@@ -1,127 +1,171 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var planetaryInteraction: PlanetaryInteraction {
+extension ESI {
+	public var planetaryInteraction: PlanetaryInteraction {
 		return PlanetaryInteraction(esi: self)
 	}
 	
-	struct PlanetaryInteraction {
+	public struct PlanetaryInteraction {
 		let esi: ESI
 		
-		@discardableResult
-		public func getSchematicInformation(ifNoneMatch: String? = nil, schematicID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<PlanetaryInteraction.SchematicInformation>> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			let url = esi.baseURL + "/universe/schematics/\(schematicID)/"
-			let components = NSURLComponents(string: url)!
-			components.queryItems = query
-			
-			let promise = Promise<ESI.Result<PlanetaryInteraction.SchematicInformation>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.SchematicInformation>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
-		}
 		
-		@discardableResult
-		public func getColonies(characterID: Int, ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[PlanetaryInteraction.Colony]>> {
+		public func getColonyLayout(characterID: Int, planetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<PlanetaryInteraction.ColonyLayout, AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-planets.manage_planets.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-planets.manage_planets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/planets/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/planets/\(planetID)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[PlanetaryInteraction.Colony]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.Colony]>) in
-				promise.set(response: response, cached: 600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func listCorporationCustomsOffices(corporationID: Int, ifNoneMatch: String? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>> {
+		
+		public func listCorporationCustomsOffices(corporationID: Int, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk], AFError> {
 			
 			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-planets.read_customs_offices.v1") else {return .init(.failure(ESIError.forbidden))}
+			guard scopes.contains("esi-planets.read_customs_offices.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.httpQuery {
-				query.append(URLQueryItem(name: "page", value: v))
+			if let v = page?.description {
+				query.append(URLQueryItem(name: "page", value: v.lazy.map{$0.description}.joined(separator: ",")))
 			}
 			
-			let url = esi.baseURL + "/corporations/\(corporationID)/customs_offices/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/corporations/\(corporationID)/customs_offices/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[PlanetaryInteraction.GetCorporationsCorporationIDCustomsOfficesOk]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func getColonyLayout(characterID: Int, ifNoneMatch: String? = nil, planetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<PlanetaryInteraction.ColonyLayout>> {
+		
+		public func getSchematicInformation(schematicID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<PlanetaryInteraction.SchematicInformation, AFError> {
 			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-planets.manage_planets.v1") else {return .init(.failure(ESIError.forbidden))}
+			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/characters/\(characterID)/planets/\(planetID)/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/universe/schematics/\(schematicID)/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<PlanetaryInteraction.ColonyLayout>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<PlanetaryInteraction.ColonyLayout>) in
-				promise.set(response: response, cached: 600.0)
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public func getColonies(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[PlanetaryInteraction.Colony], AFError> {
+			
+			let scopes = esi.token?.scopes ?? []
+			guard scopes.contains("esi-planets.manage_planets.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
+			let body: Data? = nil
+			
+			var headers = HTTPHeaders()
+			headers["Accept"] = "application/json"
+			
+			
+			var query = [URLQueryItem]()
+			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+			
+			
+			        let url = ESI.apiURL.appendingPathComponent("/characters/\(characterID)/planets/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+			components.queryItems = query
+			
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
+		}
+		
+		
+		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
 			}
-			return promise.future
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
+		public struct GetCharactersCharacterIDPlanetsPlanetIDNotFound: Codable, Hashable {
+			
+			
+			public var error: String?
+			
+			public init(error: String?) {
+				self.error = error
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case error
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						
+						default: return nil
+					}
+				}
+			}
 		}
 		
 		
@@ -152,14 +196,14 @@ public extension ESI {
 		
 		public struct GetCorporationsCorporationIDCustomsOfficesOk: Codable, Hashable {
 			
-			public enum GetCorporationsCorporationIDCustomsOfficesStandingLevel: String, Codable, HTTPQueryable {
+			public enum GetCorporationsCorporationIDCustomsOfficesStandingLevel: String, Codable, CustomStringConvertible {
 				case bad = "bad"
 				case excellent = "excellent"
 				case good = "good"
 				case neutral = "neutral"
 				case terrible = "terrible"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
@@ -223,21 +267,54 @@ public extension ESI {
 		}
 		
 		
-		public struct GetUniverseSchematicsSchematicIDNotFound: Codable, Hashable {
+		public struct Colony: Codable, Hashable {
 			
+			public enum PlanetType: String, Codable, CustomStringConvertible {
+				case barren = "barren"
+				case gas = "gas"
+				case ice = "ice"
+				case lava = "lava"
+				case oceanic = "oceanic"
+				case plasma = "plasma"
+				case storm = "storm"
+				case temperate = "temperate"
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
 			
-			public var error: String?
+			public var lastUpdate: Date
+			public var numPins: Int
+			public var ownerID: Int
+			public var planetID: Int
+			public var planetType: PlanetaryInteraction.Colony.PlanetType
+			public var solarSystemID: Int
+			public var upgradeLevel: Int
 			
-			public init(error: String?) {
-				self.error = error
+			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
+				self.lastUpdate = lastUpdate
+				self.numPins = numPins
+				self.ownerID = ownerID
+				self.planetID = planetID
+				self.planetType = planetType
+				self.solarSystemID = solarSystemID
+				self.upgradeLevel = upgradeLevel
 			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+				case lastUpdate = "last_update"
+				case numPins = "num_pins"
+				case ownerID = "owner_id"
+				case planetID = "planet_id"
+				case planetType = "planet_type"
+				case solarSystemID = "solar_system_id"
+				case upgradeLevel = "upgrade_level"
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						
+						case .lastUpdate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}
@@ -246,6 +323,42 @@ public extension ESI {
 		
 		
 		public struct ColonyLayout: Codable, Hashable {
+			
+			public struct Route: Codable, Hashable {
+				
+				
+				public var contentTypeID: Int
+				public var destinationPinID: Int64
+				public var quantity: Float
+				public var routeID: Int64
+				public var sourcePinID: Int64
+				public var waypoints: [Int64]?
+				
+				public init(contentTypeID: Int, destinationPinID: Int64, quantity: Float, routeID: Int64, sourcePinID: Int64, waypoints: [Int64]?) {
+					self.contentTypeID = contentTypeID
+					self.destinationPinID = destinationPinID
+					self.quantity = quantity
+					self.routeID = routeID
+					self.sourcePinID = sourcePinID
+					self.waypoints = waypoints
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case contentTypeID = "content_type_id"
+					case destinationPinID = "destination_pin_id"
+					case quantity
+					case routeID = "route_id"
+					case sourcePinID = "source_pin_id"
+					case waypoints
+					
+					var dateFormatter: DateFormatter? {
+						switch self {
+							
+							default: return nil
+						}
+					}
+				}
+			}
 			
 			public struct Pin: Codable, Hashable {
 				
@@ -308,6 +421,27 @@ public extension ESI {
 					}
 				}
 				
+				public struct FactoryDetails: Codable, Hashable {
+					
+					
+					public var schematicID: Int
+					
+					public init(schematicID: Int) {
+						self.schematicID = schematicID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case schematicID = "schematic_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								
+								default: return nil
+							}
+						}
+					}
+				}
+				
 				public struct Contents: Codable, Hashable {
 					
 					
@@ -322,27 +456,6 @@ public extension ESI {
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
 						case typeID = "type_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								
-								default: return nil
-							}
-						}
-					}
-				}
-				
-				public struct FactoryDetails: Codable, Hashable {
-					
-					
-					public var schematicID: Int
-					
-					public init(schematicID: Int) {
-						self.schematicID = schematicID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case schematicID = "schematic_id"
 						
 						var dateFormatter: DateFormatter? {
 							switch self {
@@ -430,42 +543,6 @@ public extension ESI {
 				}
 			}
 			
-			public struct Route: Codable, Hashable {
-				
-				
-				public var contentTypeID: Int
-				public var destinationPinID: Int64
-				public var quantity: Float
-				public var routeID: Int64
-				public var sourcePinID: Int64
-				public var waypoints: [Int64]?
-				
-				public init(contentTypeID: Int, destinationPinID: Int64, quantity: Float, routeID: Int64, sourcePinID: Int64, waypoints: [Int64]?) {
-					self.contentTypeID = contentTypeID
-					self.destinationPinID = destinationPinID
-					self.quantity = quantity
-					self.routeID = routeID
-					self.sourcePinID = sourcePinID
-					self.waypoints = waypoints
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case contentTypeID = "content_type_id"
-					case destinationPinID = "destination_pin_id"
-					case quantity
-					case routeID = "route_id"
-					case sourcePinID = "source_pin_id"
-					case waypoints
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
 			public var links: [PlanetaryInteraction.ColonyLayout.Link]
 			public var pins: [PlanetaryInteraction.ColonyLayout.Pin]
 			public var routes: [PlanetaryInteraction.ColonyLayout.Route]
@@ -484,83 +561,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetCharactersCharacterIDPlanetsPlanetIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Colony: Codable, Hashable {
-			
-			public enum PlanetType: String, Codable, HTTPQueryable {
-				case barren = "barren"
-				case gas = "gas"
-				case ice = "ice"
-				case lava = "lava"
-				case oceanic = "oceanic"
-				case plasma = "plasma"
-				case storm = "storm"
-				case temperate = "temperate"
-				
-				public var httpQuery: String? {
-					return rawValue
-				}
-				
-			}
-			
-			public var lastUpdate: Date
-			public var numPins: Int
-			public var ownerID: Int
-			public var planetID: Int
-			public var planetType: PlanetaryInteraction.Colony.PlanetType
-			public var solarSystemID: Int
-			public var upgradeLevel: Int
-			
-			public init(lastUpdate: Date, numPins: Int, ownerID: Int, planetID: Int, planetType: PlanetaryInteraction.Colony.PlanetType, solarSystemID: Int, upgradeLevel: Int) {
-				self.lastUpdate = lastUpdate
-				self.numPins = numPins
-				self.ownerID = ownerID
-				self.planetID = planetID
-				self.planetType = planetType
-				self.solarSystemID = solarSystemID
-				self.upgradeLevel = upgradeLevel
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastUpdate = "last_update"
-				case numPins = "num_pins"
-				case ownerID = "owner_id"
-				case planetID = "planet_id"
-				case planetType = "planet_type"
-				case solarSystemID = "solar_system_id"
-				case upgradeLevel = "upgrade_level"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .lastUpdate: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

@@ -1,7 +1,7 @@
-{access}enum {enum}: String, Codable, HTTPQueryable {
+{access}enum {enum}: String, Codable, CustomStringConvertible {
 {cases}
 	
-	public var httpQuery: String? {
+	public var description: String {
 		return rawValue
 	}
 

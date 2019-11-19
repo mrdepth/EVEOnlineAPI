@@ -1,95 +1,95 @@
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 
-public extension ESI {
-	var sovereignty: Sovereignty {
+extension ESI {
+	public var sovereignty: Sovereignty {
 		return Sovereignty(esi: self)
 	}
 	
-	struct Sovereignty {
+	public struct Sovereignty {
 		let esi: ESI
 		
-		@discardableResult
-		public func listSovereigntyCampaigns(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Campaign]>> {
+		
+		public func listSovereigntyCampaigns(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Sovereignty.Campaign], AFError> {
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/sovereignty/campaigns/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/sovereignty/campaigns/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Sovereignty.Campaign]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Campaign]>) in
-				promise.set(response: response, cached: 5.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func listSovereigntyStructures(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.Structure]>> {
+		
+		public func listSovereigntyOfSystems(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Sovereignty.System], AFError> {
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/sovereignty/structures/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/sovereignty/map/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Sovereignty.Structure]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.Structure]>) in
-				promise.set(response: response, cached: 120.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
-		@discardableResult
-		public func listSovereigntyOfSystems(ifNoneMatch: String? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Sovereignty.System]>> {
+		
+		public func listSovereigntyStructures(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Sovereignty.Structure], AFError> {
 			
 			
 			let body: Data? = nil
 			
 			var headers = HTTPHeaders()
 			headers["Accept"] = "application/json"
-			if let v = ifNoneMatch?.httpQuery {
-				headers["If-None-Match"] = v
-			}
+			
 			
 			var query = [URLQueryItem]()
 			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 			
 			
-			let url = esi.baseURL + "/sovereignty/map/"
-			let components = NSURLComponents(string: url)!
+			        let url = ESI.apiURL.appendingPathComponent("/sovereignty/structures/")
+			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 			components.queryItems = query
 			
-			let promise = Promise<ESI.Result<[Sovereignty.System]>>()
-			esi.request(components.url!, method: .get, encoding: body ?? URLEncoding.default, headers: headers, cachePolicy: cachePolicy).validateESI().responseESI { (response: DataResponse<[Sovereignty.System]>) in
-				promise.set(response: response, cached: 3600.0)
-			}
-			return promise.future
+			        return esi.session.publisher(components,
+			                                     method: .get,
+			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+			                                     headers: headers,
+			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+			            .eraseToAnyPublisher()
 		}
 		
 		
@@ -124,15 +124,56 @@ public extension ESI {
 		}
 		
 		
+		public struct Structure: Codable, Hashable {
+			
+			
+			public var allianceID: Int
+			public var solarSystemID: Int
+			public var structureID: Int64
+			public var structureTypeID: Int
+			public var vulnerabilityOccupancyLevel: Float?
+			public var vulnerableEndTime: Date?
+			public var vulnerableStartTime: Date?
+			
+			public init(allianceID: Int, solarSystemID: Int, structureID: Int64, structureTypeID: Int, vulnerabilityOccupancyLevel: Float?, vulnerableEndTime: Date?, vulnerableStartTime: Date?) {
+				self.allianceID = allianceID
+				self.solarSystemID = solarSystemID
+				self.structureID = structureID
+				self.structureTypeID = structureTypeID
+				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
+				self.vulnerableEndTime = vulnerableEndTime
+				self.vulnerableStartTime = vulnerableStartTime
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case allianceID = "alliance_id"
+				case solarSystemID = "solar_system_id"
+				case structureID = "structure_id"
+				case structureTypeID = "structure_type_id"
+				case vulnerabilityOccupancyLevel = "vulnerability_occupancy_level"
+				case vulnerableEndTime = "vulnerable_end_time"
+				case vulnerableStartTime = "vulnerable_start_time"
+				
+				var dateFormatter: DateFormatter? {
+					switch self {
+						case .vulnerableEndTime: return DateFormatter.esiDateTimeFormatter
+						case .vulnerableStartTime: return DateFormatter.esiDateTimeFormatter
+						default: return nil
+					}
+				}
+			}
+		}
+		
+		
 		public struct Campaign: Codable, Hashable {
 			
-			public enum GetSovereigntyCampaignsEventType: String, Codable, HTTPQueryable {
+			public enum GetSovereigntyCampaignsEventType: String, Codable, CustomStringConvertible {
 				case ihubDefense = "ihub_defense"
 				case stationDefense = "station_defense"
 				case stationFreeport = "station_freeport"
 				case tcuDefense = "tcu_defense"
 				
-				public var httpQuery: String? {
+				public var description: String {
 					return rawValue
 				}
 				
@@ -201,47 +242,6 @@ public extension ESI {
 				var dateFormatter: DateFormatter? {
 					switch self {
 						case .startTime: return DateFormatter.esiDateTimeFormatter
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Structure: Codable, Hashable {
-			
-			
-			public var allianceID: Int
-			public var solarSystemID: Int
-			public var structureID: Int64
-			public var structureTypeID: Int
-			public var vulnerabilityOccupancyLevel: Float?
-			public var vulnerableEndTime: Date?
-			public var vulnerableStartTime: Date?
-			
-			public init(allianceID: Int, solarSystemID: Int, structureID: Int64, structureTypeID: Int, vulnerabilityOccupancyLevel: Float?, vulnerableEndTime: Date?, vulnerableStartTime: Date?) {
-				self.allianceID = allianceID
-				self.solarSystemID = solarSystemID
-				self.structureID = structureID
-				self.structureTypeID = structureTypeID
-				self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
-				self.vulnerableEndTime = vulnerableEndTime
-				self.vulnerableStartTime = vulnerableStartTime
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case solarSystemID = "solar_system_id"
-				case structureID = "structure_id"
-				case structureTypeID = "structure_type_id"
-				case vulnerabilityOccupancyLevel = "vulnerability_occupancy_level"
-				case vulnerableEndTime = "vulnerable_end_time"
-				case vulnerableStartTime = "vulnerable_start_time"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .vulnerableEndTime: return DateFormatter.esiDateTimeFormatter
-						case .vulnerableStartTime: return DateFormatter.esiDateTimeFormatter
 						default: return nil
 					}
 				}

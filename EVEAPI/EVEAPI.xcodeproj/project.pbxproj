@@ -12,10 +12,55 @@
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1288F0181DEB79ED00FD7FBE /* XMLParserExtension.swift */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1696DBB32383DB8800BAFDB0 /* EVEAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1696DBB22383DB8800BAFDB0 /* EVEAPITests.swift */; };
+		1696DBB52383DB8800BAFDB0 /* EVEAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12AB654C1DE9A994003AA683 /* EVEAPI.framework */; };
+		1696DBBB2384170600BAFDB0 /* Alliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DB1EEAD16C00796B27 /* Alliance.swift */; };
+		1696DBBC2384170600BAFDB0 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DC1EEAD16C00796B27 /* Assets.swift */; };
+		1696DBBD2384170600BAFDB0 /* Bookmarks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DD1EEAD16C00796B27 /* Bookmarks.swift */; };
+		1696DBBE2384170600BAFDB0 /* Calendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DE1EEAD16C00796B27 /* Calendar.swift */; };
+		1696DBBF2384170600BAFDB0 /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295DF1EEAD16C00796B27 /* Character.swift */; };
+		1696DBC02384170600BAFDB0 /* Clones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E01EEAD16C00796B27 /* Clones.swift */; };
+		1696DBC12384170600BAFDB0 /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E11EEAD16C00796B27 /* Contacts.swift */; };
+		1696DBC22384170600BAFDB0 /* Contracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D39D111EF949500077BD17 /* Contracts.swift */; };
+		1696DBC32384170600BAFDB0 /* Corporation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E21EEAD16C00796B27 /* Corporation.swift */; };
+		1696DBC42384170600BAFDB0 /* Dogma.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E31EEAD16C00796B27 /* Dogma.swift */; };
+		1696DBC52384170600BAFDB0 /* FactionWarfare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C5F6C1F41859B0038FE7D /* FactionWarfare.swift */; };
+		1696DBC62384170600BAFDB0 /* Fittings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E41EEAD16C00796B27 /* Fittings.swift */; };
+		1696DBC72384170600BAFDB0 /* Fleets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E51EEAD16C00796B27 /* Fleets.swift */; };
+		1696DBC82384170600BAFDB0 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E61EEAD16C00796B27 /* Global.swift */; };
+		1696DBC92384170600BAFDB0 /* Incursions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E71EEAD16C00796B27 /* Incursions.swift */; };
+		1696DBCA2384170600BAFDB0 /* Industry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E81EEAD16C00796B27 /* Industry.swift */; };
+		1696DBCB2384170600BAFDB0 /* Insurance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295E91EEAD16C00796B27 /* Insurance.swift */; };
+		1696DBCC2384170600BAFDB0 /* Killmails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EA1EEAD16C00796B27 /* Killmails.swift */; };
+		1696DBCD2384170600BAFDB0 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EB1EEAD16C00796B27 /* Location.swift */; };
+		1696DBCE2384170600BAFDB0 /* Loyalty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EC1EEAD16C00796B27 /* Loyalty.swift */; };
+		1696DBCF2384170600BAFDB0 /* Mail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295ED1EEAD16C00796B27 /* Mail.swift */; };
+		1696DBD02384170600BAFDB0 /* Market.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EE1EEAD16C00796B27 /* Market.swift */; };
+		1696DBD12384170600BAFDB0 /* Opportunities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295EF1EEAD16C00796B27 /* Opportunities.swift */; };
+		1696DBD22384170600BAFDB0 /* PlanetaryInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F01EEAD16C00796B27 /* PlanetaryInteraction.swift */; };
+		1696DBD32384170600BAFDB0 /* Routes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F11EEAD16C00796B27 /* Routes.swift */; };
+		1696DBD42384170600BAFDB0 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F21EEAD16C00796B27 /* Search.swift */; };
+		1696DBD52384170600BAFDB0 /* Skills.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F31EEAD16C00796B27 /* Skills.swift */; };
+		1696DBD62384170600BAFDB0 /* Sovereignty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F41EEAD16C00796B27 /* Sovereignty.swift */; };
+		1696DBD72384170600BAFDB0 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F51EEAD16C00796B27 /* Status.swift */; };
+		1696DBD82384170600BAFDB0 /* Universe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F61EEAD16C00796B27 /* Universe.swift */; };
+		1696DBD92384170600BAFDB0 /* UserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F71EEAD16C00796B27 /* UserInterface.swift */; };
+		1696DBDA2384170600BAFDB0 /* Wallet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F81EEAD16C00796B27 /* Wallet.swift */; };
+		1696DBDB2384170600BAFDB0 /* Wars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126295F91EEAD16C00796B27 /* Wars.swift */; };
 		16DFCC9A2382CC6100A4A72C /* Alamofire+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DFCC992382CC6100A4A72C /* Alamofire+Extensions.swift */; };
 		16DFCC9B2382CD0900A4A72C /* OAuth2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1295ED481DF8169F0048C895 /* OAuth2.swift */; };
 		16DFCC9D2382E13D00A4A72C /* ESI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DFCC9C2382E13D00A4A72C /* ESI.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1696DBB62383DB8800BAFDB0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 12AB65431DE9A993003AA683 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 12AB654B1DE9A993003AA683;
+			remoteInfo = EVEAPI;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1203E8721F017D82009ADF8D /* ZKillboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZKillboard.swift; sourceTree = "<group>"; };
@@ -164,6 +209,9 @@
 		12CFDAF81F053D6700CC0762 /* rss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = rss.swift; sourceTree = "<group>"; };
 		12D39D0B1EF923C90077BD17 /* Eve.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eve.swift; sourceTree = "<group>"; };
 		12D39D111EF949500077BD17 /* Contracts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contracts.swift; sourceTree = "<group>"; };
+		1696DBB02383DB8800BAFDB0 /* EVEAPITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EVEAPITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1696DBB22383DB8800BAFDB0 /* EVEAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EVEAPITests.swift; sourceTree = "<group>"; };
+		1696DBB42383DB8800BAFDB0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16DFCC992382CC6100A4A72C /* Alamofire+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alamofire+Extensions.swift"; sourceTree = "<group>"; };
 		16DFCC9C2382E13D00A4A72C /* ESI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ESI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -175,6 +223,14 @@
 			files = (
 				126AF8F2211AE2D9008ED515 /* Futures.framework in Frameworks */,
 				126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1696DBAD2383DB8800BAFDB0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1696DBB52383DB8800BAFDB0 /* EVEAPI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,6 +513,7 @@
 			isa = PBXGroup;
 			children = (
 				12AB654E1DE9A994003AA683 /* EVEAPI */,
+				1696DBB12383DB8800BAFDB0 /* EVEAPITests */,
 				12AB654D1DE9A994003AA683 /* Products */,
 				12AB65731DE9AB21003AA683 /* Frameworks */,
 			);
@@ -466,6 +523,7 @@
 			isa = PBXGroup;
 			children = (
 				12AB654C1DE9A994003AA683 /* EVEAPI.framework */,
+				1696DBB02383DB8800BAFDB0 /* EVEAPITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -503,6 +561,15 @@
 			name = RSS;
 			sourceTree = "<group>";
 		};
+		1696DBB12383DB8800BAFDB0 /* EVEAPITests */ = {
+			isa = PBXGroup;
+			children = (
+				1696DBB22383DB8800BAFDB0 /* EVEAPITests.swift */,
+				1696DBB42383DB8800BAFDB0 /* Info.plist */,
+			);
+			path = EVEAPITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -535,12 +602,31 @@
 			productReference = 12AB654C1DE9A994003AA683 /* EVEAPI.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		1696DBAF2383DB8800BAFDB0 /* EVEAPITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1696DBBA2383DB8800BAFDB0 /* Build configuration list for PBXNativeTarget "EVEAPITests" */;
+			buildPhases = (
+				1696DBAC2383DB8800BAFDB0 /* Sources */,
+				1696DBAD2383DB8800BAFDB0 /* Frameworks */,
+				1696DBAE2383DB8800BAFDB0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1696DBB72383DB8800BAFDB0 /* PBXTargetDependency */,
+			);
+			name = EVEAPITests;
+			productName = EVEAPITests;
+			productReference = 1696DBB02383DB8800BAFDB0 /* EVEAPITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		12AB65431DE9A993003AA683 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1120;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Artem Shimanski";
 				TargetAttributes = {
@@ -548,6 +634,11 @@
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = YB4RLQ4M9A;
 						LastSwiftMigration = 1000;
+						ProvisioningStyle = Automatic;
+					};
+					1696DBAF2383DB8800BAFDB0 = {
+						CreatedOnToolsVersion = 11.2.1;
+						DevelopmentTeam = YB4RLQ4M9A;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -566,12 +657,20 @@
 			projectRoot = "";
 			targets = (
 				12AB654B1DE9A993003AA683 /* EVEAPI */,
+				1696DBAF2383DB8800BAFDB0 /* EVEAPITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		12AB654A1DE9A993003AA683 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1696DBAE2383DB8800BAFDB0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -586,14 +685,63 @@
 			buildActionMask = 2147483647;
 			files = (
 				1284C1442133D6D900AF52C2 /* XMLParserExtension.swift in Sources */,
+				1696DBBE2384170600BAFDB0 /* Calendar.swift in Sources */,
+				1696DBC32384170600BAFDB0 /* Corporation.swift in Sources */,
+				1696DBD72384170600BAFDB0 /* Status.swift in Sources */,
+				1696DBC02384170600BAFDB0 /* Clones.swift in Sources */,
+				1696DBC82384170600BAFDB0 /* Global.swift in Sources */,
+				1696DBBC2384170600BAFDB0 /* Assets.swift in Sources */,
 				16DFCC9D2382E13D00A4A72C /* ESI.swift in Sources */,
+				1696DBD32384170600BAFDB0 /* Routes.swift in Sources */,
+				1696DBBD2384170600BAFDB0 /* Bookmarks.swift in Sources */,
+				1696DBD62384170600BAFDB0 /* Sovereignty.swift in Sources */,
 				16DFCC9A2382CC6100A4A72C /* Alamofire+Extensions.swift in Sources */,
+				1696DBC72384170600BAFDB0 /* Fleets.swift in Sources */,
+				1696DBCD2384170600BAFDB0 /* Location.swift in Sources */,
+				1696DBC42384170600BAFDB0 /* Dogma.swift in Sources */,
+				1696DBCA2384170600BAFDB0 /* Industry.swift in Sources */,
+				1696DBC62384170600BAFDB0 /* Fittings.swift in Sources */,
+				1696DBD42384170600BAFDB0 /* Search.swift in Sources */,
+				1696DBC92384170600BAFDB0 /* Incursions.swift in Sources */,
 				16DFCC9B2382CD0900A4A72C /* OAuth2.swift in Sources */,
+				1696DBC12384170600BAFDB0 /* Contacts.swift in Sources */,
+				1696DBDA2384170600BAFDB0 /* Wallet.swift in Sources */,
+				1696DBD02384170600BAFDB0 /* Market.swift in Sources */,
+				1696DBD82384170600BAFDB0 /* Universe.swift in Sources */,
+				1696DBCB2384170600BAFDB0 /* Insurance.swift in Sources */,
+				1696DBD12384170600BAFDB0 /* Opportunities.swift in Sources */,
+				1696DBDB2384170600BAFDB0 /* Wars.swift in Sources */,
+				1696DBC52384170600BAFDB0 /* FactionWarfare.swift in Sources */,
+				1696DBCC2384170600BAFDB0 /* Killmails.swift in Sources */,
+				1696DBD22384170600BAFDB0 /* PlanetaryInteraction.swift in Sources */,
+				1696DBD52384170600BAFDB0 /* Skills.swift in Sources */,
+				1696DBBF2384170600BAFDB0 /* Character.swift in Sources */,
+				1696DBC22384170600BAFDB0 /* Contracts.swift in Sources */,
+				1696DBCF2384170600BAFDB0 /* Mail.swift in Sources */,
+				1696DBBB2384170600BAFDB0 /* Alliance.swift in Sources */,
 				1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */,
+				1696DBD92384170600BAFDB0 /* UserInterface.swift in Sources */,
+				1696DBCE2384170600BAFDB0 /* Loyalty.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1696DBAC2383DB8800BAFDB0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1696DBB32383DB8800BAFDB0 /* EVEAPITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1696DBB72383DB8800BAFDB0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 12AB654B1DE9A993003AA683 /* EVEAPI */;
+			targetProxy = 1696DBB62383DB8800BAFDB0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		12AB65521DE9A994003AA683 /* Debug */ = {
@@ -758,6 +906,49 @@
 			};
 			name = Release;
 		};
+		1696DBB82383DB8800BAFDB0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YB4RLQ4M9A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = EVEAPITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shimanski.EVEAPITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1696DBB92383DB8800BAFDB0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YB4RLQ4M9A;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = EVEAPITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shimanski.EVEAPITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -775,6 +966,15 @@
 			buildConfigurations = (
 				12AB65551DE9A994003AA683 /* Debug */,
 				12AB65561DE9A994003AA683 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1696DBBA2383DB8800BAFDB0 /* Build configuration list for PBXNativeTarget "EVEAPITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1696DBB82383DB8800BAFDB0 /* Debug */,
+				1696DBB92383DB8800BAFDB0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
