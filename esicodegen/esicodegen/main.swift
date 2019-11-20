@@ -8,154 +8,173 @@
 
 import Foundation
 
-let classURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("class.swft")
-let enumURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("enum.swft")
-let operationURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("operation.swft")
-let scopeURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("scope.swft")
-let securityURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("security.swft")
 
+let url = "/Users/artem.shimanski/Downloads/swagger.json"
 
-guard let data = try? Data.init(contentsOf: URL(string: CommandLine.arguments[1])!) else {
-	print("Input file not found")
-	exit(1)
+let data = try! Data(contentsOf: URL(fileURLWithPath: url))
+let swagger = try! JSONDecoder().decode(Swagger.self, from: data)
+
+func extract(from link: Swagger.Link<Swagger.Property>) -> Swagger.Property {
+    switch link {
+    case let .ref(id):
+        return swagger.definitions[id.components(separatedBy: "/").last!]!
+    case let .value(value):
+        return value
+    }
 }
 
-guard var swagger = (try? JSONSerialization.jsonObject(with: data, options: [.mutableContainers])) as? [String: Any] else {exit(1)}
+extension String {
+    
+    var camelCaps: String {
+        return components(separatedBy: CharacterSet(charactersIn: "_-. ")).enumerated().map { (i, s) -> String in
+            let s = s.replacingOccurrences(of: "'", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+            
+            guard !s.isEmpty else {return ""}
+            if i > 0 {
+                if s.compare("id", options: [.caseInsensitive]) == .orderedSame {
+                    return "ID"
+                }
+                else if s.compare("sp", options: [.caseInsensitive]) == .orderedSame {
+                    return "SP"
+                }
+            }
+            if s.compare("a", options: [.caseInsensitive]) == .orderedSame {
+                return ""
+            }
+            else {
+                let r = s.startIndex..<s.index(after: s.startIndex)
+                return s.replacingCharacters(in: r, with: s[r].uppercased())
+            }
+        }.joined()
+    }
+    
+    var camelBack: String {
+        guard !isEmpty else {return self}
+        let s = camelCaps
+        let r = s.startIndex..<s.index(after: s.startIndex)
+        return s.replacingCharacters(in: r, with: s[r].lowercased())
+    }
+    
+    var indented: String {
+        var indentation = 0
+        var c = [String]()
+        
+        for s in self.components(separatedBy: "\n") {
+            let s = s.trimmingCharacters(in: CharacterSet(charactersIn: "\t"))
+            let i = indentation - (s.first == "}" ? 1 : 0)
+            c.append(String(repeating: "\t", count: i) + s)
+            
+            for c in s {
+                if c == "}" {
+                    indentation -= 1
+                }
+                else if c == "{" {
+                    indentation += 1
+                }
+            }
 
-//Patch
-do {
-//    print(swagger)
-	let keyPath = "paths./characters/{character_id}/assets/.get.responses.200.schema.items.properties.location_flag.enum"
-	var array = (swagger as NSDictionary).value(forKeyPath: keyPath) as! [String]
-	array.append(contentsOf: ["StructureServiceSlot0",
-	                          "StructureServiceSlot1",
-	                          "StructureServiceSlot2",
-	                          "StructureServiceSlot3",
-	                          "StructureServiceSlot4",
-	                          "StructureServiceSlot5",
-	                          "StructureServiceSlot6",
-	                          "StructureServiceSlot7",
-	                          "StructureFuel"])
-	let dic = (swagger as NSDictionary).mutableCopy() as! NSMutableDictionary
-	dic.setValue(array, forKeyPath: keyPath)
-	swagger = dic as! [String: Any]
+        }
+        return c.joined(separator: "\n")
+    }
 }
 
+extension Namespace.MetaType {
+    init?(from property: Swagger.Property) {
+        guard let title = property.title else {return nil}
 
-var scopes = [String: Scope]()
-var paths = [Path]()
-var allSchemes = [String: [Int:[Schema]]]()
-
-let globalScope = Scope(tag: "", parent: nil)
-scopes[""] = globalScope
-
-var refParameters: [String: [String: Any]]
-refParameters = swagger["parameters"] as? [String: [String: Any]] ?? [:]
-
-var definitions: [Schema]
-definitions = (swagger["definitions"] as? [String: [String: Any]])?.compactMap { i -> Schema? in
-	do {
-		return try Schema(i.value, title: i.key, parent: globalScope)
-	}
-	catch {
-		print ("error: \(i.key) \(error)")
-		return nil
-	}
-} ?? []
-
-
-for path in (swagger["paths"] as? [String: Any]) ?? [:] {
-	guard let dic = path.value as? [String: Any] else {continue}
-	do {
-		let path = try Path(path: path.key, dictionary: dic)
-		paths.append(path)
-		
-//		for operation in path.operations {
-//			guard let tag = operation.tags?.first else {throw ESIParserError.missingTag(path)}
-//			let scope = scopes[tag] ?? {
-//				let scope = Scope(tag: tag)
-//				scopes[tag] = scope
-//				return scope
-//				}()
-//			scope.operations.append(operation)
-//		}
-	}
-	catch {
-		print ("error: \(path) \(error)")
-	}
+        switch property.format {
+        case .int32:
+            self = .int
+        case .int64:
+            self = .int64
+        case .double, .float:
+            self = .double
+        case .date:
+            self = .date
+        case .dateTime:
+            self = .dateTime
+        default:
+            switch property.type {
+            case .array:
+                self = .array(Namespace.MetaType(from: property.items!)!)
+            case .boolean:
+                self = .bool
+            case .integer, .number:
+                self = .int
+            case .object:
+                self = .object(title.camelBack, Namespace.Struct(from: property))
+            case .string:
+                self = .string
+            }
+        }
+    }
 }
 
-var security = [String: [String]]()
-for (key, value) in (swagger["securityDefinitions"] as? [String: Any]) ?? [:] {
-	guard let dictionary = value as? [String: Any] else {continue}
-	guard let array = (dictionary["scopes"] as? [String: String])?.map({$0.key}) else {continue}
-	security[key] = array
-}
-
-var namespaces = [Namespace: Set<Schema>]()
-
-for (_, map) in allSchemes {
-	for (_, schemes) in map {
-		let scopes = schemes.map { i -> [Namespace] in
-			return i.parent?.namespaceChain ?? []
-		}
-		
-		guard !scopes.isEmpty else {continue}
-		var prefix = scopes[0]
-		for i in scopes.suffix(from: 1) {
-			let p = i.enumerated().prefix(while: { (i, e) -> Bool in
-				return prefix.count > i && prefix[i].namespaceName == e.namespaceName
-			})
-			prefix = p.map {$0.element}
-		}
-		let ns = prefix.last!
-		schemes.forEach {$0.parent = ns}
-        namespaces[ns, default: Set()].formUnion(schemes)
-	}
-}
-
-var classLoaders = Set<String>()
-
-for (_, schemes) in namespaces {
-	var set = Set<String>()
-	for scheme in schemes {
-		var id = scheme.typeIdentifier
-		var i = 0
-		while set.contains(id) {
-			i += 1
-			id = scheme.typeIdentifier + "\(i)"
-		}
-		if i > 0 {
-			var title = scheme.title + "\(i)"
-			title = conflicts[title] ?? title
-            print("error: Conflict \(sequence(first: scheme, next: {$0.parent}).map{$0.namespaceName}.reversed().joined(separator: "."))")
-            exit(1)
-//			scheme.title = title
-//			scheme.namespaceName = title
-		}
-		set.insert(scheme.typeIdentifier)
-		if let loader = scheme.classLoader {
-			classLoaders.insert(loader)
-		}
-	}
-}
-
-var outURL = URL(fileURLWithPath: CommandLine.arguments[2])
-
-for (_, scope) in scopes {
-	do {
-		let name = scope.tag.isEmpty ? "Global.swift" : scope.tag + ".swift"
-		let url = outURL.appendingPathComponent(name)
-		let s = try scope.scopeDefinition(isPublic: false).indented
-		try s.write(to: url, atomically: true, encoding: .utf8)
-	}
-	catch {
-		print("\(error)")
-	}
+extension Namespace.Struct {
+    init(from property: Swagger.Property) {
+        properties = property.properties?.mapValues{ i -> Namespace.MetaType in
+            Namespace.MetaType(from: $0)!
+        } ?? [:]
+    }
 }
 
 
-//print("\(namespaces[["Search"]]!.map{$0.typePath.joined(separator: ".")})")
 
-//print ("\(Array(allSchemes.keys))")
+/*struct Namespace: Hashable {
+    var name: String
+    var nested: [Namespace]
+    
+    init(name: String, nested: [Namespace]) {
+        self.name = name
+        self.nested = nested
+    }
+    
+    init?(_ property: Swagger.Property) {
+        guard let title = property.title else {return nil}
+        name = title
 
+        switch property.type {
+        case .object:
+            nested = property.properties?.values.compactMap{Namespace($0)} ?? []
+        case .array:
+            nested = property.items.flatMap{Namespace($0)}.map{[$0]} ?? []
+        default:
+            return nil
+        }
+    }
+}
+
+let paths = Dictionary(grouping: swagger.paths, by: {$0.key.components(separatedBy: "/")[1]}).mapValues{$0.map{$0.value}}
+let namespaces = paths.map { i -> Namespace in
+    let (name, methods) = i
+    let nested = methods.flatMap{$0.values.compactMap { operation -> Namespace? in
+            let response = operation.responses[200] ?? operation.responses[201] ?? operation.responses[204]!
+            guard let schema = response.schema else {return nil}
+            let result = extract(from: schema)
+            return Namespace(result)
+        }
+    }
+    return Namespace(name: name, nested: nested)
+}
+
+//let namespaces = swagger.paths.map { i -> Namespace in
+//    let (path, methods) = i
+//    return Namespace(name: path.components(separatedBy: "/")[1],
+//                     nested: methods.flatMap { (method, operation) -> Namespace? in
+//                        let response = operation.responses[200] ?? operation.responses[201] ?? operation.responses[204]!
+//                        guard let schema = response.schema else {return nil}
+//                        let result = extract(from: schema)
+//                        return Namespace(result)
+//    })
+//}
+
+
+//for (path, methods) in swagger.paths {
+//    for (method, operation) in methods {
+//        let response = operation.responses[200]!
+//        guard let schema = response.schema else {continue}
+//        let result = extract(from: schema)
+//    }
+//}
+//
+*/
