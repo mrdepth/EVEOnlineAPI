@@ -237,3 +237,75 @@ struct BodyDataEncoding: ParameterEncoding {
 }
 
 
+extension ESI {
+    var character1: Characters {
+        Characters(esi: self, route: .root(ESI.apiURL))
+    }
+    struct Characters {
+        var esi: ESI
+        let route: Route
+        
+        func characterID(_ value: Int) -> CharacterID {
+            CharacterID(esi: esi, route: .parameter(value, next: route))
+        }
+        
+        public struct CharacterID {
+            let esi: ESI
+            let route: Route
+            
+            public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Character.Information, AFError> {
+            
+                
+                let body: Data? = nil
+                
+                var headers = HTTPHeaders()
+                headers["Accept"] = "application/json"
+                
+                
+                var query = [URLQueryItem]()
+                query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+                
+                
+                do {
+                    let url = try route.asURL()
+                    var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+                    components.queryItems = query
+                    
+                    return esi.session.publisher(components,
+                                                 method: .get,
+                                                 encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+                                                 headers: headers,
+                                                 interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+                        .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+                        .eraseToAnyPublisher()
+                    
+                }
+                catch {
+                    return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+                }
+                
+            }
+        }
+            
+            
+    }
+}
+
+extension ESI {
+    indirect enum Route: URLConvertible {
+        func asURL() throws -> URL {
+            switch self {
+            case let .root(url):
+                return url
+            case let .path(path, next):
+                return try next.asURL().appendingPathComponent(path)
+            case let .parameter(value, next: next):
+                return try next.asURL().appendingPathComponent(String(describing: value))
+            }
+        }
+        
+        case root(URL)
+        case path(String, next: Route)
+        case parameter(CustomStringConvertible, next: Route)
+    }
+}

@@ -9,6 +9,17 @@
 import Foundation
 
 let url = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("swagger.json")
+let classURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("class.swft")
+let enumURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("enum.swft")
+let operationURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("operation.swft")
+let scopeURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("scope.swft")
+let securityURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("security.swft")
+
+
+
+let operationTemplate = try! String(contentsOf: operationURL)
+let enumTemplate = try! String(contentsOf: enumURL)
+let classTemplate = try! String(contentsOf: classURL)
 
 let data = try! Data(contentsOf: url)
 let swagger = try! JSONDecoder().decode(Swagger.self, from: data)
@@ -86,109 +97,92 @@ extension String {
     }
 }
 
-extension Namespace.MetaType {
-	init?(from parameter: Swagger.Parameter) {
-		switch parameter.format {
-        case .int32:
-            self = .int
-        case .int64:
-            self = .int64
-        case .double, .float:
-            self = .double
-        case .date:
-            self = .date
-        case .dateTime:
-            self = .dateTime
-        default:
-			switch parameter.type {
-            case .array:
-                self = .array(Namespace.MetaType(from: parameter.items!)!)
-            case .boolean:
-                self = .bool
-            case .integer, .number:
-                self = .int
-            case .object:
-				self = .object(parameter.schema!.title!.camelCaps, Namespace.Struct(from: parameter.schema!))
-            case .string:
-                self = .string
-            }
-        }
-	}
-	
-    init?(from property: Swagger.Property) {
 
-        switch property.format {
-        case .int32:
-            self = .int
-        case .int64:
-            self = .int64
-        case .double, .float:
-            self = .double
-        case .date:
-            self = .date
-        case .dateTime:
-            self = .dateTime
-        default:
-            switch property.type {
-            case .array:
-                self = .array(Namespace.MetaType(from: property.items!)!)
-            case .boolean:
-                self = .bool
-            case .integer, .number:
-                self = .int
-            case .object:
-                self = .object(property.title!.camelCaps, Namespace.Struct(from: property))
-            case .string:
-                self = .string
+let paths = Dictionary(uniqueKeysWithValues: swagger.paths.map{(key: $0.key.components(separatedBy: "/").filter{!$0.isEmpty}, value: $0.value)})
+let root = Model.Route(node: .root , paths: paths)
+
+var typeIdentifiers: [Model.MetaType: [String]] = [:]
+var rawIDs: [Model.MetaType: [[String]]] = [:]
+
+func add(type: Model.MetaType, keyPath: [String]) {
+    
+    func store(_ type: Model.MetaType, _ keyPath: [String]) {
+        rawIDs[type, default: []].append(keyPath)
+        if let existing = typeIdentifiers[type] {
+            let prefix = existing.indices.clamped(to: keyPath.indices).prefix(while: {existing[$0] == keyPath[$0]})
+            let newKeyPath = Array(existing[prefix] + [keyPath.last!])
+            typeIdentifiers[type] = newKeyPath
+//            if newKeyPath != keyPath {
+//                store(type, newKeyPath)
+//            }
+        }
+        else {
+            typeIdentifiers[type] = keyPath
+        }
+    }
+    
+    switch type {
+    case let .enum(name, _):
+        store(type, keyPath + [name])
+    case let .array(type):
+        add(type: type, keyPath: keyPath)
+    case let .object(name, object):
+        store(type, keyPath + [name])
+        object.properties.values.forEach {
+            if name == "Success" {
+                add(type: $0, keyPath: keyPath)
+            }
+            else {
+                add(type: $0, keyPath: keyPath + [name])
             }
         }
+    default:
+        break
     }
 }
 
-extension Namespace.Struct {
-    init(from property: Swagger.Property) {
-		let pairs = property.properties?.map { i -> (String, Namespace.MetaType) in
-			if property.required?.contains(i.key) == true {
-				return (i.key, Namespace.MetaType(from: i.value)!)
-			}
-			else {
-				return (i.key, .optional(Namespace.MetaType(from: i.value)!))
-			}
+func add(route: Model.Route, keyPath: [String]) {
+    for operation in route.operations {
+        for parameter in operation.parameters.values {
+            add(type: parameter.type, keyPath: keyPath)
         }
-		properties = Dictionary(uniqueKeysWithValues: pairs ?? [])
+        if let response = operation.response {
+            add(type: response, keyPath: keyPath)
+        }
+    }
+    
+    for (key, route) in route.subpaths {
+        add(route: route, keyPath: keyPath + [key])
     }
 }
 
-extension Namespace.Parameter {
-	init(_ parameter: Swagger.Parameter) {
-		self.default = parameter.default
-		type = Namespace.MetaType(from: parameter)!
-	}
+add(route: root, keyPath: [])
+let conflicts = Dictionary(grouping: typeIdentifiers, by: {$0.value}).filter{$0.value.count > 1}
+for array in conflicts.values {
+    for (type, _) in array {
+        typeIdentifiers[type] = rawIDs[type]?.first
+    }
 }
+let ids = typeIdentifiers.map{$0.key.id()}.sorted()
+//let conflictIDs = conflicts.values.map{$0.map{rawIDs[$0.key]?.map{$0.map{$0.hasPrefix("{") ? String($0.dropFirst().dropLast()) : $0}.joined(separator: "_")} ?? []}}
+//print(conflictIDs)
+let names = Set(typeIdentifiers.values.flatMap{$0}).sorted()
 
-extension Namespace.Operation {
-	init(_ operation: Swagger.Operation, method: Swagger.Method) {
-		self.method = method
-		name = operation.operationId.camelCaps
-		let pairs = operation.parameters.map { i -> (String, Namespace.Parameter) in
-			let parameter = extract(from: i)
-			return (parameter.name.camelBack, Namespace.Parameter(parameter))
-		}
-		parameters = Dictionary(uniqueKeysWithValues: pairs)
-		security = operation.security?.flatMap{$0.evesso} ?? []
-		response = ((200..<300).lazy.compactMap{operation.responses[$0]}.first?.schema).map {
-			Namespace.MetaType(from: extract(from: $0))! }
-	}
-}
+//let group = Dictionary(grouping: queue, by: {$0.key[0]})
+//print(group)
 
 
-let paths = Dictionary(grouping: swagger.paths, by: {$0.key.components(separatedBy: "/")[1]}).mapValues{$0.map{$0.value}}
+/*let paths = Dictionary(grouping: swagger.paths, by: {$0.key.components(separatedBy: "/")[1]}).mapValues{$0.map{$0.value}}
 
 let namespaces = paths.map { i -> Namespace in
 	let operations = i.value.flatMap{$0}.map{j in Namespace.Operation(j.value, method: j.key)}
-	return Namespace(name: i.key.camelCaps, operations: Dictionary(uniqueKeysWithValues: operations.map{($0.name, $0)}))
+	return Namespace(name: i.key.camelCaps, operations: operations)
 }
-print(namespaces)
+for namespace in namespaces {
+    for operation in namespace.operations {
+        print(operation.name)
+    }
+}*/
 
 /*struct Namespace: Hashable {
     var name: String

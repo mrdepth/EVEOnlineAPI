@@ -8,7 +8,20 @@
 
 import Foundation
 
-let typeNames: [String: String] = [
+let typeNames: [String: String] = [:
+//    "characters_character_id_industry_jobs_200_ok": "CharacterIndustryJobs",
+//    "get_characters_character_id_industry_jobs_status" : "IndustryJobsStatus",
+//    "get_characters_character_id_contracts_status" : "ContractStatus",
+//    "post_characters_character_id_assets_locations_200_ok" : "AssetLocation",
+//    "post_characters_character_id_assets_names_200_ok" : "AssetName",
+//    "get_characters_character_id_contacts_labels_200_ok" : "CharacterContactLabel",
+//    "get_alliances_alliance_id_contacts_labels_200_ok" : "AllianceContactLabel",
+//    "get_characters_character_id_bookmarks_200_ok" : "Bookmark",
+//    "get_characters_character_id_contracts_contract_id_items_200_ok" : "ContractItem",
+//    "get_characters_character_id_contracts_contract_id_bids_200_ok" : "ContractBid",
+//    "get_characters_character_id_standings_200_ok" : "Standing",
+//    "get_wars_war_id_killmails_200_ok" : "Killmails",
+/*
 	//MARK: Alliance
 	"GetAlliancesAllianceIDOk"	: "Information",
 	"GetAlliancesNamesOk"	: "Name",
@@ -254,8 +267,7 @@ let typeNames: [String: String] = [
 	//MARK: Wars
 	"GetWarsWarIDOk"	: "WarInformation",
 	"GetWarsWarIDKillmailsOk"	: "Kills",
-
-	
+*/
 ]
 
 let operationNames: [String: String] = [
@@ -263,6 +275,6 @@ let operationNames: [String: String] = [
 	"get_search": "search"
 ]
 
-let conflicts: [String: String] = [
-	"Categories1" : "SearchCategories"
-]
+//let conflicts: [String: String] = [
+//	"Categories1" : "SearchCategories"
+//]

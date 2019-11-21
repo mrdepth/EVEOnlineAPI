@@ -120,6 +120,7 @@ extension Swagger {
         var title: String?
         var required: [String]?
         var uniqueItems: Bool?
+        var `enum`: [String]?
         
         static func == (lhs: Swagger.Property, rhs: Swagger.Property) -> Bool {
             lhs.description == rhs.description
@@ -131,6 +132,7 @@ extension Swagger {
                 && lhs.title == rhs.title
                 && lhs.required == rhs.required
                 && lhs.uniqueItems == rhs.uniqueItems
+                && lhs.enum == rhs.enum
         }
         
         func hash(into hasher: inout Hasher) {
@@ -143,6 +145,7 @@ extension Swagger {
             hasher.combine(description)
             hasher.combine(required)
             hasher.combine(uniqueItems)
+            hasher.combine(`enum`)
         }
     }
     
@@ -154,7 +157,20 @@ extension Swagger {
             case body
         }
         
-        enum Default: Hashable {
+        enum Default: Hashable, CustomStringConvertible {
+            var description: String {
+                switch self {
+                case let .integer(value):
+                    return String(describing: value)
+                case let .boolean(value):
+                    return String(describing: value)
+                case let .number(value):
+                    return String(describing: value)
+                case let .string(value):
+                    return String(describing: value)
+                }
+            }
+            
             case integer(Int)
             case number(Double)
             case boolean(Bool)

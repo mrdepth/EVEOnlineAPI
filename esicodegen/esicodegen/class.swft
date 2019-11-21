@@ -1,11 +1,7 @@
-{access}struct {className}: Codable, Hashable {
+public struct {className}: Codable, Hashable {
 
 {nested}
 {definitions}
-
-	public init({parameters}) {
-{initializations}
-	}
 
 	enum CodingKeys: String, CodingKey, DateFormatted {
 {codingKeys}

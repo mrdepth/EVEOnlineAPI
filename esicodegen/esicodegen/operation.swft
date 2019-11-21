@@ -1,26 +1,32 @@
 	
-	public func {operation}({definitions}) -> AnyPublisher<{result}, AFError> {
-
+	public func {operation}({arguments}) -> AnyPublisher<{result}, AFError> {
+        do {
+        
 {security}
 {body}
 
-		var headers = HTTPHeaders()
-		headers["Accept"] = "application/json"
+            var headers = HTTPHeaders()
+            headers["Accept"] = "application/json"
 {headers}
 
-		var query = [URLQueryItem]()
-		query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+            var query = [URLQueryItem]()
+            query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
 {queries}
 
-        let url = ESI.apiURL.appendingPathComponent("{url}")
-		var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-		components.queryItems = query
-
-        return esi.session.publisher(components,
-                                     method: .{method},
-                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-                                     headers: headers,
-                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-            .{decode}
-            .eraseToAnyPublisher()
+            let url = try route.asURL()
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+            components.queryItems = query
+    
+            return esi.session.publisher(components,
+                                         method: .{method},
+                                         encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+                                         headers: headers,
+                                         interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+                .{decode}
+                .eraseToAnyPublisher()
+    
+        }
+        catch {
+            return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+        }
 	}

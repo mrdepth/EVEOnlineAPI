@@ -1,4 +1,4 @@
-{access}enum {enum}: String, Codable, CustomStringConvertible {
+public enum {enum}: String, Codable, CustomStringConvertible {
 {cases}
 	
 	public var description: String {
