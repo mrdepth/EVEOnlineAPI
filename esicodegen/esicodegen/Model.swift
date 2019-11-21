@@ -13,9 +13,11 @@ struct Namespace {
     var operations: [String: Operation]
     
     struct Operation: Hashable {
-        var parameters: [String: MetaType]
+		var name: String
+        var parameters: [String: Parameter]
         var method: Swagger.Method
         var security: [String]
+		var response: MetaType?
     }
 
     indirect enum MetaType: Hashable {
@@ -36,8 +38,8 @@ struct Namespace {
         var properties: [String: MetaType]
     }
 
-//    struct Property: Hashable {
-//        var type: MetaType
-//        var `default`: Swagger.Parameter.Default?
-//    }
+    struct Parameter: Hashable {
+        var type: MetaType
+        var `default`: Swagger.Parameter.Default?
+    }
 }

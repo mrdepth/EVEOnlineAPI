@@ -92,34 +92,6 @@ extension Swagger {
 }
 
 extension Swagger {
-    /*struct Definition: Decodable, Hashable {
-        var description: String
-        var properties: [String: Property]
-        var required: [String]
-        var title: String
-        var type: ValueType
-        
-        enum CodingKeys: String, CodingKey {
-            case description
-            case properties
-            case required
-            case title
-            case type
-        }
-        
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            description = try container.decode(String.self, forKey: .description)
-            required = try container.decode([String].self, forKey: .required)
-            title = try container.decode(String.self, forKey: .title)
-            type = try container.decode(ValueType.self, forKey: .type)
-            properties = try container.decode([String: Property].self, forKey: .properties)
-        }
-    }*/
-    
-}
-
-extension Swagger {
     enum ValueType: String, Decodable, Hashable {
         case string
         case object
@@ -139,7 +111,7 @@ extension Swagger {
     }
     
     class Property: Decodable, Hashable {
-        var description: String
+        var description: String?
         var type: ValueType
         var format: ValueFormat?
         var properties: [String: Property]?
@@ -199,6 +171,7 @@ extension Swagger {
         var minimum: Int?
         var format: ValueFormat?
         var schema: Property?
+		var items: Property?
         
         enum CodingKeys: String, CodingKey {
             case `default`
@@ -211,6 +184,7 @@ extension Swagger {
             case minimum
             case format
             case schema
+			case items
         }
         
         init(from decoder: Decoder) throws {
@@ -223,6 +197,7 @@ extension Swagger {
             minimum = try container.decodeIfPresent(Int.self, forKey: .minimum)
             format = try container.decodeIfPresent(ValueFormat.self, forKey: .format)
             schema = try container.decodeIfPresent(Property.self, forKey: .schema)
+			items = try container.decodeIfPresent(Property.self, forKey: .items)
             
             let type = try container.decodeIfPresent(ValueType.self, forKey: .type) ?? .object
             self.type = type
@@ -269,6 +244,7 @@ extension Swagger {
         var tags: [String]
         var xAlternateVersions: [String]
         var xCachedSeconds: Int?
+		var security: [Security]?
         
         enum CodingKeys: String, CodingKey {
             case description
@@ -279,6 +255,7 @@ extension Swagger {
             case tags
             case xAlternateVersions = "x-alternate-versions"
             case xCachedSeconds = "x-cached-seconds"
+			case security
         }
         
         struct Response: Decodable, Hashable {
@@ -286,5 +263,9 @@ extension Swagger {
             var schema: Link<Property>?
             var headers: [String: Property]?
         }
+		
+		struct Security: Decodable, Hashable {
+			var evesso: [String]
+		}
     }
 }

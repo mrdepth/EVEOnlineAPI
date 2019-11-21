@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1287C3312385A566003BE643 /* swagger.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1287C3302385A465003BE643 /* swagger.json */; };
 		12F876BA1E9EB1B60099783E /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F876B91E9EB1B60099783E /* main.swift */; };
 		12F876DF1E9EB1EB0099783E /* operation.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 12F876C71E9EB1D10099783E /* operation.swft */; };
 		12F876E01E9EB1EB0099783E /* class.swft in CopyFiles */ = {isa = PBXBuildFile; fileRef = 12F876C01E9EB1D10099783E /* class.swft */; };
@@ -25,6 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				1287C3312385A566003BE643 /* swagger.json in CopyFiles */,
 				12F876DF1E9EB1EB0099783E /* operation.swft in CopyFiles */,
 				12F876E01E9EB1EB0099783E /* class.swft in CopyFiles */,
 				12F876E11E9EB1EB0099783E /* scope.swft in CopyFiles */,
@@ -36,6 +38,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1287C3302385A465003BE643 /* swagger.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = swagger.json; sourceTree = "<group>"; };
 		12F876B61E9EB1B60099783E /* esicodegen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = esicodegen; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F876B91E9EB1B60099783E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		12F876C01E9EB1D10099783E /* class.swft */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = class.swft; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 				12F876CF1E9EB1D10099783E /* scope.swft */,
 				12F876C11E9EB1D10099783E /* enum.swft */,
 				12F876D11E9EB1D10099783E /* security.swft */,
+				1287C3302385A465003BE643 /* swagger.json */,
 				12F876C21E9EB1D10099783E /* ESI.swift */,
 				12F876C81E9EB1D10099783E /* Operation.swift */,
 				12F876C91E9EB1D10099783E /* Parameter.swift */,

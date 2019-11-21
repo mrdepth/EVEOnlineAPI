@@ -8,16 +8,24 @@
 
 import Foundation
 
+let url = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("swagger.json")
 
-let url = "/Users/artem.shimanski/Downloads/swagger.json"
-
-let data = try! Data(contentsOf: URL(fileURLWithPath: url))
+let data = try! Data(contentsOf: url)
 let swagger = try! JSONDecoder().decode(Swagger.self, from: data)
 
 func extract(from link: Swagger.Link<Swagger.Property>) -> Swagger.Property {
     switch link {
     case let .ref(id):
         return swagger.definitions[id.components(separatedBy: "/").last!]!
+    case let .value(value):
+        return value
+    }
+}
+
+func extract(from link: Swagger.Link<Swagger.Parameter>) -> Swagger.Parameter {
+    switch link {
+    case let .ref(id):
+        return swagger.parameters[id.components(separatedBy: "/").last!]!
     case let .value(value):
         return value
     }
@@ -79,8 +87,35 @@ extension String {
 }
 
 extension Namespace.MetaType {
+	init?(from parameter: Swagger.Parameter) {
+		switch parameter.format {
+        case .int32:
+            self = .int
+        case .int64:
+            self = .int64
+        case .double, .float:
+            self = .double
+        case .date:
+            self = .date
+        case .dateTime:
+            self = .dateTime
+        default:
+			switch parameter.type {
+            case .array:
+                self = .array(Namespace.MetaType(from: parameter.items!)!)
+            case .boolean:
+                self = .bool
+            case .integer, .number:
+                self = .int
+            case .object:
+				self = .object(parameter.schema!.title!.camelCaps, Namespace.Struct(from: parameter.schema!))
+            case .string:
+                self = .string
+            }
+        }
+	}
+	
     init?(from property: Swagger.Property) {
-        guard let title = property.title else {return nil}
 
         switch property.format {
         case .int32:
@@ -102,7 +137,7 @@ extension Namespace.MetaType {
             case .integer, .number:
                 self = .int
             case .object:
-                self = .object(title.camelBack, Namespace.Struct(from: property))
+                self = .object(property.title!.camelCaps, Namespace.Struct(from: property))
             case .string:
                 self = .string
             }
@@ -112,13 +147,48 @@ extension Namespace.MetaType {
 
 extension Namespace.Struct {
     init(from property: Swagger.Property) {
-        properties = property.properties?.mapValues{ i -> Namespace.MetaType in
-            Namespace.MetaType(from: $0)!
-        } ?? [:]
+		let pairs = property.properties?.map { i -> (String, Namespace.MetaType) in
+			if property.required?.contains(i.key) == true {
+				return (i.key, Namespace.MetaType(from: i.value)!)
+			}
+			else {
+				return (i.key, .optional(Namespace.MetaType(from: i.value)!))
+			}
+        }
+		properties = Dictionary(uniqueKeysWithValues: pairs ?? [])
     }
 }
 
+extension Namespace.Parameter {
+	init(_ parameter: Swagger.Parameter) {
+		self.default = parameter.default
+		type = Namespace.MetaType(from: parameter)!
+	}
+}
 
+extension Namespace.Operation {
+	init(_ operation: Swagger.Operation, method: Swagger.Method) {
+		self.method = method
+		name = operation.operationId.camelCaps
+		let pairs = operation.parameters.map { i -> (String, Namespace.Parameter) in
+			let parameter = extract(from: i)
+			return (parameter.name.camelBack, Namespace.Parameter(parameter))
+		}
+		parameters = Dictionary(uniqueKeysWithValues: pairs)
+		security = operation.security?.flatMap{$0.evesso} ?? []
+		response = ((200..<300).lazy.compactMap{operation.responses[$0]}.first?.schema).map {
+			Namespace.MetaType(from: extract(from: $0))! }
+	}
+}
+
+
+let paths = Dictionary(grouping: swagger.paths, by: {$0.key.components(separatedBy: "/")[1]}).mapValues{$0.map{$0.value}}
+
+let namespaces = paths.map { i -> Namespace in
+	let operations = i.value.flatMap{$0}.map{j in Namespace.Operation(j.value, method: j.key)}
+	return Namespace(name: i.key.camelCaps, operations: Dictionary(uniqueKeysWithValues: operations.map{($0.name, $0)}))
+}
+print(namespaces)
 
 /*struct Namespace: Hashable {
     var name: String
