@@ -1,0 +1,12 @@
+struct {name} {
+	let esi: ESI
+	let route: Route
+	
+	{operations}
+	
+	{routes}
+	
+	{paths}
+	
+	{classes}
+}

@@ -22,17 +22,17 @@ import Foundation
 //}
 
 struct Swagger: Decodable, Hashable {
-    var basePath: String
-    var host: String
-    var swagger: String
-    var consumes: [String]
-    var definitions: [String: Property]
-    var info: Info
-    var parameters: [String: Parameter]
-    var paths: [String: [Method: Operation]]
-    var produces: [String]
-    var schemes: [String]
-    var securityDefinitions: SecurityDefinitions
+    let basePath: String
+    let host: String
+    let swagger: String
+    let consumes: [String]
+    let definitions: [String: Property]
+    let info: Info
+    let parameters: [String: Parameter]
+    let paths: [String: [Method: Operation]]
+    let produces: [String]
+    let schemes: [String]
+    let securityDefinitions: SecurityDefinitions
     
     enum CodingKeys: String, CodingKey {
         case basePath
@@ -75,9 +75,9 @@ extension Swagger {
     }
     
     struct Info: Decodable, Hashable {
-        var description: String
-        var title: String
-        var version: String
+        let description: String
+        let title: String
+        let version: String
     }
     
     struct SecurityDefinitions: Decodable, Hashable {
@@ -87,7 +87,7 @@ extension Swagger {
             var scopes: [String: String]
             var type: String
         }
-        var evesso: Evesso
+        let evesso: Evesso
     }
 }
 
@@ -111,16 +111,16 @@ extension Swagger {
     }
     
     class Property: Decodable, Hashable {
-        var description: String?
-        var type: ValueType
-        var format: ValueFormat?
-        var properties: [String: Property]?
-        var items: Property?
-        var maxItems: Int?
-        var title: String?
-        var required: [String]?
-        var uniqueItems: Bool?
-        var `enum`: [String]?
+        let description: String?
+        let type: ValueType
+        let format: ValueFormat?
+        let properties: [String: Property]?
+        let items: Property?
+        let maxItems: Int?
+        let title: String?
+        let required: [String]?
+        let uniqueItems: Bool?
+        let `enum`: [String]?
         
         static func == (lhs: Swagger.Property, rhs: Swagger.Property) -> Bool {
             lhs.description == rhs.description
@@ -167,7 +167,7 @@ extension Swagger {
                 case let .number(value):
                     return String(describing: value)
                 case let .string(value):
-                    return String(describing: value)
+                    return "\"\(value)\""
                 }
             }
             
@@ -177,17 +177,17 @@ extension Swagger {
             case string(String)
         }
         
-        var `default`: Default?
-        var description: String
-        var `enum`: [String]?
-        var `in`: In
-        var name: String
-        var type: ValueType
-        var required: Bool
-        var minimum: Int?
-        var format: ValueFormat?
-        var schema: Property?
-		var items: Property?
+        let `default`: Default?
+        let description: String
+        let `enum`: [String]?
+        let `in`: In
+        let name: String
+        let type: ValueType
+        let required: Bool
+        let minimum: Int?
+        let format: ValueFormat?
+        let schema: Property?
+		let items: Property?
         
         enum CodingKeys: String, CodingKey {
             case `default`
@@ -227,7 +227,7 @@ extension Swagger {
             case .number:
                 `default` = try container.decodeIfPresent(Double.self, forKey: .default).map{.number($0)}
             case .object, .array:
-                break
+                `default` = nil
             }
         }
     }
@@ -252,15 +252,15 @@ extension Swagger {
     
     struct Operation: Decodable, Hashable {
         
-        var description: String
-        var operationId: String
-        var parameters: [Link<Parameter>]
-        var responses: [Int: Response]
-        var summary: String
-        var tags: [String]
-        var xAlternateVersions: [String]
-        var xCachedSeconds: Int?
-		var security: [Security]?
+        let description: String
+        let operationId: String
+        let parameters: [Link<Parameter>]
+        let responses: [Int: Response]
+        let summary: String
+        let tags: [String]
+        let xAlternateVersions: [String]
+        let xCachedSeconds: Int?
+		let security: [Security]?
         
         enum CodingKeys: String, CodingKey {
             case description
@@ -275,13 +275,13 @@ extension Swagger {
         }
         
         struct Response: Decodable, Hashable {
-            var description: String
-            var schema: Link<Property>?
-            var headers: [String: Property]?
+            let description: String
+            let schema: Link<Property>?
+            let headers: [String: Property]?
         }
 		
 		struct Security: Decodable, Hashable {
-			var evesso: [String]
+			let evesso: [String]
 		}
     }
 }

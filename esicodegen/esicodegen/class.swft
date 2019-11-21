@@ -1,7 +1,7 @@
-public struct {className}: Codable, Hashable {
+public struct {name}: Codable, Hashable {
 
-{nested}
-{definitions}
+{classes}
+{properties}
 
 	enum CodingKeys: String, CodingKey, DateFormatted {
 {codingKeys}

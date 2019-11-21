@@ -13,11 +13,11 @@ struct Model {
 //    var operations: [Operation]
     
     struct Operation: Hashable {
-		var name: String
-        var parameters: [String: Parameter]
-        var method: Swagger.Method
-        var security: [String]
-		var response: MetaType?
+		let name: String
+        let parameters: [String: Parameter]
+        let method: Swagger.Method
+        let security: [String]
+		let response: MetaType?
     }
 
     indirect enum MetaType: Hashable {
@@ -35,13 +35,13 @@ struct Model {
     }
 
     struct Struct: Hashable {
-        var properties: [String: MetaType]
+        let properties: [String: MetaType]
     }
 
     struct Parameter: Hashable {
-        var type: MetaType
-        var `default`: Swagger.Parameter.Default?
-        var location: Swagger.Parameter.In
+        let type: MetaType
+        let `default`: Swagger.Parameter.Default?
+        let location: Swagger.Parameter.In
     }
 }
 
@@ -223,7 +223,8 @@ extension Model.MetaType {
     func id() -> String {
         switch self {
         case .enum, .object:
-            return typeIdentifiers[self]!.map{ $0.hasPrefix("{") ? String($0.dropFirst().dropLast()) : $0 }.map{$0.camelCaps}.joined(separator: ".")
+			assert(typeIdentifiers[self] != nil)
+            return typeIdentifiers[self]!.map{$0.camelCaps}.joined(separator: ".")
         case let .optional(type):
             return "\(type.id())?"
         default:
@@ -281,28 +282,6 @@ extension Model.Parameter {
     }
 }
 
-extension Model.MetaType {
-    func definition() -> String? {
-        switch self {
-        case let .array(type):
-            return type.definition()
-        case let .enum(name, cases):
-            var swift = enumTemplate
-            swift = swift.replacingOccurrences(of: "{enum}", with: name.camelCaps)
-            swift = swift.replacingOccurrences(of: "{enum}", with: cases.map{($0.camelBack, $0)}.map{
-                $0 == $1 ? $0 : "\($0) = \"\($1)\""
-            }.joined(separator: "\n"))
-            return swift
-        case let .object(name, _):
-            return name
-        case let .optional(type):
-            return type.definition()
-        default:
-            return nil
-        }
-    }
-}
-
 extension Model.Operation {
     func swift() -> String {
         var swift = operationTemplate
@@ -313,12 +292,12 @@ extension Model.Operation {
         var body: String?
         var securityCheck: [String] = []
         
-        for (name, parameter) in parameters.filter({$0.value.location != .path}).sorted(by: {$0.key < $1.key}) {
+		for (name, parameter) in parameters.filter({$0.value.location != .path && !skip.contains($0.key)}).sorted(by: {$0.key < $1.key}) {
             if let defaults = parameter.default {
-                arguments.append("\(name): \(parameter.type.id()) = \(defaults)")
+				arguments.append("\(name.camelBack): \(parameter.type.id()) = \(defaults)")
             }
             else {
-                arguments.append("\(name): \(parameter.type.id())")
+                arguments.append("\(name.camelBack): \(parameter.type.id())")
             }
             switch parameter.location {
             case .body:
@@ -372,5 +351,97 @@ extension Model.Operation {
         
         swift = swift.replacingOccurrences(of: "{decode}", with: decode)
         return swift
+    }
+}
+
+extension Model.Route {
+	func swift(keyPath: [String]) -> String {
+		var swift = routeTemplate
+		
+		var s = operations.sorted{$0.name < $1.name}.map{$0.swift()}.joined(separator: "\n")
+		swift = swift.replacingOccurrences(of: "{operations}", with: s)
+
+		let subpaths = self.subpaths.sorted(by: {$0.key < $1.key})
+		
+		func findParameter(_ parameter: String, in route: Model.Route) -> Model.Parameter? {
+			route.operations.flatMap{$0.parameters}.first{$0.key == parameter}?.value ??
+				route.subpaths.values.lazy.compactMap{findParameter(parameter, in: $0)}.first
+		}
+		
+		s = subpaths.map{$0.value.swift(keyPath: keyPath + [$0.key])}.joined(separator: "\n")
+		swift = swift.replacingOccurrences(of: "{paths}", with: s)
+
+		s = subpaths.map { (key, route) -> String in
+			if key.hasPrefix("{") {
+				let name = String(key.dropLast().dropFirst())
+				let parameter = findParameter(name, in: route)
+				let s: String
+				if let `default` = parameter?.default {
+					s = "func \(key.camelBack)(_ value: \(parameter!.type.id()) = \(`default`)) {\n"
+				}
+				else {
+					s = "func \(key.camelBack)(_ value: \(parameter!.type.id())) {\n"
+				}
+				return s + "\(key.camelCaps)(esi: esi, route: (esi: esi, route: .parameter(value, next: route)))\n}"
+
+			}
+			else {
+				return "func \(key.camelBack)() {\n" +
+				"\(key.camelCaps)(esi: esi, route: .path(\"\(key)\", next: route))\n}"
+			}
+		}.joined(separator: "\n")
+		
+		swift = swift.replacingOccurrences(of: "{routes}", with: s)
+		if !keyPath.isEmpty {
+			swift = swift.replacingOccurrences(of: "{name}", with: keyPath.last!.camelCaps)
+		}
+		
+		let nested = typeIdentifiers.filter{Array($0.value.prefix(keyPath.count)) == keyPath && $0.value.count == keyPath.count + 1}.compactMap{$0.key.swift(keyPath: keyPath)}
+
+		swift = swift.replacingOccurrences(of: "{classes}", with: nested.joined(separator: "\n"))
+
+		return swift
+	}
+}
+
+extension Model.MetaType {
+	func swift(keyPath: [String]) -> String? {
+        switch self {
+        case let .array(type):
+			return type.swift(keyPath: keyPath)
+        case let .enum(name, cases):
+            var swift = enumTemplate
+            swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps)
+            swift = swift.replacingOccurrences(of: "{cases}", with: cases.map{($0.camelBack, $0)}.map{
+                $0 == $1 ? "case \($0)" : "case \($0) = \"\($1)\""
+            }.joined(separator: "\n"))
+            return swift
+        case let .object(name, object):
+			var swift = classTemplate
+            swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps)
+			let properties = object.properties.sorted(by: {$0.key < $1.key})
+			let rows = properties.map { (name, property) in
+				"let \(name.camelBack): \(property.id())"
+			}
+			
+			swift = swift.replacingOccurrences(of: "{properties}", with: rows.joined(separator: "\n"))
+			
+			let codingKeys = properties.map{$0.key}.map{($0.camelBack, $0)}.map{
+                $0 == $1 ? "case \($0)" : "case \($0) = \"\($1)\""
+            }
+			
+			swift = swift.replacingOccurrences(of: "{codingKeys}", with: codingKeys.joined(separator: "\n"))
+			
+			let newKeyPath = keyPath + [name]
+			let nested = typeIdentifiers.filter{Array($0.value.prefix(newKeyPath.count)) == newKeyPath && $0.value.count == newKeyPath.count + 1}.compactMap{$0.key.swift(keyPath: newKeyPath)}
+
+			swift = swift.replacingOccurrences(of: "{classes}", with: nested.joined(separator: "\n"))
+			
+            return swift
+        case let .optional(type):
+            return type.swift(keyPath: keyPath)
+        default:
+            return nil
+        }
     }
 }

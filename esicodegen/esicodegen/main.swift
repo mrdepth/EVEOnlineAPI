@@ -8,18 +8,21 @@
 
 import Foundation
 
-let url = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("swagger.json")
-let classURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("class.swft")
-let enumURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("enum.swft")
-let operationURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("operation.swft")
-let scopeURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("scope.swft")
-let securityURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent().appendingPathComponent("security.swft")
+let baseURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent()
+let url = baseURL.appendingPathComponent("swagger.json")
+let classURL = baseURL.appendingPathComponent("class.swft")
+let enumURL = baseURL.appendingPathComponent("enum.swft")
+let operationURL = baseURL.appendingPathComponent("operation.swft")
+let scopeURL = baseURL.appendingPathComponent("scope.swft")
+let securityURL = baseURL.appendingPathComponent("security.swft")
+let routeURL = baseURL.appendingPathComponent("route.swft")
 
-
+let skip = Set(["datasource", "token", "user_agent", "X-User-Agent", "If-None-Match"])
 
 let operationTemplate = try! String(contentsOf: operationURL)
 let enumTemplate = try! String(contentsOf: enumURL)
 let classTemplate = try! String(contentsOf: classURL)
+let routeTemplate = try! String(contentsOf: routeURL)
 
 let data = try! Data(contentsOf: url)
 let swagger = try! JSONDecoder().decode(Swagger.self, from: data)
@@ -46,7 +49,7 @@ extension String {
     
     var camelCaps: String {
         return components(separatedBy: CharacterSet(charactersIn: "_-. ")).enumerated().map { (i, s) -> String in
-            let s = s.replacingOccurrences(of: "'", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "")
+			let s = s.replacingOccurrences(of: "'", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "{", with: "").replacingOccurrences(of: "}", with: "")
             
             guard !s.isEmpty else {return ""}
             if i > 0 {
@@ -136,6 +139,8 @@ func add(type: Model.MetaType, keyPath: [String]) {
                 add(type: $0, keyPath: keyPath + [name])
             }
         }
+	case let .optional(type):
+		add(type: type, keyPath: keyPath)
     default:
         break
     }
@@ -167,6 +172,9 @@ let ids = typeIdentifiers.map{$0.key.id()}.sorted()
 //let conflictIDs = conflicts.values.map{$0.map{rawIDs[$0.key]?.map{$0.map{$0.hasPrefix("{") ? String($0.dropFirst().dropLast()) : $0}.joined(separator: "_")} ?? []}}
 //print(conflictIDs)
 let names = Set(typeIdentifiers.values.flatMap{$0}).sorted()
+
+let r = root.swift(keyPath: [])
+print(r)
 
 //let group = Dictionary(grouping: queue, by: {$0.key[0]})
 //print(group)
