@@ -5,1154 +5,1217 @@ import Combine
 
 extension ESI {
 	public var universe: Universe {
-		return Universe(esi: self)
+		return Universe(esi: self, route: .path("universe", next: .root(ESI.apiURL)))
 	}
 	
 	public struct Universe {
 		let esi: ESI
+		let route: APIRoute
 		
 		
-		public func getSystemKills(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.SystemKills], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/system_kills/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
+		
+		public func ancestries() -> Ancestries {
+			Ancestries(esi: esi, route: .path("ancestries", next: route))
+		}
+		public func asteroidBelts() -> AsteroidBelts {
+			AsteroidBelts(esi: esi, route: .path("asteroid_belts", next: route))
+		}
+		public func bloodlines() -> Bloodlines {
+			Bloodlines(esi: esi, route: .path("bloodlines", next: route))
+		}
+		public func categories() -> Categories {
+			Categories(esi: esi, route: .path("categories", next: route))
+		}
+		public func constellations() -> Constellations {
+			Constellations(esi: esi, route: .path("constellations", next: route))
+		}
+		public func factions() -> Factions {
+			Factions(esi: esi, route: .path("factions", next: route))
+		}
+		public func graphics() -> Graphics {
+			Graphics(esi: esi, route: .path("graphics", next: route))
+		}
+		public func groups() -> Groups {
+			Groups(esi: esi, route: .path("groups", next: route))
+		}
+		public func ids() -> Ids {
+			Ids(esi: esi, route: .path("ids", next: route))
+		}
+		public func moons() -> Moons {
+			Moons(esi: esi, route: .path("moons", next: route))
+		}
+		public func names() -> Names {
+			Names(esi: esi, route: .path("names", next: route))
+		}
+		public func planets() -> Planets {
+			Planets(esi: esi, route: .path("planets", next: route))
+		}
+		public func races() -> Races {
+			Races(esi: esi, route: .path("races", next: route))
+		}
+		public func regions() -> Regions {
+			Regions(esi: esi, route: .path("regions", next: route))
+		}
+		public func schematics() -> Schematics {
+			Schematics(esi: esi, route: .path("schematics", next: route))
+		}
+		public func stargates() -> Stargates {
+			Stargates(esi: esi, route: .path("stargates", next: route))
+		}
+		public func stars() -> Stars {
+			Stars(esi: esi, route: .path("stars", next: route))
+		}
+		public func stations() -> Stations {
+			Stations(esi: esi, route: .path("stations", next: route))
+		}
+		public func structures() -> Structures {
+			Structures(esi: esi, route: .path("structures", next: route))
+		}
+		public func systemJumps() -> SystemJumps {
+			SystemJumps(esi: esi, route: .path("system_jumps", next: route))
+		}
+		public func systemKills() -> SystemKills {
+			SystemKills(esi: esi, route: .path("system_kills", next: route))
+		}
+		public func systems() -> Systems {
+			Systems(esi: esi, route: .path("systems", next: route))
+		}
+		public func types() -> Types {
+			Types(esi: esi, route: .path("types", next: route))
 		}
 		
-		
-		public func getSystemJumps(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.Jump], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/system_jumps/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getNamesAndCategoriesForSetOfIDs(ids: [Int], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.Name], AFError> {
-			
-			
-			let body = try? JSONEncoder().encode(ids)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/names/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .post,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getMoonInformation(moonID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.MoonInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/moons/\(moonID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getRegions(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/regions/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getFactions(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.Faction], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/factions/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getTypes(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.description {
-				query.append(URLQueryItem(name: "page", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/types/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getItemGroups(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.description {
-				query.append(URLQueryItem(name: "page", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/groups/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getAsteroidBeltInformation(asteroidBeltID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/asteroid_belts/\(asteroidBeltID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getStructureInformation(structureID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.StructureInformation, AFError> {
-			
-			let scopes = esi.token?.scopes ?? []
-			guard scopes.contains("esi-universe.read_structures.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/structures/\(structureID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getConstellations(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/constellations/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getCharacterRaces(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.Race], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/races/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getRegionInformation(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, regionID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.RegionInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/regions/\(regionID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getConstellationInformation(acceptLanguage: AcceptLanguage? = nil, constellationID: Int, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.ConstellationInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/constellations/\(constellationID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getStationInformation(stationID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.StationInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/stations/\(stationID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getGraphicInformation(graphicID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.GraphicInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/graphics/\(graphicID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getItemCategories(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/categories/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getAncestries(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.GetUniverseAncestriesOk], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/ancestries/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getItemCategoryInformation(acceptLanguage: AcceptLanguage? = nil, categoryID: Int, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.ItemCategoryInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/categories/\(categoryID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getItemGroupInformation(acceptLanguage: AcceptLanguage? = nil, groupID: Int, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.ItemGroupInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/groups/\(groupID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func listAllPublicStructures(filter: Universe.Filter? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int64], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = filter?.description {
-				query.append(URLQueryItem(name: "filter", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/structures/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getStarInformation(starID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.GetUniverseStarsStarIDOk, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/stars/\(starID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getTypeInformation(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.TypeInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/types/\(typeID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getGraphics(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/graphics/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getSolarSystemInformation(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, systemID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.SolarSystemInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/systems/\(systemID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getStargateInformation(stargateID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.StargateInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/stargates/\(stargateID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getPlanetInformation(planetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.PlanetInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/planets/\(planetID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getSolarSystems(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/systems/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func bulkNamesToIDs(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, names: [String], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Universe.PostUniverseIdsOk, AFError> {
-			
-			
-			let body = try? JSONEncoder().encode(names)
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			headers["Content-Type"] = "application/json"
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/ids/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .post,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getBloodlines(acceptLanguage: AcceptLanguage? = nil, language: Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Universe.Bloodline], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			if let v = acceptLanguage?.description {
-				headers["Accept-Language"] = v
-			}
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = language?.description {
-				query.append(URLQueryItem(name: "language", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/universe/bloodlines/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public struct GetUniverseStargatesStargateIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
+		public struct Ancestries {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let language = language {
+						query.append(URLQueryItem(name: "language", value: language.description))
 					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
 				}
 			}
-		}
-		
-		
-		public struct GetUniverseStationsStationIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseGroupsGroupIDNotFound: Codable, Hashable {
 			
 			
-			public var error: String?
 			
-			public init(error: String?) {
-				self.error = error
-			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseAsteroidBeltsAsteroidBeltIDOk: Codable, Hashable {
-			
-			public struct GetUniverseAsteroidBeltsAsteroidBeltIDPosition: Codable, Hashable {
+			public struct Success: Codable, Hashable {
 				
 				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
+				public let bloodlineID: Int
+				public let localizedDescription: String
+				public let iconID: Int?
+				public let id: Int
+				public let name: String
+				public let shortDescription: String?
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
+					case bloodlineID = "bloodline_id"
+					case localizedDescription = "description"
+					case iconID = "icon_id"
+					case id
+					case name
+					case shortDescription = "short_description"
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+						return nil
+					}
+				}
+			}
+			
+		}
+		
+		public struct AsteroidBelts {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func asteroidBeltID(_ value: Int) -> AsteroidBeltID {
+				AsteroidBeltID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct AsteroidBeltID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let name: String
+					public let position: ESI.Characters.Position
+					public let systemID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case name
+						case position
+						case systemID = "system_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
-			}
-			
-			public var name: String
-			public var position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition
-			public var systemID: Int
-			
-			public init(name: String, position: Universe.GetUniverseAsteroidBeltsAsteroidBeltIDOk.GetUniverseAsteroidBeltsAsteroidBeltIDPosition, systemID: Int) {
-				self.name = name
-				self.position = position
-				self.systemID = systemID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case position
-				case systemID = "system_id"
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
 			}
+			
+			
+			
 		}
 		
-		
-		public struct RegionInformation: Codable, Hashable {
+		public struct Bloodlines {
+			let esi: ESI
+			let route: APIRoute
 			
 			
-			public var constellations: [Int]
-			public var localizedDescription: String?
-			public var name: String
-			public var regionID: Int
-			
-			public init(constellations: [Int], localizedDescription: String?, name: String, regionID: Int) {
-				self.constellations = constellations
-				self.localizedDescription = localizedDescription
-				self.name = name
-				self.regionID = regionID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case constellations
-				case localizedDescription = "description"
-				case name
-				case regionID = "region_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
+			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let language = language {
+						query.append(URLQueryItem(name: "language", value: language.description))
 					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
 				}
 			}
-		}
-		
-		
-		public struct MoonInformation: Codable, Hashable {
 			
-			public struct GetUniverseMoonsMoonIDPosition: Codable, Hashable {
+			
+			
+			
+			
+			
+			public struct Success: Codable, Hashable {
 				
 				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
+				public let bloodlineID: Int
+				public let charisma: Int
+				public let corporationID: Int
+				public let localizedDescription: String
+				public let intelligence: Int
+				public let memory: Int
+				public let name: String
+				public let perception: Int
+				public let raceID: Int
+				public let shipTypeID: Int
+				public let willpower: Int
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
+					case bloodlineID = "bloodline_id"
+					case charisma
+					case corporationID = "corporation_id"
+					case localizedDescription = "description"
+					case intelligence
+					case memory
+					case name
+					case perception
+					case raceID = "race_id"
+					case shipTypeID = "ship_type_id"
+					case willpower
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+						return nil
+					}
+				}
+			}
+			
+		}
+		
+		public struct Categories {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func categoryID(_ value: Int) -> CategoryID {
+				CategoryID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct CategoryID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let language = language {
+							query.append(URLQueryItem(name: "language", value: language.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let categoryID: Int
+					public let groups: [Int]
+					public let name: String
+					public let published: Bool
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case categoryID = "category_id"
+						case groups
+						case name
+						case published
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
-			}
-			
-			public var moonID: Int
-			public var name: String
-			public var position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition
-			public var systemID: Int
-			
-			public init(moonID: Int, name: String, position: Universe.MoonInformation.GetUniverseMoonsMoonIDPosition, systemID: Int) {
-				self.moonID = moonID
-				self.name = name
-				self.position = position
-				self.systemID = systemID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case moonID = "moon_id"
-				case name
-				case position
-				case systemID = "system_id"
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
+			}
+			
+			
+			
+		}
+		
+		public struct Constellations {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func constellationID(_ value: Int) -> ConstellationID {
+				ConstellationID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct ConstellationID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
 						
-						default: return nil
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let language = language {
+							query.append(URLQueryItem(name: "language", value: language.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let constellationID: Int
+					public let name: String
+					public let position: ESI.Characters.Position
+					public let regionID: Int
+					public let systems: [Int]
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case constellationID = "constellation_id"
+						case name
+						case position
+						case regionID = "region_id"
+						case systems
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		public struct Factions {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let language = language {
+						query.append(URLQueryItem(name: "language", value: language.description))
+					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			
+			
+			
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public let corporationID: Int?
+				public let localizedDescription: String
+				public let factionID: Int
+				public let isUnique: Bool
+				public let militiaCorporationID: Int?
+				public let name: String
+				public let sizeFactor: Double
+				public let solarSystemID: Int?
+				public let stationCount: Int
+				public let stationSystemCount: Int
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case corporationID = "corporation_id"
+					case localizedDescription = "description"
+					case factionID = "faction_id"
+					case isUnique = "is_unique"
+					case militiaCorporationID = "militia_corporation_id"
+					case name
+					case sizeFactor = "size_factor"
+					case solarSystemID = "solar_system_id"
+					case stationCount = "station_count"
+					case stationSystemCount = "station_system_count"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
 					}
 				}
 			}
+			
 		}
 		
-		
-		public struct GetUniversePlanetsPlanetIDNotFound: Codable, Hashable {
+		public struct Graphics {
+			let esi: ESI
+			let route: APIRoute
 			
 			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+			
+			public func graphicID(_ value: Int) -> GraphicID {
+				GraphicID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct GraphicID {
+				let esi: ESI
+				let route: APIRoute
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
+				
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
 						
-						default: return nil
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let collisionFile: String?
+					public let graphicFile: String?
+					public let graphicID: Int
+					public let iconFolder: String?
+					public let sofDna: String?
+					public let sofFationName: String?
+					public let sofHullName: String?
+					public let sofRaceName: String?
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case collisionFile = "collision_file"
+						case graphicFile = "graphic_file"
+						case graphicID = "graphic_id"
+						case iconFolder = "icon_folder"
+						case sofDna = "sof_dna"
+						case sofFationName = "sof_fation_name"
+						case sofHullName = "sof_hull_name"
+						case sofRaceName = "sof_race_name"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		public struct Groups {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let page = page {
+						query.append(URLQueryItem(name: "page", value: page.description))
+					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func groupID(_ value: Int) -> GroupID {
+				GroupID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct GroupID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let language = language {
+							query.append(URLQueryItem(name: "language", value: language.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let categoryID: Int
+					public let groupID: Int
+					public let name: String
+					public let published: Bool
+					public let types: [Int]
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case categoryID = "category_id"
+						case groupID = "group_id"
+						case name
+						case published
+						case types
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		public struct Ids {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func post(language: ESI.Markets.Language? = nil, names: [String], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				do {
+					
+					
+					let body = try JSONEncoder().encode(names)
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					headers["Content-Type"] = "application/json"
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let language = language {
+						query.append(URLQueryItem(name: "language", value: language.description))
+					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .post,
+					encoding: BodyDataEncoding(data: body),
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			
+			
+			
+			
+			public struct Constellation: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
 					}
 				}
 			}
-		}
-		
-		
-		public struct GetUniverseAncestriesOk: Codable, Hashable {
 			
-			
-			public var bloodlineID: Int
-			public var localizedDescription: String
-			public var iconID: Int?
-			public var id: Int
-			public var name: String
-			public var shortDescription: String?
-			
-			public init(bloodlineID: Int, localizedDescription: String, iconID: Int?, id: Int, name: String, shortDescription: String?) {
-				self.bloodlineID = bloodlineID
-				self.localizedDescription = localizedDescription
-				self.iconID = iconID
-				self.id = id
-				self.name = name
-				self.shortDescription = shortDescription
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case bloodlineID = "bloodline_id"
-				case localizedDescription = "description"
-				case iconID = "icon_id"
-				case id
-				case name
-				case shortDescription = "short_description"
+			public struct Character: Codable, Hashable {
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
 					}
 				}
 			}
+			
+			public struct Agent: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Corporation: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Region: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Alliance: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public let agents: [ESI.Universe.Ids.Agent]?
+				public let alliances: [ESI.Universe.Ids.Alliance]?
+				public let characters: [ESI.Universe.Ids.Character]?
+				public let constellations: [ESI.Universe.Ids.Constellation]?
+				public let corporations: [ESI.Universe.Ids.Corporation]?
+				public let factions: [ESI.Universe.Ids.Faction]?
+				public let inventoryTypes: [ESI.Universe.Ids.InventoryType]?
+				public let regions: [ESI.Universe.Ids.Region]?
+				public let stations: [ESI.Universe.Ids.Station]?
+				public let systems: [ESI.Universe.Ids.System]?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case agents
+					case alliances
+					case characters
+					case constellations
+					case corporations
+					case factions
+					case inventoryTypes = "inventory_types"
+					case regions
+					case stations
+					case systems
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct System: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Station: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Faction: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct InventoryType: Codable, Hashable {
+				
+				
+				public let id: Int?
+				public let name: String?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
 		}
 		
+		public struct Moons {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func moonID(_ value: Int) -> MoonID {
+				MoonID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct MoonID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let moonID: Int
+					public let name: String
+					public let position: ESI.Characters.Position
+					public let systemID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case moonID = "moon_id"
+						case name
+						case position
+						case systemID = "system_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+			}
+			
+			
+			
+		}
 		
-		public struct Name: Codable, Hashable {
+		public struct Names {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func post(ids: [Int], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
+					
+					
+					let body = try JSONEncoder().encode(ids)
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					headers["Content-Type"] = "application/json"
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .post,
+					encoding: BodyDataEncoding(data: body),
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			
+			
+			
 			
 			public enum Category: String, Codable, CustomStringConvertible {
-				case alliance = "alliance"
-				case character = "character"
-				case constellation = "constellation"
-				case corporation = "corporation"
-				case faction = "faction"
+				case alliance
+				case character
+				case constellation
+				case corporation
 				case inventoryType = "inventory_type"
-				case region = "region"
+				case region
 				case solarSystem = "solar_system"
-				case station = "station"
+				case station
+				case faction
 				
 				public var description: String {
 					return rawValue
@@ -1160,1033 +1223,883 @@ extension ESI {
 				
 			}
 			
-			public var category: Universe.Name.Category
-			public var id: Int
-			public var name: String
-			
-			public init(category: Universe.Name.Category, id: Int, name: String) {
-				self.category = category
-				self.id = id
-				self.name = name
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case category
-				case id
-				case name
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct SystemKills: Codable, Hashable {
-			
-			
-			public var npcKills: Int
-			public var podKills: Int
-			public var shipKills: Int
-			public var systemID: Int
-			
-			public init(npcKills: Int, podKills: Int, shipKills: Int, systemID: Int) {
-				self.npcKills = npcKills
-				self.podKills = podKills
-				self.shipKills = shipKills
-				self.systemID = systemID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case npcKills = "npc_kills"
-				case podKills = "pod_kills"
-				case shipKills = "ship_kills"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Jump: Codable, Hashable {
-			
-			
-			public var shipJumps: Int
-			public var systemID: Int
-			
-			public init(shipJumps: Int, systemID: Int) {
-				self.shipJumps = shipJumps
-				self.systemID = systemID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case shipJumps = "ship_jumps"
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct TypeInformation: Codable, Hashable {
-			
-			public struct GetUniverseTypesTypeIDDogmaAttributes: Codable, Hashable {
+			public struct Success: Codable, Hashable {
 				
 				
-				public var attributeID: Int
-				public var value: Float
-				
-				public init(attributeID: Int, value: Float) {
-					self.attributeID = attributeID
-					self.value = value
-				}
+				public let category: ESI.Universe.Names.Category
+				public let id: Int
+				public let name: String
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case attributeID = "attribute_id"
-					case value
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetUniverseTypesTypeIDDogmaEffects: Codable, Hashable {
-				
-				
-				public var effectID: Int
-				public var isDefault: Bool
-				
-				public init(effectID: Int, isDefault: Bool) {
-					self.effectID = effectID
-					self.isDefault = isDefault
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case effectID = "effect_id"
-					case isDefault = "is_default"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var capacity: Float?
-			public var localizedDescription: String
-			public var dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?
-			public var dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?
-			public var graphicID: Int?
-			public var groupID: Int
-			public var iconID: Int?
-			public var marketGroupID: Int?
-			public var mass: Float?
-			public var name: String
-			public var packagedVolume: Float?
-			public var portionSize: Int?
-			public var published: Bool
-			public var radius: Float?
-			public var typeID: Int
-			public var volume: Float?
-			
-			public init(capacity: Float?, localizedDescription: String, dogmaAttributes: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaAttributes]?, dogmaEffects: [Universe.TypeInformation.GetUniverseTypesTypeIDDogmaEffects]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Float?, name: String, packagedVolume: Float?, portionSize: Int?, published: Bool, radius: Float?, typeID: Int, volume: Float?) {
-				self.capacity = capacity
-				self.localizedDescription = localizedDescription
-				self.dogmaAttributes = dogmaAttributes
-				self.dogmaEffects = dogmaEffects
-				self.graphicID = graphicID
-				self.groupID = groupID
-				self.iconID = iconID
-				self.marketGroupID = marketGroupID
-				self.mass = mass
-				self.name = name
-				self.packagedVolume = packagedVolume
-				self.portionSize = portionSize
-				self.published = published
-				self.radius = radius
-				self.typeID = typeID
-				self.volume = volume
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case capacity
-				case localizedDescription = "description"
-				case dogmaAttributes = "dogma_attributes"
-				case dogmaEffects = "dogma_effects"
-				case graphicID = "graphic_id"
-				case groupID = "group_id"
-				case iconID = "icon_id"
-				case marketGroupID = "market_group_id"
-				case mass
-				case name
-				case packagedVolume = "packaged_volume"
-				case portionSize = "portion_size"
-				case published
-				case radius
-				case typeID = "type_id"
-				case volume
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct SolarSystemInformation: Codable, Hashable {
-			
-			public struct GetUniverseSystemsSystemIDPlanets: Codable, Hashable {
-				
-				
-				public var asteroidBelts: [Int]?
-				public var moons: [Int]?
-				public var planetID: Int
-				
-				public init(asteroidBelts: [Int]?, moons: [Int]?, planetID: Int) {
-					self.asteroidBelts = asteroidBelts
-					self.moons = moons
-					self.planetID = planetID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case asteroidBelts = "asteroid_belts"
-					case moons
-					case planetID = "planet_id"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetUniverseSystemsSystemIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var constellationID: Int
-			public var name: String
-			public var planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]?
-			public var position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition
-			public var securityClass: String?
-			public var securityStatus: Float
-			public var starID: Int?
-			public var stargates: [Int]?
-			public var stations: [Int]?
-			public var systemID: Int
-			
-			public init(constellationID: Int, name: String, planets: [Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPlanets]?, position: Universe.SolarSystemInformation.GetUniverseSystemsSystemIDPosition, securityClass: String?, securityStatus: Float, starID: Int?, stargates: [Int]?, stations: [Int]?, systemID: Int) {
-				self.constellationID = constellationID
-				self.name = name
-				self.planets = planets
-				self.position = position
-				self.securityClass = securityClass
-				self.securityStatus = securityStatus
-				self.starID = starID
-				self.stargates = stargates
-				self.stations = stations
-				self.systemID = systemID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case constellationID = "constellation_id"
-				case name
-				case planets
-				case position
-				case securityClass = "security_class"
-				case securityStatus = "security_status"
-				case starID = "star_id"
-				case stargates
-				case stations
-				case systemID = "system_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostUniverseIdsOk: Codable, Hashable {
-			
-			public struct PostUniverseIdsStations: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
+					case category
 					case id
 					case name
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
+						return nil
 					}
 				}
 			}
 			
-			public struct PostUniverseIdsFactions: Codable, Hashable {
+		}
+		
+		public struct Planets {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func planetID(_ value: Int) -> PlanetID {
+				PlanetID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct PlanetID {
+				let esi: ESI
+				let route: APIRoute
 				
 				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
 				}
 				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let name: String
+					public let planetID: Int
+					public let position: ESI.Characters.Position
+					public let systemID: Int
+					public let typeID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case name
+						case planetID = "planet_id"
+						case position
+						case systemID = "system_id"
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+			}
+			
+			
+			
+		}
+		
+		public struct Races {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let language = language {
+						query.append(URLQueryItem(name: "language", value: language.description))
+					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			
+			
+			
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public let allianceID: Int
+				public let localizedDescription: String
+				public let name: String
+				public let raceID: Int
+				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
+					case allianceID = "alliance_id"
+					case localizedDescription = "description"
 					case name
+					case raceID = "race_id"
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+						return nil
+					}
+				}
+			}
+			
+		}
+		
+		public struct Regions {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func regionID(_ value: Int) -> RegionID {
+				RegionID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct RegionID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let language = language {
+							query.append(URLQueryItem(name: "language", value: language.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let constellations: [Int]
+					public let localizedDescription: String?
+					public let name: String
+					public let regionID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case constellations
+						case localizedDescription = "description"
+						case name
+						case regionID = "region_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
+				
 			}
 			
-			public struct PostUniverseIdsRegions: Codable, Hashable {
+			
+			
+		}
+		
+		public struct Schematics {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func schematicID(_ value: Int) -> SchematicID {
+				SchematicID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct SchematicID {
+				let esi: ESI
+				let route: APIRoute
 				
 				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
 				}
 				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					
+					public let cycleTime: Int
+					public let schematicName: String
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case cycleTime = "cycle_time"
+						case schematicName = "schematic_name"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
+				
 			}
 			
-			public struct PostUniverseIdsConstellations: Codable, Hashable {
+			
+			
+		}
+		
+		public struct Stargates {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func stargateID(_ value: Int) -> StargateID {
+				StargateID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct StargateID {
+				let esi: ESI
+				let route: APIRoute
 				
 				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
 				}
 				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
+				
+				
+				
+				
+				
+				public struct Destination: Codable, Hashable {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					
+					public let stargateID: Int
+					public let systemID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case stargateID = "stargate_id"
+						case systemID = "system_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
-			}
-			
-			public struct PostUniverseIdsInventoryTypes: Codable, Hashable {
 				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
+				public struct Success: Codable, Hashable {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					
+					public let destination: ESI.Universe.Stargates.StargateID.Destination
+					public let name: String
+					public let position: ESI.Characters.Position
+					public let stargateID: Int
+					public let systemID: Int
+					public let typeID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case destination
+						case name
+						case position
+						case stargateID = "stargate_id"
+						case systemID = "system_id"
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
+				
 			}
 			
-			public struct PostUniverseIdsAlliances: Codable, Hashable {
+			
+			
+		}
+		
+		public struct Stars {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func starID(_ value: Int) -> StarID {
+				StarID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct StarID {
+				let esi: ESI
+				let route: APIRoute
 				
 				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
 				}
 				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					
+					public let age: Int64
+					public let luminosity: Double
+					public let name: String
+					public let radius: Int64
+					public let solarSystemID: Int
+					public let spectralClass: ESI.Universe.Stars.StarID.SpectralClass
+					public let temperature: Int
+					public let typeID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case age
+						case luminosity
+						case name
+						case radius
+						case solarSystemID = "solar_system_id"
+						case spectralClass = "spectral_class"
+						case temperature
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
-			}
-			
-			public struct PostUniverseIdsCharacters: Codable, Hashable {
 				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
+				public enum SpectralClass: String, Codable, CustomStringConvertible {
+					case k2V = "K2 V"
+					case k4V = "K4 V"
+					case g2V = "G2 V"
+					case g8V = "G8 V"
+					case m7V = "M7 V"
+					case k7V = "K7 V"
+					case m2V = "M2 V"
+					case k5V = "K5 V"
+					case m3V = "M3 V"
+					case g0V = "G0 V"
+					case g7V = "G7 V"
+					case g3V = "G3 V"
+					case f9V = "F9 V"
+					case g5V = "G5 V"
+					case f6V = "F6 V"
+					case k8V = "K8 V"
+					case k9V = "K9 V"
+					case k6V = "K6 V"
+					case g9V = "G9 V"
+					case g6V = "G6 V"
+					case g4VI = "G4 VI"
+					case g4V = "G4 V"
+					case f8V = "F8 V"
+					case f2V = "F2 V"
+					case f1V = "F1 V"
+					case k3V = "K3 V"
+					case f0VI = "F0 VI"
+					case g1VI = "G1 VI"
+					case g0VI = "G0 VI"
+					case k1V = "K1 V"
+					case m4V = "M4 V"
+					case m1V = "M1 V"
+					case m6V = "M6 V"
+					case m0V = "M0 V"
+					case k2IV = "K2 IV"
+					case g2VI = "G2 VI"
+					case k0V = "K0 V"
+					case k5IV = "K5 IV"
+					case f5VI = "F5 VI"
+					case g6VI = "G6 VI"
+					case f6VI = "F6 VI"
+					case f2IV = "F2 IV"
+					case g3VI = "G3 VI"
+					case m8V = "M8 V"
+					case f1VI = "F1 VI"
+					case k1IV = "K1 IV"
+					case f7V = "F7 V"
+					case g5VI = "G5 VI"
+					case m5V = "M5 V"
+					case g7VI = "G7 VI"
+					case f5V = "F5 V"
+					case f4VI = "F4 VI"
+					case f8VI = "F8 VI"
+					case k3IV = "K3 IV"
+					case f4IV = "F4 IV"
+					case f0V = "F0 V"
+					case g7IV = "G7 IV"
+					case g8VI = "G8 VI"
+					case f2VI = "F2 VI"
+					case f4V = "F4 V"
+					case f7VI = "F7 VI"
+					case f3V = "F3 V"
+					case g1V = "G1 V"
+					case g9VI = "G9 VI"
+					case f3IV = "F3 IV"
+					case f9VI = "F9 VI"
+					case m9V = "M9 V"
+					case k0IV = "K0 IV"
+					case f1IV = "F1 IV"
+					case g4IV = "G4 IV"
+					case f3VI = "F3 VI"
+					case k4IV = "K4 IV"
+					case g5IV = "G5 IV"
+					case g3IV = "G3 IV"
+					case g1IV = "G1 IV"
+					case k7IV = "K7 IV"
+					case g0IV = "G0 IV"
+					case k6IV = "K6 IV"
+					case k9IV = "K9 IV"
+					case g2IV = "G2 IV"
+					case f9IV = "F9 IV"
+					case f0IV = "F0 IV"
+					case k8IV = "K8 IV"
+					case g8IV = "G8 IV"
+					case f6IV = "F6 IV"
+					case f5IV = "F5 IV"
+					case a0 = "A0"
+					case a0IV = "A0IV"
+					case a0IV2 = "A0IV2"
+					
+					public var description: String {
+						return rawValue
+					}
+					
 				}
 				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
+			}
+			
+			
+			
+		}
+		
+		public struct Stations {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			
+			public func stationID(_ value: Int) -> StationID {
+				StationID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct StationID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public enum Service: String, Codable, CustomStringConvertible {
+					case bountyMissions = "bounty-missions"
+					case assasinationMissions = "assasination-missions"
+					case courierMissions = "courier-missions"
+					case interbus
+					case reprocessingPlant = "reprocessing-plant"
+					case refinery
+					case market
+					case blackMarket = "black-market"
+					case stockExchange = "stock-exchange"
+					case cloning
+					case surgery
+					case dnaTherapy = "dna-therapy"
+					case repairFacilities = "repair-facilities"
+					case factory
+					case labratory
+					case gambling
+					case fitting
+					case paintshop
+					case news
+					case storage
+					case insurance
+					case docking
+					case officeRental = "office-rental"
+					case jumpCloneFacility = "jump-clone-facility"
+					case loyaltyPointStore = "loyalty-point-store"
+					case navyOffices = "navy-offices"
+					case securityOffices = "security-offices"
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let maxDockableShipVolume: Double
+					public let name: String
+					public let officeRentalCost: Double
+					public let owner: Int?
+					public let position: ESI.Characters.Position
+					public let raceID: Int?
+					public let reprocessingEfficiency: Double
+					public let reprocessingStationsTake: Double
+					public let services: [ESI.Universe.Stations.StationID.Service]
+					public let stationID: Int
+					public let systemID: Int
+					public let typeID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case maxDockableShipVolume = "max_dockable_ship_volume"
+						case name
+						case officeRentalCost = "office_rental_cost"
+						case owner
+						case position
+						case raceID = "race_id"
+						case reprocessingEfficiency = "reprocessing_efficiency"
+						case reprocessingStationsTake = "reprocessing_stations_take"
+						case services
+						case stationID = "station_id"
+						case systemID = "system_id"
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
+				
 			}
 			
-			public struct PostUniverseIdsAgents: Codable, Hashable {
+			
+			
+		}
+		
+		public struct Structures {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(filter: ESI.Universe.Structures.Filter?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int64], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let filter = filter {
+						query.append(URLQueryItem(name: "filter", value: filter.description))
+					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func structureID(_ value: Int64) -> StructureID {
+				StructureID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct StructureID {
+				let esi: ESI
+				let route: APIRoute
 				
 				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						let scopes = esi.token?.scopes ?? []
+						guard scopes.contains("esi-universe.read_structures.v1") else {throw ESIError.forbidden}
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
 				}
 				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+					
+					public let name: String
+					public let ownerID: Int
+					public let position: ESI.Characters.Position?
+					public let solarSystemID: Int
+					public let typeID: Int?
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case name
+						case ownerID = "owner_id"
+						case position
+						case solarSystemID = "solar_system_id"
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
-			}
-			
-			public struct PostUniverseIdsSystems: Codable, Hashable {
 				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
 			}
 			
-			public struct PostUniverseIdsCorporations: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
 			
-			public var agents: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]?
-			public var alliances: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]?
-			public var characters: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]?
-			public var constellations: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]?
-			public var corporations: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]?
-			public var factions: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]?
-			public var inventoryTypes: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]?
-			public var regions: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]?
-			public var stations: [Universe.PostUniverseIdsOk.PostUniverseIdsStations]?
-			public var systems: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]?
-			
-			public init(agents: [Universe.PostUniverseIdsOk.PostUniverseIdsAgents]?, alliances: [Universe.PostUniverseIdsOk.PostUniverseIdsAlliances]?, characters: [Universe.PostUniverseIdsOk.PostUniverseIdsCharacters]?, constellations: [Universe.PostUniverseIdsOk.PostUniverseIdsConstellations]?, corporations: [Universe.PostUniverseIdsOk.PostUniverseIdsCorporations]?, factions: [Universe.PostUniverseIdsOk.PostUniverseIdsFactions]?, inventoryTypes: [Universe.PostUniverseIdsOk.PostUniverseIdsInventoryTypes]?, regions: [Universe.PostUniverseIdsOk.PostUniverseIdsRegions]?, stations: [Universe.PostUniverseIdsOk.PostUniverseIdsStations]?, systems: [Universe.PostUniverseIdsOk.PostUniverseIdsSystems]?) {
-				self.agents = agents
-				self.alliances = alliances
-				self.characters = characters
-				self.constellations = constellations
-				self.corporations = corporations
-				self.factions = factions
-				self.inventoryTypes = inventoryTypes
-				self.regions = regions
-				self.stations = stations
-				self.systems = systems
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case agents
-				case alliances
-				case characters
-				case constellations
-				case corporations
-				case factions
-				case inventoryTypes = "inventory_types"
-				case regions
-				case stations
-				case systems
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct ItemGroupInformation: Codable, Hashable {
-			
-			
-			public var categoryID: Int
-			public var groupID: Int
-			public var name: String
-			public var published: Bool
-			public var types: [Int]
-			
-			public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
-				self.categoryID = categoryID
-				self.groupID = groupID
-				self.name = name
-				self.published = published
-				self.types = types
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case categoryID = "category_id"
-				case groupID = "group_id"
-				case name
-				case published
-				case types
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseStructuresStructureIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseMoonsMoonIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PlanetInformation: Codable, Hashable {
-			
-			public struct GetUniversePlanetsPlanetIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var name: String
-			public var planetID: Int
-			public var position: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition
-			public var systemID: Int
-			public var typeID: Int
-			
-			public init(name: String, planetID: Int, position: Universe.PlanetInformation.GetUniversePlanetsPlanetIDPosition, systemID: Int, typeID: Int) {
-				self.name = name
-				self.planetID = planetID
-				self.position = position
-				self.systemID = systemID
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case planetID = "planet_id"
-				case position
-				case systemID = "system_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseAsteroidBeltsAsteroidBeltIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseSystemsSystemIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct StructureInformation: Codable, Hashable {
-			
-			public struct GetUniverseStructuresStructureIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var name: String
-			public var ownerID: Int
-			public var position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?
-			public var solarSystemID: Int
-			public var typeID: Int?
-			
-			public init(name: String, ownerID: Int, position: Universe.StructureInformation.GetUniverseStructuresStructureIDPosition?, solarSystemID: Int, typeID: Int?) {
-				self.name = name
-				self.ownerID = ownerID
-				self.position = position
-				self.solarSystemID = solarSystemID
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case name
-				case ownerID = "owner_id"
-				case position
-				case solarSystemID = "solar_system_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GraphicInformation: Codable, Hashable {
-			
-			
-			public var collisionFile: String?
-			public var graphicFile: String?
-			public var graphicID: Int
-			public var iconFolder: String?
-			public var sofDna: String?
-			public var sofFationName: String?
-			public var sofHullName: String?
-			public var sofRaceName: String?
-			
-			public init(collisionFile: String?, graphicFile: String?, graphicID: Int, iconFolder: String?, sofDna: String?, sofFationName: String?, sofHullName: String?, sofRaceName: String?) {
-				self.collisionFile = collisionFile
-				self.graphicFile = graphicFile
-				self.graphicID = graphicID
-				self.iconFolder = iconFolder
-				self.sofDna = sofDna
-				self.sofFationName = sofFationName
-				self.sofHullName = sofHullName
-				self.sofRaceName = sofRaceName
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case collisionFile = "collision_file"
-				case graphicFile = "graphic_file"
-				case graphicID = "graphic_id"
-				case iconFolder = "icon_folder"
-				case sofDna = "sof_dna"
-				case sofFationName = "sof_fation_name"
-				case sofHullName = "sof_hull_name"
-				case sofRaceName = "sof_race_name"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Race: Codable, Hashable {
-			
-			
-			public var allianceID: Int
-			public var localizedDescription: String
-			public var name: String
-			public var raceID: Int
-			
-			public init(allianceID: Int, localizedDescription: String, name: String, raceID: Int) {
-				self.allianceID = allianceID
-				self.localizedDescription = localizedDescription
-				self.name = name
-				self.raceID = raceID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case allianceID = "alliance_id"
-				case localizedDescription = "description"
-				case name
-				case raceID = "race_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Bloodline: Codable, Hashable {
-			
-			
-			public var bloodlineID: Int
-			public var charisma: Int
-			public var corporationID: Int
-			public var localizedDescription: String
-			public var intelligence: Int
-			public var memory: Int
-			public var name: String
-			public var perception: Int
-			public var raceID: Int
-			public var shipTypeID: Int
-			public var willpower: Int
-			
-			public init(bloodlineID: Int, charisma: Int, corporationID: Int, localizedDescription: String, intelligence: Int, memory: Int, name: String, perception: Int, raceID: Int, shipTypeID: Int, willpower: Int) {
-				self.bloodlineID = bloodlineID
-				self.charisma = charisma
-				self.corporationID = corporationID
-				self.localizedDescription = localizedDescription
-				self.intelligence = intelligence
-				self.memory = memory
-				self.name = name
-				self.perception = perception
-				self.raceID = raceID
-				self.shipTypeID = shipTypeID
-				self.willpower = willpower
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case bloodlineID = "bloodline_id"
-				case charisma
-				case corporationID = "corporation_id"
-				case localizedDescription = "description"
-				case intelligence
-				case memory
-				case name
-				case perception
-				case raceID = "race_id"
-				case shipTypeID = "ship_type_id"
-				case willpower
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct PostUniverseNamesNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseTypesTypeIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct StationInformation: Codable, Hashable {
-			
-			public enum GetUniverseStationsStationIDServices: String, Codable, CustomStringConvertible {
-				case assasinationMissions = "assasination-missions"
-				case blackMarket = "black-market"
-				case bountyMissions = "bounty-missions"
-				case cloning = "cloning"
-				case courierMissions = "courier-missions"
-				case dnaTherapy = "dna-therapy"
-				case docking = "docking"
-				case factory = "factory"
-				case fitting = "fitting"
-				case gambling = "gambling"
-				case insurance = "insurance"
-				case interbus = "interbus"
-				case jumpCloneFacility = "jump-clone-facility"
-				case labratory = "labratory"
-				case loyaltyPointStore = "loyalty-point-store"
-				case market = "market"
-				case navyOffices = "navy-offices"
-				case news = "news"
-				case officeRental = "office-rental"
-				case paintshop = "paintshop"
-				case refinery = "refinery"
-				case repairFacilities = "repair-facilities"
-				case reprocessingPlant = "reprocessing-plant"
-				case securityOffices = "security-offices"
-				case stockExchange = "stock-exchange"
-				case storage = "storage"
-				case surgery = "surgery"
+			public enum Filter: String, Codable, CustomStringConvertible {
+				case market
+				case manufacturingBasic = "manufacturing_basic"
 				
 				public var description: String {
 					return rawValue
@@ -2194,548 +2107,412 @@ extension ESI {
 				
 			}
 			
-			public struct GetUniverseStationsStationIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
+		}
+		
+		public struct SystemJumps {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public var maxDockableShipVolume: Float
-			public var name: String
-			public var officeRentalCost: Float
-			public var owner: Int?
-			public var position: Universe.StationInformation.GetUniverseStationsStationIDPosition
-			public var raceID: Int?
-			public var reprocessingEfficiency: Float
-			public var reprocessingStationsTake: Float
-			public var services: [Universe.StationInformation.GetUniverseStationsStationIDServices]
-			public var stationID: Int
-			public var systemID: Int
-			public var typeID: Int
-			
-			public init(maxDockableShipVolume: Float, name: String, officeRentalCost: Float, owner: Int?, position: Universe.StationInformation.GetUniverseStationsStationIDPosition, raceID: Int?, reprocessingEfficiency: Float, reprocessingStationsTake: Float, services: [Universe.StationInformation.GetUniverseStationsStationIDServices], stationID: Int, systemID: Int, typeID: Int) {
-				self.maxDockableShipVolume = maxDockableShipVolume
-				self.name = name
-				self.officeRentalCost = officeRentalCost
-				self.owner = owner
-				self.position = position
-				self.raceID = raceID
-				self.reprocessingEfficiency = reprocessingEfficiency
-				self.reprocessingStationsTake = reprocessingStationsTake
-				self.services = services
-				self.stationID = stationID
-				self.systemID = systemID
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case maxDockableShipVolume = "max_dockable_ship_volume"
-				case name
-				case officeRentalCost = "office_rental_cost"
-				case owner
-				case position
-				case raceID = "race_id"
-				case reprocessingEfficiency = "reprocessing_efficiency"
-				case reprocessingStationsTake = "reprocessing_stations_take"
-				case services
-				case stationID = "station_id"
-				case systemID = "system_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseGraphicsGraphicIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseConstellationsConstellationIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public enum Filter: String, Codable, CustomStringConvertible {
-			case manufacturingBasic = "manufacturing_basic"
-			case market = "market"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		
-		public struct GetUniverseCategoriesCategoryIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct GetUniverseRegionsRegionIDNotFound: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct Faction: Codable, Hashable {
-			
-			
-			public var corporationID: Int?
-			public var localizedDescription: String
-			public var factionID: Int
-			public var isUnique: Bool
-			public var militiaCorporationID: Int?
-			public var name: String
-			public var sizeFactor: Float
-			public var solarSystemID: Int?
-			public var stationCount: Int
-			public var stationSystemCount: Int
-			
-			public init(corporationID: Int?, localizedDescription: String, factionID: Int, isUnique: Bool, militiaCorporationID: Int?, name: String, sizeFactor: Float, solarSystemID: Int?, stationCount: Int, stationSystemCount: Int) {
-				self.corporationID = corporationID
-				self.localizedDescription = localizedDescription
-				self.factionID = factionID
-				self.isUnique = isUnique
-				self.militiaCorporationID = militiaCorporationID
-				self.name = name
-				self.sizeFactor = sizeFactor
-				self.solarSystemID = solarSystemID
-				self.stationCount = stationCount
-				self.stationSystemCount = stationSystemCount
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case corporationID = "corporation_id"
-				case localizedDescription = "description"
-				case factionID = "faction_id"
-				case isUnique = "is_unique"
-				case militiaCorporationID = "militia_corporation_id"
-				case name
-				case sizeFactor = "size_factor"
-				case solarSystemID = "solar_system_id"
-				case stationCount = "station_count"
-				case stationSystemCount = "station_system_count"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct StargateInformation: Codable, Hashable {
-			
-			public struct GetUniverseStargatesStargateIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
 					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
 				}
 			}
 			
-			public struct GetUniverseStargatesStargateIDDestination: Codable, Hashable {
+			
+			
+			
+			
+			
+			public struct Success: Codable, Hashable {
 				
 				
-				public var stargateID: Int
-				public var systemID: Int
-				
-				public init(stargateID: Int, systemID: Int) {
-					self.stargateID = stargateID
-					self.systemID = systemID
-				}
+				public let shipJumps: Int
+				public let systemID: Int
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case stargateID = "stargate_id"
+					case shipJumps = "ship_jumps"
 					case systemID = "system_id"
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
+						return nil
 					}
 				}
 			}
 			
-			public var destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination
-			public var name: String
-			public var position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition
-			public var stargateID: Int
-			public var systemID: Int
-			public var typeID: Int
-			
-			public init(destination: Universe.StargateInformation.GetUniverseStargatesStargateIDDestination, name: String, position: Universe.StargateInformation.GetUniverseStargatesStargateIDPosition, stargateID: Int, systemID: Int, typeID: Int) {
-				self.destination = destination
-				self.name = name
-				self.position = position
-				self.stargateID = stargateID
-				self.systemID = systemID
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case destination
-				case name
-				case position
-				case stargateID = "stargate_id"
-				case systemID = "system_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
 		}
 		
-		
-		public struct ConstellationInformation: Codable, Hashable {
+		public struct SystemKills {
+			let esi: ESI
+			let route: APIRoute
 			
-			public struct GetUniverseConstellationsConstellationIDPosition: Codable, Hashable {
-				
-				
-				public var x: Double
-				public var y: Double
-				public var z: Double
-				
-				public init(x: Double, y: Double, z: Double) {
-					self.x = x
-					self.y = y
-					self.z = z
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
 				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			
+			
+			
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public let npcKills: Int
+				public let podKills: Int
+				public let shipKills: Int
+				public let systemID: Int
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case x
-					case y
-					case z
+					case npcKills = "npc_kills"
+					case podKills = "pod_kills"
+					case shipKills = "ship_kills"
+					case systemID = "system_id"
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
+						return nil
+					}
+				}
+			}
+			
+		}
+		
+		public struct Systems {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func systemID(_ value: Int) -> SystemID {
+				SystemID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct SystemID {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
+						
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let language = language {
+							query.append(URLQueryItem(name: "language", value: language.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+					}
+				}
+				
+				
+				
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let constellationID: Int
+					public let name: String
+					public let planets: [ESI.Universe.Systems.SystemID.Planet]?
+					public let position: ESI.Characters.Position
+					public let securityClass: String?
+					public let securityStatus: Double
+					public let starID: Int?
+					public let stargates: [Int]?
+					public let stations: [Int]?
+					public let systemID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case constellationID = "constellation_id"
+						case name
+						case planets
+						case position
+						case securityClass = "security_class"
+						case securityStatus = "security_status"
+						case starID = "star_id"
+						case stargates
+						case stations
+						case systemID = "system_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
 						}
 					}
 				}
-			}
-			
-			public var constellationID: Int
-			public var name: String
-			public var position: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition
-			public var regionID: Int
-			public var systems: [Int]
-			
-			public init(constellationID: Int, name: String, position: Universe.ConstellationInformation.GetUniverseConstellationsConstellationIDPosition, regionID: Int, systems: [Int]) {
-				self.constellationID = constellationID
-				self.name = name
-				self.position = position
-				self.regionID = regionID
-				self.systems = systems
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case constellationID = "constellation_id"
-				case name
-				case position
-				case regionID = "region_id"
-				case systems
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
+				public struct Planet: Codable, Hashable {
+					
+					
+					public let asteroidBelts: [Int]?
+					public let moons: [Int]?
+					public let planetID: Int
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case asteroidBelts = "asteroid_belts"
+						case moons
+						case planetID = "planet_id"
 						
-						default: return nil
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
 					}
 				}
+				
 			}
+			
+			
+			
 		}
 		
-		
-		public struct ItemCategoryInformation: Codable, Hashable {
+		public struct Types {
+			let esi: ESI
+			let route: APIRoute
 			
 			
-			public var categoryID: Int
-			public var groups: [Int]
-			public var name: String
-			public var published: Bool
-			
-			public init(categoryID: Int, groups: [Int], name: String, published: Bool) {
-				self.categoryID = categoryID
-				self.groups = groups
-				self.name = name
-				self.published = published
+			public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					if let page = page {
+						query.append(URLQueryItem(name: "page", value: page.description))
+					}
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case categoryID = "category_id"
-				case groups
-				case name
-				case published
+			
+			public func typeID(_ value: Int) -> TypeID {
+				TypeID(esi: esi, route: .parameter(value, next: route))
+			}
+			
+			public struct TypeID {
+				let esi: ESI
+				let route: APIRoute
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
+				
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+					do {
 						
-						default: return nil
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let language = language {
+							query.append(URLQueryItem(name: "language", value: language.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
 					}
 				}
-			}
-		}
-		
-		
-		public struct GetUniverseStarsStarIDOk: Codable, Hashable {
-			
-			public enum GetUniverseStarsStarIDSpectralClass: String, Codable, CustomStringConvertible {
-				case a0 = "A0"
-				case a0IV = "A0IV"
-				case a0IV2 = "A0IV2"
-				case f0IV = "F0 IV"
-				case f0V = "F0 V"
-				case f0VI = "F0 VI"
-				case f1IV = "F1 IV"
-				case f1V = "F1 V"
-				case f1VI = "F1 VI"
-				case f2IV = "F2 IV"
-				case f2V = "F2 V"
-				case f2VI = "F2 VI"
-				case f3IV = "F3 IV"
-				case f3V = "F3 V"
-				case f3VI = "F3 VI"
-				case f4IV = "F4 IV"
-				case f4V = "F4 V"
-				case f4VI = "F4 VI"
-				case f5IV = "F5 IV"
-				case f5V = "F5 V"
-				case f5VI = "F5 VI"
-				case f6IV = "F6 IV"
-				case f6V = "F6 V"
-				case f6VI = "F6 VI"
-				case f7V = "F7 V"
-				case f7VI = "F7 VI"
-				case f8V = "F8 V"
-				case f8VI = "F8 VI"
-				case f9IV = "F9 IV"
-				case f9V = "F9 V"
-				case f9VI = "F9 VI"
-				case g0IV = "G0 IV"
-				case g0V = "G0 V"
-				case g0VI = "G0 VI"
-				case g1IV = "G1 IV"
-				case g1V = "G1 V"
-				case g1VI = "G1 VI"
-				case g2IV = "G2 IV"
-				case g2V = "G2 V"
-				case g2VI = "G2 VI"
-				case g3IV = "G3 IV"
-				case g3V = "G3 V"
-				case g3VI = "G3 VI"
-				case g4IV = "G4 IV"
-				case g4V = "G4 V"
-				case g4VI = "G4 VI"
-				case g5IV = "G5 IV"
-				case g5V = "G5 V"
-				case g5VI = "G5 VI"
-				case g6V = "G6 V"
-				case g6VI = "G6 VI"
-				case g7IV = "G7 IV"
-				case g7V = "G7 V"
-				case g7VI = "G7 VI"
-				case g8IV = "G8 IV"
-				case g8V = "G8 V"
-				case g8VI = "G8 VI"
-				case g9V = "G9 V"
-				case g9VI = "G9 VI"
-				case k0IV = "K0 IV"
-				case k0V = "K0 V"
-				case k1IV = "K1 IV"
-				case k1V = "K1 V"
-				case k2IV = "K2 IV"
-				case k2V = "K2 V"
-				case k3IV = "K3 IV"
-				case k3V = "K3 V"
-				case k4IV = "K4 IV"
-				case k4V = "K4 V"
-				case k5IV = "K5 IV"
-				case k5V = "K5 V"
-				case k6IV = "K6 IV"
-				case k6V = "K6 V"
-				case k7IV = "K7 IV"
-				case k7V = "K7 V"
-				case k8IV = "K8 IV"
-				case k8V = "K8 V"
-				case k9IV = "K9 IV"
-				case k9V = "K9 V"
-				case m0V = "M0 V"
-				case m1V = "M1 V"
-				case m2V = "M2 V"
-				case m3V = "M3 V"
-				case m4V = "M4 V"
-				case m5V = "M5 V"
-				case m6V = "M6 V"
-				case m7V = "M7 V"
-				case m8V = "M8 V"
-				case m9V = "M9 V"
 				
-				public var description: String {
-					return rawValue
-				}
 				
-			}
-			
-			public var age: Int64
-			public var luminosity: Float
-			public var name: String
-			public var radius: Int64
-			public var solarSystemID: Int
-			public var spectralClass: Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass
-			public var temperature: Int
-			public var typeID: Int
-			
-			public init(age: Int64, luminosity: Float, name: String, radius: Int64, solarSystemID: Int, spectralClass: Universe.GetUniverseStarsStarIDOk.GetUniverseStarsStarIDSpectralClass, temperature: Int, typeID: Int) {
-				self.age = age
-				self.luminosity = luminosity
-				self.name = name
-				self.radius = radius
-				self.solarSystemID = solarSystemID
-				self.spectralClass = spectralClass
-				self.temperature = temperature
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case age
-				case luminosity
-				case name
-				case radius
-				case solarSystemID = "solar_system_id"
-				case spectralClass = "spectral_class"
-				case temperature
-				case typeID = "type_id"
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
+				
+				
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public let capacity: Double?
+					public let localizedDescription: String
+					public let dogmaAttributes: [ESI.Dogma.DogmaAttribute]?
+					public let dogmaEffects: [ESI.Dogma.DogmaEffect]?
+					public let graphicID: Int?
+					public let groupID: Int
+					public let iconID: Int?
+					public let marketGroupID: Int?
+					public let mass: Double?
+					public let name: String
+					public let packagedVolume: Double?
+					public let portionSize: Int?
+					public let published: Bool
+					public let radius: Double?
+					public let typeID: Int
+					public let volume: Double?
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case capacity
+						case localizedDescription = "description"
+						case dogmaAttributes = "dogma_attributes"
+						case dogmaEffects = "dogma_effects"
+						case graphicID = "graphic_id"
+						case groupID = "group_id"
+						case iconID = "icon_id"
+						case marketGroupID = "market_group_id"
+						case mass
+						case name
+						case packagedVolume = "packaged_volume"
+						case portionSize = "portion_size"
+						case published
+						case radius
+						case typeID = "type_id"
+						case volume
 						
-						default: return nil
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
 					}
 				}
+				
 			}
+			
+			
+			
 		}
+		
 		
 		
 	}

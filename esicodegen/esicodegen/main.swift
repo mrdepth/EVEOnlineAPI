@@ -8,6 +8,8 @@
 
 import Foundation
 
+let outURL = URL(fileURLWithPath: CommandLine.arguments[2])
+
 let baseURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent()
 let url = baseURL.appendingPathComponent("swagger.json")
 let classURL = baseURL.appendingPathComponent("class.swft")
@@ -17,12 +19,14 @@ let scopeURL = baseURL.appendingPathComponent("scope.swft")
 let securityURL = baseURL.appendingPathComponent("security.swft")
 let routeURL = baseURL.appendingPathComponent("route.swft")
 
-let skip = Set(["datasource", "token", "user_agent", "X-User-Agent", "If-None-Match"])
+let skip = Set(["datasource", "token", "user_agent", "X-User-Agent", "If-None-Match", "Accept-Language"])
 
 let operationTemplate = try! String(contentsOf: operationURL)
 let enumTemplate = try! String(contentsOf: enumURL)
 let classTemplate = try! String(contentsOf: classURL)
 let routeTemplate = try! String(contentsOf: routeURL)
+let scopeTemplate = try! String(contentsOf: scopeURL)
+let securityTemplate = try! String(contentsOf: securityURL)
 
 let data = try! Data(contentsOf: url)
 let swagger = try! JSONDecoder().decode(Swagger.self, from: data)
@@ -77,12 +81,45 @@ extension String {
         return s.replacingCharacters(in: r, with: s[r].lowercased())
     }
     
+    var validIdentifier: String {
+        switch self {
+        case "func":
+            return "`func`"
+        case "operator":
+            return "`operator`"
+        case "description":
+            return "localizedDescription"
+        case "id":
+            return "id"
+        case "in":
+            return "`in`"
+        case "public":
+            return "`public`"
+        case "private":
+            return "`private`"
+        case "Type":
+            return "ValueType"
+        case "Ui":
+            return "UI"
+        case "enUs":
+            return "enUS"
+        default:
+            let s = replacingOccurrences(of: "#", with: "h")
+            if CharacterSet.decimalDigits.contains(UnicodeScalar(s.utf8[s.utf8.startIndex])) {
+                return "i" + s
+            }
+            else {
+                return s
+            }
+        }
+    }
+    
     var indented: String {
         var indentation = 0
         var c = [String]()
         
         for s in self.components(separatedBy: "\n") {
-            let s = s.trimmingCharacters(in: CharacterSet(charactersIn: "\t"))
+            let s = s.trimmingCharacters(in: CharacterSet(charactersIn: "\t "))
             let i = indentation - (s.first == "}" ? 1 : 0)
             c.append(String(repeating: "\t", count: i) + s)
             
@@ -112,7 +149,10 @@ func add(type: Model.MetaType, keyPath: [String]) {
     func store(_ type: Model.MetaType, _ keyPath: [String]) {
         rawIDs[type, default: []].append(keyPath)
         if let existing = typeIdentifiers[type] {
-            let prefix = existing.indices.clamped(to: keyPath.indices).prefix(while: {existing[$0] == keyPath[$0]})
+            var prefix = existing.indices.clamped(to: keyPath.indices).prefix(while: {existing[$0] == keyPath[$0]})
+            if prefix.isEmpty {
+                prefix = 0..<1
+            }
             let newKeyPath = Array(existing[prefix] + [keyPath.last!])
             typeIdentifiers[type] = newKeyPath
 //            if newKeyPath != keyPath {
@@ -173,80 +213,28 @@ let ids = typeIdentifiers.map{$0.key.id()}.sorted()
 //print(conflictIDs)
 let names = Set(typeIdentifiers.values.flatMap{$0}).sorted()
 
-let r = root.swift(keyPath: [])
-print(r)
-
-//let group = Dictionary(grouping: queue, by: {$0.key[0]})
-//print(group)
-
-
-/*let paths = Dictionary(grouping: swagger.paths, by: {$0.key.components(separatedBy: "/")[1]}).mapValues{$0.map{$0.value}}
-
-let namespaces = paths.map { i -> Namespace in
-	let operations = i.value.flatMap{$0}.map{j in Namespace.Operation(j.value, method: j.key)}
-	return Namespace(name: i.key.camelCaps, operations: operations)
-}
-for namespace in namespaces {
-    for operation in namespace.operations {
-        print(operation.name)
-    }
-}*/
-
-/*struct Namespace: Hashable {
-    var name: String
-    var nested: [Namespace]
+for (key, path) in root.subpaths {
+    var swift = scopeTemplate
+    swift = swift.replacingOccurrences(of: "{variable}", with: key.camelBack.validIdentifier)
+    swift = swift.replacingOccurrences(of: "{scope}", with: key.camelCaps.validIdentifier)
+    swift = swift.replacingOccurrences(of: "{routes}", with: path.swift(keyPath: [key]))
+    swift = swift.replacingOccurrences(of: "{name}", with: key)
     
-    init(name: String, nested: [Namespace]) {
-        self.name = name
-        self.nested = nested
-    }
-    
-    init?(_ property: Swagger.Property) {
-        guard let title = property.title else {return nil}
-        name = title
-
-        switch property.type {
-        case .object:
-            nested = property.properties?.values.compactMap{Namespace($0)} ?? []
-        case .array:
-            nested = property.items.flatMap{Namespace($0)}.map{[$0]} ?? []
-        default:
-            return nil
-        }
-    }
+    let url = outURL.appendingPathComponent("\(key.camelCaps).swift")
+    try! swift.indented.write(to: url, atomically: true, encoding: .utf8)
+//    print(swift.indented)
 }
 
-let paths = Dictionary(grouping: swagger.paths, by: {$0.key.components(separatedBy: "/")[1]}).mapValues{$0.map{$0.value}}
-let namespaces = paths.map { i -> Namespace in
-    let (name, methods) = i
-    let nested = methods.flatMap{$0.values.compactMap { operation -> Namespace? in
-            let response = operation.responses[200] ?? operation.responses[201] ?? operation.responses[204]!
-            guard let schema = response.schema else {return nil}
-            let result = extract(from: schema)
-            return Namespace(result)
-        }
+do {
+    let security = Set(swagger.securityDefinitions.flatMap{$0.value.scopes.keys}).sorted().map {
+        ("public static let \($0.camelBack) = ESI.Scope(\"\($0)\")",
+            ".\($0.camelBack)")
     }
-    return Namespace(name: name, nested: nested)
+
+    let swift = securityTemplate.replacingOccurrences(of: "{values}", with: security.map{$0.0}.joined(separator: "\n"))
+        .replacingOccurrences(of: "{scopes}", with: security.map{$0.1}.joined(separator: ",\n"))
+
+    let url = outURL.appendingPathComponent("Global.swift")
+    try! swift.indented.write(to: url, atomically: true, encoding: .utf8)
+
 }
-
-//let namespaces = swagger.paths.map { i -> Namespace in
-//    let (path, methods) = i
-//    return Namespace(name: path.components(separatedBy: "/")[1],
-//                     nested: methods.flatMap { (method, operation) -> Namespace? in
-//                        let response = operation.responses[200] ?? operation.responses[201] ?? operation.responses[204]!
-//                        guard let schema = response.schema else {return nil}
-//                        let result = extract(from: schema)
-//                        return Namespace(result)
-//    })
-//}
-
-
-//for (path, methods) in swagger.paths {
-//    for (method, operation) in methods {
-//        let response = operation.responses[200]!
-//        guard let schema = response.schema else {continue}
-//        let result = extract(from: schema)
-//    }
-//}
-//
-*/

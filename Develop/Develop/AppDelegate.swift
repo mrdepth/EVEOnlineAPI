@@ -172,7 +172,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var c1: AnyCancellable?
     var c2: AnyCancellable?
     var c3: AnyCancellable?
-	
+    var c4: AnyCancellable?
+    var esi = ESI()
+    
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let s = Deferred{CurrentValueSubject<String, Never>("sdf").handleEvents(receiveCancel: {
             print("cancel")
@@ -181,6 +183,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         s.sink {
             print($0)
         }
+        
+        
+        c4 = esi.characters.characterID(1554561480).get().flatMap { character in
+            CurrentValueSubject(character).combineLatest(self.esi.corporations.corporationID(character.corporationID).get())
+        }.sink(receiveCompletion: {c in
+            print(c)
+        }, receiveValue: { (a, b) in
+            print(a, b)
+        })
+        
+        
         
         var r = AF.request("http://worldclockapi.com/api/json/est/now")
         print(r.isResumed)

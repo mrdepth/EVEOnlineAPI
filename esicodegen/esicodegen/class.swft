@@ -7,10 +7,7 @@ public struct {name}: Codable, Hashable {
 {codingKeys}
 
 		var dateFormatter: DateFormatter? {
-			switch self {
-{dateFormats}
-			default: return nil
-			}
+            {dateFormatters}
 		}
 	}
 }

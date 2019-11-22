@@ -47,7 +47,17 @@ extension Publisher where Output: DataRequest, Failure == AFError {
             }
         }
     }
-    
+
+    public func responseVoid(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<Void, AFError>, Self> {
+        flatMap { request -> Future<Void, AFError> in
+            Future { promise in
+                request.response(queue: queue) { response in
+                    promise(response.result.map{_ in })
+                }
+            }
+        }
+    }
+
     public func downloadProgress(queue: DispatchQueue = .main, closure: @escaping Request.ProgressHandler) -> Publishers.Map<Self, Output> {
         map { request in
             request.downloadProgress(queue: queue, closure: closure)

@@ -16,7 +16,7 @@ struct Model {
 		let name: String
         let parameters: [String: Parameter]
         let method: Swagger.Method
-        let security: [String]
+        let security: Set<String>
 		let response: MetaType?
     }
 
@@ -76,6 +76,8 @@ extension Model.MetaType {
                 else {
                     self = .string
                 }
+            default:
+                self = Model.MetaType(from: parameter.schema!, name: parameter.name, prefix: prefix)!
             }
         }
     }
@@ -83,13 +85,13 @@ extension Model.MetaType {
     private static func getName(from id: String, prefix: String) -> String {
         let id = typeNames[id] ?? {
             if id.hasPrefix(prefix) {
-                return String(id.dropFirst(prefix.count)).camelCaps
+                return String(id.dropFirst(prefix.count)).camelCaps.validIdentifier
             }
             else {
-                return id.camelCaps
+                return id.camelCaps.validIdentifier
             }
         }()
-        return id == "200Ok" || id == "Ok" ? "Success" : id
+        return id == "i200Ok" || id == "Ok" ? "Success" : id
     }
     
     init?(from property: Swagger.Property, name: String?, prefix: String) {
@@ -144,7 +146,13 @@ extension Model.Struct {
 extension Model.Parameter {
     init(_ parameter: Swagger.Parameter, prefix: String) {
         self.default = parameter.default
-        type = Model.MetaType(from: parameter, prefix: prefix)!
+        if parameter.required {
+            type = Model.MetaType(from: parameter, prefix: prefix)!
+        }
+        else {
+            type = .optional(Model.MetaType(from: parameter, prefix: prefix)!)
+        }
+//        type = Model.MetaType(from: parameter, prefix: prefix)!
         location = parameter.in
     }
 }
@@ -158,7 +166,7 @@ extension Model.Operation {
             return (parameter.name, Model.Parameter(parameter, prefix: operation.operationId))
         }
         parameters = Dictionary(uniqueKeysWithValues: pairs)
-        security = operation.security?.flatMap{$0.evesso} ?? []
+        security = Set(operation.security?.flatMap{$0}.flatMap{$0.value} ?? [])
         response = ((200..<300).lazy.compactMap{operation.responses[$0]}.first?.schema).map {
             Model.MetaType(from: extract(from: $0), name: nil, prefix: operation.operationId)! }
     }
@@ -224,7 +232,9 @@ extension Model.MetaType {
         switch self {
         case .enum, .object:
 			assert(typeIdentifiers[self] != nil)
-            return typeIdentifiers[self]!.map{$0.camelCaps}.joined(separator: ".")
+            return (["ESI"] + typeIdentifiers[self]!.map{$0.camelCaps.validIdentifier}).joined(separator: ".")
+        case let .array(type):
+            return "[\(type.id())]"
         case let .optional(type):
             return "\(type.id())?"
         default:
@@ -235,7 +245,7 @@ extension Model.MetaType {
 
 extension Model.Parameter {
     func body(_ name: String) -> String {
-        let parameterName = name.camelBack
+        let parameterName = name.camelBack.validIdentifier
         switch type {
         case .optional:
             return "let body = try \(parameterName).map{JSONEncoder().encode($0)} ?? nil"
@@ -245,12 +255,12 @@ extension Model.Parameter {
     }
     
     func header(_ name: String) -> String {
-        let parameterName = name.camelBack
+        let parameterName = name.camelBack.validIdentifier
 
         func header(_ type: Model.MetaType) -> String {
             switch type {
             case let .optional(nested):
-                return "if let parameterName = \(parameterName) {\n" +
+                return "if let \(parameterName) = \(parameterName) {\n" +
                     header(nested) +
                 "\n}"
             case .array:
@@ -263,12 +273,12 @@ extension Model.Parameter {
     }
 
     func query(_ name: String) -> String {
-        let parameterName = name.camelBack
+        let parameterName = name.camelBack.validIdentifier
         
         func query(_ type: Model.MetaType) -> String {
             switch type {
             case let .optional(nested):
-                return "if let parameterName = \(parameterName) {\n" +
+                return "if let \(parameterName) = \(parameterName) {\n" +
                 query(nested) +
                 "\n}"
             case .array:
@@ -290,14 +300,14 @@ extension Model.Operation {
         var headers: [String] = []
         var queries: [String] = []
         var body: String?
-        var securityCheck: [String] = []
         
 		for (name, parameter) in parameters.filter({$0.value.location != .path && !skip.contains($0.key)}).sorted(by: {$0.key < $1.key}) {
             if let defaults = parameter.default {
-				arguments.append("\(name.camelBack): \(parameter.type.id()) = \(defaults)")
+                let value = parameter.type.default(defaults)
+				arguments.append("\(name.camelBack.validIdentifier): \(parameter.type.id()) = \(value)")
             }
             else {
-                arguments.append("\(name.camelBack): \(parameter.type.id())")
+                arguments.append("\(name.camelBack.validIdentifier): \(parameter.type.id())")
             }
             switch parameter.location {
             case .body:
@@ -324,14 +334,14 @@ extension Model.Operation {
         swift = swift.replacingOccurrences(of: "{method}", with: method.rawValue)
         swift = swift.replacingOccurrences(of: "{arguments}", with: arguments.joined(separator: ", "))
         swift = swift.replacingOccurrences(of: "{result}", with: result)
-        swift = swift.replacingOccurrences(of: "{body}", with: body ?? "let body: Data? = nil")
+        swift = swift.replacingOccurrences(of: "{body}", with: body ?? "")
         swift = swift.replacingOccurrences(of: "{headers}", with: headers.joined(separator: "\n"))
         swift = swift.replacingOccurrences(of: "{queries}", with: queries.joined(separator: "\n"))
+        swift = swift.replacingOccurrences(of: "{encoding}", with: body != nil ? "BodyDataEncoding(data: body)" : "URLEncoding.default")
 
         if !security.isEmpty {
-            for scope in security {
-                let s = "guard scopes.contains(\"\(scope)\") else {throw ESIError.forbidden}"
-                securityCheck.append(s)
+            let securityCheck: [String] = security.sorted().map{
+                "guard scopes.contains(\"\($0)\") else {throw ESIError.forbidden}"
             }
             var s = "let scopes = esi.token?.scopes ?? []\n"
             s += securityCheck.joined(separator: "\n")
@@ -344,6 +354,9 @@ extension Model.Operation {
         let decode: String
         if result == "String" {
             decode = "responseString(queue: esi.session.serializationQueue)"
+        }
+        else if result == "Void" {
+            decode = "responseVoid(queue: esi.session.serializationQueue)"
         }
         else {
             decode = "responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)"
@@ -374,26 +387,27 @@ extension Model.Route {
 		s = subpaths.map { (key, route) -> String in
 			if key.hasPrefix("{") {
 				let name = String(key.dropLast().dropFirst())
-				let parameter = findParameter(name, in: route)
+				let parameter = findParameter(name, in: route)!
 				let s: String
-				if let `default` = parameter?.default {
-					s = "func \(key.camelBack)(_ value: \(parameter!.type.id()) = \(`default`)) {\n"
+				if let defaults = parameter.default {
+                    let value = parameter.type.default(defaults)
+					s = "public func \(key.camelBack.validIdentifier)(_ value: \(parameter.type.id()) = \(value)) -> \(key.camelCaps.validIdentifier) {\n"
 				}
 				else {
-					s = "func \(key.camelBack)(_ value: \(parameter!.type.id())) {\n"
+					s = "public func \(key.camelBack.validIdentifier)(_ value: \(parameter.type.id())) -> \(key.camelCaps.validIdentifier) {\n"
 				}
-				return s + "\(key.camelCaps)(esi: esi, route: (esi: esi, route: .parameter(value, next: route)))\n}"
+				return s + "\(key.camelCaps.validIdentifier)(esi: esi, route: .parameter(value, next: route))\n}"
 
 			}
 			else {
-				return "func \(key.camelBack)() {\n" +
-				"\(key.camelCaps)(esi: esi, route: .path(\"\(key)\", next: route))\n}"
+				return "public func \(key.camelBack.validIdentifier)() -> \(key.camelCaps.validIdentifier) {\n" +
+				"\(key.camelCaps.validIdentifier)(esi: esi, route: .path(\"\(key)\", next: route))\n}"
 			}
 		}.joined(separator: "\n")
 		
 		swift = swift.replacingOccurrences(of: "{routes}", with: s)
 		if !keyPath.isEmpty {
-			swift = swift.replacingOccurrences(of: "{name}", with: keyPath.last!.camelCaps)
+			swift = swift.replacingOccurrences(of: "{name}", with: keyPath.last!.camelCaps.validIdentifier)
 		}
 		
 		let nested = typeIdentifiers.filter{Array($0.value.prefix(keyPath.count)) == keyPath && $0.value.count == keyPath.count + 1}.compactMap{$0.key.swift(keyPath: keyPath)}
@@ -405,29 +419,72 @@ extension Model.Route {
 }
 
 extension Model.MetaType {
+    func `default`(_ defaults: Swagger.Parameter.Default) -> String {
+        switch (self, defaults) {
+        case let (.enum, .string(s)):
+            return ".\(s.camelBack.validIdentifier)"
+        case (.optional, _):
+            return "nil"
+        default:
+            return String(describing: defaults)
+        }
+    }
+    
+    func unwrap() -> Self {
+        switch self {
+        case let .array(type):
+            return type.unwrap()
+        case let .optional(type):
+            return type.unwrap()
+        default:
+            return self
+        }
+    }
+    
 	func swift(keyPath: [String]) -> String? {
         switch self {
         case let .array(type):
 			return type.swift(keyPath: keyPath)
         case let .enum(name, cases):
             var swift = enumTemplate
-            swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps)
-            swift = swift.replacingOccurrences(of: "{cases}", with: cases.map{($0.camelBack, $0)}.map{
+            swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps.validIdentifier)
+            swift = swift.replacingOccurrences(of: "{cases}", with: cases.map{($0.camelBack.validIdentifier, $0)}.map{
                 $0 == $1 ? "case \($0)" : "case \($0) = \"\($1)\""
             }.joined(separator: "\n"))
             return swift
         case let .object(name, object):
 			var swift = classTemplate
-            swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps)
+            swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps.validIdentifier)
 			let properties = object.properties.sorted(by: {$0.key < $1.key})
 			let rows = properties.map { (name, property) in
-				"let \(name.camelBack): \(property.id())"
+				"public let \(name.camelBack.validIdentifier): \(property.id())"
 			}
 			
 			swift = swift.replacingOccurrences(of: "{properties}", with: rows.joined(separator: "\n"))
 			
-			let codingKeys = properties.map{$0.key}.map{($0.camelBack, $0)}.map{
+			let codingKeys = properties.map{$0.key}.map{($0.camelBack.validIdentifier, $0)}.map{
                 $0 == $1 ? "case \($0)" : "case \($0) = \"\($1)\""
+            }
+            
+            let dateFormatters = properties.compactMap{ (name, property) -> String? in
+                switch property.unwrap() {
+                case .date:
+                    return "case .\(name.camelBack.validIdentifier):\nreturn DateFormatter.esiDateFormatter"
+                case .dateTime:
+                    return "case .\(name.camelBack.validIdentifier):\nreturn DateFormatter.esiDateTimeFormatter"
+                default:
+                    return nil
+                }
+            }
+            
+            if !dateFormatters.isEmpty {
+                let s = "switch self {\n" +
+                "\(dateFormatters.joined(separator: "\n"))\n" +
+                "default:\nreturn nil\n}"
+                swift = swift.replacingOccurrences(of: "{dateFormatters}", with: s)
+            }
+            else {
+                swift = swift.replacingOccurrences(of: "{dateFormatters}", with: "return nil")
             }
 			
 			swift = swift.replacingOccurrences(of: "{codingKeys}", with: codingKeys.joined(separator: "\n"))

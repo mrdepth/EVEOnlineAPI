@@ -32,8 +32,13 @@ public enum ESIError: LocalizedError {
     }
 }
 
+public protocol ESIDelegate: AnyObject {
+    func tokenDidRefresh(_ token: OAuth2Token)
+    func tokenDidBecomeInvalid(_ token: OAuth2Token)
+}
 
-public class ESI {
+
+public class ESI: OAuth2InterceptorDelegate {
     public enum Server: String {
         case tranquility = "tranquility"
         case singularity = "singularity"
@@ -44,6 +49,7 @@ public class ESI {
     public let session: Session
     public let token: OAuth2Token?
     public let server: Server
+    public weak var delegate: ESIDelegate?
 	
 	public init(server: Server = .tranquility) {
 		let interceptor = Interceptor(adapters: [EtagAdapter()], retriers: [])
@@ -54,10 +60,19 @@ public class ESI {
 
     public init(token: OAuth2Token, clientID: String, secretKey: String, server: Server = .tranquility) {
         self.token = token
-		let oauth2 = OAuth2Interceptor(token: token, clientID: clientID, secretKey: secretKey)
+        let oauth2 = OAuth2Interceptor(token: token, clientID: clientID, secretKey: secretKey)
 		let interceptor = Interceptor(adapters: [EtagAdapter(), oauth2], retriers: [oauth2])
         session = Session(interceptor: interceptor)
         self.server = server
+        oauth2.delegate = self
+    }
+    
+    func tokenDidRefresh(_ token: OAuth2Token) {
+        delegate?.tokenDidRefresh(token)
+    }
+    
+    func tokenDidBecomeInvalid(_ token: OAuth2Token) {
+        delegate?.tokenDidBecomeInvalid(token)
     }
 }
 
@@ -165,36 +180,6 @@ extension ESI {
                     return image
                 }
         }
-        
-        
-        @discardableResult
-        public func getCharactersSkillQueue(characterID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<String, AFError> {
-
-            let scopes = esi.token?.scopes ?? []
-            
-            guard scopes.contains("esi-skills.read_skillqueue.v1") else {return Fail(error: AFError.createURLRequestFailed(error: ESIError.forbidden)).eraseToAnyPublisher()}
-            let body: Data? = nil
-            
-            var headers = HTTPHeaders()
-            headers["Accept"] = "application/json"
-
-            var query = [URLQueryItem]()
-            query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-            
-            
-            let url = ESI.apiURL.appendingPathComponent("characters/\(characterID)/skillqueue/")
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-            components.queryItems = query
-            return esi.session.publisher(components.url!,
-                                         method: .get,
-                                         encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-                                         headers: headers,
-                                         interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-                .eraseToAnyPublisher()
-        }
-        
-        
     }
 }
 
@@ -237,62 +222,62 @@ struct BodyDataEncoding: ParameterEncoding {
 }
 
 
-extension ESI {
-    var character1: Characters {
-        Characters(esi: self, route: .root(ESI.apiURL))
-    }
-    struct Characters {
-        var esi: ESI
-        let route: Route
-        
-        func characterID(_ value: Int) -> CharacterID {
-            CharacterID(esi: esi, route: .parameter(value, next: route))
-        }
-        
-        public struct CharacterID {
-            let esi: ESI
-            let route: Route
-            
-            public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Character.Information, AFError> {
-            
-                
-                let body: Data? = nil
-                
-                var headers = HTTPHeaders()
-                headers["Accept"] = "application/json"
-                
-                
-                var query = [URLQueryItem]()
-                query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-                
-                
-                do {
-                    let url = try route.asURL()
-                    var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-                    components.queryItems = query
-                    
-                    return esi.session.publisher(components,
-                                                 method: .get,
-                                                 encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-                                                 headers: headers,
-                                                 interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                        .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-                        .eraseToAnyPublisher()
-                    
-                }
-                catch {
-                    return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
-                }
-                
-            }
-        }
-            
-            
-    }
-}
+//extension ESI {
+//    var character1: Characters {
+//        Characters(esi: self, route: .root(ESI.apiURL))
+//    }
+//    struct Characters {
+//        var esi: ESI
+//        let route: Route
+//
+//        func characterID(_ value: Int) -> CharacterID {
+//            CharacterID(esi: esi, route: .parameter(value, next: route))
+//        }
+//
+//        public struct CharacterID {
+//            let esi: ESI
+//            let route: Route
+//
+//            public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Character.Information, AFError> {
+//
+//
+//                let body: Data? = nil
+//
+//                var headers = HTTPHeaders()
+//                headers["Accept"] = "application/json"
+//
+//
+//                var query = [URLQueryItem]()
+//                query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+//
+//
+//                do {
+//                    let url = try route.asURL()
+//                    var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+//                    components.queryItems = query
+//
+//                    return esi.session.publisher(components,
+//                                                 method: .get,
+//                                                 encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+//                                                 headers: headers,
+//                                                 interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+//                        .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+//                        .eraseToAnyPublisher()
+//
+//                }
+//                catch {
+//                    return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+//                }
+//
+//            }
+//        }
+//
+//
+//    }
+//}
 
 extension ESI {
-    indirect enum Route: URLConvertible {
+    indirect enum APIRoute: URLConvertible {
         func asURL() throws -> URL {
             switch self {
             case let .root(url):
@@ -305,7 +290,7 @@ extension ESI {
         }
         
         case root(URL)
-        case path(String, next: Route)
-        case parameter(CustomStringConvertible, next: Route)
+        case path(String, next: APIRoute)
+        case parameter(CustomStringConvertible, next: APIRoute)
     }
 }

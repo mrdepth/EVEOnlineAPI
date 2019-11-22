@@ -5,54 +5,58 @@ import Combine
 
 extension ESI {
 	public var status: Status {
-		return Status(esi: self)
+		return Status(esi: self, route: .path("status", next: .root(ESI.apiURL)))
 	}
 	
 	public struct Status {
 		let esi: ESI
+		let route: APIRoute
 		
 		
-		public func retrieveTheUptimeAndPlayerCounts(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Status.ServerStatus, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/status/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
+		public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+			do {
+				
+				
+				
+				
+				var headers = HTTPHeaders()
+				headers["Accept"] = "application/json"
+				
+				
+				var query = [URLQueryItem]()
+				query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+				
+				
+				let url = try route.asURL()
+				var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+				components.queryItems = query
+				
+				return esi.session.publisher(components,
+				method: .get,
+				encoding: URLEncoding.default,
+				headers: headers,
+				interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+				.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+				.eraseToAnyPublisher()
+				
+			}
+			catch {
+				return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+			}
 		}
 		
 		
-		public struct ServerStatus: Codable, Hashable {
+		
+		
+		
+		
+		public struct Success: Codable, Hashable {
 			
 			
-			public var players: Int
-			public var serverVersion: String
-			public var startTime: Date
-			public var vip: Bool?
-			
-			public init(players: Int, serverVersion: String, startTime: Date, vip: Bool?) {
-				self.players = players
-				self.serverVersion = serverVersion
-				self.startTime = startTime
-				self.vip = vip
-			}
+			public let players: Int
+			public let serverVersion: String
+			public let startTime: Date
+			public let vip: Bool?
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case players
@@ -62,13 +66,24 @@ extension ESI {
 				
 				var dateFormatter: DateFormatter? {
 					switch self {
-						case .startTime: return DateFormatter.esiDateTimeFormatter
-						default: return nil
+						case .startTime:
+						return DateFormatter.esiDateTimeFormatter
+						default:
+						return nil
 					}
 				}
 			}
 		}
 		
+		public enum Datasource: String, Codable, CustomStringConvertible {
+			case tranquility
+			case singularity
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 	}
 	

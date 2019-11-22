@@ -5,212 +5,193 @@ import Combine
 
 extension ESI {
 	public var wars: Wars {
-		return Wars(esi: self)
+		return Wars(esi: self, route: .path("wars", next: .root(ESI.apiURL)))
 	}
 	
 	public struct Wars {
 		let esi: ESI
+		let route: APIRoute
 		
 		
-		public func listWars(maxWarID: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = maxWarID?.description {
-				query.append(URLQueryItem(name: "max_war_id", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/wars/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func getWarInformation(warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Wars.WarInformation, AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			
-			
-			        let url = ESI.apiURL.appendingPathComponent("/wars/\(warID)/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public func listKillsForWar(page: Int? = nil, warID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Wars.Kills], AFError> {
-			
-			
-			let body: Data? = nil
-			
-			var headers = HTTPHeaders()
-			headers["Accept"] = "application/json"
-			
-			
-			var query = [URLQueryItem]()
-			query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
-			if let v = page?.description {
-				query.append(URLQueryItem(name: "page", value: v.lazy.map{$0.description}.joined(separator: ",")))
-			}
-			
-			        let url = ESI.apiURL.appendingPathComponent("/wars/\(warID)/killmails/")
-			var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
-			components.queryItems = query
-			
-			        return esi.session.publisher(components,
-			                                     method: .get,
-			                                     encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
-			                                     headers: headers,
-			                                     interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-			            .responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-			            .eraseToAnyPublisher()
-		}
-		
-		
-		public struct GetWarsWarIDUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
+		public func get(maxWarID: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+			do {
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
+				
+				
+				
+				var headers = HTTPHeaders()
+				headers["Accept"] = "application/json"
+				
+				
+				var query = [URLQueryItem]()
+				query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+				if let maxWarID = maxWarID {
+					query.append(URLQueryItem(name: "max_war_id", value: maxWarID.description))
+				}
+				
+				let url = try route.asURL()
+				var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+				components.queryItems = query
+				
+				return esi.session.publisher(components,
+				method: .get,
+				encoding: URLEncoding.default,
+				headers: headers,
+				interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+				.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+				.eraseToAnyPublisher()
+				
+			}
+			catch {
+				return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+			}
+		}
+		
+		
+		public func warID(_ value: Int) -> WarID {
+			WarID(esi: esi, route: .parameter(value, next: route))
+		}
+		
+		public struct WarID {
+			let esi: ESI
+			let route: APIRoute
+			
+			
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				do {
+					
+					
+					
+					
+					var headers = HTTPHeaders()
+					headers["Accept"] = "application/json"
+					
+					
+					var query = [URLQueryItem]()
+					query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+					
+					
+					let url = try route.asURL()
+					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+					components.queryItems = query
+					
+					return esi.session.publisher(components,
+					method: .get,
+					encoding: URLEncoding.default,
+					headers: headers,
+					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+					
+				}
+				catch {
+					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
+				}
+			}
+			
+			
+			public func killmails() -> Killmails {
+				Killmails(esi: esi, route: .path("killmails", next: route))
+			}
+			
+			public struct Killmails {
+				let esi: ESI
+				let route: APIRoute
+				
+				
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+					do {
 						
-						default: return nil
+						
+						
+						
+						var headers = HTTPHeaders()
+						headers["Accept"] = "application/json"
+						
+						
+						var query = [URLQueryItem]()
+						query.append(URLQueryItem(name: "datasource", value: esi.server.rawValue))
+						if let page = page {
+							query.append(URLQueryItem(name: "page", value: page.description))
+						}
+						
+						let url = try route.asURL()
+						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+						components.queryItems = query
+						
+						return esi.session.publisher(components,
+						method: .get,
+						encoding: URLEncoding.default,
+						headers: headers,
+						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+						
+					}
+					catch {
+						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
 					}
 				}
-			}
-		}
-		
-		
-		public struct GetWarsWarIDKillmailsUnprocessableEntity: Codable, Hashable {
-			
-			
-			public var error: String?
-			
-			public init(error: String?) {
-				self.error = error
+				
+				
+				
+				
+				
+				
+				
 			}
 			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case error
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
-		
-		
-		public struct WarInformation: Codable, Hashable {
 			
-			public struct GetWarsWarIDAllies: Codable, Hashable {
+			public struct Success: Codable, Hashable {
 				
 				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				
-				public init(allianceID: Int?, corporationID: Int?) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-				}
+				public let aggressor: ESI.Wars.WarID.Aggressor
+				public let allies: [ESI.Wars.WarID.Ally]?
+				public let declared: Date
+				public let defender: ESI.Wars.WarID.Defender
+				public let finished: Date?
+				public let id: Int
+				public let mutual: Bool
+				public let openForAllies: Bool
+				public let retracted: Date?
+				public let started: Date?
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
+					case aggressor
+					case allies
+					case declared
+					case defender
+					case finished
+					case id
+					case mutual
+					case openForAllies = "open_for_allies"
+					case retracted
+					case started
 					
 					var dateFormatter: DateFormatter? {
 						switch self {
-							
-							default: return nil
+							case .declared:
+							return DateFormatter.esiDateTimeFormatter
+							case .finished:
+							return DateFormatter.esiDateTimeFormatter
+							case .retracted:
+							return DateFormatter.esiDateTimeFormatter
+							case .started:
+							return DateFormatter.esiDateTimeFormatter
+							default:
+							return nil
 						}
 					}
 				}
 			}
 			
-			public struct GetWarsWarIDDefender: Codable, Hashable {
+			public struct Defender: Codable, Hashable {
 				
 				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Float
-				public var shipsKilled: Int
-				
-				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Float, shipsKilled: Int) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-					self.iskDestroyed = iskDestroyed
-					self.shipsKilled = shipsKilled
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
-					case iskDestroyed = "isk_destroyed"
-					case shipsKilled = "ships_killed"
-					
-					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
-					}
-				}
-			}
-			
-			public struct GetWarsWarIDAggressor: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Float
-				public var shipsKilled: Int
-				
-				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Float, shipsKilled: Int) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-					self.iskDestroyed = iskDestroyed
-					self.shipsKilled = shipsKilled
-				}
+				public let allianceID: Int?
+				public let corporationID: Int?
+				public let iskDestroyed: Double
+				public let shipsKilled: Int
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"
@@ -219,86 +200,49 @@ extension ESI {
 					case shipsKilled = "ships_killed"
 					
 					var dateFormatter: DateFormatter? {
-						switch self {
-							
-							default: return nil
-						}
+						return nil
 					}
 				}
 			}
 			
-			public var aggressor: Wars.WarInformation.GetWarsWarIDAggressor
-			public var allies: [Wars.WarInformation.GetWarsWarIDAllies]?
-			public var declared: Date
-			public var defender: Wars.WarInformation.GetWarsWarIDDefender
-			public var finished: Date?
-			public var id: Int
-			public var mutual: Bool
-			public var openForAllies: Bool
-			public var retracted: Date?
-			public var started: Date?
-			
-			public init(aggressor: Wars.WarInformation.GetWarsWarIDAggressor, allies: [Wars.WarInformation.GetWarsWarIDAllies]?, declared: Date, defender: Wars.WarInformation.GetWarsWarIDDefender, finished: Date?, id: Int, mutual: Bool, openForAllies: Bool, retracted: Date?, started: Date?) {
-				self.aggressor = aggressor
-				self.allies = allies
-				self.declared = declared
-				self.defender = defender
-				self.finished = finished
-				self.id = id
-				self.mutual = mutual
-				self.openForAllies = openForAllies
-				self.retracted = retracted
-				self.started = started
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case aggressor
-				case allies
-				case declared
-				case defender
-				case finished
-				case id
-				case mutual
-				case openForAllies = "open_for_allies"
-				case retracted
-				case started
+			public struct Aggressor: Codable, Hashable {
 				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						case .declared: return DateFormatter.esiDateTimeFormatter
-						case .finished: return DateFormatter.esiDateTimeFormatter
-						case .retracted: return DateFormatter.esiDateTimeFormatter
-						case .started: return DateFormatter.esiDateTimeFormatter
-						default: return nil
+				
+				public let allianceID: Int?
+				public let corporationID: Int?
+				public let iskDestroyed: Double
+				public let shipsKilled: Int
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					case iskDestroyed = "isk_destroyed"
+					case shipsKilled = "ships_killed"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
 					}
 				}
 			}
+			
+			public struct Ally: Codable, Hashable {
+				
+				
+				public let allianceID: Int?
+				public let corporationID: Int?
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
 		}
 		
-		
-		public struct Kills: Codable, Hashable {
-			
-			
-			public var killmailHash: String
-			public var killmailID: Int
-			
-			public init(killmailHash: String, killmailID: Int) {
-				self.killmailHash = killmailHash
-				self.killmailID = killmailID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case killmailHash = "killmail_hash"
-				case killmailID = "killmail_id"
-				
-				var dateFormatter: DateFormatter? {
-					switch self {
-						
-						default: return nil
-					}
-				}
-			}
-		}
 		
 		
 	}

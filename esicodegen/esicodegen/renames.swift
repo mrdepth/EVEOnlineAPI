@@ -8,7 +8,8 @@
 
 import Foundation
 
-let typeNames: [String: String] = [:
+let typeNames: [String: String] = [
+"post_characters_character_id_mail_labels_label" : "PostLabel"
 //    "characters_character_id_industry_jobs_200_ok": "CharacterIndustryJobs",
 //    "get_characters_character_id_industry_jobs_status" : "IndustryJobsStatus",
 //    "get_characters_character_id_contracts_status" : "ContractStatus",

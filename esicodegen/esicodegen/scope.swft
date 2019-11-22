@@ -5,16 +5,8 @@ import Combine
 
 extension ESI {
 	public var {variable}: {scope} {
-		return {scope}(esi: self)
+        return {scope}(esi: self, route: .path("{name}", next: .root(ESI.apiURL)))
 	}
 
-	public struct {scope} {
-		let esi: ESI
-
-{operations}
-
-{classes}
-
-	}
-
+    {routes}
 }

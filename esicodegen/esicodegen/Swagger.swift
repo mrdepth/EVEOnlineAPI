@@ -32,7 +32,7 @@ struct Swagger: Decodable, Hashable {
     let paths: [String: [Method: Operation]]
     let produces: [String]
     let schemes: [String]
-    let securityDefinitions: SecurityDefinitions
+    let securityDefinitions: [String: SecurityDefinition]
     
     enum CodingKeys: String, CodingKey {
         case basePath
@@ -57,7 +57,7 @@ struct Swagger: Decodable, Hashable {
         info = try container.decode(Info.self, forKey: .info)
         produces = try container.decode([String].self, forKey: .produces)
         schemes = try container.decode([String].self, forKey: .schemes)
-        securityDefinitions = try container.decode(SecurityDefinitions.self, forKey: .securityDefinitions)
+        securityDefinitions = try container.decode([String: SecurityDefinition].self, forKey: .securityDefinitions)
         definitions = try container.decode([String: Property].self, forKey: .definitions)
         parameters = try container.decode([String: Parameter].self, forKey: .parameters)
         paths = try container.decode([String: [String: Operation]].self, forKey: .paths).mapValues { value -> [Method: Operation] in
@@ -80,14 +80,11 @@ extension Swagger {
         let version: String
     }
     
-    struct SecurityDefinitions: Decodable, Hashable {
-        struct Evesso: Decodable, Hashable {
-            var authorizationUrl: String
-            var flow: String
-            var scopes: [String: String]
-            var type: String
-        }
-        let evesso: Evesso
+    struct SecurityDefinition: Decodable, Hashable {
+        var authorizationUrl: String
+        var flow: String
+        var scopes: [String: String]
+        var type: String
     }
 }
 
@@ -182,7 +179,7 @@ extension Swagger {
         let `enum`: [String]?
         let `in`: In
         let name: String
-        let type: ValueType
+        let type: ValueType?
         let required: Bool
         let minimum: Int?
         let format: ValueFormat?
@@ -215,7 +212,7 @@ extension Swagger {
             schema = try container.decodeIfPresent(Property.self, forKey: .schema)
 			items = try container.decodeIfPresent(Property.self, forKey: .items)
             
-            let type = try container.decodeIfPresent(ValueType.self, forKey: .type) ?? .object
+            let type = try container.decodeIfPresent(ValueType.self, forKey: .type)// ?? .object
             self.type = type
             switch type {
             case .integer:
@@ -227,6 +224,8 @@ extension Swagger {
             case .number:
                 `default` = try container.decodeIfPresent(Double.self, forKey: .default).map{.number($0)}
             case .object, .array:
+                `default` = nil
+            default:
                 `default` = nil
             }
         }
@@ -260,7 +259,7 @@ extension Swagger {
         let tags: [String]
         let xAlternateVersions: [String]
         let xCachedSeconds: Int?
-		let security: [Security]?
+        let security: [[String: [String]]]?
         
         enum CodingKeys: String, CodingKey {
             case description
@@ -279,9 +278,5 @@ extension Swagger {
             let schema: Link<Property>?
             let headers: [String: Property]?
         }
-		
-		struct Security: Decodable, Hashable {
-			let evesso: [String]
-		}
     }
 }

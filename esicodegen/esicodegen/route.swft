@@ -1,6 +1,6 @@
-struct {name} {
+public struct {name} {
 	let esi: ESI
-	let route: Route
+	let route: APIRoute
 	
 	{operations}
 	

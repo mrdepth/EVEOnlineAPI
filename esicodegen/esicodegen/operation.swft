@@ -19,7 +19,7 @@
     
             return esi.session.publisher(components,
                                          method: .{method},
-                                         encoding: body.map{BodyDataEncoding(data: $0)} ?? URLEncoding.default,
+                                         encoding: {encoding},
                                          headers: headers,
                                          interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .{decode}

@@ -1,13 +1,12 @@
-public extension ESI.Scope {
+import Foundation
+
+extension ESI.Scope {
 
 {values}
 	
-	static var all: [ESI.Scope]  {
-		get {
-			return [
-{scopes}
-			]
-		}
-	}
+    public static let all: [ESI.Scope] = [
+        {scopes}
+    ]
+	
 }
 	

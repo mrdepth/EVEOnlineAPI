@@ -19,10 +19,10 @@ public enum OAuth2Error: Error {
 }
 
 
-extension Notification.Name {
-	static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
-	static let OAuth2TokenDidBecomeInvalid = Notification.Name(rawValue: "OAuth2TokenDidBecomeInvalid")
-}
+//extension Notification.Name {
+//	public static let OAuth2TokenDidRefresh = Notification.Name(rawValue: "OAuth2TokenDidRefresh")
+//	public static let OAuth2TokenDidBecomeInvalid = Notification.Name(rawValue: "OAuth2TokenDidBecomeInvalid")
+//}
 
 fileprivate struct TokenResponse: Decodable {
 	var accessToken: String
@@ -98,7 +98,12 @@ public struct OAuth2Token: Codable {
 	}
 }
 
-public class OAuth2Interceptor: RequestInterceptor {
+protocol OAuth2InterceptorDelegate: AnyObject {
+    func tokenDidRefresh(_ token: OAuth2Token)
+    func tokenDidBecomeInvalid(_ token: OAuth2Token)
+}
+
+class OAuth2Interceptor: RequestInterceptor {
 
     static let dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
@@ -111,8 +116,9 @@ public class OAuth2Interceptor: RequestInterceptor {
 	private(set) public var token: OAuth2Token
 	public let clientID: String
 	public let secretKey: String
+    weak var delegate: OAuth2InterceptorDelegate?
 	
-	public init(token: OAuth2Token, clientID: String, secretKey: String) {
+    public init(token: OAuth2Token, clientID: String, secretKey: String) {
 		self.token = token
 		self.clientID = clientID
 		self.secretKey = secretKey
@@ -190,20 +196,21 @@ public class OAuth2Interceptor: RequestInterceptor {
 								token.tokenType = value.tokenType
 								token.expiresOn = expiresOn
 								strongSelf.token = token
-								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
+                                strongSelf.delegate?.tokenDidRefresh(token)
+//								NotificationCenter.default.post(name: .OAuth2TokenDidRefresh, object: token)
 								completion(nil)
 							case let .failure(error):
                                 if case .requestRetryFailed(let retryError, _) = error, case OAuth2Error.invalidToken = retryError {
 									let token = strongSelf.token
 									strongSelf.token.refreshToken = ""
-									NotificationCenter.default.post(name: .OAuth2TokenDidBecomeInvalid, object: token)
+                                    strongSelf.delegate?.tokenDidBecomeInvalid(token)
+//									NotificationCenter.default.post(name: .OAuth2TokenDidBecomeInvalid, object: token)
 								}
 								completion(error)
 							}
 							
 		}
 	}
-	
 }
 
 public class OAuth2 {
