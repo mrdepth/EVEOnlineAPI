@@ -111,16 +111,28 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let attributeID: Int
-					public let defaultValue: Double?
-					public let localizedDescription: String?
-					public let displayName: String?
-					public let highIsGood: Bool?
-					public let iconID: Int?
-					public let name: String?
-					public let published: Bool?
-					public let stackable: Bool?
-					public let unitID: Int?
+					public var attributeID: Int
+					public var defaultValue: Double?
+					public var localizedDescription: String?
+					public var displayName: String?
+					public var highIsGood: Bool?
+					public var iconID: Int?
+					public var name: String?
+					public var published: Bool?
+					public var stackable: Bool?
+					public var unitID: Int?
+					public init(attributeID: Int, defaultValue: Double?, localizedDescription: String?, displayName: String?, highIsGood: Bool?, iconID: Int?, name: String?, published: Bool?, stackable: Bool?, unitID: Int?) {
+						self.attributeID = attributeID
+						self.defaultValue = defaultValue
+						self.localizedDescription = localizedDescription
+						self.displayName = displayName
+						self.highIsGood = highIsGood
+						self.iconID = iconID
+						self.name = name
+						self.published = published
+						self.stackable = stackable
+						self.unitID = unitID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case attributeID = "attribute_id"
@@ -221,11 +233,18 @@ extension ESI {
 						public struct Success: Codable, Hashable {
 							
 							
-							public let createdBy: Int
-							public let dogmaAttributes: [ESI.Dogma.DogmaAttribute]
-							public let dogmaEffects: [ESI.Dogma.DogmaEffect]
-							public let mutatorTypeID: Int
-							public let sourceTypeID: Int
+							public var createdBy: Int
+							public var dogmaAttributes: [ESI.Dogma.DogmaAttribute]
+							public var dogmaEffects: [ESI.Dogma.DogmaEffect]
+							public var mutatorTypeID: Int
+							public var sourceTypeID: Int
+							public init(createdBy: Int, dogmaAttributes: [ESI.Dogma.DogmaAttribute], dogmaEffects: [ESI.Dogma.DogmaEffect], mutatorTypeID: Int, sourceTypeID: Int) {
+								self.createdBy = createdBy
+								self.dogmaAttributes = dogmaAttributes
+								self.dogmaEffects = dogmaEffects
+								self.mutatorTypeID = mutatorTypeID
+								self.sourceTypeID = sourceTypeID
+							}
 							
 							enum CodingKeys: String, CodingKey, DateFormatted {
 								case createdBy = "created_by"
@@ -338,30 +357,85 @@ extension ESI {
 				
 				
 				
+				public struct Modifier: Codable, Hashable {
+					
+					
+					public var domain: String?
+					public var effectID: Int?
+					public var `func`: String
+					public var modifiedAttributeID: Int?
+					public var modifyingAttributeID: Int?
+					public var `operator`: Int?
+					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
+						self.domain = domain
+						self.effectID = effectID
+						self.`func` = `func`
+						self.modifiedAttributeID = modifiedAttributeID
+						self.modifyingAttributeID = modifyingAttributeID
+						self.`operator` = `operator`
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case domain
+						case effectID = "effect_id"
+						case `func` = "func"
+						case modifiedAttributeID = "modified_attribute_id"
+						case modifyingAttributeID = "modifying_attribute_id"
+						case `operator` = "operator"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let localizedDescription: String?
-					public let disallowAutoRepeat: Bool?
-					public let dischargeAttributeID: Int?
-					public let displayName: String?
-					public let durationAttributeID: Int?
-					public let effectCategory: Int?
-					public let effectID: Int
-					public let electronicChance: Bool?
-					public let falloffAttributeID: Int?
-					public let iconID: Int?
-					public let isAssistance: Bool?
-					public let isOffensive: Bool?
-					public let isWarpSafe: Bool?
-					public let modifiers: [ESI.Dogma.Effects.EffectID.Modifier]?
-					public let name: String?
-					public let postExpression: Int?
-					public let preExpression: Int?
-					public let published: Bool?
-					public let rangeAttributeID: Int?
-					public let rangeChance: Bool?
-					public let trackingSpeedAttributeID: Int?
+					public var localizedDescription: String?
+					public var disallowAutoRepeat: Bool?
+					public var dischargeAttributeID: Int?
+					public var displayName: String?
+					public var durationAttributeID: Int?
+					public var effectCategory: Int?
+					public var effectID: Int
+					public var electronicChance: Bool?
+					public var falloffAttributeID: Int?
+					public var iconID: Int?
+					public var isAssistance: Bool?
+					public var isOffensive: Bool?
+					public var isWarpSafe: Bool?
+					public var modifiers: [ESI.Dogma.Effects.EffectID.Modifier]?
+					public var name: String?
+					public var postExpression: Int?
+					public var preExpression: Int?
+					public var published: Bool?
+					public var rangeAttributeID: Int?
+					public var rangeChance: Bool?
+					public var trackingSpeedAttributeID: Int?
+					public init(localizedDescription: String?, disallowAutoRepeat: Bool?, dischargeAttributeID: Int?, displayName: String?, durationAttributeID: Int?, effectCategory: Int?, effectID: Int, electronicChance: Bool?, falloffAttributeID: Int?, iconID: Int?, isAssistance: Bool?, isOffensive: Bool?, isWarpSafe: Bool?, modifiers: [ESI.Dogma.Effects.EffectID.Modifier]?, name: String?, postExpression: Int?, preExpression: Int?, published: Bool?, rangeAttributeID: Int?, rangeChance: Bool?, trackingSpeedAttributeID: Int?) {
+						self.localizedDescription = localizedDescription
+						self.disallowAutoRepeat = disallowAutoRepeat
+						self.dischargeAttributeID = dischargeAttributeID
+						self.displayName = displayName
+						self.durationAttributeID = durationAttributeID
+						self.effectCategory = effectCategory
+						self.effectID = effectID
+						self.electronicChance = electronicChance
+						self.falloffAttributeID = falloffAttributeID
+						self.iconID = iconID
+						self.isAssistance = isAssistance
+						self.isOffensive = isOffensive
+						self.isWarpSafe = isWarpSafe
+						self.modifiers = modifiers
+						self.name = name
+						self.postExpression = postExpression
+						self.preExpression = preExpression
+						self.published = published
+						self.rangeAttributeID = rangeAttributeID
+						self.rangeChance = rangeChance
+						self.trackingSpeedAttributeID = trackingSpeedAttributeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case localizedDescription = "description"
@@ -392,30 +466,6 @@ extension ESI {
 					}
 				}
 				
-				public struct Modifier: Codable, Hashable {
-					
-					
-					public let domain: String?
-					public let effectID: Int?
-					public let `func`: String
-					public let modifiedAttributeID: Int?
-					public let modifyingAttributeID: Int?
-					public let `operator`: Int?
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case domain
-						case effectID = "effect_id"
-						case `func` = "func"
-						case modifiedAttributeID = "modified_attribute_id"
-						case modifyingAttributeID = "modifying_attribute_id"
-						case `operator` = "operator"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 			}
 			
 			
@@ -426,8 +476,12 @@ extension ESI {
 		public struct DogmaAttribute: Codable, Hashable {
 			
 			
-			public let attributeID: Int
-			public let value: Double
+			public var attributeID: Int
+			public var value: Double
+			public init(attributeID: Int, value: Double) {
+				self.attributeID = attributeID
+				self.value = value
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case attributeID = "attribute_id"
@@ -442,8 +496,12 @@ extension ESI {
 		public struct DogmaEffect: Codable, Hashable {
 			
 			
-			public let effectID: Int
-			public let isDefault: Bool
+			public var effectID: Int
+			public var isDefault: Bool
+			public init(effectID: Int, isDefault: Bool) {
+				self.effectID = effectID
+				self.isDefault = isDefault
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case effectID = "effect_id"

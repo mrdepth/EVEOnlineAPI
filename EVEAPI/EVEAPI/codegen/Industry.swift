@@ -66,12 +66,20 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let facilityID: Int64
-				public let ownerID: Int
-				public let regionID: Int
-				public let solarSystemID: Int
-				public let tax: Double?
-				public let typeID: Int
+				public var facilityID: Int64
+				public var ownerID: Int
+				public var regionID: Int
+				public var solarSystemID: Int
+				public var tax: Double?
+				public var typeID: Int
+				public init(facilityID: Int64, ownerID: Int, regionID: Int, solarSystemID: Int, tax: Double?, typeID: Int) {
+					self.facilityID = facilityID
+					self.ownerID = ownerID
+					self.regionID = regionID
+					self.solarSystemID = solarSystemID
+					self.tax = tax
+					self.typeID = typeID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case facilityID = "facility_id"
@@ -134,8 +142,12 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let costIndices: [ESI.Industry.Systems.CostIndice]
-				public let solarSystemID: Int
+				public var costIndices: [ESI.Industry.Systems.CostIndice]
+				public var solarSystemID: Int
+				public init(costIndices: [ESI.Industry.Systems.CostIndice], solarSystemID: Int) {
+					self.costIndices = costIndices
+					self.solarSystemID = solarSystemID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case costIndices = "cost_indices"
@@ -167,8 +179,12 @@ extension ESI {
 					
 				}
 				
-				public let activity: ESI.Industry.Systems.CostIndice.Activity
-				public let costIndex: Double
+				public var activity: ESI.Industry.Systems.CostIndice.Activity
+				public var costIndex: Double
+				public init(activity: ESI.Industry.Systems.CostIndice.Activity, costIndex: Double) {
+					self.activity = activity
+					self.costIndex = costIndex
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case activity

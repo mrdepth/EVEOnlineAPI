@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(categories: [ESI.Search.Categories], language: ESI.Markets.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+		public func get(categories: [ESI.Search.Categories], language: ESI.Opportunities.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 			do {
 				
 				
@@ -80,16 +80,28 @@ extension ESI {
 		public struct Success: Codable, Hashable {
 			
 			
-			public let agent: [Int]?
-			public let alliance: [Int]?
-			public let character: [Int]?
-			public let constellation: [Int]?
-			public let corporation: [Int]?
-			public let faction: [Int]?
-			public let inventoryType: [Int]?
-			public let region: [Int]?
-			public let solarSystem: [Int]?
-			public let station: [Int]?
+			public var agent: [Int]?
+			public var alliance: [Int]?
+			public var character: [Int]?
+			public var constellation: [Int]?
+			public var corporation: [Int]?
+			public var faction: [Int]?
+			public var inventoryType: [Int]?
+			public var region: [Int]?
+			public var solarSystem: [Int]?
+			public var station: [Int]?
+			public init(agent: [Int]?, alliance: [Int]?, character: [Int]?, constellation: [Int]?, corporation: [Int]?, faction: [Int]?, inventoryType: [Int]?, region: [Int]?, solarSystem: [Int]?, station: [Int]?) {
+				self.agent = agent
+				self.alliance = alliance
+				self.character = character
+				self.constellation = constellation
+				self.corporation = corporation
+				self.faction = faction
+				self.inventoryType = inventoryType
+				self.region = region
+				self.solarSystem = solarSystem
+				self.station = station
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case agent

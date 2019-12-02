@@ -83,13 +83,22 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let akCost: Int?
-						public let iskCost: Int64
-						public let lpCost: Int
-						public let offerID: Int
-						public let quantity: Int
-						public let requiredItems: [ESI.Loyalty.Stores.CorporationID.Offers.RequiredItem]
-						public let typeID: Int
+						public var akCost: Int?
+						public var iskCost: Int64
+						public var lpCost: Int
+						public var offerID: Int
+						public var quantity: Int
+						public var requiredItems: [ESI.Loyalty.Stores.CorporationID.Offers.RequiredItem]
+						public var typeID: Int
+						public init(akCost: Int?, iskCost: Int64, lpCost: Int, offerID: Int, quantity: Int, requiredItems: [ESI.Loyalty.Stores.CorporationID.Offers.RequiredItem], typeID: Int) {
+							self.akCost = akCost
+							self.iskCost = iskCost
+							self.lpCost = lpCost
+							self.offerID = offerID
+							self.quantity = quantity
+							self.requiredItems = requiredItems
+							self.typeID = typeID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case akCost = "ak_cost"
@@ -109,8 +118,12 @@ extension ESI {
 					public struct RequiredItem: Codable, Hashable {
 						
 						
-						public let quantity: Int
-						public let typeID: Int
+						public var quantity: Int
+						public var typeID: Int
+						public init(quantity: Int, typeID: Int) {
+							self.quantity = quantity
+							self.typeID = typeID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case quantity

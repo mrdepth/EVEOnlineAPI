@@ -91,9 +91,14 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let amount: Double
-						public let bidID: Int
-						public let dateBid: Date
+						public var amount: Double
+						public var bidID: Int
+						public var dateBid: Date
+						public init(amount: Double, bidID: Int, dateBid: Date) {
+							self.amount = amount
+							self.bidID = bidID
+							self.dateBid = dateBid
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -174,15 +179,26 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let isBlueprintCopy: Bool?
-						public let isIncluded: Bool
-						public let itemID: Int64?
-						public let materialEfficiency: Int?
-						public let quantity: Int
-						public let recordID: Int64
-						public let runs: Int?
-						public let timeEfficiency: Int?
-						public let typeID: Int
+						public var isBlueprintCopy: Bool?
+						public var isIncluded: Bool
+						public var itemID: Int64?
+						public var materialEfficiency: Int?
+						public var quantity: Int
+						public var recordID: Int64
+						public var runs: Int?
+						public var timeEfficiency: Int?
+						public var typeID: Int
+						public init(isBlueprintCopy: Bool?, isIncluded: Bool, itemID: Int64?, materialEfficiency: Int?, quantity: Int, recordID: Int64, runs: Int?, timeEfficiency: Int?, typeID: Int) {
+							self.isBlueprintCopy = isBlueprintCopy
+							self.isIncluded = isIncluded
+							self.itemID = itemID
+							self.materialEfficiency = materialEfficiency
+							self.quantity = quantity
+							self.recordID = recordID
+							self.runs = runs
+							self.timeEfficiency = timeEfficiency
+							self.typeID = typeID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case isBlueprintCopy = "is_blueprint_copy"
@@ -254,22 +270,40 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let buyout: Double?
-					public let collateral: Double?
-					public let contractID: Int
-					public let dateExpired: Date
-					public let dateIssued: Date
-					public let daysToComplete: Int?
-					public let endLocationID: Int64?
-					public let forCorporation: Bool?
-					public let issuerCorporationID: Int
-					public let issuerID: Int
-					public let price: Double?
-					public let reward: Double?
-					public let startLocationID: Int64?
-					public let title: String?
-					public let type: ESI.Contracts.ValueType
-					public let volume: Double?
+					public var buyout: Double?
+					public var collateral: Double?
+					public var contractID: Int
+					public var dateExpired: Date
+					public var dateIssued: Date
+					public var daysToComplete: Int?
+					public var endLocationID: Int64?
+					public var forCorporation: Bool?
+					public var issuerCorporationID: Int
+					public var issuerID: Int
+					public var price: Double?
+					public var reward: Double?
+					public var startLocationID: Int64?
+					public var title: String?
+					public var type: ESI.Corporations.ValueType
+					public var volume: Double?
+					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Corporations.ValueType, volume: Double?) {
+						self.buyout = buyout
+						self.collateral = collateral
+						self.contractID = contractID
+						self.dateExpired = dateExpired
+						self.dateIssued = dateIssued
+						self.daysToComplete = daysToComplete
+						self.endLocationID = endLocationID
+						self.forCorporation = forCorporation
+						self.issuerCorporationID = issuerCorporationID
+						self.issuerID = issuerID
+						self.price = price
+						self.reward = reward
+						self.startLocationID = startLocationID
+						self.title = title
+						self.type = type
+						self.volume = volume
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case buyout
@@ -309,18 +343,6 @@ extension ESI {
 		}
 		
 		
-		public enum ValueType: String, Codable, CustomStringConvertible {
-			case unknown
-			case itemExchange = "item_exchange"
-			case auction
-			case courier
-			case loan
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
 		
 	}
 	

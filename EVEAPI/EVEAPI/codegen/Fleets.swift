@@ -106,7 +106,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -260,9 +260,14 @@ extension ESI {
 					public struct Movement: Codable, Hashable {
 						
 						
-						public let role: ESI.Fleets.FleetID.Members.Role
-						public let squadID: Int64?
-						public let wingID: Int64?
+						public var role: ESI.Fleets.FleetID.Members.Role
+						public var squadID: Int64?
+						public var wingID: Int64?
+						public init(role: ESI.Fleets.FleetID.Members.Role, squadID: Int64?, wingID: Int64?) {
+							self.role = role
+							self.squadID = squadID
+							self.wingID = wingID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case role
@@ -278,19 +283,57 @@ extension ESI {
 				}
 				
 				
+				public struct Invitation: Codable, Hashable {
+					
+					
+					public var characterID: Int
+					public var role: ESI.Fleets.FleetID.Members.Role
+					public var squadID: Int64?
+					public var wingID: Int64?
+					public init(characterID: Int, role: ESI.Fleets.FleetID.Members.Role, squadID: Int64?, wingID: Int64?) {
+						self.characterID = characterID
+						self.role = role
+						self.squadID = squadID
+						self.wingID = wingID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case characterID = "character_id"
+						case role
+						case squadID = "squad_id"
+						case wingID = "wing_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let characterID: Int
-					public let joinTime: Date
-					public let role: ESI.Fleets.FleetID.Members.Role
-					public let roleName: String
-					public let shipTypeID: Int
-					public let solarSystemID: Int
-					public let squadID: Int64
-					public let stationID: Int64?
-					public let takesFleetWarp: Bool
-					public let wingID: Int64
+					public var characterID: Int
+					public var joinTime: Date
+					public var role: ESI.Fleets.FleetID.Members.Role
+					public var roleName: String
+					public var shipTypeID: Int
+					public var solarSystemID: Int
+					public var squadID: Int64
+					public var stationID: Int64?
+					public var takesFleetWarp: Bool
+					public var wingID: Int64
+					public init(characterID: Int, joinTime: Date, role: ESI.Fleets.FleetID.Members.Role, roleName: String, shipTypeID: Int, solarSystemID: Int, squadID: Int64, stationID: Int64?, takesFleetWarp: Bool, wingID: Int64) {
+						self.characterID = characterID
+						self.joinTime = joinTime
+						self.role = role
+						self.roleName = roleName
+						self.shipTypeID = shipTypeID
+						self.solarSystemID = solarSystemID
+						self.squadID = squadID
+						self.stationID = stationID
+						self.takesFleetWarp = takesFleetWarp
+						self.wingID = wingID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case characterID = "character_id"
@@ -325,26 +368,6 @@ extension ESI {
 						return rawValue
 					}
 					
-				}
-				
-				public struct Invitation: Codable, Hashable {
-					
-					
-					public let characterID: Int
-					public let role: ESI.Fleets.FleetID.Members.Role
-					public let squadID: Int64?
-					public let wingID: Int64?
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case characterID = "character_id"
-						case role
-						case squadID = "squad_id"
-						case wingID = "wing_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
 				}
 				
 			}
@@ -448,7 +471,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -645,7 +668,10 @@ extension ESI {
 						public struct Created: Codable, Hashable {
 							
 							
-							public let squadID: Int64
+							public var squadID: Int64
+							public init(squadID: Int64) {
+								self.squadID = squadID
+							}
 							
 							enum CodingKeys: String, CodingKey, DateFormatted {
 								case squadID = "squad_id"
@@ -663,12 +689,34 @@ extension ESI {
 				}
 				
 				
+				public struct Created: Codable, Hashable {
+					
+					
+					public var wingID: Int64
+					public init(wingID: Int64) {
+						self.wingID = wingID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case wingID = "wing_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let id: Int64
-					public let name: String
-					public let squads: [ESI.Fleets.FleetID.Wings.Squad]
+					public var id: Int64
+					public var name: String
+					public var squads: [ESI.Fleets.FleetID.Wings.Squad]
+					public init(id: Int64, name: String, squads: [ESI.Fleets.FleetID.Wings.Squad]) {
+						self.id = id
+						self.name = name
+						self.squads = squads
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case id
@@ -684,26 +732,16 @@ extension ESI {
 				public struct Squad: Codable, Hashable {
 					
 					
-					public let id: Int64
-					public let name: String
+					public var id: Int64
+					public var name: String
+					public init(id: Int64, name: String) {
+						self.id = id
+						self.name = name
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case id
 						case name
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Created: Codable, Hashable {
-					
-					
-					public let wingID: Int64
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case wingID = "wing_id"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -717,31 +755,15 @@ extension ESI {
 			public struct NewSettings: Codable, Hashable {
 				
 				
-				public let isFreeMove: Bool?
-				public let motd: String?
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case isFreeMove = "is_free_move"
-					case motd
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
+				public var isFreeMove: Bool?
+				public var motd: String?
+				public init(isFreeMove: Bool?, motd: String?) {
+					self.isFreeMove = isFreeMove
+					self.motd = motd
 				}
-			}
-			
-			public struct Success: Codable, Hashable {
-				
-				
-				public let isFreeMove: Bool
-				public let isRegistered: Bool
-				public let isVoiceEnabled: Bool
-				public let motd: String
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case isFreeMove = "is_free_move"
-					case isRegistered = "is_registered"
-					case isVoiceEnabled = "is_voice_enabled"
 					case motd
 					
 					var dateFormatter: DateFormatter? {
@@ -753,10 +775,39 @@ extension ESI {
 			public struct Naming: Codable, Hashable {
 				
 				
-				public let name: String
+				public var name: String
+				public init(name: String) {
+					self.name = name
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public var isFreeMove: Bool
+				public var isRegistered: Bool
+				public var isVoiceEnabled: Bool
+				public var motd: String
+				public init(isFreeMove: Bool, isRegistered: Bool, isVoiceEnabled: Bool, motd: String) {
+					self.isFreeMove = isFreeMove
+					self.isRegistered = isRegistered
+					self.isVoiceEnabled = isVoiceEnabled
+					self.motd = motd
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case isFreeMove = "is_free_move"
+					case isRegistered = "is_registered"
+					case isVoiceEnabled = "is_voice_enabled"
+					case motd
 					
 					var dateFormatter: DateFormatter? {
 						return nil

@@ -456,11 +456,23 @@ extension Model.MetaType {
 			var swift = classTemplate
             swift = swift.replacingOccurrences(of: "{name}", with: name.camelCaps.validIdentifier)
 			let properties = object.properties.sorted(by: {$0.key < $1.key})
-			let rows = properties.map { (name, property) in
-				"public let \(name.camelBack.validIdentifier): \(property.id())"
+			var rows = properties.map { (name, property) in
+				"public var \(name.camelBack.validIdentifier): \(property.id())"
 			}
 			
 			swift = swift.replacingOccurrences(of: "{properties}", with: rows.joined(separator: "\n"))
+            
+            rows = properties.map { (name, property) in
+                "\(name.camelBack.validIdentifier): \(property.id())"
+            }
+            let arguments = rows.joined(separator: ", ")
+            rows = properties.map { (name, property) in
+                "self.\(name.camelBack.validIdentifier) = \(name.camelBack.validIdentifier)"
+            }
+            let assigns = rows.joined(separator: "\n")
+            let constructor = "public init(\(arguments)) {\n\(assigns)\n}"
+            swift = swift.replacingOccurrences(of: "{constructor}", with: constructor)
+
 			
 			let codingKeys = properties.map{$0.key}.map{($0.camelBack.validIdentifier, $0)}.map{
                 $0 == $1 ? "case \($0)" : "case \($0) = \"\($1)\""

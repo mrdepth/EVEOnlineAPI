@@ -2,7 +2,8 @@ public struct {name}: Codable, Hashable {
 
 {classes}
 {properties}
-
+{constructor}
+    
 	enum CodingKeys: String, CodingKey, DateFormatted {
 {codingKeys}
 

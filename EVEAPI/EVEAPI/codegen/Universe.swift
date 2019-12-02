@@ -89,7 +89,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 				do {
 					
 					
@@ -131,12 +131,20 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let bloodlineID: Int
-				public let localizedDescription: String
-				public let iconID: Int?
-				public let id: Int
-				public let name: String
-				public let shortDescription: String?
+				public var bloodlineID: Int
+				public var localizedDescription: String
+				public var iconID: Int?
+				public var id: Int
+				public var name: String
+				public var shortDescription: String?
+				public init(bloodlineID: Int, localizedDescription: String, iconID: Int?, id: Int, name: String, shortDescription: String?) {
+					self.bloodlineID = bloodlineID
+					self.localizedDescription = localizedDescription
+					self.iconID = iconID
+					self.id = id
+					self.name = name
+					self.shortDescription = shortDescription
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case bloodlineID = "bloodline_id"
@@ -209,9 +217,14 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let name: String
-					public let position: ESI.Characters.Position
-					public let systemID: Int
+					public var name: String
+					public var position: ESI.Killmails.Position
+					public var systemID: Int
+					public init(name: String, position: ESI.Killmails.Position, systemID: Int) {
+						self.name = name
+						self.position = position
+						self.systemID = systemID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case name
@@ -235,7 +248,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 				do {
 					
 					
@@ -277,17 +290,30 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let bloodlineID: Int
-				public let charisma: Int
-				public let corporationID: Int
-				public let localizedDescription: String
-				public let intelligence: Int
-				public let memory: Int
-				public let name: String
-				public let perception: Int
-				public let raceID: Int
-				public let shipTypeID: Int
-				public let willpower: Int
+				public var bloodlineID: Int
+				public var charisma: Int
+				public var corporationID: Int
+				public var localizedDescription: String
+				public var intelligence: Int
+				public var memory: Int
+				public var name: String
+				public var perception: Int
+				public var raceID: Int
+				public var shipTypeID: Int
+				public var willpower: Int
+				public init(bloodlineID: Int, charisma: Int, corporationID: Int, localizedDescription: String, intelligence: Int, memory: Int, name: String, perception: Int, raceID: Int, shipTypeID: Int, willpower: Int) {
+					self.bloodlineID = bloodlineID
+					self.charisma = charisma
+					self.corporationID = corporationID
+					self.localizedDescription = localizedDescription
+					self.intelligence = intelligence
+					self.memory = memory
+					self.name = name
+					self.perception = perception
+					self.raceID = raceID
+					self.shipTypeID = shipTypeID
+					self.willpower = willpower
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case bloodlineID = "bloodline_id"
@@ -357,7 +383,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -399,10 +425,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let categoryID: Int
-					public let groups: [Int]
-					public let name: String
-					public let published: Bool
+					public var categoryID: Int
+					public var groups: [Int]
+					public var name: String
+					public var published: Bool
+					public init(categoryID: Int, groups: [Int], name: String, published: Bool) {
+						self.categoryID = categoryID
+						self.groups = groups
+						self.name = name
+						self.published = published
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case categoryID = "category_id"
@@ -469,7 +501,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -511,11 +543,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let constellationID: Int
-					public let name: String
-					public let position: ESI.Characters.Position
-					public let regionID: Int
-					public let systems: [Int]
+					public var constellationID: Int
+					public var name: String
+					public var position: ESI.Killmails.Position
+					public var regionID: Int
+					public var systems: [Int]
+					public init(constellationID: Int, name: String, position: ESI.Killmails.Position, regionID: Int, systems: [Int]) {
+						self.constellationID = constellationID
+						self.name = name
+						self.position = position
+						self.regionID = regionID
+						self.systems = systems
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case constellationID = "constellation_id"
@@ -541,7 +580,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 				do {
 					
 					
@@ -583,16 +622,28 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let corporationID: Int?
-				public let localizedDescription: String
-				public let factionID: Int
-				public let isUnique: Bool
-				public let militiaCorporationID: Int?
-				public let name: String
-				public let sizeFactor: Double
-				public let solarSystemID: Int?
-				public let stationCount: Int
-				public let stationSystemCount: Int
+				public var corporationID: Int?
+				public var localizedDescription: String
+				public var factionID: Int
+				public var isUnique: Bool
+				public var militiaCorporationID: Int?
+				public var name: String
+				public var sizeFactor: Double
+				public var solarSystemID: Int?
+				public var stationCount: Int
+				public var stationSystemCount: Int
+				public init(corporationID: Int?, localizedDescription: String, factionID: Int, isUnique: Bool, militiaCorporationID: Int?, name: String, sizeFactor: Double, solarSystemID: Int?, stationCount: Int, stationSystemCount: Int) {
+					self.corporationID = corporationID
+					self.localizedDescription = localizedDescription
+					self.factionID = factionID
+					self.isUnique = isUnique
+					self.militiaCorporationID = militiaCorporationID
+					self.name = name
+					self.sizeFactor = sizeFactor
+					self.solarSystemID = solarSystemID
+					self.stationCount = stationCount
+					self.stationSystemCount = stationSystemCount
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case corporationID = "corporation_id"
@@ -701,14 +752,24 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let collisionFile: String?
-					public let graphicFile: String?
-					public let graphicID: Int
-					public let iconFolder: String?
-					public let sofDna: String?
-					public let sofFationName: String?
-					public let sofHullName: String?
-					public let sofRaceName: String?
+					public var collisionFile: String?
+					public var graphicFile: String?
+					public var graphicID: Int
+					public var iconFolder: String?
+					public var sofDna: String?
+					public var sofFationName: String?
+					public var sofHullName: String?
+					public var sofRaceName: String?
+					public init(collisionFile: String?, graphicFile: String?, graphicID: Int, iconFolder: String?, sofDna: String?, sofFationName: String?, sofHullName: String?, sofRaceName: String?) {
+						self.collisionFile = collisionFile
+						self.graphicFile = graphicFile
+						self.graphicID = graphicID
+						self.iconFolder = iconFolder
+						self.sofDna = sofDna
+						self.sofFationName = sofFationName
+						self.sofHullName = sofHullName
+						self.sofRaceName = sofRaceName
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case collisionFile = "collision_file"
@@ -781,7 +842,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -823,11 +884,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let categoryID: Int
-					public let groupID: Int
-					public let name: String
-					public let published: Bool
-					public let types: [Int]
+					public var categoryID: Int
+					public var groupID: Int
+					public var name: String
+					public var published: Bool
+					public var types: [Int]
+					public init(categoryID: Int, groupID: Int, name: String, published: Bool, types: [Int]) {
+						self.categoryID = categoryID
+						self.groupID = groupID
+						self.name = name
+						self.published = published
+						self.types = types
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case categoryID = "category_id"
@@ -853,7 +921,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func post(language: ESI.Markets.Language? = nil, names: [String], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+			public func post(language: ESI.Opportunities.Language? = nil, names: [String], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 				do {
 					
 					
@@ -892,59 +960,75 @@ extension ESI {
 			
 			
 			
-			public struct Constellation: Codable, Hashable {
-				
-				
-				public let id: Int?
-				public let name: String?
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct Character: Codable, Hashable {
-				
-				
-				public let id: Int?
-				public let name: String?
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct Agent: Codable, Hashable {
-				
-				
-				public let id: Int?
-				public let name: String?
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public struct Corporation: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Station: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct InventoryType: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct System: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case id
@@ -959,8 +1043,12 @@ extension ESI {
 			public struct Region: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case id
@@ -972,11 +1060,55 @@ extension ESI {
 				}
 			}
 			
-			public struct Alliance: Codable, Hashable {
+			public struct Character: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Constellation: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Faction: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case id
@@ -991,16 +1123,28 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let agents: [ESI.Universe.Ids.Agent]?
-				public let alliances: [ESI.Universe.Ids.Alliance]?
-				public let characters: [ESI.Universe.Ids.Character]?
-				public let constellations: [ESI.Universe.Ids.Constellation]?
-				public let corporations: [ESI.Universe.Ids.Corporation]?
-				public let factions: [ESI.Universe.Ids.Faction]?
-				public let inventoryTypes: [ESI.Universe.Ids.InventoryType]?
-				public let regions: [ESI.Universe.Ids.Region]?
-				public let stations: [ESI.Universe.Ids.Station]?
-				public let systems: [ESI.Universe.Ids.System]?
+				public var agents: [ESI.Universe.Ids.Agent]?
+				public var alliances: [ESI.Universe.Ids.Alliance]?
+				public var characters: [ESI.Universe.Ids.Character]?
+				public var constellations: [ESI.Universe.Ids.Constellation]?
+				public var corporations: [ESI.Universe.Ids.Corporation]?
+				public var factions: [ESI.Universe.Ids.Faction]?
+				public var inventoryTypes: [ESI.Universe.Ids.InventoryType]?
+				public var regions: [ESI.Universe.Ids.Region]?
+				public var stations: [ESI.Universe.Ids.Station]?
+				public var systems: [ESI.Universe.Ids.System]?
+				public init(agents: [ESI.Universe.Ids.Agent]?, alliances: [ESI.Universe.Ids.Alliance]?, characters: [ESI.Universe.Ids.Character]?, constellations: [ESI.Universe.Ids.Constellation]?, corporations: [ESI.Universe.Ids.Corporation]?, factions: [ESI.Universe.Ids.Faction]?, inventoryTypes: [ESI.Universe.Ids.InventoryType]?, regions: [ESI.Universe.Ids.Region]?, stations: [ESI.Universe.Ids.Station]?, systems: [ESI.Universe.Ids.System]?) {
+					self.agents = agents
+					self.alliances = alliances
+					self.characters = characters
+					self.constellations = constellations
+					self.corporations = corporations
+					self.factions = factions
+					self.inventoryTypes = inventoryTypes
+					self.regions = regions
+					self.stations = stations
+					self.systems = systems
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case agents
@@ -1020,11 +1164,15 @@ extension ESI {
 				}
 			}
 			
-			public struct System: Codable, Hashable {
+			public struct Alliance: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case id
@@ -1036,43 +1184,15 @@ extension ESI {
 				}
 			}
 			
-			public struct Station: Codable, Hashable {
+			public struct Agent: Codable, Hashable {
 				
 				
-				public let id: Int?
-				public let name: String?
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
 				}
-			}
-			
-			public struct Faction: Codable, Hashable {
-				
-				
-				public let id: Int?
-				public let name: String?
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct InventoryType: Codable, Hashable {
-				
-				
-				public let id: Int?
-				public let name: String?
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case id
@@ -1141,10 +1261,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let moonID: Int
-					public let name: String
-					public let position: ESI.Characters.Position
-					public let systemID: Int
+					public var moonID: Int
+					public var name: String
+					public var position: ESI.Killmails.Position
+					public var systemID: Int
+					public init(moonID: Int, name: String, position: ESI.Killmails.Position, systemID: Int) {
+						self.moonID = moonID
+						self.name = name
+						self.position = position
+						self.systemID = systemID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case moonID = "moon_id"
@@ -1226,9 +1352,14 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let category: ESI.Universe.Names.Category
-				public let id: Int
-				public let name: String
+				public var category: ESI.Universe.Names.Category
+				public var id: Int
+				public var name: String
+				public init(category: ESI.Universe.Names.Category, id: Int, name: String) {
+					self.category = category
+					self.id = id
+					self.name = name
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case category
@@ -1298,11 +1429,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let name: String
-					public let planetID: Int
-					public let position: ESI.Characters.Position
-					public let systemID: Int
-					public let typeID: Int
+					public var name: String
+					public var planetID: Int
+					public var position: ESI.Killmails.Position
+					public var systemID: Int
+					public var typeID: Int
+					public init(name: String, planetID: Int, position: ESI.Killmails.Position, systemID: Int, typeID: Int) {
+						self.name = name
+						self.planetID = planetID
+						self.position = position
+						self.systemID = systemID
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case name
@@ -1328,7 +1466,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 				do {
 					
 					
@@ -1370,10 +1508,16 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let allianceID: Int
-				public let localizedDescription: String
-				public let name: String
-				public let raceID: Int
+				public var allianceID: Int
+				public var localizedDescription: String
+				public var name: String
+				public var raceID: Int
+				public init(allianceID: Int, localizedDescription: String, name: String, raceID: Int) {
+					self.allianceID = allianceID
+					self.localizedDescription = localizedDescription
+					self.name = name
+					self.raceID = raceID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"
@@ -1436,7 +1580,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -1478,10 +1622,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let constellations: [Int]
-					public let localizedDescription: String?
-					public let name: String
-					public let regionID: Int
+					public var constellations: [Int]
+					public var localizedDescription: String?
+					public var name: String
+					public var regionID: Int
+					public init(constellations: [Int], localizedDescription: String?, name: String, regionID: Int) {
+						self.constellations = constellations
+						self.localizedDescription = localizedDescription
+						self.name = name
+						self.regionID = regionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case constellations
@@ -1556,8 +1706,12 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let cycleTime: Int
-					public let schematicName: String
+					public var cycleTime: Int
+					public var schematicName: String
+					public init(cycleTime: Int, schematicName: String) {
+						self.cycleTime = cycleTime
+						self.schematicName = schematicName
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case cycleTime = "cycle_time"
@@ -1627,31 +1781,23 @@ extension ESI {
 				
 				
 				
-				public struct Destination: Codable, Hashable {
-					
-					
-					public let stargateID: Int
-					public let systemID: Int
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case stargateID = "stargate_id"
-						case systemID = "system_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let destination: ESI.Universe.Stargates.StargateID.Destination
-					public let name: String
-					public let position: ESI.Characters.Position
-					public let stargateID: Int
-					public let systemID: Int
-					public let typeID: Int
+					public var destination: ESI.Universe.Stargates.StargateID.Destination
+					public var name: String
+					public var position: ESI.Killmails.Position
+					public var stargateID: Int
+					public var systemID: Int
+					public var typeID: Int
+					public init(destination: ESI.Universe.Stargates.StargateID.Destination, name: String, position: ESI.Killmails.Position, stargateID: Int, systemID: Int, typeID: Int) {
+						self.destination = destination
+						self.name = name
+						self.position = position
+						self.stargateID = stargateID
+						self.systemID = systemID
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case destination
@@ -1660,6 +1806,26 @@ extension ESI {
 						case stargateID = "stargate_id"
 						case systemID = "system_id"
 						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Destination: Codable, Hashable {
+					
+					
+					public var stargateID: Int
+					public var systemID: Int
+					public init(stargateID: Int, systemID: Int) {
+						self.stargateID = stargateID
+						self.systemID = systemID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case stargateID = "stargate_id"
+						case systemID = "system_id"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -1728,14 +1894,24 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let age: Int64
-					public let luminosity: Double
-					public let name: String
-					public let radius: Int64
-					public let solarSystemID: Int
-					public let spectralClass: ESI.Universe.Stars.StarID.SpectralClass
-					public let temperature: Int
-					public let typeID: Int
+					public var age: Int64
+					public var luminosity: Double
+					public var name: String
+					public var radius: Int64
+					public var solarSystemID: Int
+					public var spectralClass: ESI.Universe.Stars.StarID.SpectralClass
+					public var temperature: Int
+					public var typeID: Int
+					public init(age: Int64, luminosity: Double, name: String, radius: Int64, solarSystemID: Int, spectralClass: ESI.Universe.Stars.StarID.SpectralClass, temperature: Int, typeID: Int) {
+						self.age = age
+						self.luminosity = luminosity
+						self.name = name
+						self.radius = radius
+						self.solarSystemID = solarSystemID
+						self.spectralClass = spectralClass
+						self.temperature = temperature
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case age
@@ -1946,18 +2122,32 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let maxDockableShipVolume: Double
-					public let name: String
-					public let officeRentalCost: Double
-					public let owner: Int?
-					public let position: ESI.Characters.Position
-					public let raceID: Int?
-					public let reprocessingEfficiency: Double
-					public let reprocessingStationsTake: Double
-					public let services: [ESI.Universe.Stations.StationID.Service]
-					public let stationID: Int
-					public let systemID: Int
-					public let typeID: Int
+					public var maxDockableShipVolume: Double
+					public var name: String
+					public var officeRentalCost: Double
+					public var owner: Int?
+					public var position: ESI.Killmails.Position
+					public var raceID: Int?
+					public var reprocessingEfficiency: Double
+					public var reprocessingStationsTake: Double
+					public var services: [ESI.Universe.Stations.StationID.Service]
+					public var stationID: Int
+					public var systemID: Int
+					public var typeID: Int
+					public init(maxDockableShipVolume: Double, name: String, officeRentalCost: Double, owner: Int?, position: ESI.Killmails.Position, raceID: Int?, reprocessingEfficiency: Double, reprocessingStationsTake: Double, services: [ESI.Universe.Stations.StationID.Service], stationID: Int, systemID: Int, typeID: Int) {
+						self.maxDockableShipVolume = maxDockableShipVolume
+						self.name = name
+						self.officeRentalCost = officeRentalCost
+						self.owner = owner
+						self.position = position
+						self.raceID = raceID
+						self.reprocessingEfficiency = reprocessingEfficiency
+						self.reprocessingStationsTake = reprocessingStationsTake
+						self.services = services
+						self.stationID = stationID
+						self.systemID = systemID
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case maxDockableShipVolume = "max_dockable_ship_volume"
@@ -2075,11 +2265,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let name: String
-					public let ownerID: Int
-					public let position: ESI.Characters.Position?
-					public let solarSystemID: Int
-					public let typeID: Int?
+					public var name: String
+					public var ownerID: Int
+					public var position: ESI.Killmails.Position?
+					public var solarSystemID: Int
+					public var typeID: Int?
+					public init(name: String, ownerID: Int, position: ESI.Killmails.Position?, solarSystemID: Int, typeID: Int?) {
+						self.name = name
+						self.ownerID = ownerID
+						self.position = position
+						self.solarSystemID = solarSystemID
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case name
@@ -2154,8 +2351,12 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let shipJumps: Int
-				public let systemID: Int
+				public var shipJumps: Int
+				public var systemID: Int
+				public init(shipJumps: Int, systemID: Int) {
+					self.shipJumps = shipJumps
+					self.systemID = systemID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case shipJumps = "ship_jumps"
@@ -2214,10 +2415,16 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let npcKills: Int
-				public let podKills: Int
-				public let shipKills: Int
-				public let systemID: Int
+				public var npcKills: Int
+				public var podKills: Int
+				public var shipKills: Int
+				public var systemID: Int
+				public init(npcKills: Int, podKills: Int, shipKills: Int, systemID: Int) {
+					self.npcKills = npcKills
+					self.podKills = podKills
+					self.shipKills = shipKills
+					self.systemID = systemID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case npcKills = "npc_kills"
@@ -2280,7 +2487,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -2319,19 +2526,54 @@ extension ESI {
 				
 				
 				
+				public struct Planet: Codable, Hashable {
+					
+					
+					public var asteroidBelts: [Int]?
+					public var moons: [Int]?
+					public var planetID: Int
+					public init(asteroidBelts: [Int]?, moons: [Int]?, planetID: Int) {
+						self.asteroidBelts = asteroidBelts
+						self.moons = moons
+						self.planetID = planetID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case asteroidBelts = "asteroid_belts"
+						case moons
+						case planetID = "planet_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let constellationID: Int
-					public let name: String
-					public let planets: [ESI.Universe.Systems.SystemID.Planet]?
-					public let position: ESI.Characters.Position
-					public let securityClass: String?
-					public let securityStatus: Double
-					public let starID: Int?
-					public let stargates: [Int]?
-					public let stations: [Int]?
-					public let systemID: Int
+					public var constellationID: Int
+					public var name: String
+					public var planets: [ESI.Universe.Systems.SystemID.Planet]?
+					public var position: ESI.Killmails.Position
+					public var securityClass: String?
+					public var securityStatus: Double
+					public var starID: Int?
+					public var stargates: [Int]?
+					public var stations: [Int]?
+					public var systemID: Int
+					public init(constellationID: Int, name: String, planets: [ESI.Universe.Systems.SystemID.Planet]?, position: ESI.Killmails.Position, securityClass: String?, securityStatus: Double, starID: Int?, stargates: [Int]?, stations: [Int]?, systemID: Int) {
+						self.constellationID = constellationID
+						self.name = name
+						self.planets = planets
+						self.position = position
+						self.securityClass = securityClass
+						self.securityStatus = securityStatus
+						self.starID = starID
+						self.stargates = stargates
+						self.stations = stations
+						self.systemID = systemID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case constellationID = "constellation_id"
@@ -2344,24 +2586,6 @@ extension ESI {
 						case stargates
 						case stations
 						case systemID = "system_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Planet: Codable, Hashable {
-					
-					
-					public let asteroidBelts: [Int]?
-					public let moons: [Int]?
-					public let planetID: Int
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case asteroidBelts = "asteroid_belts"
-						case moons
-						case planetID = "planet_id"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -2424,7 +2648,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -2466,22 +2690,40 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let capacity: Double?
-					public let localizedDescription: String
-					public let dogmaAttributes: [ESI.Dogma.DogmaAttribute]?
-					public let dogmaEffects: [ESI.Dogma.DogmaEffect]?
-					public let graphicID: Int?
-					public let groupID: Int
-					public let iconID: Int?
-					public let marketGroupID: Int?
-					public let mass: Double?
-					public let name: String
-					public let packagedVolume: Double?
-					public let portionSize: Int?
-					public let published: Bool
-					public let radius: Double?
-					public let typeID: Int
-					public let volume: Double?
+					public var capacity: Double?
+					public var localizedDescription: String
+					public var dogmaAttributes: [ESI.Dogma.DogmaAttribute]?
+					public var dogmaEffects: [ESI.Dogma.DogmaEffect]?
+					public var graphicID: Int?
+					public var groupID: Int
+					public var iconID: Int?
+					public var marketGroupID: Int?
+					public var mass: Double?
+					public var name: String
+					public var packagedVolume: Double?
+					public var portionSize: Int?
+					public var published: Bool
+					public var radius: Double?
+					public var typeID: Int
+					public var volume: Double?
+					public init(capacity: Double?, localizedDescription: String, dogmaAttributes: [ESI.Dogma.DogmaAttribute]?, dogmaEffects: [ESI.Dogma.DogmaEffect]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Double?, name: String, packagedVolume: Double?, portionSize: Int?, published: Bool, radius: Double?, typeID: Int, volume: Double?) {
+						self.capacity = capacity
+						self.localizedDescription = localizedDescription
+						self.dogmaAttributes = dogmaAttributes
+						self.dogmaEffects = dogmaEffects
+						self.graphicID = graphicID
+						self.groupID = groupID
+						self.iconID = iconID
+						self.marketGroupID = marketGroupID
+						self.mass = mass
+						self.name = name
+						self.packagedVolume = packagedVolume
+						self.portionSize = portionSize
+						self.published = published
+						self.radius = radius
+						self.typeID = typeID
+						self.volume = volume
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case capacity

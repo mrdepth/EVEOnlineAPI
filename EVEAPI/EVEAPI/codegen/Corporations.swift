@@ -225,10 +225,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let allianceID: Int?
-					public let isDeleted: Bool?
-					public let recordID: Int
-					public let startDate: Date
+					public var allianceID: Int?
+					public var isDeleted: Bool?
+					public var recordID: Int
+					public var startDate: Date
+					public init(allianceID: Int?, isDeleted: Bool?, recordID: Int, startDate: Date) {
+						self.allianceID = allianceID
+						self.isDeleted = isDeleted
+						self.recordID = recordID
+						self.startDate = startDate
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case allianceID = "alliance_id"
@@ -340,6 +346,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var itemID: Int64
+						public var position: ESI.Killmails.Position
+						public init(itemID: Int64, position: ESI.Killmails.Position) {
+							self.itemID = itemID
+							self.position = position
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case itemID = "item_id"
+							case position
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -386,6 +411,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var itemID: Int64
+						public var name: String
+						public init(itemID: Int64, name: String) {
+							self.itemID = itemID
+							self.name = name
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case itemID = "item_id"
+							case name
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -393,14 +437,24 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let isBlueprintCopy: Bool?
-					public let isSingleton: Bool
-					public let itemID: Int64
-					public let locationFlag: ESI.Corporations.CorporationID.LocationFlag
-					public let locationID: Int64
-					public let locationType: ESI.Characters.LocationType
-					public let quantity: Int
-					public let typeID: Int
+					public var isBlueprintCopy: Bool?
+					public var isSingleton: Bool
+					public var itemID: Int64
+					public var locationFlag: ESI.Corporations.CorporationID.LocationFlag
+					public var locationID: Int64
+					public var locationType: ESI.Corporations.LocationType
+					public var quantity: Int
+					public var typeID: Int
+					public init(isBlueprintCopy: Bool?, isSingleton: Bool, itemID: Int64, locationFlag: ESI.Corporations.CorporationID.LocationFlag, locationID: Int64, locationType: ESI.Corporations.LocationType, quantity: Int, typeID: Int) {
+						self.isBlueprintCopy = isBlueprintCopy
+						self.isSingleton = isSingleton
+						self.itemID = itemID
+						self.locationFlag = locationFlag
+						self.locationID = locationID
+						self.locationType = locationType
+						self.quantity = quantity
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case isBlueprintCopy = "is_blueprint_copy"
@@ -468,14 +522,24 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let itemID: Int64
-					public let locationFlag: ESI.Corporations.CorporationID.LocationFlag
-					public let locationID: Int64
-					public let materialEfficiency: Int
-					public let quantity: Int
-					public let runs: Int
-					public let timeEfficiency: Int
-					public let typeID: Int
+					public var itemID: Int64
+					public var locationFlag: ESI.Corporations.CorporationID.LocationFlag
+					public var locationID: Int64
+					public var materialEfficiency: Int
+					public var quantity: Int
+					public var runs: Int
+					public var timeEfficiency: Int
+					public var typeID: Int
+					public init(itemID: Int64, locationFlag: ESI.Corporations.CorporationID.LocationFlag, locationID: Int64, materialEfficiency: Int, quantity: Int, runs: Int, timeEfficiency: Int, typeID: Int) {
+						self.itemID = itemID
+						self.locationFlag = locationFlag
+						self.locationID = locationID
+						self.materialEfficiency = materialEfficiency
+						self.quantity = quantity
+						self.runs = runs
+						self.timeEfficiency = timeEfficiency
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case itemID = "item_id"
@@ -588,9 +652,14 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let creatorID: Int?
-						public let folderID: Int
-						public let name: String
+						public var creatorID: Int?
+						public var folderID: Int
+						public var name: String
+						public init(creatorID: Int?, folderID: Int, name: String) {
+							self.creatorID = creatorID
+							self.folderID = folderID
+							self.name = name
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case creatorID = "creator_id"
@@ -606,6 +675,51 @@ extension ESI {
 				}
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var bookmarkID: Int
+					public var coordinates: ESI.Corporations.Coordinates?
+					public var created: Date
+					public var creatorID: Int
+					public var folderID: Int?
+					public var item: ESI.Corporations.Item?
+					public var label: String
+					public var locationID: Int
+					public var notes: String
+					public init(bookmarkID: Int, coordinates: ESI.Corporations.Coordinates?, created: Date, creatorID: Int, folderID: Int?, item: ESI.Corporations.Item?, label: String, locationID: Int, notes: String) {
+						self.bookmarkID = bookmarkID
+						self.coordinates = coordinates
+						self.created = created
+						self.creatorID = creatorID
+						self.folderID = folderID
+						self.item = item
+						self.label = label
+						self.locationID = locationID
+						self.notes = notes
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case bookmarkID = "bookmark_id"
+						case coordinates
+						case created
+						case creatorID = "creator_id"
+						case folderID = "folder_id"
+						case item
+						case label
+						case locationID = "location_id"
+						case notes
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .created:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
+						}
+					}
+				}
 				
 			}
 			
@@ -697,6 +811,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var labelID: Int64
+						public var labelName: String
+						public init(labelID: Int64, labelName: String) {
+							self.labelID = labelID
+							self.labelName = labelName
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case labelID = "label_id"
+							case labelName = "label_name"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -704,11 +837,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let contactID: Int
-					public let contactType: ESI.Characters.ContactType
-					public let isWatched: Bool?
-					public let labelIds: [Int64]?
-					public let standing: Double
+					public var contactID: Int
+					public var contactType: ESI.Corporations.ContactType
+					public var isWatched: Bool?
+					public var labelIds: [Int64]?
+					public var standing: Double
+					public init(contactID: Int, contactType: ESI.Corporations.ContactType, isWatched: Bool?, labelIds: [Int64]?, standing: Double) {
+						self.contactID = contactID
+						self.contactType = contactType
+						self.isWatched = isWatched
+						self.labelIds = labelIds
+						self.standing = standing
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case contactID = "contact_id"
@@ -780,21 +920,53 @@ extension ESI {
 					
 					
 					
+					public enum Action: String, Codable, CustomStringConvertible {
+						case add
+						case assemble
+						case configure
+						case enterPassword = "enter_password"
+						case lock
+						case move
+						case repackage
+						case setName = "set_name"
+						case setPassword = "set_password"
+						case unlock
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
-						public let action: ESI.Corporations.CorporationID.Containers.Logs.Action
-						public let characterID: Int
-						public let containerID: Int64
-						public let containerTypeID: Int
-						public let locationFlag: ESI.Corporations.CorporationID.LocationFlag
-						public let locationID: Int64
-						public let loggedAt: Date
-						public let newConfigBitmask: Int?
-						public let oldConfigBitmask: Int?
-						public let passwordType: ESI.Corporations.CorporationID.Containers.Logs.PasswordType?
-						public let quantity: Int?
-						public let typeID: Int?
+						public var action: ESI.Corporations.CorporationID.Containers.Logs.Action
+						public var characterID: Int
+						public var containerID: Int64
+						public var containerTypeID: Int
+						public var locationFlag: ESI.Corporations.CorporationID.LocationFlag
+						public var locationID: Int64
+						public var loggedAt: Date
+						public var newConfigBitmask: Int?
+						public var oldConfigBitmask: Int?
+						public var passwordType: ESI.Corporations.CorporationID.Containers.Logs.PasswordType?
+						public var quantity: Int?
+						public var typeID: Int?
+						public init(action: ESI.Corporations.CorporationID.Containers.Logs.Action, characterID: Int, containerID: Int64, containerTypeID: Int, locationFlag: ESI.Corporations.CorporationID.LocationFlag, locationID: Int64, loggedAt: Date, newConfigBitmask: Int?, oldConfigBitmask: Int?, passwordType: ESI.Corporations.CorporationID.Containers.Logs.PasswordType?, quantity: Int?, typeID: Int?) {
+							self.action = action
+							self.characterID = characterID
+							self.containerID = containerID
+							self.containerTypeID = containerTypeID
+							self.locationFlag = locationFlag
+							self.locationID = locationID
+							self.loggedAt = loggedAt
+							self.newConfigBitmask = newConfigBitmask
+							self.oldConfigBitmask = oldConfigBitmask
+							self.passwordType = passwordType
+							self.quantity = quantity
+							self.typeID = typeID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case action
@@ -819,24 +991,6 @@ extension ESI {
 								}
 							}
 						}
-					}
-					
-					public enum Action: String, Codable, CustomStringConvertible {
-						case add
-						case assemble
-						case configure
-						case enterPassword = "enter_password"
-						case lock
-						case move
-						case repackage
-						case setName = "set_name"
-						case setPassword = "set_password"
-						case unlock
-						
-						public var description: String {
-							return rawValue
-						}
-						
 					}
 					
 					public enum PasswordType: String, Codable, CustomStringConvertible {
@@ -958,6 +1112,36 @@ extension ESI {
 						
 						
 						
+						public struct Success: Codable, Hashable {
+							
+							
+							public var amount: Double
+							public var bidID: Int
+							public var bidderID: Int
+							public var dateBid: Date
+							public init(amount: Double, bidID: Int, bidderID: Int, dateBid: Date) {
+								self.amount = amount
+								self.bidID = bidID
+								self.bidderID = bidderID
+								self.dateBid = dateBid
+							}
+							
+							enum CodingKeys: String, CodingKey, DateFormatted {
+								case amount
+								case bidID = "bid_id"
+								case bidderID = "bidder_id"
+								case dateBid = "date_bid"
+								
+								var dateFormatter: DateFormatter? {
+									switch self {
+										case .dateBid:
+										return DateFormatter.esiDateTimeFormatter
+										default:
+										return nil
+									}
+								}
+							}
+						}
 						
 					}
 					
@@ -1004,6 +1188,37 @@ extension ESI {
 						
 						
 						
+						public struct Success: Codable, Hashable {
+							
+							
+							public var isIncluded: Bool
+							public var isSingleton: Bool
+							public var quantity: Int
+							public var rawQuantity: Int?
+							public var recordID: Int64
+							public var typeID: Int
+							public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
+								self.isIncluded = isIncluded
+								self.isSingleton = isSingleton
+								self.quantity = quantity
+								self.rawQuantity = rawQuantity
+								self.recordID = recordID
+								self.typeID = typeID
+							}
+							
+							enum CodingKeys: String, CodingKey, DateFormatted {
+								case isIncluded = "is_included"
+								case isSingleton = "is_singleton"
+								case quantity
+								case rawQuantity = "raw_quantity"
+								case recordID = "record_id"
+								case typeID = "type_id"
+								
+								var dateFormatter: DateFormatter? {
+									return nil
+								}
+							}
+						}
 						
 					}
 					
@@ -1012,6 +1227,114 @@ extension ESI {
 				}
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var acceptorID: Int
+					public var assigneeID: Int
+					public var availability: ESI.Corporations.Availability
+					public var buyout: Double?
+					public var collateral: Double?
+					public var contractID: Int
+					public var dateAccepted: Date?
+					public var dateCompleted: Date?
+					public var dateExpired: Date
+					public var dateIssued: Date
+					public var daysToComplete: Int?
+					public var endLocationID: Int64?
+					public var forCorporation: Bool
+					public var issuerCorporationID: Int
+					public var issuerID: Int
+					public var price: Double?
+					public var reward: Double?
+					public var startLocationID: Int64?
+					public var status: ESI.Corporations.CorporationID.Contracts.Status
+					public var title: String?
+					public var type: ESI.Corporations.ValueType
+					public var volume: Double?
+					public init(acceptorID: Int, assigneeID: Int, availability: ESI.Corporations.Availability, buyout: Double?, collateral: Double?, contractID: Int, dateAccepted: Date?, dateCompleted: Date?, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, status: ESI.Corporations.CorporationID.Contracts.Status, title: String?, type: ESI.Corporations.ValueType, volume: Double?) {
+						self.acceptorID = acceptorID
+						self.assigneeID = assigneeID
+						self.availability = availability
+						self.buyout = buyout
+						self.collateral = collateral
+						self.contractID = contractID
+						self.dateAccepted = dateAccepted
+						self.dateCompleted = dateCompleted
+						self.dateExpired = dateExpired
+						self.dateIssued = dateIssued
+						self.daysToComplete = daysToComplete
+						self.endLocationID = endLocationID
+						self.forCorporation = forCorporation
+						self.issuerCorporationID = issuerCorporationID
+						self.issuerID = issuerID
+						self.price = price
+						self.reward = reward
+						self.startLocationID = startLocationID
+						self.status = status
+						self.title = title
+						self.type = type
+						self.volume = volume
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case acceptorID = "acceptor_id"
+						case assigneeID = "assignee_id"
+						case availability
+						case buyout
+						case collateral
+						case contractID = "contract_id"
+						case dateAccepted = "date_accepted"
+						case dateCompleted = "date_completed"
+						case dateExpired = "date_expired"
+						case dateIssued = "date_issued"
+						case daysToComplete = "days_to_complete"
+						case endLocationID = "end_location_id"
+						case forCorporation = "for_corporation"
+						case issuerCorporationID = "issuer_corporation_id"
+						case issuerID = "issuer_id"
+						case price
+						case reward
+						case startLocationID = "start_location_id"
+						case status
+						case title
+						case type
+						case volume
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .dateAccepted:
+								return DateFormatter.esiDateTimeFormatter
+								case .dateCompleted:
+								return DateFormatter.esiDateTimeFormatter
+								case .dateExpired:
+								return DateFormatter.esiDateTimeFormatter
+								case .dateIssued:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
+						}
+					}
+				}
+				
+				public enum Status: String, Codable, CustomStringConvertible {
+					case outstanding
+					case inProgress = "in_progress"
+					case finishedIssuer = "finished_issuer"
+					case finishedContractor = "finished_contractor"
+					case finished
+					case cancelled
+					case rejected
+					case failed
+					case deleted
+					case reversed
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
 				
 			}
 			
@@ -1076,20 +1399,36 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let allianceTaxRate: Double?
-					public let allowAccessWithStandings: Bool
-					public let allowAllianceAccess: Bool
-					public let badStandingTaxRate: Double?
-					public let corporationTaxRate: Double?
-					public let excellentStandingTaxRate: Double?
-					public let goodStandingTaxRate: Double?
-					public let neutralStandingTaxRate: Double?
-					public let officeID: Int64
-					public let reinforceExitEnd: Int
-					public let reinforceExitStart: Int
-					public let standingLevel: ESI.Corporations.CorporationID.CustomsOffices.StandingLevel?
-					public let systemID: Int
-					public let terribleStandingTaxRate: Double?
+					public var allianceTaxRate: Double?
+					public var allowAccessWithStandings: Bool
+					public var allowAllianceAccess: Bool
+					public var badStandingTaxRate: Double?
+					public var corporationTaxRate: Double?
+					public var excellentStandingTaxRate: Double?
+					public var goodStandingTaxRate: Double?
+					public var neutralStandingTaxRate: Double?
+					public var officeID: Int64
+					public var reinforceExitEnd: Int
+					public var reinforceExitStart: Int
+					public var standingLevel: ESI.Corporations.CorporationID.CustomsOffices.StandingLevel?
+					public var systemID: Int
+					public var terribleStandingTaxRate: Double?
+					public init(allianceTaxRate: Double?, allowAccessWithStandings: Bool, allowAllianceAccess: Bool, badStandingTaxRate: Double?, corporationTaxRate: Double?, excellentStandingTaxRate: Double?, goodStandingTaxRate: Double?, neutralStandingTaxRate: Double?, officeID: Int64, reinforceExitEnd: Int, reinforceExitStart: Int, standingLevel: ESI.Corporations.CorporationID.CustomsOffices.StandingLevel?, systemID: Int, terribleStandingTaxRate: Double?) {
+						self.allianceTaxRate = allianceTaxRate
+						self.allowAccessWithStandings = allowAccessWithStandings
+						self.allowAllianceAccess = allowAllianceAccess
+						self.badStandingTaxRate = badStandingTaxRate
+						self.corporationTaxRate = corporationTaxRate
+						self.excellentStandingTaxRate = excellentStandingTaxRate
+						self.goodStandingTaxRate = goodStandingTaxRate
+						self.neutralStandingTaxRate = neutralStandingTaxRate
+						self.officeID = officeID
+						self.reinforceExitEnd = reinforceExitEnd
+						self.reinforceExitStart = reinforceExitStart
+						self.standingLevel = standingLevel
+						self.systemID = systemID
+						self.terribleStandingTaxRate = terribleStandingTaxRate
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case allianceTaxRate = "alliance_tax_rate"
@@ -1158,27 +1497,15 @@ extension ESI {
 				
 				
 				
-				public struct Success: Codable, Hashable {
-					
-					
-					public let hangar: [ESI.Corporations.CorporationID.Divisions.HangarHangar]?
-					public let wallet: [ESI.Corporations.CorporationID.Divisions.WalletWallet]?
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case hangar
-						case wallet
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct HangarHangar: Codable, Hashable {
 					
 					
-					public let division: Int?
-					public let name: String?
+					public var division: Int?
+					public var name: String?
+					public init(division: Int?, name: String?) {
+						self.division = division
+						self.name = name
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case division
@@ -1190,11 +1517,35 @@ extension ESI {
 					}
 				}
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var hangar: [ESI.Corporations.CorporationID.Divisions.HangarHangar]?
+					public var wallet: [ESI.Corporations.CorporationID.Divisions.WalletWallet]?
+					public init(hangar: [ESI.Corporations.CorporationID.Divisions.HangarHangar]?, wallet: [ESI.Corporations.CorporationID.Divisions.WalletWallet]?) {
+						self.hangar = hangar
+						self.wallet = wallet
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case hangar
+						case wallet
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct WalletWallet: Codable, Hashable {
 					
 					
-					public let division: Int?
-					public let name: String?
+					public var division: Int?
+					public var name: String?
+					public init(division: Int?, name: String?) {
+						self.division = division
+						self.name = name
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case division
@@ -1254,9 +1605,14 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let facilityID: Int64
-					public let systemID: Int
-					public let typeID: Int
+					public var facilityID: Int64
+					public var systemID: Int
+					public var typeID: Int
+					public init(facilityID: Int64, systemID: Int, typeID: Int) {
+						self.facilityID = facilityID
+						self.systemID = systemID
+						self.typeID = typeID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case facilityID = "facility_id"
@@ -1327,11 +1683,18 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let enlistedOn: Date?
-						public let factionID: Int?
-						public let kills: ESI.Fw.Kills
-						public let pilots: Int?
-						public let victoryPoints: ESI.Fw.VictoryPoints
+						public var enlistedOn: Date?
+						public var factionID: Int?
+						public var kills: ESI.Fw.Kills
+						public var pilots: Int?
+						public var victoryPoints: ESI.Fw.VictoryPoints
+						public init(enlistedOn: Date?, factionID: Int?, kills: ESI.Fw.Kills, pilots: Int?, victoryPoints: ESI.Fw.VictoryPoints) {
+							self.enlistedOn = enlistedOn
+							self.factionID = factionID
+							self.kills = kills
+							self.pilots = pilots
+							self.victoryPoints = victoryPoints
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case enlistedOn = "enlisted_on"
@@ -1402,9 +1765,14 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let px128x128: String?
-					public let px256x256: String?
-					public let px64x64: String?
+					public var px128x128: String?
+					public var px256x256: String?
+					public var px64x64: String?
+					public init(px128x128: String?, px256x256: String?, px64x64: String?) {
+						self.px128x128 = px128x128
+						self.px256x256 = px256x256
+						self.px64x64 = px64x64
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case px128x128
@@ -1477,31 +1845,69 @@ extension ESI {
 					
 					
 					
+					public enum Status: String, Codable, CustomStringConvertible {
+						case active
+						case cancelled
+						case delivered
+						case paused
+						case ready
+						case reverted
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
-						public let activityID: Int
-						public let blueprintID: Int64
-						public let blueprintLocationID: Int64
-						public let blueprintTypeID: Int
-						public let completedCharacterID: Int?
-						public let completedDate: Date?
-						public let cost: Double?
-						public let duration: Int
-						public let endDate: Date
-						public let facilityID: Int64
-						public let installerID: Int
-						public let jobID: Int
-						public let licensedRuns: Int?
-						public let locationID: Int64
-						public let outputLocationID: Int64
-						public let pauseDate: Date?
-						public let probability: Double?
-						public let productTypeID: Int?
-						public let runs: Int
-						public let startDate: Date
-						public let status: ESI.Characters.CharacterID.Industry.Jobs.Status
-						public let successfulRuns: Int?
+						public var activityID: Int
+						public var blueprintID: Int64
+						public var blueprintLocationID: Int64
+						public var blueprintTypeID: Int
+						public var completedCharacterID: Int?
+						public var completedDate: Date?
+						public var cost: Double?
+						public var duration: Int
+						public var endDate: Date
+						public var facilityID: Int64
+						public var installerID: Int
+						public var jobID: Int
+						public var licensedRuns: Int?
+						public var locationID: Int64
+						public var outputLocationID: Int64
+						public var pauseDate: Date?
+						public var probability: Double?
+						public var productTypeID: Int?
+						public var runs: Int
+						public var startDate: Date
+						public var status: ESI.Corporations.CorporationID.Industry.Jobs.Status
+						public var successfulRuns: Int?
+						public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, locationID: Int64, outputLocationID: Int64, pauseDate: Date?, probability: Double?, productTypeID: Int?, runs: Int, startDate: Date, status: ESI.Corporations.CorporationID.Industry.Jobs.Status, successfulRuns: Int?) {
+							self.activityID = activityID
+							self.blueprintID = blueprintID
+							self.blueprintLocationID = blueprintLocationID
+							self.blueprintTypeID = blueprintTypeID
+							self.completedCharacterID = completedCharacterID
+							self.completedDate = completedDate
+							self.cost = cost
+							self.duration = duration
+							self.endDate = endDate
+							self.facilityID = facilityID
+							self.installerID = installerID
+							self.jobID = jobID
+							self.licensedRuns = licensedRuns
+							self.locationID = locationID
+							self.outputLocationID = outputLocationID
+							self.pauseDate = pauseDate
+							self.probability = probability
+							self.productTypeID = productTypeID
+							self.runs = runs
+							self.startDate = startDate
+							self.status = status
+							self.successfulRuns = successfulRuns
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case activityID = "activity_id"
@@ -1705,12 +2111,20 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let characterID: Int
-						public let issuedAt: Date
-						public let issuerID: Int
-						public let medalID: Int
-						public let reason: String
-						public let status: ESI.Corporations.CorporationID.Medals.Issued.Status
+						public var characterID: Int
+						public var issuedAt: Date
+						public var issuerID: Int
+						public var medalID: Int
+						public var reason: String
+						public var status: ESI.Corporations.CorporationID.Medals.Issued.Status
+						public init(characterID: Int, issuedAt: Date, issuerID: Int, medalID: Int, reason: String, status: ESI.Corporations.CorporationID.Medals.Issued.Status) {
+							self.characterID = characterID
+							self.issuedAt = issuedAt
+							self.issuerID = issuerID
+							self.medalID = medalID
+							self.reason = reason
+							self.status = status
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case characterID = "character_id"
@@ -1747,11 +2161,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let createdAt: Date
-					public let creatorID: Int
-					public let localizedDescription: String
-					public let medalID: Int
-					public let title: String
+					public var createdAt: Date
+					public var creatorID: Int
+					public var localizedDescription: String
+					public var medalID: Int
+					public var title: String
+					public init(createdAt: Date, creatorID: Int, localizedDescription: String, medalID: Int, title: String) {
+						self.createdAt = createdAt
+						self.creatorID = creatorID
+						self.localizedDescription = localizedDescription
+						self.medalID = medalID
+						self.title = title
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case createdAt = "created_at"
@@ -1911,8 +2332,12 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let characterID: Int
-						public let titles: [Int]
+						public var characterID: Int
+						public var titles: [Int]
+						public init(characterID: Int, titles: [Int]) {
+							self.characterID = characterID
+							self.titles = titles
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case characterID = "character_id"
@@ -1976,13 +2401,22 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let baseID: Int?
-					public let characterID: Int
-					public let locationID: Int64?
-					public let logoffDate: Date?
-					public let logonDate: Date?
-					public let shipTypeID: Int?
-					public let startDate: Date?
+					public var baseID: Int?
+					public var characterID: Int
+					public var locationID: Int64?
+					public var logoffDate: Date?
+					public var logonDate: Date?
+					public var shipTypeID: Int?
+					public var startDate: Date?
+					public init(baseID: Int?, characterID: Int, locationID: Int64?, logoffDate: Date?, logonDate: Date?, shipTypeID: Int?, startDate: Date?) {
+						self.baseID = baseID
+						self.characterID = characterID
+						self.locationID = locationID
+						self.logoffDate = logoffDate
+						self.logonDate = logonDate
+						self.shipTypeID = shipTypeID
+						self.startDate = startDate
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case baseID = "base_id"
@@ -2103,22 +2537,40 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let duration: Int
-						public let escrow: Double?
-						public let isBuyOrder: Bool?
-						public let issued: Date
-						public let issuedBy: Int?
-						public let locationID: Int64
-						public let minVolume: Int?
-						public let orderID: Int64
-						public let price: Double
-						public let range: ESI.Characters.Range
-						public let regionID: Int
-						public let state: ESI.Characters.State
-						public let typeID: Int
-						public let volumeRemain: Int
-						public let volumeTotal: Int
-						public let walletDivision: Int
+						public var duration: Int
+						public var escrow: Double?
+						public var isBuyOrder: Bool?
+						public var issued: Date
+						public var issuedBy: Int?
+						public var locationID: Int64
+						public var minVolume: Int?
+						public var orderID: Int64
+						public var price: Double
+						public var range: ESI.Corporations.Range
+						public var regionID: Int
+						public var state: ESI.Corporations.State
+						public var typeID: Int
+						public var volumeRemain: Int
+						public var volumeTotal: Int
+						public var walletDivision: Int
+						public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, issued: Date, issuedBy: Int?, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Corporations.Range, regionID: Int, state: ESI.Corporations.State, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
+							self.duration = duration
+							self.escrow = escrow
+							self.isBuyOrder = isBuyOrder
+							self.issued = issued
+							self.issuedBy = issuedBy
+							self.locationID = locationID
+							self.minVolume = minVolume
+							self.orderID = orderID
+							self.price = price
+							self.range = range
+							self.regionID = regionID
+							self.state = state
+							self.typeID = typeID
+							self.volumeRemain = volumeRemain
+							self.volumeTotal = volumeTotal
+							self.walletDivision = walletDivision
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case duration
@@ -2155,21 +2607,38 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let duration: Int
-					public let escrow: Double?
-					public let isBuyOrder: Bool?
-					public let issued: Date
-					public let issuedBy: Int
-					public let locationID: Int64
-					public let minVolume: Int?
-					public let orderID: Int64
-					public let price: Double
-					public let range: ESI.Characters.Range
-					public let regionID: Int
-					public let typeID: Int
-					public let volumeRemain: Int
-					public let volumeTotal: Int
-					public let walletDivision: Int
+					public var duration: Int
+					public var escrow: Double?
+					public var isBuyOrder: Bool?
+					public var issued: Date
+					public var issuedBy: Int
+					public var locationID: Int64
+					public var minVolume: Int?
+					public var orderID: Int64
+					public var price: Double
+					public var range: ESI.Corporations.Range
+					public var regionID: Int
+					public var typeID: Int
+					public var volumeRemain: Int
+					public var volumeTotal: Int
+					public var walletDivision: Int
+					public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, issued: Date, issuedBy: Int, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Corporations.Range, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int, walletDivision: Int) {
+						self.duration = duration
+						self.escrow = escrow
+						self.isBuyOrder = isBuyOrder
+						self.issued = issued
+						self.issuedBy = issuedBy
+						self.locationID = locationID
+						self.minVolume = minVolume
+						self.orderID = orderID
+						self.price = price
+						self.range = range
+						self.regionID = regionID
+						self.typeID = typeID
+						self.volumeRemain = volumeRemain
+						self.volumeTotal = volumeTotal
+						self.walletDivision = walletDivision
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case duration
@@ -2289,6 +2758,99 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var changedAt: Date
+						public var characterID: Int
+						public var issuerID: Int
+						public var newRoles: [ESI.Corporations.CorporationID.Roles.History.NewRole]
+						public var oldRoles: [ESI.Corporations.CorporationID.Roles.History.OldRole]
+						public var roleType: ESI.Corporations.CorporationID.Roles.History.RoleType
+						public init(changedAt: Date, characterID: Int, issuerID: Int, newRoles: [ESI.Corporations.CorporationID.Roles.History.NewRole], oldRoles: [ESI.Corporations.CorporationID.Roles.History.OldRole], roleType: ESI.Corporations.CorporationID.Roles.History.RoleType) {
+							self.changedAt = changedAt
+							self.characterID = characterID
+							self.issuerID = issuerID
+							self.newRoles = newRoles
+							self.oldRoles = oldRoles
+							self.roleType = roleType
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case changedAt = "changed_at"
+							case characterID = "character_id"
+							case issuerID = "issuer_id"
+							case newRoles = "new_roles"
+							case oldRoles = "old_roles"
+							case roleType = "role_type"
+							
+							var dateFormatter: DateFormatter? {
+								switch self {
+									case .changedAt:
+									return DateFormatter.esiDateTimeFormatter
+									default:
+									return nil
+								}
+							}
+						}
+					}
+					
+					public enum NewRole: String, Codable, CustomStringConvertible {
+						case accountTake1 = "Account_Take_1"
+						case accountTake2 = "Account_Take_2"
+						case accountTake3 = "Account_Take_3"
+						case accountTake4 = "Account_Take_4"
+						case accountTake5 = "Account_Take_5"
+						case accountTake6 = "Account_Take_6"
+						case accountTake7 = "Account_Take_7"
+						case accountant = "Accountant"
+						case auditor = "Auditor"
+						case communicationsOfficer = "Communications_Officer"
+						case configEquipment = "Config_Equipment"
+						case configStarbaseEquipment = "Config_Starbase_Equipment"
+						case containerTake1 = "Container_Take_1"
+						case containerTake2 = "Container_Take_2"
+						case containerTake3 = "Container_Take_3"
+						case containerTake4 = "Container_Take_4"
+						case containerTake5 = "Container_Take_5"
+						case containerTake6 = "Container_Take_6"
+						case containerTake7 = "Container_Take_7"
+						case contractManager = "Contract_Manager"
+						case diplomat = "Diplomat"
+						case director = "Director"
+						case factoryManager = "Factory_Manager"
+						case fittingManager = "Fitting_Manager"
+						case hangarQuery1 = "Hangar_Query_1"
+						case hangarQuery2 = "Hangar_Query_2"
+						case hangarQuery3 = "Hangar_Query_3"
+						case hangarQuery4 = "Hangar_Query_4"
+						case hangarQuery5 = "Hangar_Query_5"
+						case hangarQuery6 = "Hangar_Query_6"
+						case hangarQuery7 = "Hangar_Query_7"
+						case hangarTake1 = "Hangar_Take_1"
+						case hangarTake2 = "Hangar_Take_2"
+						case hangarTake3 = "Hangar_Take_3"
+						case hangarTake4 = "Hangar_Take_4"
+						case hangarTake5 = "Hangar_Take_5"
+						case hangarTake6 = "Hangar_Take_6"
+						case hangarTake7 = "Hangar_Take_7"
+						case juniorAccountant = "Junior_Accountant"
+						case personnelManager = "Personnel_Manager"
+						case rentFactoryFacility = "Rent_Factory_Facility"
+						case rentOffice = "Rent_Office"
+						case rentResearchFacility = "Rent_Research_Facility"
+						case securityOfficer = "Security_Officer"
+						case starbaseDefenseOperator = "Starbase_Defense_Operator"
+						case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+						case stationManager = "Station_Manager"
+						case trader = "Trader"
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 					public enum OldRole: String, Codable, CustomStringConvertible {
 						case accountTake1 = "Account_Take_1"
 						case accountTake2 = "Account_Take_2"
@@ -2361,106 +2923,32 @@ extension ESI {
 						
 					}
 					
-					public enum NewRole: String, Codable, CustomStringConvertible {
-						case accountTake1 = "Account_Take_1"
-						case accountTake2 = "Account_Take_2"
-						case accountTake3 = "Account_Take_3"
-						case accountTake4 = "Account_Take_4"
-						case accountTake5 = "Account_Take_5"
-						case accountTake6 = "Account_Take_6"
-						case accountTake7 = "Account_Take_7"
-						case accountant = "Accountant"
-						case auditor = "Auditor"
-						case communicationsOfficer = "Communications_Officer"
-						case configEquipment = "Config_Equipment"
-						case configStarbaseEquipment = "Config_Starbase_Equipment"
-						case containerTake1 = "Container_Take_1"
-						case containerTake2 = "Container_Take_2"
-						case containerTake3 = "Container_Take_3"
-						case containerTake4 = "Container_Take_4"
-						case containerTake5 = "Container_Take_5"
-						case containerTake6 = "Container_Take_6"
-						case containerTake7 = "Container_Take_7"
-						case contractManager = "Contract_Manager"
-						case diplomat = "Diplomat"
-						case director = "Director"
-						case factoryManager = "Factory_Manager"
-						case fittingManager = "Fitting_Manager"
-						case hangarQuery1 = "Hangar_Query_1"
-						case hangarQuery2 = "Hangar_Query_2"
-						case hangarQuery3 = "Hangar_Query_3"
-						case hangarQuery4 = "Hangar_Query_4"
-						case hangarQuery5 = "Hangar_Query_5"
-						case hangarQuery6 = "Hangar_Query_6"
-						case hangarQuery7 = "Hangar_Query_7"
-						case hangarTake1 = "Hangar_Take_1"
-						case hangarTake2 = "Hangar_Take_2"
-						case hangarTake3 = "Hangar_Take_3"
-						case hangarTake4 = "Hangar_Take_4"
-						case hangarTake5 = "Hangar_Take_5"
-						case hangarTake6 = "Hangar_Take_6"
-						case hangarTake7 = "Hangar_Take_7"
-						case juniorAccountant = "Junior_Accountant"
-						case personnelManager = "Personnel_Manager"
-						case rentFactoryFacility = "Rent_Factory_Facility"
-						case rentOffice = "Rent_Office"
-						case rentResearchFacility = "Rent_Research_Facility"
-						case securityOfficer = "Security_Officer"
-						case starbaseDefenseOperator = "Starbase_Defense_Operator"
-						case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-						case stationManager = "Station_Manager"
-						case trader = "Trader"
-						
-						public var description: String {
-							return rawValue
-						}
-						
-					}
-					
-					public struct Success: Codable, Hashable {
-						
-						
-						public let changedAt: Date
-						public let characterID: Int
-						public let issuerID: Int
-						public let newRoles: [ESI.Corporations.CorporationID.Roles.History.NewRole]
-						public let oldRoles: [ESI.Corporations.CorporationID.Roles.History.OldRole]
-						public let roleType: ESI.Corporations.CorporationID.Roles.History.RoleType
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case changedAt = "changed_at"
-							case characterID = "character_id"
-							case issuerID = "issuer_id"
-							case newRoles = "new_roles"
-							case oldRoles = "old_roles"
-							case roleType = "role_type"
-							
-							var dateFormatter: DateFormatter? {
-								switch self {
-									case .changedAt:
-									return DateFormatter.esiDateTimeFormatter
-									default:
-									return nil
-								}
-							}
-						}
-					}
-					
 				}
 				
 				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let characterID: Int
-					public let grantableRoles: [ESI.Corporations.CorporationID.GrantableRole]?
-					public let grantableRolesAtBase: [ESI.Corporations.CorporationID.GrantableRolesAtBaseGrantableRolesAtBase]?
-					public let grantableRolesAtHq: [ESI.Corporations.CorporationID.GrantableRolesAtHqGrantableRolesAtHq]?
-					public let grantableRolesAtOther: [ESI.Corporations.CorporationID.GrantableRolesAtOtherGrantableRolesAtOther]?
-					public let roles: [ESI.Characters.Role]?
-					public let rolesAtBase: [ESI.Characters.RolesAtBaseRolesAtBase]?
-					public let rolesAtHq: [ESI.Characters.RolesAtHqRolesAtHq]?
-					public let rolesAtOther: [ESI.Characters.RolesAtOtherRolesAtOther]?
+					public var characterID: Int
+					public var grantableRoles: [ESI.Corporations.CorporationID.GrantableRole]?
+					public var grantableRolesAtBase: [ESI.Corporations.CorporationID.GrantableRolesAtBaseGrantableRolesAtBase]?
+					public var grantableRolesAtHq: [ESI.Corporations.CorporationID.GrantableRolesAtHqGrantableRolesAtHq]?
+					public var grantableRolesAtOther: [ESI.Corporations.CorporationID.GrantableRolesAtOtherGrantableRolesAtOther]?
+					public var roles: [ESI.Corporations.Role]?
+					public var rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?
+					public var rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?
+					public var rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?
+					public init(characterID: Int, grantableRoles: [ESI.Corporations.CorporationID.GrantableRole]?, grantableRolesAtBase: [ESI.Corporations.CorporationID.GrantableRolesAtBaseGrantableRolesAtBase]?, grantableRolesAtHq: [ESI.Corporations.CorporationID.GrantableRolesAtHqGrantableRolesAtHq]?, grantableRolesAtOther: [ESI.Corporations.CorporationID.GrantableRolesAtOtherGrantableRolesAtOther]?, roles: [ESI.Corporations.Role]?, rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?, rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?, rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?) {
+						self.characterID = characterID
+						self.grantableRoles = grantableRoles
+						self.grantableRolesAtBase = grantableRolesAtBase
+						self.grantableRolesAtHq = grantableRolesAtHq
+						self.grantableRolesAtOther = grantableRolesAtOther
+						self.roles = roles
+						self.rolesAtBase = rolesAtBase
+						self.rolesAtHq = rolesAtHq
+						self.rolesAtOther = rolesAtOther
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case characterID = "character_id"
@@ -2526,12 +3014,27 @@ extension ESI {
 				
 				
 				
+				public enum ShareholderType: String, Codable, CustomStringConvertible {
+					case character
+					case corporation
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let shareCount: Int64
-					public let shareholderID: Int
-					public let shareholderType: ESI.Corporations.CorporationID.Shareholders.ShareholderType
+					public var shareCount: Int64
+					public var shareholderID: Int
+					public var shareholderType: ESI.Corporations.CorporationID.Shareholders.ShareholderType
+					public init(shareCount: Int64, shareholderID: Int, shareholderType: ESI.Corporations.CorporationID.Shareholders.ShareholderType) {
+						self.shareCount = shareCount
+						self.shareholderID = shareholderID
+						self.shareholderType = shareholderType
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case shareCount = "share_count"
@@ -2542,16 +3045,6 @@ extension ESI {
 							return nil
 						}
 					}
-				}
-				
-				public enum ShareholderType: String, Codable, CustomStringConvertible {
-					case character
-					case corporation
-					
-					public var description: String {
-						return rawValue
-					}
-					
 				}
 				
 			}
@@ -2601,6 +3094,28 @@ extension ESI {
 				
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var fromID: Int
+					public var fromType: ESI.Corporations.FromType
+					public var standing: Double
+					public init(fromID: Int, fromType: ESI.Corporations.FromType, standing: Double) {
+						self.fromID = fromID
+						self.fromType = fromType
+						self.standing = standing
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case fromID = "from_id"
+						case fromType = "from_type"
+						case standing
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
 				
 			}
 			
@@ -2692,7 +3207,7 @@ extension ESI {
 					
 					
 					
-					public enum Offline: String, Codable, CustomStringConvertible {
+					public enum FuelBayTake: String, Codable, CustomStringConvertible {
 						case allianceMember = "alliance_member"
 						case configStarbaseEquipmentRole = "config_starbase_equipment_role"
 						case corporationMember = "corporation_member"
@@ -2704,7 +3219,7 @@ extension ESI {
 						
 					}
 					
-					public enum FuelBayTake: String, Codable, CustomStringConvertible {
+					public enum Online: String, Codable, CustomStringConvertible {
 						case allianceMember = "alliance_member"
 						case configStarbaseEquipmentRole = "config_starbase_equipment_role"
 						case corporationMember = "corporation_member"
@@ -2740,23 +3255,51 @@ extension ESI {
 						
 					}
 					
+					public enum Unanchor: String, Codable, CustomStringConvertible {
+						case allianceMember = "alliance_member"
+						case configStarbaseEquipmentRole = "config_starbase_equipment_role"
+						case corporationMember = "corporation_member"
+						case starbaseFuelTechnicianRole = "starbase_fuel_technician_role"
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
-						public let allowAllianceMembers: Bool
-						public let allowCorporationMembers: Bool
-						public let anchor: ESI.Corporations.CorporationID.Starbases.StarbaseID.Anchor
-						public let attackIfAtWar: Bool
-						public let attackIfOtherSecurityStatusDropping: Bool
-						public let attackSecurityStatusThreshold: Double?
-						public let attackStandingThreshold: Double?
-						public let fuelBayTake: ESI.Corporations.CorporationID.Starbases.StarbaseID.FuelBayTake
-						public let fuelBayView: ESI.Corporations.CorporationID.Starbases.StarbaseID.FuelBayView
-						public let fuels: [ESI.Corporations.CorporationID.Starbases.StarbaseID.Fuel]?
-						public let offline: ESI.Corporations.CorporationID.Starbases.StarbaseID.Offline
-						public let online: ESI.Corporations.CorporationID.Starbases.StarbaseID.Online
-						public let unanchor: ESI.Corporations.CorporationID.Starbases.StarbaseID.Unanchor
-						public let useAllianceStandings: Bool
+						public var allowAllianceMembers: Bool
+						public var allowCorporationMembers: Bool
+						public var anchor: ESI.Corporations.CorporationID.Starbases.StarbaseID.Anchor
+						public var attackIfAtWar: Bool
+						public var attackIfOtherSecurityStatusDropping: Bool
+						public var attackSecurityStatusThreshold: Double?
+						public var attackStandingThreshold: Double?
+						public var fuelBayTake: ESI.Corporations.CorporationID.Starbases.StarbaseID.FuelBayTake
+						public var fuelBayView: ESI.Corporations.CorporationID.Starbases.StarbaseID.FuelBayView
+						public var fuels: [ESI.Corporations.CorporationID.Starbases.StarbaseID.Fuel]?
+						public var offline: ESI.Corporations.CorporationID.Starbases.StarbaseID.Offline
+						public var online: ESI.Corporations.CorporationID.Starbases.StarbaseID.Online
+						public var unanchor: ESI.Corporations.CorporationID.Starbases.StarbaseID.Unanchor
+						public var useAllianceStandings: Bool
+						public init(allowAllianceMembers: Bool, allowCorporationMembers: Bool, anchor: ESI.Corporations.CorporationID.Starbases.StarbaseID.Anchor, attackIfAtWar: Bool, attackIfOtherSecurityStatusDropping: Bool, attackSecurityStatusThreshold: Double?, attackStandingThreshold: Double?, fuelBayTake: ESI.Corporations.CorporationID.Starbases.StarbaseID.FuelBayTake, fuelBayView: ESI.Corporations.CorporationID.Starbases.StarbaseID.FuelBayView, fuels: [ESI.Corporations.CorporationID.Starbases.StarbaseID.Fuel]?, offline: ESI.Corporations.CorporationID.Starbases.StarbaseID.Offline, online: ESI.Corporations.CorporationID.Starbases.StarbaseID.Online, unanchor: ESI.Corporations.CorporationID.Starbases.StarbaseID.Unanchor, useAllianceStandings: Bool) {
+							self.allowAllianceMembers = allowAllianceMembers
+							self.allowCorporationMembers = allowCorporationMembers
+							self.anchor = anchor
+							self.attackIfAtWar = attackIfAtWar
+							self.attackIfOtherSecurityStatusDropping = attackIfOtherSecurityStatusDropping
+							self.attackSecurityStatusThreshold = attackSecurityStatusThreshold
+							self.attackStandingThreshold = attackStandingThreshold
+							self.fuelBayTake = fuelBayTake
+							self.fuelBayView = fuelBayView
+							self.fuels = fuels
+							self.offline = offline
+							self.online = online
+							self.unanchor = unanchor
+							self.useAllianceStandings = useAllianceStandings
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case allowAllianceMembers = "allow_alliance_members"
@@ -2780,19 +3323,7 @@ extension ESI {
 						}
 					}
 					
-					public enum Unanchor: String, Codable, CustomStringConvertible {
-						case allianceMember = "alliance_member"
-						case configStarbaseEquipmentRole = "config_starbase_equipment_role"
-						case corporationMember = "corporation_member"
-						case starbaseFuelTechnicianRole = "starbase_fuel_technician_role"
-						
-						public var description: String {
-							return rawValue
-						}
-						
-					}
-					
-					public enum Online: String, Codable, CustomStringConvertible {
+					public enum Offline: String, Codable, CustomStringConvertible {
 						case allianceMember = "alliance_member"
 						case configStarbaseEquipmentRole = "config_starbase_equipment_role"
 						case corporationMember = "corporation_member"
@@ -2807,8 +3338,12 @@ extension ESI {
 					public struct Fuel: Codable, Hashable {
 						
 						
-						public let quantity: Int
-						public let typeID: Int
+						public var quantity: Int
+						public var typeID: Int
+						public init(quantity: Int, typeID: Int) {
+							self.quantity = quantity
+							self.typeID = typeID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case quantity
@@ -2823,30 +3358,27 @@ extension ESI {
 				}
 				
 				
-				public enum State: String, Codable, CustomStringConvertible {
-					case offline
-					case online
-					case onlining
-					case reinforced
-					case unanchoring
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let moonID: Int?
-					public let onlinedSince: Date?
-					public let reinforcedUntil: Date?
-					public let starbaseID: Int64
-					public let state: ESI.Corporations.CorporationID.Starbases.State?
-					public let systemID: Int
-					public let typeID: Int
-					public let unanchorAt: Date?
+					public var moonID: Int?
+					public var onlinedSince: Date?
+					public var reinforcedUntil: Date?
+					public var starbaseID: Int64
+					public var state: ESI.Corporations.CorporationID.Starbases.State?
+					public var systemID: Int
+					public var typeID: Int
+					public var unanchorAt: Date?
+					public init(moonID: Int?, onlinedSince: Date?, reinforcedUntil: Date?, starbaseID: Int64, state: ESI.Corporations.CorporationID.Starbases.State?, systemID: Int, typeID: Int, unanchorAt: Date?) {
+						self.moonID = moonID
+						self.onlinedSince = onlinedSince
+						self.reinforcedUntil = reinforcedUntil
+						self.starbaseID = starbaseID
+						self.state = state
+						self.systemID = systemID
+						self.typeID = typeID
+						self.unanchorAt = unanchorAt
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case moonID = "moon_id"
@@ -2873,6 +3405,19 @@ extension ESI {
 					}
 				}
 				
+				public enum State: String, Codable, CustomStringConvertible {
+					case offline
+					case online
+					case onlining
+					case reinforced
+					case unanchoring
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
 			}
 			
 			public struct Structures {
@@ -2880,7 +3425,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -2936,8 +3481,12 @@ extension ESI {
 						
 					}
 					
-					public let name: String
-					public let state: ESI.Corporations.CorporationID.Structures.Service.ServiceState
+					public var name: String
+					public var state: ESI.Corporations.CorporationID.Structures.Service.ServiceState
+					public init(name: String, state: ESI.Corporations.CorporationID.Structures.Service.ServiceState) {
+						self.name = name
+						self.state = state
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case name
@@ -2949,25 +3498,64 @@ extension ESI {
 					}
 				}
 				
+				public enum State: String, Codable, CustomStringConvertible {
+					case anchorVulnerable = "anchor_vulnerable"
+					case anchoring
+					case armorReinforce = "armor_reinforce"
+					case armorVulnerable = "armor_vulnerable"
+					case deployVulnerable = "deploy_vulnerable"
+					case fittingInvulnerable = "fitting_invulnerable"
+					case hullReinforce = "hull_reinforce"
+					case hullVulnerable = "hull_vulnerable"
+					case onlineDeprecated = "online_deprecated"
+					case onliningVulnerable = "onlining_vulnerable"
+					case shieldVulnerable = "shield_vulnerable"
+					case unanchored
+					case unknown
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
-					public let corporationID: Int
-					public let fuelExpires: Date?
-					public let nextReinforceApply: Date?
-					public let nextReinforceHour: Int?
-					public let nextReinforceWeekday: Int?
-					public let profileID: Int
-					public let reinforceHour: Int
-					public let reinforceWeekday: Int?
-					public let services: [ESI.Corporations.CorporationID.Structures.Service]?
-					public let state: ESI.Corporations.CorporationID.Structures.State
-					public let stateTimerEnd: Date?
-					public let stateTimerStart: Date?
-					public let structureID: Int64
-					public let systemID: Int
-					public let typeID: Int
-					public let unanchorsAt: Date?
+					public var corporationID: Int
+					public var fuelExpires: Date?
+					public var nextReinforceApply: Date?
+					public var nextReinforceHour: Int?
+					public var nextReinforceWeekday: Int?
+					public var profileID: Int
+					public var reinforceHour: Int
+					public var reinforceWeekday: Int?
+					public var services: [ESI.Corporations.CorporationID.Structures.Service]?
+					public var state: ESI.Corporations.CorporationID.Structures.State
+					public var stateTimerEnd: Date?
+					public var stateTimerStart: Date?
+					public var structureID: Int64
+					public var systemID: Int
+					public var typeID: Int
+					public var unanchorsAt: Date?
+					public init(corporationID: Int, fuelExpires: Date?, nextReinforceApply: Date?, nextReinforceHour: Int?, nextReinforceWeekday: Int?, profileID: Int, reinforceHour: Int, reinforceWeekday: Int?, services: [ESI.Corporations.CorporationID.Structures.Service]?, state: ESI.Corporations.CorporationID.Structures.State, stateTimerEnd: Date?, stateTimerStart: Date?, structureID: Int64, systemID: Int, typeID: Int, unanchorsAt: Date?) {
+						self.corporationID = corporationID
+						self.fuelExpires = fuelExpires
+						self.nextReinforceApply = nextReinforceApply
+						self.nextReinforceHour = nextReinforceHour
+						self.nextReinforceWeekday = nextReinforceWeekday
+						self.profileID = profileID
+						self.reinforceHour = reinforceHour
+						self.reinforceWeekday = reinforceWeekday
+						self.services = services
+						self.state = state
+						self.stateTimerEnd = stateTimerEnd
+						self.stateTimerStart = stateTimerStart
+						self.structureID = structureID
+						self.systemID = systemID
+						self.typeID = typeID
+						self.unanchorsAt = unanchorsAt
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case corporationID = "corporation_id"
@@ -3004,27 +3592,6 @@ extension ESI {
 							}
 						}
 					}
-				}
-				
-				public enum State: String, Codable, CustomStringConvertible {
-					case anchorVulnerable = "anchor_vulnerable"
-					case anchoring
-					case armorReinforce = "armor_reinforce"
-					case armorVulnerable = "armor_vulnerable"
-					case deployVulnerable = "deploy_vulnerable"
-					case fittingInvulnerable = "fitting_invulnerable"
-					case hullReinforce = "hull_reinforce"
-					case hullVulnerable = "hull_vulnerable"
-					case onlineDeprecated = "online_deprecated"
-					case onliningVulnerable = "onlining_vulnerable"
-					case shieldVulnerable = "shield_vulnerable"
-					case unanchored
-					case unknown
-					
-					public var description: String {
-						return rawValue
-					}
-					
 				}
 				
 			}
@@ -3075,16 +3642,28 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let grantableRoles: [ESI.Corporations.CorporationID.GrantableRole]?
-					public let grantableRolesAtBase: [ESI.Corporations.CorporationID.GrantableRolesAtBaseGrantableRolesAtBase]?
-					public let grantableRolesAtHq: [ESI.Corporations.CorporationID.GrantableRolesAtHqGrantableRolesAtHq]?
-					public let grantableRolesAtOther: [ESI.Corporations.CorporationID.GrantableRolesAtOtherGrantableRolesAtOther]?
-					public let name: String?
-					public let roles: [ESI.Characters.Role]?
-					public let rolesAtBase: [ESI.Characters.RolesAtBaseRolesAtBase]?
-					public let rolesAtHq: [ESI.Characters.RolesAtHqRolesAtHq]?
-					public let rolesAtOther: [ESI.Characters.RolesAtOtherRolesAtOther]?
-					public let titleID: Int?
+					public var grantableRoles: [ESI.Corporations.CorporationID.GrantableRole]?
+					public var grantableRolesAtBase: [ESI.Corporations.CorporationID.GrantableRolesAtBaseGrantableRolesAtBase]?
+					public var grantableRolesAtHq: [ESI.Corporations.CorporationID.GrantableRolesAtHqGrantableRolesAtHq]?
+					public var grantableRolesAtOther: [ESI.Corporations.CorporationID.GrantableRolesAtOtherGrantableRolesAtOther]?
+					public var name: String?
+					public var roles: [ESI.Corporations.Role]?
+					public var rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?
+					public var rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?
+					public var rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?
+					public var titleID: Int?
+					public init(grantableRoles: [ESI.Corporations.CorporationID.GrantableRole]?, grantableRolesAtBase: [ESI.Corporations.CorporationID.GrantableRolesAtBaseGrantableRolesAtBase]?, grantableRolesAtHq: [ESI.Corporations.CorporationID.GrantableRolesAtHqGrantableRolesAtHq]?, grantableRolesAtOther: [ESI.Corporations.CorporationID.GrantableRolesAtOtherGrantableRolesAtOther]?, name: String?, roles: [ESI.Corporations.Role]?, rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?, rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?, rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?, titleID: Int?) {
+						self.grantableRoles = grantableRoles
+						self.grantableRolesAtBase = grantableRolesAtBase
+						self.grantableRolesAtHq = grantableRolesAtHq
+						self.grantableRolesAtOther = grantableRolesAtOther
+						self.name = name
+						self.roles = roles
+						self.rolesAtBase = rolesAtBase
+						self.rolesAtHq = rolesAtHq
+						self.rolesAtOther = rolesAtOther
+						self.titleID = titleID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case grantableRoles = "grantable_roles"
@@ -3336,19 +3915,34 @@ extension ESI {
 						public struct Success: Codable, Hashable {
 							
 							
-							public let amount: Double?
-							public let balance: Double?
-							public let contextID: Int64?
-							public let contextIDType: ESI.Characters.ContextIDType?
-							public let date: Date
-							public let localizedDescription: String
-							public let firstPartyID: Int?
-							public let id: Int64
-							public let reason: String?
-							public let refType: ESI.Corporations.CorporationID.Wallets.Division.Journal.RefType
-							public let secondPartyID: Int?
-							public let tax: Double?
-							public let taxReceiverID: Int?
+							public var amount: Double?
+							public var balance: Double?
+							public var contextID: Int64?
+							public var contextIDType: ESI.Corporations.ContextIDType?
+							public var date: Date
+							public var localizedDescription: String
+							public var firstPartyID: Int?
+							public var id: Int64
+							public var reason: String?
+							public var refType: ESI.Corporations.CorporationID.Wallets.Division.Journal.RefType
+							public var secondPartyID: Int?
+							public var tax: Double?
+							public var taxReceiverID: Int?
+							public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: ESI.Corporations.ContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: ESI.Corporations.CorporationID.Wallets.Division.Journal.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
+								self.amount = amount
+								self.balance = balance
+								self.contextID = contextID
+								self.contextIDType = contextIDType
+								self.date = date
+								self.localizedDescription = localizedDescription
+								self.firstPartyID = firstPartyID
+								self.id = id
+								self.reason = reason
+								self.refType = refType
+								self.secondPartyID = secondPartyID
+								self.tax = tax
+								self.taxReceiverID = taxReceiverID
+							}
 							
 							enum CodingKeys: String, CodingKey, DateFormatted {
 								case amount
@@ -3426,15 +4020,26 @@ extension ESI {
 						public struct Success: Codable, Hashable {
 							
 							
-							public let clientID: Int
-							public let date: Date
-							public let isBuy: Bool
-							public let journalRefID: Int64
-							public let locationID: Int64
-							public let quantity: Int
-							public let transactionID: Int64
-							public let typeID: Int
-							public let unitPrice: Double
+							public var clientID: Int
+							public var date: Date
+							public var isBuy: Bool
+							public var journalRefID: Int64
+							public var locationID: Int64
+							public var quantity: Int
+							public var transactionID: Int64
+							public var typeID: Int
+							public var unitPrice: Double
+							public init(clientID: Int, date: Date, isBuy: Bool, journalRefID: Int64, locationID: Int64, quantity: Int, transactionID: Int64, typeID: Int, unitPrice: Double) {
+								self.clientID = clientID
+								self.date = date
+								self.isBuy = isBuy
+								self.journalRefID = journalRefID
+								self.locationID = locationID
+								self.quantity = quantity
+								self.transactionID = transactionID
+								self.typeID = typeID
+								self.unitPrice = unitPrice
+							}
 							
 							enum CodingKeys: String, CodingKey, DateFormatted {
 								case clientID = "client_id"
@@ -3468,8 +4073,12 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let balance: Double
-					public let division: Int
+					public var balance: Double
+					public var division: Int
+					public init(balance: Double, division: Int) {
+						self.balance = balance
+						self.division = division
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case balance
@@ -3487,20 +4096,36 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let ceoID: Int
-				public let creatorID: Int
-				public let dateFounded: Date?
-				public let localizedDescription: String?
-				public let factionID: Int?
-				public let homeStationID: Int?
-				public let memberCount: Int
-				public let name: String
-				public let shares: Int64?
-				public let taxRate: Double
-				public let ticker: String
-				public let url: String?
-				public let warEligible: Bool?
+				public var allianceID: Int?
+				public var ceoID: Int
+				public var creatorID: Int
+				public var dateFounded: Date?
+				public var localizedDescription: String?
+				public var factionID: Int?
+				public var homeStationID: Int?
+				public var memberCount: Int
+				public var name: String
+				public var shares: Int64?
+				public var taxRate: Double
+				public var ticker: String
+				public var url: String?
+				public var warEligible: Bool?
+				public init(allianceID: Int?, ceoID: Int, creatorID: Int, dateFounded: Date?, localizedDescription: String?, factionID: Int?, homeStationID: Int?, memberCount: Int, name: String, shares: Int64?, taxRate: Double, ticker: String, url: String?, warEligible: Bool?) {
+					self.allianceID = allianceID
+					self.ceoID = ceoID
+					self.creatorID = creatorID
+					self.dateFounded = dateFounded
+					self.localizedDescription = localizedDescription
+					self.factionID = factionID
+					self.homeStationID = homeStationID
+					self.memberCount = memberCount
+					self.name = name
+					self.shares = shares
+					self.taxRate = taxRate
+					self.ticker = ticker
+					self.url = url
+					self.warEligible = warEligible
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"
@@ -3529,63 +4154,7 @@ extension ESI {
 				}
 			}
 			
-			public enum GrantableRolesAtOtherGrantableRolesAtOther: String, Codable, CustomStringConvertible {
-				case accountTake1 = "Account_Take_1"
-				case accountTake2 = "Account_Take_2"
-				case accountTake3 = "Account_Take_3"
-				case accountTake4 = "Account_Take_4"
-				case accountTake5 = "Account_Take_5"
-				case accountTake6 = "Account_Take_6"
-				case accountTake7 = "Account_Take_7"
-				case accountant = "Accountant"
-				case auditor = "Auditor"
-				case communicationsOfficer = "Communications_Officer"
-				case configEquipment = "Config_Equipment"
-				case configStarbaseEquipment = "Config_Starbase_Equipment"
-				case containerTake1 = "Container_Take_1"
-				case containerTake2 = "Container_Take_2"
-				case containerTake3 = "Container_Take_3"
-				case containerTake4 = "Container_Take_4"
-				case containerTake5 = "Container_Take_5"
-				case containerTake6 = "Container_Take_6"
-				case containerTake7 = "Container_Take_7"
-				case contractManager = "Contract_Manager"
-				case diplomat = "Diplomat"
-				case director = "Director"
-				case factoryManager = "Factory_Manager"
-				case fittingManager = "Fitting_Manager"
-				case hangarQuery1 = "Hangar_Query_1"
-				case hangarQuery2 = "Hangar_Query_2"
-				case hangarQuery3 = "Hangar_Query_3"
-				case hangarQuery4 = "Hangar_Query_4"
-				case hangarQuery5 = "Hangar_Query_5"
-				case hangarQuery6 = "Hangar_Query_6"
-				case hangarQuery7 = "Hangar_Query_7"
-				case hangarTake1 = "Hangar_Take_1"
-				case hangarTake2 = "Hangar_Take_2"
-				case hangarTake3 = "Hangar_Take_3"
-				case hangarTake4 = "Hangar_Take_4"
-				case hangarTake5 = "Hangar_Take_5"
-				case hangarTake6 = "Hangar_Take_6"
-				case hangarTake7 = "Hangar_Take_7"
-				case juniorAccountant = "Junior_Accountant"
-				case personnelManager = "Personnel_Manager"
-				case rentFactoryFacility = "Rent_Factory_Facility"
-				case rentOffice = "Rent_Office"
-				case rentResearchFacility = "Rent_Research_Facility"
-				case securityOfficer = "Security_Officer"
-				case starbaseDefenseOperator = "Starbase_Defense_Operator"
-				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-				case stationManager = "Station_Manager"
-				case trader = "Trader"
-				
-				public var description: String {
-					return rawValue
-				}
-				
-			}
-			
-			public enum GrantableRolesAtHqGrantableRolesAtHq: String, Codable, CustomStringConvertible {
+			public enum GrantableRole: String, Codable, CustomStringConvertible {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -3697,7 +4266,7 @@ extension ESI {
 				
 			}
 			
-			public enum GrantableRole: String, Codable, CustomStringConvertible {
+			public enum GrantableRolesAtHqGrantableRolesAtHq: String, Codable, CustomStringConvertible {
 				case accountTake1 = "Account_Take_1"
 				case accountTake2 = "Account_Take_2"
 				case accountTake3 = "Account_Take_3"
@@ -3876,9 +4445,440 @@ extension ESI {
 				
 			}
 			
+			public enum GrantableRolesAtOtherGrantableRolesAtOther: String, Codable, CustomStringConvertible {
+				case accountTake1 = "Account_Take_1"
+				case accountTake2 = "Account_Take_2"
+				case accountTake3 = "Account_Take_3"
+				case accountTake4 = "Account_Take_4"
+				case accountTake5 = "Account_Take_5"
+				case accountTake6 = "Account_Take_6"
+				case accountTake7 = "Account_Take_7"
+				case accountant = "Accountant"
+				case auditor = "Auditor"
+				case communicationsOfficer = "Communications_Officer"
+				case configEquipment = "Config_Equipment"
+				case configStarbaseEquipment = "Config_Starbase_Equipment"
+				case containerTake1 = "Container_Take_1"
+				case containerTake2 = "Container_Take_2"
+				case containerTake3 = "Container_Take_3"
+				case containerTake4 = "Container_Take_4"
+				case containerTake5 = "Container_Take_5"
+				case containerTake6 = "Container_Take_6"
+				case containerTake7 = "Container_Take_7"
+				case contractManager = "Contract_Manager"
+				case diplomat = "Diplomat"
+				case director = "Director"
+				case factoryManager = "Factory_Manager"
+				case fittingManager = "Fitting_Manager"
+				case hangarQuery1 = "Hangar_Query_1"
+				case hangarQuery2 = "Hangar_Query_2"
+				case hangarQuery3 = "Hangar_Query_3"
+				case hangarQuery4 = "Hangar_Query_4"
+				case hangarQuery5 = "Hangar_Query_5"
+				case hangarQuery6 = "Hangar_Query_6"
+				case hangarQuery7 = "Hangar_Query_7"
+				case hangarTake1 = "Hangar_Take_1"
+				case hangarTake2 = "Hangar_Take_2"
+				case hangarTake3 = "Hangar_Take_3"
+				case hangarTake4 = "Hangar_Take_4"
+				case hangarTake5 = "Hangar_Take_5"
+				case hangarTake6 = "Hangar_Take_6"
+				case hangarTake7 = "Hangar_Take_7"
+				case juniorAccountant = "Junior_Accountant"
+				case personnelManager = "Personnel_Manager"
+				case rentFactoryFacility = "Rent_Factory_Facility"
+				case rentOffice = "Rent_Office"
+				case rentResearchFacility = "Rent_Research_Facility"
+				case securityOfficer = "Security_Officer"
+				case starbaseDefenseOperator = "Starbase_Defense_Operator"
+				case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+				case stationManager = "Station_Manager"
+				case trader = "Trader"
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
+			
 		}
 		
 		
+		public enum ContactType: String, Codable, CustomStringConvertible {
+			case character
+			case corporation
+			case alliance
+			case faction
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum State: String, Codable, CustomStringConvertible {
+			case cancelled
+			case expired
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public struct Coordinates: Codable, Hashable {
+			
+			
+			public var x: Double
+			public var y: Double
+			public var z: Double
+			public init(x: Double, y: Double, z: Double) {
+				self.x = x
+				self.y = y
+				self.z = z
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case x
+				case y
+				case z
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum Role: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Availability: String, Codable, CustomStringConvertible {
+			case `public` = "public"
+			case personal
+			case corporation
+			case alliance
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Range: String, Codable, CustomStringConvertible {
+			case i1 = "1"
+			case i10 = "10"
+			case i2 = "2"
+			case i20 = "20"
+			case i3 = "3"
+			case i30 = "30"
+			case i4 = "4"
+			case i40 = "40"
+			case i5 = "5"
+			case region
+			case solarsystem
+			case station
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum LocationType: String, Codable, CustomStringConvertible {
+			case station
+			case solarSystem = "solar_system"
+			case other
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum RolesAtHqRolesAtHq: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum RolesAtOtherRolesAtOther: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public struct Item: Codable, Hashable {
+			
+			
+			public var itemID: Int64
+			public var typeID: Int
+			public init(itemID: Int64, typeID: Int) {
+				self.itemID = itemID
+				self.typeID = typeID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum FromType: String, Codable, CustomStringConvertible {
+			case agent
+			case npcCorp = "npc_corp"
+			case faction
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum ContextIDType: String, Codable, CustomStringConvertible {
+			case structureID = "structure_id"
+			case stationID = "station_id"
+			case marketTransactionID = "market_transaction_id"
+			case characterID = "character_id"
+			case corporationID = "corporation_id"
+			case allianceID = "alliance_id"
+			case eveSystem = "eve_system"
+			case industryJobID = "industry_job_id"
+			case contractID = "contract_id"
+			case planetID = "planet_id"
+			case systemID = "system_id"
+			case typeID = "type_id"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum ValueType: String, Codable, CustomStringConvertible {
+			case unknown
+			case itemExchange = "item_exchange"
+			case auction
+			case courier
+			case loan
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum RolesAtBaseRolesAtBase: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 	}
 	

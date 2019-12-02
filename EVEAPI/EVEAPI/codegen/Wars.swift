@@ -145,16 +145,28 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let aggressor: ESI.Wars.WarID.Aggressor
-				public let allies: [ESI.Wars.WarID.Ally]?
-				public let declared: Date
-				public let defender: ESI.Wars.WarID.Defender
-				public let finished: Date?
-				public let id: Int
-				public let mutual: Bool
-				public let openForAllies: Bool
-				public let retracted: Date?
-				public let started: Date?
+				public var aggressor: ESI.Wars.WarID.Aggressor
+				public var allies: [ESI.Wars.WarID.Ally]?
+				public var declared: Date
+				public var defender: ESI.Wars.WarID.Defender
+				public var finished: Date?
+				public var id: Int
+				public var mutual: Bool
+				public var openForAllies: Bool
+				public var retracted: Date?
+				public var started: Date?
+				public init(aggressor: ESI.Wars.WarID.Aggressor, allies: [ESI.Wars.WarID.Ally]?, declared: Date, defender: ESI.Wars.WarID.Defender, finished: Date?, id: Int, mutual: Bool, openForAllies: Bool, retracted: Date?, started: Date?) {
+					self.aggressor = aggressor
+					self.allies = allies
+					self.declared = declared
+					self.defender = defender
+					self.finished = finished
+					self.id = id
+					self.mutual = mutual
+					self.openForAllies = openForAllies
+					self.retracted = retracted
+					self.started = started
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case aggressor
@@ -185,33 +197,19 @@ extension ESI {
 				}
 			}
 			
-			public struct Defender: Codable, Hashable {
-				
-				
-				public let allianceID: Int?
-				public let corporationID: Int?
-				public let iskDestroyed: Double
-				public let shipsKilled: Int
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
-					case iskDestroyed = "isk_destroyed"
-					case shipsKilled = "ships_killed"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public struct Aggressor: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let corporationID: Int?
-				public let iskDestroyed: Double
-				public let shipsKilled: Int
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Double
+				public var shipsKilled: Int
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"
@@ -228,8 +226,12 @@ extension ESI {
 			public struct Ally: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let corporationID: Int?
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public init(allianceID: Int?, corporationID: Int?) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"
@@ -241,9 +243,54 @@ extension ESI {
 				}
 			}
 			
+			public struct Defender: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Double
+				public var shipsKilled: Int
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					case iskDestroyed = "isk_destroyed"
+					case shipsKilled = "ships_killed"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
 		}
 		
 		
+		public struct Success: Codable, Hashable {
+			
+			
+			public var killmailHash: String
+			public var killmailID: Int
+			public init(killmailHash: String, killmailID: Int) {
+				self.killmailHash = killmailHash
+				self.killmailID = killmailID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case killmailHash = "killmail_hash"
+				case killmailID = "killmail_id"
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
 		
 	}
 	

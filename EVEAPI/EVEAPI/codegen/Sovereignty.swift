@@ -66,47 +66,31 @@ extension ESI {
 			
 			
 			
-			public struct Participant: Codable, Hashable {
-				
-				
-				public let allianceID: Int
-				public let score: Double
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case score
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public enum EventType: String, Codable, CustomStringConvertible {
-				case tcuDefense = "tcu_defense"
-				case ihubDefense = "ihub_defense"
-				case stationDefense = "station_defense"
-				case stationFreeport = "station_freeport"
-				
-				public var description: String {
-					return rawValue
-				}
-				
-			}
-			
 			public struct Success: Codable, Hashable {
 				
 				
-				public let attackersScore: Double?
-				public let campaignID: Int
-				public let constellationID: Int
-				public let defenderID: Int?
-				public let defenderScore: Double?
-				public let eventType: ESI.Sovereignty.Campaigns.EventType
-				public let participants: [ESI.Sovereignty.Campaigns.Participant]?
-				public let solarSystemID: Int
-				public let startTime: Date
-				public let structureID: Int64
+				public var attackersScore: Double?
+				public var campaignID: Int
+				public var constellationID: Int
+				public var defenderID: Int?
+				public var defenderScore: Double?
+				public var eventType: ESI.Sovereignty.Campaigns.EventType
+				public var participants: [ESI.Sovereignty.Campaigns.Participant]?
+				public var solarSystemID: Int
+				public var startTime: Date
+				public var structureID: Int64
+				public init(attackersScore: Double?, campaignID: Int, constellationID: Int, defenderID: Int?, defenderScore: Double?, eventType: ESI.Sovereignty.Campaigns.EventType, participants: [ESI.Sovereignty.Campaigns.Participant]?, solarSystemID: Int, startTime: Date, structureID: Int64) {
+					self.attackersScore = attackersScore
+					self.campaignID = campaignID
+					self.constellationID = constellationID
+					self.defenderID = defenderID
+					self.defenderScore = defenderScore
+					self.eventType = eventType
+					self.participants = participants
+					self.solarSystemID = solarSystemID
+					self.startTime = startTime
+					self.structureID = structureID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case attackersScore = "attackers_score"
@@ -129,6 +113,38 @@ extension ESI {
 						}
 					}
 				}
+			}
+			
+			public struct Participant: Codable, Hashable {
+				
+				
+				public var allianceID: Int
+				public var score: Double
+				public init(allianceID: Int, score: Double) {
+					self.allianceID = allianceID
+					self.score = score
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case score
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public enum EventType: String, Codable, CustomStringConvertible {
+				case tcuDefense = "tcu_defense"
+				case ihubDefense = "ihub_defense"
+				case stationDefense = "station_defense"
+				case stationFreeport = "station_freeport"
+				
+				public var description: String {
+					return rawValue
+				}
+				
 			}
 			
 		}
@@ -178,10 +194,16 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let allianceID: Int?
-				public let corporationID: Int?
-				public let factionID: Int?
-				public let systemID: Int
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var factionID: Int?
+				public var systemID: Int
+				public init(allianceID: Int?, corporationID: Int?, factionID: Int?, systemID: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.factionID = factionID
+					self.systemID = systemID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"
@@ -242,13 +264,22 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let allianceID: Int
-				public let solarSystemID: Int
-				public let structureID: Int64
-				public let structureTypeID: Int
-				public let vulnerabilityOccupancyLevel: Double?
-				public let vulnerableEndTime: Date?
-				public let vulnerableStartTime: Date?
+				public var allianceID: Int
+				public var solarSystemID: Int
+				public var structureID: Int64
+				public var structureTypeID: Int
+				public var vulnerabilityOccupancyLevel: Double?
+				public var vulnerableEndTime: Date?
+				public var vulnerableStartTime: Date?
+				public init(allianceID: Int, solarSystemID: Int, structureID: Int64, structureTypeID: Int, vulnerabilityOccupancyLevel: Double?, vulnerableEndTime: Date?, vulnerableStartTime: Date?) {
+					self.allianceID = allianceID
+					self.solarSystemID = solarSystemID
+					self.structureID = structureID
+					self.structureTypeID = structureTypeID
+					self.vulnerabilityOccupancyLevel = vulnerabilityOccupancyLevel
+					self.vulnerableEndTime = vulnerableEndTime
+					self.vulnerableStartTime = vulnerableStartTime
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case allianceID = "alliance_id"

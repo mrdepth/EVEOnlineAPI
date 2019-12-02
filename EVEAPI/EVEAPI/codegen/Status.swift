@@ -53,10 +53,16 @@ extension ESI {
 		public struct Success: Codable, Hashable {
 			
 			
-			public let players: Int
-			public let serverVersion: String
-			public let startTime: Date
-			public let vip: Bool?
+			public var players: Int
+			public var serverVersion: String
+			public var startTime: Date
+			public var vip: Bool?
+			public init(players: Int, serverVersion: String, startTime: Date, vip: Bool?) {
+				self.players = players
+				self.serverVersion = serverVersion
+				self.startTime = startTime
+				self.vip = vip
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case players
@@ -73,16 +79,6 @@ extension ESI {
 					}
 				}
 			}
-		}
-		
-		public enum Datasource: String, Codable, CustomStringConvertible {
-			case tranquility
-			case singularity
-			
-			public var description: String {
-				return rawValue
-			}
-			
 		}
 		
 	}

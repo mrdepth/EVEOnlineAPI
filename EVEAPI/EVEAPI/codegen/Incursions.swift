@@ -64,14 +64,24 @@ extension ESI {
 		public struct Success: Codable, Hashable {
 			
 			
-			public let constellationID: Int
-			public let factionID: Int
-			public let hasBoss: Bool
-			public let infestedSolarSystems: [Int]
-			public let influence: Double
-			public let stagingSolarSystemID: Int
-			public let state: ESI.Incursions.State
-			public let type: String
+			public var constellationID: Int
+			public var factionID: Int
+			public var hasBoss: Bool
+			public var infestedSolarSystems: [Int]
+			public var influence: Double
+			public var stagingSolarSystemID: Int
+			public var state: ESI.Incursions.State
+			public var type: String
+			public init(constellationID: Int, factionID: Int, hasBoss: Bool, infestedSolarSystems: [Int], influence: Double, stagingSolarSystemID: Int, state: ESI.Incursions.State, type: String) {
+				self.constellationID = constellationID
+				self.factionID = factionID
+				self.hasBoss = hasBoss
+				self.infestedSolarSystems = infestedSolarSystems
+				self.influence = influence
+				self.stagingSolarSystemID = stagingSolarSystemID
+				self.state = state
+				self.type = type
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case constellationID = "constellation_id"

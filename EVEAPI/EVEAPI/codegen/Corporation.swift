@@ -89,11 +89,18 @@ extension ESI {
 					public struct Success: Codable, Hashable {
 						
 						
-						public let chunkArrivalTime: Date
-						public let extractionStartTime: Date
-						public let moonID: Int
-						public let naturalDecayTime: Date
-						public let structureID: Int64
+						public var chunkArrivalTime: Date
+						public var extractionStartTime: Date
+						public var moonID: Int
+						public var naturalDecayTime: Date
+						public var structureID: Int64
+						public init(chunkArrivalTime: Date, extractionStartTime: Date, moonID: Int, naturalDecayTime: Date, structureID: Int64) {
+							self.chunkArrivalTime = chunkArrivalTime
+							self.extractionStartTime = extractionStartTime
+							self.moonID = moonID
+							self.naturalDecayTime = naturalDecayTime
+							self.structureID = structureID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case chunkArrivalTime = "chunk_arrival_time"
@@ -212,11 +219,18 @@ extension ESI {
 						public struct Success: Codable, Hashable {
 							
 							
-							public let characterID: Int
-							public let lastUpdated: Date
-							public let quantity: Int64
-							public let recordedCorporationID: Int
-							public let typeID: Int
+							public var characterID: Int
+							public var lastUpdated: Date
+							public var quantity: Int64
+							public var recordedCorporationID: Int
+							public var typeID: Int
+							public init(characterID: Int, lastUpdated: Date, quantity: Int64, recordedCorporationID: Int, typeID: Int) {
+								self.characterID = characterID
+								self.lastUpdated = lastUpdated
+								self.quantity = quantity
+								self.recordedCorporationID = recordedCorporationID
+								self.typeID = typeID
+							}
 							
 							enum CodingKeys: String, CodingKey, DateFormatted {
 								case characterID = "character_id"
@@ -239,12 +253,26 @@ extension ESI {
 					}
 					
 					
+					public enum ObserverType: String, Codable, CustomStringConvertible {
+						case structure
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
-						public let lastUpdated: Date
-						public let observerID: Int64
-						public let observerType: ESI.Corporation.CorporationID.Mining.Observers.ObserverType
+						public var lastUpdated: Date
+						public var observerID: Int64
+						public var observerType: ESI.Corporation.CorporationID.Mining.Observers.ObserverType
+						public init(lastUpdated: Date, observerID: Int64, observerType: ESI.Corporation.CorporationID.Mining.Observers.ObserverType) {
+							self.lastUpdated = lastUpdated
+							self.observerID = observerID
+							self.observerType = observerType
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case lastUpdated = "last_updated"
@@ -260,15 +288,6 @@ extension ESI {
 								}
 							}
 						}
-					}
-					
-					public enum ObserverType: String, Codable, CustomStringConvertible {
-						case structure
-						
-						public var description: String {
-							return rawValue
-						}
-						
 					}
 					
 				}

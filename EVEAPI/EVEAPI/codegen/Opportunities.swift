@@ -68,7 +68,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -110,12 +110,20 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let connectedGroups: [Int]
-					public let localizedDescription: String
-					public let groupID: Int
-					public let name: String
-					public let notification: String
-					public let requiredTasks: [Int]
+					public var connectedGroups: [Int]
+					public var localizedDescription: String
+					public var groupID: Int
+					public var name: String
+					public var notification: String
+					public var requiredTasks: [Int]
+					public init(connectedGroups: [Int], localizedDescription: String, groupID: Int, name: String, notification: String, requiredTasks: [Int]) {
+						self.connectedGroups = connectedGroups
+						self.localizedDescription = localizedDescription
+						self.groupID = groupID
+						self.name = name
+						self.notification = notification
+						self.requiredTasks = requiredTasks
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case connectedGroups = "connected_groups"
@@ -224,10 +232,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let localizedDescription: String
-					public let name: String
-					public let notification: String
-					public let taskID: Int
+					public var localizedDescription: String
+					public var name: String
+					public var notification: String
+					public var taskID: Int
+					public init(localizedDescription: String, name: String, notification: String, taskID: Int) {
+						self.localizedDescription = localizedDescription
+						self.name = name
+						self.notification = notification
+						self.taskID = taskID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case localizedDescription = "description"
@@ -248,6 +262,45 @@ extension ESI {
 		}
 		
 		
+		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Language: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Datasource: String, Codable, CustomStringConvertible {
+			case tranquility
+			case singularity
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 	}
 	

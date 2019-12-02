@@ -39,6 +39,7 @@ public protocol ESIDelegate: AnyObject {
 
 
 public class ESI: OAuth2InterceptorDelegate {
+
     public enum Server: String {
         case tranquility = "tranquility"
         case singularity = "singularity"
@@ -69,14 +70,19 @@ public class ESI: OAuth2InterceptorDelegate {
     
     func tokenDidRefresh(_ token: OAuth2Token) {
         delegate?.tokenDidRefresh(token)
+        NotificationCenter.default.post(name: ESI.didRefreshTokenNotification, object: self, userInfo: [ESI.tokenUserInfoKey: token])
     }
     
     func tokenDidBecomeInvalid(_ token: OAuth2Token) {
         delegate?.tokenDidBecomeInvalid(token)
+        NotificationCenter.default.post(name: ESI.didInvalidateTokenNotification, object: self, userInfo: [ESI.tokenUserInfoKey: token])
     }
 }
 
 extension ESI {
+    public static let didRefreshTokenNotification = Notification.Name(rawValue: "com.shimanski.eveapi.didRefreshToken")
+    public static let didInvalidateTokenNotification = Notification.Name(rawValue: "com.shimanski.eveapi.didInvaldateToken")
+    public static let tokenUserInfoKey: String = "token"
 }
 
 

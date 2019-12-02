@@ -114,13 +114,37 @@ extension ESI {
 				
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var kills: ESI.Fw.Leaderboards.Characters.Kills
+					public var victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints
+					public init(kills: ESI.Fw.Leaderboards.Characters.Kills, victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints) {
+						self.kills = kills
+						self.victoryPoints = victoryPoints
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case kills
+						case victoryPoints = "victory_points"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Kills: Codable, Hashable {
 					
-					public struct YesterdayYesterday: Codable, Hashable {
+					public struct LastWeekLastWeek: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let characterID: Int?
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -132,11 +156,15 @@ extension ESI {
 						}
 					}
 					
-					public struct LastWeekLastWeek: Codable, Hashable {
+					public struct YesterdayYesterday: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let characterID: Int?
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -151,8 +179,12 @@ extension ESI {
 					public struct ActiveTotalActiveTotal: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let characterID: Int?
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -164,9 +196,14 @@ extension ESI {
 						}
 					}
 					
-					public let activeTotal: [ESI.Fw.Leaderboards.Characters.Kills.ActiveTotalActiveTotal]
-					public let lastWeek: [ESI.Fw.Leaderboards.Characters.Kills.LastWeekLastWeek]
-					public let yesterday: [ESI.Fw.Leaderboards.Characters.Kills.YesterdayYesterday]
+					public var activeTotal: [ESI.Fw.Leaderboards.Characters.Kills.ActiveTotalActiveTotal]
+					public var lastWeek: [ESI.Fw.Leaderboards.Characters.Kills.LastWeekLastWeek]
+					public var yesterday: [ESI.Fw.Leaderboards.Characters.Kills.YesterdayYesterday]
+					public init(activeTotal: [ESI.Fw.Leaderboards.Characters.Kills.ActiveTotalActiveTotal], lastWeek: [ESI.Fw.Leaderboards.Characters.Kills.LastWeekLastWeek], yesterday: [ESI.Fw.Leaderboards.Characters.Kills.YesterdayYesterday]) {
+						self.activeTotal = activeTotal
+						self.lastWeek = lastWeek
+						self.yesterday = yesterday
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case activeTotal = "active_total"
@@ -179,29 +216,17 @@ extension ESI {
 					}
 				}
 				
-				public struct Success: Codable, Hashable {
-					
-					
-					public let kills: ESI.Fw.Leaderboards.Characters.Kills
-					public let victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case kills
-						case victoryPoints = "victory_points"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct VictoryPoints: Codable, Hashable {
 					
-					public struct ActiveTotalActiveTotal1: Codable, Hashable {
+					public struct LastWeekLastWeek1: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let characterID: Int?
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -216,8 +241,12 @@ extension ESI {
 					public struct YesterdayYesterday1: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let characterID: Int?
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -229,11 +258,15 @@ extension ESI {
 						}
 					}
 					
-					public struct LastWeekLastWeek1: Codable, Hashable {
+					public struct ActiveTotalActiveTotal1: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let characterID: Int?
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -245,9 +278,14 @@ extension ESI {
 						}
 					}
 					
-					public let activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1]
-					public let lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1]
-					public let yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]
+					public var activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1]
+					public var lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1]
+					public var yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]
+					public init(activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]) {
+						self.activeTotal = activeTotal
+						self.lastWeek = lastWeek
+						self.yesterday = yesterday
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case activeTotal = "active_total"
@@ -304,13 +342,99 @@ extension ESI {
 				
 				
 				
+				public struct VictoryPoints: Codable, Hashable {
+					
+					public struct LastWeekLastWeek1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public struct YesterdayYesterday1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public struct ActiveTotalActiveTotal1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public var activeTotal: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.ActiveTotalActiveTotal1]
+					public var lastWeek: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.LastWeekLastWeek1]
+					public var yesterday: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.YesterdayYesterday1]
+					public init(activeTotal: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.YesterdayYesterday1]) {
+						self.activeTotal = activeTotal
+						self.lastWeek = lastWeek
+						self.yesterday = yesterday
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case activeTotal = "active_total"
+						case lastWeek = "last_week"
+						case yesterday
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Kills: Codable, Hashable {
 					
-					public struct ActiveTotalActiveTotal: Codable, Hashable {
+					public struct LastWeekLastWeek: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let corporationID: Int?
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -325,8 +449,12 @@ extension ESI {
 					public struct YesterdayYesterday: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let corporationID: Int?
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -338,11 +466,15 @@ extension ESI {
 						}
 					}
 					
-					public struct LastWeekLastWeek: Codable, Hashable {
+					public struct ActiveTotalActiveTotal: Codable, Hashable {
 						
 						
-						public let amount: Int?
-						public let corporationID: Int?
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case amount
@@ -354,9 +486,14 @@ extension ESI {
 						}
 					}
 					
-					public let activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal]
-					public let lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek]
-					public let yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]
+					public var activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal]
+					public var lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek]
+					public var yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]
+					public init(activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal], lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek], yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]) {
+						self.activeTotal = activeTotal
+						self.lastWeek = lastWeek
+						self.yesterday = yesterday
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case activeTotal = "active_total"
@@ -372,77 +509,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let kills: ESI.Fw.Leaderboards.Corporations.Kills
-					public let victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints
+					public var kills: ESI.Fw.Leaderboards.Corporations.Kills
+					public var victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints
+					public init(kills: ESI.Fw.Leaderboards.Corporations.Kills, victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints) {
+						self.kills = kills
+						self.victoryPoints = victoryPoints
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case kills
 						case victoryPoints = "victory_points"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct VictoryPoints: Codable, Hashable {
-					
-					public struct ActiveTotalActiveTotal1: Codable, Hashable {
-						
-						
-						public let amount: Int?
-						public let corporationID: Int?
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct YesterdayYesterday1: Codable, Hashable {
-						
-						
-						public let amount: Int?
-						public let corporationID: Int?
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct LastWeekLastWeek1: Codable, Hashable {
-						
-						
-						public let amount: Int?
-						public let corporationID: Int?
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public let activeTotal: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.ActiveTotalActiveTotal1]
-					public let lastWeek: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.LastWeekLastWeek1]
-					public let yesterday: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.YesterdayYesterday1]
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case activeTotal = "active_total"
-						case lastWeek = "last_week"
-						case yesterday
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -455,11 +531,15 @@ extension ESI {
 			
 			public struct VictoryPoints: Codable, Hashable {
 				
-				public struct LastWeekLastWeek1: Codable, Hashable {
+				public struct ActiveTotalActiveTotal1: Codable, Hashable {
 					
 					
-					public let amount: Int?
-					public let factionID: Int?
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
@@ -474,8 +554,12 @@ extension ESI {
 				public struct YesterdayYesterday1: Codable, Hashable {
 					
 					
-					public let amount: Int?
-					public let factionID: Int?
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
@@ -487,11 +571,15 @@ extension ESI {
 					}
 				}
 				
-				public struct ActiveTotalActiveTotal1: Codable, Hashable {
+				public struct LastWeekLastWeek1: Codable, Hashable {
 					
 					
-					public let amount: Int?
-					public let factionID: Int?
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
@@ -503,9 +591,14 @@ extension ESI {
 					}
 				}
 				
-				public let activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1]
-				public let lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1]
-				public let yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]
+				public var activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1]
+				public var lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1]
+				public var yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]
+				public init(activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case activeTotal = "active_total"
@@ -521,8 +614,12 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let kills: ESI.Fw.Leaderboards.Kills
-				public let victoryPoints: ESI.Fw.Leaderboards.VictoryPoints
+				public var kills: ESI.Fw.Leaderboards.Kills
+				public var victoryPoints: ESI.Fw.Leaderboards.VictoryPoints
+				public init(kills: ESI.Fw.Leaderboards.Kills, victoryPoints: ESI.Fw.Leaderboards.VictoryPoints) {
+					self.kills = kills
+					self.victoryPoints = victoryPoints
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case kills
@@ -539,8 +636,12 @@ extension ESI {
 				public struct ActiveTotalActiveTotal: Codable, Hashable {
 					
 					
-					public let amount: Int?
-					public let factionID: Int?
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
@@ -555,8 +656,12 @@ extension ESI {
 				public struct YesterdayYesterday: Codable, Hashable {
 					
 					
-					public let amount: Int?
-					public let factionID: Int?
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
@@ -571,8 +676,12 @@ extension ESI {
 				public struct LastWeekLastWeek: Codable, Hashable {
 					
 					
-					public let amount: Int?
-					public let factionID: Int?
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case amount
@@ -584,9 +693,14 @@ extension ESI {
 					}
 				}
 				
-				public let activeTotal: [ESI.Fw.Leaderboards.Kills.ActiveTotalActiveTotal]
-				public let lastWeek: [ESI.Fw.Leaderboards.Kills.LastWeekLastWeek]
-				public let yesterday: [ESI.Fw.Leaderboards.Kills.YesterdayYesterday]
+				public var activeTotal: [ESI.Fw.Leaderboards.Kills.ActiveTotalActiveTotal]
+				public var lastWeek: [ESI.Fw.Leaderboards.Kills.LastWeekLastWeek]
+				public var yesterday: [ESI.Fw.Leaderboards.Kills.YesterdayYesterday]
+				public init(activeTotal: [ESI.Fw.Leaderboards.Kills.ActiveTotalActiveTotal], lastWeek: [ESI.Fw.Leaderboards.Kills.LastWeekLastWeek], yesterday: [ESI.Fw.Leaderboards.Kills.YesterdayYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case activeTotal = "active_total"
@@ -646,11 +760,18 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let factionID: Int
-				public let kills: ESI.Fw.Kills
-				public let pilots: Int
-				public let systemsControlled: Int
-				public let victoryPoints: ESI.Fw.VictoryPoints
+				public var factionID: Int
+				public var kills: ESI.Fw.Kills
+				public var pilots: Int
+				public var systemsControlled: Int
+				public var victoryPoints: ESI.Fw.VictoryPoints
+				public init(factionID: Int, kills: ESI.Fw.Kills, pilots: Int, systemsControlled: Int, victoryPoints: ESI.Fw.VictoryPoints) {
+					self.factionID = factionID
+					self.kills = kills
+					self.pilots = pilots
+					self.systemsControlled = systemsControlled
+					self.victoryPoints = victoryPoints
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case factionID = "faction_id"
@@ -709,27 +830,23 @@ extension ESI {
 			
 			
 			
-			public enum Contested: String, Codable, CustomStringConvertible {
-				case captured
-				case contested
-				case uncontested
-				case vulnerable
-				
-				public var description: String {
-					return rawValue
-				}
-				
-			}
-			
 			public struct Success: Codable, Hashable {
 				
 				
-				public let contested: ESI.Fw.Systems.Contested
-				public let occupierFactionID: Int
-				public let ownerFactionID: Int
-				public let solarSystemID: Int
-				public let victoryPoints: Int
-				public let victoryPointsThreshold: Int
+				public var contested: ESI.Fw.Systems.Contested
+				public var occupierFactionID: Int
+				public var ownerFactionID: Int
+				public var solarSystemID: Int
+				public var victoryPoints: Int
+				public var victoryPointsThreshold: Int
+				public init(contested: ESI.Fw.Systems.Contested, occupierFactionID: Int, ownerFactionID: Int, solarSystemID: Int, victoryPoints: Int, victoryPointsThreshold: Int) {
+					self.contested = contested
+					self.occupierFactionID = occupierFactionID
+					self.ownerFactionID = ownerFactionID
+					self.solarSystemID = solarSystemID
+					self.victoryPoints = victoryPoints
+					self.victoryPointsThreshold = victoryPointsThreshold
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case contested
@@ -743,6 +860,18 @@ extension ESI {
 						return nil
 					}
 				}
+			}
+			
+			public enum Contested: String, Codable, CustomStringConvertible {
+				case captured
+				case contested
+				case uncontested
+				case vulnerable
+				
+				public var description: String {
+					return rawValue
+				}
+				
 			}
 			
 		}
@@ -792,8 +921,12 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let againstID: Int
-				public let factionID: Int
+				public var againstID: Int
+				public var factionID: Int
+				public init(againstID: Int, factionID: Int) {
+					self.againstID = againstID
+					self.factionID = factionID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case againstID = "against_id"
@@ -808,12 +941,17 @@ extension ESI {
 		}
 		
 		
-		public struct Kills: Codable, Hashable {
+		public struct VictoryPoints: Codable, Hashable {
 			
 			
-			public let lastWeek: Int
-			public let total: Int
-			public let yesterday: Int
+			public var lastWeek: Int
+			public var total: Int
+			public var yesterday: Int
+			public init(lastWeek: Int, total: Int, yesterday: Int) {
+				self.lastWeek = lastWeek
+				self.total = total
+				self.yesterday = yesterday
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case lastWeek = "last_week"
@@ -826,12 +964,17 @@ extension ESI {
 			}
 		}
 		
-		public struct VictoryPoints: Codable, Hashable {
+		public struct Kills: Codable, Hashable {
 			
 			
-			public let lastWeek: Int
-			public let total: Int
-			public let yesterday: Int
+			public var lastWeek: Int
+			public var total: Int
+			public var yesterday: Int
+			public init(lastWeek: Int, total: Int, yesterday: Int) {
+				self.lastWeek = lastWeek
+				self.total = total
+				self.yesterday = yesterday
+			}
 			
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case lastWeek = "last_week"

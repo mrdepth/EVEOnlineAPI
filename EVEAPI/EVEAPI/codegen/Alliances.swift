@@ -193,10 +193,16 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let contactID: Int
-					public let contactType: ESI.Characters.ContactType
-					public let labelIds: [Int64]?
-					public let standing: Double
+					public var contactID: Int
+					public var contactType: ESI.Corporations.ContactType
+					public var labelIds: [Int64]?
+					public var standing: Double
+					public init(contactID: Int, contactType: ESI.Corporations.ContactType, labelIds: [Int64]?, standing: Double) {
+						self.contactID = contactID
+						self.contactType = contactType
+						self.labelIds = labelIds
+						self.standing = standing
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case contactID = "contact_id"
@@ -302,8 +308,12 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let px128x128: String?
-					public let px64x64: String?
+					public var px128x128: String?
+					public var px64x64: String?
+					public init(px128x128: String?, px64x64: String?) {
+						self.px128x128 = px128x128
+						self.px64x64 = px64x64
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case px128x128
@@ -321,13 +331,22 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let creatorCorporationID: Int
-				public let creatorID: Int
-				public let dateFounded: Date
-				public let executorCorporationID: Int?
-				public let factionID: Int?
-				public let name: String
-				public let ticker: String
+				public var creatorCorporationID: Int
+				public var creatorID: Int
+				public var dateFounded: Date
+				public var executorCorporationID: Int?
+				public var factionID: Int?
+				public var name: String
+				public var ticker: String
+				public init(creatorCorporationID: Int, creatorID: Int, dateFounded: Date, executorCorporationID: Int?, factionID: Int?, name: String, ticker: String) {
+					self.creatorCorporationID = creatorCorporationID
+					self.creatorID = creatorID
+					self.dateFounded = dateFounded
+					self.executorCorporationID = executorCorporationID
+					self.factionID = factionID
+					self.name = name
+					self.ticker = ticker
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case creatorCorporationID = "creator_corporation_id"

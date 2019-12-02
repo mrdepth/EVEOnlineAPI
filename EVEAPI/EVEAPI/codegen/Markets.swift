@@ -74,7 +74,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
 					do {
 						
 						
@@ -116,11 +116,18 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let localizedDescription: String
-					public let marketGroupID: Int
-					public let name: String
-					public let parentGroupID: Int?
-					public let types: [Int]
+					public var localizedDescription: String
+					public var marketGroupID: Int
+					public var name: String
+					public var parentGroupID: Int?
+					public var types: [Int]
+					public init(localizedDescription: String, marketGroupID: Int, name: String, parentGroupID: Int?, types: [Int]) {
+						self.localizedDescription = localizedDescription
+						self.marketGroupID = marketGroupID
+						self.name = name
+						self.parentGroupID = parentGroupID
+						self.types = types
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case localizedDescription = "description"
@@ -186,9 +193,14 @@ extension ESI {
 			public struct Success: Codable, Hashable {
 				
 				
-				public let adjustedPrice: Double?
-				public let averagePrice: Double?
-				public let typeID: Int
+				public var adjustedPrice: Double?
+				public var averagePrice: Double?
+				public var typeID: Int
+				public init(adjustedPrice: Double?, averagePrice: Double?, typeID: Int) {
+					self.adjustedPrice = adjustedPrice
+					self.averagePrice = averagePrice
+					self.typeID = typeID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case adjustedPrice = "adjusted_price"
@@ -261,17 +273,30 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let duration: Int
-					public let isBuyOrder: Bool
-					public let issued: Date
-					public let locationID: Int64
-					public let minVolume: Int
-					public let orderID: Int64
-					public let price: Double
-					public let range: ESI.Markets.Range
-					public let typeID: Int
-					public let volumeRemain: Int
-					public let volumeTotal: Int
+					public var duration: Int
+					public var isBuyOrder: Bool
+					public var issued: Date
+					public var locationID: Int64
+					public var minVolume: Int
+					public var orderID: Int64
+					public var price: Double
+					public var range: ESI.Markets.Range
+					public var typeID: Int
+					public var volumeRemain: Int
+					public var volumeTotal: Int
+					public init(duration: Int, isBuyOrder: Bool, issued: Date, locationID: Int64, minVolume: Int, orderID: Int64, price: Double, range: ESI.Markets.Range, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+						self.duration = duration
+						self.isBuyOrder = isBuyOrder
+						self.issued = issued
+						self.locationID = locationID
+						self.minVolume = minVolume
+						self.orderID = orderID
+						self.price = price
+						self.range = range
+						self.typeID = typeID
+						self.volumeRemain = volumeRemain
+						self.volumeTotal = volumeTotal
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case duration
@@ -364,12 +389,20 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let average: Double
-					public let date: Date
-					public let highest: Double
-					public let lowest: Double
-					public let orderCount: Int64
-					public let volume: Int64
+					public var average: Double
+					public var date: Date
+					public var highest: Double
+					public var lowest: Double
+					public var orderCount: Int64
+					public var volume: Int64
+					public init(average: Double, date: Date, highest: Double, lowest: Double, orderCount: Int64, volume: Int64) {
+						self.average = average
+						self.date = date
+						self.highest = highest
+						self.lowest = lowest
+						self.orderCount = orderCount
+						self.volume = volume
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case average
@@ -443,18 +476,32 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public let duration: Int
-					public let isBuyOrder: Bool
-					public let issued: Date
-					public let locationID: Int64
-					public let minVolume: Int
-					public let orderID: Int64
-					public let price: Double
-					public let range: ESI.Markets.Range
-					public let systemID: Int
-					public let typeID: Int
-					public let volumeRemain: Int
-					public let volumeTotal: Int
+					public var duration: Int
+					public var isBuyOrder: Bool
+					public var issued: Date
+					public var locationID: Int64
+					public var minVolume: Int
+					public var orderID: Int64
+					public var price: Double
+					public var range: ESI.Markets.Range
+					public var systemID: Int
+					public var typeID: Int
+					public var volumeRemain: Int
+					public var volumeTotal: Int
+					public init(duration: Int, isBuyOrder: Bool, issued: Date, locationID: Int64, minVolume: Int, orderID: Int64, price: Double, range: ESI.Markets.Range, systemID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+						self.duration = duration
+						self.isBuyOrder = isBuyOrder
+						self.issued = issued
+						self.locationID = locationID
+						self.minVolume = minVolume
+						self.orderID = orderID
+						self.price = price
+						self.range = range
+						self.systemID = systemID
+						self.typeID = typeID
+						self.volumeRemain = volumeRemain
+						self.volumeTotal = volumeTotal
+					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case duration
@@ -545,36 +592,6 @@ extension ESI {
 			
 		}
 		
-		
-		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Language: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
 		
 		public enum Range: String, Codable, CustomStringConvertible {
 			case station

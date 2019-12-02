@@ -23,7 +23,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
 				do {
 					
 					
@@ -62,15 +62,22 @@ extension ESI {
 			
 			
 			
-			public struct Success: Codable, Hashable {
+			public struct Level: Codable, Hashable {
 				
 				
-				public let levels: [ESI.Insurance.Prices.Level]
-				public let typeID: Int
+				public var cost: Double
+				public var name: String
+				public var payout: Double
+				public init(cost: Double, name: String, payout: Double) {
+					self.cost = cost
+					self.name = name
+					self.payout = payout
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case levels
-					case typeID = "type_id"
+					case cost
+					case name
+					case payout
 					
 					var dateFormatter: DateFormatter? {
 						return nil
@@ -78,17 +85,19 @@ extension ESI {
 				}
 			}
 			
-			public struct Level: Codable, Hashable {
+			public struct Success: Codable, Hashable {
 				
 				
-				public let cost: Double
-				public let name: String
-				public let payout: Double
+				public var levels: [ESI.Insurance.Prices.Level]
+				public var typeID: Int
+				public init(levels: [ESI.Insurance.Prices.Level], typeID: Int) {
+					self.levels = levels
+					self.typeID = typeID
+				}
 				
 				enum CodingKeys: String, CodingKey, DateFormatted {
-					case cost
-					case name
-					case payout
+					case levels
+					case typeID = "type_id"
 					
 					var dateFormatter: DateFormatter? {
 						return nil
