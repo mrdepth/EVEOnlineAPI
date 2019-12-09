@@ -207,7 +207,7 @@ extension ESI {
         }
     }
     
-    static let jsonDecoder: JSONDecoder = {
+    public static let jsonDecoder: JSONDecoder = {
         let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .custom { decoder -> Date in
             if let formatter = (decoder.codingPath.last as? DateFormatted)?.dateFormatter {
