@@ -43,7 +43,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 						do {
 							
 							
@@ -80,6 +80,26 @@ extension ESI {
 					
 					
 					
+					public struct RequiredItem: Codable, Hashable {
+						
+						
+						public var quantity: Int
+						public var typeID: Int
+						public init(quantity: Int, typeID: Int) {
+							self.quantity = quantity
+							self.typeID = typeID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case quantity
+							case typeID = "type_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
@@ -107,26 +127,6 @@ extension ESI {
 							case offerID = "offer_id"
 							case quantity
 							case requiredItems = "required_items"
-							case typeID = "type_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct RequiredItem: Codable, Hashable {
-						
-						
-						public var quantity: Int
-						public var typeID: Int
-						public init(quantity: Int, typeID: Int) {
-							self.quantity = quantity
-							self.typeID = typeID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case quantity
 							case typeID = "type_id"
 							
 							var dateFormatter: DateFormatter? {

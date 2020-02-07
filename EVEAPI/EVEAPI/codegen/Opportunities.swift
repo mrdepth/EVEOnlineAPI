@@ -26,7 +26,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 				do {
 					
 					
@@ -68,7 +68,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(language: ESI.Search.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -150,7 +150,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 				do {
 					
 					
@@ -192,7 +192,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -262,45 +262,6 @@ extension ESI {
 		}
 		
 		
-		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Language: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Datasource: String, Codable, CustomStringConvertible {
-			case tranquility
-			case singularity
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
 		
 	}
 	

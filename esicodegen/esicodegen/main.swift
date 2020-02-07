@@ -155,9 +155,6 @@ func add(type: Model.MetaType, keyPath: [String]) {
             }
             let newKeyPath = Array(existing[prefix] + [keyPath.last!])
             typeIdentifiers[type] = newKeyPath
-//            if newKeyPath != keyPath {
-//                store(type, newKeyPath)
-//            }
         }
         else {
             typeIdentifiers[type] = keyPath

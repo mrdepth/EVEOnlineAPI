@@ -36,7 +36,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(addToBeginning: Bool = false, clearOtherWaypoints: Bool = false, destinationID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+				public func post(addToBeginning: Bool = false, clearOtherWaypoints: Bool = false, destinationID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -107,7 +107,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+				public func post(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -153,7 +153,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+				public func post(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -199,7 +199,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+				public func post(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -245,7 +245,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(newMail: ESI.UI.Openwindow.Newmail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+				public func post(newMail: ESI.UI.Openwindow.Newmail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []

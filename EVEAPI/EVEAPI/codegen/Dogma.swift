@@ -29,7 +29,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 				do {
 					
 					
@@ -71,7 +71,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -193,7 +193,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 							do {
 								
 								
@@ -278,7 +278,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 				do {
 					
 					
@@ -320,7 +320,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -356,38 +356,6 @@ extension ESI {
 				
 				
 				
-				
-				public struct Modifier: Codable, Hashable {
-					
-					
-					public var domain: String?
-					public var effectID: Int?
-					public var `func`: String
-					public var modifiedAttributeID: Int?
-					public var modifyingAttributeID: Int?
-					public var `operator`: Int?
-					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
-						self.domain = domain
-						self.effectID = effectID
-						self.`func` = `func`
-						self.modifiedAttributeID = modifiedAttributeID
-						self.modifyingAttributeID = modifyingAttributeID
-						self.`operator` = `operator`
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case domain
-						case effectID = "effect_id"
-						case `func` = "func"
-						case modifiedAttributeID = "modified_attribute_id"
-						case modifyingAttributeID = "modifying_attribute_id"
-						case `operator` = "operator"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
 				
 				public struct Success: Codable, Hashable {
 					
@@ -466,32 +434,44 @@ extension ESI {
 					}
 				}
 				
-			}
-			
-			
-			
-		}
-		
-		
-		public struct DogmaAttribute: Codable, Hashable {
-			
-			
-			public var attributeID: Int
-			public var value: Double
-			public init(attributeID: Int, value: Double) {
-				self.attributeID = attributeID
-				self.value = value
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case attributeID = "attribute_id"
-				case value
-				
-				var dateFormatter: DateFormatter? {
-					return nil
+				public struct Modifier: Codable, Hashable {
+					
+					
+					public var domain: String?
+					public var effectID: Int?
+					public var `func`: String
+					public var modifiedAttributeID: Int?
+					public var modifyingAttributeID: Int?
+					public var `operator`: Int?
+					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
+						self.domain = domain
+						self.effectID = effectID
+						self.`func` = `func`
+						self.modifiedAttributeID = modifiedAttributeID
+						self.modifyingAttributeID = modifyingAttributeID
+						self.`operator` = `operator`
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case domain
+						case effectID = "effect_id"
+						case `func` = "func"
+						case modifiedAttributeID = "modified_attribute_id"
+						case modifyingAttributeID = "modifying_attribute_id"
+						case `operator` = "operator"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
 				}
+				
 			}
+			
+			
+			
 		}
+		
 		
 		public struct DogmaEffect: Codable, Hashable {
 			
@@ -506,6 +486,26 @@ extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case effectID = "effect_id"
 				case isDefault = "is_default"
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public struct DogmaAttribute: Codable, Hashable {
+			
+			
+			public var attributeID: Int
+			public var value: Double
+			public init(attributeID: Int, value: Double) {
+				self.attributeID = attributeID
+				self.value = value
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case attributeID = "attribute_id"
+				case value
 				
 				var dateFormatter: DateFormatter? {
 					return nil

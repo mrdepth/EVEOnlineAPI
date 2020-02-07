@@ -1,5 +1,5 @@
 	
-	public func {operation}({arguments}) -> AnyPublisher<{result}, AFError> {
+	public func {operation}({arguments}) -> AnyPublisher<ESIResponse<{result}>, AFError> {
         do {
         
 {security}

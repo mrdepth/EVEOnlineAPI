@@ -29,7 +29,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 				do {
 					
 					
@@ -65,6 +65,26 @@ extension ESI {
 			
 			
 			
+			
+			public struct Participant: Codable, Hashable {
+				
+				
+				public var allianceID: Int
+				public var score: Double
+				public init(allianceID: Int, score: Double) {
+					self.allianceID = allianceID
+					self.score = score
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case score
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
 			
 			public struct Success: Codable, Hashable {
 				
@@ -115,26 +135,6 @@ extension ESI {
 				}
 			}
 			
-			public struct Participant: Codable, Hashable {
-				
-				
-				public var allianceID: Int
-				public var score: Double
-				public init(allianceID: Int, score: Double) {
-					self.allianceID = allianceID
-					self.score = score
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case score
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public enum EventType: String, Codable, CustomStringConvertible {
 				case tcuDefense = "tcu_defense"
 				case ihubDefense = "ihub_defense"
@@ -154,7 +154,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 				do {
 					
 					
@@ -224,7 +224,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 				do {
 					
 					

@@ -33,7 +33,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(avoid: [Int]?, connections: [[Int]]?, flag: ESI.Route.Origin.Destination.Flag? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				public func get(avoid: [Int]?, connections: [[Int]]?, flag: ESI.Route.Origin.Destination.Flag? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 					do {
 						
 						

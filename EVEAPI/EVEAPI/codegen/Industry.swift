@@ -26,7 +26,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 				do {
 					
 					
@@ -102,7 +102,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 				do {
 					
 					
@@ -139,26 +139,6 @@ extension ESI {
 			
 			
 			
-			public struct Success: Codable, Hashable {
-				
-				
-				public var costIndices: [ESI.Industry.Systems.CostIndice]
-				public var solarSystemID: Int
-				public init(costIndices: [ESI.Industry.Systems.CostIndice], solarSystemID: Int) {
-					self.costIndices = costIndices
-					self.solarSystemID = solarSystemID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case costIndices = "cost_indices"
-					case solarSystemID = "solar_system_id"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public struct CostIndice: Codable, Hashable {
 				
 				public enum Activity: String, Codable, CustomStringConvertible {
@@ -189,6 +169,26 @@ extension ESI {
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case activity
 					case costIndex = "cost_index"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public var costIndices: [ESI.Industry.Systems.CostIndice]
+				public var solarSystemID: Int
+				public init(costIndices: [ESI.Industry.Systems.CostIndice], solarSystemID: Int) {
+					self.costIndices = costIndices
+					self.solarSystemID = solarSystemID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case costIndices = "cost_indices"
+					case solarSystemID = "solar_system_id"
 					
 					var dateFormatter: DateFormatter? {
 						return nil

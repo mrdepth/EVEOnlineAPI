@@ -154,7 +154,7 @@ extension ESI {
             
             return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
-					guard let image = UIImage(data: data) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
+                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
                     return image
 			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
         }
@@ -165,7 +165,7 @@ extension ESI {
 
             return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
+                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
 							return image
 			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
         }
@@ -176,7 +176,7 @@ extension ESI {
 
             return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
+                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
 							return image
 			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
         }
@@ -187,7 +187,7 @@ extension ESI {
 
             return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
+                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
 							return image
 			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
         }

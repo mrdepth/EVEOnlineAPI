@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+		public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 			do {
 				
 				
@@ -55,7 +55,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 				do {
 					
 					
@@ -103,7 +103,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -148,7 +148,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -194,10 +194,10 @@ extension ESI {
 					
 					
 					public var contactID: Int
-					public var contactType: ESI.Corporations.ContactType
+					public var contactType: ESI.Characters.ContactType
 					public var labelIds: [Int64]?
 					public var standing: Double
-					public init(contactID: Int, contactType: ESI.Corporations.ContactType, labelIds: [Int64]?, standing: Double) {
+					public init(contactID: Int, contactType: ESI.Characters.ContactType, labelIds: [Int64]?, standing: Double) {
 						self.contactID = contactID
 						self.contactType = contactType
 						self.labelIds = labelIds
@@ -223,7 +223,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Int], AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 					do {
 						
 						
@@ -268,7 +268,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						

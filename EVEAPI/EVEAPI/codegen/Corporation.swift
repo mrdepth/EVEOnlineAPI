@@ -46,7 +46,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -131,7 +131,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -176,7 +176,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+						public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 							do {
 								
 								let scopes = esi.token?.scopes ?? []

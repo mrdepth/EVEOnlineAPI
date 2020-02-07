@@ -10,6 +10,11 @@ import Foundation
 import Alamofire
 import Combine
 
+public struct ESIResponse<Value> {
+    public var value: Value
+    public var httpHeaders: HTTPHeaders?
+}
+
 extension Publisher where Output: DataRequest, Failure == AFError {
     
     public func validate(_ validation: @escaping DataRequest.Validation) -> Publishers.Map<Self, Output> {
@@ -18,41 +23,41 @@ extension Publisher where Output: DataRequest, Failure == AFError {
         }
     }
     
-    public func responseDecodable<Item: Decodable>(of type: Item.Type = Item.self, queue: DispatchQueue = .main, decoder: DataDecoder = JSONDecoder()) -> Publishers.FlatMap<Future<Item, AFError>, Self> {
-        flatMap { request -> Future<Item, AFError> in
+    public func responseDecodable<Item: Decodable>(of type: Item.Type = Item.self, queue: DispatchQueue = .main, decoder: DataDecoder = JSONDecoder()) -> Publishers.FlatMap<Future<ESIResponse<Item>, AFError>, Self> {
+        flatMap { request -> Future<ESIResponse<Item>, AFError> in
             Future { promise in
                 request.responseDecodable(of: Item.self, queue: queue, decoder: decoder) { response in
-                    promise(response.result)
+                    promise(response.result.map{ESIResponse(value: $0, httpHeaders: response.response?.headers)})
                 }
             }
         }
     }
     
-    public func responseString(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<String, AFError>, Self> {
-        flatMap { request -> Future<String, AFError> in
+    public func responseString(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<ESIResponse<String>, AFError>, Self> {
+        flatMap { request -> Future<ESIResponse<String>, AFError> in
             Future { promise in
                 request.responseString(queue: queue) { response in
-                    promise(response.result)
+                    promise(response.result.map{ESIResponse(value: $0, httpHeaders: response.response?.headers)})
                 }
             }
         }
     }
     
-    public func responseData(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<Data, AFError>, Self> {
-        flatMap { request -> Future<Data, AFError> in
+    public func responseData(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<ESIResponse<Data>, AFError>, Self> {
+        flatMap { request -> Future<ESIResponse<Data>, AFError> in
             Future { promise in
                 request.responseData(queue: queue) { response in
-                    promise(response.result)
+                    promise(response.result.map{ESIResponse(value: $0, httpHeaders: response.response?.headers)})
                 }
             }
         }
     }
 
-    public func responseVoid(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<Void, AFError>, Self> {
-        flatMap { request -> Future<Void, AFError> in
+    public func responseVoid(queue: DispatchQueue = .main) -> Publishers.FlatMap<Future<ESIResponse<Void>, AFError>, Self> {
+        flatMap { request -> Future<ESIResponse<Void>, AFError> in
             Future { promise in
                 request.response(queue: queue) { response in
-                    promise(response.result.map{_ in })
+                    promise(response.result.map{_ in ESIResponse(value: (), httpHeaders: response.response?.headers)})
                 }
             }
         }
@@ -75,9 +80,20 @@ extension Session {
                    interceptor: RequestInterceptor? = nil) -> Deferred<Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>>> {
         Deferred { () -> Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>> in
             let request = self.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
-            return CurrentValueSubject<DataRequest, AFError>(request).handleEvents(receiveCancel:  {
+            let subject = CurrentValueSubject<DataRequest, AFError>(request)
+            let publisher = subject.handleEvents(receiveCancel:  {
                 request.cancel()
             })
+            
+            request.response { [weak subject] response in
+                switch response.result {
+                case .success:
+                    subject?.send(completion: .finished)
+                case let .failure(error):
+                    subject?.send(completion: .failure(error))
+                }
+            }
+            return publisher
         }
     }
 }

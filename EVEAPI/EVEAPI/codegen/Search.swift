@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(categories: [ESI.Search.Categories], language: ESI.Opportunities.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+		public func get(categories: [ESI.Search.Categories], language: ESI.Search.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 			do {
 				
 				
@@ -59,24 +59,6 @@ extension ESI {
 		
 		
 		
-		public enum Categories: String, Codable, CustomStringConvertible {
-			case agent
-			case alliance
-			case character
-			case constellation
-			case corporation
-			case faction
-			case inventoryType = "inventory_type"
-			case region
-			case solarSystem = "solar_system"
-			case station
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
 		public struct Success: Codable, Hashable {
 			
 			
@@ -119,6 +101,64 @@ extension ESI {
 					return nil
 				}
 			}
+		}
+		
+		public enum Datasource: String, Codable, CustomStringConvertible {
+			case tranquility
+			case singularity
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Categories: String, Codable, CustomStringConvertible {
+			case agent
+			case alliance
+			case character
+			case constellation
+			case corporation
+			case faction
+			case inventoryType = "inventory_type"
+			case region
+			case solarSystem = "solar_system"
+			case station
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Language: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
 		}
 		
 	}

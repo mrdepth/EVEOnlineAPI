@@ -23,7 +23,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Success, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
 				do {
 					
 					let scopes = esi.token?.scopes ?? []
@@ -57,7 +57,7 @@ extension ESI {
 			}
 			
 			
-			public func put(newSettings: ESI.Fleets.FleetID.NewSettings, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+			public func put(newSettings: ESI.Fleets.FleetID.NewSettings, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 				do {
 					
 					let scopes = esi.token?.scopes ?? []
@@ -106,7 +106,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				public func get(language: ESI.Search.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -142,7 +142,7 @@ extension ESI {
 				}
 				
 				
-				public func post(invitation: ESI.Fleets.FleetID.Members.Invitation, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+				public func post(invitation: ESI.Fleets.FleetID.Members.Invitation, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -185,7 +185,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func delete(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+					public func delete(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -219,7 +219,7 @@ extension ESI {
 					}
 					
 					
-					public func put(movement: ESI.Fleets.FleetID.Members.MemberID.Movement, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+					public func put(movement: ESI.Fleets.FleetID.Members.MemberID.Movement, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -283,32 +283,6 @@ extension ESI {
 				}
 				
 				
-				public struct Invitation: Codable, Hashable {
-					
-					
-					public var characterID: Int
-					public var role: ESI.Fleets.FleetID.Members.Role
-					public var squadID: Int64?
-					public var wingID: Int64?
-					public init(characterID: Int, role: ESI.Fleets.FleetID.Members.Role, squadID: Int64?, wingID: Int64?) {
-						self.characterID = characterID
-						self.role = role
-						self.squadID = squadID
-						self.wingID = wingID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case characterID = "character_id"
-						case role
-						case squadID = "squad_id"
-						case wingID = "wing_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -370,6 +344,32 @@ extension ESI {
 					
 				}
 				
+				public struct Invitation: Codable, Hashable {
+					
+					
+					public var characterID: Int
+					public var role: ESI.Fleets.FleetID.Members.Role
+					public var squadID: Int64?
+					public var wingID: Int64?
+					public init(characterID: Int, role: ESI.Fleets.FleetID.Members.Role, squadID: Int64?, wingID: Int64?) {
+						self.characterID = characterID
+						self.role = role
+						self.squadID = squadID
+						self.wingID = wingID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case characterID = "character_id"
+						case role
+						case squadID = "squad_id"
+						case wingID = "wing_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 			}
 			
 			public struct Squads {
@@ -387,7 +387,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func delete(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+					public func delete(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -421,7 +421,7 @@ extension ESI {
 					}
 					
 					
-					public func put(naming: ESI.Fleets.FleetID.Naming, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+					public func put(naming: ESI.Fleets.FleetID.Naming, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -471,7 +471,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Opportunities.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<[Success], AFError> {
+				public func get(language: ESI.Search.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -507,7 +507,7 @@ extension ESI {
 				}
 				
 				
-				public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Created, AFError> {
+				public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Created>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -550,7 +550,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func delete(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+					public func delete(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -584,7 +584,7 @@ extension ESI {
 					}
 					
 					
-					public func put(naming: ESI.Fleets.FleetID.Naming, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Void, AFError> {
+					public func put(naming: ESI.Fleets.FleetID.Naming, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -627,7 +627,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<Created, AFError> {
+						public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Created>, AFError> {
 							do {
 								
 								let scopes = esi.token?.scopes ?? []
@@ -772,23 +772,6 @@ extension ESI {
 				}
 			}
 			
-			public struct Naming: Codable, Hashable {
-				
-				
-				public var name: String
-				public init(name: String) {
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public struct Success: Codable, Hashable {
 				
 				
@@ -808,6 +791,23 @@ extension ESI {
 					case isRegistered = "is_registered"
 					case isVoiceEnabled = "is_voice_enabled"
 					case motd
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Naming: Codable, Hashable {
+				
+				
+				public var name: String
+				public init(name: String) {
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case name
 					
 					var dateFormatter: DateFormatter? {
 						return nil
