@@ -33,7 +33,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -51,14 +51,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .get,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -178,9 +186,9 @@ extension ESI {
 					public var damageTaken: Int
 					public var factionID: Int?
 					public var items: [ESI.Killmails.KillmailID.KillmailHash.Victim.Item]?
-					public var position: ESI.Characters.Position?
+					public var position: ESI.Killmails.Position?
 					public var shipTypeID: Int
-					public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [ESI.Killmails.KillmailID.KillmailHash.Victim.Item]?, position: ESI.Characters.Position?, shipTypeID: Int) {
+					public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [ESI.Killmails.KillmailID.KillmailHash.Victim.Item]?, position: ESI.Killmails.Position?, shipTypeID: Int) {
 						self.allianceID = allianceID
 						self.characterID = characterID
 						self.corporationID = corporationID
@@ -255,6 +263,28 @@ extension ESI {
 		}
 		
 		
+		public struct Position: Codable, Hashable {
+			
+			
+			public var x: Double
+			public var y: Double
+			public var z: Double
+			public init(x: Double, y: Double, z: Double) {
+				self.x = x
+				self.y = y
+				self.z = z
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case x
+				case y
+				case z
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
 		
 	}
 	

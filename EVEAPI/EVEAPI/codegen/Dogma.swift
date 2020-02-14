@@ -29,7 +29,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 				do {
 					
 					
@@ -47,14 +47,22 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					return esi.session.publisher(components,
+					let publisher = esi.session.publisher(components,
 					method: .get,
 					encoding: URLEncoding.default,
 					headers: headers,
 					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-					.eraseToAnyPublisher()
-					
+					if let progress = progress {
+						return publisher
+						.downloadProgress(closure: progress)
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
+					else {
+						return publisher
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -71,7 +79,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -89,14 +97,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .get,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -193,7 +209,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
+						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
 							do {
 								
 								
@@ -211,14 +227,22 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								return esi.session.publisher(components,
+								let publisher = esi.session.publisher(components,
 								method: .get,
 								encoding: URLEncoding.default,
 								headers: headers,
 								interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-								
+								if let progress = progress {
+									return publisher
+									.downloadProgress(closure: progress)
+									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+									.eraseToAnyPublisher()
+								}
+								else {
+									return publisher
+									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+									.eraseToAnyPublisher()
+								}
 							}
 							catch {
 								return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -278,7 +302,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 				do {
 					
 					
@@ -296,14 +320,22 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					return esi.session.publisher(components,
+					let publisher = esi.session.publisher(components,
 					method: .get,
 					encoding: URLEncoding.default,
 					headers: headers,
 					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-					.eraseToAnyPublisher()
-					
+					if let progress = progress {
+						return publisher
+						.downloadProgress(closure: progress)
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
+					else {
+						return publisher
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -320,7 +352,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
 					do {
 						
 						
@@ -338,14 +370,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .get,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -356,6 +396,38 @@ extension ESI {
 				
 				
 				
+				
+				public struct Modifier: Codable, Hashable {
+					
+					
+					public var domain: String?
+					public var effectID: Int?
+					public var `func`: String
+					public var modifiedAttributeID: Int?
+					public var modifyingAttributeID: Int?
+					public var `operator`: Int?
+					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
+						self.domain = domain
+						self.effectID = effectID
+						self.`func` = `func`
+						self.modifiedAttributeID = modifiedAttributeID
+						self.modifyingAttributeID = modifyingAttributeID
+						self.`operator` = `operator`
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case domain
+						case effectID = "effect_id"
+						case `func` = "func"
+						case modifiedAttributeID = "modified_attribute_id"
+						case modifyingAttributeID = "modifying_attribute_id"
+						case `operator` = "operator"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
 				
 				public struct Success: Codable, Hashable {
 					
@@ -427,38 +499,6 @@ extension ESI {
 						case rangeAttributeID = "range_attribute_id"
 						case rangeChance = "range_chance"
 						case trackingSpeedAttributeID = "tracking_speed_attribute_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Modifier: Codable, Hashable {
-					
-					
-					public var domain: String?
-					public var effectID: Int?
-					public var `func`: String
-					public var modifiedAttributeID: Int?
-					public var modifyingAttributeID: Int?
-					public var `operator`: Int?
-					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
-						self.domain = domain
-						self.effectID = effectID
-						self.`func` = `func`
-						self.modifiedAttributeID = modifiedAttributeID
-						self.modifyingAttributeID = modifyingAttributeID
-						self.`operator` = `operator`
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case domain
-						case effectID = "effect_id"
-						case `func` = "func"
-						case modifiedAttributeID = "modified_attribute_id"
-						case modifyingAttributeID = "modifying_attribute_id"
-						case `operator` = "operator"
 						
 						var dateFormatter: DateFormatter? {
 							return nil

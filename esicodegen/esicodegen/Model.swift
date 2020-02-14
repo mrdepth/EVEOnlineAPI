@@ -327,6 +327,7 @@ extension Model.Operation {
         
 
         arguments.append("cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy")
+        arguments.append("progress: Request.ProgressHandler? = nil")
         
         let result = response?.name() ?? "Void"
         

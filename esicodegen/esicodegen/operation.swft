@@ -17,14 +17,22 @@
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
             components.queryItems = query
     
-            return esi.session.publisher(components,
+            let publisher = esi.session.publisher(components,
                                          method: .{method},
                                          encoding: {encoding},
                                          headers: headers,
                                          interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                .{decode}
-                .eraseToAnyPublisher()
-    
+            if let progress = progress {
+                return publisher
+                    .downloadProgress(closure: progress)
+                    .{decode}
+                    .eraseToAnyPublisher()
+            }
+            else {
+                return publisher
+                    .{decode}
+                    .eraseToAnyPublisher()
+            }
         }
         catch {
             return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()

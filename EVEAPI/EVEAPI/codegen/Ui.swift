@@ -36,7 +36,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(addToBeginning: Bool = false, clearOtherWaypoints: Bool = false, destinationID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
+				public func post(addToBeginning: Bool = false, clearOtherWaypoints: Bool = false, destinationID: Int64, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -57,14 +57,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .post,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseVoid(queue: esi.session.serializationQueue)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -107,7 +115,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
+				public func post(contractID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -126,14 +134,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .post,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseVoid(queue: esi.session.serializationQueue)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -153,7 +169,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
+				public func post(targetID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -172,14 +188,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .post,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseVoid(queue: esi.session.serializationQueue)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -199,7 +223,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
+				public func post(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -218,14 +242,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .post,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseVoid(queue: esi.session.serializationQueue)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -245,7 +277,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func post(newMail: ESI.UI.Openwindow.Newmail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Void>, AFError> {
+				public func post(newMail: ESI.UI.Openwindow.Newmail.NewMail, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Void>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -264,14 +296,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .post,
 						encoding: BodyDataEncoding(data: body),
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseVoid(queue: esi.session.serializationQueue)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseVoid(queue: esi.session.serializationQueue)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()

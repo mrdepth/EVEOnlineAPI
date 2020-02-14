@@ -23,7 +23,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Search.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(language: ESI.Characters.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 				do {
 					
 					
@@ -43,14 +43,22 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					return esi.session.publisher(components,
+					let publisher = esi.session.publisher(components,
 					method: .get,
 					encoding: URLEncoding.default,
 					headers: headers,
 					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-					.eraseToAnyPublisher()
-					
+					if let progress = progress {
+						return publisher
+						.downloadProgress(closure: progress)
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
+					else {
+						return publisher
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()

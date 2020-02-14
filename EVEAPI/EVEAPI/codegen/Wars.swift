@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(maxWarID: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
+		public func get(maxWarID: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Int]>, AFError> {
 			do {
 				
 				
@@ -33,14 +33,22 @@ extension ESI {
 				var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 				components.queryItems = query
 				
-				return esi.session.publisher(components,
+				let publisher = esi.session.publisher(components,
 				method: .get,
 				encoding: URLEncoding.default,
 				headers: headers,
 				interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-				.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-				.eraseToAnyPublisher()
-				
+				if let progress = progress {
+					return publisher
+					.downloadProgress(closure: progress)
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+				}
+				else {
+					return publisher
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+				}
 			}
 			catch {
 				return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -57,7 +65,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
 				do {
 					
 					
@@ -75,14 +83,22 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					return esi.session.publisher(components,
+					let publisher = esi.session.publisher(components,
 					method: .get,
 					encoding: URLEncoding.default,
 					headers: headers,
 					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-					.eraseToAnyPublisher()
-					
+					if let progress = progress {
+						return publisher
+						.downloadProgress(closure: progress)
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
+					else {
+						return publisher
+						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+						.eraseToAnyPublisher()
+					}
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -99,7 +115,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
 					do {
 						
 						
@@ -119,14 +135,22 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						return esi.session.publisher(components,
+						let publisher = esi.session.publisher(components,
 						method: .get,
 						encoding: URLEncoding.default,
 						headers: headers,
 						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-						
+						if let progress = progress {
+							return publisher
+							.downloadProgress(closure: progress)
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
+						else {
+							return publisher
+							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+							.eraseToAnyPublisher()
+						}
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -141,52 +165,6 @@ extension ESI {
 				
 			}
 			
-			
-			public struct Defender: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Double
-				public var shipsKilled: Int
-				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-					self.iskDestroyed = iskDestroyed
-					self.shipsKilled = shipsKilled
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
-					case iskDestroyed = "isk_destroyed"
-					case shipsKilled = "ships_killed"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct Ally: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public init(allianceID: Int?, corporationID: Int?) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
 			
 			public struct Success: Codable, Hashable {
 				
@@ -262,6 +240,52 @@ extension ESI {
 					case corporationID = "corporation_id"
 					case iskDestroyed = "isk_destroyed"
 					case shipsKilled = "ships_killed"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Defender: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Double
+				public var shipsKilled: Int
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					case iskDestroyed = "isk_destroyed"
+					case shipsKilled = "ships_killed"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Ally: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public init(allianceID: Int?, corporationID: Int?) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
 					
 					var dateFormatter: DateFormatter? {
 						return nil

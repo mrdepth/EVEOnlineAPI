@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(categories: [ESI.Search.Categories], language: ESI.Search.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<ESIResponse<Success>, AFError> {
+		public func get(categories: [ESI.Search.Categories], language: ESI.Characters.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
 			do {
 				
 				
@@ -40,14 +40,22 @@ extension ESI {
 				var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 				components.queryItems = query
 				
-				return esi.session.publisher(components,
+				let publisher = esi.session.publisher(components,
 				method: .get,
 				encoding: URLEncoding.default,
 				headers: headers,
 				interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-				.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-				.eraseToAnyPublisher()
-				
+				if let progress = progress {
+					return publisher
+					.downloadProgress(closure: progress)
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+				}
+				else {
+					return publisher
+					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
+					.eraseToAnyPublisher()
+				}
 			}
 			catch {
 				return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -103,16 +111,6 @@ extension ESI {
 			}
 		}
 		
-		public enum Datasource: String, Codable, CustomStringConvertible {
-			case tranquility
-			case singularity
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
 		public enum Categories: String, Codable, CustomStringConvertible {
 			case agent
 			case alliance
@@ -124,36 +122,6 @@ extension ESI {
 			case region
 			case solarSystem = "solar_system"
 			case station
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Language: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
 			
 			public var description: String {
 				return rawValue
