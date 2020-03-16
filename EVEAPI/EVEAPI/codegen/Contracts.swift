@@ -49,7 +49,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Contracts.Public.Bids.ContractID.Success]>, AFError> {
 						do {
 							
 							
@@ -69,11 +69,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .get,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -145,7 +141,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Contracts.Public.Items.ContractID.Success]>, AFError> {
 						do {
 							
 							
@@ -165,11 +161,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .get,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -244,7 +236,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Contracts.Public.RegionID.Success]>, AFError> {
 					do {
 						
 						
@@ -264,11 +256,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -308,9 +296,9 @@ extension ESI {
 					public var reward: Double?
 					public var startLocationID: Int64?
 					public var title: String?
-					public var type: ESI.Characters.ValueType
+					public var type: ESI.Contracts.ValueType
 					public var volume: Double?
-					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Characters.ValueType, volume: Double?) {
+					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Contracts.ValueType, volume: Double?) {
 						self.buyout = buyout
 						self.collateral = collateral
 						self.contractID = contractID
@@ -367,6 +355,18 @@ extension ESI {
 		}
 		
 		
+		public enum ValueType: String, Codable, CustomStringConvertible {
+			case unknown
+			case itemExchange = "item_exchange"
+			case auction
+			case courier
+			case loan
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 	}
 	

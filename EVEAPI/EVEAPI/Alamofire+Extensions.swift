@@ -71,7 +71,7 @@ extension Publisher where Output: DataRequest, Failure == AFError {
 
 }
 
-extension Session {
+extension ESI {
     public func publisher(_ convertible: URLConvertible,
                    method: HTTPMethod = .get,
                    parameters: Parameters? = nil,
@@ -79,19 +79,26 @@ extension Session {
                    headers: HTTPHeaders? = nil,
                    interceptor: RequestInterceptor? = nil) -> Deferred<Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>>> {
         Deferred { () -> Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>> in
-            let request = self.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
+            let request = self.session.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
             let subject = CurrentValueSubject<DataRequest, AFError>(request)
+            var esi: ESI? = self
             let publisher = subject.handleEvents(receiveCancel:  {
-                request.cancel()
+                _ = withExtendedLifetime(esi) {
+                    request.cancel()
+                }
+                esi = nil
             })
             
             request.response { [weak subject] response in
-                switch response.result {
-                case .success:
-                    subject?.send(completion: .finished)
-                case let .failure(error):
-                    subject?.send(completion: .failure(error))
+                _ = withExtendedLifetime(esi) {
+                    switch response.result {
+                    case .success:
+                        subject?.send(completion: .finished)
+                    case let .failure(error):
+                        subject?.send(completion: .failure(error))
+                    }
                 }
+                esi = nil
             }
             return publisher
         }

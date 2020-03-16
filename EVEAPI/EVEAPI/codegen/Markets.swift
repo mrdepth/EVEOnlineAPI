@@ -50,11 +50,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -82,7 +78,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Characters.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Markets.Groups.MarketGroupID.Success>, AFError> {
 					do {
 						
 						
@@ -102,11 +98,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -169,7 +161,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Markets.Prices.Success]>, AFError> {
 				do {
 					
 					
@@ -187,11 +179,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -254,7 +242,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Markets.Structures.StructureID.Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -275,11 +263,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -381,7 +365,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(typeID: Int, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Markets.RegionID.History.Success]>, AFError> {
 					do {
 						
 						
@@ -399,11 +383,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -470,7 +450,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(orderType: ESI.Markets.RegionID.Orders.OrderType = .all, page: Int? = nil, typeID: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(orderType: ESI.Markets.RegionID.Orders.OrderType = .all, page: Int? = nil, typeID: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Markets.RegionID.Orders.Success]>, AFError> {
 					do {
 						
 						
@@ -494,11 +474,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -614,11 +590,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -662,6 +634,46 @@ extension ESI {
 			case i20 = "20"
 			case i30 = "30"
 			case i40 = "40"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Datasource: String, Codable, CustomStringConvertible {
+			case tranquility
+			case singularity
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Language: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
 			
 			public var description: String {
 				return rawValue

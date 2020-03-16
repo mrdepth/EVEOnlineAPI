@@ -46,7 +46,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporation.CorporationID.Mining.Extractions.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -67,11 +67,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .get,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -139,7 +135,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporation.CorporationID.Mining.Observers.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -160,11 +156,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .get,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -192,7 +184,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+						public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporation.CorporationID.Mining.Observers.ObserverID.Success]>, AFError> {
 							do {
 								
 								let scopes = esi.token?.scopes ?? []
@@ -213,11 +205,7 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.session.publisher(components,
-								method: .get,
-								encoding: URLEncoding.default,
-								headers: headers,
-								interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 								if let progress = progress {
 									return publisher
 									.downloadProgress(closure: progress)

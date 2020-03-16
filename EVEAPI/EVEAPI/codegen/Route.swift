@@ -63,11 +63,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)

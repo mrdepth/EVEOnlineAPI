@@ -23,7 +23,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Fleets.FleetID.Success>, AFError> {
 				do {
 					
 					let scopes = esi.token?.scopes ?? []
@@ -42,11 +42,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -84,11 +80,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .put,
-					encoding: BodyDataEncoding(data: body),
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -122,7 +114,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Characters.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Fleets.FleetID.Members.Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -143,11 +135,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -185,11 +173,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .post,
-						encoding: BodyDataEncoding(data: body),
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -236,11 +220,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .delete,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -278,11 +258,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .put,
-							encoding: BodyDataEncoding(data: body),
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -380,18 +356,6 @@ extension ESI {
 					}
 				}
 				
-				public enum Role: String, Codable, CustomStringConvertible {
-					case fleetCommander = "fleet_commander"
-					case wingCommander = "wing_commander"
-					case squadCommander = "squad_commander"
-					case squadMember = "squad_member"
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
-				
 				public struct Invitation: Codable, Hashable {
 					
 					
@@ -416,6 +380,18 @@ extension ESI {
 							return nil
 						}
 					}
+				}
+				
+				public enum Role: String, Codable, CustomStringConvertible {
+					case fleetCommander = "fleet_commander"
+					case wingCommander = "wing_commander"
+					case squadCommander = "squad_commander"
+					case squadMember = "squad_member"
+					
+					public var description: String {
+						return rawValue
+					}
+					
 				}
 				
 			}
@@ -454,11 +430,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .delete,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -496,11 +468,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .put,
-							encoding: BodyDataEncoding(data: body),
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -535,7 +503,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Characters.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Fleets.FleetID.Wings.Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -556,11 +524,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -579,7 +543,7 @@ extension ESI {
 				}
 				
 				
-				public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Created>, AFError> {
+				public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Fleets.FleetID.Wings.Created>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -598,11 +562,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .post,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .post, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -649,11 +609,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .delete,
-							encoding: URLEncoding.default,
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -691,11 +647,7 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.session.publisher(components,
-							method: .put,
-							encoding: BodyDataEncoding(data: body),
-							headers: headers,
-							interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 							if let progress = progress {
 								return publisher
 								.downloadProgress(closure: progress)
@@ -723,7 +675,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Created>, AFError> {
+						public func post(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Fleets.FleetID.Wings.WingID.Squads.Created>, AFError> {
 							do {
 								
 								let scopes = esi.token?.scopes ?? []
@@ -742,11 +694,7 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.session.publisher(components,
-								method: .post,
-								encoding: URLEncoding.default,
-								headers: headers,
-								interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								let publisher = esi.publisher(components, method: .post, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 								if let progress = progress {
 									return publisher
 									.downloadProgress(closure: progress)
@@ -793,6 +741,29 @@ extension ESI {
 				}
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var id: Int64
+					public var name: String
+					public var squads: [ESI.Fleets.FleetID.Wings.Squad]
+					public init(id: Int64, name: String, squads: [ESI.Fleets.FleetID.Wings.Squad]) {
+						self.id = id
+						self.name = name
+						self.squads = squads
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case id
+						case name
+						case squads
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Created: Codable, Hashable {
 					
 					
@@ -830,48 +801,8 @@ extension ESI {
 					}
 				}
 				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var id: Int64
-					public var name: String
-					public var squads: [ESI.Fleets.FleetID.Wings.Squad]
-					public init(id: Int64, name: String, squads: [ESI.Fleets.FleetID.Wings.Squad]) {
-						self.id = id
-						self.name = name
-						self.squads = squads
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case id
-						case name
-						case squads
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 			}
 			
-			
-			public struct Naming: Codable, Hashable {
-				
-				
-				public var name: String
-				public init(name: String) {
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
 			
 			public struct NewSettings: Codable, Hashable {
 				
@@ -912,6 +843,23 @@ extension ESI {
 					case isRegistered = "is_registered"
 					case isVoiceEnabled = "is_voice_enabled"
 					case motd
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Naming: Codable, Hashable {
+				
+				
+				public var name: String
+				public init(name: String) {
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case name
 					
 					var dateFormatter: DateFormatter? {
 						return nil

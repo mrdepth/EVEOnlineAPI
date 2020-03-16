@@ -152,7 +152,7 @@ extension ESI {
             var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("characters/\(id)/portrait"), resolvingAgainstBaseURL: false)!
             components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
             
-            return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
                     guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
                     return image
@@ -163,7 +163,7 @@ extension ESI {
             var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("corporations/\(id)/logo"), resolvingAgainstBaseURL: false)!
             components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
 
-            return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
                     guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
 							return image
@@ -174,7 +174,7 @@ extension ESI {
             var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("alliances/\(id)/logo"), resolvingAgainstBaseURL: false)!
             components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
 
-            return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
                     guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
 							return image
@@ -185,7 +185,7 @@ extension ESI {
             var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("types/\(id)/render"), resolvingAgainstBaseURL: false)!
             components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
 
-            return esi.session.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
                 .responseData().tryMap { data -> UIImage in
                     guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
 							return image

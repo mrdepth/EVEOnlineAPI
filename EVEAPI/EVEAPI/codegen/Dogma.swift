@@ -47,11 +47,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -79,7 +75,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Dogma.Attributes.AttributeID.Success>, AFError> {
 					do {
 						
 						
@@ -97,11 +93,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -209,7 +201,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Dogma.Dynamic.Items.TypeID.ItemID.Success>, AFError> {
 							do {
 								
 								
@@ -227,11 +219,7 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.session.publisher(components,
-								method: .get,
-								encoding: URLEncoding.default,
-								headers: headers,
-								interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 								if let progress = progress {
 									return publisher
 									.downloadProgress(closure: progress)
@@ -320,11 +308,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -352,7 +336,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Dogma.Effects.EffectID.Success>, AFError> {
 					do {
 						
 						
@@ -370,11 +354,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -513,26 +493,6 @@ extension ESI {
 		}
 		
 		
-		public struct DogmaEffect: Codable, Hashable {
-			
-			
-			public var effectID: Int
-			public var isDefault: Bool
-			public init(effectID: Int, isDefault: Bool) {
-				self.effectID = effectID
-				self.isDefault = isDefault
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case effectID = "effect_id"
-				case isDefault = "is_default"
-				
-				var dateFormatter: DateFormatter? {
-					return nil
-				}
-			}
-		}
-		
 		public struct DogmaAttribute: Codable, Hashable {
 			
 			
@@ -546,6 +506,26 @@ extension ESI {
 			enum CodingKeys: String, CodingKey, DateFormatted {
 				case attributeID = "attribute_id"
 				case value
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public struct DogmaEffect: Codable, Hashable {
+			
+			
+			public var effectID: Int
+			public var isDefault: Bool
+			public init(effectID: Int, isDefault: Bool) {
+				self.effectID = effectID
+				self.isDefault = isDefault
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case effectID = "effect_id"
+				case isDefault = "is_default"
 				
 				var dateFormatter: DateFormatter? {
 					return nil

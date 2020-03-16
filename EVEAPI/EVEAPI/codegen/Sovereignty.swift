@@ -29,7 +29,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Sovereignty.Campaigns.Success]>, AFError> {
 				do {
 					
 					
@@ -47,11 +47,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -73,6 +69,26 @@ extension ESI {
 			
 			
 			
+			
+			public struct Participant: Codable, Hashable {
+				
+				
+				public var allianceID: Int
+				public var score: Double
+				public init(allianceID: Int, score: Double) {
+					self.allianceID = allianceID
+					self.score = score
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case score
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
 			
 			public struct Success: Codable, Hashable {
 				
@@ -135,26 +151,6 @@ extension ESI {
 				
 			}
 			
-			public struct Participant: Codable, Hashable {
-				
-				
-				public var allianceID: Int
-				public var score: Double
-				public init(allianceID: Int, score: Double) {
-					self.allianceID = allianceID
-					self.score = score
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case score
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 		}
 		
 		public struct Map {
@@ -162,7 +158,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Sovereignty.Map.Success]>, AFError> {
 				do {
 					
 					
@@ -180,11 +176,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -240,7 +232,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Sovereignty.Structures.Success]>, AFError> {
 				do {
 					
 					
@@ -258,11 +250,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)

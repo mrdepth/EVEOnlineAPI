@@ -32,7 +32,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Fw.Leaderboards.Success>, AFError> {
 				do {
 					
 					
@@ -50,11 +50,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -85,7 +81,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Fw.Leaderboards.Characters.Success>, AFError> {
 					do {
 						
 						
@@ -103,11 +99,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -130,81 +122,19 @@ extension ESI {
 				
 				
 				
-				public struct VictoryPoints: Codable, Hashable {
+				public struct Success: Codable, Hashable {
 					
-					public struct LastWeekLastWeek1: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var characterID: Int?
-						public init(amount: Int?, characterID: Int?) {
-							self.amount = amount
-							self.characterID = characterID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case characterID = "character_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
 					
-					public struct ActiveTotalActiveTotal1: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var characterID: Int?
-						public init(amount: Int?, characterID: Int?) {
-							self.amount = amount
-							self.characterID = characterID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case characterID = "character_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct YesterdayYesterday1: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var characterID: Int?
-						public init(amount: Int?, characterID: Int?) {
-							self.amount = amount
-							self.characterID = characterID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case characterID = "character_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public var activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1]
-					public var lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1]
-					public var yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]
-					public init(activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]) {
-						self.activeTotal = activeTotal
-						self.lastWeek = lastWeek
-						self.yesterday = yesterday
+					public var kills: ESI.Fw.Leaderboards.Characters.Kills
+					public var victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints
+					public init(kills: ESI.Fw.Leaderboards.Characters.Kills, victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints) {
+						self.kills = kills
+						self.victoryPoints = victoryPoints
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
-						case activeTotal = "active_total"
-						case lastWeek = "last_week"
-						case yesterday
+						case kills
+						case victoryPoints = "victory_points"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -294,19 +224,81 @@ extension ESI {
 					}
 				}
 				
-				public struct Success: Codable, Hashable {
+				public struct VictoryPoints: Codable, Hashable {
 					
+					public struct ActiveTotalActiveTotal1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case characterID = "character_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
-					public var kills: ESI.Fw.Leaderboards.Characters.Kills
-					public var victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints
-					public init(kills: ESI.Fw.Leaderboards.Characters.Kills, victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints) {
-						self.kills = kills
-						self.victoryPoints = victoryPoints
+					public struct YesterdayYesterday1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case characterID = "character_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public struct LastWeekLastWeek1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case characterID = "character_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public var activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1]
+					public var lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1]
+					public var yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]
+					public init(activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]) {
+						self.activeTotal = activeTotal
+						self.lastWeek = lastWeek
+						self.yesterday = yesterday
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
-						case kills
-						case victoryPoints = "victory_points"
+						case activeTotal = "active_total"
+						case lastWeek = "last_week"
+						case yesterday
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -321,7 +313,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Fw.Leaderboards.Corporations.Success>, AFError> {
 					do {
 						
 						
@@ -339,11 +331,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -366,131 +354,9 @@ extension ESI {
 				
 				
 				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var kills: ESI.Fw.Leaderboards.Corporations.Kills
-					public var victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints
-					public init(kills: ESI.Fw.Leaderboards.Corporations.Kills, victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints) {
-						self.kills = kills
-						self.victoryPoints = victoryPoints
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case kills
-						case victoryPoints = "victory_points"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Kills: Codable, Hashable {
-					
-					public struct YesterdayYesterday: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var corporationID: Int?
-						public init(amount: Int?, corporationID: Int?) {
-							self.amount = amount
-							self.corporationID = corporationID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct ActiveTotalActiveTotal: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var corporationID: Int?
-						public init(amount: Int?, corporationID: Int?) {
-							self.amount = amount
-							self.corporationID = corporationID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct LastWeekLastWeek: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var corporationID: Int?
-						public init(amount: Int?, corporationID: Int?) {
-							self.amount = amount
-							self.corporationID = corporationID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public var activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal]
-					public var lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek]
-					public var yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]
-					public init(activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal], lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek], yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]) {
-						self.activeTotal = activeTotal
-						self.lastWeek = lastWeek
-						self.yesterday = yesterday
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case activeTotal = "active_total"
-						case lastWeek = "last_week"
-						case yesterday
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct VictoryPoints: Codable, Hashable {
 					
 					public struct YesterdayYesterday1: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var corporationID: Int?
-						public init(amount: Int?, corporationID: Int?) {
-							self.amount = amount
-							self.corporationID = corporationID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case corporationID = "corporation_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct LastWeekLastWeek1: Codable, Hashable {
 						
 						
 						public var amount: Int?
@@ -530,6 +396,26 @@ extension ESI {
 						}
 					}
 					
+					public struct LastWeekLastWeek1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
 					public var activeTotal: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.ActiveTotalActiveTotal1]
 					public var lastWeek: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.LastWeekLastWeek1]
 					public var yesterday: [ESI.Fw.Leaderboards.Corporations.VictoryPoints.YesterdayYesterday1]
@@ -550,12 +436,114 @@ extension ESI {
 					}
 				}
 				
+				public struct Kills: Codable, Hashable {
+					
+					public struct LastWeekLastWeek: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public struct ActiveTotalActiveTotal: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public struct YesterdayYesterday: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var corporationID: Int?
+						public init(amount: Int?, corporationID: Int?) {
+							self.amount = amount
+							self.corporationID = corporationID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case corporationID = "corporation_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public var activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal]
+					public var lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek]
+					public var yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]
+					public init(activeTotal: [ESI.Fw.Leaderboards.Corporations.Kills.ActiveTotalActiveTotal], lastWeek: [ESI.Fw.Leaderboards.Corporations.Kills.LastWeekLastWeek], yesterday: [ESI.Fw.Leaderboards.Corporations.Kills.YesterdayYesterday]) {
+						self.activeTotal = activeTotal
+						self.lastWeek = lastWeek
+						self.yesterday = yesterday
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case activeTotal = "active_total"
+						case lastWeek = "last_week"
+						case yesterday
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var kills: ESI.Fw.Leaderboards.Corporations.Kills
+					public var victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints
+					public init(kills: ESI.Fw.Leaderboards.Corporations.Kills, victoryPoints: ESI.Fw.Leaderboards.Corporations.VictoryPoints) {
+						self.kills = kills
+						self.victoryPoints = victoryPoints
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case kills
+						case victoryPoints = "victory_points"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 			}
 			
 			
 			public struct VictoryPoints: Codable, Hashable {
 				
-				public struct LastWeekLastWeek1: Codable, Hashable {
+				public struct ActiveTotalActiveTotal1: Codable, Hashable {
 					
 					
 					public var amount: Int?
@@ -575,7 +563,7 @@ extension ESI {
 					}
 				}
 				
-				public struct ActiveTotalActiveTotal1: Codable, Hashable {
+				public struct LastWeekLastWeek1: Codable, Hashable {
 					
 					
 					public var amount: Int?
@@ -657,6 +645,26 @@ extension ESI {
 			
 			public struct Kills: Codable, Hashable {
 				
+				public struct LastWeekLastWeek: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct ActiveTotalActiveTotal: Codable, Hashable {
 					
 					
@@ -678,26 +686,6 @@ extension ESI {
 				}
 				
 				public struct YesterdayYesterday: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct LastWeekLastWeek: Codable, Hashable {
 					
 					
 					public var amount: Int?
@@ -744,7 +732,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Fw.Stats.Success]>, AFError> {
 				do {
 					
 					
@@ -762,11 +750,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -825,7 +809,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Fw.Systems.Success]>, AFError> {
 				do {
 					
 					
@@ -843,11 +827,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)
@@ -921,7 +901,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+			public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Fw.Wars.Success]>, AFError> {
 				do {
 					
 					
@@ -939,11 +919,7 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.session.publisher(components,
-					method: .get,
-					encoding: URLEncoding.default,
-					headers: headers,
-					interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 					if let progress = progress {
 						return publisher
 						.downloadProgress(closure: progress)

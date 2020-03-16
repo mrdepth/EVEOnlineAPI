@@ -33,7 +33,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<Success>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Killmails.KillmailID.KillmailHash.Success>, AFError> {
 					do {
 						
 						
@@ -51,11 +51,7 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.session.publisher(components,
-						method: .get,
-						encoding: URLEncoding.default,
-						headers: headers,
-						interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 						if let progress = progress {
 							return publisher
 							.downloadProgress(closure: progress)
@@ -77,46 +73,6 @@ extension ESI {
 				
 				
 				
-				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var attackers: [ESI.Killmails.KillmailID.KillmailHash.Attacker]
-					public var killmailID: Int
-					public var killmailTime: Date
-					public var moonID: Int?
-					public var solarSystemID: Int
-					public var victim: ESI.Killmails.KillmailID.KillmailHash.Victim
-					public var warID: Int?
-					public init(attackers: [ESI.Killmails.KillmailID.KillmailHash.Attacker], killmailID: Int, killmailTime: Date, moonID: Int?, solarSystemID: Int, victim: ESI.Killmails.KillmailID.KillmailHash.Victim, warID: Int?) {
-						self.attackers = attackers
-						self.killmailID = killmailID
-						self.killmailTime = killmailTime
-						self.moonID = moonID
-						self.solarSystemID = solarSystemID
-						self.victim = victim
-						self.warID = warID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case attackers
-						case killmailID = "killmail_id"
-						case killmailTime = "killmail_time"
-						case moonID = "moon_id"
-						case solarSystemID = "solar_system_id"
-						case victim
-						case warID = "war_id"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								case .killmailTime:
-								return DateFormatter.esiDateTimeFormatter
-								default:
-								return nil
-							}
-						}
-					}
-				}
 				
 				public struct Victim: Codable, Hashable {
 					
@@ -186,9 +142,9 @@ extension ESI {
 					public var damageTaken: Int
 					public var factionID: Int?
 					public var items: [ESI.Killmails.KillmailID.KillmailHash.Victim.Item]?
-					public var position: ESI.Killmails.Position?
+					public var position: ESI.Universe.Position?
 					public var shipTypeID: Int
-					public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [ESI.Killmails.KillmailID.KillmailHash.Victim.Item]?, position: ESI.Killmails.Position?, shipTypeID: Int) {
+					public init(allianceID: Int?, characterID: Int?, corporationID: Int?, damageTaken: Int, factionID: Int?, items: [ESI.Killmails.KillmailID.KillmailHash.Victim.Item]?, position: ESI.Universe.Position?, shipTypeID: Int) {
 						self.allianceID = allianceID
 						self.characterID = characterID
 						self.corporationID = corporationID
@@ -256,35 +212,53 @@ extension ESI {
 					}
 				}
 				
-			}
-			
-			
-			
-		}
-		
-		
-		public struct Position: Codable, Hashable {
-			
-			
-			public var x: Double
-			public var y: Double
-			public var z: Double
-			public init(x: Double, y: Double, z: Double) {
-				self.x = x
-				self.y = y
-				self.z = z
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case x
-				case y
-				case z
-				
-				var dateFormatter: DateFormatter? {
-					return nil
+				public struct Success: Codable, Hashable {
+					
+					
+					public var attackers: [ESI.Killmails.KillmailID.KillmailHash.Attacker]
+					public var killmailID: Int
+					public var killmailTime: Date
+					public var moonID: Int?
+					public var solarSystemID: Int
+					public var victim: ESI.Killmails.KillmailID.KillmailHash.Victim
+					public var warID: Int?
+					public init(attackers: [ESI.Killmails.KillmailID.KillmailHash.Attacker], killmailID: Int, killmailTime: Date, moonID: Int?, solarSystemID: Int, victim: ESI.Killmails.KillmailID.KillmailHash.Victim, warID: Int?) {
+						self.attackers = attackers
+						self.killmailID = killmailID
+						self.killmailTime = killmailTime
+						self.moonID = moonID
+						self.solarSystemID = solarSystemID
+						self.victim = victim
+						self.warID = warID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case attackers
+						case killmailID = "killmail_id"
+						case killmailTime = "killmail_time"
+						case moonID = "moon_id"
+						case solarSystemID = "solar_system_id"
+						case victim
+						case warID = "war_id"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .killmailTime:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
+						}
+					}
 				}
+				
 			}
+			
+			
+			
 		}
+		
+		
 		
 	}
 	

@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[Success]>, AFError> {
+		public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Incursions.Success]>, AFError> {
 			do {
 				
 				
@@ -31,11 +31,7 @@ extension ESI {
 				var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 				components.queryItems = query
 				
-				let publisher = esi.session.publisher(components,
-				method: .get,
-				encoding: URLEncoding.default,
-				headers: headers,
-				interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+				let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
 				if let progress = progress {
 					return publisher
 					.downloadProgress(closure: progress)
@@ -57,6 +53,17 @@ extension ESI {
 		
 		
 		
+		
+		public enum State: String, Codable, CustomStringConvertible {
+			case withdrawing
+			case mobilizing
+			case established
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 		public struct Success: Codable, Hashable {
 			
@@ -94,17 +101,6 @@ extension ESI {
 					return nil
 				}
 			}
-		}
-		
-		public enum State: String, Codable, CustomStringConvertible {
-			case withdrawing
-			case mobilizing
-			case established
-			
-			public var description: String {
-				return rawValue
-			}
-			
 		}
 		
 	}

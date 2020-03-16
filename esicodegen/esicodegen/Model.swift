@@ -329,7 +329,7 @@ extension Model.Operation {
         arguments.append("cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy")
         arguments.append("progress: Request.ProgressHandler? = nil")
         
-        let result = response?.name() ?? "Void"
+        let result = response?.id() ?? "Void"
         
         swift = swift.replacingOccurrences(of: "{operation}", with: method.rawValue)
         swift = swift.replacingOccurrences(of: "{method}", with: method.rawValue)
