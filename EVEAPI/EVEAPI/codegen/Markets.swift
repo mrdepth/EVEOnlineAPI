@@ -78,7 +78,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Markets.Groups.MarketGroupID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Markets.Groups.MarketGroupID.Success>, AFError> {
 					do {
 						
 						
@@ -634,46 +634,6 @@ extension ESI {
 			case i20 = "20"
 			case i30 = "30"
 			case i40 = "40"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Datasource: String, Codable, CustomStringConvertible {
-			case tranquility
-			case singularity
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Language: String, Codable, CustomStringConvertible {
-			case de
-			case enUS = "en-us"
-			case fr
-			case ja
-			case ru
-			case zh
-			case ko
 			
 			public var description: String {
 				return rawValue

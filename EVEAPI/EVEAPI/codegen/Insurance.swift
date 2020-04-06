@@ -23,7 +23,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Insurance.Prices.Success]>, AFError> {
+			public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Insurance.Prices.Success]>, AFError> {
 				do {
 					
 					

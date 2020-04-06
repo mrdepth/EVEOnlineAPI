@@ -296,9 +296,9 @@ extension ESI {
 					public var reward: Double?
 					public var startLocationID: Int64?
 					public var title: String?
-					public var type: ESI.Contracts.ValueType
+					public var type: ESI.Characters.ValueType
 					public var volume: Double?
-					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Contracts.ValueType, volume: Double?) {
+					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Characters.ValueType, volume: Double?) {
 						self.buyout = buyout
 						self.collateral = collateral
 						self.contractID = contractID
@@ -355,18 +355,6 @@ extension ESI {
 		}
 		
 		
-		public enum ValueType: String, Codable, CustomStringConvertible {
-			case unknown
-			case itemExchange = "item_exchange"
-			case auction
-			case courier
-			case loan
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
 		
 	}
 	

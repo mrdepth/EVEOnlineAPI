@@ -8,7 +8,7 @@
 
 import Foundation
 import Alamofire
-import Futures
+import Combine
 
 enum ZKillboardError: Error {
 	case invalidRequest(URLRequest)
@@ -35,65 +35,79 @@ extension DateFormatter {
 public class ZKillboard {
 	let baseURL = "https://zkillboard.com/api/"
 	
-	var sessionManager = Session()
-	
+	public let session: Session
+    
 	public init() {
-		
+        let interceptor = Interceptor(adapters: [ESI.EtagAdapter()], retriers: [])
+        session = Session(interceptor: interceptor)
 	}
-	
-	open func request(_ url: URLConvertible,
-					  method: HTTPMethod = .get,
-					  parameters: Parameters? = nil,
-					  encoding: ParameterEncoding = URLEncoding.default,
-					  headers: HTTPHeaders? = nil,
-					  cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> DataRequest {
-		let convertible = RequestConvertible(url: url,
-											 method: method,
-											 parameters: parameters,
-											 encoding: encoding,
-											 headers: headers,
-											 cachePolicy: cachePolicy)
-		return sessionManager.request(convertible)
-	}
-	
-	public func kills(filter: [Filter], page: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> Future<ESI.Result<[Killmail]>> {
-		let promise = Promise<ESI.Result<[Killmail]>>()
-		guard filter.count > 1 else {
-			try! promise.fail(ZKillboardError.notFound)
-			return promise.future
-		}
-		var args = filter.map {$0.value}
-		if let page = page {
-			args.append("page/\(page)")
-		}
-		
-		let url = baseURL
-		
-		let progress = Progress(totalUnitCount: 100)
-		
-		request(url + args.joined(separator: "/") + "/", method: .get, cachePolicy: cachePolicy).downloadProgress { p in
-			progress.completedUnitCount = Int64(p.fractionCompleted * 100)
-		}.validate().responseZKillboard { (response: DataResponse<[Killmail]>) in
-			promise.set(response: response, cached: 600.0)
-		}
-		return promise.future
-	}
-	
+    
+    public func publisher(_ convertible: URLConvertible,
+                   method: HTTPMethod = .get,
+                   parameters: Parameters? = nil,
+                   encoding: ParameterEncoding = URLEncoding.default,
+                   headers: HTTPHeaders? = nil,
+                   interceptor: RequestInterceptor? = nil) -> Deferred<Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>>> {
+        Deferred { () -> Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>> in
+            let request = self.session.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
+            let subject = CurrentValueSubject<DataRequest, AFError>(request)
+            var zKillboard: ZKillboard? = self
+            let publisher = subject.handleEvents(receiveCancel:  {
+                _ = withExtendedLifetime(zKillboard) {
+                    request.cancel()
+                }
+                zKillboard = nil
+            })
+            
+            request.response { [weak subject] response in
+                _ = withExtendedLifetime(zKillboard) {
+                    switch response.result {
+                    case .success:
+                        subject?.send(completion: .finished)
+                    case let .failure(error):
+                        subject?.send(completion: .failure(error))
+                    }
+                }
+                zKillboard = nil
+            }
+            return publisher
+        }
+    }
 }
 
-extension DataRequest {
-	
-	
-	@discardableResult
-	public func responseZKillboard<T: Decodable>(queue: DispatchQueue = .main,
-	                        completionHandler: @escaping (DataResponse<T>) -> Void) -> Self
-	{
-		let decoder = JSONDecoder()
-//        decoder.dateDecodingStrategy = .formatted(ZKillboard.dateFormatter)
-		return responseDecodable(queue: queue, decoder: decoder, completionHandler: completionHandler)
-	}
+extension ZKillboard {
+    public struct Kills {
+        let zKillboard: ZKillboard
+        
+        public func get(filter: [Filter], page: Int?, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ZKillboard.Killmail]>, AFError>{
+            var args = filter.map {$0.value}
+            if let page = page, page > 1 {
+                args.append("page/\(page)")
+            }
+            
+            let url = zKillboard.baseURL + args.joined(separator: "/") + "/"
+            
+            let publisher = zKillboard.publisher(url, method: .get, encoding: URLEncoding.default, interceptor: ESI.CachePolicyAdapter(cachePolicy: cachePolicy))
+            if let progress = progress {
+                return publisher
+                    .downloadProgress(closure: progress)
+                    .responseDecodable(of: Killmails.self, queue: zKillboard.session.serializationQueue, decoder: JSONDecoder())
+                    .map{result in result.map{$0.records}}
+                    .eraseToAnyPublisher()
+            }
+            else {
+                return publisher
+                    .responseDecodable(of: Killmails.self, queue: zKillboard.session.serializationQueue, decoder: JSONDecoder())
+                    .map{result in result.map{$0.records}}
+                    .eraseToAnyPublisher()
+            }
+        }
+    }
+    
+    public var kills: Kills {
+        Kills(zKillboard: self)
+    }
 }
-
 
 extension ZKillboard {
 	
@@ -102,9 +116,13 @@ extension ZKillboard {
 		case descending
 	}
 	
-//    fileprivate static let dateFormatter: DateFormatter = {
-//        return DateFormatter.esiDateTimeFormatter
-//    }()
+    fileprivate static let dateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMddHHmm00"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return dateFormatter
+    }()
 	
 	public enum Filter {
 		case characterID([Int64])
@@ -117,8 +135,8 @@ extension ZKillboard {
 		case regionID([Int])
 		case warID([Int])
 		case iskValue(Int64)
-//        case startTime(Date)
-//        case endTime(Date)
+        case startTime(Date)
+        case endTime(Date)
 		case noItems
 		case noAttackers
 		case zkbOnly
@@ -170,23 +188,64 @@ extension ZKillboard {
 				return "solo"
 			case .finalBlowOnly:
 				return "finalblow-only"
+            case let .startTime(date):
+                return "startTime/\(ZKillboard.dateFormatter.string(from: date))"
+            case let .endTime(date):
+                return "endTime/\(ZKillboard.dateFormatter.string(from: date))"
 			}
 		}
 	}
-	
-	
+    
+    public struct Killmail: Hashable {
+        public var killmailID: Int64
+        public var hash: String
+    }
 
-	public struct Killmail: Codable, Hashable {
+    private struct Killmails: Decodable, Hashable {
+        var records: [Killmail]
+        
+        struct Record: CodingKey {
+            var stringValue: String
+            
+            init?(stringValue: String) {
+                self.stringValue = stringValue
+                self.intValue = nil
+            }
+            
+            var intValue: Int?
+            
+            init?(intValue: Int) {
+                self.intValue = intValue
+                self.stringValue = "\(intValue)"
+            }
+            
+            
+        }
+        
+        init(from decoder: Decoder) throws {
+            do {
+                let container = try decoder.singleValueContainer()
+                let killmails = try container.decode([ZKBKillmail].self)
+                records = killmails.map{Killmail(killmailID: $0.killmailID, hash: $0.hash)}
+            }
+            catch {
+                let container = try decoder.singleValueContainer()
+                records = try container.decode([Int: String].self).sorted{$0.key > $1.key}.map{Killmail(killmailID: Int64($0.key), hash: $0.value)}
+            }
+        }
+    }
+
+	private struct ZKBKillmail: Codable, Hashable {
 		
-		public var killmailID: Int64
-		public var fittedValue: Double?
-		public var hash: String
-		public var locationID: Int?
-		public var points: Int
-		public var totalValue: Double?
-		public var npc: Bool
-		public var solo: Bool
-		public var awox: Bool
+		var killmailID: Int64
+		var fittedValue: Double?
+		var hash: String
+		var locationID: Int?
+		var points: Int
+		var totalValue: Double?
+		var npc: Bool
+		var solo: Bool
+		var awox: Bool
 		
 		enum CodingKeys: String, CodingKey {
 			case killmailID = "killmail_id"
@@ -204,7 +263,7 @@ extension ZKillboard {
 			case awox
 		}
 		
-		public init(from decoder: Decoder) throws {
+		init(from decoder: Decoder) throws {
 			let container = try decoder.container(keyedBy: CodingKeys.self)
 			killmailID = try container.decode(Int64.self, forKey: .killmailID)
 			let zkb = try container.nestedContainer(keyedBy: ZKBCodingKeys.self, forKey: .zkb)
@@ -219,7 +278,7 @@ extension ZKillboard {
 			awox = try zkb.decode(Bool.self, forKey: .awox)
 		}
 		
-		public func encode(to encoder: Encoder) throws {
+		func encode(to encoder: Encoder) throws {
 			var container = encoder.container(keyedBy: CodingKeys.self)
 			try container.encode(killmailID, forKey: .killmailID)
 			

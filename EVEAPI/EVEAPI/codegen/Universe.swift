@@ -89,7 +89,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Ancestries.Success]>, AFError> {
+			public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Ancestries.Success]>, AFError> {
 				do {
 					
 					
@@ -256,7 +256,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Bloodlines.Success]>, AFError> {
+			public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Bloodlines.Success]>, AFError> {
 				do {
 					
 					
@@ -399,7 +399,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Categories.CategoryID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Categories.CategoryID.Success>, AFError> {
 					do {
 						
 						
@@ -525,7 +525,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Constellations.ConstellationID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Constellations.ConstellationID.Success>, AFError> {
 					do {
 						
 						
@@ -608,7 +608,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Factions.Success]>, AFError> {
+			public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Factions.Success]>, AFError> {
 				do {
 					
 					
@@ -886,7 +886,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Groups.GroupID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Groups.GroupID.Success>, AFError> {
 					do {
 						
 						
@@ -969,7 +969,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func post(language: ESI.Markets.Language? = nil, names: [String], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Ids.Success>, AFError> {
+			public func post(language: ESI.Universe.Language? = nil, names: [String], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Ids.Success>, AFError> {
 				do {
 					
 					
@@ -1012,27 +1012,7 @@ extension ESI {
 			
 			
 			
-			public struct Constellation: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct Corporation: Codable, Hashable {
+			public struct Faction: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -1053,6 +1033,46 @@ extension ESI {
 			}
 			
 			public struct Region: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct InventoryType: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Alliance: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -1136,7 +1156,7 @@ extension ESI {
 				}
 			}
 			
-			public struct Alliance: Codable, Hashable {
+			public struct Constellation: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -1176,46 +1196,6 @@ extension ESI {
 				}
 			}
 			
-			public struct System: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct InventoryType: Codable, Hashable {
-				
-				
-				public var id: Int?
-				public var name: String?
-				public init(id: Int?, name: String?) {
-					self.id = id
-					self.name = name
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case id
-					case name
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public struct Station: Codable, Hashable {
 				
 				
@@ -1236,7 +1216,27 @@ extension ESI {
 				}
 			}
 			
-			public struct Faction: Codable, Hashable {
+			public struct System: Codable, Hashable {
+				
+				
+				public var id: Int?
+				public var name: String?
+				public init(id: Int?, name: String?) {
+					self.id = id
+					self.name = name
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case id
+					case name
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Corporation: Codable, Hashable {
 				
 				
 				public var id: Int?
@@ -1392,6 +1392,23 @@ extension ESI {
 			
 			
 			
+			public enum Category: String, Codable, CustomStringConvertible {
+				case alliance
+				case character
+				case constellation
+				case corporation
+				case inventoryType = "inventory_type"
+				case region
+				case solarSystem = "solar_system"
+				case station
+				case faction
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
+			
 			public struct Success: Codable, Hashable {
 				
 				
@@ -1413,23 +1430,6 @@ extension ESI {
 						return nil
 					}
 				}
-			}
-			
-			public enum Category: String, Codable, CustomStringConvertible {
-				case alliance
-				case character
-				case constellation
-				case corporation
-				case inventoryType = "inventory_type"
-				case region
-				case solarSystem = "solar_system"
-				case station
-				case faction
-				
-				public var description: String {
-					return rawValue
-				}
-				
 			}
 			
 		}
@@ -1530,7 +1530,7 @@ extension ESI {
 			let route: APIRoute
 			
 			
-			public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Races.Success]>, AFError> {
+			public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Universe.Races.Success]>, AFError> {
 				do {
 					
 					
@@ -1652,7 +1652,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Regions.RegionID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Regions.RegionID.Success>, AFError> {
 					do {
 						
 						
@@ -2176,41 +2176,6 @@ extension ESI {
 				
 				
 				
-				public enum Service: String, Codable, CustomStringConvertible {
-					case bountyMissions = "bounty-missions"
-					case assasinationMissions = "assasination-missions"
-					case courierMissions = "courier-missions"
-					case interbus
-					case reprocessingPlant = "reprocessing-plant"
-					case refinery
-					case market
-					case blackMarket = "black-market"
-					case stockExchange = "stock-exchange"
-					case cloning
-					case surgery
-					case dnaTherapy = "dna-therapy"
-					case repairFacilities = "repair-facilities"
-					case factory
-					case labratory
-					case gambling
-					case fitting
-					case paintshop
-					case news
-					case storage
-					case insurance
-					case docking
-					case officeRental = "office-rental"
-					case jumpCloneFacility = "jump-clone-facility"
-					case loyaltyPointStore = "loyalty-point-store"
-					case navyOffices = "navy-offices"
-					case securityOffices = "security-offices"
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -2259,6 +2224,41 @@ extension ESI {
 							return nil
 						}
 					}
+				}
+				
+				public enum Service: String, Codable, CustomStringConvertible {
+					case bountyMissions = "bounty-missions"
+					case assasinationMissions = "assasination-missions"
+					case courierMissions = "courier-missions"
+					case interbus
+					case reprocessingPlant = "reprocessing-plant"
+					case refinery
+					case market
+					case blackMarket = "black-market"
+					case stockExchange = "stock-exchange"
+					case cloning
+					case surgery
+					case dnaTherapy = "dna-therapy"
+					case repairFacilities = "repair-facilities"
+					case factory
+					case labratory
+					case gambling
+					case fitting
+					case paintshop
+					case news
+					case storage
+					case insurance
+					case docking
+					case officeRental = "office-rental"
+					case jumpCloneFacility = "jump-clone-facility"
+					case loyaltyPointStore = "loyalty-point-store"
+					case navyOffices = "navy-offices"
+					case securityOffices = "security-offices"
+					
+					public var description: String {
+						return rawValue
+					}
+					
 				}
 				
 			}
@@ -2599,7 +2599,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Systems.SystemID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Systems.SystemID.Success>, AFError> {
 					do {
 						
 						
@@ -2768,7 +2768,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(language: ESI.Markets.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Types.TypeID.Success>, AFError> {
+				public func get(language: ESI.Universe.Language? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Universe.Types.TypeID.Success>, AFError> {
 					do {
 						
 						
@@ -2816,8 +2816,8 @@ extension ESI {
 					
 					public var capacity: Double?
 					public var localizedDescription: String
-					public var dogmaAttributes: [ESI.Dogma.DogmaAttribute]?
-					public var dogmaEffects: [ESI.Dogma.DogmaEffect]?
+					public var dogmaAttributes: [ESI.Universe.DogmaAttribute]?
+					public var dogmaEffects: [ESI.Universe.DogmaEffect]?
 					public var graphicID: Int?
 					public var groupID: Int
 					public var iconID: Int?
@@ -2830,7 +2830,7 @@ extension ESI {
 					public var radius: Double?
 					public var typeID: Int
 					public var volume: Double?
-					public init(capacity: Double?, localizedDescription: String, dogmaAttributes: [ESI.Dogma.DogmaAttribute]?, dogmaEffects: [ESI.Dogma.DogmaEffect]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Double?, name: String, packagedVolume: Double?, portionSize: Int?, published: Bool, radius: Double?, typeID: Int, volume: Double?) {
+					public init(capacity: Double?, localizedDescription: String, dogmaAttributes: [ESI.Universe.DogmaAttribute]?, dogmaEffects: [ESI.Universe.DogmaEffect]?, graphicID: Int?, groupID: Int, iconID: Int?, marketGroupID: Int?, mass: Double?, name: String, packagedVolume: Double?, portionSize: Int?, published: Bool, radius: Double?, typeID: Int, volume: Double?) {
 						self.capacity = capacity
 						self.localizedDescription = localizedDescription
 						self.dogmaAttributes = dogmaAttributes
@@ -2880,6 +2880,21 @@ extension ESI {
 		}
 		
 		
+		public enum Language: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
 		public struct Position: Codable, Hashable {
 			
 			
@@ -2901,6 +2916,61 @@ extension ESI {
 					return nil
 				}
 			}
+		}
+		
+		public struct DogmaAttribute: Codable, Hashable {
+			
+			
+			public var attributeID: Int
+			public var value: Double
+			public init(attributeID: Int, value: Double) {
+				self.attributeID = attributeID
+				self.value = value
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case attributeID = "attribute_id"
+				case value
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public struct DogmaEffect: Codable, Hashable {
+			
+			
+			public var effectID: Int
+			public var isDefault: Bool
+			public init(effectID: Int, isDefault: Bool) {
+				self.effectID = effectID
+				self.isDefault = isDefault
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case effectID = "effect_id"
+				case isDefault = "is_default"
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum AcceptLanguage: String, Codable, CustomStringConvertible {
+			case de
+			case enUS = "en-us"
+			case fr
+			case ja
+			case ru
+			case zh
+			case ko
+			
+			public var description: String {
+				return rawValue
+			}
+			
 		}
 		
 	}

@@ -160,7 +160,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Contacts.Labels.Success]>, AFError> {
+					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contacts.Labels.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -210,10 +210,10 @@ extension ESI {
 					
 					
 					public var contactID: Int
-					public var contactType: ESI.Corporations.ContactType
+					public var contactType: ESI.Characters.ContactType
 					public var labelIds: [Int64]?
 					public var standing: Double
-					public init(contactID: Int, contactType: ESI.Corporations.ContactType, labelIds: [Int64]?, standing: Double) {
+					public init(contactID: Int, contactType: ESI.Characters.ContactType, labelIds: [Int64]?, standing: Double) {
 						self.contactID = contactID
 						self.contactType = contactType
 						self.labelIds = labelIds

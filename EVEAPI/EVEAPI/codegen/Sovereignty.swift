@@ -90,6 +90,18 @@ extension ESI {
 				}
 			}
 			
+			public enum EventType: String, Codable, CustomStringConvertible {
+				case tcuDefense = "tcu_defense"
+				case ihubDefense = "ihub_defense"
+				case stationDefense = "station_defense"
+				case stationFreeport = "station_freeport"
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
+			
 			public struct Success: Codable, Hashable {
 				
 				
@@ -137,18 +149,6 @@ extension ESI {
 						}
 					}
 				}
-			}
-			
-			public enum EventType: String, Codable, CustomStringConvertible {
-				case tcuDefense = "tcu_defense"
-				case ihubDefense = "ihub_defense"
-				case stationDefense = "station_defense"
-				case stationFreeport = "station_freeport"
-				
-				public var description: String {
-					return rawValue
-				}
-				
 			}
 			
 		}

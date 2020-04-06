@@ -246,11 +246,11 @@ extension ESI {
 							
 							
 							public var createdBy: Int
-							public var dogmaAttributes: [ESI.Dogma.DogmaAttribute]
-							public var dogmaEffects: [ESI.Dogma.DogmaEffect]
+							public var dogmaAttributes: [ESI.Universe.DogmaAttribute]
+							public var dogmaEffects: [ESI.Universe.DogmaEffect]
 							public var mutatorTypeID: Int
 							public var sourceTypeID: Int
-							public init(createdBy: Int, dogmaAttributes: [ESI.Dogma.DogmaAttribute], dogmaEffects: [ESI.Dogma.DogmaEffect], mutatorTypeID: Int, sourceTypeID: Int) {
+							public init(createdBy: Int, dogmaAttributes: [ESI.Universe.DogmaAttribute], dogmaEffects: [ESI.Universe.DogmaEffect], mutatorTypeID: Int, sourceTypeID: Int) {
 								self.createdBy = createdBy
 								self.dogmaAttributes = dogmaAttributes
 								self.dogmaEffects = dogmaEffects
@@ -377,38 +377,6 @@ extension ESI {
 				
 				
 				
-				public struct Modifier: Codable, Hashable {
-					
-					
-					public var domain: String?
-					public var effectID: Int?
-					public var `func`: String
-					public var modifiedAttributeID: Int?
-					public var modifyingAttributeID: Int?
-					public var `operator`: Int?
-					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
-						self.domain = domain
-						self.effectID = effectID
-						self.`func` = `func`
-						self.modifiedAttributeID = modifiedAttributeID
-						self.modifyingAttributeID = modifyingAttributeID
-						self.`operator` = `operator`
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case domain
-						case effectID = "effect_id"
-						case `func` = "func"
-						case modifiedAttributeID = "modified_attribute_id"
-						case modifyingAttributeID = "modifying_attribute_id"
-						case `operator` = "operator"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -486,52 +454,45 @@ extension ESI {
 					}
 				}
 				
-			}
-			
-			
-			
-		}
-		
-		
-		public struct DogmaAttribute: Codable, Hashable {
-			
-			
-			public var attributeID: Int
-			public var value: Double
-			public init(attributeID: Int, value: Double) {
-				self.attributeID = attributeID
-				self.value = value
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case attributeID = "attribute_id"
-				case value
-				
-				var dateFormatter: DateFormatter? {
-					return nil
+				public struct Modifier: Codable, Hashable {
+					
+					
+					public var domain: String?
+					public var effectID: Int?
+					public var `func`: String
+					public var modifiedAttributeID: Int?
+					public var modifyingAttributeID: Int?
+					public var `operator`: Int?
+					public init(domain: String?, effectID: Int?, `func`: String, modifiedAttributeID: Int?, modifyingAttributeID: Int?, `operator`: Int?) {
+						self.domain = domain
+						self.effectID = effectID
+						self.`func` = `func`
+						self.modifiedAttributeID = modifiedAttributeID
+						self.modifyingAttributeID = modifyingAttributeID
+						self.`operator` = `operator`
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case domain
+						case effectID = "effect_id"
+						case `func` = "func"
+						case modifiedAttributeID = "modified_attribute_id"
+						case modifyingAttributeID = "modifying_attribute_id"
+						case `operator` = "operator"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
 				}
+				
 			}
+			
+			
+			
 		}
 		
-		public struct DogmaEffect: Codable, Hashable {
-			
-			
-			public var effectID: Int
-			public var isDefault: Bool
-			public init(effectID: Int, isDefault: Bool) {
-				self.effectID = effectID
-				self.isDefault = isDefault
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case effectID = "effect_id"
-				case isDefault = "is_default"
-				
-				var dateFormatter: DateFormatter? {
-					return nil
-				}
-			}
-		}
+		
 		
 	}
 	

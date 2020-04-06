@@ -392,7 +392,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func post(itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Assets.Locations.Success]>, AFError> {
+					public func post(itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Assets.Locations.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -434,6 +434,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var itemID: Int64
+						public var position: ESI.Universe.Position
+						public init(itemID: Int64, position: ESI.Universe.Position) {
+							self.itemID = itemID
+							self.position = position
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case itemID = "item_id"
+							case position
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -442,7 +461,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func post(itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Assets.Names.Success]>, AFError> {
+					public func post(itemIds: [Int64], cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Assets.Names.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -484,6 +503,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var itemID: Int64
+						public var name: String
+						public init(itemID: Int64, name: String) {
+							self.itemID = itemID
+							self.name = name
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case itemID = "item_id"
+							case name
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -503,6 +541,7 @@ extension ESI {
 					case fighterTube3 = "FighterTube3"
 					case fighterTube4 = "FighterTube4"
 					case fleetHangar = "FleetHangar"
+					case frigateEscapeBay = "FrigateEscapeBay"
 					case hangar = "Hangar"
 					case hangarAll = "HangarAll"
 					case hiSlot0 = "HiSlot0"
@@ -583,10 +622,10 @@ extension ESI {
 					public var itemID: Int64
 					public var locationFlag: ESI.Characters.CharacterID.Assets.LocationFlag
 					public var locationID: Int64
-					public var locationType: ESI.Corporations.LocationType
+					public var locationType: ESI.Characters.LocationType
 					public var quantity: Int
 					public var typeID: Int
-					public init(isBlueprintCopy: Bool?, isSingleton: Bool, itemID: Int64, locationFlag: ESI.Characters.CharacterID.Assets.LocationFlag, locationID: Int64, locationType: ESI.Corporations.LocationType, quantity: Int, typeID: Int) {
+					public init(isBlueprintCopy: Bool?, isSingleton: Bool, itemID: Int64, locationFlag: ESI.Characters.CharacterID.Assets.LocationFlag, locationID: Int64, locationType: ESI.Characters.LocationType, quantity: Int, typeID: Int) {
 						self.isBlueprintCopy = isBlueprintCopy
 						self.isSingleton = isSingleton
 						self.itemID = itemID
@@ -887,7 +926,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Bookmarks.Success]>, AFError> {
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Bookmarks.Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -1003,6 +1042,51 @@ extension ESI {
 				}
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var bookmarkID: Int
+					public var coordinates: ESI.Characters.Coordinates?
+					public var created: Date
+					public var creatorID: Int
+					public var folderID: Int?
+					public var item: ESI.Characters.Item?
+					public var label: String
+					public var locationID: Int
+					public var notes: String
+					public init(bookmarkID: Int, coordinates: ESI.Characters.Coordinates?, created: Date, creatorID: Int, folderID: Int?, item: ESI.Characters.Item?, label: String, locationID: Int, notes: String) {
+						self.bookmarkID = bookmarkID
+						self.coordinates = coordinates
+						self.created = created
+						self.creatorID = creatorID
+						self.folderID = folderID
+						self.item = item
+						self.label = label
+						self.locationID = locationID
+						self.notes = notes
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case bookmarkID = "bookmark_id"
+						case coordinates
+						case created
+						case creatorID = "creator_id"
+						case folderID = "folder_id"
+						case item
+						case label
+						case locationID = "location_id"
+						case notes
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .created:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
+						}
+					}
+				}
 				
 			}
 			
@@ -1210,6 +1294,46 @@ extension ESI {
 					}
 					
 					
+					public enum OwnerType: String, Codable, CustomStringConvertible {
+						case eveServer = "eve_server"
+						case corporation
+						case faction
+						case character
+						case alliance
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
+					public struct Response: Codable, Hashable {
+						
+						public enum ResponseResponse: String, Codable, CustomStringConvertible {
+							case accepted
+							case declined
+							case tentative
+							
+							public var description: String {
+								return rawValue
+							}
+							
+						}
+						
+						public var response: ESI.Characters.CharacterID.Calendar.EventID.Response.ResponseResponse
+						public init(response: ESI.Characters.CharacterID.Calendar.EventID.Response.ResponseResponse) {
+							self.response = response
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case response
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
@@ -1259,48 +1383,20 @@ extension ESI {
 						}
 					}
 					
-					public struct Response: Codable, Hashable {
-						
-						public enum ResponseResponse: String, Codable, CustomStringConvertible {
-							case accepted
-							case declined
-							case tentative
-							
-							public var description: String {
-								return rawValue
-							}
-							
-						}
-						
-						public var response: ESI.Characters.CharacterID.Calendar.EventID.Response.ResponseResponse
-						public init(response: ESI.Characters.CharacterID.Calendar.EventID.Response.ResponseResponse) {
-							self.response = response
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case response
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
+				}
+				
+				
+				public enum EventResponse: String, Codable, CustomStringConvertible {
+					case declined
+					case notResponded = "not_responded"
+					case accepted
+					case tentative
 					
-					public enum OwnerType: String, Codable, CustomStringConvertible {
-						case eveServer = "eve_server"
-						case corporation
-						case faction
-						case character
-						case alliance
-						
-						public var description: String {
-							return rawValue
-						}
-						
+					public var description: String {
+						return rawValue
 					}
 					
 				}
-				
 				
 				public struct Success: Codable, Hashable {
 					
@@ -1334,18 +1430,6 @@ extension ESI {
 							}
 						}
 					}
-				}
-				
-				public enum EventResponse: String, Codable, CustomStringConvertible {
-					case declined
-					case notResponded = "not_responded"
-					case accepted
-					case tentative
-					
-					public var description: String {
-						return rawValue
-					}
-					
 				}
 				
 			}
@@ -1430,35 +1514,6 @@ extension ESI {
 					}
 				}
 				
-				public struct HomeLocation: Codable, Hashable {
-					
-					public enum LocationType: String, Codable, CustomStringConvertible {
-						case station
-						case structure
-						
-						public var description: String {
-							return rawValue
-						}
-						
-					}
-					
-					public var locationID: Int64?
-					public var locationType: ESI.Characters.CharacterID.Clones.HomeLocation.LocationType?
-					public init(locationID: Int64?, locationType: ESI.Characters.CharacterID.Clones.HomeLocation.LocationType?) {
-						self.locationID = locationID
-						self.locationType = locationType
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case locationID = "location_id"
-						case locationType = "location_type"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct JumpClone: Codable, Hashable {
 					
 					public enum JumpCloneLocationType: String, Codable, CustomStringConvertible {
@@ -1490,6 +1545,35 @@ extension ESI {
 						case locationID = "location_id"
 						case locationType = "location_type"
 						case name
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct HomeLocation: Codable, Hashable {
+					
+					public enum LocationType: String, Codable, CustomStringConvertible {
+						case station
+						case structure
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
+					public var locationID: Int64?
+					public var locationType: ESI.Characters.CharacterID.Clones.HomeLocation.LocationType?
+					public init(locationID: Int64?, locationType: ESI.Characters.CharacterID.Clones.HomeLocation.LocationType?) {
+						self.locationID = locationID
+						self.locationType = locationType
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case locationID = "location_id"
+						case locationType = "location_type"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -1685,7 +1769,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Contacts.Labels.Success]>, AFError> {
+					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contacts.Labels.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -1727,6 +1811,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var labelID: Int64
+						public var labelName: String
+						public init(labelID: Int64, labelName: String) {
+							self.labelID = labelID
+							self.labelName = labelName
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case labelID = "label_id"
+							case labelName = "label_name"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -1735,12 +1838,12 @@ extension ESI {
 					
 					
 					public var contactID: Int
-					public var contactType: ESI.Corporations.ContactType
+					public var contactType: ESI.Characters.ContactType
 					public var isBlocked: Bool?
 					public var isWatched: Bool?
 					public var labelIds: [Int64]?
 					public var standing: Double
-					public init(contactID: Int, contactType: ESI.Corporations.ContactType, isBlocked: Bool?, isWatched: Bool?, labelIds: [Int64]?, standing: Double) {
+					public init(contactID: Int, contactType: ESI.Characters.ContactType, isBlocked: Bool?, isWatched: Bool?, labelIds: [Int64]?, standing: Double) {
 						self.contactID = contactID
 						self.contactType = contactType
 						self.isBlocked = isBlocked
@@ -1770,7 +1873,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Contracts.Success]>, AFError> {
+				public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contracts.Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -1832,7 +1935,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Contracts.ContractID.Bids.Success]>, AFError> {
+						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contracts.ContractID.Bids.Success]>, AFError> {
 							do {
 								
 								let scopes = esi.token?.scopes ?? []
@@ -1874,6 +1977,36 @@ extension ESI {
 						
 						
 						
+						public struct Success: Codable, Hashable {
+							
+							
+							public var amount: Double
+							public var bidID: Int
+							public var bidderID: Int
+							public var dateBid: Date
+							public init(amount: Double, bidID: Int, bidderID: Int, dateBid: Date) {
+								self.amount = amount
+								self.bidID = bidID
+								self.bidderID = bidderID
+								self.dateBid = dateBid
+							}
+							
+							enum CodingKeys: String, CodingKey, DateFormatted {
+								case amount
+								case bidID = "bid_id"
+								case bidderID = "bidder_id"
+								case dateBid = "date_bid"
+								
+								var dateFormatter: DateFormatter? {
+									switch self {
+										case .dateBid:
+										return DateFormatter.esiDateTimeFormatter
+										default:
+										return nil
+									}
+								}
+							}
+						}
 						
 					}
 					
@@ -1882,7 +2015,7 @@ extension ESI {
 						let route: APIRoute
 						
 						
-						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Contracts.ContractID.Items.Success]>, AFError> {
+						public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contracts.ContractID.Items.Success]>, AFError> {
 							do {
 								
 								let scopes = esi.token?.scopes ?? []
@@ -1924,6 +2057,37 @@ extension ESI {
 						
 						
 						
+						public struct Success: Codable, Hashable {
+							
+							
+							public var isIncluded: Bool
+							public var isSingleton: Bool
+							public var quantity: Int
+							public var rawQuantity: Int?
+							public var recordID: Int64
+							public var typeID: Int
+							public init(isIncluded: Bool, isSingleton: Bool, quantity: Int, rawQuantity: Int?, recordID: Int64, typeID: Int) {
+								self.isIncluded = isIncluded
+								self.isSingleton = isSingleton
+								self.quantity = quantity
+								self.rawQuantity = rawQuantity
+								self.recordID = recordID
+								self.typeID = typeID
+							}
+							
+							enum CodingKeys: String, CodingKey, DateFormatted {
+								case isIncluded = "is_included"
+								case isSingleton = "is_singleton"
+								case quantity
+								case rawQuantity = "raw_quantity"
+								case recordID = "record_id"
+								case typeID = "type_id"
+								
+								var dateFormatter: DateFormatter? {
+									return nil
+								}
+							}
+						}
 						
 					}
 					
@@ -1932,6 +2096,114 @@ extension ESI {
 				}
 				
 				
+				public enum Status: String, Codable, CustomStringConvertible {
+					case outstanding
+					case inProgress = "in_progress"
+					case finishedIssuer = "finished_issuer"
+					case finishedContractor = "finished_contractor"
+					case finished
+					case cancelled
+					case rejected
+					case failed
+					case deleted
+					case reversed
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var acceptorID: Int
+					public var assigneeID: Int
+					public var availability: ESI.Characters.Availability
+					public var buyout: Double?
+					public var collateral: Double?
+					public var contractID: Int
+					public var dateAccepted: Date?
+					public var dateCompleted: Date?
+					public var dateExpired: Date
+					public var dateIssued: Date
+					public var daysToComplete: Int?
+					public var endLocationID: Int64?
+					public var forCorporation: Bool
+					public var issuerCorporationID: Int
+					public var issuerID: Int
+					public var price: Double?
+					public var reward: Double?
+					public var startLocationID: Int64?
+					public var status: ESI.Characters.CharacterID.Contracts.Status
+					public var title: String?
+					public var type: ESI.Characters.ValueType
+					public var volume: Double?
+					public init(acceptorID: Int, assigneeID: Int, availability: ESI.Characters.Availability, buyout: Double?, collateral: Double?, contractID: Int, dateAccepted: Date?, dateCompleted: Date?, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, status: ESI.Characters.CharacterID.Contracts.Status, title: String?, type: ESI.Characters.ValueType, volume: Double?) {
+						self.acceptorID = acceptorID
+						self.assigneeID = assigneeID
+						self.availability = availability
+						self.buyout = buyout
+						self.collateral = collateral
+						self.contractID = contractID
+						self.dateAccepted = dateAccepted
+						self.dateCompleted = dateCompleted
+						self.dateExpired = dateExpired
+						self.dateIssued = dateIssued
+						self.daysToComplete = daysToComplete
+						self.endLocationID = endLocationID
+						self.forCorporation = forCorporation
+						self.issuerCorporationID = issuerCorporationID
+						self.issuerID = issuerID
+						self.price = price
+						self.reward = reward
+						self.startLocationID = startLocationID
+						self.status = status
+						self.title = title
+						self.type = type
+						self.volume = volume
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case acceptorID = "acceptor_id"
+						case assigneeID = "assignee_id"
+						case availability
+						case buyout
+						case collateral
+						case contractID = "contract_id"
+						case dateAccepted = "date_accepted"
+						case dateCompleted = "date_completed"
+						case dateExpired = "date_expired"
+						case dateIssued = "date_issued"
+						case daysToComplete = "days_to_complete"
+						case endLocationID = "end_location_id"
+						case forCorporation = "for_corporation"
+						case issuerCorporationID = "issuer_corporation_id"
+						case issuerID = "issuer_id"
+						case price
+						case reward
+						case startLocationID = "start_location_id"
+						case status
+						case title
+						case type
+						case volume
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .dateAccepted:
+								return DateFormatter.esiDateTimeFormatter
+								case .dateCompleted:
+								return DateFormatter.esiDateTimeFormatter
+								case .dateExpired:
+								return DateFormatter.esiDateTimeFormatter
+								case .dateIssued:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
+						}
+					}
+				}
 				
 			}
 			
@@ -2281,17 +2553,15 @@ extension ESI {
 				}
 				
 				
-				public struct Success: Codable, Hashable {
+				public struct Fitting: Codable, Hashable {
 					
 					
 					public var localizedDescription: String
-					public var fittingID: Int
 					public var items: [ESI.Characters.CharacterID.Fittings.Item]
 					public var name: String
 					public var shipTypeID: Int
-					public init(localizedDescription: String, fittingID: Int, items: [ESI.Characters.CharacterID.Fittings.Item], name: String, shipTypeID: Int) {
+					public init(localizedDescription: String, items: [ESI.Characters.CharacterID.Fittings.Item], name: String, shipTypeID: Int) {
 						self.localizedDescription = localizedDescription
-						self.fittingID = fittingID
 						self.items = items
 						self.name = name
 						self.shipTypeID = shipTypeID
@@ -2299,33 +2569,9 @@ extension ESI {
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case localizedDescription = "description"
-						case fittingID = "fitting_id"
 						case items
 						case name
 						case shipTypeID = "ship_type_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Item: Codable, Hashable {
-					
-					
-					public var flag: ESI.Characters.CharacterID.Fittings.Flag
-					public var quantity: Int
-					public var typeID: Int
-					public init(flag: ESI.Characters.CharacterID.Fittings.Flag, quantity: Int, typeID: Int) {
-						self.flag = flag
-						self.quantity = quantity
-						self.typeID = typeID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case flag
-						case quantity
-						case typeID = "type_id"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -2384,15 +2630,40 @@ extension ESI {
 					
 				}
 				
-				public struct Fitting: Codable, Hashable {
+				public struct Item: Codable, Hashable {
+					
+					
+					public var flag: ESI.Characters.CharacterID.Fittings.Flag
+					public var quantity: Int
+					public var typeID: Int
+					public init(flag: ESI.Characters.CharacterID.Fittings.Flag, quantity: Int, typeID: Int) {
+						self.flag = flag
+						self.quantity = quantity
+						self.typeID = typeID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case flag
+						case quantity
+						case typeID = "type_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Success: Codable, Hashable {
 					
 					
 					public var localizedDescription: String
+					public var fittingID: Int
 					public var items: [ESI.Characters.CharacterID.Fittings.Item]
 					public var name: String
 					public var shipTypeID: Int
-					public init(localizedDescription: String, items: [ESI.Characters.CharacterID.Fittings.Item], name: String, shipTypeID: Int) {
+					public init(localizedDescription: String, fittingID: Int, items: [ESI.Characters.CharacterID.Fittings.Item], name: String, shipTypeID: Int) {
 						self.localizedDescription = localizedDescription
+						self.fittingID = fittingID
 						self.items = items
 						self.name = name
 						self.shipTypeID = shipTypeID
@@ -2400,6 +2671,7 @@ extension ESI {
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
 						case localizedDescription = "description"
+						case fittingID = "fitting_id"
 						case items
 						case name
 						case shipTypeID = "ship_type_id"
@@ -2476,18 +2748,6 @@ extension ESI {
 				
 				
 				
-				public enum Role: String, Codable, CustomStringConvertible {
-					case fleetCommander = "fleet_commander"
-					case squadCommander = "squad_commander"
-					case squadMember = "squad_member"
-					case wingCommander = "wing_commander"
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -2512,6 +2772,18 @@ extension ESI {
 							return nil
 						}
 					}
+				}
+				
+				public enum Role: String, Codable, CustomStringConvertible {
+					case fleetCommander = "fleet_commander"
+					case squadCommander = "squad_commander"
+					case squadMember = "squad_member"
+					case wingCommander = "wing_commander"
+					
+					public var description: String {
+						return rawValue
+					}
+					
 				}
 				
 			}
@@ -2580,9 +2852,9 @@ extension ESI {
 						public var enlistedOn: Date?
 						public var factionID: Int?
 						public var highestRank: Int?
-						public var kills: ESI.Fw.Kills
-						public var victoryPoints: ESI.Fw.VictoryPoints
-						public init(currentRank: Int?, enlistedOn: Date?, factionID: Int?, highestRank: Int?, kills: ESI.Fw.Kills, victoryPoints: ESI.Fw.VictoryPoints) {
+						public var kills: ESI.Characters.Kills
+						public var victoryPoints: ESI.Characters.VictoryPoints
+						public init(currentRank: Int?, enlistedOn: Date?, factionID: Int?, highestRank: Int?, kills: ESI.Characters.Kills, victoryPoints: ESI.Characters.VictoryPoints) {
 							self.currentRank = currentRank
 							self.enlistedOn = enlistedOn
 							self.factionID = factionID
@@ -2748,9 +3020,9 @@ extension ESI {
 						public var runs: Int
 						public var startDate: Date
 						public var stationID: Int64
-						public var status: ESI.Corporations.CorporationID.Industry.Jobs.Status
+						public var status: ESI.Characters.CharacterID.Industry.Jobs.Status
 						public var successfulRuns: Int?
-						public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Double?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: ESI.Corporations.CorporationID.Industry.Jobs.Status, successfulRuns: Int?) {
+						public init(activityID: Int, blueprintID: Int64, blueprintLocationID: Int64, blueprintTypeID: Int, completedCharacterID: Int?, completedDate: Date?, cost: Double?, duration: Int, endDate: Date, facilityID: Int64, installerID: Int, jobID: Int, licensedRuns: Int?, outputLocationID: Int64, pauseDate: Date?, probability: Double?, productTypeID: Int?, runs: Int, startDate: Date, stationID: Int64, status: ESI.Characters.CharacterID.Industry.Jobs.Status, successfulRuns: Int?) {
 							self.activityID = activityID
 							self.blueprintID = blueprintID
 							self.blueprintLocationID = blueprintLocationID
@@ -2816,6 +3088,20 @@ extension ESI {
 						}
 					}
 					
+					public enum Status: String, Codable, CustomStringConvertible {
+						case active
+						case cancelled
+						case delivered
+						case paused
+						case ready
+						case reverted
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 				}
 				
 				
@@ -2837,7 +3123,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Wars.Success]>, AFError> {
+					public func get(page: Int? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Killmails.Recent.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -2881,6 +3167,25 @@ extension ESI {
 					
 					
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var killmailHash: String
+						public var killmailID: Int
+						public init(killmailHash: String, killmailID: Int) {
+							self.killmailHash = killmailHash
+							self.killmailID = killmailID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case killmailHash = "killmail_hash"
+							case killmailID = "killmail_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 				}
 				
@@ -3277,52 +3582,6 @@ extension ESI {
 					}
 					
 					
-					public struct PostLabel: Codable, Hashable {
-						
-						
-						public var color: ESI.Characters.CharacterID.Mail.Labels.Color?
-						public var name: String
-						public init(color: ESI.Characters.CharacterID.Mail.Labels.Color?, name: String) {
-							self.color = color
-							self.name = name
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case color
-							case name
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public enum Color: String, Codable, CustomStringConvertible {
-						case h0000fe = "#0000fe"
-						case h006634 = "#006634"
-						case h0099ff = "#0099ff"
-						case h00ff33 = "#00ff33"
-						case h01ffff = "#01ffff"
-						case h349800 = "#349800"
-						case h660066 = "#660066"
-						case h666666 = "#666666"
-						case h999999 = "#999999"
-						case h99ffff = "#99ffff"
-						case h9a0000 = "#9a0000"
-						case hccff9a = "#ccff9a"
-						case he6e6e6 = "#e6e6e6"
-						case hfe0000 = "#fe0000"
-						case hff6600 = "#ff6600"
-						case hffff01 = "#ffff01"
-						case hffffcd = "#ffffcd"
-						case hffffff = "#ffffff"
-						
-						public var description: String {
-							return rawValue
-						}
-						
-					}
-					
 					public struct Success: Codable, Hashable {
 						
 						
@@ -3336,6 +3595,26 @@ extension ESI {
 						enum CodingKeys: String, CodingKey, DateFormatted {
 							case labels
 							case totalUnreadCount = "total_unread_count"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
+					public struct PostLabel: Codable, Hashable {
+						
+						
+						public var color: ESI.Characters.CharacterID.Mail.Labels.Color?
+						public var name: String
+						public init(color: ESI.Characters.CharacterID.Mail.Labels.Color?, name: String) {
+							self.color = color
+							self.name = name
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case color
+							case name
 							
 							var dateFormatter: DateFormatter? {
 								return nil
@@ -3367,6 +3646,32 @@ extension ESI {
 								return nil
 							}
 						}
+					}
+					
+					public enum Color: String, Codable, CustomStringConvertible {
+						case h0000fe = "#0000fe"
+						case h006634 = "#006634"
+						case h0099ff = "#0099ff"
+						case h00ff33 = "#00ff33"
+						case h01ffff = "#01ffff"
+						case h349800 = "#349800"
+						case h660066 = "#660066"
+						case h666666 = "#666666"
+						case h999999 = "#999999"
+						case h99ffff = "#99ffff"
+						case h9a0000 = "#9a0000"
+						case hccff9a = "#ccff9a"
+						case he6e6e6 = "#e6e6e6"
+						case hfe0000 = "#fe0000"
+						case hff6600 = "#ff6600"
+						case hffff01 = "#ffff01"
+						case hffffcd = "#ffffcd"
+						case hffffff = "#ffffff"
+						
+						public var description: String {
+							return rawValue
+						}
+						
 					}
 					
 				}
@@ -3626,32 +3931,6 @@ extension ESI {
 				}
 				
 				
-				public struct Mail: Codable, Hashable {
-					
-					
-					public var approvedCost: Int64?
-					public var body: String
-					public var recipients: [ESI.Characters.CharacterID.Mail.Recipient]
-					public var subject: String
-					public init(approvedCost: Int64?, body: String, recipients: [ESI.Characters.CharacterID.Mail.Recipient], subject: String) {
-						self.approvedCost = approvedCost
-						self.body = body
-						self.recipients = recipients
-						self.subject = subject
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case approvedCost = "approved_cost"
-						case body
-						case recipients
-						case subject
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -3692,16 +3971,30 @@ extension ESI {
 					}
 				}
 				
-				public enum RecipientType: String, Codable, CustomStringConvertible {
-					case alliance
-					case character
-					case corporation
-					case mailingList = "mailing_list"
+				public struct Mail: Codable, Hashable {
 					
-					public var description: String {
-						return rawValue
+					
+					public var approvedCost: Int64?
+					public var body: String
+					public var recipients: [ESI.Characters.CharacterID.Mail.Recipient]
+					public var subject: String
+					public init(approvedCost: Int64?, body: String, recipients: [ESI.Characters.CharacterID.Mail.Recipient], subject: String) {
+						self.approvedCost = approvedCost
+						self.body = body
+						self.recipients = recipients
+						self.subject = subject
 					}
 					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case approvedCost = "approved_cost"
+						case body
+						case recipients
+						case subject
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
 				}
 				
 				public struct Recipient: Codable, Hashable {
@@ -3722,6 +4015,18 @@ extension ESI {
 							return nil
 						}
 					}
+				}
+				
+				public enum RecipientType: String, Codable, CustomStringConvertible {
+					case alliance
+					case character
+					case corporation
+					case mailingList = "mailing_list"
+					
+					public var description: String {
+						return rawValue
+					}
+					
 				}
 				
 			}
@@ -3772,32 +4077,6 @@ extension ESI {
 				
 				
 				
-				
-				public struct Graphic: Codable, Hashable {
-					
-					
-					public var color: Int?
-					public var graphic: String
-					public var layer: Int
-					public var part: Int
-					public init(color: Int?, graphic: String, layer: Int, part: Int) {
-						self.color = color
-						self.graphic = graphic
-						self.layer = layer
-						self.part = part
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case color
-						case graphic
-						case layer
-						case part
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
 				
 				public struct Success: Codable, Hashable {
 					
@@ -3853,6 +4132,32 @@ extension ESI {
 						return rawValue
 					}
 					
+				}
+				
+				public struct Graphic: Codable, Hashable {
+					
+					
+					public var color: Int?
+					public var graphic: String
+					public var layer: Int
+					public var part: Int
+					public init(color: Int?, graphic: String, layer: Int, part: Int) {
+						self.color = color
+						self.graphic = graphic
+						self.layer = layer
+						self.part = part
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case color
+						case graphic
+						case layer
+						case part
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
 				}
 				
 			}
@@ -4070,46 +4375,6 @@ extension ESI {
 				}
 				
 				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var isRead: Bool?
-					public var notificationID: Int64
-					public var senderID: Int
-					public var senderType: ESI.Characters.CharacterID.Notifications.SenderType
-					public var text: String?
-					public var timestamp: Date
-					public var type: ESI.Characters.CharacterID.Notifications.ValueType
-					public init(isRead: Bool?, notificationID: Int64, senderID: Int, senderType: ESI.Characters.CharacterID.Notifications.SenderType, text: String?, timestamp: Date, type: ESI.Characters.CharacterID.Notifications.ValueType) {
-						self.isRead = isRead
-						self.notificationID = notificationID
-						self.senderID = senderID
-						self.senderType = senderType
-						self.text = text
-						self.timestamp = timestamp
-						self.type = type
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case isRead = "is_read"
-						case notificationID = "notification_id"
-						case senderID = "sender_id"
-						case senderType = "sender_type"
-						case text
-						case timestamp
-						case type
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								case .timestamp:
-								return DateFormatter.esiDateTimeFormatter
-								default:
-								return nil
-							}
-						}
-					}
-				}
-				
 				public enum ValueType: String, Codable, CustomStringConvertible {
 					case acceptedAlly = "AcceptedAlly"
 					case acceptedSurrender = "AcceptedSurrender"
@@ -4256,6 +4521,9 @@ extension ESI {
 					case orbitalAttacked = "OrbitalAttacked"
 					case orbitalReinforced = "OrbitalReinforced"
 					case ownershipTransferred = "OwnershipTransferred"
+					case raffleCreated = "RaffleCreated"
+					case raffleExpired = "RaffleExpired"
+					case raffleFinished = "RaffleFinished"
 					case reimbursementMsg = "ReimbursementMsg"
 					case researchMissionAvailableMsg = "ResearchMissionAvailableMsg"
 					case retractsWar = "RetractsWar"
@@ -4333,6 +4601,46 @@ extension ESI {
 						return rawValue
 					}
 					
+				}
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var isRead: Bool?
+					public var notificationID: Int64
+					public var senderID: Int
+					public var senderType: ESI.Characters.CharacterID.Notifications.SenderType
+					public var text: String?
+					public var timestamp: Date
+					public var type: ESI.Characters.CharacterID.Notifications.ValueType
+					public init(isRead: Bool?, notificationID: Int64, senderID: Int, senderType: ESI.Characters.CharacterID.Notifications.SenderType, text: String?, timestamp: Date, type: ESI.Characters.CharacterID.Notifications.ValueType) {
+						self.isRead = isRead
+						self.notificationID = notificationID
+						self.senderID = senderID
+						self.senderType = senderType
+						self.text = text
+						self.timestamp = timestamp
+						self.type = type
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case isRead = "is_read"
+						case notificationID = "notification_id"
+						case senderID = "sender_id"
+						case senderType = "sender_type"
+						case text
+						case timestamp
+						case type
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .timestamp:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
+						}
+					}
 				}
 				
 			}
@@ -4601,13 +4909,13 @@ extension ESI {
 						public var minVolume: Int?
 						public var orderID: Int64
 						public var price: Double
-						public var range: ESI.Corporations.Range
+						public var range: ESI.Characters.Range
 						public var regionID: Int
-						public var state: ESI.Corporations.State
+						public var state: ESI.Characters.State
 						public var typeID: Int
 						public var volumeRemain: Int
 						public var volumeTotal: Int
-						public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Corporations.Range, regionID: Int, state: ESI.Corporations.State, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+						public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Characters.Range, regionID: Int, state: ESI.Characters.State, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
 							self.duration = duration
 							self.escrow = escrow
 							self.isBuyOrder = isBuyOrder
@@ -4668,12 +4976,12 @@ extension ESI {
 					public var minVolume: Int?
 					public var orderID: Int64
 					public var price: Double
-					public var range: ESI.Corporations.Range
+					public var range: ESI.Characters.Range
 					public var regionID: Int
 					public var typeID: Int
 					public var volumeRemain: Int
 					public var volumeTotal: Int
-					public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Corporations.Range, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+					public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Characters.Range, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
 						self.duration = duration
 						self.escrow = escrow
 						self.isBuyOrder = isBuyOrder
@@ -4813,29 +5121,6 @@ extension ESI {
 					
 					
 					
-					public struct Success: Codable, Hashable {
-						
-						
-						public var links: [ESI.Characters.CharacterID.Planets.PlanetID.Link]
-						public var pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin]
-						public var routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]
-						public init(links: [ESI.Characters.CharacterID.Planets.PlanetID.Link], pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin], routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]) {
-							self.links = links
-							self.pins = pins
-							self.routes = routes
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case links
-							case pins
-							case routes
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
 					public struct Link: Codable, Hashable {
 						
 						
@@ -4892,6 +5177,26 @@ extension ESI {
 					}
 					
 					public struct Pin: Codable, Hashable {
+						
+						public struct Content: Codable, Hashable {
+							
+							
+							public var amount: Int64
+							public var typeID: Int
+							public init(amount: Int64, typeID: Int) {
+								self.amount = amount
+								self.typeID = typeID
+							}
+							
+							enum CodingKeys: String, CodingKey, DateFormatted {
+								case amount
+								case typeID = "type_id"
+								
+								var dateFormatter: DateFormatter? {
+									return nil
+								}
+							}
+						}
 						
 						public struct FactoryDetails: Codable, Hashable {
 							
@@ -4961,26 +5266,6 @@ extension ESI {
 							}
 						}
 						
-						public struct Content: Codable, Hashable {
-							
-							
-							public var amount: Int64
-							public var typeID: Int
-							public init(amount: Int64, typeID: Int) {
-								self.amount = amount
-								self.typeID = typeID
-							}
-							
-							enum CodingKeys: String, CodingKey, DateFormatted {
-								case amount
-								case typeID = "type_id"
-								
-								var dateFormatter: DateFormatter? {
-									return nil
-								}
-							}
-						}
-						
 						public var contents: [ESI.Characters.CharacterID.Planets.PlanetID.Pin.Content]?
 						public var expiryTime: Date?
 						public var extractorDetails: ESI.Characters.CharacterID.Planets.PlanetID.Pin.ExtractorDetails?
@@ -5034,24 +5319,31 @@ extension ESI {
 						}
 					}
 					
-				}
-				
-				
-				public enum PlanetType: String, Codable, CustomStringConvertible {
-					case temperate
-					case barren
-					case oceanic
-					case ice
-					case gas
-					case lava
-					case storm
-					case plasma
-					
-					public var description: String {
-						return rawValue
+					public struct Success: Codable, Hashable {
+						
+						
+						public var links: [ESI.Characters.CharacterID.Planets.PlanetID.Link]
+						public var pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin]
+						public var routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]
+						public init(links: [ESI.Characters.CharacterID.Planets.PlanetID.Link], pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin], routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]) {
+							self.links = links
+							self.pins = pins
+							self.routes = routes
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case links
+							case pins
+							case routes
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
 					}
 					
 				}
+				
 				
 				public struct Success: Codable, Hashable {
 					
@@ -5091,6 +5383,22 @@ extension ESI {
 							}
 						}
 					}
+				}
+				
+				public enum PlanetType: String, Codable, CustomStringConvertible {
+					case temperate
+					case barren
+					case oceanic
+					case ice
+					case gas
+					case lava
+					case storm
+					case plasma
+					
+					public var description: String {
+						return rawValue
+					}
+					
 				}
 				
 			}
@@ -5219,11 +5527,11 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public var roles: [ESI.Corporations.Role]?
-					public var rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?
-					public var rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?
-					public var rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?
-					public init(roles: [ESI.Corporations.Role]?, rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?, rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?, rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?) {
+					public var roles: [ESI.Characters.Role]?
+					public var rolesAtBase: [ESI.Characters.RolesAtBaseRolesAtBase]?
+					public var rolesAtHq: [ESI.Characters.RolesAtHqRolesAtHq]?
+					public var rolesAtOther: [ESI.Characters.RolesAtOtherRolesAtOther]?
+					public init(roles: [ESI.Characters.Role]?, rolesAtBase: [ESI.Characters.RolesAtBaseRolesAtBase]?, rolesAtHq: [ESI.Characters.RolesAtHqRolesAtHq]?, rolesAtOther: [ESI.Characters.RolesAtOtherRolesAtOther]?) {
 						self.roles = roles
 						self.rolesAtBase = rolesAtBase
 						self.rolesAtHq = rolesAtHq
@@ -5249,7 +5557,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(categories: [ESI.Characters.CharacterID.Search.Categories], language: ESI.Markets.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Search.Success>, AFError> {
+				public func get(categories: [ESI.Characters.CharacterID.Search.Categories], language: ESI.Universe.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Search.Success>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -5581,29 +5889,6 @@ extension ESI {
 				
 				
 				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var skills: [ESI.Characters.CharacterID.Skills.Skill]
-					public var totalSP: Int64
-					public var unallocatedSP: Int?
-					public init(skills: [ESI.Characters.CharacterID.Skills.Skill], totalSP: Int64, unallocatedSP: Int?) {
-						self.skills = skills
-						self.totalSP = totalSP
-						self.unallocatedSP = unallocatedSP
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case skills
-						case totalSP = "total_sp"
-						case unallocatedSP = "unallocated_sp"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public struct Skill: Codable, Hashable {
 					
 					
@@ -5630,6 +5915,29 @@ extension ESI {
 					}
 				}
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var skills: [ESI.Characters.CharacterID.Skills.Skill]
+					public var totalSP: Int64
+					public var unallocatedSP: Int?
+					public init(skills: [ESI.Characters.CharacterID.Skills.Skill], totalSP: Int64, unallocatedSP: Int?) {
+						self.skills = skills
+						self.totalSP = totalSP
+						self.unallocatedSP = unallocatedSP
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case skills
+						case totalSP = "total_sp"
+						case unallocatedSP = "unallocated_sp"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 			}
 			
 			public struct Standings {
@@ -5637,7 +5945,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Corporations.CorporationID.Standings.Success]>, AFError> {
+				public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Standings.Success]>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -5679,6 +5987,28 @@ extension ESI {
 				
 				
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var fromID: Int
+					public var fromType: ESI.Characters.FromType
+					public var standing: Double
+					public init(fromID: Int, fromType: ESI.Characters.FromType, standing: Double) {
+						self.fromID = fromID
+						self.fromType = fromType
+						self.standing = standing
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case fromID = "from_id"
+						case fromType = "from_type"
+						case standing
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
 				
 			}
 			
@@ -5729,19 +6059,52 @@ extension ESI {
 				
 				
 				
-				public struct Inventory: Codable, Hashable {
+				public struct Success: Codable, Hashable {
 					
 					
-					public var abandonLootQuantity: Int64?
-					public var trashItemQuantity: Int64?
-					public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
-						self.abandonLootQuantity = abandonLootQuantity
-						self.trashItemQuantity = trashItemQuantity
+					public var character: ESI.Characters.CharacterID.Stats.Character?
+					public var combat: ESI.Characters.CharacterID.Stats.Combat?
+					public var industry: ESI.Characters.CharacterID.Stats.Industry?
+					public var inventory: ESI.Characters.CharacterID.Stats.Inventory?
+					public var isk: ESI.Characters.CharacterID.Stats.Isk?
+					public var market: ESI.Characters.CharacterID.Stats.Market?
+					public var mining: ESI.Characters.CharacterID.Stats.Mining?
+					public var module: ESI.Characters.CharacterID.Stats.Module?
+					public var orbital: ESI.Characters.CharacterID.Stats.Orbital?
+					public var pve: ESI.Characters.CharacterID.Stats.Pve?
+					public var social: ESI.Characters.CharacterID.Stats.Social?
+					public var travel: ESI.Characters.CharacterID.Stats.Travel?
+					public var year: Int
+					public init(character: ESI.Characters.CharacterID.Stats.Character?, combat: ESI.Characters.CharacterID.Stats.Combat?, industry: ESI.Characters.CharacterID.Stats.Industry?, inventory: ESI.Characters.CharacterID.Stats.Inventory?, isk: ESI.Characters.CharacterID.Stats.Isk?, market: ESI.Characters.CharacterID.Stats.Market?, mining: ESI.Characters.CharacterID.Stats.Mining?, module: ESI.Characters.CharacterID.Stats.Module?, orbital: ESI.Characters.CharacterID.Stats.Orbital?, pve: ESI.Characters.CharacterID.Stats.Pve?, social: ESI.Characters.CharacterID.Stats.Social?, travel: ESI.Characters.CharacterID.Stats.Travel?, year: Int) {
+						self.character = character
+						self.combat = combat
+						self.industry = industry
+						self.inventory = inventory
+						self.isk = isk
+						self.market = market
+						self.mining = mining
+						self.module = module
+						self.orbital = orbital
+						self.pve = pve
+						self.social = social
+						self.travel = travel
+						self.year = year
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
-						case abandonLootQuantity = "abandon_loot_quantity"
-						case trashItemQuantity = "trash_item_quantity"
+						case character
+						case combat
+						case industry
+						case inventory
+						case isk
+						case market
+						case mining
+						case module
+						case orbital
+						case pve
+						case social
+						case travel
+						case year
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -5765,6 +6128,202 @@ extension ESI {
 						case daysOfActivity = "days_of_activity"
 						case minutes
 						case sessionsStarted = "sessions_started"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Isk: Codable, Hashable {
+					
+					
+					public var `in`: Int64?
+					public var out: Int64?
+					public init(`in`: Int64?, out: Int64?) {
+						self.`in` = `in`
+						self.out = out
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case `in` = "in"
+						case out
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Market: Codable, Hashable {
+					
+					
+					public var acceptContractsCourier: Int64?
+					public var acceptContractsItemExchange: Int64?
+					public var buyOrdersPlaced: Int64?
+					public var cancelMarketOrder: Int64?
+					public var createContractsAuction: Int64?
+					public var createContractsCourier: Int64?
+					public var createContractsItemExchange: Int64?
+					public var deliverCourierContract: Int64?
+					public var iskGained: Int64?
+					public var iskSpent: Int64?
+					public var modifyMarketOrder: Int64?
+					public var searchContracts: Int64?
+					public var sellOrdersPlaced: Int64?
+					public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
+						self.acceptContractsCourier = acceptContractsCourier
+						self.acceptContractsItemExchange = acceptContractsItemExchange
+						self.buyOrdersPlaced = buyOrdersPlaced
+						self.cancelMarketOrder = cancelMarketOrder
+						self.createContractsAuction = createContractsAuction
+						self.createContractsCourier = createContractsCourier
+						self.createContractsItemExchange = createContractsItemExchange
+						self.deliverCourierContract = deliverCourierContract
+						self.iskGained = iskGained
+						self.iskSpent = iskSpent
+						self.modifyMarketOrder = modifyMarketOrder
+						self.searchContracts = searchContracts
+						self.sellOrdersPlaced = sellOrdersPlaced
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case acceptContractsCourier = "accept_contracts_courier"
+						case acceptContractsItemExchange = "accept_contracts_item_exchange"
+						case buyOrdersPlaced = "buy_orders_placed"
+						case cancelMarketOrder = "cancel_market_order"
+						case createContractsAuction = "create_contracts_auction"
+						case createContractsCourier = "create_contracts_courier"
+						case createContractsItemExchange = "create_contracts_item_exchange"
+						case deliverCourierContract = "deliver_courier_contract"
+						case iskGained = "isk_gained"
+						case iskSpent = "isk_spent"
+						case modifyMarketOrder = "modify_market_order"
+						case searchContracts = "search_contracts"
+						case sellOrdersPlaced = "sell_orders_placed"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Inventory: Codable, Hashable {
+					
+					
+					public var abandonLootQuantity: Int64?
+					public var trashItemQuantity: Int64?
+					public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
+						self.abandonLootQuantity = abandonLootQuantity
+						self.trashItemQuantity = trashItemQuantity
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case abandonLootQuantity = "abandon_loot_quantity"
+						case trashItemQuantity = "trash_item_quantity"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Travel: Codable, Hashable {
+					
+					
+					public var accelerationGateActivations: Int64?
+					public var alignTo: Int64?
+					public var distanceWarpedHighSec: Int64?
+					public var distanceWarpedLowSec: Int64?
+					public var distanceWarpedNullSec: Int64?
+					public var distanceWarpedWormhole: Int64?
+					public var docksHighSec: Int64?
+					public var docksLowSec: Int64?
+					public var docksNullSec: Int64?
+					public var jumpsStargateHighSec: Int64?
+					public var jumpsStargateLowSec: Int64?
+					public var jumpsStargateNullSec: Int64?
+					public var jumpsWormhole: Int64?
+					public var warpsHighSec: Int64?
+					public var warpsLowSec: Int64?
+					public var warpsNullSec: Int64?
+					public var warpsToBookmark: Int64?
+					public var warpsToCelestial: Int64?
+					public var warpsToFleetMember: Int64?
+					public var warpsToScanResult: Int64?
+					public var warpsWormhole: Int64?
+					public init(accelerationGateActivations: Int64?, alignTo: Int64?, distanceWarpedHighSec: Int64?, distanceWarpedLowSec: Int64?, distanceWarpedNullSec: Int64?, distanceWarpedWormhole: Int64?, docksHighSec: Int64?, docksLowSec: Int64?, docksNullSec: Int64?, jumpsStargateHighSec: Int64?, jumpsStargateLowSec: Int64?, jumpsStargateNullSec: Int64?, jumpsWormhole: Int64?, warpsHighSec: Int64?, warpsLowSec: Int64?, warpsNullSec: Int64?, warpsToBookmark: Int64?, warpsToCelestial: Int64?, warpsToFleetMember: Int64?, warpsToScanResult: Int64?, warpsWormhole: Int64?) {
+						self.accelerationGateActivations = accelerationGateActivations
+						self.alignTo = alignTo
+						self.distanceWarpedHighSec = distanceWarpedHighSec
+						self.distanceWarpedLowSec = distanceWarpedLowSec
+						self.distanceWarpedNullSec = distanceWarpedNullSec
+						self.distanceWarpedWormhole = distanceWarpedWormhole
+						self.docksHighSec = docksHighSec
+						self.docksLowSec = docksLowSec
+						self.docksNullSec = docksNullSec
+						self.jumpsStargateHighSec = jumpsStargateHighSec
+						self.jumpsStargateLowSec = jumpsStargateLowSec
+						self.jumpsStargateNullSec = jumpsStargateNullSec
+						self.jumpsWormhole = jumpsWormhole
+						self.warpsHighSec = warpsHighSec
+						self.warpsLowSec = warpsLowSec
+						self.warpsNullSec = warpsNullSec
+						self.warpsToBookmark = warpsToBookmark
+						self.warpsToCelestial = warpsToCelestial
+						self.warpsToFleetMember = warpsToFleetMember
+						self.warpsToScanResult = warpsToScanResult
+						self.warpsWormhole = warpsWormhole
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case accelerationGateActivations = "acceleration_gate_activations"
+						case alignTo = "align_to"
+						case distanceWarpedHighSec = "distance_warped_high_sec"
+						case distanceWarpedLowSec = "distance_warped_low_sec"
+						case distanceWarpedNullSec = "distance_warped_null_sec"
+						case distanceWarpedWormhole = "distance_warped_wormhole"
+						case docksHighSec = "docks_high_sec"
+						case docksLowSec = "docks_low_sec"
+						case docksNullSec = "docks_null_sec"
+						case jumpsStargateHighSec = "jumps_stargate_high_sec"
+						case jumpsStargateLowSec = "jumps_stargate_low_sec"
+						case jumpsStargateNullSec = "jumps_stargate_null_sec"
+						case jumpsWormhole = "jumps_wormhole"
+						case warpsHighSec = "warps_high_sec"
+						case warpsLowSec = "warps_low_sec"
+						case warpsNullSec = "warps_null_sec"
+						case warpsToBookmark = "warps_to_bookmark"
+						case warpsToCelestial = "warps_to_celestial"
+						case warpsToFleetMember = "warps_to_fleet_member"
+						case warpsToScanResult = "warps_to_scan_result"
+						case warpsWormhole = "warps_wormhole"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Pve: Codable, Hashable {
+					
+					
+					public var dungeonsCompletedAgent: Int64?
+					public var dungeonsCompletedDistribution: Int64?
+					public var missionsSucceeded: Int64?
+					public var missionsSucceededEpicArc: Int64?
+					public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
+						self.dungeonsCompletedAgent = dungeonsCompletedAgent
+						self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
+						self.missionsSucceeded = missionsSucceeded
+						self.missionsSucceededEpicArc = missionsSucceededEpicArc
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case dungeonsCompletedAgent = "dungeons_completed_agent"
+						case dungeonsCompletedDistribution = "dungeons_completed_distribution"
+						case missionsSucceeded = "missions_succeeded"
+						case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -5993,76 +6552,121 @@ extension ESI {
 					}
 				}
 				
-				public struct Travel: Codable, Hashable {
+				public struct Industry: Codable, Hashable {
 					
 					
-					public var accelerationGateActivations: Int64?
-					public var alignTo: Int64?
-					public var distanceWarpedHighSec: Int64?
-					public var distanceWarpedLowSec: Int64?
-					public var distanceWarpedNullSec: Int64?
-					public var distanceWarpedWormhole: Int64?
-					public var docksHighSec: Int64?
-					public var docksLowSec: Int64?
-					public var docksNullSec: Int64?
-					public var jumpsStargateHighSec: Int64?
-					public var jumpsStargateLowSec: Int64?
-					public var jumpsStargateNullSec: Int64?
-					public var jumpsWormhole: Int64?
-					public var warpsHighSec: Int64?
-					public var warpsLowSec: Int64?
-					public var warpsNullSec: Int64?
-					public var warpsToBookmark: Int64?
-					public var warpsToCelestial: Int64?
-					public var warpsToFleetMember: Int64?
-					public var warpsToScanResult: Int64?
-					public var warpsWormhole: Int64?
-					public init(accelerationGateActivations: Int64?, alignTo: Int64?, distanceWarpedHighSec: Int64?, distanceWarpedLowSec: Int64?, distanceWarpedNullSec: Int64?, distanceWarpedWormhole: Int64?, docksHighSec: Int64?, docksLowSec: Int64?, docksNullSec: Int64?, jumpsStargateHighSec: Int64?, jumpsStargateLowSec: Int64?, jumpsStargateNullSec: Int64?, jumpsWormhole: Int64?, warpsHighSec: Int64?, warpsLowSec: Int64?, warpsNullSec: Int64?, warpsToBookmark: Int64?, warpsToCelestial: Int64?, warpsToFleetMember: Int64?, warpsToScanResult: Int64?, warpsWormhole: Int64?) {
-						self.accelerationGateActivations = accelerationGateActivations
-						self.alignTo = alignTo
-						self.distanceWarpedHighSec = distanceWarpedHighSec
-						self.distanceWarpedLowSec = distanceWarpedLowSec
-						self.distanceWarpedNullSec = distanceWarpedNullSec
-						self.distanceWarpedWormhole = distanceWarpedWormhole
-						self.docksHighSec = docksHighSec
-						self.docksLowSec = docksLowSec
-						self.docksNullSec = docksNullSec
-						self.jumpsStargateHighSec = jumpsStargateHighSec
-						self.jumpsStargateLowSec = jumpsStargateLowSec
-						self.jumpsStargateNullSec = jumpsStargateNullSec
-						self.jumpsWormhole = jumpsWormhole
-						self.warpsHighSec = warpsHighSec
-						self.warpsLowSec = warpsLowSec
-						self.warpsNullSec = warpsNullSec
-						self.warpsToBookmark = warpsToBookmark
-						self.warpsToCelestial = warpsToCelestial
-						self.warpsToFleetMember = warpsToFleetMember
-						self.warpsToScanResult = warpsToScanResult
-						self.warpsWormhole = warpsWormhole
+					public var hackingSuccesses: Int64?
+					public var jobsCancelled: Int64?
+					public var jobsCompletedCopyBlueprint: Int64?
+					public var jobsCompletedInvention: Int64?
+					public var jobsCompletedManufacture: Int64?
+					public var jobsCompletedManufactureAsteroid: Int64?
+					public var jobsCompletedManufactureAsteroidQuantity: Int64?
+					public var jobsCompletedManufactureCharge: Int64?
+					public var jobsCompletedManufactureChargeQuantity: Int64?
+					public var jobsCompletedManufactureCommodity: Int64?
+					public var jobsCompletedManufactureCommodityQuantity: Int64?
+					public var jobsCompletedManufactureDeployable: Int64?
+					public var jobsCompletedManufactureDeployableQuantity: Int64?
+					public var jobsCompletedManufactureDrone: Int64?
+					public var jobsCompletedManufactureDroneQuantity: Int64?
+					public var jobsCompletedManufactureImplant: Int64?
+					public var jobsCompletedManufactureImplantQuantity: Int64?
+					public var jobsCompletedManufactureModule: Int64?
+					public var jobsCompletedManufactureModuleQuantity: Int64?
+					public var jobsCompletedManufactureOther: Int64?
+					public var jobsCompletedManufactureOtherQuantity: Int64?
+					public var jobsCompletedManufactureShip: Int64?
+					public var jobsCompletedManufactureShipQuantity: Int64?
+					public var jobsCompletedManufactureStructure: Int64?
+					public var jobsCompletedManufactureStructureQuantity: Int64?
+					public var jobsCompletedManufactureSubsystem: Int64?
+					public var jobsCompletedManufactureSubsystemQuantity: Int64?
+					public var jobsCompletedMaterialProductivity: Int64?
+					public var jobsCompletedTimeProductivity: Int64?
+					public var jobsStartedCopyBlueprint: Int64?
+					public var jobsStartedInvention: Int64?
+					public var jobsStartedManufacture: Int64?
+					public var jobsStartedMaterialProductivity: Int64?
+					public var jobsStartedTimeProductivity: Int64?
+					public var reprocessItem: Int64?
+					public var reprocessItemQuantity: Int64?
+					public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
+						self.hackingSuccesses = hackingSuccesses
+						self.jobsCancelled = jobsCancelled
+						self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
+						self.jobsCompletedInvention = jobsCompletedInvention
+						self.jobsCompletedManufacture = jobsCompletedManufacture
+						self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
+						self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
+						self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
+						self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
+						self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
+						self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
+						self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
+						self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
+						self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
+						self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
+						self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
+						self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
+						self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
+						self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
+						self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
+						self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
+						self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
+						self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
+						self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
+						self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
+						self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
+						self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
+						self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
+						self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
+						self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
+						self.jobsStartedInvention = jobsStartedInvention
+						self.jobsStartedManufacture = jobsStartedManufacture
+						self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
+						self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
+						self.reprocessItem = reprocessItem
+						self.reprocessItemQuantity = reprocessItemQuantity
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
-						case accelerationGateActivations = "acceleration_gate_activations"
-						case alignTo = "align_to"
-						case distanceWarpedHighSec = "distance_warped_high_sec"
-						case distanceWarpedLowSec = "distance_warped_low_sec"
-						case distanceWarpedNullSec = "distance_warped_null_sec"
-						case distanceWarpedWormhole = "distance_warped_wormhole"
-						case docksHighSec = "docks_high_sec"
-						case docksLowSec = "docks_low_sec"
-						case docksNullSec = "docks_null_sec"
-						case jumpsStargateHighSec = "jumps_stargate_high_sec"
-						case jumpsStargateLowSec = "jumps_stargate_low_sec"
-						case jumpsStargateNullSec = "jumps_stargate_null_sec"
-						case jumpsWormhole = "jumps_wormhole"
-						case warpsHighSec = "warps_high_sec"
-						case warpsLowSec = "warps_low_sec"
-						case warpsNullSec = "warps_null_sec"
-						case warpsToBookmark = "warps_to_bookmark"
-						case warpsToCelestial = "warps_to_celestial"
-						case warpsToFleetMember = "warps_to_fleet_member"
-						case warpsToScanResult = "warps_to_scan_result"
-						case warpsWormhole = "warps_wormhole"
+						case hackingSuccesses = "hacking_successes"
+						case jobsCancelled = "jobs_cancelled"
+						case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
+						case jobsCompletedInvention = "jobs_completed_invention"
+						case jobsCompletedManufacture = "jobs_completed_manufacture"
+						case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
+						case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
+						case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
+						case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
+						case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
+						case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
+						case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
+						case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
+						case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
+						case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
+						case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
+						case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
+						case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
+						case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
+						case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
+						case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
+						case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
+						case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
+						case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
+						case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
+						case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
+						case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
+						case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
+						case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
+						case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
+						case jobsStartedInvention = "jobs_started_invention"
+						case jobsStartedManufacture = "jobs_started_manufacture"
+						case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
+						case jobsStartedTimeProductivity = "jobs_started_time_productivity"
+						case reprocessItem = "reprocess_item"
+						case reprocessItemQuantity = "reprocess_item_quantity"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -6070,52 +6674,22 @@ extension ESI {
 					}
 				}
 				
-				public struct Market: Codable, Hashable {
+				public struct Orbital: Codable, Hashable {
 					
 					
-					public var acceptContractsCourier: Int64?
-					public var acceptContractsItemExchange: Int64?
-					public var buyOrdersPlaced: Int64?
-					public var cancelMarketOrder: Int64?
-					public var createContractsAuction: Int64?
-					public var createContractsCourier: Int64?
-					public var createContractsItemExchange: Int64?
-					public var deliverCourierContract: Int64?
-					public var iskGained: Int64?
-					public var iskSpent: Int64?
-					public var modifyMarketOrder: Int64?
-					public var searchContracts: Int64?
-					public var sellOrdersPlaced: Int64?
-					public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
-						self.acceptContractsCourier = acceptContractsCourier
-						self.acceptContractsItemExchange = acceptContractsItemExchange
-						self.buyOrdersPlaced = buyOrdersPlaced
-						self.cancelMarketOrder = cancelMarketOrder
-						self.createContractsAuction = createContractsAuction
-						self.createContractsCourier = createContractsCourier
-						self.createContractsItemExchange = createContractsItemExchange
-						self.deliverCourierContract = deliverCourierContract
-						self.iskGained = iskGained
-						self.iskSpent = iskSpent
-						self.modifyMarketOrder = modifyMarketOrder
-						self.searchContracts = searchContracts
-						self.sellOrdersPlaced = sellOrdersPlaced
+					public var strikeCharactersKilled: Int64?
+					public var strikeDamageToPlayersArmorAmount: Int64?
+					public var strikeDamageToPlayersShieldAmount: Int64?
+					public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
+						self.strikeCharactersKilled = strikeCharactersKilled
+						self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
+						self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
-						case acceptContractsCourier = "accept_contracts_courier"
-						case acceptContractsItemExchange = "accept_contracts_item_exchange"
-						case buyOrdersPlaced = "buy_orders_placed"
-						case cancelMarketOrder = "cancel_market_order"
-						case createContractsAuction = "create_contracts_auction"
-						case createContractsCourier = "create_contracts_courier"
-						case createContractsItemExchange = "create_contracts_item_exchange"
-						case deliverCourierContract = "deliver_courier_contract"
-						case iskGained = "isk_gained"
-						case iskSpent = "isk_spent"
-						case modifyMarketOrder = "modify_market_order"
-						case searchContracts = "search_contracts"
-						case sellOrdersPlaced = "sell_orders_placed"
+						case strikeCharactersKilled = "strike_characters_killed"
+						case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
+						case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -6123,19 +6697,159 @@ extension ESI {
 					}
 				}
 				
-				public struct Isk: Codable, Hashable {
+				public struct Social: Codable, Hashable {
 					
 					
-					public var `in`: Int64?
-					public var out: Int64?
-					public init(`in`: Int64?, out: Int64?) {
-						self.`in` = `in`
-						self.out = out
+					public var addContactBad: Int64?
+					public var addContactGood: Int64?
+					public var addContactHigh: Int64?
+					public var addContactHorrible: Int64?
+					public var addContactNeutral: Int64?
+					public var addNote: Int64?
+					public var addedAsContactBad: Int64?
+					public var addedAsContactGood: Int64?
+					public var addedAsContactHigh: Int64?
+					public var addedAsContactHorrible: Int64?
+					public var addedAsContactNeutral: Int64?
+					public var calendarEventCreated: Int64?
+					public var chatMessagesAlliance: Int64?
+					public var chatMessagesConstellation: Int64?
+					public var chatMessagesCorporation: Int64?
+					public var chatMessagesFleet: Int64?
+					public var chatMessagesRegion: Int64?
+					public var chatMessagesSolarsystem: Int64?
+					public var chatMessagesWarfaction: Int64?
+					public var chatTotalMessageLength: Int64?
+					public var directTrades: Int64?
+					public var fleetBroadcasts: Int64?
+					public var fleetJoins: Int64?
+					public var mailsReceived: Int64?
+					public var mailsSent: Int64?
+					public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
+						self.addContactBad = addContactBad
+						self.addContactGood = addContactGood
+						self.addContactHigh = addContactHigh
+						self.addContactHorrible = addContactHorrible
+						self.addContactNeutral = addContactNeutral
+						self.addNote = addNote
+						self.addedAsContactBad = addedAsContactBad
+						self.addedAsContactGood = addedAsContactGood
+						self.addedAsContactHigh = addedAsContactHigh
+						self.addedAsContactHorrible = addedAsContactHorrible
+						self.addedAsContactNeutral = addedAsContactNeutral
+						self.calendarEventCreated = calendarEventCreated
+						self.chatMessagesAlliance = chatMessagesAlliance
+						self.chatMessagesConstellation = chatMessagesConstellation
+						self.chatMessagesCorporation = chatMessagesCorporation
+						self.chatMessagesFleet = chatMessagesFleet
+						self.chatMessagesRegion = chatMessagesRegion
+						self.chatMessagesSolarsystem = chatMessagesSolarsystem
+						self.chatMessagesWarfaction = chatMessagesWarfaction
+						self.chatTotalMessageLength = chatTotalMessageLength
+						self.directTrades = directTrades
+						self.fleetBroadcasts = fleetBroadcasts
+						self.fleetJoins = fleetJoins
+						self.mailsReceived = mailsReceived
+						self.mailsSent = mailsSent
 					}
 					
 					enum CodingKeys: String, CodingKey, DateFormatted {
-						case `in` = "in"
-						case out
+						case addContactBad = "add_contact_bad"
+						case addContactGood = "add_contact_good"
+						case addContactHigh = "add_contact_high"
+						case addContactHorrible = "add_contact_horrible"
+						case addContactNeutral = "add_contact_neutral"
+						case addNote = "add_note"
+						case addedAsContactBad = "added_as_contact_bad"
+						case addedAsContactGood = "added_as_contact_good"
+						case addedAsContactHigh = "added_as_contact_high"
+						case addedAsContactHorrible = "added_as_contact_horrible"
+						case addedAsContactNeutral = "added_as_contact_neutral"
+						case calendarEventCreated = "calendar_event_created"
+						case chatMessagesAlliance = "chat_messages_alliance"
+						case chatMessagesConstellation = "chat_messages_constellation"
+						case chatMessagesCorporation = "chat_messages_corporation"
+						case chatMessagesFleet = "chat_messages_fleet"
+						case chatMessagesRegion = "chat_messages_region"
+						case chatMessagesSolarsystem = "chat_messages_solarsystem"
+						case chatMessagesWarfaction = "chat_messages_warfaction"
+						case chatTotalMessageLength = "chat_total_message_length"
+						case directTrades = "direct_trades"
+						case fleetBroadcasts = "fleet_broadcasts"
+						case fleetJoins = "fleet_joins"
+						case mailsReceived = "mails_received"
+						case mailsSent = "mails_sent"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Mining: Codable, Hashable {
+					
+					
+					public var droneMine: Int64?
+					public var oreArkonor: Int64?
+					public var oreBistot: Int64?
+					public var oreCrokite: Int64?
+					public var oreDarkOchre: Int64?
+					public var oreGneiss: Int64?
+					public var oreHarvestableCloud: Int64?
+					public var oreHedbergite: Int64?
+					public var oreHemorphite: Int64?
+					public var oreIce: Int64?
+					public var oreJaspet: Int64?
+					public var oreKernite: Int64?
+					public var oreMercoxit: Int64?
+					public var oreOmber: Int64?
+					public var orePlagioclase: Int64?
+					public var orePyroxeres: Int64?
+					public var oreScordite: Int64?
+					public var oreSpodumain: Int64?
+					public var oreVeldspar: Int64?
+					public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
+						self.droneMine = droneMine
+						self.oreArkonor = oreArkonor
+						self.oreBistot = oreBistot
+						self.oreCrokite = oreCrokite
+						self.oreDarkOchre = oreDarkOchre
+						self.oreGneiss = oreGneiss
+						self.oreHarvestableCloud = oreHarvestableCloud
+						self.oreHedbergite = oreHedbergite
+						self.oreHemorphite = oreHemorphite
+						self.oreIce = oreIce
+						self.oreJaspet = oreJaspet
+						self.oreKernite = oreKernite
+						self.oreMercoxit = oreMercoxit
+						self.oreOmber = oreOmber
+						self.orePlagioclase = orePlagioclase
+						self.orePyroxeres = orePyroxeres
+						self.oreScordite = oreScordite
+						self.oreSpodumain = oreSpodumain
+						self.oreVeldspar = oreVeldspar
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case droneMine = "drone_mine"
+						case oreArkonor = "ore_arkonor"
+						case oreBistot = "ore_bistot"
+						case oreCrokite = "ore_crokite"
+						case oreDarkOchre = "ore_dark_ochre"
+						case oreGneiss = "ore_gneiss"
+						case oreHarvestableCloud = "ore_harvestable_cloud"
+						case oreHedbergite = "ore_hedbergite"
+						case oreHemorphite = "ore_hemorphite"
+						case oreIce = "ore_ice"
+						case oreJaspet = "ore_jaspet"
+						case oreKernite = "ore_kernite"
+						case oreMercoxit = "ore_mercoxit"
+						case oreOmber = "ore_omber"
+						case orePlagioclase = "ore_plagioclase"
+						case orePyroxeres = "ore_pyroxeres"
+						case oreScordite = "ore_scordite"
+						case oreSpodumain = "ore_spodumain"
+						case oreVeldspar = "ore_veldspar"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -6439,390 +7153,6 @@ extension ESI {
 					}
 				}
 				
-				public struct Mining: Codable, Hashable {
-					
-					
-					public var droneMine: Int64?
-					public var oreArkonor: Int64?
-					public var oreBistot: Int64?
-					public var oreCrokite: Int64?
-					public var oreDarkOchre: Int64?
-					public var oreGneiss: Int64?
-					public var oreHarvestableCloud: Int64?
-					public var oreHedbergite: Int64?
-					public var oreHemorphite: Int64?
-					public var oreIce: Int64?
-					public var oreJaspet: Int64?
-					public var oreKernite: Int64?
-					public var oreMercoxit: Int64?
-					public var oreOmber: Int64?
-					public var orePlagioclase: Int64?
-					public var orePyroxeres: Int64?
-					public var oreScordite: Int64?
-					public var oreSpodumain: Int64?
-					public var oreVeldspar: Int64?
-					public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
-						self.droneMine = droneMine
-						self.oreArkonor = oreArkonor
-						self.oreBistot = oreBistot
-						self.oreCrokite = oreCrokite
-						self.oreDarkOchre = oreDarkOchre
-						self.oreGneiss = oreGneiss
-						self.oreHarvestableCloud = oreHarvestableCloud
-						self.oreHedbergite = oreHedbergite
-						self.oreHemorphite = oreHemorphite
-						self.oreIce = oreIce
-						self.oreJaspet = oreJaspet
-						self.oreKernite = oreKernite
-						self.oreMercoxit = oreMercoxit
-						self.oreOmber = oreOmber
-						self.orePlagioclase = orePlagioclase
-						self.orePyroxeres = orePyroxeres
-						self.oreScordite = oreScordite
-						self.oreSpodumain = oreSpodumain
-						self.oreVeldspar = oreVeldspar
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case droneMine = "drone_mine"
-						case oreArkonor = "ore_arkonor"
-						case oreBistot = "ore_bistot"
-						case oreCrokite = "ore_crokite"
-						case oreDarkOchre = "ore_dark_ochre"
-						case oreGneiss = "ore_gneiss"
-						case oreHarvestableCloud = "ore_harvestable_cloud"
-						case oreHedbergite = "ore_hedbergite"
-						case oreHemorphite = "ore_hemorphite"
-						case oreIce = "ore_ice"
-						case oreJaspet = "ore_jaspet"
-						case oreKernite = "ore_kernite"
-						case oreMercoxit = "ore_mercoxit"
-						case oreOmber = "ore_omber"
-						case orePlagioclase = "ore_plagioclase"
-						case orePyroxeres = "ore_pyroxeres"
-						case oreScordite = "ore_scordite"
-						case oreSpodumain = "ore_spodumain"
-						case oreVeldspar = "ore_veldspar"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Orbital: Codable, Hashable {
-					
-					
-					public var strikeCharactersKilled: Int64?
-					public var strikeDamageToPlayersArmorAmount: Int64?
-					public var strikeDamageToPlayersShieldAmount: Int64?
-					public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
-						self.strikeCharactersKilled = strikeCharactersKilled
-						self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
-						self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case strikeCharactersKilled = "strike_characters_killed"
-						case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
-						case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Social: Codable, Hashable {
-					
-					
-					public var addContactBad: Int64?
-					public var addContactGood: Int64?
-					public var addContactHigh: Int64?
-					public var addContactHorrible: Int64?
-					public var addContactNeutral: Int64?
-					public var addNote: Int64?
-					public var addedAsContactBad: Int64?
-					public var addedAsContactGood: Int64?
-					public var addedAsContactHigh: Int64?
-					public var addedAsContactHorrible: Int64?
-					public var addedAsContactNeutral: Int64?
-					public var calendarEventCreated: Int64?
-					public var chatMessagesAlliance: Int64?
-					public var chatMessagesConstellation: Int64?
-					public var chatMessagesCorporation: Int64?
-					public var chatMessagesFleet: Int64?
-					public var chatMessagesRegion: Int64?
-					public var chatMessagesSolarsystem: Int64?
-					public var chatMessagesWarfaction: Int64?
-					public var chatTotalMessageLength: Int64?
-					public var directTrades: Int64?
-					public var fleetBroadcasts: Int64?
-					public var fleetJoins: Int64?
-					public var mailsReceived: Int64?
-					public var mailsSent: Int64?
-					public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
-						self.addContactBad = addContactBad
-						self.addContactGood = addContactGood
-						self.addContactHigh = addContactHigh
-						self.addContactHorrible = addContactHorrible
-						self.addContactNeutral = addContactNeutral
-						self.addNote = addNote
-						self.addedAsContactBad = addedAsContactBad
-						self.addedAsContactGood = addedAsContactGood
-						self.addedAsContactHigh = addedAsContactHigh
-						self.addedAsContactHorrible = addedAsContactHorrible
-						self.addedAsContactNeutral = addedAsContactNeutral
-						self.calendarEventCreated = calendarEventCreated
-						self.chatMessagesAlliance = chatMessagesAlliance
-						self.chatMessagesConstellation = chatMessagesConstellation
-						self.chatMessagesCorporation = chatMessagesCorporation
-						self.chatMessagesFleet = chatMessagesFleet
-						self.chatMessagesRegion = chatMessagesRegion
-						self.chatMessagesSolarsystem = chatMessagesSolarsystem
-						self.chatMessagesWarfaction = chatMessagesWarfaction
-						self.chatTotalMessageLength = chatTotalMessageLength
-						self.directTrades = directTrades
-						self.fleetBroadcasts = fleetBroadcasts
-						self.fleetJoins = fleetJoins
-						self.mailsReceived = mailsReceived
-						self.mailsSent = mailsSent
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case addContactBad = "add_contact_bad"
-						case addContactGood = "add_contact_good"
-						case addContactHigh = "add_contact_high"
-						case addContactHorrible = "add_contact_horrible"
-						case addContactNeutral = "add_contact_neutral"
-						case addNote = "add_note"
-						case addedAsContactBad = "added_as_contact_bad"
-						case addedAsContactGood = "added_as_contact_good"
-						case addedAsContactHigh = "added_as_contact_high"
-						case addedAsContactHorrible = "added_as_contact_horrible"
-						case addedAsContactNeutral = "added_as_contact_neutral"
-						case calendarEventCreated = "calendar_event_created"
-						case chatMessagesAlliance = "chat_messages_alliance"
-						case chatMessagesConstellation = "chat_messages_constellation"
-						case chatMessagesCorporation = "chat_messages_corporation"
-						case chatMessagesFleet = "chat_messages_fleet"
-						case chatMessagesRegion = "chat_messages_region"
-						case chatMessagesSolarsystem = "chat_messages_solarsystem"
-						case chatMessagesWarfaction = "chat_messages_warfaction"
-						case chatTotalMessageLength = "chat_total_message_length"
-						case directTrades = "direct_trades"
-						case fleetBroadcasts = "fleet_broadcasts"
-						case fleetJoins = "fleet_joins"
-						case mailsReceived = "mails_received"
-						case mailsSent = "mails_sent"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Industry: Codable, Hashable {
-					
-					
-					public var hackingSuccesses: Int64?
-					public var jobsCancelled: Int64?
-					public var jobsCompletedCopyBlueprint: Int64?
-					public var jobsCompletedInvention: Int64?
-					public var jobsCompletedManufacture: Int64?
-					public var jobsCompletedManufactureAsteroid: Int64?
-					public var jobsCompletedManufactureAsteroidQuantity: Int64?
-					public var jobsCompletedManufactureCharge: Int64?
-					public var jobsCompletedManufactureChargeQuantity: Int64?
-					public var jobsCompletedManufactureCommodity: Int64?
-					public var jobsCompletedManufactureCommodityQuantity: Int64?
-					public var jobsCompletedManufactureDeployable: Int64?
-					public var jobsCompletedManufactureDeployableQuantity: Int64?
-					public var jobsCompletedManufactureDrone: Int64?
-					public var jobsCompletedManufactureDroneQuantity: Int64?
-					public var jobsCompletedManufactureImplant: Int64?
-					public var jobsCompletedManufactureImplantQuantity: Int64?
-					public var jobsCompletedManufactureModule: Int64?
-					public var jobsCompletedManufactureModuleQuantity: Int64?
-					public var jobsCompletedManufactureOther: Int64?
-					public var jobsCompletedManufactureOtherQuantity: Int64?
-					public var jobsCompletedManufactureShip: Int64?
-					public var jobsCompletedManufactureShipQuantity: Int64?
-					public var jobsCompletedManufactureStructure: Int64?
-					public var jobsCompletedManufactureStructureQuantity: Int64?
-					public var jobsCompletedManufactureSubsystem: Int64?
-					public var jobsCompletedManufactureSubsystemQuantity: Int64?
-					public var jobsCompletedMaterialProductivity: Int64?
-					public var jobsCompletedTimeProductivity: Int64?
-					public var jobsStartedCopyBlueprint: Int64?
-					public var jobsStartedInvention: Int64?
-					public var jobsStartedManufacture: Int64?
-					public var jobsStartedMaterialProductivity: Int64?
-					public var jobsStartedTimeProductivity: Int64?
-					public var reprocessItem: Int64?
-					public var reprocessItemQuantity: Int64?
-					public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
-						self.hackingSuccesses = hackingSuccesses
-						self.jobsCancelled = jobsCancelled
-						self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
-						self.jobsCompletedInvention = jobsCompletedInvention
-						self.jobsCompletedManufacture = jobsCompletedManufacture
-						self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
-						self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
-						self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
-						self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
-						self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
-						self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
-						self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
-						self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
-						self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
-						self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
-						self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
-						self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
-						self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
-						self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
-						self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
-						self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
-						self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
-						self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
-						self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
-						self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
-						self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
-						self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
-						self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
-						self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
-						self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
-						self.jobsStartedInvention = jobsStartedInvention
-						self.jobsStartedManufacture = jobsStartedManufacture
-						self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
-						self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
-						self.reprocessItem = reprocessItem
-						self.reprocessItemQuantity = reprocessItemQuantity
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case hackingSuccesses = "hacking_successes"
-						case jobsCancelled = "jobs_cancelled"
-						case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
-						case jobsCompletedInvention = "jobs_completed_invention"
-						case jobsCompletedManufacture = "jobs_completed_manufacture"
-						case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
-						case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
-						case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
-						case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
-						case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
-						case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
-						case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
-						case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
-						case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
-						case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
-						case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
-						case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
-						case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
-						case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
-						case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
-						case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
-						case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
-						case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
-						case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
-						case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
-						case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
-						case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
-						case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
-						case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
-						case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
-						case jobsStartedInvention = "jobs_started_invention"
-						case jobsStartedManufacture = "jobs_started_manufacture"
-						case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
-						case jobsStartedTimeProductivity = "jobs_started_time_productivity"
-						case reprocessItem = "reprocess_item"
-						case reprocessItemQuantity = "reprocess_item_quantity"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var character: ESI.Characters.CharacterID.Stats.Character?
-					public var combat: ESI.Characters.CharacterID.Stats.Combat?
-					public var industry: ESI.Characters.CharacterID.Stats.Industry?
-					public var inventory: ESI.Characters.CharacterID.Stats.Inventory?
-					public var isk: ESI.Characters.CharacterID.Stats.Isk?
-					public var market: ESI.Characters.CharacterID.Stats.Market?
-					public var mining: ESI.Characters.CharacterID.Stats.Mining?
-					public var module: ESI.Characters.CharacterID.Stats.Module?
-					public var orbital: ESI.Characters.CharacterID.Stats.Orbital?
-					public var pve: ESI.Characters.CharacterID.Stats.Pve?
-					public var social: ESI.Characters.CharacterID.Stats.Social?
-					public var travel: ESI.Characters.CharacterID.Stats.Travel?
-					public var year: Int
-					public init(character: ESI.Characters.CharacterID.Stats.Character?, combat: ESI.Characters.CharacterID.Stats.Combat?, industry: ESI.Characters.CharacterID.Stats.Industry?, inventory: ESI.Characters.CharacterID.Stats.Inventory?, isk: ESI.Characters.CharacterID.Stats.Isk?, market: ESI.Characters.CharacterID.Stats.Market?, mining: ESI.Characters.CharacterID.Stats.Mining?, module: ESI.Characters.CharacterID.Stats.Module?, orbital: ESI.Characters.CharacterID.Stats.Orbital?, pve: ESI.Characters.CharacterID.Stats.Pve?, social: ESI.Characters.CharacterID.Stats.Social?, travel: ESI.Characters.CharacterID.Stats.Travel?, year: Int) {
-						self.character = character
-						self.combat = combat
-						self.industry = industry
-						self.inventory = inventory
-						self.isk = isk
-						self.market = market
-						self.mining = mining
-						self.module = module
-						self.orbital = orbital
-						self.pve = pve
-						self.social = social
-						self.travel = travel
-						self.year = year
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case character
-						case combat
-						case industry
-						case inventory
-						case isk
-						case market
-						case mining
-						case module
-						case orbital
-						case pve
-						case social
-						case travel
-						case year
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Pve: Codable, Hashable {
-					
-					
-					public var dungeonsCompletedAgent: Int64?
-					public var dungeonsCompletedDistribution: Int64?
-					public var missionsSucceeded: Int64?
-					public var missionsSucceededEpicArc: Int64?
-					public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
-						self.dungeonsCompletedAgent = dungeonsCompletedAgent
-						self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
-						self.missionsSucceeded = missionsSucceeded
-						self.missionsSucceededEpicArc = missionsSucceededEpicArc
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case dungeonsCompletedAgent = "dungeons_completed_agent"
-						case dungeonsCompletedDistribution = "dungeons_completed_distribution"
-						case missionsSucceeded = "missions_succeeded"
-						case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 			}
 			
 			public struct Titles {
@@ -6993,64 +7323,6 @@ extension ESI {
 					
 					
 					
-					public struct Success: Codable, Hashable {
-						
-						
-						public var amount: Double?
-						public var balance: Double?
-						public var contextID: Int64?
-						public var contextIDType: ESI.Corporations.ContextIDType?
-						public var date: Date
-						public var localizedDescription: String
-						public var firstPartyID: Int?
-						public var id: Int64
-						public var reason: String?
-						public var refType: ESI.Characters.CharacterID.Wallet.Journal.RefType
-						public var secondPartyID: Int?
-						public var tax: Double?
-						public var taxReceiverID: Int?
-						public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: ESI.Corporations.ContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: ESI.Characters.CharacterID.Wallet.Journal.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
-							self.amount = amount
-							self.balance = balance
-							self.contextID = contextID
-							self.contextIDType = contextIDType
-							self.date = date
-							self.localizedDescription = localizedDescription
-							self.firstPartyID = firstPartyID
-							self.id = id
-							self.reason = reason
-							self.refType = refType
-							self.secondPartyID = secondPartyID
-							self.tax = tax
-							self.taxReceiverID = taxReceiverID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case balance
-							case contextID = "context_id"
-							case contextIDType = "context_id_type"
-							case date
-							case localizedDescription = "description"
-							case firstPartyID = "first_party_id"
-							case id
-							case reason
-							case refType = "ref_type"
-							case secondPartyID = "second_party_id"
-							case tax
-							case taxReceiverID = "tax_receiver_id"
-							
-							var dateFormatter: DateFormatter? {
-								switch self {
-									case .date:
-									return DateFormatter.esiDateTimeFormatter
-									default:
-									return nil
-								}
-							}
-						}
-					}
-					
 					public enum RefType: String, Codable, CustomStringConvertible {
 						case accelerationGateFee = "acceleration_gate_fee"
 						case advertisementListingFee = "advertisement_listing_fee"
@@ -7179,6 +7451,64 @@ extension ESI {
 						
 					}
 					
+					public struct Success: Codable, Hashable {
+						
+						
+						public var amount: Double?
+						public var balance: Double?
+						public var contextID: Int64?
+						public var contextIDType: ESI.Characters.ContextIDType?
+						public var date: Date
+						public var localizedDescription: String
+						public var firstPartyID: Int?
+						public var id: Int64
+						public var reason: String?
+						public var refType: ESI.Characters.CharacterID.Wallet.Journal.RefType
+						public var secondPartyID: Int?
+						public var tax: Double?
+						public var taxReceiverID: Int?
+						public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: ESI.Characters.ContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: ESI.Characters.CharacterID.Wallet.Journal.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
+							self.amount = amount
+							self.balance = balance
+							self.contextID = contextID
+							self.contextIDType = contextIDType
+							self.date = date
+							self.localizedDescription = localizedDescription
+							self.firstPartyID = firstPartyID
+							self.id = id
+							self.reason = reason
+							self.refType = refType
+							self.secondPartyID = secondPartyID
+							self.tax = tax
+							self.taxReceiverID = taxReceiverID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case balance
+							case contextID = "context_id"
+							case contextIDType = "context_id_type"
+							case date
+							case localizedDescription = "description"
+							case firstPartyID = "first_party_id"
+							case id
+							case reason
+							case refType = "ref_type"
+							case secondPartyID = "second_party_id"
+							case tax
+							case taxReceiverID = "tax_receiver_id"
+							
+							var dateFormatter: DateFormatter? {
+								switch self {
+									case .date:
+									return DateFormatter.esiDateTimeFormatter
+									default:
+									return nil
+								}
+							}
+						}
+					}
+					
 				}
 				
 				public struct Transactions {
@@ -7286,6 +7616,16 @@ extension ESI {
 			}
 			
 			
+			public enum Gender: String, Codable, CustomStringConvertible {
+				case female
+				case male
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
+			
 			public struct Success: Codable, Hashable {
 				
 				
@@ -7341,19 +7681,431 @@ extension ESI {
 				}
 			}
 			
-			public enum Gender: String, Codable, CustomStringConvertible {
-				case female
-				case male
-				
-				public var description: String {
-					return rawValue
-				}
-				
+		}
+		
+		
+		public enum Role: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
 			}
 			
 		}
 		
+		public enum RolesAtOtherRolesAtOther: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
+		public struct Item: Codable, Hashable {
+			
+			
+			public var itemID: Int64
+			public var typeID: Int
+			public init(itemID: Int64, typeID: Int) {
+				self.itemID = itemID
+				self.typeID = typeID
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case itemID = "item_id"
+				case typeID = "type_id"
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum RolesAtBaseRolesAtBase: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum ValueType: String, Codable, CustomStringConvertible {
+			case unknown
+			case itemExchange = "item_exchange"
+			case auction
+			case courier
+			case loan
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum ContextIDType: String, Codable, CustomStringConvertible {
+			case structureID = "structure_id"
+			case stationID = "station_id"
+			case marketTransactionID = "market_transaction_id"
+			case characterID = "character_id"
+			case corporationID = "corporation_id"
+			case allianceID = "alliance_id"
+			case eveSystem = "eve_system"
+			case industryJobID = "industry_job_id"
+			case contractID = "contract_id"
+			case planetID = "planet_id"
+			case systemID = "system_id"
+			case typeID = "type_id"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public struct VictoryPoints: Codable, Hashable {
+			
+			
+			public var lastWeek: Int
+			public var total: Int
+			public var yesterday: Int
+			public init(lastWeek: Int, total: Int, yesterday: Int) {
+				self.lastWeek = lastWeek
+				self.total = total
+				self.yesterday = yesterday
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case lastWeek = "last_week"
+				case total
+				case yesterday
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum Range: String, Codable, CustomStringConvertible {
+			case i1 = "1"
+			case i10 = "10"
+			case i2 = "2"
+			case i20 = "20"
+			case i3 = "3"
+			case i30 = "30"
+			case i4 = "4"
+			case i40 = "40"
+			case i5 = "5"
+			case region
+			case solarsystem
+			case station
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public struct Kills: Codable, Hashable {
+			
+			
+			public var lastWeek: Int
+			public var total: Int
+			public var yesterday: Int
+			public init(lastWeek: Int, total: Int, yesterday: Int) {
+				self.lastWeek = lastWeek
+				self.total = total
+				self.yesterday = yesterday
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case lastWeek = "last_week"
+				case total
+				case yesterday
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum State: String, Codable, CustomStringConvertible {
+			case cancelled
+			case expired
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum Availability: String, Codable, CustomStringConvertible {
+			case `public` = "public"
+			case personal
+			case corporation
+			case alliance
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum RolesAtHqRolesAtHq: String, Codable, CustomStringConvertible {
+			case accountTake1 = "Account_Take_1"
+			case accountTake2 = "Account_Take_2"
+			case accountTake3 = "Account_Take_3"
+			case accountTake4 = "Account_Take_4"
+			case accountTake5 = "Account_Take_5"
+			case accountTake6 = "Account_Take_6"
+			case accountTake7 = "Account_Take_7"
+			case accountant = "Accountant"
+			case auditor = "Auditor"
+			case communicationsOfficer = "Communications_Officer"
+			case configEquipment = "Config_Equipment"
+			case configStarbaseEquipment = "Config_Starbase_Equipment"
+			case containerTake1 = "Container_Take_1"
+			case containerTake2 = "Container_Take_2"
+			case containerTake3 = "Container_Take_3"
+			case containerTake4 = "Container_Take_4"
+			case containerTake5 = "Container_Take_5"
+			case containerTake6 = "Container_Take_6"
+			case containerTake7 = "Container_Take_7"
+			case contractManager = "Contract_Manager"
+			case diplomat = "Diplomat"
+			case director = "Director"
+			case factoryManager = "Factory_Manager"
+			case fittingManager = "Fitting_Manager"
+			case hangarQuery1 = "Hangar_Query_1"
+			case hangarQuery2 = "Hangar_Query_2"
+			case hangarQuery3 = "Hangar_Query_3"
+			case hangarQuery4 = "Hangar_Query_4"
+			case hangarQuery5 = "Hangar_Query_5"
+			case hangarQuery6 = "Hangar_Query_6"
+			case hangarQuery7 = "Hangar_Query_7"
+			case hangarTake1 = "Hangar_Take_1"
+			case hangarTake2 = "Hangar_Take_2"
+			case hangarTake3 = "Hangar_Take_3"
+			case hangarTake4 = "Hangar_Take_4"
+			case hangarTake5 = "Hangar_Take_5"
+			case hangarTake6 = "Hangar_Take_6"
+			case hangarTake7 = "Hangar_Take_7"
+			case juniorAccountant = "Junior_Accountant"
+			case personnelManager = "Personnel_Manager"
+			case rentFactoryFacility = "Rent_Factory_Facility"
+			case rentOffice = "Rent_Office"
+			case rentResearchFacility = "Rent_Research_Facility"
+			case securityOfficer = "Security_Officer"
+			case starbaseDefenseOperator = "Starbase_Defense_Operator"
+			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
+			case stationManager = "Station_Manager"
+			case trader = "Trader"
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum ContactType: String, Codable, CustomStringConvertible {
+			case character
+			case corporation
+			case alliance
+			case faction
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public enum LocationType: String, Codable, CustomStringConvertible {
+			case station
+			case solarSystem = "solar_system"
+			case item
+			case other
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
+		
+		public struct Coordinates: Codable, Hashable {
+			
+			
+			public var x: Double
+			public var y: Double
+			public var z: Double
+			public init(x: Double, y: Double, z: Double) {
+				self.x = x
+				self.y = y
+				self.z = z
+			}
+			
+			enum CodingKeys: String, CodingKey, DateFormatted {
+				case x
+				case y
+				case z
+				
+				var dateFormatter: DateFormatter? {
+					return nil
+				}
+			}
+		}
+		
+		public enum FromType: String, Codable, CustomStringConvertible {
+			case agent
+			case npcCorp = "npc_corp"
+			case faction
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 	}
 	

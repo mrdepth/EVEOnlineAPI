@@ -10,6 +10,7 @@
 		1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB658C1DEB39D6003AA683 /* DateFormatterExtension.swift */; };
 		126FA8041DFD761C005FFDD3 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126FA8031DFD761C005FFDD3 /* Alamofire.framework */; };
 		12AB65511DE9A994003AA683 /* EVEAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = 12AB654F1DE9A994003AA683 /* EVEAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1686E2A22437538100FAD3BA /* ZKillboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1203E8721F017D82009ADF8D /* ZKillboard.swift */; };
 		169672BB2387C34000EB860B /* Corporations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169672A42387C33F00EB860B /* Corporations.swift */; };
 		169672BC2387C34000EB860B /* Industry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169672A52387C33F00EB860B /* Industry.swift */; };
 		169672BD2387C34000EB860B /* Contracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169672A62387C33F00EB860B /* Contracts.swift */; };
@@ -672,6 +673,7 @@
 				169672C62387C34000EB860B /* Universe.swift in Sources */,
 				169672C42387C34000EB860B /* Ui.swift in Sources */,
 				169672BE2387C34000EB860B /* Corporation.swift in Sources */,
+				1686E2A22437538100FAD3BA /* ZKillboard.swift in Sources */,
 				169672D12387C34000EB860B /* Opportunities.swift in Sources */,
 				1231FFE81FFF80040052B007 /* DateFormatterExtension.swift in Sources */,
 				169672C92387C34000EB860B /* Dogma.swift in Sources */,

@@ -11,7 +11,8 @@ import Foundation
 let outURL = URL(fileURLWithPath: CommandLine.arguments[2])
 
 let baseURL = URL(fileURLWithPath: CommandLine.arguments[0]).deletingLastPathComponent()
-let url = baseURL.appendingPathComponent("swagger.json")
+//let url = baseURL.appendingPathComponent("swagger.json")
+let url = URL(string: CommandLine.arguments[1])!
 let classURL = baseURL.appendingPathComponent("class.swft")
 let enumURL = baseURL.appendingPathComponent("enum.swft")
 let operationURL = baseURL.appendingPathComponent("operation.swft")

@@ -150,6 +150,14 @@ extension ESI {
 		}
 		
 		
+		public enum Datasource: String, Codable, CustomStringConvertible {
+			case tranquility
+			
+			public var description: String {
+				return rawValue
+			}
+			
+		}
 		
 	}
 	

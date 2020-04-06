@@ -13,7 +13,7 @@ extension ESI {
 		let route: APIRoute
 		
 		
-		public func get(categories: [ESI.Search.Categories], language: ESI.Markets.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Search.Success>, AFError> {
+		public func get(categories: [ESI.Search.Categories], language: ESI.Universe.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Search.Success>, AFError> {
 			do {
 				
 				
@@ -63,24 +63,6 @@ extension ESI {
 		
 		
 		
-		public enum Categories: String, Codable, CustomStringConvertible {
-			case agent
-			case alliance
-			case character
-			case constellation
-			case corporation
-			case faction
-			case inventoryType = "inventory_type"
-			case region
-			case solarSystem = "solar_system"
-			case station
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
 		public struct Success: Codable, Hashable {
 			
 			
@@ -123,6 +105,24 @@ extension ESI {
 					return nil
 				}
 			}
+		}
+		
+		public enum Categories: String, Codable, CustomStringConvertible {
+			case agent
+			case alliance
+			case character
+			case constellation
+			case corporation
+			case faction
+			case inventoryType = "inventory_type"
+			case region
+			case solarSystem = "solar_system"
+			case station
+			
+			public var description: String {
+				return rawValue
+			}
+			
 		}
 		
 	}

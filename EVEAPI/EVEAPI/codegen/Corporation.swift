@@ -265,6 +265,15 @@ extension ESI {
 					}
 					
 					
+					public enum ObserverType: String, Codable, CustomStringConvertible {
+						case structure
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 					public struct Success: Codable, Hashable {
 						
 						
@@ -291,15 +300,6 @@ extension ESI {
 								}
 							}
 						}
-					}
-					
-					public enum ObserverType: String, Codable, CustomStringConvertible {
-						case structure
-						
-						public var description: String {
-							return rawValue
-						}
-						
 					}
 					
 				}

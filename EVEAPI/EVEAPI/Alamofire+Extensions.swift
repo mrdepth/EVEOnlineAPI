@@ -13,6 +13,10 @@ import Combine
 public struct ESIResponse<Value> {
     public var value: Value
     public var httpHeaders: HTTPHeaders?
+    
+    func map<T>(_ transform: (Value) throws -> T) rethrows -> ESIResponse<T> {
+        try ESIResponse<T>(value: transform(value), httpHeaders: httpHeaders)
+    }
 }
 
 extension Publisher where Output: DataRequest, Failure == AFError {

@@ -97,7 +97,7 @@ extension ESI {
         }
     }
     
-    private struct EtagAdapter: RequestAdapter {
+    struct EtagAdapter: RequestAdapter {
         let cache: URLCache = .shared
         func adapt(_ urlRequest: URLRequest, for session: Session, completion: @escaping (Result<URLRequest, Error>) -> Void) {
             guard (urlRequest.cachePolicy != .reloadIgnoringLocalCacheData && urlRequest.cachePolicy != .reloadIgnoringLocalAndRemoteCacheData),
