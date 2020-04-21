@@ -215,21 +215,21 @@ class OAuth2Interceptor: RequestInterceptor {
 
 public class OAuth2 {
 	
-//	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
-//		var query = [URLQueryItem] ()
-//		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
-//
-//		query.append(URLQueryItem(name: "response_type", value: "code"))
-//		query.append(URLQueryItem(name: "redirect_uri", value: callback))
-//		query.append(URLQueryItem(name: "client_id", value: clientID))
-//		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+")))
-//		query.append(URLQueryItem(name: "state", value: state))
-//		query.append(URLQueryItem(name: "realm", value: state))
-//
-//		var components = URLComponents(string: OAuthBaseURL + "authorize/")!
-//		components.queryItems = query
-//		return components.url!
-//	}
+	public class func authURL(clientID: String, callbackURL: URL, scope: [ESI.Scope], state: String) -> URL {
+		var query = [URLQueryItem] ()
+		let callback = callbackURL.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+
+		query.append(URLQueryItem(name: "response_type", value: "code"))
+		query.append(URLQueryItem(name: "redirect_uri", value: callback))
+		query.append(URLQueryItem(name: "client_id", value: clientID))
+		query.append(URLQueryItem(name: "scope", value: scope.map{$0.rawValue}.joined(separator: "+")))
+		query.append(URLQueryItem(name: "state", value: state))
+		query.append(URLQueryItem(name: "realm", value: state))
+
+		var components = URLComponents(string: OAuthBaseURL + "authorize/")!
+		components.queryItems = query
+		return components.url!
+	}
 	
 	
 	public class func handleOpenURL(_ url: URL, clientID: String, secretKey: String, completionHandler: @escaping (_ result: Result<OAuth2Token, AFError>) -> Void) -> Bool {

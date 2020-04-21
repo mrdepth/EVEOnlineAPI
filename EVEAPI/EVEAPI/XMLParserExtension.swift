@@ -39,9 +39,9 @@ private class ASXMLElement: NSObject, XMLParserDelegate {
 		get {
 			
 			if children.isEmpty {
-				var decimal: Decimal = 0
 				let scanner = Scanner(string: string)
-				if scanner.scanDecimal(&decimal) && scanner.isAtEnd {
+                
+				if let decimal = scanner.scanDecimal(), scanner.isAtEnd {
 					return decimal as NSNumber
 				}
 				else {
@@ -52,7 +52,7 @@ private class ASXMLElement: NSObject, XMLParserDelegate {
 				var dictionary = [String: Any]()
 				
 				if !string.isEmpty {
-					dictionary["_"] = string
+					dictionary["$text"] = string
 				}
 				
 				for (key, value) in children {
@@ -70,19 +70,19 @@ private class ASXMLElement: NSObject, XMLParserDelegate {
 	}
 	
 	//MARK: XMLParserDelegate
-	public func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+	func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
 		addChild(ASXMLElement(name: elementName, attributes: attributeDict, parser: parser))
 	}
 	
-	public func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+	func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
 		parser.delegate = parent
 	}
 	
-	public func parser(_ parser: XMLParser, foundCharacters string: String) {
+	func parser(_ parser: XMLParser, foundCharacters string: String) {
 		self.string += string
 	}
 	
-	public func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
+	func parser(_ parser: XMLParser, foundCDATA CDATABlock: Data) {
 		if let s = String(data: CDATABlock, encoding:.utf8) {
 			self.string += s
 		}
