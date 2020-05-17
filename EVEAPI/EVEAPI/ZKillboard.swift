@@ -41,38 +41,6 @@ public class ZKillboard {
         let interceptor = Interceptor(adapters: [ESI.EtagAdapter()], retriers: [])
         session = Session(interceptor: interceptor)
 	}
-    
-    public func publisher(_ convertible: URLConvertible,
-                   method: HTTPMethod = .get,
-                   parameters: Parameters? = nil,
-                   encoding: ParameterEncoding = URLEncoding.default,
-                   headers: HTTPHeaders? = nil,
-                   interceptor: RequestInterceptor? = nil) -> Deferred<Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>>> {
-        Deferred { () -> Publishers.HandleEvents<CurrentValueSubject<DataRequest, AFError>> in
-            let request = self.session.request(convertible, method: method, parameters: parameters, encoding: encoding, headers: headers, interceptor: interceptor)
-            let subject = CurrentValueSubject<DataRequest, AFError>(request)
-            var zKillboard: ZKillboard? = self
-            let publisher = subject.handleEvents(receiveCancel:  {
-                _ = withExtendedLifetime(zKillboard) {
-                    request.cancel()
-                }
-                zKillboard = nil
-            })
-            
-            request.response { [weak subject] response in
-                _ = withExtendedLifetime(zKillboard) {
-                    switch response.result {
-                    case .success:
-                        subject?.send(completion: .finished)
-                    case let .failure(error):
-                        subject?.send(completion: .failure(error))
-                    }
-                }
-                zKillboard = nil
-            }
-            return publisher
-        }
-    }
 }
 
 extension ZKillboard {
@@ -87,20 +55,24 @@ extension ZKillboard {
             
             let url = zKillboard.baseURL + args.joined(separator: "/") + "/"
             
-            let publisher = zKillboard.publisher(url, method: .get, encoding: URLEncoding.default, interceptor: ESI.CachePolicyAdapter(cachePolicy: cachePolicy))
-            if let progress = progress {
-                return publisher
-                    .downloadProgress(closure: progress)
-                    .responseDecodable(of: Killmails.self, queue: zKillboard.session.serializationQueue, decoder: JSONDecoder())
-                    .map{result in result.map{$0.records}}
-                    .eraseToAnyPublisher()
-            }
-            else {
-                return publisher
-                    .responseDecodable(of: Killmails.self, queue: zKillboard.session.serializationQueue, decoder: JSONDecoder())
-                    .map{result in result.map{$0.records}}
-                    .eraseToAnyPublisher()
-            }
+            let session = zKillboard.session
+            
+            return Deferred { () -> AnyPublisher<ESIResponse<[ZKillboard.Killmail]>, AFError> in
+                var request = session.request(url, method: .get, encoding: URLEncoding.default, interceptor: ESI.CachePolicyAdapter(cachePolicy: cachePolicy))
+                
+                if let progress = progress {
+                    request = request.downloadProgress(closure: progress)
+                }
+                
+                return request.publishDecodable(type: Killmails.self, queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+                    .tryMap { response in
+                        try ESIResponse(value: response.result.get().records, httpHeaders: response.response?.headers)
+                }
+                .mapError{$0 as! AFError}
+                .handleEvents(receiveCompletion: { (_) in
+                    withExtendedLifetime(session) {}
+                }).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
         }
     }
     

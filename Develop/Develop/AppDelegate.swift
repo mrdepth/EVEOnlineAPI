@@ -9,7 +9,6 @@
 import UIKit
 import EVEAPI
 import Alamofire
-import Futures
 import Combine
 
 
@@ -159,6 +158,12 @@ struct Time: Codable {
     var utcOffset: String
 }
 
+class MySess: Session {
+    deinit {
+        print("deinit")
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -176,32 +181,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var esi = ESI()
     
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let s = Deferred{CurrentValueSubject<String, Never>("sdf").handleEvents(receiveCancel: {
-            print("cancel")
-        })}
         
-        s.sink {
-            print($0)
+        
+        var session = MySess()
+        let head = Deferred {
+            session.request("https://google.com").publishString()
+            .handleEvents(receiveSubscription: { (s) in
+                
+            }, receiveOutput: nil, receiveCompletion: { (c) in
+                withExtendedLifetime(session) {}
+            }, receiveCancel: {
+                
+            }, receiveRequest: nil)
         }
-        
-        
-        c4 = esi.characters.characterID(1554561480).get().flatMap { character in
-            CurrentValueSubject(character).combineLatest(self.esi.corporations.corporationID(character.corporationID).get())
-        }.sink(receiveCompletion: {c in
-            print(c)
-        }, receiveValue: { (a, b) in
-            print(a, b)
-        })
-        
-        
-        
-        var r = AF.request("http://worldclockapi.com/api/json/est/now")
-        print(r.isResumed)
-//        r = r.responseString { result in
-//            print(result)
-//        }
-        print(r.isResumed)
-        
+
+        var sub: AnyCancellable?
+        sub = head.sink(receiveCompletion: { (c) in
+            sub?.cancel()
+            sub = nil
+        }) { (v) in
+            print(v.result)
+        }
+
         /*let p = URLSession.shared.dataTaskPublisher(for: URL(string: "http://worldclockapi.com/api/json/est/now")!)
         c1 = p.sink(receiveCompletion: { (c) in
             print(c)

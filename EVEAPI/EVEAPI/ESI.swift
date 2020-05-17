@@ -149,47 +149,39 @@ extension ESI {
         let esi: ESI
         
         public func character(_ id: Int, size: Size, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<UIImage, AFError> {
-            var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("characters/\(id)/portrait"), resolvingAgainstBaseURL: false)!
-            components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
-            
-            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
-                    return image
-			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
+            return image(ESI.imagesURL.appendingPathComponent("characters/\(id)/portrait"), size: size, cachePolicy: cachePolicy)
         }
         
         public func corporation(_ id: Int, size: Size, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<UIImage, AFError> {
-            var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("corporations/\(id)/logo"), resolvingAgainstBaseURL: false)!
-            components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
-
-            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
-							return image
-			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
+            return image(ESI.imagesURL.appendingPathComponent("corporations/\(id)/logo"), size: size, cachePolicy: cachePolicy)
         }
         
         public func alliance(_ id: Int, size: Size, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<UIImage, AFError> {
-            var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("alliances/\(id)/logo"), resolvingAgainstBaseURL: false)!
-            components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
-
-            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
-							return image
-			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
+            return image(ESI.imagesURL.appendingPathComponent("alliances/\(id)/logo"), size: size, cachePolicy: cachePolicy)
         }
         
         public func type(_ id: Int, size: Size, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy) -> AnyPublisher<UIImage, AFError> {
-            var components = URLComponents(url: ESI.imagesURL.appendingPathComponent("types/\(id)/render"), resolvingAgainstBaseURL: false)!
+            return image(ESI.imagesURL.appendingPathComponent("types/\(id)/render"), size: size, cachePolicy: cachePolicy)
+        }
+        
+        private func image(_ url: URL, size: Size, cachePolicy: URLRequest.CachePolicy) -> AnyPublisher<UIImage, AFError> {
+            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
             components.queryItems = [URLQueryItem(name: "size", value: "\(size.rawValue)")]
-
-            return esi.publisher(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-                .responseData().tryMap { data -> UIImage in
-                    guard let image = UIImage(data: data.value) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
-							return image
-			}.mapError{$0 as! AFError}.eraseToAnyPublisher()
+            
+            let session = esi.session
+            return Deferred {
+                session.request(components, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+                    .publishData()
+                    .tryMap{try $0.result.get()}
+                    .tryMap { data -> UIImage in
+                        guard let image = UIImage(data: data) else {throw AFError.responseSerializationFailed(reason: AFError.ResponseSerializationFailureReason.decodingFailed(error: ESIError.imageDecodeFailed))}
+                        return image
+                }
+                .mapError{$0 as! AFError}
+                .handleEvents(receiveCompletion: { (_) in
+                    withExtendedLifetime(session) {}
+                })
+            }.eraseToAnyPublisher()
         }
     }
 }

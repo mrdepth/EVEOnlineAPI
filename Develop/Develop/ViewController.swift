@@ -25,7 +25,6 @@ class ViewController: UIViewController {
 		/*session = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
 		let task = session!.dataTask(with: URL(string: "http://refreshyourcache.com/cache-test/test.php")!)
 		task.resume()*/
-		
 	}
 	
 	override func didReceiveMemoryWarning() {

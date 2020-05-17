@@ -33,18 +33,24 @@ extension ESI {
 				var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 				components.queryItems = query
 				
-				let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-				if let progress = progress {
-					return publisher
-					.downloadProgress(closure: progress)
-					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-					.eraseToAnyPublisher()
-				}
-				else {
-					return publisher
-					.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-					.eraseToAnyPublisher()
-				}
+				let session = esi.session
+				
+				return Deferred { () -> AnyPublisher<ESIResponse<[Int]>, AFError> in
+					var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+					
+					if let progress = progress {
+						request = request.downloadProgress(closure: progress)
+					}
+					
+					return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+					.tryMap { response in
+						try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+					}
+					.mapError{$0 as! AFError}
+					.handleEvents(receiveCompletion: { (_) in
+						withExtendedLifetime(session) {}
+					}).eraseToAnyPublisher()
+				}.eraseToAnyPublisher()
 			}
 			catch {
 				return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -79,18 +85,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<ESI.Wars.WarID.Success>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -127,18 +139,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Killmails.Recent.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -153,6 +171,58 @@ extension ESI {
 				
 			}
 			
+			
+			public struct Aggressor: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Double
+				public var shipsKilled: Int
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					case iskDestroyed = "isk_destroyed"
+					case shipsKilled = "ships_killed"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Defender: Codable, Hashable {
+				
+				
+				public var allianceID: Int?
+				public var corporationID: Int?
+				public var iskDestroyed: Double
+				public var shipsKilled: Int
+				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
+					self.allianceID = allianceID
+					self.corporationID = corporationID
+					self.iskDestroyed = iskDestroyed
+					self.shipsKilled = shipsKilled
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case allianceID = "alliance_id"
+					case corporationID = "corporation_id"
+					case iskDestroyed = "isk_destroyed"
+					case shipsKilled = "ships_killed"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
 			
 			public struct Success: Codable, Hashable {
 				
@@ -205,58 +275,6 @@ extension ESI {
 							default:
 							return nil
 						}
-					}
-				}
-			}
-			
-			public struct Defender: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Double
-				public var shipsKilled: Int
-				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-					self.iskDestroyed = iskDestroyed
-					self.shipsKilled = shipsKilled
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
-					case iskDestroyed = "isk_destroyed"
-					case shipsKilled = "ships_killed"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
-			public struct Aggressor: Codable, Hashable {
-				
-				
-				public var allianceID: Int?
-				public var corporationID: Int?
-				public var iskDestroyed: Double
-				public var shipsKilled: Int
-				public init(allianceID: Int?, corporationID: Int?, iskDestroyed: Double, shipsKilled: Int) {
-					self.allianceID = allianceID
-					self.corporationID = corporationID
-					self.iskDestroyed = iskDestroyed
-					self.shipsKilled = shipsKilled
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case allianceID = "alliance_id"
-					case corporationID = "corporation_id"
-					case iskDestroyed = "isk_destroyed"
-					case shipsKilled = "ships_killed"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
 					}
 				}
 			}

@@ -69,18 +69,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Contracts.Public.Bids.ContractID.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -161,18 +167,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Contracts.Public.Items.ContractID.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -256,18 +268,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Contracts.Public.RegionID.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -296,9 +314,9 @@ extension ESI {
 					public var reward: Double?
 					public var startLocationID: Int64?
 					public var title: String?
-					public var type: ESI.Characters.ValueType
+					public var type: ESI.Corporations.ValueType
 					public var volume: Double?
-					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Characters.ValueType, volume: Double?) {
+					public init(buyout: Double?, collateral: Double?, contractID: Int, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool?, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, title: String?, type: ESI.Corporations.ValueType, volume: Double?) {
 						self.buyout = buyout
 						self.collateral = collateral
 						self.contractID = contractID

@@ -44,18 +44,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.Affiliation.Success]>, AFError> in
+						var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -118,18 +124,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Success>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -276,18 +288,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.AgentsResearch.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -361,18 +379,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Assets.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -411,18 +435,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Assets.Locations.Success]>, AFError> in
+								var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -438,8 +468,8 @@ extension ESI {
 						
 						
 						public var itemID: Int64
-						public var position: ESI.Universe.Position
-						public init(itemID: Int64, position: ESI.Universe.Position) {
+						public var position: ESI.Corporations.Position
+						public init(itemID: Int64, position: ESI.Corporations.Position) {
 							self.itemID = itemID
 							self.position = position
 						}
@@ -480,18 +510,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Assets.Names.Success]>, AFError> in
+								var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -622,10 +658,10 @@ extension ESI {
 					public var itemID: Int64
 					public var locationFlag: ESI.Characters.CharacterID.Assets.LocationFlag
 					public var locationID: Int64
-					public var locationType: ESI.Characters.LocationType
+					public var locationType: ESI.Corporations.LocationType
 					public var quantity: Int
 					public var typeID: Int
-					public init(isBlueprintCopy: Bool?, isSingleton: Bool, itemID: Int64, locationFlag: ESI.Characters.CharacterID.Assets.LocationFlag, locationID: Int64, locationType: ESI.Characters.LocationType, quantity: Int, typeID: Int) {
+					public init(isBlueprintCopy: Bool?, isSingleton: Bool, itemID: Int64, locationFlag: ESI.Characters.CharacterID.Assets.LocationFlag, locationID: Int64, locationType: ESI.Corporations.LocationType, quantity: Int, typeID: Int) {
 						self.isBlueprintCopy = isBlueprintCopy
 						self.isSingleton = isSingleton
 						self.itemID = itemID
@@ -678,18 +714,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Attributes.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -774,18 +816,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Blueprints.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -947,18 +995,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Bookmarks.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -996,18 +1050,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Bookmarks.Folders.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1046,15 +1106,15 @@ extension ESI {
 					
 					
 					public var bookmarkID: Int
-					public var coordinates: ESI.Characters.Coordinates?
+					public var coordinates: ESI.Corporations.Coordinates?
 					public var created: Date
 					public var creatorID: Int
 					public var folderID: Int?
-					public var item: ESI.Characters.Item?
+					public var item: ESI.Corporations.Item?
 					public var label: String
 					public var locationID: Int
 					public var notes: String
-					public init(bookmarkID: Int, coordinates: ESI.Characters.Coordinates?, created: Date, creatorID: Int, folderID: Int?, item: ESI.Characters.Item?, label: String, locationID: Int, notes: String) {
+					public init(bookmarkID: Int, coordinates: ESI.Corporations.Coordinates?, created: Date, creatorID: Int, folderID: Int?, item: ESI.Corporations.Item?, label: String, locationID: Int, notes: String) {
 						self.bookmarkID = bookmarkID
 						self.coordinates = coordinates
 						self.created = created
@@ -1116,18 +1176,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Calendar.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1163,18 +1229,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Calendar.EventID.Success>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1201,18 +1273,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+								var request = session.request(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishData(queue: session.serializationQueue)
+								.tryMap { response in
+									try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1248,18 +1326,24 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-								if let progress = progress {
-									return publisher
-									.downloadProgress(closure: progress)
-									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-									.eraseToAnyPublisher()
-								}
-								else {
-									return publisher
-									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-									.eraseToAnyPublisher()
-								}
+								let session = esi.session
+								
+								return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Calendar.EventID.Attendees.Success]>, AFError> in
+									var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+									
+									if let progress = progress {
+										request = request.downloadProgress(closure: progress)
+									}
+									
+									return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+									.tryMap { response in
+										try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+									}
+									.mapError{$0 as! AFError}
+									.handleEvents(receiveCompletion: { (_) in
+										withExtendedLifetime(session) {}
+									}).eraseToAnyPublisher()
+								}.eraseToAnyPublisher()
 							}
 							catch {
 								return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1293,19 +1377,6 @@ extension ESI {
 						
 					}
 					
-					
-					public enum OwnerType: String, Codable, CustomStringConvertible {
-						case eveServer = "eve_server"
-						case corporation
-						case faction
-						case character
-						case alliance
-						
-						public var description: String {
-							return rawValue
-						}
-						
-					}
 					
 					public struct Response: Codable, Hashable {
 						
@@ -1383,6 +1454,19 @@ extension ESI {
 						}
 					}
 					
+					public enum OwnerType: String, Codable, CustomStringConvertible {
+						case eveServer = "eve_server"
+						case corporation
+						case faction
+						case character
+						case alliance
+						
+						public var description: String {
+							return rawValue
+						}
+						
+					}
+					
 				}
 				
 				
@@ -1458,18 +1542,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Clones.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1480,39 +1570,6 @@ extension ESI {
 				
 				
 				
-				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var homeLocation: ESI.Characters.CharacterID.Clones.HomeLocation?
-					public var jumpClones: [ESI.Characters.CharacterID.Clones.JumpClone]
-					public var lastCloneJumpDate: Date?
-					public var lastStationChangeDate: Date?
-					public init(homeLocation: ESI.Characters.CharacterID.Clones.HomeLocation?, jumpClones: [ESI.Characters.CharacterID.Clones.JumpClone], lastCloneJumpDate: Date?, lastStationChangeDate: Date?) {
-						self.homeLocation = homeLocation
-						self.jumpClones = jumpClones
-						self.lastCloneJumpDate = lastCloneJumpDate
-						self.lastStationChangeDate = lastStationChangeDate
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case homeLocation = "home_location"
-						case jumpClones = "jump_clones"
-						case lastCloneJumpDate = "last_clone_jump_date"
-						case lastStationChangeDate = "last_station_change_date"
-						
-						var dateFormatter: DateFormatter? {
-							switch self {
-								case .lastCloneJumpDate:
-								return DateFormatter.esiDateTimeFormatter
-								case .lastStationChangeDate:
-								return DateFormatter.esiDateTimeFormatter
-								default:
-								return nil
-							}
-						}
-					}
-				}
 				
 				public struct JumpClone: Codable, Hashable {
 					
@@ -1548,6 +1605,39 @@ extension ESI {
 						
 						var dateFormatter: DateFormatter? {
 							return nil
+						}
+					}
+				}
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var homeLocation: ESI.Characters.CharacterID.Clones.HomeLocation?
+					public var jumpClones: [ESI.Characters.CharacterID.Clones.JumpClone]
+					public var lastCloneJumpDate: Date?
+					public var lastStationChangeDate: Date?
+					public init(homeLocation: ESI.Characters.CharacterID.Clones.HomeLocation?, jumpClones: [ESI.Characters.CharacterID.Clones.JumpClone], lastCloneJumpDate: Date?, lastStationChangeDate: Date?) {
+						self.homeLocation = homeLocation
+						self.jumpClones = jumpClones
+						self.lastCloneJumpDate = lastCloneJumpDate
+						self.lastStationChangeDate = lastStationChangeDate
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case homeLocation = "home_location"
+						case jumpClones = "jump_clones"
+						case lastCloneJumpDate = "last_clone_jump_date"
+						case lastStationChangeDate = "last_station_change_date"
+						
+						var dateFormatter: DateFormatter? {
+							switch self {
+								case .lastCloneJumpDate:
+								return DateFormatter.esiDateTimeFormatter
+								case .lastStationChangeDate:
+								return DateFormatter.esiDateTimeFormatter
+								default:
+								return nil
+							}
 						}
 					}
 				}
@@ -1609,18 +1699,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseVoid(queue: esi.session.serializationQueue)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseVoid(queue: esi.session.serializationQueue)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+							var request = session.request(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishData(queue: session.serializationQueue)
+							.tryMap { response in
+								try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1649,18 +1745,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contacts.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1695,18 +1797,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[Int]>, AFError> in
+							var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1741,18 +1849,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseVoid(queue: esi.session.serializationQueue)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseVoid(queue: esi.session.serializationQueue)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+							var request = session.request(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishData(queue: session.serializationQueue)
+							.tryMap { response in
+								try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1769,7 +1883,7 @@ extension ESI {
 					let route: APIRoute
 					
 					
-					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contacts.Labels.Success]>, AFError> {
+					public func get(cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<[ESI.Alliances.AllianceID.Contacts.Labels.Success]>, AFError> {
 						do {
 							
 							let scopes = esi.token?.scopes ?? []
@@ -1788,18 +1902,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Alliances.AllianceID.Contacts.Labels.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1811,25 +1931,6 @@ extension ESI {
 					
 					
 					
-					public struct Success: Codable, Hashable {
-						
-						
-						public var labelID: Int64
-						public var labelName: String
-						public init(labelID: Int64, labelName: String) {
-							self.labelID = labelID
-							self.labelName = labelName
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case labelID = "label_id"
-							case labelName = "label_name"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
 					
 				}
 				
@@ -1838,12 +1939,12 @@ extension ESI {
 					
 					
 					public var contactID: Int
-					public var contactType: ESI.Characters.ContactType
+					public var contactType: ESI.Corporations.ContactType
 					public var isBlocked: Bool?
 					public var isWatched: Bool?
 					public var labelIds: [Int64]?
 					public var standing: Double
-					public init(contactID: Int, contactType: ESI.Characters.ContactType, isBlocked: Bool?, isWatched: Bool?, labelIds: [Int64]?, standing: Double) {
+					public init(contactID: Int, contactType: ESI.Corporations.ContactType, isBlocked: Bool?, isWatched: Bool?, labelIds: [Int64]?, standing: Double) {
 						self.contactID = contactID
 						self.contactType = contactType
 						self.isBlocked = isBlocked
@@ -1894,18 +1995,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contracts.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -1954,18 +2061,24 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-								if let progress = progress {
-									return publisher
-									.downloadProgress(closure: progress)
-									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-									.eraseToAnyPublisher()
-								}
-								else {
-									return publisher
-									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-									.eraseToAnyPublisher()
-								}
+								let session = esi.session
+								
+								return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contracts.ContractID.Bids.Success]>, AFError> in
+									var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+									
+									if let progress = progress {
+										request = request.downloadProgress(closure: progress)
+									}
+									
+									return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+									.tryMap { response in
+										try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+									}
+									.mapError{$0 as! AFError}
+									.handleEvents(receiveCompletion: { (_) in
+										withExtendedLifetime(session) {}
+									}).eraseToAnyPublisher()
+								}.eraseToAnyPublisher()
 							}
 							catch {
 								return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2034,18 +2147,24 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-								if let progress = progress {
-									return publisher
-									.downloadProgress(closure: progress)
-									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-									.eraseToAnyPublisher()
-								}
-								else {
-									return publisher
-									.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-									.eraseToAnyPublisher()
-								}
+								let session = esi.session
+								
+								return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Contracts.ContractID.Items.Success]>, AFError> in
+									var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+									
+									if let progress = progress {
+										request = request.downloadProgress(closure: progress)
+									}
+									
+									return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+									.tryMap { response in
+										try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+									}
+									.mapError{$0 as! AFError}
+									.handleEvents(receiveCompletion: { (_) in
+										withExtendedLifetime(session) {}
+									}).eraseToAnyPublisher()
+								}.eraseToAnyPublisher()
 							}
 							catch {
 								return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2096,30 +2215,12 @@ extension ESI {
 				}
 				
 				
-				public enum Status: String, Codable, CustomStringConvertible {
-					case outstanding
-					case inProgress = "in_progress"
-					case finishedIssuer = "finished_issuer"
-					case finishedContractor = "finished_contractor"
-					case finished
-					case cancelled
-					case rejected
-					case failed
-					case deleted
-					case reversed
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
 					public var acceptorID: Int
 					public var assigneeID: Int
-					public var availability: ESI.Characters.Availability
+					public var availability: ESI.Corporations.Availability
 					public var buyout: Double?
 					public var collateral: Double?
 					public var contractID: Int
@@ -2137,9 +2238,9 @@ extension ESI {
 					public var startLocationID: Int64?
 					public var status: ESI.Characters.CharacterID.Contracts.Status
 					public var title: String?
-					public var type: ESI.Characters.ValueType
+					public var type: ESI.Corporations.ValueType
 					public var volume: Double?
-					public init(acceptorID: Int, assigneeID: Int, availability: ESI.Characters.Availability, buyout: Double?, collateral: Double?, contractID: Int, dateAccepted: Date?, dateCompleted: Date?, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, status: ESI.Characters.CharacterID.Contracts.Status, title: String?, type: ESI.Characters.ValueType, volume: Double?) {
+					public init(acceptorID: Int, assigneeID: Int, availability: ESI.Corporations.Availability, buyout: Double?, collateral: Double?, contractID: Int, dateAccepted: Date?, dateCompleted: Date?, dateExpired: Date, dateIssued: Date, daysToComplete: Int?, endLocationID: Int64?, forCorporation: Bool, issuerCorporationID: Int, issuerID: Int, price: Double?, reward: Double?, startLocationID: Int64?, status: ESI.Characters.CharacterID.Contracts.Status, title: String?, type: ESI.Corporations.ValueType, volume: Double?) {
 						self.acceptorID = acceptorID
 						self.assigneeID = assigneeID
 						self.availability = availability
@@ -2205,6 +2306,24 @@ extension ESI {
 					}
 				}
 				
+				public enum Status: String, Codable, CustomStringConvertible {
+					case outstanding
+					case inProgress = "in_progress"
+					case finishedIssuer = "finished_issuer"
+					case finishedContractor = "finished_contractor"
+					case finished
+					case cancelled
+					case rejected
+					case failed
+					case deleted
+					case reversed
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
 			}
 			
 			public struct Corporationhistory {
@@ -2230,18 +2349,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Corporationhistory.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2310,18 +2435,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<Double>, AFError> in
+							var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2360,18 +2491,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Fatigue.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2441,18 +2578,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Fittings.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2479,18 +2622,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Fittings.Created>, AFError> in
+							var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2526,18 +2675,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+								var request = session.request(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishData(queue: session.serializationQueue)
+								.tryMap { response in
+									try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2725,18 +2880,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Fleet.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2747,6 +2908,18 @@ extension ESI {
 				
 				
 				
+				
+				public enum Role: String, Codable, CustomStringConvertible {
+					case fleetCommander = "fleet_commander"
+					case squadCommander = "squad_commander"
+					case squadMember = "squad_member"
+					case wingCommander = "wing_commander"
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
 				
 				public struct Success: Codable, Hashable {
 					
@@ -2772,18 +2945,6 @@ extension ESI {
 							return nil
 						}
 					}
-				}
-				
-				public enum Role: String, Codable, CustomStringConvertible {
-					case fleetCommander = "fleet_commander"
-					case squadCommander = "squad_commander"
-					case squadMember = "squad_member"
-					case wingCommander = "wing_commander"
-					
-					public var description: String {
-						return rawValue
-					}
-					
 				}
 				
 			}
@@ -2822,18 +2983,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Fw.Stats.Success>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2852,9 +3019,9 @@ extension ESI {
 						public var enlistedOn: Date?
 						public var factionID: Int?
 						public var highestRank: Int?
-						public var kills: ESI.Characters.Kills
-						public var victoryPoints: ESI.Characters.VictoryPoints
-						public init(currentRank: Int?, enlistedOn: Date?, factionID: Int?, highestRank: Int?, kills: ESI.Characters.Kills, victoryPoints: ESI.Characters.VictoryPoints) {
+						public var kills: ESI.Corporations.Kills
+						public var victoryPoints: ESI.Corporations.VictoryPoints
+						public init(currentRank: Int?, enlistedOn: Date?, factionID: Int?, highestRank: Int?, kills: ESI.Corporations.Kills, victoryPoints: ESI.Corporations.VictoryPoints) {
 							self.currentRank = currentRank
 							self.enlistedOn = enlistedOn
 							self.factionID = factionID
@@ -2912,18 +3079,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[Int]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -2974,18 +3147,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Industry.Jobs.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3144,18 +3323,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Killmails.Recent.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3217,18 +3402,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Location.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3299,18 +3490,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Loyalty.Points.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3379,18 +3576,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Mail.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3417,18 +3620,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<Int>, AFError> in
+							var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3470,18 +3679,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Mail.Labels.Success>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3508,18 +3723,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<Int>, AFError> in
+								var request = session.request(components, method: .post, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3555,18 +3776,24 @@ extension ESI {
 								var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 								components.queryItems = query
 								
-								let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-								if let progress = progress {
-									return publisher
-									.downloadProgress(closure: progress)
-									.responseVoid(queue: esi.session.serializationQueue)
-									.eraseToAnyPublisher()
-								}
-								else {
-									return publisher
-									.responseVoid(queue: esi.session.serializationQueue)
-									.eraseToAnyPublisher()
-								}
+								let session = esi.session
+								
+								return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+									var request = session.request(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+									
+									if let progress = progress {
+										request = request.downloadProgress(closure: progress)
+									}
+									
+									return request.publishData(queue: session.serializationQueue)
+									.tryMap { response in
+										try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+									}
+									.mapError{$0 as! AFError}
+									.handleEvents(receiveCompletion: { (_) in
+										withExtendedLifetime(session) {}
+									}).eraseToAnyPublisher()
+								}.eraseToAnyPublisher()
 							}
 							catch {
 								return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3622,32 +3849,6 @@ extension ESI {
 						}
 					}
 					
-					public struct Label: Codable, Hashable {
-						
-						
-						public var color: ESI.Characters.CharacterID.Mail.Labels.Color?
-						public var labelID: Int?
-						public var name: String?
-						public var unreadCount: Int?
-						public init(color: ESI.Characters.CharacterID.Mail.Labels.Color?, labelID: Int?, name: String?, unreadCount: Int?) {
-							self.color = color
-							self.labelID = labelID
-							self.name = name
-							self.unreadCount = unreadCount
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case color
-							case labelID = "label_id"
-							case name
-							case unreadCount = "unread_count"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
 					public enum Color: String, Codable, CustomStringConvertible {
 						case h0000fe = "#0000fe"
 						case h006634 = "#006634"
@@ -3672,6 +3873,32 @@ extension ESI {
 							return rawValue
 						}
 						
+					}
+					
+					public struct Label: Codable, Hashable {
+						
+						
+						public var color: ESI.Characters.CharacterID.Mail.Labels.Color?
+						public var labelID: Int?
+						public var name: String?
+						public var unreadCount: Int?
+						public init(color: ESI.Characters.CharacterID.Mail.Labels.Color?, labelID: Int?, name: String?, unreadCount: Int?) {
+							self.color = color
+							self.labelID = labelID
+							self.name = name
+							self.unreadCount = unreadCount
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case color
+							case labelID = "label_id"
+							case name
+							case unreadCount = "unread_count"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
 					}
 					
 				}
@@ -3700,18 +3927,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Mail.Lists.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3769,18 +4002,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+								var request = session.request(components, method: .delete, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishData(queue: session.serializationQueue)
+								.tryMap { response in
+									try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3807,18 +4046,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Mail.MailID.Success>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3845,18 +4090,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseVoid(queue: esi.session.serializationQueue)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<Void>, AFError> in
+								var request = session.request(components, method: .put, encoding: BodyDataEncoding(data: body), headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishData(queue: session.serializationQueue)
+								.tryMap { response in
+									try ESIResponse(value: response.result.map{_ in}.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -3931,6 +4182,26 @@ extension ESI {
 				}
 				
 				
+				public struct Recipient: Codable, Hashable {
+					
+					
+					public var recipientID: Int
+					public var recipientType: ESI.Characters.CharacterID.Mail.RecipientType
+					public init(recipientID: Int, recipientType: ESI.Characters.CharacterID.Mail.RecipientType) {
+						self.recipientID = recipientID
+						self.recipientType = recipientType
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case recipientID = "recipient_id"
+						case recipientType = "recipient_type"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -3997,26 +4268,6 @@ extension ESI {
 					}
 				}
 				
-				public struct Recipient: Codable, Hashable {
-					
-					
-					public var recipientID: Int
-					public var recipientType: ESI.Characters.CharacterID.Mail.RecipientType
-					public init(recipientID: Int, recipientType: ESI.Characters.CharacterID.Mail.RecipientType) {
-						self.recipientID = recipientID
-						self.recipientType = recipientType
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case recipientID = "recipient_id"
-						case recipientType = "recipient_type"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 				public enum RecipientType: String, Codable, CustomStringConvertible {
 					case alliance
 					case character
@@ -4055,18 +4306,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Medals.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4077,6 +4334,32 @@ extension ESI {
 				
 				
 				
+				
+				public struct Graphic: Codable, Hashable {
+					
+					
+					public var color: Int?
+					public var graphic: String
+					public var layer: Int
+					public var part: Int
+					public init(color: Int?, graphic: String, layer: Int, part: Int) {
+						self.color = color
+						self.graphic = graphic
+						self.layer = layer
+						self.part = part
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case color
+						case graphic
+						case layer
+						case part
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
 				
 				public struct Success: Codable, Hashable {
 					
@@ -4134,32 +4417,6 @@ extension ESI {
 					
 				}
 				
-				public struct Graphic: Codable, Hashable {
-					
-					
-					public var color: Int?
-					public var graphic: String
-					public var layer: Int
-					public var part: Int
-					public init(color: Int?, graphic: String, layer: Int, part: Int) {
-						self.color = color
-						self.graphic = graphic
-						self.layer = layer
-						self.part = part
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case color
-						case graphic
-						case layer
-						case part
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
 			}
 			
 			public struct Mining {
@@ -4188,18 +4445,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Mining.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4268,18 +4531,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Notifications.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4315,18 +4584,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Notifications.Contacts.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4374,6 +4649,19 @@ extension ESI {
 					
 				}
 				
+				
+				public enum SenderType: String, Codable, CustomStringConvertible {
+					case character
+					case corporation
+					case alliance
+					case faction
+					case other
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
 				
 				public enum ValueType: String, Codable, CustomStringConvertible {
 					case acceptedAlly = "AcceptedAlly"
@@ -4590,19 +4878,6 @@ extension ESI {
 					
 				}
 				
-				public enum SenderType: String, Codable, CustomStringConvertible {
-					case character
-					case corporation
-					case alliance
-					case faction
-					case other
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
-				
 				public struct Success: Codable, Hashable {
 					
 					
@@ -4669,18 +4944,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Online.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4751,18 +5032,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Opportunities.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4825,18 +5112,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Orders.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4874,18 +5167,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Orders.History.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -4909,13 +5208,13 @@ extension ESI {
 						public var minVolume: Int?
 						public var orderID: Int64
 						public var price: Double
-						public var range: ESI.Characters.Range
+						public var range: ESI.Corporations.Range
 						public var regionID: Int
-						public var state: ESI.Characters.State
+						public var state: ESI.Corporations.State
 						public var typeID: Int
 						public var volumeRemain: Int
 						public var volumeTotal: Int
-						public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Characters.Range, regionID: Int, state: ESI.Characters.State, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+						public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Corporations.Range, regionID: Int, state: ESI.Corporations.State, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
 							self.duration = duration
 							self.escrow = escrow
 							self.isBuyOrder = isBuyOrder
@@ -4976,12 +5275,12 @@ extension ESI {
 					public var minVolume: Int?
 					public var orderID: Int64
 					public var price: Double
-					public var range: ESI.Characters.Range
+					public var range: ESI.Corporations.Range
 					public var regionID: Int
 					public var typeID: Int
 					public var volumeRemain: Int
 					public var volumeTotal: Int
-					public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Characters.Range, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
+					public init(duration: Int, escrow: Double?, isBuyOrder: Bool?, isCorporation: Bool, issued: Date, locationID: Int64, minVolume: Int?, orderID: Int64, price: Double, range: ESI.Corporations.Range, regionID: Int, typeID: Int, volumeRemain: Int, volumeTotal: Int) {
 						self.duration = duration
 						self.escrow = escrow
 						self.isBuyOrder = isBuyOrder
@@ -5051,18 +5350,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Planets.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5098,18 +5403,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Planets.PlanetID.Success>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5121,22 +5432,22 @@ extension ESI {
 					
 					
 					
-					public struct Link: Codable, Hashable {
+					public struct Success: Codable, Hashable {
 						
 						
-						public var destinationPinID: Int64
-						public var linkLevel: Int
-						public var sourcePinID: Int64
-						public init(destinationPinID: Int64, linkLevel: Int, sourcePinID: Int64) {
-							self.destinationPinID = destinationPinID
-							self.linkLevel = linkLevel
-							self.sourcePinID = sourcePinID
+						public var links: [ESI.Characters.CharacterID.Planets.PlanetID.Link]
+						public var pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin]
+						public var routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]
+						public init(links: [ESI.Characters.CharacterID.Planets.PlanetID.Link], pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin], routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]) {
+							self.links = links
+							self.pins = pins
+							self.routes = routes
 						}
 						
 						enum CodingKeys: String, CodingKey, DateFormatted {
-							case destinationPinID = "destination_pin_id"
-							case linkLevel = "link_level"
-							case sourcePinID = "source_pin_id"
+							case links
+							case pins
+							case routes
 							
 							var dateFormatter: DateFormatter? {
 								return nil
@@ -5176,27 +5487,30 @@ extension ESI {
 						}
 					}
 					
-					public struct Pin: Codable, Hashable {
+					public struct Link: Codable, Hashable {
 						
-						public struct Content: Codable, Hashable {
+						
+						public var destinationPinID: Int64
+						public var linkLevel: Int
+						public var sourcePinID: Int64
+						public init(destinationPinID: Int64, linkLevel: Int, sourcePinID: Int64) {
+							self.destinationPinID = destinationPinID
+							self.linkLevel = linkLevel
+							self.sourcePinID = sourcePinID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case destinationPinID = "destination_pin_id"
+							case linkLevel = "link_level"
+							case sourcePinID = "source_pin_id"
 							
-							
-							public var amount: Int64
-							public var typeID: Int
-							public init(amount: Int64, typeID: Int) {
-								self.amount = amount
-								self.typeID = typeID
-							}
-							
-							enum CodingKeys: String, CodingKey, DateFormatted {
-								case amount
-								case typeID = "type_id"
-								
-								var dateFormatter: DateFormatter? {
-									return nil
-								}
+							var dateFormatter: DateFormatter? {
+								return nil
 							}
 						}
+					}
+					
+					public struct Pin: Codable, Hashable {
 						
 						public struct FactoryDetails: Codable, Hashable {
 							
@@ -5266,6 +5580,26 @@ extension ESI {
 							}
 						}
 						
+						public struct Content: Codable, Hashable {
+							
+							
+							public var amount: Int64
+							public var typeID: Int
+							public init(amount: Int64, typeID: Int) {
+								self.amount = amount
+								self.typeID = typeID
+							}
+							
+							enum CodingKeys: String, CodingKey, DateFormatted {
+								case amount
+								case typeID = "type_id"
+								
+								var dateFormatter: DateFormatter? {
+									return nil
+								}
+							}
+						}
+						
 						public var contents: [ESI.Characters.CharacterID.Planets.PlanetID.Pin.Content]?
 						public var expiryTime: Date?
 						public var extractorDetails: ESI.Characters.CharacterID.Planets.PlanetID.Pin.ExtractorDetails?
@@ -5315,29 +5649,6 @@ extension ESI {
 									default:
 									return nil
 								}
-							}
-						}
-					}
-					
-					public struct Success: Codable, Hashable {
-						
-						
-						public var links: [ESI.Characters.CharacterID.Planets.PlanetID.Link]
-						public var pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin]
-						public var routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]
-						public init(links: [ESI.Characters.CharacterID.Planets.PlanetID.Link], pins: [ESI.Characters.CharacterID.Planets.PlanetID.Pin], routes: [ESI.Characters.CharacterID.Planets.PlanetID.Route]) {
-							self.links = links
-							self.pins = pins
-							self.routes = routes
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case links
-							case pins
-							case routes
-							
-							var dateFormatter: DateFormatter? {
-								return nil
 							}
 						}
 					}
@@ -5426,18 +5737,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Portrait.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5501,18 +5818,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Roles.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5527,11 +5850,11 @@ extension ESI {
 				public struct Success: Codable, Hashable {
 					
 					
-					public var roles: [ESI.Characters.Role]?
-					public var rolesAtBase: [ESI.Characters.RolesAtBaseRolesAtBase]?
-					public var rolesAtHq: [ESI.Characters.RolesAtHqRolesAtHq]?
-					public var rolesAtOther: [ESI.Characters.RolesAtOtherRolesAtOther]?
-					public init(roles: [ESI.Characters.Role]?, rolesAtBase: [ESI.Characters.RolesAtBaseRolesAtBase]?, rolesAtHq: [ESI.Characters.RolesAtHqRolesAtHq]?, rolesAtOther: [ESI.Characters.RolesAtOtherRolesAtOther]?) {
+					public var roles: [ESI.Corporations.Role]?
+					public var rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?
+					public var rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?
+					public var rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?
+					public init(roles: [ESI.Corporations.Role]?, rolesAtBase: [ESI.Corporations.RolesAtBaseRolesAtBase]?, rolesAtHq: [ESI.Corporations.RolesAtHqRolesAtHq]?, rolesAtOther: [ESI.Corporations.RolesAtOtherRolesAtOther]?) {
 						self.roles = roles
 						self.rolesAtBase = rolesAtBase
 						self.rolesAtHq = rolesAtHq
@@ -5557,7 +5880,7 @@ extension ESI {
 				let route: APIRoute
 				
 				
-				public func get(categories: [ESI.Characters.CharacterID.Search.Categories], language: ESI.Universe.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Search.Success>, AFError> {
+				public func get(categories: [ESI.Characters.CharacterID.Search.Categories], language: ESI.Corporations.Language? = nil, search: String, strict: Bool? = nil, cachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy, progress: Request.ProgressHandler? = nil) -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Search.Success>, AFError> {
 					do {
 						
 						let scopes = esi.token?.scopes ?? []
@@ -5585,18 +5908,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Search.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5607,25 +5936,6 @@ extension ESI {
 				
 				
 				
-				
-				public enum Categories: String, Codable, CustomStringConvertible {
-					case agent
-					case alliance
-					case character
-					case constellation
-					case corporation
-					case faction
-					case inventoryType = "inventory_type"
-					case region
-					case solarSystem = "solar_system"
-					case station
-					case structure
-					
-					public var description: String {
-						return rawValue
-					}
-					
-				}
 				
 				public struct Success: Codable, Hashable {
 					
@@ -5674,6 +5984,25 @@ extension ESI {
 					}
 				}
 				
+				public enum Categories: String, Codable, CustomStringConvertible {
+					case agent
+					case alliance
+					case character
+					case constellation
+					case corporation
+					case faction
+					case inventoryType = "inventory_type"
+					case region
+					case solarSystem = "solar_system"
+					case station
+					case structure
+					
+					public var description: String {
+						return rawValue
+					}
+					
+				}
+				
 			}
 			
 			public struct Ship {
@@ -5700,18 +6029,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Ship.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5772,18 +6107,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Skillqueue.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5866,18 +6207,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Characters.CharacterID.Skills.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5964,18 +6311,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Standings.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -5991,9 +6344,9 @@ extension ESI {
 					
 					
 					public var fromID: Int
-					public var fromType: ESI.Characters.FromType
+					public var fromType: ESI.Corporations.FromType
 					public var standing: Double
-					public init(fromID: Int, fromType: ESI.Characters.FromType, standing: Double) {
+					public init(fromID: Int, fromType: ESI.Corporations.FromType, standing: Double) {
 						self.fromID = fromID
 						self.fromType = fromType
 						self.standing = standing
@@ -6036,18 +6389,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Stats.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -6058,175 +6417,6 @@ extension ESI {
 				
 				
 				
-				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var character: ESI.Characters.CharacterID.Stats.Character?
-					public var combat: ESI.Characters.CharacterID.Stats.Combat?
-					public var industry: ESI.Characters.CharacterID.Stats.Industry?
-					public var inventory: ESI.Characters.CharacterID.Stats.Inventory?
-					public var isk: ESI.Characters.CharacterID.Stats.Isk?
-					public var market: ESI.Characters.CharacterID.Stats.Market?
-					public var mining: ESI.Characters.CharacterID.Stats.Mining?
-					public var module: ESI.Characters.CharacterID.Stats.Module?
-					public var orbital: ESI.Characters.CharacterID.Stats.Orbital?
-					public var pve: ESI.Characters.CharacterID.Stats.Pve?
-					public var social: ESI.Characters.CharacterID.Stats.Social?
-					public var travel: ESI.Characters.CharacterID.Stats.Travel?
-					public var year: Int
-					public init(character: ESI.Characters.CharacterID.Stats.Character?, combat: ESI.Characters.CharacterID.Stats.Combat?, industry: ESI.Characters.CharacterID.Stats.Industry?, inventory: ESI.Characters.CharacterID.Stats.Inventory?, isk: ESI.Characters.CharacterID.Stats.Isk?, market: ESI.Characters.CharacterID.Stats.Market?, mining: ESI.Characters.CharacterID.Stats.Mining?, module: ESI.Characters.CharacterID.Stats.Module?, orbital: ESI.Characters.CharacterID.Stats.Orbital?, pve: ESI.Characters.CharacterID.Stats.Pve?, social: ESI.Characters.CharacterID.Stats.Social?, travel: ESI.Characters.CharacterID.Stats.Travel?, year: Int) {
-						self.character = character
-						self.combat = combat
-						self.industry = industry
-						self.inventory = inventory
-						self.isk = isk
-						self.market = market
-						self.mining = mining
-						self.module = module
-						self.orbital = orbital
-						self.pve = pve
-						self.social = social
-						self.travel = travel
-						self.year = year
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case character
-						case combat
-						case industry
-						case inventory
-						case isk
-						case market
-						case mining
-						case module
-						case orbital
-						case pve
-						case social
-						case travel
-						case year
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Character: Codable, Hashable {
-					
-					
-					public var daysOfActivity: Int64?
-					public var minutes: Int64?
-					public var sessionsStarted: Int64?
-					public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
-						self.daysOfActivity = daysOfActivity
-						self.minutes = minutes
-						self.sessionsStarted = sessionsStarted
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case daysOfActivity = "days_of_activity"
-						case minutes
-						case sessionsStarted = "sessions_started"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Isk: Codable, Hashable {
-					
-					
-					public var `in`: Int64?
-					public var out: Int64?
-					public init(`in`: Int64?, out: Int64?) {
-						self.`in` = `in`
-						self.out = out
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case `in` = "in"
-						case out
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Market: Codable, Hashable {
-					
-					
-					public var acceptContractsCourier: Int64?
-					public var acceptContractsItemExchange: Int64?
-					public var buyOrdersPlaced: Int64?
-					public var cancelMarketOrder: Int64?
-					public var createContractsAuction: Int64?
-					public var createContractsCourier: Int64?
-					public var createContractsItemExchange: Int64?
-					public var deliverCourierContract: Int64?
-					public var iskGained: Int64?
-					public var iskSpent: Int64?
-					public var modifyMarketOrder: Int64?
-					public var searchContracts: Int64?
-					public var sellOrdersPlaced: Int64?
-					public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
-						self.acceptContractsCourier = acceptContractsCourier
-						self.acceptContractsItemExchange = acceptContractsItemExchange
-						self.buyOrdersPlaced = buyOrdersPlaced
-						self.cancelMarketOrder = cancelMarketOrder
-						self.createContractsAuction = createContractsAuction
-						self.createContractsCourier = createContractsCourier
-						self.createContractsItemExchange = createContractsItemExchange
-						self.deliverCourierContract = deliverCourierContract
-						self.iskGained = iskGained
-						self.iskSpent = iskSpent
-						self.modifyMarketOrder = modifyMarketOrder
-						self.searchContracts = searchContracts
-						self.sellOrdersPlaced = sellOrdersPlaced
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case acceptContractsCourier = "accept_contracts_courier"
-						case acceptContractsItemExchange = "accept_contracts_item_exchange"
-						case buyOrdersPlaced = "buy_orders_placed"
-						case cancelMarketOrder = "cancel_market_order"
-						case createContractsAuction = "create_contracts_auction"
-						case createContractsCourier = "create_contracts_courier"
-						case createContractsItemExchange = "create_contracts_item_exchange"
-						case deliverCourierContract = "deliver_courier_contract"
-						case iskGained = "isk_gained"
-						case iskSpent = "isk_spent"
-						case modifyMarketOrder = "modify_market_order"
-						case searchContracts = "search_contracts"
-						case sellOrdersPlaced = "sell_orders_placed"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Inventory: Codable, Hashable {
-					
-					
-					public var abandonLootQuantity: Int64?
-					public var trashItemQuantity: Int64?
-					public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
-						self.abandonLootQuantity = abandonLootQuantity
-						self.trashItemQuantity = trashItemQuantity
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case abandonLootQuantity = "abandon_loot_quantity"
-						case trashItemQuantity = "trash_item_quantity"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
 				
 				public struct Travel: Codable, Hashable {
 					
@@ -6298,558 +6488,6 @@ extension ESI {
 						case warpsToFleetMember = "warps_to_fleet_member"
 						case warpsToScanResult = "warps_to_scan_result"
 						case warpsWormhole = "warps_wormhole"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Pve: Codable, Hashable {
-					
-					
-					public var dungeonsCompletedAgent: Int64?
-					public var dungeonsCompletedDistribution: Int64?
-					public var missionsSucceeded: Int64?
-					public var missionsSucceededEpicArc: Int64?
-					public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
-						self.dungeonsCompletedAgent = dungeonsCompletedAgent
-						self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
-						self.missionsSucceeded = missionsSucceeded
-						self.missionsSucceededEpicArc = missionsSucceededEpicArc
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case dungeonsCompletedAgent = "dungeons_completed_agent"
-						case dungeonsCompletedDistribution = "dungeons_completed_distribution"
-						case missionsSucceeded = "missions_succeeded"
-						case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Module: Codable, Hashable {
-					
-					
-					public var activationsArmorHardener: Int64?
-					public var activationsArmorRepairUnit: Int64?
-					public var activationsArmorResistanceShiftHardener: Int64?
-					public var activationsAutomatedTargetingSystem: Int64?
-					public var activationsBastion: Int64?
-					public var activationsBombLauncher: Int64?
-					public var activationsCapacitorBooster: Int64?
-					public var activationsCargoScanner: Int64?
-					public var activationsCloakingDevice: Int64?
-					public var activationsCloneVatBay: Int64?
-					public var activationsCynosuralField: Int64?
-					public var activationsDamageControl: Int64?
-					public var activationsDataMiners: Int64?
-					public var activationsDroneControlUnit: Int64?
-					public var activationsDroneTrackingModules: Int64?
-					public var activationsEccm: Int64?
-					public var activationsEcm: Int64?
-					public var activationsEcmBurst: Int64?
-					public var activationsEnergyDestabilizer: Int64?
-					public var activationsEnergyVampire: Int64?
-					public var activationsEnergyWeapon: Int64?
-					public var activationsFestivalLauncher: Int64?
-					public var activationsFrequencyMiningLaser: Int64?
-					public var activationsFueledArmorRepairer: Int64?
-					public var activationsFueledShieldBooster: Int64?
-					public var activationsGangCoordinator: Int64?
-					public var activationsGasCloudHarvester: Int64?
-					public var activationsHullRepairUnit: Int64?
-					public var activationsHybridWeapon: Int64?
-					public var activationsIndustrialCore: Int64?
-					public var activationsInterdictionSphereLauncher: Int64?
-					public var activationsMicroJumpDrive: Int64?
-					public var activationsMiningLaser: Int64?
-					public var activationsMissileLauncher: Int64?
-					public var activationsPassiveTargetingSystem: Int64?
-					public var activationsProbeLauncher: Int64?
-					public var activationsProjectedEccm: Int64?
-					public var activationsProjectileWeapon: Int64?
-					public var activationsPropulsionModule: Int64?
-					public var activationsRemoteArmorRepairer: Int64?
-					public var activationsRemoteCapacitorTransmitter: Int64?
-					public var activationsRemoteEcmBurst: Int64?
-					public var activationsRemoteHullRepairer: Int64?
-					public var activationsRemoteSensorBooster: Int64?
-					public var activationsRemoteSensorDamper: Int64?
-					public var activationsRemoteShieldBooster: Int64?
-					public var activationsRemoteTrackingComputer: Int64?
-					public var activationsSalvager: Int64?
-					public var activationsSensorBooster: Int64?
-					public var activationsShieldBooster: Int64?
-					public var activationsShieldHardener: Int64?
-					public var activationsShipScanner: Int64?
-					public var activationsSiege: Int64?
-					public var activationsSmartBomb: Int64?
-					public var activationsStasisWeb: Int64?
-					public var activationsStripMiner: Int64?
-					public var activationsSuperWeapon: Int64?
-					public var activationsSurveyScanner: Int64?
-					public var activationsTargetBreaker: Int64?
-					public var activationsTargetPainter: Int64?
-					public var activationsTrackingComputer: Int64?
-					public var activationsTrackingDisruptor: Int64?
-					public var activationsTractorBeam: Int64?
-					public var activationsTriage: Int64?
-					public var activationsWarpDisruptFieldGenerator: Int64?
-					public var activationsWarpScrambler: Int64?
-					public var linkWeapons: Int64?
-					public var overload: Int64?
-					public var repairs: Int64?
-					public init(activationsArmorHardener: Int64?, activationsArmorRepairUnit: Int64?, activationsArmorResistanceShiftHardener: Int64?, activationsAutomatedTargetingSystem: Int64?, activationsBastion: Int64?, activationsBombLauncher: Int64?, activationsCapacitorBooster: Int64?, activationsCargoScanner: Int64?, activationsCloakingDevice: Int64?, activationsCloneVatBay: Int64?, activationsCynosuralField: Int64?, activationsDamageControl: Int64?, activationsDataMiners: Int64?, activationsDroneControlUnit: Int64?, activationsDroneTrackingModules: Int64?, activationsEccm: Int64?, activationsEcm: Int64?, activationsEcmBurst: Int64?, activationsEnergyDestabilizer: Int64?, activationsEnergyVampire: Int64?, activationsEnergyWeapon: Int64?, activationsFestivalLauncher: Int64?, activationsFrequencyMiningLaser: Int64?, activationsFueledArmorRepairer: Int64?, activationsFueledShieldBooster: Int64?, activationsGangCoordinator: Int64?, activationsGasCloudHarvester: Int64?, activationsHullRepairUnit: Int64?, activationsHybridWeapon: Int64?, activationsIndustrialCore: Int64?, activationsInterdictionSphereLauncher: Int64?, activationsMicroJumpDrive: Int64?, activationsMiningLaser: Int64?, activationsMissileLauncher: Int64?, activationsPassiveTargetingSystem: Int64?, activationsProbeLauncher: Int64?, activationsProjectedEccm: Int64?, activationsProjectileWeapon: Int64?, activationsPropulsionModule: Int64?, activationsRemoteArmorRepairer: Int64?, activationsRemoteCapacitorTransmitter: Int64?, activationsRemoteEcmBurst: Int64?, activationsRemoteHullRepairer: Int64?, activationsRemoteSensorBooster: Int64?, activationsRemoteSensorDamper: Int64?, activationsRemoteShieldBooster: Int64?, activationsRemoteTrackingComputer: Int64?, activationsSalvager: Int64?, activationsSensorBooster: Int64?, activationsShieldBooster: Int64?, activationsShieldHardener: Int64?, activationsShipScanner: Int64?, activationsSiege: Int64?, activationsSmartBomb: Int64?, activationsStasisWeb: Int64?, activationsStripMiner: Int64?, activationsSuperWeapon: Int64?, activationsSurveyScanner: Int64?, activationsTargetBreaker: Int64?, activationsTargetPainter: Int64?, activationsTrackingComputer: Int64?, activationsTrackingDisruptor: Int64?, activationsTractorBeam: Int64?, activationsTriage: Int64?, activationsWarpDisruptFieldGenerator: Int64?, activationsWarpScrambler: Int64?, linkWeapons: Int64?, overload: Int64?, repairs: Int64?) {
-						self.activationsArmorHardener = activationsArmorHardener
-						self.activationsArmorRepairUnit = activationsArmorRepairUnit
-						self.activationsArmorResistanceShiftHardener = activationsArmorResistanceShiftHardener
-						self.activationsAutomatedTargetingSystem = activationsAutomatedTargetingSystem
-						self.activationsBastion = activationsBastion
-						self.activationsBombLauncher = activationsBombLauncher
-						self.activationsCapacitorBooster = activationsCapacitorBooster
-						self.activationsCargoScanner = activationsCargoScanner
-						self.activationsCloakingDevice = activationsCloakingDevice
-						self.activationsCloneVatBay = activationsCloneVatBay
-						self.activationsCynosuralField = activationsCynosuralField
-						self.activationsDamageControl = activationsDamageControl
-						self.activationsDataMiners = activationsDataMiners
-						self.activationsDroneControlUnit = activationsDroneControlUnit
-						self.activationsDroneTrackingModules = activationsDroneTrackingModules
-						self.activationsEccm = activationsEccm
-						self.activationsEcm = activationsEcm
-						self.activationsEcmBurst = activationsEcmBurst
-						self.activationsEnergyDestabilizer = activationsEnergyDestabilizer
-						self.activationsEnergyVampire = activationsEnergyVampire
-						self.activationsEnergyWeapon = activationsEnergyWeapon
-						self.activationsFestivalLauncher = activationsFestivalLauncher
-						self.activationsFrequencyMiningLaser = activationsFrequencyMiningLaser
-						self.activationsFueledArmorRepairer = activationsFueledArmorRepairer
-						self.activationsFueledShieldBooster = activationsFueledShieldBooster
-						self.activationsGangCoordinator = activationsGangCoordinator
-						self.activationsGasCloudHarvester = activationsGasCloudHarvester
-						self.activationsHullRepairUnit = activationsHullRepairUnit
-						self.activationsHybridWeapon = activationsHybridWeapon
-						self.activationsIndustrialCore = activationsIndustrialCore
-						self.activationsInterdictionSphereLauncher = activationsInterdictionSphereLauncher
-						self.activationsMicroJumpDrive = activationsMicroJumpDrive
-						self.activationsMiningLaser = activationsMiningLaser
-						self.activationsMissileLauncher = activationsMissileLauncher
-						self.activationsPassiveTargetingSystem = activationsPassiveTargetingSystem
-						self.activationsProbeLauncher = activationsProbeLauncher
-						self.activationsProjectedEccm = activationsProjectedEccm
-						self.activationsProjectileWeapon = activationsProjectileWeapon
-						self.activationsPropulsionModule = activationsPropulsionModule
-						self.activationsRemoteArmorRepairer = activationsRemoteArmorRepairer
-						self.activationsRemoteCapacitorTransmitter = activationsRemoteCapacitorTransmitter
-						self.activationsRemoteEcmBurst = activationsRemoteEcmBurst
-						self.activationsRemoteHullRepairer = activationsRemoteHullRepairer
-						self.activationsRemoteSensorBooster = activationsRemoteSensorBooster
-						self.activationsRemoteSensorDamper = activationsRemoteSensorDamper
-						self.activationsRemoteShieldBooster = activationsRemoteShieldBooster
-						self.activationsRemoteTrackingComputer = activationsRemoteTrackingComputer
-						self.activationsSalvager = activationsSalvager
-						self.activationsSensorBooster = activationsSensorBooster
-						self.activationsShieldBooster = activationsShieldBooster
-						self.activationsShieldHardener = activationsShieldHardener
-						self.activationsShipScanner = activationsShipScanner
-						self.activationsSiege = activationsSiege
-						self.activationsSmartBomb = activationsSmartBomb
-						self.activationsStasisWeb = activationsStasisWeb
-						self.activationsStripMiner = activationsStripMiner
-						self.activationsSuperWeapon = activationsSuperWeapon
-						self.activationsSurveyScanner = activationsSurveyScanner
-						self.activationsTargetBreaker = activationsTargetBreaker
-						self.activationsTargetPainter = activationsTargetPainter
-						self.activationsTrackingComputer = activationsTrackingComputer
-						self.activationsTrackingDisruptor = activationsTrackingDisruptor
-						self.activationsTractorBeam = activationsTractorBeam
-						self.activationsTriage = activationsTriage
-						self.activationsWarpDisruptFieldGenerator = activationsWarpDisruptFieldGenerator
-						self.activationsWarpScrambler = activationsWarpScrambler
-						self.linkWeapons = linkWeapons
-						self.overload = overload
-						self.repairs = repairs
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case activationsArmorHardener = "activations_armor_hardener"
-						case activationsArmorRepairUnit = "activations_armor_repair_unit"
-						case activationsArmorResistanceShiftHardener = "activations_armor_resistance_shift_hardener"
-						case activationsAutomatedTargetingSystem = "activations_automated_targeting_system"
-						case activationsBastion = "activations_bastion"
-						case activationsBombLauncher = "activations_bomb_launcher"
-						case activationsCapacitorBooster = "activations_capacitor_booster"
-						case activationsCargoScanner = "activations_cargo_scanner"
-						case activationsCloakingDevice = "activations_cloaking_device"
-						case activationsCloneVatBay = "activations_clone_vat_bay"
-						case activationsCynosuralField = "activations_cynosural_field"
-						case activationsDamageControl = "activations_damage_control"
-						case activationsDataMiners = "activations_data_miners"
-						case activationsDroneControlUnit = "activations_drone_control_unit"
-						case activationsDroneTrackingModules = "activations_drone_tracking_modules"
-						case activationsEccm = "activations_eccm"
-						case activationsEcm = "activations_ecm"
-						case activationsEcmBurst = "activations_ecm_burst"
-						case activationsEnergyDestabilizer = "activations_energy_destabilizer"
-						case activationsEnergyVampire = "activations_energy_vampire"
-						case activationsEnergyWeapon = "activations_energy_weapon"
-						case activationsFestivalLauncher = "activations_festival_launcher"
-						case activationsFrequencyMiningLaser = "activations_frequency_mining_laser"
-						case activationsFueledArmorRepairer = "activations_fueled_armor_repairer"
-						case activationsFueledShieldBooster = "activations_fueled_shield_booster"
-						case activationsGangCoordinator = "activations_gang_coordinator"
-						case activationsGasCloudHarvester = "activations_gas_cloud_harvester"
-						case activationsHullRepairUnit = "activations_hull_repair_unit"
-						case activationsHybridWeapon = "activations_hybrid_weapon"
-						case activationsIndustrialCore = "activations_industrial_core"
-						case activationsInterdictionSphereLauncher = "activations_interdiction_sphere_launcher"
-						case activationsMicroJumpDrive = "activations_micro_jump_drive"
-						case activationsMiningLaser = "activations_mining_laser"
-						case activationsMissileLauncher = "activations_missile_launcher"
-						case activationsPassiveTargetingSystem = "activations_passive_targeting_system"
-						case activationsProbeLauncher = "activations_probe_launcher"
-						case activationsProjectedEccm = "activations_projected_eccm"
-						case activationsProjectileWeapon = "activations_projectile_weapon"
-						case activationsPropulsionModule = "activations_propulsion_module"
-						case activationsRemoteArmorRepairer = "activations_remote_armor_repairer"
-						case activationsRemoteCapacitorTransmitter = "activations_remote_capacitor_transmitter"
-						case activationsRemoteEcmBurst = "activations_remote_ecm_burst"
-						case activationsRemoteHullRepairer = "activations_remote_hull_repairer"
-						case activationsRemoteSensorBooster = "activations_remote_sensor_booster"
-						case activationsRemoteSensorDamper = "activations_remote_sensor_damper"
-						case activationsRemoteShieldBooster = "activations_remote_shield_booster"
-						case activationsRemoteTrackingComputer = "activations_remote_tracking_computer"
-						case activationsSalvager = "activations_salvager"
-						case activationsSensorBooster = "activations_sensor_booster"
-						case activationsShieldBooster = "activations_shield_booster"
-						case activationsShieldHardener = "activations_shield_hardener"
-						case activationsShipScanner = "activations_ship_scanner"
-						case activationsSiege = "activations_siege"
-						case activationsSmartBomb = "activations_smart_bomb"
-						case activationsStasisWeb = "activations_stasis_web"
-						case activationsStripMiner = "activations_strip_miner"
-						case activationsSuperWeapon = "activations_super_weapon"
-						case activationsSurveyScanner = "activations_survey_scanner"
-						case activationsTargetBreaker = "activations_target_breaker"
-						case activationsTargetPainter = "activations_target_painter"
-						case activationsTrackingComputer = "activations_tracking_computer"
-						case activationsTrackingDisruptor = "activations_tracking_disruptor"
-						case activationsTractorBeam = "activations_tractor_beam"
-						case activationsTriage = "activations_triage"
-						case activationsWarpDisruptFieldGenerator = "activations_warp_disrupt_field_generator"
-						case activationsWarpScrambler = "activations_warp_scrambler"
-						case linkWeapons = "link_weapons"
-						case overload
-						case repairs
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Industry: Codable, Hashable {
-					
-					
-					public var hackingSuccesses: Int64?
-					public var jobsCancelled: Int64?
-					public var jobsCompletedCopyBlueprint: Int64?
-					public var jobsCompletedInvention: Int64?
-					public var jobsCompletedManufacture: Int64?
-					public var jobsCompletedManufactureAsteroid: Int64?
-					public var jobsCompletedManufactureAsteroidQuantity: Int64?
-					public var jobsCompletedManufactureCharge: Int64?
-					public var jobsCompletedManufactureChargeQuantity: Int64?
-					public var jobsCompletedManufactureCommodity: Int64?
-					public var jobsCompletedManufactureCommodityQuantity: Int64?
-					public var jobsCompletedManufactureDeployable: Int64?
-					public var jobsCompletedManufactureDeployableQuantity: Int64?
-					public var jobsCompletedManufactureDrone: Int64?
-					public var jobsCompletedManufactureDroneQuantity: Int64?
-					public var jobsCompletedManufactureImplant: Int64?
-					public var jobsCompletedManufactureImplantQuantity: Int64?
-					public var jobsCompletedManufactureModule: Int64?
-					public var jobsCompletedManufactureModuleQuantity: Int64?
-					public var jobsCompletedManufactureOther: Int64?
-					public var jobsCompletedManufactureOtherQuantity: Int64?
-					public var jobsCompletedManufactureShip: Int64?
-					public var jobsCompletedManufactureShipQuantity: Int64?
-					public var jobsCompletedManufactureStructure: Int64?
-					public var jobsCompletedManufactureStructureQuantity: Int64?
-					public var jobsCompletedManufactureSubsystem: Int64?
-					public var jobsCompletedManufactureSubsystemQuantity: Int64?
-					public var jobsCompletedMaterialProductivity: Int64?
-					public var jobsCompletedTimeProductivity: Int64?
-					public var jobsStartedCopyBlueprint: Int64?
-					public var jobsStartedInvention: Int64?
-					public var jobsStartedManufacture: Int64?
-					public var jobsStartedMaterialProductivity: Int64?
-					public var jobsStartedTimeProductivity: Int64?
-					public var reprocessItem: Int64?
-					public var reprocessItemQuantity: Int64?
-					public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
-						self.hackingSuccesses = hackingSuccesses
-						self.jobsCancelled = jobsCancelled
-						self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
-						self.jobsCompletedInvention = jobsCompletedInvention
-						self.jobsCompletedManufacture = jobsCompletedManufacture
-						self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
-						self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
-						self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
-						self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
-						self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
-						self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
-						self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
-						self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
-						self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
-						self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
-						self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
-						self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
-						self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
-						self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
-						self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
-						self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
-						self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
-						self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
-						self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
-						self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
-						self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
-						self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
-						self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
-						self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
-						self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
-						self.jobsStartedInvention = jobsStartedInvention
-						self.jobsStartedManufacture = jobsStartedManufacture
-						self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
-						self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
-						self.reprocessItem = reprocessItem
-						self.reprocessItemQuantity = reprocessItemQuantity
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case hackingSuccesses = "hacking_successes"
-						case jobsCancelled = "jobs_cancelled"
-						case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
-						case jobsCompletedInvention = "jobs_completed_invention"
-						case jobsCompletedManufacture = "jobs_completed_manufacture"
-						case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
-						case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
-						case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
-						case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
-						case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
-						case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
-						case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
-						case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
-						case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
-						case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
-						case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
-						case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
-						case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
-						case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
-						case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
-						case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
-						case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
-						case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
-						case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
-						case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
-						case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
-						case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
-						case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
-						case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
-						case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
-						case jobsStartedInvention = "jobs_started_invention"
-						case jobsStartedManufacture = "jobs_started_manufacture"
-						case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
-						case jobsStartedTimeProductivity = "jobs_started_time_productivity"
-						case reprocessItem = "reprocess_item"
-						case reprocessItemQuantity = "reprocess_item_quantity"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Orbital: Codable, Hashable {
-					
-					
-					public var strikeCharactersKilled: Int64?
-					public var strikeDamageToPlayersArmorAmount: Int64?
-					public var strikeDamageToPlayersShieldAmount: Int64?
-					public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
-						self.strikeCharactersKilled = strikeCharactersKilled
-						self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
-						self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case strikeCharactersKilled = "strike_characters_killed"
-						case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
-						case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Social: Codable, Hashable {
-					
-					
-					public var addContactBad: Int64?
-					public var addContactGood: Int64?
-					public var addContactHigh: Int64?
-					public var addContactHorrible: Int64?
-					public var addContactNeutral: Int64?
-					public var addNote: Int64?
-					public var addedAsContactBad: Int64?
-					public var addedAsContactGood: Int64?
-					public var addedAsContactHigh: Int64?
-					public var addedAsContactHorrible: Int64?
-					public var addedAsContactNeutral: Int64?
-					public var calendarEventCreated: Int64?
-					public var chatMessagesAlliance: Int64?
-					public var chatMessagesConstellation: Int64?
-					public var chatMessagesCorporation: Int64?
-					public var chatMessagesFleet: Int64?
-					public var chatMessagesRegion: Int64?
-					public var chatMessagesSolarsystem: Int64?
-					public var chatMessagesWarfaction: Int64?
-					public var chatTotalMessageLength: Int64?
-					public var directTrades: Int64?
-					public var fleetBroadcasts: Int64?
-					public var fleetJoins: Int64?
-					public var mailsReceived: Int64?
-					public var mailsSent: Int64?
-					public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
-						self.addContactBad = addContactBad
-						self.addContactGood = addContactGood
-						self.addContactHigh = addContactHigh
-						self.addContactHorrible = addContactHorrible
-						self.addContactNeutral = addContactNeutral
-						self.addNote = addNote
-						self.addedAsContactBad = addedAsContactBad
-						self.addedAsContactGood = addedAsContactGood
-						self.addedAsContactHigh = addedAsContactHigh
-						self.addedAsContactHorrible = addedAsContactHorrible
-						self.addedAsContactNeutral = addedAsContactNeutral
-						self.calendarEventCreated = calendarEventCreated
-						self.chatMessagesAlliance = chatMessagesAlliance
-						self.chatMessagesConstellation = chatMessagesConstellation
-						self.chatMessagesCorporation = chatMessagesCorporation
-						self.chatMessagesFleet = chatMessagesFleet
-						self.chatMessagesRegion = chatMessagesRegion
-						self.chatMessagesSolarsystem = chatMessagesSolarsystem
-						self.chatMessagesWarfaction = chatMessagesWarfaction
-						self.chatTotalMessageLength = chatTotalMessageLength
-						self.directTrades = directTrades
-						self.fleetBroadcasts = fleetBroadcasts
-						self.fleetJoins = fleetJoins
-						self.mailsReceived = mailsReceived
-						self.mailsSent = mailsSent
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case addContactBad = "add_contact_bad"
-						case addContactGood = "add_contact_good"
-						case addContactHigh = "add_contact_high"
-						case addContactHorrible = "add_contact_horrible"
-						case addContactNeutral = "add_contact_neutral"
-						case addNote = "add_note"
-						case addedAsContactBad = "added_as_contact_bad"
-						case addedAsContactGood = "added_as_contact_good"
-						case addedAsContactHigh = "added_as_contact_high"
-						case addedAsContactHorrible = "added_as_contact_horrible"
-						case addedAsContactNeutral = "added_as_contact_neutral"
-						case calendarEventCreated = "calendar_event_created"
-						case chatMessagesAlliance = "chat_messages_alliance"
-						case chatMessagesConstellation = "chat_messages_constellation"
-						case chatMessagesCorporation = "chat_messages_corporation"
-						case chatMessagesFleet = "chat_messages_fleet"
-						case chatMessagesRegion = "chat_messages_region"
-						case chatMessagesSolarsystem = "chat_messages_solarsystem"
-						case chatMessagesWarfaction = "chat_messages_warfaction"
-						case chatTotalMessageLength = "chat_total_message_length"
-						case directTrades = "direct_trades"
-						case fleetBroadcasts = "fleet_broadcasts"
-						case fleetJoins = "fleet_joins"
-						case mailsReceived = "mails_received"
-						case mailsSent = "mails_sent"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Mining: Codable, Hashable {
-					
-					
-					public var droneMine: Int64?
-					public var oreArkonor: Int64?
-					public var oreBistot: Int64?
-					public var oreCrokite: Int64?
-					public var oreDarkOchre: Int64?
-					public var oreGneiss: Int64?
-					public var oreHarvestableCloud: Int64?
-					public var oreHedbergite: Int64?
-					public var oreHemorphite: Int64?
-					public var oreIce: Int64?
-					public var oreJaspet: Int64?
-					public var oreKernite: Int64?
-					public var oreMercoxit: Int64?
-					public var oreOmber: Int64?
-					public var orePlagioclase: Int64?
-					public var orePyroxeres: Int64?
-					public var oreScordite: Int64?
-					public var oreSpodumain: Int64?
-					public var oreVeldspar: Int64?
-					public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
-						self.droneMine = droneMine
-						self.oreArkonor = oreArkonor
-						self.oreBistot = oreBistot
-						self.oreCrokite = oreCrokite
-						self.oreDarkOchre = oreDarkOchre
-						self.oreGneiss = oreGneiss
-						self.oreHarvestableCloud = oreHarvestableCloud
-						self.oreHedbergite = oreHedbergite
-						self.oreHemorphite = oreHemorphite
-						self.oreIce = oreIce
-						self.oreJaspet = oreJaspet
-						self.oreKernite = oreKernite
-						self.oreMercoxit = oreMercoxit
-						self.oreOmber = oreOmber
-						self.orePlagioclase = orePlagioclase
-						self.orePyroxeres = orePyroxeres
-						self.oreScordite = oreScordite
-						self.oreSpodumain = oreSpodumain
-						self.oreVeldspar = oreVeldspar
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case droneMine = "drone_mine"
-						case oreArkonor = "ore_arkonor"
-						case oreBistot = "ore_bistot"
-						case oreCrokite = "ore_crokite"
-						case oreDarkOchre = "ore_dark_ochre"
-						case oreGneiss = "ore_gneiss"
-						case oreHarvestableCloud = "ore_harvestable_cloud"
-						case oreHedbergite = "ore_hedbergite"
-						case oreHemorphite = "ore_hemorphite"
-						case oreIce = "ore_ice"
-						case oreJaspet = "ore_jaspet"
-						case oreKernite = "ore_kernite"
-						case oreMercoxit = "ore_mercoxit"
-						case oreOmber = "ore_omber"
-						case orePlagioclase = "ore_plagioclase"
-						case orePyroxeres = "ore_pyroxeres"
-						case oreScordite = "ore_scordite"
-						case oreSpodumain = "ore_spodumain"
-						case oreVeldspar = "ore_veldspar"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -7153,6 +6791,727 @@ extension ESI {
 					}
 				}
 				
+				public struct Module: Codable, Hashable {
+					
+					
+					public var activationsArmorHardener: Int64?
+					public var activationsArmorRepairUnit: Int64?
+					public var activationsArmorResistanceShiftHardener: Int64?
+					public var activationsAutomatedTargetingSystem: Int64?
+					public var activationsBastion: Int64?
+					public var activationsBombLauncher: Int64?
+					public var activationsCapacitorBooster: Int64?
+					public var activationsCargoScanner: Int64?
+					public var activationsCloakingDevice: Int64?
+					public var activationsCloneVatBay: Int64?
+					public var activationsCynosuralField: Int64?
+					public var activationsDamageControl: Int64?
+					public var activationsDataMiners: Int64?
+					public var activationsDroneControlUnit: Int64?
+					public var activationsDroneTrackingModules: Int64?
+					public var activationsEccm: Int64?
+					public var activationsEcm: Int64?
+					public var activationsEcmBurst: Int64?
+					public var activationsEnergyDestabilizer: Int64?
+					public var activationsEnergyVampire: Int64?
+					public var activationsEnergyWeapon: Int64?
+					public var activationsFestivalLauncher: Int64?
+					public var activationsFrequencyMiningLaser: Int64?
+					public var activationsFueledArmorRepairer: Int64?
+					public var activationsFueledShieldBooster: Int64?
+					public var activationsGangCoordinator: Int64?
+					public var activationsGasCloudHarvester: Int64?
+					public var activationsHullRepairUnit: Int64?
+					public var activationsHybridWeapon: Int64?
+					public var activationsIndustrialCore: Int64?
+					public var activationsInterdictionSphereLauncher: Int64?
+					public var activationsMicroJumpDrive: Int64?
+					public var activationsMiningLaser: Int64?
+					public var activationsMissileLauncher: Int64?
+					public var activationsPassiveTargetingSystem: Int64?
+					public var activationsProbeLauncher: Int64?
+					public var activationsProjectedEccm: Int64?
+					public var activationsProjectileWeapon: Int64?
+					public var activationsPropulsionModule: Int64?
+					public var activationsRemoteArmorRepairer: Int64?
+					public var activationsRemoteCapacitorTransmitter: Int64?
+					public var activationsRemoteEcmBurst: Int64?
+					public var activationsRemoteHullRepairer: Int64?
+					public var activationsRemoteSensorBooster: Int64?
+					public var activationsRemoteSensorDamper: Int64?
+					public var activationsRemoteShieldBooster: Int64?
+					public var activationsRemoteTrackingComputer: Int64?
+					public var activationsSalvager: Int64?
+					public var activationsSensorBooster: Int64?
+					public var activationsShieldBooster: Int64?
+					public var activationsShieldHardener: Int64?
+					public var activationsShipScanner: Int64?
+					public var activationsSiege: Int64?
+					public var activationsSmartBomb: Int64?
+					public var activationsStasisWeb: Int64?
+					public var activationsStripMiner: Int64?
+					public var activationsSuperWeapon: Int64?
+					public var activationsSurveyScanner: Int64?
+					public var activationsTargetBreaker: Int64?
+					public var activationsTargetPainter: Int64?
+					public var activationsTrackingComputer: Int64?
+					public var activationsTrackingDisruptor: Int64?
+					public var activationsTractorBeam: Int64?
+					public var activationsTriage: Int64?
+					public var activationsWarpDisruptFieldGenerator: Int64?
+					public var activationsWarpScrambler: Int64?
+					public var linkWeapons: Int64?
+					public var overload: Int64?
+					public var repairs: Int64?
+					public init(activationsArmorHardener: Int64?, activationsArmorRepairUnit: Int64?, activationsArmorResistanceShiftHardener: Int64?, activationsAutomatedTargetingSystem: Int64?, activationsBastion: Int64?, activationsBombLauncher: Int64?, activationsCapacitorBooster: Int64?, activationsCargoScanner: Int64?, activationsCloakingDevice: Int64?, activationsCloneVatBay: Int64?, activationsCynosuralField: Int64?, activationsDamageControl: Int64?, activationsDataMiners: Int64?, activationsDroneControlUnit: Int64?, activationsDroneTrackingModules: Int64?, activationsEccm: Int64?, activationsEcm: Int64?, activationsEcmBurst: Int64?, activationsEnergyDestabilizer: Int64?, activationsEnergyVampire: Int64?, activationsEnergyWeapon: Int64?, activationsFestivalLauncher: Int64?, activationsFrequencyMiningLaser: Int64?, activationsFueledArmorRepairer: Int64?, activationsFueledShieldBooster: Int64?, activationsGangCoordinator: Int64?, activationsGasCloudHarvester: Int64?, activationsHullRepairUnit: Int64?, activationsHybridWeapon: Int64?, activationsIndustrialCore: Int64?, activationsInterdictionSphereLauncher: Int64?, activationsMicroJumpDrive: Int64?, activationsMiningLaser: Int64?, activationsMissileLauncher: Int64?, activationsPassiveTargetingSystem: Int64?, activationsProbeLauncher: Int64?, activationsProjectedEccm: Int64?, activationsProjectileWeapon: Int64?, activationsPropulsionModule: Int64?, activationsRemoteArmorRepairer: Int64?, activationsRemoteCapacitorTransmitter: Int64?, activationsRemoteEcmBurst: Int64?, activationsRemoteHullRepairer: Int64?, activationsRemoteSensorBooster: Int64?, activationsRemoteSensorDamper: Int64?, activationsRemoteShieldBooster: Int64?, activationsRemoteTrackingComputer: Int64?, activationsSalvager: Int64?, activationsSensorBooster: Int64?, activationsShieldBooster: Int64?, activationsShieldHardener: Int64?, activationsShipScanner: Int64?, activationsSiege: Int64?, activationsSmartBomb: Int64?, activationsStasisWeb: Int64?, activationsStripMiner: Int64?, activationsSuperWeapon: Int64?, activationsSurveyScanner: Int64?, activationsTargetBreaker: Int64?, activationsTargetPainter: Int64?, activationsTrackingComputer: Int64?, activationsTrackingDisruptor: Int64?, activationsTractorBeam: Int64?, activationsTriage: Int64?, activationsWarpDisruptFieldGenerator: Int64?, activationsWarpScrambler: Int64?, linkWeapons: Int64?, overload: Int64?, repairs: Int64?) {
+						self.activationsArmorHardener = activationsArmorHardener
+						self.activationsArmorRepairUnit = activationsArmorRepairUnit
+						self.activationsArmorResistanceShiftHardener = activationsArmorResistanceShiftHardener
+						self.activationsAutomatedTargetingSystem = activationsAutomatedTargetingSystem
+						self.activationsBastion = activationsBastion
+						self.activationsBombLauncher = activationsBombLauncher
+						self.activationsCapacitorBooster = activationsCapacitorBooster
+						self.activationsCargoScanner = activationsCargoScanner
+						self.activationsCloakingDevice = activationsCloakingDevice
+						self.activationsCloneVatBay = activationsCloneVatBay
+						self.activationsCynosuralField = activationsCynosuralField
+						self.activationsDamageControl = activationsDamageControl
+						self.activationsDataMiners = activationsDataMiners
+						self.activationsDroneControlUnit = activationsDroneControlUnit
+						self.activationsDroneTrackingModules = activationsDroneTrackingModules
+						self.activationsEccm = activationsEccm
+						self.activationsEcm = activationsEcm
+						self.activationsEcmBurst = activationsEcmBurst
+						self.activationsEnergyDestabilizer = activationsEnergyDestabilizer
+						self.activationsEnergyVampire = activationsEnergyVampire
+						self.activationsEnergyWeapon = activationsEnergyWeapon
+						self.activationsFestivalLauncher = activationsFestivalLauncher
+						self.activationsFrequencyMiningLaser = activationsFrequencyMiningLaser
+						self.activationsFueledArmorRepairer = activationsFueledArmorRepairer
+						self.activationsFueledShieldBooster = activationsFueledShieldBooster
+						self.activationsGangCoordinator = activationsGangCoordinator
+						self.activationsGasCloudHarvester = activationsGasCloudHarvester
+						self.activationsHullRepairUnit = activationsHullRepairUnit
+						self.activationsHybridWeapon = activationsHybridWeapon
+						self.activationsIndustrialCore = activationsIndustrialCore
+						self.activationsInterdictionSphereLauncher = activationsInterdictionSphereLauncher
+						self.activationsMicroJumpDrive = activationsMicroJumpDrive
+						self.activationsMiningLaser = activationsMiningLaser
+						self.activationsMissileLauncher = activationsMissileLauncher
+						self.activationsPassiveTargetingSystem = activationsPassiveTargetingSystem
+						self.activationsProbeLauncher = activationsProbeLauncher
+						self.activationsProjectedEccm = activationsProjectedEccm
+						self.activationsProjectileWeapon = activationsProjectileWeapon
+						self.activationsPropulsionModule = activationsPropulsionModule
+						self.activationsRemoteArmorRepairer = activationsRemoteArmorRepairer
+						self.activationsRemoteCapacitorTransmitter = activationsRemoteCapacitorTransmitter
+						self.activationsRemoteEcmBurst = activationsRemoteEcmBurst
+						self.activationsRemoteHullRepairer = activationsRemoteHullRepairer
+						self.activationsRemoteSensorBooster = activationsRemoteSensorBooster
+						self.activationsRemoteSensorDamper = activationsRemoteSensorDamper
+						self.activationsRemoteShieldBooster = activationsRemoteShieldBooster
+						self.activationsRemoteTrackingComputer = activationsRemoteTrackingComputer
+						self.activationsSalvager = activationsSalvager
+						self.activationsSensorBooster = activationsSensorBooster
+						self.activationsShieldBooster = activationsShieldBooster
+						self.activationsShieldHardener = activationsShieldHardener
+						self.activationsShipScanner = activationsShipScanner
+						self.activationsSiege = activationsSiege
+						self.activationsSmartBomb = activationsSmartBomb
+						self.activationsStasisWeb = activationsStasisWeb
+						self.activationsStripMiner = activationsStripMiner
+						self.activationsSuperWeapon = activationsSuperWeapon
+						self.activationsSurveyScanner = activationsSurveyScanner
+						self.activationsTargetBreaker = activationsTargetBreaker
+						self.activationsTargetPainter = activationsTargetPainter
+						self.activationsTrackingComputer = activationsTrackingComputer
+						self.activationsTrackingDisruptor = activationsTrackingDisruptor
+						self.activationsTractorBeam = activationsTractorBeam
+						self.activationsTriage = activationsTriage
+						self.activationsWarpDisruptFieldGenerator = activationsWarpDisruptFieldGenerator
+						self.activationsWarpScrambler = activationsWarpScrambler
+						self.linkWeapons = linkWeapons
+						self.overload = overload
+						self.repairs = repairs
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case activationsArmorHardener = "activations_armor_hardener"
+						case activationsArmorRepairUnit = "activations_armor_repair_unit"
+						case activationsArmorResistanceShiftHardener = "activations_armor_resistance_shift_hardener"
+						case activationsAutomatedTargetingSystem = "activations_automated_targeting_system"
+						case activationsBastion = "activations_bastion"
+						case activationsBombLauncher = "activations_bomb_launcher"
+						case activationsCapacitorBooster = "activations_capacitor_booster"
+						case activationsCargoScanner = "activations_cargo_scanner"
+						case activationsCloakingDevice = "activations_cloaking_device"
+						case activationsCloneVatBay = "activations_clone_vat_bay"
+						case activationsCynosuralField = "activations_cynosural_field"
+						case activationsDamageControl = "activations_damage_control"
+						case activationsDataMiners = "activations_data_miners"
+						case activationsDroneControlUnit = "activations_drone_control_unit"
+						case activationsDroneTrackingModules = "activations_drone_tracking_modules"
+						case activationsEccm = "activations_eccm"
+						case activationsEcm = "activations_ecm"
+						case activationsEcmBurst = "activations_ecm_burst"
+						case activationsEnergyDestabilizer = "activations_energy_destabilizer"
+						case activationsEnergyVampire = "activations_energy_vampire"
+						case activationsEnergyWeapon = "activations_energy_weapon"
+						case activationsFestivalLauncher = "activations_festival_launcher"
+						case activationsFrequencyMiningLaser = "activations_frequency_mining_laser"
+						case activationsFueledArmorRepairer = "activations_fueled_armor_repairer"
+						case activationsFueledShieldBooster = "activations_fueled_shield_booster"
+						case activationsGangCoordinator = "activations_gang_coordinator"
+						case activationsGasCloudHarvester = "activations_gas_cloud_harvester"
+						case activationsHullRepairUnit = "activations_hull_repair_unit"
+						case activationsHybridWeapon = "activations_hybrid_weapon"
+						case activationsIndustrialCore = "activations_industrial_core"
+						case activationsInterdictionSphereLauncher = "activations_interdiction_sphere_launcher"
+						case activationsMicroJumpDrive = "activations_micro_jump_drive"
+						case activationsMiningLaser = "activations_mining_laser"
+						case activationsMissileLauncher = "activations_missile_launcher"
+						case activationsPassiveTargetingSystem = "activations_passive_targeting_system"
+						case activationsProbeLauncher = "activations_probe_launcher"
+						case activationsProjectedEccm = "activations_projected_eccm"
+						case activationsProjectileWeapon = "activations_projectile_weapon"
+						case activationsPropulsionModule = "activations_propulsion_module"
+						case activationsRemoteArmorRepairer = "activations_remote_armor_repairer"
+						case activationsRemoteCapacitorTransmitter = "activations_remote_capacitor_transmitter"
+						case activationsRemoteEcmBurst = "activations_remote_ecm_burst"
+						case activationsRemoteHullRepairer = "activations_remote_hull_repairer"
+						case activationsRemoteSensorBooster = "activations_remote_sensor_booster"
+						case activationsRemoteSensorDamper = "activations_remote_sensor_damper"
+						case activationsRemoteShieldBooster = "activations_remote_shield_booster"
+						case activationsRemoteTrackingComputer = "activations_remote_tracking_computer"
+						case activationsSalvager = "activations_salvager"
+						case activationsSensorBooster = "activations_sensor_booster"
+						case activationsShieldBooster = "activations_shield_booster"
+						case activationsShieldHardener = "activations_shield_hardener"
+						case activationsShipScanner = "activations_ship_scanner"
+						case activationsSiege = "activations_siege"
+						case activationsSmartBomb = "activations_smart_bomb"
+						case activationsStasisWeb = "activations_stasis_web"
+						case activationsStripMiner = "activations_strip_miner"
+						case activationsSuperWeapon = "activations_super_weapon"
+						case activationsSurveyScanner = "activations_survey_scanner"
+						case activationsTargetBreaker = "activations_target_breaker"
+						case activationsTargetPainter = "activations_target_painter"
+						case activationsTrackingComputer = "activations_tracking_computer"
+						case activationsTrackingDisruptor = "activations_tracking_disruptor"
+						case activationsTractorBeam = "activations_tractor_beam"
+						case activationsTriage = "activations_triage"
+						case activationsWarpDisruptFieldGenerator = "activations_warp_disrupt_field_generator"
+						case activationsWarpScrambler = "activations_warp_scrambler"
+						case linkWeapons = "link_weapons"
+						case overload
+						case repairs
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Pve: Codable, Hashable {
+					
+					
+					public var dungeonsCompletedAgent: Int64?
+					public var dungeonsCompletedDistribution: Int64?
+					public var missionsSucceeded: Int64?
+					public var missionsSucceededEpicArc: Int64?
+					public init(dungeonsCompletedAgent: Int64?, dungeonsCompletedDistribution: Int64?, missionsSucceeded: Int64?, missionsSucceededEpicArc: Int64?) {
+						self.dungeonsCompletedAgent = dungeonsCompletedAgent
+						self.dungeonsCompletedDistribution = dungeonsCompletedDistribution
+						self.missionsSucceeded = missionsSucceeded
+						self.missionsSucceededEpicArc = missionsSucceededEpicArc
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case dungeonsCompletedAgent = "dungeons_completed_agent"
+						case dungeonsCompletedDistribution = "dungeons_completed_distribution"
+						case missionsSucceeded = "missions_succeeded"
+						case missionsSucceededEpicArc = "missions_succeeded_epic_arc"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Isk: Codable, Hashable {
+					
+					
+					public var `in`: Int64?
+					public var out: Int64?
+					public init(`in`: Int64?, out: Int64?) {
+						self.`in` = `in`
+						self.out = out
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case `in` = "in"
+						case out
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var character: ESI.Characters.CharacterID.Stats.Character?
+					public var combat: ESI.Characters.CharacterID.Stats.Combat?
+					public var industry: ESI.Characters.CharacterID.Stats.Industry?
+					public var inventory: ESI.Characters.CharacterID.Stats.Inventory?
+					public var isk: ESI.Characters.CharacterID.Stats.Isk?
+					public var market: ESI.Characters.CharacterID.Stats.Market?
+					public var mining: ESI.Characters.CharacterID.Stats.Mining?
+					public var module: ESI.Characters.CharacterID.Stats.Module?
+					public var orbital: ESI.Characters.CharacterID.Stats.Orbital?
+					public var pve: ESI.Characters.CharacterID.Stats.Pve?
+					public var social: ESI.Characters.CharacterID.Stats.Social?
+					public var travel: ESI.Characters.CharacterID.Stats.Travel?
+					public var year: Int
+					public init(character: ESI.Characters.CharacterID.Stats.Character?, combat: ESI.Characters.CharacterID.Stats.Combat?, industry: ESI.Characters.CharacterID.Stats.Industry?, inventory: ESI.Characters.CharacterID.Stats.Inventory?, isk: ESI.Characters.CharacterID.Stats.Isk?, market: ESI.Characters.CharacterID.Stats.Market?, mining: ESI.Characters.CharacterID.Stats.Mining?, module: ESI.Characters.CharacterID.Stats.Module?, orbital: ESI.Characters.CharacterID.Stats.Orbital?, pve: ESI.Characters.CharacterID.Stats.Pve?, social: ESI.Characters.CharacterID.Stats.Social?, travel: ESI.Characters.CharacterID.Stats.Travel?, year: Int) {
+						self.character = character
+						self.combat = combat
+						self.industry = industry
+						self.inventory = inventory
+						self.isk = isk
+						self.market = market
+						self.mining = mining
+						self.module = module
+						self.orbital = orbital
+						self.pve = pve
+						self.social = social
+						self.travel = travel
+						self.year = year
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case character
+						case combat
+						case industry
+						case inventory
+						case isk
+						case market
+						case mining
+						case module
+						case orbital
+						case pve
+						case social
+						case travel
+						case year
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Social: Codable, Hashable {
+					
+					
+					public var addContactBad: Int64?
+					public var addContactGood: Int64?
+					public var addContactHigh: Int64?
+					public var addContactHorrible: Int64?
+					public var addContactNeutral: Int64?
+					public var addNote: Int64?
+					public var addedAsContactBad: Int64?
+					public var addedAsContactGood: Int64?
+					public var addedAsContactHigh: Int64?
+					public var addedAsContactHorrible: Int64?
+					public var addedAsContactNeutral: Int64?
+					public var calendarEventCreated: Int64?
+					public var chatMessagesAlliance: Int64?
+					public var chatMessagesConstellation: Int64?
+					public var chatMessagesCorporation: Int64?
+					public var chatMessagesFleet: Int64?
+					public var chatMessagesRegion: Int64?
+					public var chatMessagesSolarsystem: Int64?
+					public var chatMessagesWarfaction: Int64?
+					public var chatTotalMessageLength: Int64?
+					public var directTrades: Int64?
+					public var fleetBroadcasts: Int64?
+					public var fleetJoins: Int64?
+					public var mailsReceived: Int64?
+					public var mailsSent: Int64?
+					public init(addContactBad: Int64?, addContactGood: Int64?, addContactHigh: Int64?, addContactHorrible: Int64?, addContactNeutral: Int64?, addNote: Int64?, addedAsContactBad: Int64?, addedAsContactGood: Int64?, addedAsContactHigh: Int64?, addedAsContactHorrible: Int64?, addedAsContactNeutral: Int64?, calendarEventCreated: Int64?, chatMessagesAlliance: Int64?, chatMessagesConstellation: Int64?, chatMessagesCorporation: Int64?, chatMessagesFleet: Int64?, chatMessagesRegion: Int64?, chatMessagesSolarsystem: Int64?, chatMessagesWarfaction: Int64?, chatTotalMessageLength: Int64?, directTrades: Int64?, fleetBroadcasts: Int64?, fleetJoins: Int64?, mailsReceived: Int64?, mailsSent: Int64?) {
+						self.addContactBad = addContactBad
+						self.addContactGood = addContactGood
+						self.addContactHigh = addContactHigh
+						self.addContactHorrible = addContactHorrible
+						self.addContactNeutral = addContactNeutral
+						self.addNote = addNote
+						self.addedAsContactBad = addedAsContactBad
+						self.addedAsContactGood = addedAsContactGood
+						self.addedAsContactHigh = addedAsContactHigh
+						self.addedAsContactHorrible = addedAsContactHorrible
+						self.addedAsContactNeutral = addedAsContactNeutral
+						self.calendarEventCreated = calendarEventCreated
+						self.chatMessagesAlliance = chatMessagesAlliance
+						self.chatMessagesConstellation = chatMessagesConstellation
+						self.chatMessagesCorporation = chatMessagesCorporation
+						self.chatMessagesFleet = chatMessagesFleet
+						self.chatMessagesRegion = chatMessagesRegion
+						self.chatMessagesSolarsystem = chatMessagesSolarsystem
+						self.chatMessagesWarfaction = chatMessagesWarfaction
+						self.chatTotalMessageLength = chatTotalMessageLength
+						self.directTrades = directTrades
+						self.fleetBroadcasts = fleetBroadcasts
+						self.fleetJoins = fleetJoins
+						self.mailsReceived = mailsReceived
+						self.mailsSent = mailsSent
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case addContactBad = "add_contact_bad"
+						case addContactGood = "add_contact_good"
+						case addContactHigh = "add_contact_high"
+						case addContactHorrible = "add_contact_horrible"
+						case addContactNeutral = "add_contact_neutral"
+						case addNote = "add_note"
+						case addedAsContactBad = "added_as_contact_bad"
+						case addedAsContactGood = "added_as_contact_good"
+						case addedAsContactHigh = "added_as_contact_high"
+						case addedAsContactHorrible = "added_as_contact_horrible"
+						case addedAsContactNeutral = "added_as_contact_neutral"
+						case calendarEventCreated = "calendar_event_created"
+						case chatMessagesAlliance = "chat_messages_alliance"
+						case chatMessagesConstellation = "chat_messages_constellation"
+						case chatMessagesCorporation = "chat_messages_corporation"
+						case chatMessagesFleet = "chat_messages_fleet"
+						case chatMessagesRegion = "chat_messages_region"
+						case chatMessagesSolarsystem = "chat_messages_solarsystem"
+						case chatMessagesWarfaction = "chat_messages_warfaction"
+						case chatTotalMessageLength = "chat_total_message_length"
+						case directTrades = "direct_trades"
+						case fleetBroadcasts = "fleet_broadcasts"
+						case fleetJoins = "fleet_joins"
+						case mailsReceived = "mails_received"
+						case mailsSent = "mails_sent"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Mining: Codable, Hashable {
+					
+					
+					public var droneMine: Int64?
+					public var oreArkonor: Int64?
+					public var oreBistot: Int64?
+					public var oreCrokite: Int64?
+					public var oreDarkOchre: Int64?
+					public var oreGneiss: Int64?
+					public var oreHarvestableCloud: Int64?
+					public var oreHedbergite: Int64?
+					public var oreHemorphite: Int64?
+					public var oreIce: Int64?
+					public var oreJaspet: Int64?
+					public var oreKernite: Int64?
+					public var oreMercoxit: Int64?
+					public var oreOmber: Int64?
+					public var orePlagioclase: Int64?
+					public var orePyroxeres: Int64?
+					public var oreScordite: Int64?
+					public var oreSpodumain: Int64?
+					public var oreVeldspar: Int64?
+					public init(droneMine: Int64?, oreArkonor: Int64?, oreBistot: Int64?, oreCrokite: Int64?, oreDarkOchre: Int64?, oreGneiss: Int64?, oreHarvestableCloud: Int64?, oreHedbergite: Int64?, oreHemorphite: Int64?, oreIce: Int64?, oreJaspet: Int64?, oreKernite: Int64?, oreMercoxit: Int64?, oreOmber: Int64?, orePlagioclase: Int64?, orePyroxeres: Int64?, oreScordite: Int64?, oreSpodumain: Int64?, oreVeldspar: Int64?) {
+						self.droneMine = droneMine
+						self.oreArkonor = oreArkonor
+						self.oreBistot = oreBistot
+						self.oreCrokite = oreCrokite
+						self.oreDarkOchre = oreDarkOchre
+						self.oreGneiss = oreGneiss
+						self.oreHarvestableCloud = oreHarvestableCloud
+						self.oreHedbergite = oreHedbergite
+						self.oreHemorphite = oreHemorphite
+						self.oreIce = oreIce
+						self.oreJaspet = oreJaspet
+						self.oreKernite = oreKernite
+						self.oreMercoxit = oreMercoxit
+						self.oreOmber = oreOmber
+						self.orePlagioclase = orePlagioclase
+						self.orePyroxeres = orePyroxeres
+						self.oreScordite = oreScordite
+						self.oreSpodumain = oreSpodumain
+						self.oreVeldspar = oreVeldspar
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case droneMine = "drone_mine"
+						case oreArkonor = "ore_arkonor"
+						case oreBistot = "ore_bistot"
+						case oreCrokite = "ore_crokite"
+						case oreDarkOchre = "ore_dark_ochre"
+						case oreGneiss = "ore_gneiss"
+						case oreHarvestableCloud = "ore_harvestable_cloud"
+						case oreHedbergite = "ore_hedbergite"
+						case oreHemorphite = "ore_hemorphite"
+						case oreIce = "ore_ice"
+						case oreJaspet = "ore_jaspet"
+						case oreKernite = "ore_kernite"
+						case oreMercoxit = "ore_mercoxit"
+						case oreOmber = "ore_omber"
+						case orePlagioclase = "ore_plagioclase"
+						case orePyroxeres = "ore_pyroxeres"
+						case oreScordite = "ore_scordite"
+						case oreSpodumain = "ore_spodumain"
+						case oreVeldspar = "ore_veldspar"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Industry: Codable, Hashable {
+					
+					
+					public var hackingSuccesses: Int64?
+					public var jobsCancelled: Int64?
+					public var jobsCompletedCopyBlueprint: Int64?
+					public var jobsCompletedInvention: Int64?
+					public var jobsCompletedManufacture: Int64?
+					public var jobsCompletedManufactureAsteroid: Int64?
+					public var jobsCompletedManufactureAsteroidQuantity: Int64?
+					public var jobsCompletedManufactureCharge: Int64?
+					public var jobsCompletedManufactureChargeQuantity: Int64?
+					public var jobsCompletedManufactureCommodity: Int64?
+					public var jobsCompletedManufactureCommodityQuantity: Int64?
+					public var jobsCompletedManufactureDeployable: Int64?
+					public var jobsCompletedManufactureDeployableQuantity: Int64?
+					public var jobsCompletedManufactureDrone: Int64?
+					public var jobsCompletedManufactureDroneQuantity: Int64?
+					public var jobsCompletedManufactureImplant: Int64?
+					public var jobsCompletedManufactureImplantQuantity: Int64?
+					public var jobsCompletedManufactureModule: Int64?
+					public var jobsCompletedManufactureModuleQuantity: Int64?
+					public var jobsCompletedManufactureOther: Int64?
+					public var jobsCompletedManufactureOtherQuantity: Int64?
+					public var jobsCompletedManufactureShip: Int64?
+					public var jobsCompletedManufactureShipQuantity: Int64?
+					public var jobsCompletedManufactureStructure: Int64?
+					public var jobsCompletedManufactureStructureQuantity: Int64?
+					public var jobsCompletedManufactureSubsystem: Int64?
+					public var jobsCompletedManufactureSubsystemQuantity: Int64?
+					public var jobsCompletedMaterialProductivity: Int64?
+					public var jobsCompletedTimeProductivity: Int64?
+					public var jobsStartedCopyBlueprint: Int64?
+					public var jobsStartedInvention: Int64?
+					public var jobsStartedManufacture: Int64?
+					public var jobsStartedMaterialProductivity: Int64?
+					public var jobsStartedTimeProductivity: Int64?
+					public var reprocessItem: Int64?
+					public var reprocessItemQuantity: Int64?
+					public init(hackingSuccesses: Int64?, jobsCancelled: Int64?, jobsCompletedCopyBlueprint: Int64?, jobsCompletedInvention: Int64?, jobsCompletedManufacture: Int64?, jobsCompletedManufactureAsteroid: Int64?, jobsCompletedManufactureAsteroidQuantity: Int64?, jobsCompletedManufactureCharge: Int64?, jobsCompletedManufactureChargeQuantity: Int64?, jobsCompletedManufactureCommodity: Int64?, jobsCompletedManufactureCommodityQuantity: Int64?, jobsCompletedManufactureDeployable: Int64?, jobsCompletedManufactureDeployableQuantity: Int64?, jobsCompletedManufactureDrone: Int64?, jobsCompletedManufactureDroneQuantity: Int64?, jobsCompletedManufactureImplant: Int64?, jobsCompletedManufactureImplantQuantity: Int64?, jobsCompletedManufactureModule: Int64?, jobsCompletedManufactureModuleQuantity: Int64?, jobsCompletedManufactureOther: Int64?, jobsCompletedManufactureOtherQuantity: Int64?, jobsCompletedManufactureShip: Int64?, jobsCompletedManufactureShipQuantity: Int64?, jobsCompletedManufactureStructure: Int64?, jobsCompletedManufactureStructureQuantity: Int64?, jobsCompletedManufactureSubsystem: Int64?, jobsCompletedManufactureSubsystemQuantity: Int64?, jobsCompletedMaterialProductivity: Int64?, jobsCompletedTimeProductivity: Int64?, jobsStartedCopyBlueprint: Int64?, jobsStartedInvention: Int64?, jobsStartedManufacture: Int64?, jobsStartedMaterialProductivity: Int64?, jobsStartedTimeProductivity: Int64?, reprocessItem: Int64?, reprocessItemQuantity: Int64?) {
+						self.hackingSuccesses = hackingSuccesses
+						self.jobsCancelled = jobsCancelled
+						self.jobsCompletedCopyBlueprint = jobsCompletedCopyBlueprint
+						self.jobsCompletedInvention = jobsCompletedInvention
+						self.jobsCompletedManufacture = jobsCompletedManufacture
+						self.jobsCompletedManufactureAsteroid = jobsCompletedManufactureAsteroid
+						self.jobsCompletedManufactureAsteroidQuantity = jobsCompletedManufactureAsteroidQuantity
+						self.jobsCompletedManufactureCharge = jobsCompletedManufactureCharge
+						self.jobsCompletedManufactureChargeQuantity = jobsCompletedManufactureChargeQuantity
+						self.jobsCompletedManufactureCommodity = jobsCompletedManufactureCommodity
+						self.jobsCompletedManufactureCommodityQuantity = jobsCompletedManufactureCommodityQuantity
+						self.jobsCompletedManufactureDeployable = jobsCompletedManufactureDeployable
+						self.jobsCompletedManufactureDeployableQuantity = jobsCompletedManufactureDeployableQuantity
+						self.jobsCompletedManufactureDrone = jobsCompletedManufactureDrone
+						self.jobsCompletedManufactureDroneQuantity = jobsCompletedManufactureDroneQuantity
+						self.jobsCompletedManufactureImplant = jobsCompletedManufactureImplant
+						self.jobsCompletedManufactureImplantQuantity = jobsCompletedManufactureImplantQuantity
+						self.jobsCompletedManufactureModule = jobsCompletedManufactureModule
+						self.jobsCompletedManufactureModuleQuantity = jobsCompletedManufactureModuleQuantity
+						self.jobsCompletedManufactureOther = jobsCompletedManufactureOther
+						self.jobsCompletedManufactureOtherQuantity = jobsCompletedManufactureOtherQuantity
+						self.jobsCompletedManufactureShip = jobsCompletedManufactureShip
+						self.jobsCompletedManufactureShipQuantity = jobsCompletedManufactureShipQuantity
+						self.jobsCompletedManufactureStructure = jobsCompletedManufactureStructure
+						self.jobsCompletedManufactureStructureQuantity = jobsCompletedManufactureStructureQuantity
+						self.jobsCompletedManufactureSubsystem = jobsCompletedManufactureSubsystem
+						self.jobsCompletedManufactureSubsystemQuantity = jobsCompletedManufactureSubsystemQuantity
+						self.jobsCompletedMaterialProductivity = jobsCompletedMaterialProductivity
+						self.jobsCompletedTimeProductivity = jobsCompletedTimeProductivity
+						self.jobsStartedCopyBlueprint = jobsStartedCopyBlueprint
+						self.jobsStartedInvention = jobsStartedInvention
+						self.jobsStartedManufacture = jobsStartedManufacture
+						self.jobsStartedMaterialProductivity = jobsStartedMaterialProductivity
+						self.jobsStartedTimeProductivity = jobsStartedTimeProductivity
+						self.reprocessItem = reprocessItem
+						self.reprocessItemQuantity = reprocessItemQuantity
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case hackingSuccesses = "hacking_successes"
+						case jobsCancelled = "jobs_cancelled"
+						case jobsCompletedCopyBlueprint = "jobs_completed_copy_blueprint"
+						case jobsCompletedInvention = "jobs_completed_invention"
+						case jobsCompletedManufacture = "jobs_completed_manufacture"
+						case jobsCompletedManufactureAsteroid = "jobs_completed_manufacture_asteroid"
+						case jobsCompletedManufactureAsteroidQuantity = "jobs_completed_manufacture_asteroid_quantity"
+						case jobsCompletedManufactureCharge = "jobs_completed_manufacture_charge"
+						case jobsCompletedManufactureChargeQuantity = "jobs_completed_manufacture_charge_quantity"
+						case jobsCompletedManufactureCommodity = "jobs_completed_manufacture_commodity"
+						case jobsCompletedManufactureCommodityQuantity = "jobs_completed_manufacture_commodity_quantity"
+						case jobsCompletedManufactureDeployable = "jobs_completed_manufacture_deployable"
+						case jobsCompletedManufactureDeployableQuantity = "jobs_completed_manufacture_deployable_quantity"
+						case jobsCompletedManufactureDrone = "jobs_completed_manufacture_drone"
+						case jobsCompletedManufactureDroneQuantity = "jobs_completed_manufacture_drone_quantity"
+						case jobsCompletedManufactureImplant = "jobs_completed_manufacture_implant"
+						case jobsCompletedManufactureImplantQuantity = "jobs_completed_manufacture_implant_quantity"
+						case jobsCompletedManufactureModule = "jobs_completed_manufacture_module"
+						case jobsCompletedManufactureModuleQuantity = "jobs_completed_manufacture_module_quantity"
+						case jobsCompletedManufactureOther = "jobs_completed_manufacture_other"
+						case jobsCompletedManufactureOtherQuantity = "jobs_completed_manufacture_other_quantity"
+						case jobsCompletedManufactureShip = "jobs_completed_manufacture_ship"
+						case jobsCompletedManufactureShipQuantity = "jobs_completed_manufacture_ship_quantity"
+						case jobsCompletedManufactureStructure = "jobs_completed_manufacture_structure"
+						case jobsCompletedManufactureStructureQuantity = "jobs_completed_manufacture_structure_quantity"
+						case jobsCompletedManufactureSubsystem = "jobs_completed_manufacture_subsystem"
+						case jobsCompletedManufactureSubsystemQuantity = "jobs_completed_manufacture_subsystem_quantity"
+						case jobsCompletedMaterialProductivity = "jobs_completed_material_productivity"
+						case jobsCompletedTimeProductivity = "jobs_completed_time_productivity"
+						case jobsStartedCopyBlueprint = "jobs_started_copy_blueprint"
+						case jobsStartedInvention = "jobs_started_invention"
+						case jobsStartedManufacture = "jobs_started_manufacture"
+						case jobsStartedMaterialProductivity = "jobs_started_material_productivity"
+						case jobsStartedTimeProductivity = "jobs_started_time_productivity"
+						case reprocessItem = "reprocess_item"
+						case reprocessItemQuantity = "reprocess_item_quantity"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Inventory: Codable, Hashable {
+					
+					
+					public var abandonLootQuantity: Int64?
+					public var trashItemQuantity: Int64?
+					public init(abandonLootQuantity: Int64?, trashItemQuantity: Int64?) {
+						self.abandonLootQuantity = abandonLootQuantity
+						self.trashItemQuantity = trashItemQuantity
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case abandonLootQuantity = "abandon_loot_quantity"
+						case trashItemQuantity = "trash_item_quantity"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Character: Codable, Hashable {
+					
+					
+					public var daysOfActivity: Int64?
+					public var minutes: Int64?
+					public var sessionsStarted: Int64?
+					public init(daysOfActivity: Int64?, minutes: Int64?, sessionsStarted: Int64?) {
+						self.daysOfActivity = daysOfActivity
+						self.minutes = minutes
+						self.sessionsStarted = sessionsStarted
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case daysOfActivity = "days_of_activity"
+						case minutes
+						case sessionsStarted = "sessions_started"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Market: Codable, Hashable {
+					
+					
+					public var acceptContractsCourier: Int64?
+					public var acceptContractsItemExchange: Int64?
+					public var buyOrdersPlaced: Int64?
+					public var cancelMarketOrder: Int64?
+					public var createContractsAuction: Int64?
+					public var createContractsCourier: Int64?
+					public var createContractsItemExchange: Int64?
+					public var deliverCourierContract: Int64?
+					public var iskGained: Int64?
+					public var iskSpent: Int64?
+					public var modifyMarketOrder: Int64?
+					public var searchContracts: Int64?
+					public var sellOrdersPlaced: Int64?
+					public init(acceptContractsCourier: Int64?, acceptContractsItemExchange: Int64?, buyOrdersPlaced: Int64?, cancelMarketOrder: Int64?, createContractsAuction: Int64?, createContractsCourier: Int64?, createContractsItemExchange: Int64?, deliverCourierContract: Int64?, iskGained: Int64?, iskSpent: Int64?, modifyMarketOrder: Int64?, searchContracts: Int64?, sellOrdersPlaced: Int64?) {
+						self.acceptContractsCourier = acceptContractsCourier
+						self.acceptContractsItemExchange = acceptContractsItemExchange
+						self.buyOrdersPlaced = buyOrdersPlaced
+						self.cancelMarketOrder = cancelMarketOrder
+						self.createContractsAuction = createContractsAuction
+						self.createContractsCourier = createContractsCourier
+						self.createContractsItemExchange = createContractsItemExchange
+						self.deliverCourierContract = deliverCourierContract
+						self.iskGained = iskGained
+						self.iskSpent = iskSpent
+						self.modifyMarketOrder = modifyMarketOrder
+						self.searchContracts = searchContracts
+						self.sellOrdersPlaced = sellOrdersPlaced
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case acceptContractsCourier = "accept_contracts_courier"
+						case acceptContractsItemExchange = "accept_contracts_item_exchange"
+						case buyOrdersPlaced = "buy_orders_placed"
+						case cancelMarketOrder = "cancel_market_order"
+						case createContractsAuction = "create_contracts_auction"
+						case createContractsCourier = "create_contracts_courier"
+						case createContractsItemExchange = "create_contracts_item_exchange"
+						case deliverCourierContract = "deliver_courier_contract"
+						case iskGained = "isk_gained"
+						case iskSpent = "isk_spent"
+						case modifyMarketOrder = "modify_market_order"
+						case searchContracts = "search_contracts"
+						case sellOrdersPlaced = "sell_orders_placed"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct Orbital: Codable, Hashable {
+					
+					
+					public var strikeCharactersKilled: Int64?
+					public var strikeDamageToPlayersArmorAmount: Int64?
+					public var strikeDamageToPlayersShieldAmount: Int64?
+					public init(strikeCharactersKilled: Int64?, strikeDamageToPlayersArmorAmount: Int64?, strikeDamageToPlayersShieldAmount: Int64?) {
+						self.strikeCharactersKilled = strikeCharactersKilled
+						self.strikeDamageToPlayersArmorAmount = strikeDamageToPlayersArmorAmount
+						self.strikeDamageToPlayersShieldAmount = strikeDamageToPlayersShieldAmount
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case strikeCharactersKilled = "strike_characters_killed"
+						case strikeDamageToPlayersArmorAmount = "strike_damage_to_players_armor_amount"
+						case strikeDamageToPlayersShieldAmount = "strike_damage_to_players_shield_amount"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 			}
 			
 			public struct Titles {
@@ -7179,18 +7538,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Titles.Success]>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -7248,18 +7613,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<Double>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -7300,18 +7671,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Wallet.Journal.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -7457,7 +7834,7 @@ extension ESI {
 						public var amount: Double?
 						public var balance: Double?
 						public var contextID: Int64?
-						public var contextIDType: ESI.Characters.ContextIDType?
+						public var contextIDType: ESI.Corporations.ContextIDType?
 						public var date: Date
 						public var localizedDescription: String
 						public var firstPartyID: Int?
@@ -7467,7 +7844,7 @@ extension ESI {
 						public var secondPartyID: Int?
 						public var tax: Double?
 						public var taxReceiverID: Int?
-						public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: ESI.Characters.ContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: ESI.Characters.CharacterID.Wallet.Journal.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
+						public init(amount: Double?, balance: Double?, contextID: Int64?, contextIDType: ESI.Corporations.ContextIDType?, date: Date, localizedDescription: String, firstPartyID: Int?, id: Int64, reason: String?, refType: ESI.Characters.CharacterID.Wallet.Journal.RefType, secondPartyID: Int?, tax: Double?, taxReceiverID: Int?) {
 							self.amount = amount
 							self.balance = balance
 							self.contextID = contextID
@@ -7537,18 +7914,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Characters.CharacterID.Wallet.Transactions.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -7684,428 +8067,6 @@ extension ESI {
 		}
 		
 		
-		public enum Role: String, Codable, CustomStringConvertible {
-			case accountTake1 = "Account_Take_1"
-			case accountTake2 = "Account_Take_2"
-			case accountTake3 = "Account_Take_3"
-			case accountTake4 = "Account_Take_4"
-			case accountTake5 = "Account_Take_5"
-			case accountTake6 = "Account_Take_6"
-			case accountTake7 = "Account_Take_7"
-			case accountant = "Accountant"
-			case auditor = "Auditor"
-			case communicationsOfficer = "Communications_Officer"
-			case configEquipment = "Config_Equipment"
-			case configStarbaseEquipment = "Config_Starbase_Equipment"
-			case containerTake1 = "Container_Take_1"
-			case containerTake2 = "Container_Take_2"
-			case containerTake3 = "Container_Take_3"
-			case containerTake4 = "Container_Take_4"
-			case containerTake5 = "Container_Take_5"
-			case containerTake6 = "Container_Take_6"
-			case containerTake7 = "Container_Take_7"
-			case contractManager = "Contract_Manager"
-			case diplomat = "Diplomat"
-			case director = "Director"
-			case factoryManager = "Factory_Manager"
-			case fittingManager = "Fitting_Manager"
-			case hangarQuery1 = "Hangar_Query_1"
-			case hangarQuery2 = "Hangar_Query_2"
-			case hangarQuery3 = "Hangar_Query_3"
-			case hangarQuery4 = "Hangar_Query_4"
-			case hangarQuery5 = "Hangar_Query_5"
-			case hangarQuery6 = "Hangar_Query_6"
-			case hangarQuery7 = "Hangar_Query_7"
-			case hangarTake1 = "Hangar_Take_1"
-			case hangarTake2 = "Hangar_Take_2"
-			case hangarTake3 = "Hangar_Take_3"
-			case hangarTake4 = "Hangar_Take_4"
-			case hangarTake5 = "Hangar_Take_5"
-			case hangarTake6 = "Hangar_Take_6"
-			case hangarTake7 = "Hangar_Take_7"
-			case juniorAccountant = "Junior_Accountant"
-			case personnelManager = "Personnel_Manager"
-			case rentFactoryFacility = "Rent_Factory_Facility"
-			case rentOffice = "Rent_Office"
-			case rentResearchFacility = "Rent_Research_Facility"
-			case securityOfficer = "Security_Officer"
-			case starbaseDefenseOperator = "Starbase_Defense_Operator"
-			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-			case stationManager = "Station_Manager"
-			case trader = "Trader"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum RolesAtOtherRolesAtOther: String, Codable, CustomStringConvertible {
-			case accountTake1 = "Account_Take_1"
-			case accountTake2 = "Account_Take_2"
-			case accountTake3 = "Account_Take_3"
-			case accountTake4 = "Account_Take_4"
-			case accountTake5 = "Account_Take_5"
-			case accountTake6 = "Account_Take_6"
-			case accountTake7 = "Account_Take_7"
-			case accountant = "Accountant"
-			case auditor = "Auditor"
-			case communicationsOfficer = "Communications_Officer"
-			case configEquipment = "Config_Equipment"
-			case configStarbaseEquipment = "Config_Starbase_Equipment"
-			case containerTake1 = "Container_Take_1"
-			case containerTake2 = "Container_Take_2"
-			case containerTake3 = "Container_Take_3"
-			case containerTake4 = "Container_Take_4"
-			case containerTake5 = "Container_Take_5"
-			case containerTake6 = "Container_Take_6"
-			case containerTake7 = "Container_Take_7"
-			case contractManager = "Contract_Manager"
-			case diplomat = "Diplomat"
-			case director = "Director"
-			case factoryManager = "Factory_Manager"
-			case fittingManager = "Fitting_Manager"
-			case hangarQuery1 = "Hangar_Query_1"
-			case hangarQuery2 = "Hangar_Query_2"
-			case hangarQuery3 = "Hangar_Query_3"
-			case hangarQuery4 = "Hangar_Query_4"
-			case hangarQuery5 = "Hangar_Query_5"
-			case hangarQuery6 = "Hangar_Query_6"
-			case hangarQuery7 = "Hangar_Query_7"
-			case hangarTake1 = "Hangar_Take_1"
-			case hangarTake2 = "Hangar_Take_2"
-			case hangarTake3 = "Hangar_Take_3"
-			case hangarTake4 = "Hangar_Take_4"
-			case hangarTake5 = "Hangar_Take_5"
-			case hangarTake6 = "Hangar_Take_6"
-			case hangarTake7 = "Hangar_Take_7"
-			case juniorAccountant = "Junior_Accountant"
-			case personnelManager = "Personnel_Manager"
-			case rentFactoryFacility = "Rent_Factory_Facility"
-			case rentOffice = "Rent_Office"
-			case rentResearchFacility = "Rent_Research_Facility"
-			case securityOfficer = "Security_Officer"
-			case starbaseDefenseOperator = "Starbase_Defense_Operator"
-			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-			case stationManager = "Station_Manager"
-			case trader = "Trader"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public struct Item: Codable, Hashable {
-			
-			
-			public var itemID: Int64
-			public var typeID: Int
-			public init(itemID: Int64, typeID: Int) {
-				self.itemID = itemID
-				self.typeID = typeID
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case itemID = "item_id"
-				case typeID = "type_id"
-				
-				var dateFormatter: DateFormatter? {
-					return nil
-				}
-			}
-		}
-		
-		public enum RolesAtBaseRolesAtBase: String, Codable, CustomStringConvertible {
-			case accountTake1 = "Account_Take_1"
-			case accountTake2 = "Account_Take_2"
-			case accountTake3 = "Account_Take_3"
-			case accountTake4 = "Account_Take_4"
-			case accountTake5 = "Account_Take_5"
-			case accountTake6 = "Account_Take_6"
-			case accountTake7 = "Account_Take_7"
-			case accountant = "Accountant"
-			case auditor = "Auditor"
-			case communicationsOfficer = "Communications_Officer"
-			case configEquipment = "Config_Equipment"
-			case configStarbaseEquipment = "Config_Starbase_Equipment"
-			case containerTake1 = "Container_Take_1"
-			case containerTake2 = "Container_Take_2"
-			case containerTake3 = "Container_Take_3"
-			case containerTake4 = "Container_Take_4"
-			case containerTake5 = "Container_Take_5"
-			case containerTake6 = "Container_Take_6"
-			case containerTake7 = "Container_Take_7"
-			case contractManager = "Contract_Manager"
-			case diplomat = "Diplomat"
-			case director = "Director"
-			case factoryManager = "Factory_Manager"
-			case fittingManager = "Fitting_Manager"
-			case hangarQuery1 = "Hangar_Query_1"
-			case hangarQuery2 = "Hangar_Query_2"
-			case hangarQuery3 = "Hangar_Query_3"
-			case hangarQuery4 = "Hangar_Query_4"
-			case hangarQuery5 = "Hangar_Query_5"
-			case hangarQuery6 = "Hangar_Query_6"
-			case hangarQuery7 = "Hangar_Query_7"
-			case hangarTake1 = "Hangar_Take_1"
-			case hangarTake2 = "Hangar_Take_2"
-			case hangarTake3 = "Hangar_Take_3"
-			case hangarTake4 = "Hangar_Take_4"
-			case hangarTake5 = "Hangar_Take_5"
-			case hangarTake6 = "Hangar_Take_6"
-			case hangarTake7 = "Hangar_Take_7"
-			case juniorAccountant = "Junior_Accountant"
-			case personnelManager = "Personnel_Manager"
-			case rentFactoryFacility = "Rent_Factory_Facility"
-			case rentOffice = "Rent_Office"
-			case rentResearchFacility = "Rent_Research_Facility"
-			case securityOfficer = "Security_Officer"
-			case starbaseDefenseOperator = "Starbase_Defense_Operator"
-			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-			case stationManager = "Station_Manager"
-			case trader = "Trader"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum ValueType: String, Codable, CustomStringConvertible {
-			case unknown
-			case itemExchange = "item_exchange"
-			case auction
-			case courier
-			case loan
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum ContextIDType: String, Codable, CustomStringConvertible {
-			case structureID = "structure_id"
-			case stationID = "station_id"
-			case marketTransactionID = "market_transaction_id"
-			case characterID = "character_id"
-			case corporationID = "corporation_id"
-			case allianceID = "alliance_id"
-			case eveSystem = "eve_system"
-			case industryJobID = "industry_job_id"
-			case contractID = "contract_id"
-			case planetID = "planet_id"
-			case systemID = "system_id"
-			case typeID = "type_id"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public struct VictoryPoints: Codable, Hashable {
-			
-			
-			public var lastWeek: Int
-			public var total: Int
-			public var yesterday: Int
-			public init(lastWeek: Int, total: Int, yesterday: Int) {
-				self.lastWeek = lastWeek
-				self.total = total
-				self.yesterday = yesterday
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastWeek = "last_week"
-				case total
-				case yesterday
-				
-				var dateFormatter: DateFormatter? {
-					return nil
-				}
-			}
-		}
-		
-		public enum Range: String, Codable, CustomStringConvertible {
-			case i1 = "1"
-			case i10 = "10"
-			case i2 = "2"
-			case i20 = "20"
-			case i3 = "3"
-			case i30 = "30"
-			case i4 = "4"
-			case i40 = "40"
-			case i5 = "5"
-			case region
-			case solarsystem
-			case station
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public struct Kills: Codable, Hashable {
-			
-			
-			public var lastWeek: Int
-			public var total: Int
-			public var yesterday: Int
-			public init(lastWeek: Int, total: Int, yesterday: Int) {
-				self.lastWeek = lastWeek
-				self.total = total
-				self.yesterday = yesterday
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case lastWeek = "last_week"
-				case total
-				case yesterday
-				
-				var dateFormatter: DateFormatter? {
-					return nil
-				}
-			}
-		}
-		
-		public enum State: String, Codable, CustomStringConvertible {
-			case cancelled
-			case expired
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum Availability: String, Codable, CustomStringConvertible {
-			case `public` = "public"
-			case personal
-			case corporation
-			case alliance
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum RolesAtHqRolesAtHq: String, Codable, CustomStringConvertible {
-			case accountTake1 = "Account_Take_1"
-			case accountTake2 = "Account_Take_2"
-			case accountTake3 = "Account_Take_3"
-			case accountTake4 = "Account_Take_4"
-			case accountTake5 = "Account_Take_5"
-			case accountTake6 = "Account_Take_6"
-			case accountTake7 = "Account_Take_7"
-			case accountant = "Accountant"
-			case auditor = "Auditor"
-			case communicationsOfficer = "Communications_Officer"
-			case configEquipment = "Config_Equipment"
-			case configStarbaseEquipment = "Config_Starbase_Equipment"
-			case containerTake1 = "Container_Take_1"
-			case containerTake2 = "Container_Take_2"
-			case containerTake3 = "Container_Take_3"
-			case containerTake4 = "Container_Take_4"
-			case containerTake5 = "Container_Take_5"
-			case containerTake6 = "Container_Take_6"
-			case containerTake7 = "Container_Take_7"
-			case contractManager = "Contract_Manager"
-			case diplomat = "Diplomat"
-			case director = "Director"
-			case factoryManager = "Factory_Manager"
-			case fittingManager = "Fitting_Manager"
-			case hangarQuery1 = "Hangar_Query_1"
-			case hangarQuery2 = "Hangar_Query_2"
-			case hangarQuery3 = "Hangar_Query_3"
-			case hangarQuery4 = "Hangar_Query_4"
-			case hangarQuery5 = "Hangar_Query_5"
-			case hangarQuery6 = "Hangar_Query_6"
-			case hangarQuery7 = "Hangar_Query_7"
-			case hangarTake1 = "Hangar_Take_1"
-			case hangarTake2 = "Hangar_Take_2"
-			case hangarTake3 = "Hangar_Take_3"
-			case hangarTake4 = "Hangar_Take_4"
-			case hangarTake5 = "Hangar_Take_5"
-			case hangarTake6 = "Hangar_Take_6"
-			case hangarTake7 = "Hangar_Take_7"
-			case juniorAccountant = "Junior_Accountant"
-			case personnelManager = "Personnel_Manager"
-			case rentFactoryFacility = "Rent_Factory_Facility"
-			case rentOffice = "Rent_Office"
-			case rentResearchFacility = "Rent_Research_Facility"
-			case securityOfficer = "Security_Officer"
-			case starbaseDefenseOperator = "Starbase_Defense_Operator"
-			case starbaseFuelTechnician = "Starbase_Fuel_Technician"
-			case stationManager = "Station_Manager"
-			case trader = "Trader"
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum ContactType: String, Codable, CustomStringConvertible {
-			case character
-			case corporation
-			case alliance
-			case faction
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public enum LocationType: String, Codable, CustomStringConvertible {
-			case station
-			case solarSystem = "solar_system"
-			case item
-			case other
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
-		
-		public struct Coordinates: Codable, Hashable {
-			
-			
-			public var x: Double
-			public var y: Double
-			public var z: Double
-			public init(x: Double, y: Double, z: Double) {
-				self.x = x
-				self.y = y
-				self.z = z
-			}
-			
-			enum CodingKeys: String, CodingKey, DateFormatted {
-				case x
-				case y
-				case z
-				
-				var dateFormatter: DateFormatter? {
-					return nil
-				}
-			}
-		}
-		
-		public enum FromType: String, Codable, CustomStringConvertible {
-			case agent
-			case npcCorp = "npc_corp"
-			case faction
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
 		
 	}
 	

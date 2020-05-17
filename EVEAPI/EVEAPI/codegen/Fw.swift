@@ -50,18 +50,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<ESI.Fw.Leaderboards.Success>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -99,18 +105,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Fw.Leaderboards.Characters.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -125,26 +137,6 @@ extension ESI {
 				public struct Kills: Codable, Hashable {
 					
 					public struct ActiveTotalActiveTotal: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var characterID: Int?
-						public init(amount: Int?, characterID: Int?) {
-							self.amount = amount
-							self.characterID = characterID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case characterID = "character_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
-					public struct YesterdayYesterday: Codable, Hashable {
 						
 						
 						public var amount: Int?
@@ -184,6 +176,26 @@ extension ESI {
 						}
 					}
 					
+					public struct YesterdayYesterday: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case characterID = "character_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
+					
 					public var activeTotal: [ESI.Fw.Leaderboards.Characters.Kills.ActiveTotalActiveTotal]
 					public var lastWeek: [ESI.Fw.Leaderboards.Characters.Kills.LastWeekLastWeek]
 					public var yesterday: [ESI.Fw.Leaderboards.Characters.Kills.YesterdayYesterday]
@@ -204,7 +216,47 @@ extension ESI {
 					}
 				}
 				
+				public struct Success: Codable, Hashable {
+					
+					
+					public var kills: ESI.Fw.Leaderboards.Characters.Kills
+					public var victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints
+					public init(kills: ESI.Fw.Leaderboards.Characters.Kills, victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints) {
+						self.kills = kills
+						self.victoryPoints = victoryPoints
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case kills
+						case victoryPoints = "victory_points"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
 				public struct VictoryPoints: Codable, Hashable {
+					
+					public struct YesterdayYesterday1: Codable, Hashable {
+						
+						
+						public var amount: Int?
+						public var characterID: Int?
+						public init(amount: Int?, characterID: Int?) {
+							self.amount = amount
+							self.characterID = characterID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case amount
+							case characterID = "character_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 					public struct ActiveTotalActiveTotal1: Codable, Hashable {
 						
@@ -246,26 +298,6 @@ extension ESI {
 						}
 					}
 					
-					public struct YesterdayYesterday1: Codable, Hashable {
-						
-						
-						public var amount: Int?
-						public var characterID: Int?
-						public init(amount: Int?, characterID: Int?) {
-							self.amount = amount
-							self.characterID = characterID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case amount
-							case characterID = "character_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
 					public var activeTotal: [ESI.Fw.Leaderboards.Characters.VictoryPoints.ActiveTotalActiveTotal1]
 					public var lastWeek: [ESI.Fw.Leaderboards.Characters.VictoryPoints.LastWeekLastWeek1]
 					public var yesterday: [ESI.Fw.Leaderboards.Characters.VictoryPoints.YesterdayYesterday1]
@@ -279,26 +311,6 @@ extension ESI {
 						case activeTotal = "active_total"
 						case lastWeek = "last_week"
 						case yesterday
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct Success: Codable, Hashable {
-					
-					
-					public var kills: ESI.Fw.Leaderboards.Characters.Kills
-					public var victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints
-					public init(kills: ESI.Fw.Leaderboards.Characters.Kills, victoryPoints: ESI.Fw.Leaderboards.Characters.VictoryPoints) {
-						self.kills = kills
-						self.victoryPoints = victoryPoints
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case kills
-						case victoryPoints = "victory_points"
 						
 						var dateFormatter: DateFormatter? {
 							return nil
@@ -331,18 +343,24 @@ extension ESI {
 						var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 						components.queryItems = query
 						
-						let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-						if let progress = progress {
-							return publisher
-							.downloadProgress(closure: progress)
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
-						else {
-							return publisher
-							.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-							.eraseToAnyPublisher()
-						}
+						let session = esi.session
+						
+						return Deferred { () -> AnyPublisher<ESIResponse<ESI.Fw.Leaderboards.Corporations.Success>, AFError> in
+							var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+							
+							if let progress = progress {
+								request = request.downloadProgress(closure: progress)
+							}
+							
+							return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+							.tryMap { response in
+								try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+							}
+							.mapError{$0 as! AFError}
+							.handleEvents(receiveCompletion: { (_) in
+								withExtendedLifetime(session) {}
+							}).eraseToAnyPublisher()
+						}.eraseToAnyPublisher()
 					}
 					catch {
 						return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -356,7 +374,7 @@ extension ESI {
 				
 				public struct Kills: Codable, Hashable {
 					
-					public struct ActiveTotalActiveTotal: Codable, Hashable {
+					public struct LastWeekLastWeek: Codable, Hashable {
 						
 						
 						public var amount: Int?
@@ -396,7 +414,7 @@ extension ESI {
 						}
 					}
 					
-					public struct LastWeekLastWeek: Codable, Hashable {
+					public struct ActiveTotalActiveTotal: Codable, Hashable {
 						
 						
 						public var amount: Int?
@@ -458,7 +476,7 @@ extension ESI {
 				
 				public struct VictoryPoints: Codable, Hashable {
 					
-					public struct ActiveTotalActiveTotal1: Codable, Hashable {
+					public struct YesterdayYesterday1: Codable, Hashable {
 						
 						
 						public var amount: Int?
@@ -478,7 +496,7 @@ extension ESI {
 						}
 					}
 					
-					public struct YesterdayYesterday1: Codable, Hashable {
+					public struct ActiveTotalActiveTotal1: Codable, Hashable {
 						
 						
 						public var amount: Int?
@@ -541,88 +559,6 @@ extension ESI {
 			}
 			
 			
-			public struct VictoryPoints: Codable, Hashable {
-				
-				public struct LastWeekLastWeek1: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct ActiveTotalActiveTotal1: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public struct YesterdayYesterday1: Codable, Hashable {
-					
-					
-					public var amount: Int?
-					public var factionID: Int?
-					public init(amount: Int?, factionID: Int?) {
-						self.amount = amount
-						self.factionID = factionID
-					}
-					
-					enum CodingKeys: String, CodingKey, DateFormatted {
-						case amount
-						case factionID = "faction_id"
-						
-						var dateFormatter: DateFormatter? {
-							return nil
-						}
-					}
-				}
-				
-				public var activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1]
-				public var lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1]
-				public var yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]
-				public init(activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]) {
-					self.activeTotal = activeTotal
-					self.lastWeek = lastWeek
-					self.yesterday = yesterday
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case activeTotal = "active_total"
-					case lastWeek = "last_week"
-					case yesterday
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
-			
 			public struct Success: Codable, Hashable {
 				
 				
@@ -665,7 +601,7 @@ extension ESI {
 					}
 				}
 				
-				public struct YesterdayYesterday: Codable, Hashable {
+				public struct LastWeekLastWeek: Codable, Hashable {
 					
 					
 					public var amount: Int?
@@ -685,7 +621,7 @@ extension ESI {
 					}
 				}
 				
-				public struct LastWeekLastWeek: Codable, Hashable {
+				public struct YesterdayYesterday: Codable, Hashable {
 					
 					
 					public var amount: Int?
@@ -709,6 +645,88 @@ extension ESI {
 				public var lastWeek: [ESI.Fw.Leaderboards.Kills.LastWeekLastWeek]
 				public var yesterday: [ESI.Fw.Leaderboards.Kills.YesterdayYesterday]
 				public init(activeTotal: [ESI.Fw.Leaderboards.Kills.ActiveTotalActiveTotal], lastWeek: [ESI.Fw.Leaderboards.Kills.LastWeekLastWeek], yesterday: [ESI.Fw.Leaderboards.Kills.YesterdayYesterday]) {
+					self.activeTotal = activeTotal
+					self.lastWeek = lastWeek
+					self.yesterday = yesterday
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case activeTotal = "active_total"
+					case lastWeek = "last_week"
+					case yesterday
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct VictoryPoints: Codable, Hashable {
+				
+				public struct LastWeekLastWeek1: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct YesterdayYesterday1: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public struct ActiveTotalActiveTotal1: Codable, Hashable {
+					
+					
+					public var amount: Int?
+					public var factionID: Int?
+					public init(amount: Int?, factionID: Int?) {
+						self.amount = amount
+						self.factionID = factionID
+					}
+					
+					enum CodingKeys: String, CodingKey, DateFormatted {
+						case amount
+						case factionID = "faction_id"
+						
+						var dateFormatter: DateFormatter? {
+							return nil
+						}
+					}
+				}
+				
+				public var activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1]
+				public var lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1]
+				public var yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]
+				public init(activeTotal: [ESI.Fw.Leaderboards.VictoryPoints.ActiveTotalActiveTotal1], lastWeek: [ESI.Fw.Leaderboards.VictoryPoints.LastWeekLastWeek1], yesterday: [ESI.Fw.Leaderboards.VictoryPoints.YesterdayYesterday1]) {
 					self.activeTotal = activeTotal
 					self.lastWeek = lastWeek
 					self.yesterday = yesterday
@@ -750,18 +768,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Fw.Stats.Success]>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -777,11 +801,11 @@ extension ESI {
 				
 				
 				public var factionID: Int
-				public var kills: ESI.Characters.Kills
+				public var kills: ESI.Corporations.Kills
 				public var pilots: Int
 				public var systemsControlled: Int
-				public var victoryPoints: ESI.Characters.VictoryPoints
-				public init(factionID: Int, kills: ESI.Characters.Kills, pilots: Int, systemsControlled: Int, victoryPoints: ESI.Characters.VictoryPoints) {
+				public var victoryPoints: ESI.Corporations.VictoryPoints
+				public init(factionID: Int, kills: ESI.Corporations.Kills, pilots: Int, systemsControlled: Int, victoryPoints: ESI.Corporations.VictoryPoints) {
 					self.factionID = factionID
 					self.kills = kills
 					self.pilots = pilots
@@ -827,18 +851,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Fw.Systems.Success]>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -849,6 +879,18 @@ extension ESI {
 			
 			
 			
+			
+			public enum Contested: String, Codable, CustomStringConvertible {
+				case captured
+				case contested
+				case uncontested
+				case vulnerable
+				
+				public var description: String {
+					return rawValue
+				}
+				
+			}
 			
 			public struct Success: Codable, Hashable {
 				
@@ -882,18 +924,6 @@ extension ESI {
 				}
 			}
 			
-			public enum Contested: String, Codable, CustomStringConvertible {
-				case captured
-				case contested
-				case uncontested
-				case vulnerable
-				
-				public var description: String {
-					return rawValue
-				}
-				
-			}
-			
 		}
 		
 		public struct Wars {
@@ -919,18 +949,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Fw.Wars.Success]>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()

@@ -203,7 +203,7 @@ add(route: root, keyPath: [])
 let conflicts = Dictionary(grouping: typeIdentifiers, by: {$0.value}).filter{$0.value.count > 1}
 for array in conflicts.values {
     for (type, _) in array {
-        typeIdentifiers[type] = rawIDs[type]?.first
+        typeIdentifiers[type] = rawIDs[type]?.min{$0.joined(separator: ".") < $1.joined(separator: ".")}
     }
 }
 let ids = typeIdentifiers.map{$0.key.id()}.sorted()

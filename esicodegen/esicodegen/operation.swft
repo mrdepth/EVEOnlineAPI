@@ -17,18 +17,24 @@
             var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
             components.queryItems = query
     
-            let publisher = esi.publisher(components, method: .{method}, encoding: {encoding}, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-            if let progress = progress {
-                return publisher
-                    .downloadProgress(closure: progress)
-                    .{decode}
-                    .eraseToAnyPublisher()
-            }
-            else {
-                return publisher
-                    .{decode}
-                    .eraseToAnyPublisher()
-            }
+            let session = esi.session
+            
+            return Deferred { () -> AnyPublisher<ESIResponse<{result}>, AFError> in
+                var request = session.request(components, method: .{method}, encoding: {encoding}, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+    
+                if let progress = progress {
+                    request = request.downloadProgress(closure: progress)
+                }
+        
+                return request.{publisher}
+                    .tryMap { response in
+                        try ESIResponse(value: response.result.{getter}, httpHeaders: response.response?.headers)
+                }
+                .mapError{$0 as! AFError}
+                .handleEvents(receiveCompletion: { (_) in
+                    withExtendedLifetime(session) {}
+                }).eraseToAnyPublisher()
+            }.eraseToAnyPublisher()
         }
         catch {
             return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()

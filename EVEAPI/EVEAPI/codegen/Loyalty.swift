@@ -61,18 +61,24 @@ extension ESI {
 							var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 							components.queryItems = query
 							
-							let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-							if let progress = progress {
-								return publisher
-								.downloadProgress(closure: progress)
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
-							else {
-								return publisher
-								.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-								.eraseToAnyPublisher()
-							}
+							let session = esi.session
+							
+							return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Loyalty.Stores.CorporationID.Offers.Success]>, AFError> in
+								var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+								
+								if let progress = progress {
+									request = request.downloadProgress(closure: progress)
+								}
+								
+								return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+								.tryMap { response in
+									try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+								}
+								.mapError{$0 as! AFError}
+								.handleEvents(receiveCompletion: { (_) in
+									withExtendedLifetime(session) {}
+								}).eraseToAnyPublisher()
+							}.eraseToAnyPublisher()
 						}
 						catch {
 							return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -83,6 +89,26 @@ extension ESI {
 					
 					
 					
+					
+					public struct RequiredItem: Codable, Hashable {
+						
+						
+						public var quantity: Int
+						public var typeID: Int
+						public init(quantity: Int, typeID: Int) {
+							self.quantity = quantity
+							self.typeID = typeID
+						}
+						
+						enum CodingKeys: String, CodingKey, DateFormatted {
+							case quantity
+							case typeID = "type_id"
+							
+							var dateFormatter: DateFormatter? {
+								return nil
+							}
+						}
+					}
 					
 					public struct Success: Codable, Hashable {
 						
@@ -119,26 +145,6 @@ extension ESI {
 						}
 					}
 					
-					public struct RequiredItem: Codable, Hashable {
-						
-						
-						public var quantity: Int
-						public var typeID: Int
-						public init(quantity: Int, typeID: Int) {
-							self.quantity = quantity
-							self.typeID = typeID
-						}
-						
-						enum CodingKeys: String, CodingKey, DateFormatted {
-							case quantity
-							case typeID = "type_id"
-							
-							var dateFormatter: DateFormatter? {
-								return nil
-							}
-						}
-					}
-					
 				}
 				
 				
@@ -150,14 +156,6 @@ extension ESI {
 		}
 		
 		
-		public enum Datasource: String, Codable, CustomStringConvertible {
-			case tranquility
-			
-			public var description: String {
-				return rawValue
-			}
-			
-		}
 		
 	}
 	

@@ -331,6 +331,17 @@ extension Model.Operation {
         
         let result = response?.id() ?? "Void"
         
+        let publisher: String
+        let getter: String
+        if result == "Void" {
+            publisher = "publishData(queue: session.serializationQueue)"
+            getter = "map{_ in}.get()"
+        }
+        else {
+            publisher = "publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)"
+            getter = "get()"
+        }
+        
         swift = swift.replacingOccurrences(of: "{operation}", with: method.rawValue)
         swift = swift.replacingOccurrences(of: "{method}", with: method.rawValue)
         swift = swift.replacingOccurrences(of: "{arguments}", with: arguments.joined(separator: ", "))
@@ -339,6 +350,8 @@ extension Model.Operation {
         swift = swift.replacingOccurrences(of: "{headers}", with: headers.joined(separator: "\n"))
         swift = swift.replacingOccurrences(of: "{queries}", with: queries.joined(separator: "\n"))
         swift = swift.replacingOccurrences(of: "{encoding}", with: body != nil ? "BodyDataEncoding(data: body)" : "URLEncoding.default")
+        swift = swift.replacingOccurrences(of: "{publisher}", with: publisher)
+        swift = swift.replacingOccurrences(of: "{getter}", with: getter)
 
         if !security.isEmpty {
             let securityCheck: [String] = security.sorted().map{
@@ -352,18 +365,18 @@ extension Model.Operation {
             swift = swift.replacingOccurrences(of: "{security}", with: "")
         }
 
-        let decode: String
-        if result == "String" {
-            decode = "responseString(queue: esi.session.serializationQueue)"
-        }
-        else if result == "Void" {
-            decode = "responseVoid(queue: esi.session.serializationQueue)"
-        }
-        else {
-            decode = "responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)"
-        }
-        
-        swift = swift.replacingOccurrences(of: "{decode}", with: decode)
+//        let decode: String
+//        if result == "String" {
+//            decode = "responseString(queue: esi.session.serializationQueue)"
+//        }
+//        else if result == "Void" {
+//            decode = "responseVoid(queue: esi.session.serializationQueue)"
+//        }
+//        else {
+//            decode = "responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)"
+//        }
+//        
+//        swift = swift.replacingOccurrences(of: "{decode}", with: decode)
         return swift
     }
 }

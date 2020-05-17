@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "12AB654B1DE9A993003AA683"
-               BuildableName = "EVEAPI.framework"
-               BlueprintName = "EVEAPI"
-               ReferencedContainer = "container:EVEAPI.xcodeproj">
+               BlueprintIdentifier = "1288EFFE1DEB5FBD00FD7FBE"
+               BuildableName = "Develop.app"
+               BlueprintName = "Develop"
+               ReferencedContainer = "container:Develop.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,20 +28,10 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1696DBAF2383DB8800BAFDB0"
-               BuildableName = "EVEAPITests.xctest"
-               BlueprintName = "EVEAPITests"
-               ReferencedContainer = "container:EVEAPI.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -50,15 +40,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "12AB654B1DE9A993003AA683"
-            BuildableName = "EVEAPI.framework"
-            BlueprintName = "EVEAPI"
-            ReferencedContainer = "container:EVEAPI.xcodeproj">
+            BlueprintIdentifier = "1288EFFE1DEB5FBD00FD7FBE"
+            BuildableName = "Develop.app"
+            BlueprintName = "Develop"
+            ReferencedContainer = "container:Develop.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -66,15 +57,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "12AB654B1DE9A993003AA683"
-            BuildableName = "EVEAPI.framework"
-            BlueprintName = "EVEAPI"
-            ReferencedContainer = "container:EVEAPI.xcodeproj">
+            BlueprintIdentifier = "1288EFFE1DEB5FBD00FD7FBE"
+            BuildableName = "Develop.app"
+            BlueprintName = "Develop"
+            ReferencedContainer = "container:Develop.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

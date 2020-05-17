@@ -44,18 +44,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Industry.Facilities.Success]>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -124,18 +130,24 @@ extension ESI {
 					var components = URLComponents(url: url, resolvingAgainstBaseURL: false)!
 					components.queryItems = query
 					
-					let publisher = esi.publisher(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
-					if let progress = progress {
-						return publisher
-						.downloadProgress(closure: progress)
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
-					else {
-						return publisher
-						.responseDecodable(queue: esi.session.serializationQueue, decoder: ESI.jsonDecoder)
-						.eraseToAnyPublisher()
-					}
+					let session = esi.session
+					
+					return Deferred { () -> AnyPublisher<ESIResponse<[ESI.Industry.Systems.Success]>, AFError> in
+						var request = session.request(components, method: .get, encoding: URLEncoding.default, headers: headers, interceptor: CachePolicyAdapter(cachePolicy: cachePolicy))
+						
+						if let progress = progress {
+							request = request.downloadProgress(closure: progress)
+						}
+						
+						return request.publishDecodable(queue: session.serializationQueue, decoder: ESI.jsonDecoder)
+						.tryMap { response in
+							try ESIResponse(value: response.result.get(), httpHeaders: response.response?.headers)
+						}
+						.mapError{$0 as! AFError}
+						.handleEvents(receiveCompletion: { (_) in
+							withExtendedLifetime(session) {}
+						}).eraseToAnyPublisher()
+					}.eraseToAnyPublisher()
 				}
 				catch {
 					return Fail(error: AFError.createURLRequestFailed(error: error)).eraseToAnyPublisher()
@@ -146,26 +158,6 @@ extension ESI {
 			
 			
 			
-			
-			public struct Success: Codable, Hashable {
-				
-				
-				public var costIndices: [ESI.Industry.Systems.CostIndice]
-				public var solarSystemID: Int
-				public init(costIndices: [ESI.Industry.Systems.CostIndice], solarSystemID: Int) {
-					self.costIndices = costIndices
-					self.solarSystemID = solarSystemID
-				}
-				
-				enum CodingKeys: String, CodingKey, DateFormatted {
-					case costIndices = "cost_indices"
-					case solarSystemID = "solar_system_id"
-					
-					var dateFormatter: DateFormatter? {
-						return nil
-					}
-				}
-			}
 			
 			public struct CostIndice: Codable, Hashable {
 				
@@ -197,6 +189,26 @@ extension ESI {
 				enum CodingKeys: String, CodingKey, DateFormatted {
 					case activity
 					case costIndex = "cost_index"
+					
+					var dateFormatter: DateFormatter? {
+						return nil
+					}
+				}
+			}
+			
+			public struct Success: Codable, Hashable {
+				
+				
+				public var costIndices: [ESI.Industry.Systems.CostIndice]
+				public var solarSystemID: Int
+				public init(costIndices: [ESI.Industry.Systems.CostIndice], solarSystemID: Int) {
+					self.costIndices = costIndices
+					self.solarSystemID = solarSystemID
+				}
+				
+				enum CodingKeys: String, CodingKey, DateFormatted {
+					case costIndices = "cost_indices"
+					case solarSystemID = "solar_system_id"
 					
 					var dateFormatter: DateFormatter? {
 						return nil
